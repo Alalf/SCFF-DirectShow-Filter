@@ -1,0 +1,47 @@
+* SCFF DirectShow Filter Ver 0.0.1 (2012/5/5)
+
+** ビルド+利用方法
+
+1. http://ffmpeg.zeranoe.com/builds/ からSharedビルド及びDevビルドを取得する
+  - ext/ffmpeg/amd64に64bit版を、ext/ffmpeg/x86に32bit版を展開する
+  - SharedもDevも同じディレクトリに展開すること（数個のファイルが上書きされるが問題ない）
+  - ext/ffmpeg/amd64/README.txt, ext/ffmpeg/x86/README.txtが存在するように確認すること
+2. ソリューションを開き、全てのビルドが通ることを確認
+  - Microsoft Visual Studio 2010 Express Edition + Windows SDK 7.1で確認済み
+  - 必要ならばいくつかのプロジェクト設定を書き換えること
+3. tools/copy-binaries.batを実行してdistディレクトリにdllなどをコピー
+4. tools/install-debug.batかtools/install-release.batを実行
+5. 各種エンコーダを起動しフィルタが認識されているかチェック
+6. dist/*にあるヘルパーアプリケーションを起動し取り込み設定を行う
+7. デバッグバージョンを利用する場合:
+  - プロジェクト設定からローカルWindowsデバッガーを選ぶ
+  - コマンドにWME/KTE/FMEなどを選択すればデバッグ文字列などを見ることが出来る。
+
+** 開発者向け
+
+- パッチを作成したい場合やコードを追加したい場合はGoogle C++スタイルガイドに従ってください
+-- Google C++スタイルガイド 日本語訳
+--- http://www.textdrop.net/google-styleguide-ja/cppguide.xml
+-- このガイドは単純に決め事ではなく、バグを減らすために役に立つテクニックもいくらか含まれているようです。
+
+- scff-dsfにはdoxygenコメントをつけてあります
+-- Doxygen(http://www.stack.nl/~dimitri/doxygen/index.html)
+--- プログラムの全体的な構造を把握したい場合はぜひ利用してみてください。
+
+** 関連するソフトウェア、ソースコードについて
+
+- DirectShow base classes - efines class hierarchy for streams architecture.
+-- Copyright (c) 1992-2001 Microsoft Corporation.  All rights reserved.
+- ISO C9x  compliant inttypes.h for Microsoft Visual Studio
+-- Copyright (c) 2006 Alexander Chemeris
+
+- SCFF DirectShow Filterではffmpegプロジェクトに含まれる以下のLGPLライブラリを使用しています。
+-- libavutil: a library containing functions for simplifying programming, including random number generators, data structures, mathematics routines, core multimedia utilities, and much more.
+-- libavcodec: a library containing decoders and encoders for audio/video codecs.
+-- libswscale: a library performing highly optimized image scaling and color space/pixel format conversion operations.
+
+** 注意
+- SCFF DirectShow Filterは"フリーソフトウェア"です。
+- 作者は本ソフトウェアに関する一切の義務（サポート、恒久的アップデート）を持ちません。
+- また、本ソフトウェアの使用により生じた直接的、間接的損害に一切の責任を持ちません。
+- 本ソフトウェアの利用についてはLICENCE(LGPLv.3の詳細)も参照してください。

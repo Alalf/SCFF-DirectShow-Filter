@@ -1,0 +1,259 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="base\constants.cc" />
+    <ClCompile Include="base\debug.cc" />
+    <ClCompile Include="base\scff-clock-time.cc" />
+    <ClCompile Include="base\scff-dsf.cc" />
+    <ClCompile Include="base\scff-interprocess.cc" />
+    <ClCompile Include="base\scff-monitor.cc" />
+    <ClCompile Include="base\scff-output-pin-implement.cc" />
+    <ClCompile Include="base\scff-output-pin.cc" />
+    <ClCompile Include="base\scff-quality-controlled-time.cc" />
+    <ClCompile Include="base\scff-source.cc" />
+    <ClCompile Include="imaging\avpicture-image.cc" />
+    <ClCompile Include="imaging\avpicture-with-fill-image.cc" />
+    <ClCompile Include="imaging\image.cc" />
+    <ClCompile Include="imaging\engine.cc" />
+    <ClCompile Include="imaging\native-layout.cc" />
+    <ClCompile Include="imaging\processor.cc" />
+    <ClCompile Include="imaging\raw-bitmap-image.cc" />
+    <ClCompile Include="imaging\request.cc" />
+    <ClCompile Include="imaging\screen-capture.cc" />
+    <ClCompile Include="imaging\splash-screen.cc" />
+    <ClCompile Include="imaging\utilities.cc" />
+    <ClCompile Include="imaging\windows-ddb-image.cc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="base\scff-dsf-amd64.def" />
+    <None Include="base\scff-dsf-x86.def" />
+    <None Include="base\scff-dsf.dox" />
+    <None Include="scff-dsf.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="base\constants.h" />
+    <ClInclude Include="base\debug.h" />
+    <ClInclude Include="base\scff-clock-time.h" />
+    <ClInclude Include="base\scff-interprocess.h" />
+    <ClInclude Include="base\scff-monitor.h" />
+    <ClInclude Include="base\scff-output-pin.h" />
+    <ClInclude Include="base\scff-quality-controlled-time.h" />
+    <ClInclude Include="base\scff-source.h" />
+    <ClInclude Include="imaging\avpicture-image.h" />
+    <ClInclude Include="imaging\avpicture-with-fill-image.h" />
+    <ClInclude Include="imaging\image.h" />
+    <ClInclude Include="imaging\engine.h" />
+    <ClInclude Include="imaging\imaging.h" />
+    <ClInclude Include="imaging\native-layout.h" />
+    <ClInclude Include="imaging\processor.h" />
+    <ClInclude Include="imaging\raw-bitmap-image.h" />
+    <ClInclude Include="imaging\request.h" />
+    <ClInclude Include="imaging\screen-capture.h" />
+    <ClInclude Include="imaging\imaging-types.h" />
+    <ClInclude Include="imaging\splash-screen.h" />
+    <ClInclude Include="imaging\utilities.h" />
+    <ClInclude Include="imaging\windows-ddb-image.h" />
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="scff-dsf.rc" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{B525A541-2E41-424C-B549-D70CA0AA982F}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>scffdsf</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>Windows7.1SDK</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>Windows7.1SDK</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <TargetName>$(ProjectName)-$(PlatformShortName)</TargetName>
+    <IntDir>$(SolutionDir)\obj\$(ProjectName)\$(Configuration)-$(PlatformShortName)\</IntDir>
+    <OutDir>$(SolutionDir)\dist\$(Configuration)-$(PlatformShortName)\</OutDir>
+    <ExtensionsToDeleteOnClean>*.ax;$(ExtensionsToDeleteOnClean)</ExtensionsToDeleteOnClean>
+    <TargetExt>.ax</TargetExt>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <TargetName>$(ProjectName)-$(PlatformShortName)</TargetName>
+    <IntDir>$(SolutionDir)\obj\$(ProjectName)\$(Configuration)-$(PlatformShortName)\</IntDir>
+    <OutDir>$(SolutionDir)\dist\$(Configuration)-$(PlatformShortName)\</OutDir>
+    <ExtensionsToDeleteOnClean>*.ax;$(ExtensionsToDeleteOnClean)</ExtensionsToDeleteOnClean>
+    <TargetExt>.ax</TargetExt>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <TargetName>$(ProjectName)-$(PlatformShortName)</TargetName>
+    <IntDir>$(SolutionDir)\obj\$(ProjectName)\$(Configuration)-$(PlatformShortName)\</IntDir>
+    <OutDir>$(SolutionDir)\dist\$(Configuration)-$(PlatformShortName)\</OutDir>
+    <ExtensionsToDeleteOnClean>*.ax;$(ExtensionsToDeleteOnClean)</ExtensionsToDeleteOnClean>
+    <TargetExt>.ax</TargetExt>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <TargetName>$(ProjectName)-$(PlatformShortName)</TargetName>
+    <IntDir>$(SolutionDir)\obj\$(ProjectName)\$(Configuration)-$(PlatformShortName)\</IntDir>
+    <OutDir>$(SolutionDir)\dist\$(Configuration)-$(PlatformShortName)\</OutDir>
+    <ExtensionsToDeleteOnClean>*.ax;$(ExtensionsToDeleteOnClean)</ExtensionsToDeleteOnClean>
+    <TargetExt>.ax</TargetExt>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;ARCH_X86_32;SCFFDSF_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)ext\directshow\baseclasses;$(SolutionDir)ext\ffmpeg\$(PlatformShortName)\include;$(SolutionDir)ext\include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeaderFile>StdAfx.h</PrecompiledHeaderFile>
+      <DisableSpecificWarnings>4005;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)\obj\BaseClasses\$(Configuration)-$(PlatformShortName)\;$(SolutionDir)ext\ffmpeg\$(PlatformShortName)\lib</AdditionalLibraryDirectories>
+      <ModuleDefinitionFile>base\$(ProjectName)-$(PlatformShortName).def</ModuleDefinitionFile>
+      <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
+      <AdditionalDependencies>strmbasd.lib;Msvcrtd.lib;Winmm.lib;PSAPI.lib;swscale.lib;avcodec.lib;avutil.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PreLinkEvent />
+    <PreLinkEvent />
+    <PostBuildEvent />
+    <PostBuildEvent />
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;ARCH_X86_64;SCFFDSF_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)ext\directshow\baseclasses;$(SolutionDir)ext\ffmpeg\$(PlatformShortName)\include;$(SolutionDir)ext\include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeaderFile>StdAfx.h</PrecompiledHeaderFile>
+      <DisableSpecificWarnings>4005;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)\obj\BaseClasses\$(Configuration)-$(PlatformShortName)\;$(SolutionDir)ext\ffmpeg\$(PlatformShortName)\lib</AdditionalLibraryDirectories>
+      <ModuleDefinitionFile>base\$(ProjectName)-$(PlatformShortName).def</ModuleDefinitionFile>
+      <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
+      <AdditionalDependencies>strmbasd.lib;Msvcrtd.lib;Winmm.lib;PSAPI.lib;swscale.lib;avcodec.lib;avutil.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent />
+    <PreLinkEvent />
+    <PreLinkEvent />
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;ARCH_X86_32;SCFFDSF_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)ext\directshow\baseclasses;$(SolutionDir)ext\ffmpeg\$(PlatformShortName)\include;$(SolutionDir)ext\include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeaderFile>StdAfx.h</PrecompiledHeaderFile>
+      <DisableSpecificWarnings>4005;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(SolutionDir)\obj\BaseClasses\$(Configuration)-$(PlatformShortName)\;$(SolutionDir)ext\ffmpeg\$(PlatformShortName)\lib</AdditionalLibraryDirectories>
+      <ModuleDefinitionFile>base\$(ProjectName)-$(PlatformShortName).def</ModuleDefinitionFile>
+      <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
+      <AdditionalDependencies>strmbase.lib;Msvcrt.lib;Winmm.lib;PSAPI.lib;swscale.lib;avcodec.lib;avutil.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PreLinkEvent />
+    <PreLinkEvent />
+    <PostBuildEvent />
+    <PostBuildEvent />
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;ARCH_X86_64;SCFFDSF_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)ext\directshow\baseclasses;$(SolutionDir)ext\ffmpeg\$(PlatformShortName)\include;$(SolutionDir)ext\include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeaderFile>StdAfx.h</PrecompiledHeaderFile>
+      <DisableSpecificWarnings>4005;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(SolutionDir)\obj\BaseClasses\$(Configuration)-$(PlatformShortName)\;$(SolutionDir)ext\ffmpeg\$(PlatformShortName)\lib</AdditionalLibraryDirectories>
+      <ModuleDefinitionFile>base\$(ProjectName)-$(PlatformShortName).def</ModuleDefinitionFile>
+      <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
+      <AdditionalDependencies>strmbase.lib;Msvcrt.lib;Winmm.lib;PSAPI.lib;swscale.lib;avcodec.lib;avutil.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PreLinkEvent />
+    <PreLinkEvent />
+    <PostBuildEvent />
+    <PostBuildEvent />
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

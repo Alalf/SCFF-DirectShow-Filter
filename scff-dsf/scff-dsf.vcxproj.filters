@@ -1,0 +1,174 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="リソース ファイル">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="base">
+      <UniqueIdentifier>{e140f878-f4e6-4a1b-bef3-93170491fd0c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="imaging">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="base\scff-dsf.cc">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="base\scff-output-pin-implement.cc">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="base\scff-output-pin.cc">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="base\scff-source.cc">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="imaging\engine.cc">
+      <Filter>imaging</Filter>
+    </ClCompile>
+    <ClCompile Include="imaging\screen-capture.cc">
+      <Filter>imaging</Filter>
+    </ClCompile>
+    <ClCompile Include="imaging\native-layout.cc">
+      <Filter>imaging</Filter>
+    </ClCompile>
+    <ClCompile Include="base\scff-monitor.cc">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="base\constants.cc">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="base\debug.cc">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="imaging\processor.cc">
+      <Filter>imaging</Filter>
+    </ClCompile>
+    <ClCompile Include="imaging\image.cc">
+      <Filter>imaging</Filter>
+    </ClCompile>
+    <ClCompile Include="imaging\request.cc">
+      <Filter>imaging</Filter>
+    </ClCompile>
+    <ClCompile Include="imaging\raw-bitmap-image.cc">
+      <Filter>imaging</Filter>
+    </ClCompile>
+    <ClCompile Include="imaging\avpicture-image.cc">
+      <Filter>imaging</Filter>
+    </ClCompile>
+    <ClCompile Include="base\scff-quality-controlled-time.cc">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="base\scff-clock-time.cc">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="imaging\utilities.cc">
+      <Filter>imaging</Filter>
+    </ClCompile>
+    <ClCompile Include="imaging\splash-screen.cc">
+      <Filter>imaging</Filter>
+    </ClCompile>
+    <ClCompile Include="imaging\windows-ddb-image.cc">
+      <Filter>imaging</Filter>
+    </ClCompile>
+    <ClCompile Include="imaging\avpicture-with-fill-image.cc">
+      <Filter>imaging</Filter>
+    </ClCompile>
+    <ClCompile Include="base\scff-interprocess.cc">
+      <Filter>base</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="base\scff-dsf-amd64.def">
+      <Filter>base</Filter>
+    </None>
+    <None Include="base\scff-dsf-x86.def">
+      <Filter>base</Filter>
+    </None>
+    <None Include="base\scff-dsf.dox">
+      <Filter>base</Filter>
+    </None>
+    <None Include="scff-dsf.bmp">
+      <Filter>リソース ファイル</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="base\scff-source.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="base\scff-output-pin.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="imaging\engine.h">
+      <Filter>imaging</Filter>
+    </ClInclude>
+    <ClInclude Include="imaging\screen-capture.h">
+      <Filter>imaging</Filter>
+    </ClInclude>
+    <ClInclude Include="imaging\native-layout.h">
+      <Filter>imaging</Filter>
+    </ClInclude>
+    <ClInclude Include="base\scff-monitor.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="base\constants.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="base\debug.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="imaging\processor.h">
+      <Filter>imaging</Filter>
+    </ClInclude>
+    <ClInclude Include="imaging\imaging-types.h">
+      <Filter>imaging</Filter>
+    </ClInclude>
+    <ClInclude Include="imaging\image.h">
+      <Filter>imaging</Filter>
+    </ClInclude>
+    <ClInclude Include="imaging\request.h">
+      <Filter>imaging</Filter>
+    </ClInclude>
+    <ClInclude Include="imaging\avpicture-image.h">
+      <Filter>imaging</Filter>
+    </ClInclude>
+    <ClInclude Include="imaging\raw-bitmap-image.h">
+      <Filter>imaging</Filter>
+    </ClInclude>
+    <ClInclude Include="base\scff-quality-controlled-time.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="base\scff-clock-time.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="imaging\utilities.h">
+      <Filter>imaging</Filter>
+    </ClInclude>
+    <ClInclude Include="imaging\imaging.h">
+      <Filter>imaging</Filter>
+    </ClInclude>
+    <ClInclude Include="imaging\splash-screen.h">
+      <Filter>imaging</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>リソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="imaging\windows-ddb-image.h">
+      <Filter>imaging</Filter>
+    </ClInclude>
+    <ClInclude Include="imaging\avpicture-with-fill-image.h">
+      <Filter>imaging</Filter>
+    </ClInclude>
+    <ClInclude Include="base\scff-interprocess.h">
+      <Filter>base</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="scff-dsf.rc">
+      <Filter>リソース ファイル</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

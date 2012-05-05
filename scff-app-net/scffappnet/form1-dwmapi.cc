@@ -33,6 +33,8 @@ void Form1::DWMAPIOff() {
     return;
   }
 
+  /// @todo(me) LoadLibraryで置き換える
+
   BOOL was_dwm_enabled_on_start;
   DwmIsCompositionEnabled(&was_dwm_enabled_on_start);
   if (was_dwm_enabled_on_start) {
@@ -52,6 +54,8 @@ void Form1::DWMAPIFlip() {
     return;
   }
 
+  /// @todo(me) LoadLibraryで置き換える
+
   if (this->aero_on_item->Checked) {
     DwmEnableComposition(DWM_EC_DISABLECOMPOSITION);
   } else {
@@ -66,6 +70,8 @@ void Form1::DWMAPIRestore() {
     // dwmapi.dllを利用できなければ何もしない
     return;
   }
+
+  /// @todo(me) LoadLibraryで置き換える
 
   if (was_dwm_enabled_on_start_) {
     DwmEnableComposition(DWM_EC_ENABLECOMPOSITION);

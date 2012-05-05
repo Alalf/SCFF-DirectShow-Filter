@@ -215,7 +215,6 @@ ErrorCode ScreenCapture::Accept(Request *request) {
 void ScreenCapture::DrawCursor(HDC dc) {
   POINT cursor_screen_point;
   GetCursorPos(&cursor_screen_point);
-  ScreenToClient(parameter_.window, &cursor_screen_point);
 
   RECT window_screen_rect;
   GetWindowRect(parameter_.window, &window_screen_rect);

@@ -22,7 +22,6 @@
 #include "Form1.h"
 
 #include <Windows.h>
-#include <Dwmapi.h>
 
 #include <ctime>
 
@@ -33,23 +32,23 @@
 namespace scffappnet {
 
 // コンストラクタ
-Form1::Form1(void) {
+Form1::Form1(void)
+    : can_use_dwmapi_dll_(false),
+      was_dwm_enabled_on_start_(false),
+      interprocess_(0),         // NULL
+      layout_parameter_(0) {    // NULL
   //---------------------------------------------------------------
   // DO NOT DELETE THIS!!!
   InitializeComponent();
   //---------------------------------------------------------------
 
-  // まずはAeroの状態を保存して、強制的に無効にする
-  BOOL was_dwm_enabled_on_start;
-  DwmIsCompositionEnabled(&was_dwm_enabled_on_start);
-  if (was_dwm_enabled_on_start) {
-    DwmEnableComposition(DWM_EC_DISABLECOMPOSITION);
-    Diagnostics::Debug::WriteLine("Aero ON to OFF");
-  } else {
-    Diagnostics::Debug::WriteLine("Aero Already OFF");
+  // DWMAPI.DLLが利用可能かどうか調べる
+  OSVERSIONINFO os_info;
+  os_info.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
+  GetVersionEx(&os_info);
+  if (os_info.dwPlatformId == 2 && os_info.dwMajorVersion >= 6) {
+    can_use_dwmapi_dll_ = true;
   }
-  this->aero_on_item->Checked = false;
-  was_dwm_enabled_on_start_ = was_dwm_enabled_on_start == TRUE;
 
   // プロセス間通信に必要なオブジェクトの生成
   interprocess_ = new SCFFInterprocess;
@@ -82,11 +81,7 @@ Form1::~Form1() {
   }
   //---------------------------------------------------------------
 
-  // Aeroの状態を元に戻す
-  if (was_dwm_enabled_on_start_) {
-    DwmEnableComposition(DWM_EC_ENABLECOMPOSITION);
-    Diagnostics::Debug::WriteLine("Aero OFF to ON");
-  }
+  DWMAPIRestore();
 
   // プロセス間通信に必要なオブジェクトの削除
   delete interprocess_;
@@ -216,15 +211,6 @@ void Form1::SendNativeLayoutRequest() {
     interprocess_->InitMessage(process_id);
     interprocess_->SendMessage(message);
   }
-}
-
-void Form1::DoAeroOn() {
-  if (this->aero_on_item->Checked) {
-    DwmEnableComposition(DWM_EC_DISABLECOMPOSITION);
-  } else {
-    DwmEnableComposition(DWM_EC_ENABLECOMPOSITION);
-  }
-  this->aero_on_item->Checked = !(this->aero_on_item->Checked);
 }
 
 void Form1::DoCaptureDesktopWindow() {

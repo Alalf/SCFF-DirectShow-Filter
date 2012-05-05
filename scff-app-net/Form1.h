@@ -759,6 +759,7 @@ private: System::Windows::Forms::NumericUpDown^  area_clipping_x;
     this->MinimumSize = System::Drawing::Size(300, 500);
     this->Name = L"Form1";
     this->Text = L"SCFF DirectShow Filter Ver.0.0.1";
+    this->Shown += gcnew System::EventHandler(this, &Form1::Form1_Shown);
     this->main_menu->ResumeLayout(false);
     this->main_menu->PerformLayout();
     this->kTarget->ResumeLayout(false);
@@ -800,24 +801,38 @@ private: System::Windows::Forms::NumericUpDown^  area_clipping_x;
   /// @brief 共有メモリにNativeLayoutリクエストを設定
   void SendNativeLayoutRequest();
 
-  /// @brief 起動時にAeroをONからOFFにしていたらONにもどす
-  void DoAeroOn();
-  /// @brief デスクトップを全画面で取り込む
-  void DoCaptureDesktopWindow();
+  //-------------------------------------------------------------------
 
   /// @brief ResizeMethod ComboBoxにデータソースを設定する
   void BuildResizeMethodCombobox();
 
+  //-------------------------------------------------------------------
+
   /// @brief ウィンドウを指定する
   void SetWindow(HWND window_handle);
+  /// @brief デスクトップを全画面で取り込む
+  void DoCaptureDesktopWindow();
   /// @brief クリッピング領域をリセットする
   void ResetClippingRegion();
 
   /// @brief パラメータのValidate
   bool ValidateParameters();
 
+  //-------------------------------------------------------------------
+
+  /// @brief Dwmapi.dllを利用してAeroをOffに
+  void DWMAPIOff();
+  /// @brief 強制的にAeroのOn/Offを切り替える
+  void DWMAPIFlip();
+  /// @brief AeroをOffにしていたらOnに戻す
+  void DWMAPIRestore();
+  /// @brief Dwmapi.dllが利用可能かどうか
+  bool can_use_dwmapi_dll_;
   /// @brief Aeroが起動時にONになっていたかどうか
   bool was_dwm_enabled_on_start_;
+
+  //-------------------------------------------------------------------
+
   /// @brief プロセス間通信用オブジェクト
   SCFFInterprocess *interprocess_;
   /// @brief 現在編集中のレイアウト番号
@@ -849,5 +864,6 @@ private: System::Void option_over_sampling_CheckedChanged(System::Object^  sende
 private: System::Void option_thread_num_ValueChanged(System::Object^  sender, System::EventArgs^  e);
 private: System::Void option_resize_method_combo_SelectedIndexChanged(System::Object^  sender, System::EventArgs^  e);
 private: System::Void target_area_select_Click(System::Object^  sender, System::EventArgs^  e);
+private: System::Void Form1_Shown(System::Object^  sender, System::EventArgs^  e);
 };
 }   // namepspace

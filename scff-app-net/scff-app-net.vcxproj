@@ -101,9 +101,10 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Dwmapi.lib;User32.lib</AdditionalDependencies>
+      <AdditionalDependencies>User32.lib;Dwmapi.lib</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
       <EntryPointSymbol>main</EntryPointSymbol>
+      <DelayLoadDLLs>Dwmapi.dll</DelayLoadDLLs>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -116,9 +117,10 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Dwmapi.lib;User32.lib</AdditionalDependencies>
+      <AdditionalDependencies>User32.lib;Dwmapi.lib</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
       <EntryPointSymbol>main</EntryPointSymbol>
+      <DelayLoadDLLs>Dwmapi.dll</DelayLoadDLLs>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -130,9 +132,10 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Dwmapi.lib;User32.lib</AdditionalDependencies>
+      <AdditionalDependencies>User32.lib;Dwmapi.lib</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
       <EntryPointSymbol>main</EntryPointSymbol>
+      <DelayLoadDLLs>Dwmapi.dll</DelayLoadDLLs>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -144,9 +147,10 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Dwmapi.lib;User32.lib</AdditionalDependencies>
+      <AdditionalDependencies>User32.lib;Dwmapi.lib</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
       <EntryPointSymbol>main</EntryPointSymbol>
+      <DelayLoadDLLs>Dwmapi.dll</DelayLoadDLLs>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -165,6 +169,7 @@
     <ClCompile Include="AssemblyInfo.cpp" />
     <ClCompile Include="scff-app-net.cpp" />
     <ClCompile Include="scffappnet\data_source.cc" />
+    <ClCompile Include="scffappnet\form1-dwmapi.cc" />
     <ClCompile Include="scffappnet\form1-event-handlers.cc" />
     <ClCompile Include="scffappnet\form1.cc" />
   </ItemGroup>

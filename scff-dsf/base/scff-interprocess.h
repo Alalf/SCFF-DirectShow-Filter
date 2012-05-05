@@ -185,7 +185,8 @@ struct SCFFLayoutParameter {
 /// @brief 共有メモリ(SCFFMessage)に格納する構造体
 struct SCFFMessage {
   /// @brief タイムスタンプ(time()で求められたものを想定)
-  /// @warning 1ではじまり単調増加が必須条件(0および負数は無効なメッセージを示す)
+  /// @warning 1ではじまり単調増加が必須条件
+  /// @warning (0および負数は無効なメッセージを示す)
   int64_t timestamp;
   /// @brief レイアウトの種類
   /// @attention SCFFLayoutTypeを操作に使うこと

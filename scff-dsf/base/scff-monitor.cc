@@ -136,7 +136,7 @@ imaging::Request* SCFFMonitor::CreateRequest() {
     //-----------------------------------------------------------------
     MyDbgLog((LOG_TRACE, kDbgImportant,
               TEXT("SCFFMonitor: SetNativeLayoutRequest arrived.")));
-    
+
     // 以下のデータは無視される
     // message.layout_element_count
     // message.layout_parameters[0]以外の全てのエントリ

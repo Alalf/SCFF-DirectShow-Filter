@@ -40,7 +40,7 @@ STDMETHODIMP SCFFOutputPin::Notify(IBaseFilter *self, Quality quality) {
 
   /// @attention Notifyは別スレッドから呼ばれることを確認
 
-  // デバッグ用 if (false) { 
+  // デバッグ用 if (false) {
   if (!can_use_quality) {
     can_use_quality = true;
     MyDbgLog((LOG_TRACE, kDbgImportant,

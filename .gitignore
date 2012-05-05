@@ -3,3 +3,17 @@
 /obj
 *.opensdf
 *.sdf
+/ext/ffmpeg/amd64/README.txt
+/ext/ffmpeg/amd64/presets
+/ext/ffmpeg/amd64/licenses
+/ext/ffmpeg/amd64/lib
+/ext/ffmpeg/amd64/include
+/ext/ffmpeg/amd64/doc
+/ext/ffmpeg/amd64/bin
+/ext/ffmpeg/x86/README.txt
+/ext/ffmpeg/x86/presets
+/ext/ffmpeg/x86/licenses
+/ext/ffmpeg/x86/lib
+/ext/ffmpeg/x86/include
+/ext/ffmpeg/x86/doc
+/ext/ffmpeg/x86/bin

@@ -101,7 +101,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>User32.lib;Dwmapi.lib</AdditionalDependencies>
+      <AdditionalDependencies>User32.lib;Dwmapi.lib;delayimp.lib</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
       <EntryPointSymbol>main</EntryPointSymbol>
       <DelayLoadDLLs>Dwmapi.dll</DelayLoadDLLs>
@@ -117,7 +117,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>User32.lib;Dwmapi.lib</AdditionalDependencies>
+      <AdditionalDependencies>User32.lib;Dwmapi.lib;delayimp.lib</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
       <EntryPointSymbol>main</EntryPointSymbol>
       <DelayLoadDLLs>Dwmapi.dll</DelayLoadDLLs>
@@ -132,7 +132,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>User32.lib;Dwmapi.lib</AdditionalDependencies>
+      <AdditionalDependencies>User32.lib;Dwmapi.lib;delayimp.lib</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
       <EntryPointSymbol>main</EntryPointSymbol>
       <DelayLoadDLLs>Dwmapi.dll</DelayLoadDLLs>
@@ -147,7 +147,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>User32.lib;Dwmapi.lib</AdditionalDependencies>
+      <AdditionalDependencies>User32.lib;Dwmapi.lib;delayimp.lib</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
       <EntryPointSymbol>main</EntryPointSymbol>
       <DelayLoadDLLs>Dwmapi.dll</DelayLoadDLLs>

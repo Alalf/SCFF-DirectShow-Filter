@@ -13,15 +13,27 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="drawutils">
+      <UniqueIdentifier>{cd6ce1f8-5786-48e2-bb07-3a4f15de8104}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="base\scff-tests.cc">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="drawuitls\drawutils.cc">
+      <Filter>drawutils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\scff-tests.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="drawuitls\colorspace.h">
+      <Filter>drawutils</Filter>
+    </ClInclude>
+    <ClInclude Include="drawuitls\drawutils.h">
+      <Filter>drawutils</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

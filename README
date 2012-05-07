@@ -6,14 +6,20 @@
   - ext/ffmpeg/amd64に64bit版を、ext/ffmpeg/x86に32bit版を展開する
   - SharedもDevも同じディレクトリに展開すること（数個のファイルが上書きされるが問題ない）
   - ext/ffmpeg/amd64/README.txt, ext/ffmpeg/x86/README.txtが存在するように確認すること
-2. ソリューションを開き、全てのビルドが通ることを確認
+2. (重要！) ext/ffmpeg/amd64/include/libavutil/pixdesc.hおよび
+   ext/ffmpeg/x86/include/libavutil/pixdesc.hの以下の部分:
+> extern const AVPixFmtDescriptor av_pix_fmt_descriptors[];
+   を
+> extern __declspec(dllimport) const AVPixFmtDescriptor av_pix_fmt_descriptors[];
+   のように書き換えてください。一応tools/pixdesc.patchも添付してあります。
+3. ソリューションを開き、全てのビルドが通ることを確認
   - Microsoft Visual Studio 2010 Express Edition + Windows SDK 7.1で確認済み
   - 必要ならばいくつかのプロジェクト設定を書き換えること
-3. tools/copy-binaries.batを実行してdistディレクトリにdllなどをコピー
-4. tools/install-debug.batかtools/install-release.batを実行
-5. 各種エンコーダを起動しフィルタが認識されているかチェック
-6. dist/*にあるヘルパーアプリケーションを起動し取り込み設定を行う
-7. デバッグバージョンを利用する場合:
+4. tools/copy-binaries.batを実行してdistディレクトリにdllなどをコピー
+5. tools/install-debug.batかtools/install-release.batを実行
+6. 各種エンコーダを起動しフィルタが認識されているかチェック
+7. dist/*にあるヘルパーアプリケーションを起動し取り込み設定を行う
+8. デバッグバージョンを利用する場合:
   - プロジェクト設定からローカルWindowsデバッガーを選ぶ
   - コマンドにWME/KTE/FMEなどを選択すればデバッグ文字列などを見ることが出来る。
 
@@ -27,6 +33,9 @@
 - scff-dsfにはdoxygenコメントをつけてあります
 -- Doxygen(http://www.stack.nl/~dimitri/doxygen/index.html)
 --- プログラムの全体的な構造を把握したい場合はぜひ利用してみてください。
+
+- scff-dsf/base/constants.hのプリプロセッサ ブロックを編集すると
+  RGB32bit出力およびYUV422出力が可能になります。
 
 ** 関連するソフトウェア、ソースコードについて
 

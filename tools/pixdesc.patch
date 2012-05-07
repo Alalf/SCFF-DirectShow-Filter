@@ -1,0 +1,8 @@
+105c105,109
+< extern const AVPixFmtDescriptor av_pix_fmt_descriptors[];
+---
+> /*-------------------------------------------------------------------*/
+> /* 2012/05/07 modified by Alalf                                      */
+> /* "Because the windows dll format was designed by morons."          */
+> /*-------------------------------------------------------------------*/
+> extern __declspec(dllimport) const AVPixFmtDescriptor av_pix_fmt_descriptors[];

@@ -66,6 +66,8 @@
 --- libavcodec: a library containing decoders and encoders for audio/video codecs.
 --- libswscale: a library performing highly optimized image scaling and color space/pixel format conversion operations.
 --- libavfilter: a library containing media filters.
+--- libavformat: a library containing demuxers and muxers for multimedia container formats.
+--- libswresample: a library performing highly optimized audio resampling, rematrixing and sample format conversion operations.
 -- 利用しているLGPLライセンスのソースコード
 --- libavutil/colorspace.h
 --- libavfilter/drawutils.c

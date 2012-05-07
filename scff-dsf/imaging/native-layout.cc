@@ -52,8 +52,8 @@ NativeLayout::NativeLayout(ImagePixelFormat pixel_format,
       screen_capture_(0),   // NULL
       capture_image_() {
   MyDbgLog((LOG_MEMORY, kDbgNewDelete,
-          TEXT("NativeLayout: NEW(%d,%d,stretch:%d,keep-aspect:%d)"),
-          width, height, stretch, keep_aspect_ratio));
+          TEXT("NativeLayout: NEW(%d, %d, %d, stretch:%d, keep-aspect:%d)"),
+          pixel_format, width, height, stretch, keep_aspect_ratio));
 }
 
 // デストラクタ
@@ -80,7 +80,7 @@ ErrorCode NativeLayout::Init() {
   padding_left_ = 0;
   padding_right_ = 0;
 
-  /// @warning YUV420Pのみに対応
+  /// @warning I420のみに対応
   bool error = false;
   switch (pixel_format()) {
   case kI420:
@@ -159,7 +159,7 @@ ErrorCode NativeLayout::PullAVPictureImage(AVPictureImage *image) {
   ASSERT(screen_capture_ != 0);   // NULL
   ASSERT(image != 0);             // NULL
 
-  /// @warning YUV420Pのみに対応
+  /// @warning I420のみに対応
   ErrorCode error = kNoError;
   int error_pad = -1;
   static int padding_yuv_color[3] = {0, 128, 128};

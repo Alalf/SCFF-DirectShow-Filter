@@ -34,8 +34,24 @@
 -- Doxygen(http://www.stack.nl/~dimitri/doxygen/index.html)
 --- プログラムの全体的な構造を把握したい場合はぜひ利用してみてください。
 
-- scff-dsf/base/constants.hのプリプロセッサ ブロックを編集すると
-  RGB32bit出力およびYUV422出力が可能になります。
+** 各種エンコーダー対応情報
+
+*** Windows Media Encoder etc.
+-  YUV420P(I420)に加えてYUV422(UYVY), RGB 32(RGB0)フォーマット出力が使えるようになりました。
+-- （暫定対応なので現在パディングはできません。）
+-- WMEのプロパティ > 処理 > ビデオ > ピクセルの形式から「UYVY」「RGB 32」を選択することで利用できます。
+
+*** KoToEncoder(KTE)
+- KTEでYUV420P出力を利用する場合、scff-dsf/base/constants.hの以下の部分：
+> // #define FOR_KOTOENCODER
+  を
+> #define FOR_KOTOENCODER
+  のように書き換えてください。
+- KTEはRGB32出力をサポートしたフィルタを利用する場合、フィルタの出力をRGB32に固定するようです。
+-- 書き換え量は増えますが、YUV422も利用可能です。
+--- 詳しくはソリューション内検索で"FOR_KOTOENCODER"で検索してみてください。
+- KoToEncoderのプレビュー機能はI420出力利用時にうまく動かないようです。
+-- 出力サイズを設定したあとKTEを再起動すればプレビューが表示されるようになります。
 
 ** 関連するソフトウェア、ソースコードについて
 
@@ -44,10 +60,16 @@
 - ISO C9x  compliant inttypes.h for Microsoft Visual Studio
 -- Copyright (c) 2006 Alexander Chemeris
 
-- SCFF DirectShow Filterではffmpegプロジェクトに含まれる以下のLGPLライブラリを使用しています。
--- libavutil: a library containing functions for simplifying programming, including random number generators, data structures, mathematics routines, core multimedia utilities, and much more.
--- libavcodec: a library containing decoders and encoders for audio/video codecs.
--- libswscale: a library performing highly optimized image scaling and color space/pixel format conversion operations.
+- ffmpegプロジェクト(http://ffmpeg.org)
+-- 利用しているLGPLライブラリ:
+--- libavutil: a library containing functions for simplifying programming, including random number generators, data structures, mathematics routines, core multimedia utilities, and much more.
+--- libavcodec: a library containing decoders and encoders for audio/video codecs.
+--- libswscale: a library performing highly optimized image scaling and color space/pixel format conversion operations.
+--- libavfilter: a library containing media filters.
+-- 利用しているLGPLライセンスのソースコード
+--- libavutil/colorspace.h
+--- libavfilter/drawutils.c
+--- libavfilter/drawutils.h
 
 ** 注意
 - SCFF DirectShow Filterは"フリーソフトウェア"です。

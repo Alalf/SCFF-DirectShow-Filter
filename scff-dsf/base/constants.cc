@@ -20,6 +20,7 @@
 /// @brief グローバル定数定義
 
 #include "base/constants.h"
+#include "imaging/imaging.h"
 
 //=====================================================================
 // 定数
@@ -48,6 +49,19 @@ const SIZE kPreferredSizes[] = {
 // 優先ビデオサイズの数
 const int kPreferredSizesCount =
   sizeof(kPreferredSizes) / sizeof(kPreferredSizes[0]);
+
+/// @brief 対応ピクセルフォーマットの数
+const int kSupportedPixelFormatsCount =
+#if defined(FOR_KOTOENCODER)
+  // KoToEncoderは基本的に1ピクセルフォーマットしか対応していない
+  1;
+#else
+  imaging::kSupportedPixelFormatsCount;
+#endif
+
+// 優先フォーマットの数
+const int kSupportedFormatsCount =
+    kPreferredSizesCount * kSupportedPixelFormatsCount;
 
 // デフォルトFPS
 const int kDefaultFPS = 30;

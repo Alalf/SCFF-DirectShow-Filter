@@ -111,7 +111,7 @@ STDMETHODIMP SCFFOutputPin::GetNumberOfCapabilities(
                               int *count, int *size) {
   CheckPointer(size, E_POINTER);
 
-  *count = kPreferredSizesCount;
+  *count = kSupportedFormatsCount;
   *size = sizeof(VIDEO_STREAM_CONFIG_CAPS);
 
   MyDbgLog((LOG_TRACE, kDbgImportant,

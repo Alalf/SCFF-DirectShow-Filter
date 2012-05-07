@@ -49,8 +49,8 @@ Engine::Engine(ImagePixelFormat pixel_format, int width, int height, double fps)
       front_image_(),
       back_image_() {
   MyDbgLog((LOG_MEMORY, kDbgNewDelete,
-          TEXT("Engine: NEW(%d,%d,%.1f)"),
-          width, height, fps));
+          TEXT("Engine: NEW(%d, %d, %d, %.1f)"),
+          pixel_format, width, height, fps));
 }
 
 // デストラクタ

@@ -43,8 +43,8 @@ SplashScreen::SplashScreen(ImagePixelFormat pixel_format,
                            int width, int height)
     : Processor(pixel_format, width, height) {
   MyDbgLog((LOG_MEMORY, kDbgNewDelete,
-          TEXT("SplashScreen: NEW(%d,%d)"),
-          width, height));
+          TEXT("SplashScreen: NEW(%d, %d, %d)"),
+          pixel_format, width, height));
 }
 
 //-------------------------------------------------------------------
@@ -126,7 +126,7 @@ ErrorCode SplashScreen::PullAVPictureImage(AVPictureImage *image) {
     return ErrorOccured(error_resource_image_for_swscale);
   }
 
-  // YUV420Pのみパディングも使うのでパディング幅、高さを計算しておく
+  // I420のみパディングも使うのでパディング幅、高さを計算しておく
   int padding_top = 0;
   int padding_bottom = 0;
   int padding_left = 0;
@@ -153,7 +153,7 @@ ErrorCode SplashScreen::PullAVPictureImage(AVPictureImage *image) {
   }
 
   // ピクセルフォーマット変換＋拡大縮小用のコンテキスト作成
-  // YUV420Pのみパディングも使うので拡大縮小はなし
+  // I420のみパディングも使うので拡大縮小はなし
   struct SwsContext *scaler = 0;  // NULL
   switch (pixel_format()) {
   case kI420:

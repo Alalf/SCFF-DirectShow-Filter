@@ -71,12 +71,12 @@ static const int kSCFFMaxComplexLayoutElements = 8;
 /// @brief ピクセルフォーマットの種類
 /// @sa imaging::ImagePixelFormat
 enum SCFFPixelFormat {
-  /// @brief RGB0(32bit)
-  kSCFFRGB0 = 0,
   /// @brief I420(12bit)
-  kSCFFI420,
+  kSCFFI420 = 0,
   /// @brief UYVY(16bit)
-  kSCFFUYVY
+  kSCFFUYVY,
+  /// @brief RGB0(32bit)
+  kSCFFRGB0,
 };
 
 /// @brief レイアウトの種類

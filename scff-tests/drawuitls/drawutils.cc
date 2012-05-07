@@ -21,17 +21,8 @@
 //---------------------------------------------------------------------
 // 2012/05/06 modified by Alalf
 extern "C" {
-#ifdef WIN32
-#define av_pix_fmt_descriptors av_pix_fmt_descriptors_foo
-#endif
-
-#include <libavutil/pixdesc.h>
-
-#ifdef WIN32
-#undef av_pix_fmt_descriptors
-__declspec(dllimport) const AVPixFmtDescriptor av_pix_fmt_descriptors[PIX_FMT_NB];
-#endif
 #include <libavfilter/avfilter.h>
+#include <libavutil/pixdesc.h>
 }
 #include "colorspace.h"
 //---------------------------------------------------------------------
@@ -73,8 +64,8 @@ int ff_fill_line_with_color(uint8_t *line[4], int pixel_step[4], int w, uint8_t 
         for (i = 0; i < 4; i++)
             dst_color[rgba_map[i]] = rgba_color[i];
         //-------------------------------------------------------------
-        // 2012/05/06 modified by Alalf
-        line[0] = reinterpret_cast<uint8_t*>(av_malloc(w * pixel_step[0]));
+        // 2012/05/07 modified by Alalf
+        line[0] = static_cast<uint8_t*>(av_malloc(w * pixel_step[0]));
         //-------------------------------------------------------------
         for (i = 0; i < w; i++)
             memcpy(line[0] + i * pixel_step[0], dst_color, pixel_step[0]);
@@ -95,8 +86,8 @@ int ff_fill_line_with_color(uint8_t *line[4], int pixel_step[4], int w, uint8_t 
             pixel_step[plane] = 1;
             line_size = (w >> hsub1) * pixel_step[plane];
             //---------------------------------------------------------
-            // 2012/05/06 modified by Alalf
-            line[plane] = reinterpret_cast<uint8_t*>(av_malloc(line_size));
+            // 2012/05/07 modified by Alalf
+            line[plane] = static_cast<uint8_t*>(av_malloc(line_size));
             //---------------------------------------------------------
             memset(line[plane], dst_color[plane], line_size);
         }
@@ -515,7 +506,9 @@ int ff_draw_round_to_sub(FFDrawContext *draw, int sub_dir, int round_dir,
 AVFilterFormats *ff_draw_supported_pixel_formats(unsigned flags)
 {
     //-----------------------------------------------------------------
-    // 2012/05/06 modified by Alalf
+    // 2012/05/07 modified by Alalf
+    // **WARNING** int->enum static_casting
+    // Where's our enum iterator?
     int pix_fmts[PIX_FMT_NB + 1];
     unsigned n = 0;
     FFDrawContext draw;

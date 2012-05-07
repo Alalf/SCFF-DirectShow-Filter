@@ -48,8 +48,8 @@ ScreenCapture::ScreenCapture(ImagePixelFormat pixel_format,
       window_width_(-1),      // ありえない値
       window_height_(-1) {    // ありえない値
   MyDbgLog((LOG_MEMORY, kDbgNewDelete,
-          TEXT("ScreenCapture: NEW(%d,%d)"),
-          width, height));
+          TEXT("ScreenCapture: NEW(%d, %d, %d)"),
+          pixel_format, width, height));
 }
 
 // デストラクタ

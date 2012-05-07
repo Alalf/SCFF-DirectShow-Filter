@@ -110,14 +110,14 @@ int Utilities::CalcImageSize(const Image &image) {
 /// @attention ピクセルフォーマットを追加するときはここを修正すること
 PixelFormat Utilities::ToAVPicturePixelFormat(ImagePixelFormat pixel_format) {
   switch (pixel_format) {
-  case kRGB0:
-    return PIX_FMT_RGB0;
-    break;
   case kI420:
     return PIX_FMT_YUV420P;
     break;
   case kUYVY:
     return PIX_FMT_UYVY422;
+    break;
+  case kRGB0:
+    return PIX_FMT_RGB0;
     break;
   }
 
@@ -144,10 +144,6 @@ BITMAPINFO Utilities::ToWindowsBitmapInfo(ImagePixelFormat pixel_format,
   info.bmiHeader.biClrUsed       = 0;
   info.bmiHeader.biClrImportant  = 0;
   switch (pixel_format) {
-  case kRGB0:
-    info.bmiHeader.biBitCount      = 32;
-    info.bmiHeader.biCompression   = BI_RGB;
-    break;
   case kI420:
     info.bmiHeader.biBitCount      = 12;
     info.bmiHeader.biCompression   = MAKEFOURCC('I', '4', '2', '0');
@@ -155,6 +151,10 @@ BITMAPINFO Utilities::ToWindowsBitmapInfo(ImagePixelFormat pixel_format,
   case kUYVY:
     info.bmiHeader.biBitCount      = 16;
     info.bmiHeader.biCompression   = MAKEFOURCC('U', 'Y', 'V', 'Y');
+    break;
+  case kRGB0:
+    info.bmiHeader.biBitCount      = 32;
+    info.bmiHeader.biCompression   = BI_RGB;
     break;
   }
   return info;

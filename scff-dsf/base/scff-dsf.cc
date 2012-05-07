@@ -29,26 +29,27 @@
 // フィルタ/ピン設定
 //=====================================================================
 
-/// @brief メディアサブタイプ: RGB0/I420/UYVY
-static const GUID kMediaSubType =
-#if defined(YUV420P)
-///- I420: YUV420P
+/// @brief メディアサブタイプGUID: I420
+static const GUID kMediaSubtypeI420 =
     static_cast<GUID>(FOURCCMap(MAKEFOURCC('I', '4', '2', '0')));
-#elif defined(UYVY422)
-///- UYVY: UYVY422
+
+/// @brief メディアサブタイプGUID: UYVY
+static const GUID kMediaSubtypeUYVY =
     static_cast<GUID>(FOURCCMap(MAKEFOURCC('U', 'Y', 'V', 'Y')));
-#else
-///- RGB0: UNUSED-8bit,B:8bit,G:8bit,R:8bit
-///  - リトルエンディアンであることに注意
-    MEDIASUBTYPE_RGB32;
-#endif
+
+/// @brief メディアサブタイプGUID: RGB0
+static const GUID kMediaSubtypeRGB0 =
+    MEDIASUBTYPE_RGB32;   // リトルエンディアンであることに注意
 
 /// @brief メディアタイプ: Video
 static const AMOVIESETUP_MEDIATYPE kMediaTypes[] = {
-  {
-    &MEDIATYPE_Video,
-    &kMediaSubType
-  },
+#if defined(FOR_KOTOENCODER)
+  {&MEDIATYPE_Video, &kMediaSubtypeI420},
+#else
+  {&MEDIATYPE_Video, &kMediaSubtypeI420},
+  {&MEDIATYPE_Video, &kMediaSubtypeUYVY},
+  {&MEDIATYPE_Video, &kMediaSubtypeRGB0},
+#endif
 };
 
 /// @brief ピン: 出力ピンは必ず１個存在する
@@ -62,7 +63,7 @@ static const AMOVIESETUP_PIN kOutputPins[] = {
     FALSE,        // フィルタは複数のインスタンスを作成できるか?
     &GUID_NULL,
     NULL,
-    1,            // メディア タイプの数。
+    kSupportedPixelFormatsCount,  // メディア タイプの数。
     kMediaTypes   // メディア タイプへのポインタ。
   }
 };
@@ -90,7 +91,7 @@ static const REGFILTERPINS2 kOutputPinsIFM2[] = {
     REG_PINFLAG_B_OUTPUT,   // REG_PINFLAG フラグのビットごとの組み合わせ
                             // (0 個でもよい)。
     1,                      // ピンのインスタンス数。
-    1,                      // このピンがサポートするメディア タイプ数。
+    kSupportedPixelFormatsCount,  // このピンがサポートするメディア タイプ数。
     kMediaTypes,            // REGPINTYPES 構造体の配列へのポインタ。
                             // 配列のサイズは nMediaTypes。
     0,                      // メディア数。0 も指定できる。

@@ -59,30 +59,18 @@ enum ErrorCode {
 
 //---------------------------------------------------------------------
 
-/// @brief イメージタイプ
-enum ImageType {
-  /// @brief 不正なタイプ
-  kInvalidImageType = -1,
-  /// @brief 各種ビットマップへのポインタ
-  kRawBitmap = 0,
-  /// @brief ビットマップハンドル(HBITMAP)
-  kWindowsDDB,
-  /// @brief AVPicture(ffmepg)
-  kAVPicture
-};
-
-//---------------------------------------------------------------------
-
 /// @brief イメージのピクセルフォーマット
 enum ImagePixelFormat {
   /// @brief 不正なピクセルフォーマット
   kInvalidPixelFormat = -1,
-  /// @brief RGB0(32bit)
-  kRGB0 = 0,
   /// @brief I420(12bit)
-  kI420,
+  kI420 = 0,
   /// @brief UYVY(16bit)
-  kUYVY
+  kUYVY,
+  /// @brief RGB0(32bit)
+  kRGB0,
+  /// @brief 対応ピクセルフォーマット数
+  kSupportedPixelFormatsCount
 };
 
 //---------------------------------------------------------------------

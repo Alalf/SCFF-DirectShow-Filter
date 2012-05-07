@@ -30,9 +30,8 @@
 // プリプロセッサ
 //=====================================================================
 
-/// @brief 内部形式をYUV420P(I420)にする場合は有効に（デフォルトRGB0）
-#define YUV420P
-//#define UYVY422
+/// @brief KoToEncoder(KTE)を利用してYUV出力を利用する場合
+// #define FOR_KOTOENCODER
 
 //=====================================================================
 // 定数
@@ -49,6 +48,12 @@ extern const SIZE kPreferredSizes[];
 
 /// @brief 優先ビデオサイズの数
 extern const int kPreferredSizesCount;
+
+/// @brief 対応ピクセルフォーマットの数
+extern const int kSupportedPixelFormatsCount;
+
+/// @brief 対応フォーマットの数
+extern const int kSupportedFormatsCount;
 
 /// @brief デフォルトFPS
 extern const int kDefaultFPS;

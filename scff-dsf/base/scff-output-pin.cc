@@ -88,7 +88,11 @@ HRESULT SCFFOutputPin::GetMediaType(int position, CMediaType *media_type) {
   // 引数チェック
   CheckPointer(media_type, E_POINTER);
   if (position < 0) return E_INVALIDARG;
-  if (position >= kPreferredSizesCount) return VFW_S_NO_MORE_ITEMS;
+  if (position >= kSupportedFormatsCount) return VFW_S_NO_MORE_ITEMS;
+
+  // サイズおよびピクセルフォーマット設定用
+  const int position_in_preferred_sizes = position % kPreferredSizesCount;
+  const int position_in_pixel_formats = position / kPreferredSizesCount;
 
   // ロック: m_pFilter->pStateLock()
   CAutoLock lock(m_pFilter->pStateLock());
@@ -108,43 +112,64 @@ HRESULT SCFFOutputPin::GetMediaType(int position, CMediaType *media_type) {
   // サイズ設定の優先度は以下のとおり:
   //  0.  SetMediaTypeでピン接続先から指定されたサイズ
   //  1-. 優先サイズの配列順
-  switch (position) {
+  switch (position_in_preferred_sizes) {
   case 0:
     video_info->bmiHeader.biWidth   = width_;
     video_info->bmiHeader.biHeight  = height_;
     break;
   default:
-    video_info->bmiHeader.biWidth   = kPreferredSizes[position].cx;
-    video_info->bmiHeader.biHeight  = kPreferredSizes[position].cy;
+    video_info->bmiHeader.biWidth   =
+        kPreferredSizes[position_in_preferred_sizes].cx;
+    video_info->bmiHeader.biHeight  =
+        kPreferredSizes[position_in_preferred_sizes].cy;
     break;
   }
 
   video_info->bmiHeader.biPlanes        = 1;
   video_info->bmiHeader.biClrImportant  = 0;
 
-#if defined(YUV420P)
+  int data_size = -1;
+#if defined(FOR_KOTOENCODER)
+  // I420(12bit)
   video_info->bmiHeader.biCompression   = MAKEFOURCC('I', '4', '2', '0');
   video_info->bmiHeader.biBitCount      = 12;
-  const int data_size =
+  data_size =
       imaging::Utilities::CalcDataSize(imaging::kI420,
-                                       video_info->bmiHeader.biWidth,
-                                       video_info->bmiHeader.biHeight);
-#elif defined(UYVY422)
-  video_info->bmiHeader.biCompression   = MAKEFOURCC('U', 'Y', 'V', 'Y');
-  video_info->bmiHeader.biBitCount      = 16;
-  const int data_size =
-      imaging::Utilities::CalcDataSize(imaging::kUYVY,
-                                       video_info->bmiHeader.biWidth,
-                                       video_info->bmiHeader.biHeight);
+                                        video_info->bmiHeader.biWidth,
+                                        video_info->bmiHeader.biHeight);
 #else
-  video_info->bmiHeader.biCompression   = BI_RGB;
-  video_info->bmiHeader.biBitCount      = 32;
-  const int data_size =
-      imaging::Utilities::CalcDataSize(imaging::kRGB0,
-                                       video_info->bmiHeader.biWidth,
-                                       video_info->bmiHeader.biHeight);
+  switch (position_in_pixel_formats) {
+  case imaging::kI420:
+    // I420(12bit)
+    video_info->bmiHeader.biCompression   = MAKEFOURCC('I', '4', '2', '0');
+    video_info->bmiHeader.biBitCount      = 12;
+    data_size =
+        imaging::Utilities::CalcDataSize(imaging::kI420,
+                                         video_info->bmiHeader.biWidth,
+                                         video_info->bmiHeader.biHeight);
+    break;
+  case imaging::kUYVY:
+    // UYVY(16bit)
+    video_info->bmiHeader.biCompression   = MAKEFOURCC('U', 'Y', 'V', 'Y');
+    video_info->bmiHeader.biBitCount      = 16;
+    data_size =
+        imaging::Utilities::CalcDataSize(imaging::kUYVY,
+                                         video_info->bmiHeader.biWidth,
+                                         video_info->bmiHeader.biHeight);
+    break;
+  case imaging::kRGB0:
+    // RGB0(32bit)
+    video_info->bmiHeader.biCompression   = BI_RGB;
+    video_info->bmiHeader.biBitCount      = 32;
+    data_size =
+        imaging::Utilities::CalcDataSize(imaging::kRGB0,
+                                         video_info->bmiHeader.biWidth,
+                                         video_info->bmiHeader.biHeight);
+    break;
+  }
 #endif
 
+  ASSERT(data_size != -1);
   video_info->bmiHeader.biSizeImage     = data_size;
   // @attention GetBitmapSize(&video_info->bmiHeader)のほうが小さい？
 
@@ -164,7 +189,8 @@ HRESULT SCFFOutputPin::GetMediaType(int position, CMediaType *media_type) {
   media_type->SetTemporalCompression(FALSE);
 
   MyDbgLog((LOG_TRACE, kDbgTrace,
-    TEXT("[pin] -> mediatype(%d, %d, %.1ffps)"),
+    TEXT("[pin] -> mediatype(%dbpp, %d, %d, %.1ffps)"),
+    video_info->bmiHeader.biBitCount,
     video_info->bmiHeader.biWidth,
     video_info->bmiHeader.biHeight,
     ToFPS(video_info->AvgTimePerFrame)));
@@ -205,15 +231,11 @@ HRESULT SCFFOutputPin::CheckMediaType(const CMediaType *media_type) {
   // ピクセルフォーマットが適切か？
   CheckPointer(media_type->Subtype(), E_INVALIDARG);
   const GUID subtype = *(media_type->Subtype());
-#if defined(YUV420P)
-  if (subtype != static_cast<GUID>(
-          FOURCCMap(MAKEFOURCC('I', '4', '2', '0')))) {
-#elif defined(UYVY422)
-  if (subtype != static_cast<GUID>(
-          FOURCCMap(MAKEFOURCC('U', 'Y', 'V', 'Y')))) {
-#else
-  if (subtype != MEDIASUBTYPE_RGB32) {
-#endif
+  const GUID I420_guid = FOURCCMap(MAKEFOURCC('I', '4', '2', '0'));
+  const GUID UYVY_guid = FOURCCMap(MAKEFOURCC('U', 'Y', 'V', 'Y'));
+  const GUID RGB0_guid = MEDIASUBTYPE_RGB32;
+
+  if (subtype != I420_guid && subtype != UYVY_guid && subtype != RGB0_guid) {
     return E_INVALIDARG;
   }
 
@@ -231,7 +253,8 @@ HRESULT SCFFOutputPin::CheckMediaType(const CMediaType *media_type) {
   }
 
   MyDbgLog((LOG_TRACE, kDbgTrace,
-    TEXT("[pin] <- check: mediatype(%d, %d, %.1ffps)"),
+    TEXT("[pin] <- check: mediatype(%dbpp, %d, %d, %.1ffps)"),
+    video_info->bmiHeader.biBitCount,
     video_info->bmiHeader.biWidth,
     video_info->bmiHeader.biHeight,
     ToFPS(video_info->AvgTimePerFrame)));
@@ -258,7 +281,8 @@ HRESULT SCFFOutputPin::SetMediaType(const CMediaType *media_type) {
   CheckPointer(video_info, E_UNEXPECTED);
 
   MyDbgLog((LOG_TRACE, kDbgTrace,
-    TEXT("[pin] <- mediatype(%d, %d, %.1ffps)"),
+    TEXT("[pin] <- mediatype(%d, %d, %d, %.1ffps)"),
+    video_info->bmiHeader.biBitCount,
     video_info->bmiHeader.biWidth,
     video_info->bmiHeader.biHeight,
     ToFPS(video_info->AvgTimePerFrame)));
@@ -283,13 +307,14 @@ HRESULT SCFFOutputPin::SetMediaType(const CMediaType *media_type) {
     return E_INVALIDARG;
   }
 
-#if defined(YUV420P)
-  if (specified_video_info->bmiHeader.biBitCount != 12) {
-#elif defined(UYVY422)
-  if (specified_video_info->bmiHeader.biBitCount != 16) {
-#else
-  if (specified_video_info->bmiHeader.biBitCount != 32) {
-#endif
+  /// @warning biBitCountでピクセルフォーマットを判断しているが、
+  /// @warning これは正確ではない。
+  /// @warning 本来はbiCompressionで判断するべきであるが、
+  /// @warning GUIDの比較関数が見当たらないので
+  /// @warning 現時点ではbiBitCountで判断することにした。
+  if (specified_video_info->bmiHeader.biBitCount != 12 &&
+      specified_video_info->bmiHeader.biBitCount != 16 &&
+      specified_video_info->bmiHeader.biBitCount != 32) {
     return E_INVALIDARG;
   }
 
@@ -409,14 +434,28 @@ HRESULT SCFFOutputPin::DoBufferProcessingLoop(void) {
 
   // ImagingEngineを作成
 
+  /// @warning biBitCountでピクセルフォーマットを判断しているが、
+  /// @warning これは正確ではない。
+  /// @warning 本来はbiCompressionで判断するべきであるが、
+  /// @warning GUIDの比較関数が見当たらないので
+  /// @warning 現時点ではbiBitCountで判断することにした。
+  ASSERT(m_mt.formattype == FORMAT_VideoInfo);
+  VIDEOINFOHEADER *video_info =
+    reinterpret_cast<VIDEOINFOHEADER*>(m_mt.pbFormat);
+  imaging::ImagePixelFormat pixel_format = imaging::kInvalidPixelFormat;
+  switch (video_info->bmiHeader.biBitCount) {
+  case 12:
+    pixel_format = imaging::kI420;
+    break;
+  case 16:
+    pixel_format = imaging::kUYVY;
+    break;
+  case 32:
+    pixel_format = imaging::kRGB0;
+    break;
+  }
+  ASSERT(pixel_format != imaging::kInvalidPixelFormat);
 
-#if defined(YUV420P)
-  imaging::ImagePixelFormat pixel_format = imaging::kI420;
-#elif defined(UYVY422)
-  imaging::ImagePixelFormat pixel_format = imaging::kUYVY;
-#else
-  imaging::ImagePixelFormat pixel_format = imaging::kRGB0;
-#endif
   imaging::Engine engine(pixel_format, width_, height_, fps_);
   const imaging::ErrorCode error = engine.Init();
   ASSERT(error == imaging::kNoError);

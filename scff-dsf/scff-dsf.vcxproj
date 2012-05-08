@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\ext\src\libavfilter\drawutils.cc" />
     <ClCompile Include="base\constants.cc" />
     <ClCompile Include="base\debug.cc" />
     <ClCompile Include="base\scff-clock-time.cc" />
@@ -49,6 +50,8 @@
     <None Include="scff-dsf.bmp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\ext\include\libavfilter\drawutils.h" />
+    <ClInclude Include="..\ext\include\libavutil\colorspace.h" />
     <ClInclude Include="base\constants.h" />
     <ClInclude Include="base\debug.h" />
     <ClInclude Include="base\scff-clock-time.h" />
@@ -170,7 +173,7 @@
       <AdditionalLibraryDirectories>$(SolutionDir)\obj\BaseClasses\$(Configuration)-$(PlatformShortName)\;$(SolutionDir)ext\ffmpeg\$(PlatformShortName)\lib</AdditionalLibraryDirectories>
       <ModuleDefinitionFile>base\$(ProjectName)-$(PlatformShortName).def</ModuleDefinitionFile>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
-      <AdditionalDependencies>strmbasd.lib;Msvcrtd.lib;Winmm.lib;PSAPI.lib;swscale.lib;avcodec.lib;avutil.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>strmbasd.lib;Msvcrtd.lib;Winmm.lib;PSAPI.lib;swscale.lib;avcodec.lib;avutil.lib;avfilter.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreLinkEvent />
     <PreLinkEvent />
@@ -193,7 +196,7 @@
       <AdditionalLibraryDirectories>$(SolutionDir)\obj\BaseClasses\$(Configuration)-$(PlatformShortName)\;$(SolutionDir)ext\ffmpeg\$(PlatformShortName)\lib</AdditionalLibraryDirectories>
       <ModuleDefinitionFile>base\$(ProjectName)-$(PlatformShortName).def</ModuleDefinitionFile>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
-      <AdditionalDependencies>strmbasd.lib;Msvcrtd.lib;Winmm.lib;PSAPI.lib;swscale.lib;avcodec.lib;avutil.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>strmbasd.lib;Msvcrtd.lib;Winmm.lib;PSAPI.lib;swscale.lib;avcodec.lib;avutil.lib;avfilter.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent />
     <PreLinkEvent />
@@ -219,7 +222,7 @@
       <AdditionalLibraryDirectories>$(SolutionDir)\obj\BaseClasses\$(Configuration)-$(PlatformShortName)\;$(SolutionDir)ext\ffmpeg\$(PlatformShortName)\lib</AdditionalLibraryDirectories>
       <ModuleDefinitionFile>base\$(ProjectName)-$(PlatformShortName).def</ModuleDefinitionFile>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
-      <AdditionalDependencies>strmbase.lib;Msvcrt.lib;Winmm.lib;PSAPI.lib;swscale.lib;avcodec.lib;avutil.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>strmbase.lib;Msvcrt.lib;Winmm.lib;PSAPI.lib;swscale.lib;avcodec.lib;avutil.lib;avfilter.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreLinkEvent />
     <PreLinkEvent />
@@ -246,7 +249,7 @@
       <AdditionalLibraryDirectories>$(SolutionDir)\obj\BaseClasses\$(Configuration)-$(PlatformShortName)\;$(SolutionDir)ext\ffmpeg\$(PlatformShortName)\lib</AdditionalLibraryDirectories>
       <ModuleDefinitionFile>base\$(ProjectName)-$(PlatformShortName).def</ModuleDefinitionFile>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
-      <AdditionalDependencies>strmbase.lib;Msvcrt.lib;Winmm.lib;PSAPI.lib;swscale.lib;avcodec.lib;avutil.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>strmbase.lib;Msvcrt.lib;Winmm.lib;PSAPI.lib;swscale.lib;avcodec.lib;avutil.lib;avfilter.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreLinkEvent />
     <PreLinkEvent />

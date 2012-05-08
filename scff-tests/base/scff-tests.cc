@@ -17,12 +17,20 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "base/scff-tests.h"
+#include <libavfilter/drawutils.h>
 
 int _tmain(int argc, _TCHAR* argv[]) {
-  AVPicture picture;
+  FFDrawContext* test_context = new FFDrawContext;
+  FFDrawColor* test_color = new FFDrawColor;
+  uint8_t test_fill_color[4] = {255,255,255,255};
 
-  printf("Hello, World!\n");
+  ff_draw_init(test_context,PIX_FMT_RGB0,0);
+  ff_draw_color(test_context,test_color,test_fill_color);
+
+  printf("Hello, World! %d\n",test_context->format);
   getchar();
+
+  delete test_context;
 
   return 0;
 }

@@ -12,6 +12,9 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
+    <Filter Include="ext">
+      <UniqueIdentifier>{a5377094-f746-475b-bb08-29f90d6ce201}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="base\scff-dsf.cc">
@@ -79,6 +82,9 @@
     </ClCompile>
     <ClCompile Include="base\scff-interprocess.cc">
       <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ext\src\libavfilter\drawutils.cc">
+      <Filter>ext</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -164,6 +170,12 @@
     </ClInclude>
     <ClInclude Include="base\scff-interprocess.h">
       <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ext\include\libavfilter\drawutils.h">
+      <Filter>ext</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ext\include\libavutil\colorspace.h">
+      <Filter>ext</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

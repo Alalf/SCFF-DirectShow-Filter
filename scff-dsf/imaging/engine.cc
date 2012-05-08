@@ -26,6 +26,7 @@
 extern "C" {
 #include <libavcodec/avcodec.h>
 }
+#include <libavfilter/drawutils.h>
 
 #include "base/debug.h"
 #include "imaging/avpicture-image.h"
@@ -235,6 +236,19 @@ ErrorCode Engine::PullFrontImage(BYTE *sample, DWORD data_size) {
   // フロントイメージにデータを詰める
   /// @todo(me) マルチスレッド化した場合はダブルバッファ処理にする
   PullAVPictureImage(&front_image_);
+
+  /// @todo(me) テスト中。とりあえずなんか書いてみるか。
+  FFDrawContext draw_context;
+  FFDrawColor draw_color;
+  uint8_t rgba_draw_color[4] = {255,255,255,128};
+  ff_draw_init(&draw_context, Utilities::ToAVPicturePixelFormat(pixel_format()), 0);
+  ff_draw_color(&draw_context, &draw_color, rgba_draw_color);
+
+  ff_blend_rectangle(&draw_context, &draw_color,
+                    front_image_.avpicture()->data,
+                    front_image_.avpicture()->linesize,
+                    width(), height(),
+                    0,0,32,32);
 
   // フロントイメージからsampleにそのままコピー
   ASSERT(data_size == Utilities::CalcImageSize(front_image_));

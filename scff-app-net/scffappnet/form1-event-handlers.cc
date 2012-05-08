@@ -1,4 +1,4 @@
-
+ï»¿
 // Copyright 2012 Alalf <alalf.iQLc_at_gmail.com>
 //
 // This file is part of SCFF DSF.
@@ -17,7 +17,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scffappnet/form1.cc
-/// @brief scffappnet::Form1‚Ìˆê•”ƒƒ\ƒbƒh‚Ì’è‹`
+/// @brief scffappnet::Form1ã®ä¸€éƒ¨ãƒ¡ã‚½ãƒƒãƒ‰ã®å®šç¾©
 
 #include "Form1.h"
 #include "AreaSelectForm.h"
@@ -59,7 +59,7 @@ System::Void Form1::apply_Click(System::Object^  sender, System::EventArgs^  e) 
 //-------------------------------------------------------------------
 
 System::Void Form1::process_refresh_Click(System::Object^  sender, System::EventArgs^  e) {
-  // ƒfƒBƒŒƒNƒgƒŠ‚©‚çXV
+  // ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‹ã‚‰æ›´æ–°
   UpdateDirectory();
 }
 
@@ -87,7 +87,7 @@ System::Void Form1::window_draghere_MouseUp(System::Object^  sender, System::Win
 
   HWND window_handle = WindowFromPoint(point);
   if (window_handle != NULL) {
-    // Œ©‚Â‚©‚Á‚½ê‡
+    // è¦‹ã¤ã‹ã£ãŸå ´åˆ
     SetWindow(window_handle);
     Diagnostics::Debug::WriteLine(location);
   } else {
@@ -149,9 +149,9 @@ System::Void Form1::target_area_select_Click(System::Object^  sender, System::Ev
   form->Size = new_size;
   form->ShowDialog();
 
-  // ƒfƒXƒNƒgƒbƒvƒLƒƒƒvƒ`ƒƒ‚É•ÏX
+  // ãƒ‡ã‚¹ã‚¯ãƒˆãƒƒãƒ—ã‚­ãƒ£ãƒ—ãƒãƒ£ã«å¤‰æ›´
   DoCaptureDesktopWindow();
-  // Fit‚ð‚Í‚¸‚µ‚ÄClipping‚ð‚©‚­
+  // Fitã‚’ã¯ãšã—ã¦Clippingã‚’ã‹ã
   this->area_fit->Checked = false;
   this->area_clipping_x->Value = form->clipping_x;
   this->area_clipping_y->Value = form->clipping_y;
@@ -197,12 +197,12 @@ System::Void Form1::option_enable_enlargement_CheckedChanged(System::Object^  se
 
 System::Void Form1::option_over_sampling_CheckedChanged(System::Object^  sender, System::EventArgs^  e) {
   // this->option_over_sampling->Checked) {
-  /// @todo(me) ŽÀ‘•
+  /// @todo(me) å®Ÿè£…
 }
 
 System::Void Form1::option_thread_num_ValueChanged(System::Object^  sender, System::EventArgs^  e) {
   // this->option_thread_num->Value
-  /// @todo(me) ŽÀ‘•
+  /// @todo(me) å®Ÿè£…
 }
 
 System::Void Form1::option_resize_method_combo_SelectedIndexChanged(System::Object^  sender, System::EventArgs^  e) {

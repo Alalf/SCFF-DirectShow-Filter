@@ -19,3 +19,4 @@
 /ext/ffmpeg/x86/bin
 /ipch
 *.suo
+/doc/html

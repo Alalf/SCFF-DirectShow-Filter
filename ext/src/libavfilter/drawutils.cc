@@ -16,15 +16,15 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-#include "drawutils.h"
+#include <libavfilter/drawutils.h>
 
 //---------------------------------------------------------------------
 // 2012/05/06 modified by Alalf
 extern "C" {
 #include <libavfilter/avfilter.h>
 #include <libavutil/pixdesc.h>
+#include <libavutil/colorspace.h>
 }
-#include "colorspace.h"
 //---------------------------------------------------------------------
 
 enum { RED = 0, GREEN, BLUE, ALPHA };

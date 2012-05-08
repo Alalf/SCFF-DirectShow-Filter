@@ -144,27 +144,27 @@ HRESULT SCFFOutputPin::GetMediaType(int position, CMediaType *media_type) {
     video_info->bmiHeader.biCompression   = MAKEFOURCC('I', '4', '2', '0');
     video_info->bmiHeader.biBitCount      = 12;
     data_size =
-        imaging::Utilities::CalcDataSize(imaging::kI420,
-                                         video_info->bmiHeader.biWidth,
-                                         video_info->bmiHeader.biHeight);
+        imaging::Utilities::CalculateDataSize(imaging::kI420,
+                                              video_info->bmiHeader.biWidth,
+                                              video_info->bmiHeader.biHeight);
     break;
   case imaging::kUYVY:
     // UYVY(16bit)
     video_info->bmiHeader.biCompression   = MAKEFOURCC('U', 'Y', 'V', 'Y');
     video_info->bmiHeader.biBitCount      = 16;
     data_size =
-        imaging::Utilities::CalcDataSize(imaging::kUYVY,
-                                         video_info->bmiHeader.biWidth,
-                                         video_info->bmiHeader.biHeight);
+        imaging::Utilities::CalculateDataSize(imaging::kUYVY,
+                                              video_info->bmiHeader.biWidth,
+                                              video_info->bmiHeader.biHeight);
     break;
   case imaging::kRGB0:
     // RGB0(32bit)
     video_info->bmiHeader.biCompression   = BI_RGB;
     video_info->bmiHeader.biBitCount      = 32;
     data_size =
-        imaging::Utilities::CalcDataSize(imaging::kRGB0,
-                                         video_info->bmiHeader.biWidth,
-                                         video_info->bmiHeader.biHeight);
+        imaging::Utilities::CalculateDataSize(imaging::kRGB0,
+                                              video_info->bmiHeader.biWidth,
+                                              video_info->bmiHeader.biHeight);
     break;
   }
 #endif

@@ -198,45 +198,16 @@ ErrorCode NativeLayout::PullAVPictureImage(AVPictureImage *image) {
     return ErrorOccured(error);
   }
 
-  // 上の枠を書く
-  ff_fill_rectangle(&draw_context_, &padding_color_,
-                    image->avpicture()->data,
-                    image->avpicture()->linesize,
-                    0, 0, width(), padding_top_);
-
-  // 中央に画像を配置する
-  ff_copy_rectangle2(&draw_context_,
-                     image->avpicture()->data,
-                     image->avpicture()->linesize,
-                     capture_image_.avpicture()->data,
-                     capture_image_.avpicture()->linesize,
-                     padding_left_, padding_top_,
-                     0, 0, 
-                     capture_image_.width(),
-                     capture_image_.height());
-
-  // 下の枠を書く
-  ff_fill_rectangle(&draw_context_, &padding_color_,
-                    image->avpicture()->data,
-                    image->avpicture()->linesize,
-                    0,
-                    padding_top_ + capture_image_.height(),
-                    width(),
-                    padding_bottom_);
-
-  // 左の枠を書く
-  ff_fill_rectangle(&draw_context_, &padding_color_,
-                    image->avpicture()->data,
-                    image->avpicture()->linesize,
-                    0, padding_top_,
-                    padding_left_, capture_image_.height());
-
-  // 右の枠を書く
-  ff_fill_rectangle(&draw_context_, &padding_color_,
-                    image->avpicture()->data,
-                    image->avpicture()->linesize,
-                    padding_left_ + capture_image_.width(), padding_top_,
-                    padding_right_, capture_image_.height());
+  // パディング
+  Utilities::PadImage(&draw_context_,
+                      &padding_color_,
+                      capture_image_.avpicture(),
+                      capture_image_.width(),
+                      capture_image_.height(),
+                      padding_left_, padding_right_,
+                      padding_top_, padding_bottom_,
+                      width(), height(),
+                      image->avpicture());
 
   return NoError();
 }

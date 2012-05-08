@@ -64,7 +64,7 @@ ErrorCode RawBitmapImage::Create(ImagePixelFormat pixel_format,
   }
 
   // 取り込み用バッファを作成
-  int size = Utilities::CalcDataSize(pixel_format, width, height);
+  int size = Utilities::CalculateDataSize(pixel_format, width, height);
   uint8_t *raw_bitmap = static_cast<uint8_t*>(av_malloc(size));
   if (raw_bitmap == 0) {   // NULL
     return kOutOfMemoryError;

@@ -225,7 +225,7 @@ ErrorCode Engine::PullFrontImage(BYTE *sample, DWORD data_size) {
 
   // layout_にエラーが発生していたらスプラッシュを書く
   if (GetCurrentLayoutError() != kNoError) {
-    ASSERT(data_size == Utilities::CalcImageSize(splash_image_));
+    ASSERT(data_size == Utilities::CalculateImageSize(splash_image_));
     avpicture_layout(splash_image_.avpicture(),
                       Utilities::ToAVPicturePixelFormat(pixel_format()),
                       width(), height(), sample, data_size);
@@ -237,7 +237,7 @@ ErrorCode Engine::PullFrontImage(BYTE *sample, DWORD data_size) {
   PullAVPictureImage(&front_image_);
 
   // フロントイメージからsampleにそのままコピー
-  ASSERT(data_size == Utilities::CalcImageSize(front_image_));
+  ASSERT(data_size == Utilities::CalculateImageSize(front_image_));
   avpicture_layout(front_image_.avpicture(),
                     Utilities::ToAVPicturePixelFormat(pixel_format()),
                     width(), height(), sample, data_size);

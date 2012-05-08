@@ -166,27 +166,25 @@ ErrorCode ScreenCapture::Init() {
 
   // 拡大縮小用のコンテキストを作成
   struct SwsContext *scaler = 0;    // NULL
+  PixelFormat input_pixel_format = PIX_FMT_NONE;
   switch (pixel_format()) {
   case kI420:
   case kUYVY:
     // I420/UYVY: 入力:BGR0(32bit) 出力:I420(12bit)/UYVY(16bit)
     /// @attention RGB->YUV変換時にUVが逆になるのを修正
     ///- RGBデータをBGRデータとしてSwsContextに渡してあります
-    scaler = sws_getCachedContext(NULL,
-        capture_width, capture_height, PIX_FMT_BGR0,
-        width(), height(),
-        Utilities::ToAVPicturePixelFormat(pixel_format()),
-        parameter_.sws_flags, NULL, NULL, NULL);
+    input_pixel_format = PIX_FMT_BGR0;
     break;
   case kRGB0:
     // RGB0: 入力:RGB0(32bit) 出力:RGB0(32bit)
-    scaler = sws_getCachedContext(NULL,
-        capture_width, capture_height, PIX_FMT_RGB0,
-        width(), height(),
-        Utilities::ToAVPicturePixelFormat(pixel_format()),
-        parameter_.sws_flags, NULL, NULL, NULL);
+    input_pixel_format = PIX_FMT_RGB0;
     break;
   }
+  scaler = sws_getCachedContext(NULL,
+      capture_width, capture_height, input_pixel_format,
+      width(), height(),
+      Utilities::ToAVPicturePixelFormat(pixel_format()),
+      parameter_.sws_flags, NULL, NULL, NULL);
   if (scaler == NULL) {
     return ErrorOccured(kOutOfMemoryError);
   }
@@ -323,19 +321,17 @@ ErrorCode ScreenCapture::PullAVPictureImage(AVPictureImage *image) {
   case kI420:
   case kUYVY:
     /// @attention RGB->YUV変換時に上下が逆になるのを修正
-    ///- 取り込みデータの中身を操作せず、ポインタをいじるだけで対処してあります
-    AVPicture tmp_image_for_swscale;
-    for (int i = 0; i < 8; i++) {
-      tmp_image_for_swscale.data[i] = image_for_swscale_.avpicture()->data[i]
-          + image_for_swscale_.avpicture()->linesize[i] * (capture_height - 1);
-      tmp_image_for_swscale.linesize[i] =
-          -image_for_swscale_.avpicture()->linesize[i];
-    }
+    AVPicture flip_horizontal_image_for_swscale;
+    Utilities::FlipHorizontal(
+        image_for_swscale_.avpicture(),
+        capture_height,
+        &flip_horizontal_image_for_swscale);
+
     // 拡大縮小
     scale_height =
         sws_scale(scaler_,
-                  tmp_image_for_swscale.data,
-                  tmp_image_for_swscale.linesize,
+                  flip_horizontal_image_for_swscale.data,
+                  flip_horizontal_image_for_swscale.linesize,
                   0, capture_height,
                   image->avpicture()->data,
                   image->avpicture()->linesize);

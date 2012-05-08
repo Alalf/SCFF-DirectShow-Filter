@@ -222,29 +222,24 @@ ErrorCode SplashScreen::PullAVPictureImage(AVPictureImage *image) {
   // SWScaleによる拡大・縮小
   //-------------------------------------------------------------------
 
-  // 上下逆転
+  /// @attention RGB->YUV変換時に上下が逆になるのを修正
   const bool need_horizontal_flip =
       pixel_format() == kI420 || pixel_format() == kUYVY;
-  AVPicture tmp_image_for_swscale;
+  AVPicture flip_horizontal_image_for_swscale;
   if (need_horizontal_flip) {
-    /// @attention RGB->YUV変換時に上下が逆になるのを修正
-    ///- 取り込みデータの中身を操作せず、ポインタをいじるだけで対処してあります
-    for (int i = 0; i < 8; i++) {
-      tmp_image_for_swscale.data[i] =
-          resource_image_for_swscale.avpicture()->data[i]
-          + resource_image_for_swscale.avpicture()->linesize[i]
-              * (resource_height - 1);
-      tmp_image_for_swscale.linesize[i] =
-          -resource_image_for_swscale.avpicture()->linesize[i];
-    }
+    Utilities::FlipHorizontal(
+        resource_image_for_swscale.avpicture(),
+        resource_height,
+        &flip_horizontal_image_for_swscale);
   }
 
   // パディング不可能な場合はそのまま出力
   if (!can_use_drawutils) {
+    ASSERT(pixel_format() == kUYVY);
     const int scale_height =
         sws_scale(scaler,
-                  tmp_image_for_swscale.data,
-                  tmp_image_for_swscale.linesize,
+                  flip_horizontal_image_for_swscale.data,
+                  flip_horizontal_image_for_swscale.linesize,
                   0, resource_height,
                   image->avpicture()->data,
                   image->avpicture()->linesize);
@@ -266,8 +261,8 @@ ErrorCode SplashScreen::PullAVPictureImage(AVPictureImage *image) {
   if (pixel_format() == kI420) {
     const int scale_height =
         sws_scale(scaler,
-                  tmp_image_for_swscale.data,
-                  tmp_image_for_swscale.linesize,
+                  flip_horizontal_image_for_swscale.data,
+                  flip_horizontal_image_for_swscale.linesize,
                   0, resource_height,
                   tmp_image_for_padding.avpicture()->data,
                   tmp_image_for_padding.avpicture()->linesize);
@@ -284,46 +279,15 @@ ErrorCode SplashScreen::PullAVPictureImage(AVPictureImage *image) {
   }
 
   // パディング
-
-  // 上の枠を書く
-  ff_fill_rectangle(&draw_context, &padding_color,
-                    image->avpicture()->data,
-                    image->avpicture()->linesize,
-                    0, 0, width(), padding_top);
-
-  // 中央に画像を配置する
-  ff_copy_rectangle2(&draw_context,
-                     image->avpicture()->data,
-                     image->avpicture()->linesize,
-                     tmp_image_for_padding.avpicture()->data,
-                     tmp_image_for_padding.avpicture()->linesize,
-                     padding_left, padding_top,
-                     0, 0, 
-                     tmp_image_for_padding.width(),
-                     tmp_image_for_padding.height());
-
-  // 下の枠を書く
-  ff_fill_rectangle(&draw_context, &padding_color,
-                    image->avpicture()->data,
-                    image->avpicture()->linesize,
-                    0,
-                    padding_top + tmp_image_for_padding.height(),
-                    width(),
-                    padding_bottom);
-
-  // 左の枠を書く
-  ff_fill_rectangle(&draw_context, &padding_color,
-                    image->avpicture()->data,
-                    image->avpicture()->linesize,
-                    0, padding_top,
-                    padding_left, tmp_image_for_padding.height());
-
-  // 右の枠を書く
-  ff_fill_rectangle(&draw_context, &padding_color,
-                    image->avpicture()->data,
-                    image->avpicture()->linesize,
-                    padding_left + tmp_image_for_padding.width(), padding_top,
-                    padding_right, tmp_image_for_padding.height());
+  Utilities::PadImage(&draw_context,
+                      &padding_color,
+                      tmp_image_for_padding.avpicture(),
+                      tmp_image_for_padding.width(),
+                      tmp_image_for_padding.height(),
+                      padding_left, padding_right,
+                      padding_top, padding_bottom,
+                      width(), height(),
+                      image->avpicture());
 
   // エラー発生なし
   return NoError();

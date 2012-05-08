@@ -1,6 +1,6 @@
-* Boost‚É‚Â‚¢‚Ä
+ï»¿* Boostã«ã¤ã„ã¦
 
-Œ»İ‚Ìƒo[ƒWƒ‡ƒ“‚Å‚Íƒ}ƒ‹ƒ`ƒXƒŒƒbƒh‚ğƒTƒ|[ƒg‚µ‚Ä‚¢‚È‚¢‚ªA«—ˆ“I‚É‚ÍBoost‚ÌThread‚ğg‚¤‚©‚à‚µ‚ê‚È‚¢B
+ç¾åœ¨ã®ãƒãƒ¼ã‚¸ãƒ§ãƒ³ã§ã¯ãƒãƒ«ãƒã‚¹ãƒ¬ãƒƒãƒ‰ã‚’ã‚µãƒãƒ¼ãƒˆã—ã¦ã„ãªã„ãŒã€å°†æ¥çš„ã«ã¯Boostã®Threadã‚’ä½¿ã†ã‹ã‚‚ã—ã‚Œãªã„ã€‚
 
 ** Boost Build
 b2 toolset=msvc-10.0 --build-type=complete --build-dir=build\x86 --stagedir=stage\x86 address-model=32 -j 4

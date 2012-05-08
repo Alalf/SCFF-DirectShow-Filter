@@ -1,4 +1,4 @@
-
+ï»¿
 // Copyright 2012 Alalf <alalf.iQLc_at_gmail.com>
 //
 // This file is part of SCFF DSF.
@@ -17,7 +17,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scffappnet/form1.cc
-/// @brief scffappnet::Form1‚Ìˆê•”ƒƒ\ƒbƒh‚Ì’è‹`
+/// @brief scffappnet::Form1ã®ä¸€éƒ¨ãƒ¡ã‚½ãƒƒãƒ‰ã®å®šç¾©
 
 #include "Form1.h"
 
@@ -31,7 +31,7 @@
 
 namespace scffappnet {
 
-// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 Form1::Form1(void)
     : can_use_dwmapi_dll_(false),
       was_dwm_enabled_on_start_(false),
@@ -42,7 +42,7 @@ Form1::Form1(void)
   InitializeComponent();
   //---------------------------------------------------------------
 
-  // DWMAPI.DLL‚ª—˜—p‰Â”\‚©‚Ç‚¤‚©’²‚×‚é
+  // DWMAPI.DLLãŒåˆ©ç”¨å¯èƒ½ã‹ã©ã†ã‹èª¿ã¹ã‚‹
   OSVERSIONINFO os_info;
   os_info.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
   GetVersionEx(&os_info);
@@ -50,21 +50,21 @@ Form1::Form1(void)
     can_use_dwmapi_dll_ = true;
   }
 
-  // ƒvƒƒZƒXŠÔ’ÊM‚É•K—v‚ÈƒIƒuƒWƒFƒNƒg‚Ì¶¬
+  // ãƒ—ãƒ­ã‚»ã‚¹é–“é€šä¿¡ã«å¿…è¦ãªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ç”Ÿæˆ
   interprocess_ = new SCFFInterprocess;
-  // ƒŒƒCƒAƒEƒgƒpƒ‰ƒ[ƒ^‚ğŠi”[‚·‚é‚½‚ß‚ÌƒIƒuƒWƒFƒNƒg‚ğ¶¬
+  // ãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’æ ¼ç´ã™ã‚‹ãŸã‚ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç”Ÿæˆ
   layout_parameter_ = new SCFFLayoutParameter;
   ZeroMemory(layout_parameter_,sizeof(SCFFLayoutParameter));
 
-  // ƒRƒ“ƒgƒ[ƒ‹‚Ì€”õ
+  // ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã®æº–å‚™
   BuildResizeMethodCombobox();
 
-  // •ÒW’†‚ÌƒŒƒCƒAƒEƒgƒCƒ“ƒfƒbƒNƒX
+  // ç·¨é›†ä¸­ã®ãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹
   editing_layout_index_ = 0;
-  // ƒfƒBƒŒƒNƒgƒŠæ“¾
+  // ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå–å¾—
   UpdateDirectory();
 
-  // ƒfƒtƒHƒ‹ƒg‚Ìİ’è‚ğ‘‚«‚Ş
+  // ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®è¨­å®šã‚’æ›¸ãè¾¼ã‚€
   DoCaptureDesktopWindow();
   this->option_keep_aspect_ratio->Checked = true;
   this->option_enable_enlargement->Checked = true;
@@ -72,7 +72,7 @@ Form1::Form1(void)
 
 }
 
-// ƒfƒXƒgƒ‰ƒNƒ^
+// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 Form1::~Form1() {
   //---------------------------------------------------------------
   // DO NOT DELETE THIS!!!
@@ -83,12 +83,12 @@ Form1::~Form1() {
 
   DWMAPIRestore();
 
-  // ƒvƒƒZƒXŠÔ’ÊM‚É•K—v‚ÈƒIƒuƒWƒFƒNƒg‚Ìíœ
+  // ãƒ—ãƒ­ã‚»ã‚¹é–“é€šä¿¡ã«å¿…è¦ãªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®å‰Šé™¤
   delete interprocess_;
 }
 
-// enumŠi”[—p
-// Tuple‚Ì“®ì‚ª•sˆÀ’è‚Æ‚Ìî•ñ‚ğ•·‚¢‚½‚Ì‚Å‚µ‚å‚¤‚ª‚È‚­ì‚Á‚½
+// enumæ ¼ç´ç”¨
+// Tupleã®å‹•ä½œãŒä¸å®‰å®šã¨ã®æƒ…å ±ã‚’èã„ãŸã®ã§ã—ã‚‡ã†ãŒãªãä½œã£ãŸ
 ref class ResizeMethod {
  public:
   ResizeMethod(String^ name, SCFFSWScaleFlags flags) {
@@ -99,9 +99,9 @@ ref class ResizeMethod {
   property SCFFSWScaleFlags SWScaleFlags;
 };
 
-// ResizeMethod ComboBox‚Éƒf[ƒ^ƒ\[ƒX‚ğİ’è‚·‚é
+// ResizeMethod ComboBoxã«ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹ã‚’è¨­å®šã™ã‚‹
 void Form1::BuildResizeMethodCombobox() {
-  // ƒŠƒXƒg‚ğV‚µ‚­ì¬‚·‚é
+  // ãƒªã‚¹ãƒˆã‚’æ–°ã—ãä½œæˆã™ã‚‹
   ArrayList^ resize_methods = gcnew ArrayList();
 
   resize_methods->Add(gcnew ResizeMethod("fast bilinear", kSCFFFastBilinear));
@@ -123,18 +123,18 @@ void Form1::BuildResizeMethodCombobox() {
   this->option_resize_method_combo->SelectedIndex = 0;
 }
 
-// ‹¤—Lƒƒ‚ƒŠ‚©‚çƒfƒBƒŒƒNƒgƒŠ‚ğæ“¾‚µA‚¢‚ë‚¢‚ëˆ—
+// å…±æœ‰ãƒ¡ãƒ¢ãƒªã‹ã‚‰ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’å–å¾—ã—ã€ã„ã‚ã„ã‚å‡¦ç†
 void Form1::UpdateDirectory() {
-  // ‹¤—Lƒƒ‚ƒŠ‚©‚çƒf[ƒ^‚ğæ“¾
+  // å…±æœ‰ãƒ¡ãƒ¢ãƒªã‹ã‚‰ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—
   interprocess_->InitDirectory();
   SCFFDirectory directory;
   interprocess_->GetDirectory(&directory);
   Diagnostics::Debug::WriteLine("Get Directory");
 
-  // ƒŠƒXƒg‚ğV‚µ‚­ì¬‚·‚é
+  // ãƒªã‚¹ãƒˆã‚’æ–°ã—ãä½œæˆã™ã‚‹
   ArrayList^ managed_directory = gcnew ArrayList();
 
-  // ƒRƒ“ƒ{ƒ{ƒbƒNƒX‚Ì“à—e‚ğ\’z
+  // ã‚³ãƒ³ãƒœãƒœãƒƒã‚¯ã‚¹ã®å†…å®¹ã‚’æ§‹ç¯‰
   for (int i = 0; i < kSCFFMaxEntry; i++) {
     if (directory.entries[i].process_id == 0) continue;
     ManagedSCFFEntry^ entry = gcnew ManagedSCFFEntry(directory.entries[i]);
@@ -143,35 +143,35 @@ void Form1::UpdateDirectory() {
   this->process_combo->DataSource = managed_directory;
 
   if (managed_directory->Count > 0) {
-    // SCFH DSF”­Œ©
+    // SCFH DSFç™ºè¦‹
     this->process_combo->DisplayMember = "Info";
     this->process_combo->ValueMember = "ProcessID";
     this->process_combo->Enabled = true;
     this->process_combo->SelectedIndex =0;
 
-    // ƒƒbƒZ[ƒW‚ğ‘—‚é‚½‚ß‚Ìƒ{ƒ^ƒ“‚ğ—LŒø‰»
+    // ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’é€ã‚‹ãŸã‚ã®ãƒœã‚¿ãƒ³ã‚’æœ‰åŠ¹åŒ–
     this->splash->Enabled = true;
     this->apply->Enabled = true;
   } else {
-    // SCFH DSF‚ªƒ[ƒh‚³‚ê‚Ä‚¢‚È‚¢ê‡
+    // SCFH DSFãŒãƒ­ãƒ¼ãƒ‰ã•ã‚Œã¦ã„ãªã„å ´åˆ
     this->process_combo->Enabled = false;
 
-    // ƒƒbƒZ[ƒW‚ğ‘—‚é‚½‚ß‚Ìƒ{ƒ^ƒ“‚ğ–³Œø‰»
+    // ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’é€ã‚‹ãŸã‚ã®ãƒœã‚¿ãƒ³ã‚’ç„¡åŠ¹åŒ–
     this->splash->Enabled = false;
     this->apply->Enabled = false;
   }
 }
 
-// ‹¤—Lƒƒ‚ƒŠ‚ÉNullLayoutƒŠƒNƒGƒXƒg‚ğİ’è
+// å…±æœ‰ãƒ¡ãƒ¢ãƒªã«NullLayoutãƒªã‚¯ã‚¨ã‚¹ãƒˆã‚’è¨­å®š
 void Form1::SendNullLayoutRequest() {
-  // ƒƒbƒZ[ƒW‚ğ‘‚¢‚Ä‘—‚é
+  // ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’æ›¸ã„ã¦é€ã‚‹
   SCFFMessage message;
   time_t timestamp;
   time(&timestamp);
   message.timestamp = static_cast<int32_t>(timestamp);
   message.layout_type = kSCFFNullLayout;
     
-  // ‹¤—Lƒƒ‚ƒŠ‚ğŠJ‚¢‚Ä‘—‚é
+  // å…±æœ‰ãƒ¡ãƒ¢ãƒªã‚’é–‹ã„ã¦é€ã‚‹
   if (this->process_combo->SelectedValue != nullptr) {
     uint32_t process_id = (uint32_t)(this->process_combo->SelectedValue);
     interprocess_->InitMessage(process_id);
@@ -179,21 +179,21 @@ void Form1::SendNullLayoutRequest() {
   }
 }
 
-/// @brief ‹¤—Lƒƒ‚ƒŠ‚ÉNativeLayoutƒŠƒNƒGƒXƒg‚ğİ’è
+/// @brief å…±æœ‰ãƒ¡ãƒ¢ãƒªã«NativeLayoutãƒªã‚¯ã‚¨ã‚¹ãƒˆã‚’è¨­å®š
 void Form1::SendNativeLayoutRequest() {
-  // ƒƒbƒZ[ƒW‚ğ‘‚¢‚Ä‘—‚é
+  // ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’æ›¸ã„ã¦é€ã‚‹
   SCFFMessage message;
   time_t timestamp;
   time(&timestamp);
   message.timestamp = static_cast<int64_t>(timestamp);
   message.layout_type = kSCFFNativeLayout;
-  // –³‹‚³‚ê‚é
+  // ç„¡è¦–ã•ã‚Œã‚‹
   message.layout_element_count = 1;
   message.layout_parameters[0].bound_x = 0;
   message.layout_parameters[0].bound_y = 0;
   message.layout_parameters[0].bound_width = 0;
   message.layout_parameters[0].bound_height = 0;
-  // ‚±‚±‚Ü‚Å–³‹
+  // ã“ã“ã¾ã§ç„¡è¦–
   message.layout_parameters[0].window = this->layout_parameter_->window;
   message.layout_parameters[0].clipping_x = this->layout_parameter_->clipping_x;
   message.layout_parameters[0].clipping_y = this->layout_parameter_->clipping_y;
@@ -205,7 +205,7 @@ void Form1::SendNativeLayoutRequest() {
   message.layout_parameters[0].stretch = this->layout_parameter_->stretch;
   message.layout_parameters[0].keep_aspect_ratio = this->layout_parameter_->keep_aspect_ratio;
 
-  // ‹¤—Lƒƒ‚ƒŠ‚ğŠJ‚¢‚Ä‘—‚é
+  // å…±æœ‰ãƒ¡ãƒ¢ãƒªã‚’é–‹ã„ã¦é€ã‚‹
   if (this->process_combo->SelectedValue != nullptr) {
     uint32_t process_id = (uint32_t)(this->process_combo->SelectedValue);
     interprocess_->InitMessage(process_id);
@@ -217,7 +217,7 @@ void Form1::DoCaptureDesktopWindow() {
   SetWindow(GetDesktopWindow());
 }
 
-// ƒNƒŠƒbƒsƒ“ƒO—Ìˆæ‚ğƒŠƒZƒbƒg‚·‚é
+// ã‚¯ãƒªãƒƒãƒ”ãƒ³ã‚°é ˜åŸŸã‚’ãƒªã‚»ãƒƒãƒˆã™ã‚‹
 void Form1::ResetClippingRegion() {
   HWND window_handle = reinterpret_cast<HWND>(
       this->layout_parameter_->window);
@@ -230,7 +230,7 @@ void Form1::ResetClippingRegion() {
   GetClientRect(window_handle,&window_rect);
   this->area_fit->Checked = true;
 
-  // Minimum‚ÆMaximum‚ÍValue‚ÌXV‘O‚ÉXV‚µ‚Ä‚¨‚©‚È‚¢‚Æ—áŠO‚ª”­¶‚·‚é
+  // Minimumã¨Maximumã¯Valueã®æ›´æ–°å‰ã«æ›´æ–°ã—ã¦ãŠã‹ãªã„ã¨ä¾‹å¤–ãŒç™ºç”Ÿã™ã‚‹
   this->area_clipping_x->Minimum = window_rect.left;
   this->area_clipping_x->Maximum = window_rect.right;
   this->area_clipping_y->Minimum = window_rect.top;
@@ -249,7 +249,7 @@ void Form1::ResetClippingRegion() {
   this->layout_parameter_->clipping_height = window_rect.bottom;  
 }
 
-// ƒEƒBƒ“ƒhƒE‚ğw’è‚·‚é
+// ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’æŒ‡å®šã™ã‚‹
 void Form1::SetWindow(HWND window_handle) {
   uint64_t window = reinterpret_cast<uint64_t>(window_handle);
   this->layout_parameter_->window = window;
@@ -267,9 +267,9 @@ void Form1::SetWindow(HWND window_handle) {
   ResetClippingRegion();
 }
 
-/// @brief ƒpƒ‰ƒ[ƒ^‚ÌValidate
+/// @brief ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®Validate
 bool Form1::ValidateParameters() {
-  // ‚à‚Á‚Æ‚àŠëŒ¯‚Èó‘Ô‚É‚È‚è‚â‚·‚¢ƒEƒBƒ“ƒhƒE‚©‚çƒ`ƒFƒbƒN
+  // ã‚‚ã£ã¨ã‚‚å±é™ºãªçŠ¶æ…‹ã«ãªã‚Šã‚„ã™ã„ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‹ã‚‰ãƒã‚§ãƒƒã‚¯
   if (this->layout_parameter_->window == 0) { // NULL
     MessageBox::Show("Specified window is invalid", "Invalid Window",
         MessageBoxButtons::OK, MessageBoxIcon::Error);
@@ -282,7 +282,7 @@ bool Form1::ValidateParameters() {
     return false;
   }
 
-  // ƒNƒŠƒbƒsƒ“ƒOƒŠ[ƒWƒ‡ƒ“‚Ì”»’è
+  // ã‚¯ãƒªãƒƒãƒ”ãƒ³ã‚°ãƒªãƒ¼ã‚¸ãƒ§ãƒ³ã®åˆ¤å®š
   RECT window_rect;
   GetClientRect(window_handle,&window_rect);
   if (this->layout_parameter_->clipping_x +
@@ -293,7 +293,7 @@ bool Form1::ValidateParameters() {
       <= window_rect.bottom &&
       this->layout_parameter_->clipping_width > 0 &&
       this->layout_parameter_->clipping_height > 0) {
-    // nop –â‘è‚È‚µ
+    // nop å•é¡Œãªã—
   } else {
     MessageBox::Show("Clipping region is invalid", "Invalid Clipping Region",
         MessageBoxButtons::OK, MessageBoxIcon::Error);

@@ -1,4 +1,4 @@
-
+﻿
 // Copyright 2012 Alalf <alalf.iQLc_at_gmail.com>
 //
 // This file is part of SCFF DSF.
@@ -17,6 +17,6 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scffappnet/data_source.cc
-/// @brief scffappnet::***Wrapper�Ȃǂ̒�`
+/// @brief scffappnet::***Wrapperなどの定義
 
 #include "scffappnet/data_source.h"

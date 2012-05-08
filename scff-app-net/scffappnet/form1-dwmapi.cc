@@ -1,4 +1,4 @@
-
+ï»¿
 // Copyright 2012 Alalf <alalf.iQLc_at_gmail.com>
 //
 // This file is part of SCFF DSF.
@@ -17,7 +17,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scffappnet/form1.cc
-/// @brief scffappnet::Form1‚ÌDwmAPIŠÖ˜A‚Ìƒƒ\ƒbƒh‚Ì’è‹`
+/// @brief scffappnet::Form1ã®DwmAPIé–¢é€£ã®ãƒ¡ã‚½ãƒƒãƒ‰ã®å®šç¾©
 
 #include "Form1.h"
 
@@ -25,15 +25,15 @@
 
 namespace scffappnet {
 
-// Dwmapi.dll‚ğ—˜—p‚µ‚ÄAero‚ğOff‚É
+// Dwmapi.dllã‚’åˆ©ç”¨ã—ã¦Aeroã‚’Offã«
 void Form1::DWMAPIOff() {
   if (!can_use_dwmapi_dll_) {
-    // dwmapi.dll‚ğ—˜—p‚Å‚«‚È‚¯‚ê‚Î‰½‚à‚µ‚È‚¢
+    // dwmapi.dllã‚’åˆ©ç”¨ã§ããªã‘ã‚Œã°ä½•ã‚‚ã—ãªã„
     was_dwm_enabled_on_start_ = false;
     return;
   }
 
-  /// @todo(me) LoadLibrary‚Å’u‚«Š·‚¦‚é
+  /// @todo(me) LoadLibraryã§ç½®ãæ›ãˆã‚‹
 
   BOOL was_dwm_enabled_on_start;
   DwmIsCompositionEnabled(&was_dwm_enabled_on_start);
@@ -47,14 +47,14 @@ void Form1::DWMAPIOff() {
   was_dwm_enabled_on_start_ = was_dwm_enabled_on_start == TRUE;
 }
 
-// ‹­§“I‚ÉAero‚ÌOn/Off‚ğØ‚è‘Ö‚¦‚é
+// å¼·åˆ¶çš„ã«Aeroã®On/Offã‚’åˆ‡ã‚Šæ›¿ãˆã‚‹
 void Form1::DWMAPIFlip() {
   if (!can_use_dwmapi_dll_) {
-    // dwmapi.dll‚ğ—˜—p‚Å‚«‚È‚¯‚ê‚Î‰½‚à‚µ‚È‚¢
+    // dwmapi.dllã‚’åˆ©ç”¨ã§ããªã‘ã‚Œã°ä½•ã‚‚ã—ãªã„
     return;
   }
 
-  /// @todo(me) LoadLibrary‚Å’u‚«Š·‚¦‚é
+  /// @todo(me) LoadLibraryã§ç½®ãæ›ãˆã‚‹
 
   if (this->aero_on_item->Checked) {
     DwmEnableComposition(DWM_EC_DISABLECOMPOSITION);
@@ -64,14 +64,14 @@ void Form1::DWMAPIFlip() {
   this->aero_on_item->Checked = !(this->aero_on_item->Checked);
 }
 
-// Aero‚ğOff‚É‚µ‚Ä‚¢‚½‚çOn‚É–ß‚·
+// Aeroã‚’Offã«ã—ã¦ã„ãŸã‚‰Onã«æˆ»ã™
 void Form1::DWMAPIRestore() {
   if (!can_use_dwmapi_dll_) {
-    // dwmapi.dll‚ğ—˜—p‚Å‚«‚È‚¯‚ê‚Î‰½‚à‚µ‚È‚¢
+    // dwmapi.dllã‚’åˆ©ç”¨ã§ããªã‘ã‚Œã°ä½•ã‚‚ã—ãªã„
     return;
   }
 
-  /// @todo(me) LoadLibrary‚Å’u‚«Š·‚¦‚é
+  /// @todo(me) LoadLibraryã§ç½®ãæ›ãˆã‚‹
 
   if (was_dwm_enabled_on_start_) {
     DwmEnableComposition(DWM_EC_ENABLECOMPOSITION);

@@ -22,6 +22,8 @@
 #ifndef SCFF_DSF_IMAGING_NATIVE_LAYOUT_H_
 #define SCFF_DSF_IMAGING_NATIVE_LAYOUT_H_
 
+#include <libavfilter/drawutils.h>
+
 #include "imaging/processor.h"
 #include "imaging/avpicture-image.h"
 
@@ -87,6 +89,13 @@ class NativeLayout : public Processor {
   int padding_top_;
   /// @brief パディング(bottom)
   int padding_bottom_;
+
+  /// @brief 描画用コンテキスト
+  FFDrawContext draw_context;
+  /// @brief 枠描画用カラー
+  FFDrawColor draw_color;
+  /// @brief 枠描画用カラー(RGBA)
+  uint8_t rgba_draw_color[4];
 };
 }   // namespace imaging
 

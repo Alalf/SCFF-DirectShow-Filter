@@ -1,4 +1,4 @@
-
+ï»¿
 // Copyright 2012 Alalf <alalf.iQLc_at_gmail.com>
 //
 // This file is part of SCFF DSF.
@@ -17,7 +17,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scffappnet/data_source.h
-/// @brief scffappnet::***Wrapper‚È‚Ç‚ÌéŒ¾
+/// @brief scffappnet::***Wrapperãªã©ã®å®£è¨€
 
 #ifndef SCFF_APP_NET_SCFFAPPNET_DATA_SOURCE_H_
 #define SCFF_APP_NET_SCFFAPPNET_DATA_SOURCE_H_
@@ -28,7 +28,7 @@ namespace scffappnet {
 
 using namespace System;
 
-/// @brief SCFFEntry‚ğƒ}ƒl[ƒWƒhƒNƒ‰ƒX‰»‚µ‚½‚à‚Ì
+/// @brief SCFFEntryã‚’ãƒãƒãƒ¼ã‚¸ãƒ‰ã‚¯ãƒ©ã‚¹åŒ–ã—ãŸã‚‚ã®
 ref class ManagedSCFFEntry {
  public:
   ManagedSCFFEntry(const SCFFEntry &raw_entry) {

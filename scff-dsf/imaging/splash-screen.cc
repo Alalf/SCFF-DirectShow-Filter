@@ -24,6 +24,7 @@
 extern "C" {
 #include <libswscale/swscale.h>
 }
+#include <libavfilter/drawutils.h>
 
 #include "resource.h"   // NOLINT
 #include "base/debug.h"
@@ -91,11 +92,16 @@ ErrorCode SplashScreen::Accept(Request *request) {
 }
 
 // Processor::PullImageの実装
+/// @todo(me) 全体的に汚すぎるので徹底的に書き直す
 ErrorCode SplashScreen::PullAVPictureImage(AVPictureImage *image) {
   if (GetCurrentError() != kNoError) {
     // 何かエラーが発生している場合は何もしない
     return GetCurrentError();
   }
+
+  //-------------------------------------------------------------------
+  // リソースからのビットマップ読み込み
+  //-------------------------------------------------------------------
 
   // リソース画像の情報
   const int resource_width = 128;
@@ -126,61 +132,7 @@ ErrorCode SplashScreen::PullAVPictureImage(AVPictureImage *image) {
     return ErrorOccured(error_resource_image_for_swscale);
   }
 
-  // I420のみパディングも使うのでパディング幅、高さを計算しておく
-  int padding_top = 0;
-  int padding_bottom = 0;
-  int padding_left = 0;
-  int padding_right = 0;
-  int splash_width = width();
-  int splash_height = height();
-  int no_error = true;
-  switch (pixel_format()) {
-  case kI420:
-    no_error =
-        Utilities::CalculatePaddingSize(width(), height(),
-                                        resource_width, resource_height,
-                                        false, true,
-                                        &padding_top, &padding_bottom,
-                                        &padding_left, &padding_right);
-    ASSERT(no_error);
-    splash_width = width() - padding_left - padding_right;
-    splash_height = height() - padding_top - padding_bottom;
-    break;
-  case kUYVY:
-  case kRGB0:
-    // nop
-    break;
-  }
-
-  // ピクセルフォーマット変換＋拡大縮小用のコンテキスト作成
-  // I420のみパディングも使うので拡大縮小はなし
-  struct SwsContext *scaler = 0;  // NULL
-  switch (pixel_format()) {
-  case kI420:
-  case kUYVY:
-    // I420/UYVY: 入力:BGR0(32bit) 出力:I420(12bit)/UYVY(16bit)
-    /// @attention RGB->YUV変換時にUVが逆になるのを修正
-    ///- RGBデータをBGRデータとしてSwsContextに渡してあります
-    scaler = sws_getCachedContext(NULL,
-        resource_width, resource_height, PIX_FMT_BGR0,
-        splash_width, splash_height,
-        Utilities::ToAVPicturePixelFormat(pixel_format()),
-        kLanczos, NULL, NULL, NULL);
-    break;
-  case kRGB0:
-    // RGB0: 入力:RGB0(32bit) 出力:RGB0(32bit)
-    scaler = sws_getCachedContext(NULL,
-        resource_width, resource_height, PIX_FMT_RGB0,
-        splash_width, splash_height,
-        Utilities::ToAVPicturePixelFormat(pixel_format()),
-        kLanczos, NULL, NULL, NULL);
-    break;
-  }
-  if (scaler == NULL) {
-    return ErrorOccured(kOutOfMemoryError);
-  }
-
-  // DDBからビットマップ(配列)を取り出す
+  // GetDIBitsを利用してビットマップデータを転送
   HDC resource_dc = CreateCompatibleDC(NULL);
   SelectObject(resource_dc, resource_image.windows_ddb());
   GetDIBits(resource_dc, resource_image.windows_ddb(),
@@ -190,17 +142,91 @@ ErrorCode SplashScreen::PullAVPictureImage(AVPictureImage *image) {
             DIB_RGB_COLORS);
   DeleteDC(resource_dc);
 
-  // SWScaleを使って拡大・縮小を行う
-  int scale_height = -1;    // ありえない値
+  //-------------------------------------------------------------------
+  // パディング
+  //-------------------------------------------------------------------
+  int splash_width = width();
+  int splash_height = height();
+  int padding_top = 0;
+  int padding_bottom = 0;
+  int padding_left = 0;
+  int padding_right = 0;
+  FFDrawContext draw_context;
+  FFDrawColor padding_color;
 
-  ErrorCode error_tmp_image_for_padding = kNoError;
-  static int padding_yuv_color[3] = {0, 128, 128};
-  int error_pad = -1;
-  AVPicture tmp_image_for_swscale;
-  AVPictureImage tmp_image_for_padding;
-
+  /// @warning 2012/05/08現在drawutilsはPlaner Formatにしか対応していない
+  bool can_use_drawutils = false;
   switch (pixel_format()) {
   case kI420:
+  case kRGB0:
+    can_use_drawutils = true;
+    break;
+  case kUYVY:
+    can_use_drawutils = false;
+    break;
+  }
+  if (can_use_drawutils) {
+    // パディング用のコンテキスト・カラーの初期化
+    const int error_init =
+        ff_draw_init(&draw_context,
+                     Utilities::ToAVPicturePixelFormat(pixel_format()),
+                     0);
+    ASSERT(error_init == 0);
+    uint8_t rgba_padding_color[4] = {0,0,0,0};    // black
+    ff_draw_color(&draw_context,
+                  &padding_color,
+                  rgba_padding_color);
+
+    // パディングサイズの計算
+    const bool no_error = Utilities::CalculatePaddingSize(
+        width(), height(),
+        resource_width, resource_height,
+        false, true,
+        &padding_top, &padding_bottom,
+        &padding_left, &padding_right);
+    ASSERT(no_error);
+
+    // パディング分だけサイズを小さくする
+    splash_width -= padding_left + padding_right;
+    splash_height -= padding_top + padding_bottom;
+  }
+
+  //-------------------------------------------------------------------
+  // ピクセルフォーマット変換＋拡大縮小
+  //-------------------------------------------------------------------
+  struct SwsContext *scaler = 0;  // NULL
+  PixelFormat input_pixel_format = PIX_FMT_NONE;
+  switch (pixel_format()) {
+  case kI420:
+  case kUYVY:
+    // I420/UYVY: 入力:BGR0(32bit) 出力:I420(12bit)/UYVY(16bit)
+    /// @attention RGB->YUV変換時にUVが逆になるのを修正
+    ///- RGBデータをBGRデータとしてSwsContextに渡してあります
+    input_pixel_format = PIX_FMT_BGR0;
+    break;
+  case kRGB0:
+    // RGB0: 入力:RGB0(32bit) 出力:RGB0(32bit)
+    input_pixel_format  = PIX_FMT_RGB0;
+    break;
+  }
+  scaler = sws_getCachedContext(NULL,
+      resource_width, resource_height, input_pixel_format,
+      splash_width, splash_height,
+      Utilities::ToAVPicturePixelFormat(pixel_format()),
+      kLanczos, NULL, NULL, NULL);
+  if (scaler == NULL) {
+    return ErrorOccured(kOutOfMemoryError);
+  }
+
+  //-------------------------------------------------------------------
+  // SWScaleによる拡大・縮小
+  //-------------------------------------------------------------------
+
+  // 上下逆転
+  const bool need_horizontal_flip =
+      pixel_format() == kI420 || pixel_format() == kUYVY;
+  AVPicture tmp_image_for_swscale;
+  if (need_horizontal_flip) {
     /// @attention RGB->YUV変換時に上下が逆になるのを修正
     ///- 取り込みデータの中身を操作せず、ポインタをいじるだけで対処してあります
     for (int i = 0; i < 8; i++) {
@@ -211,16 +237,34 @@ ErrorCode SplashScreen::PullAVPictureImage(AVPictureImage *image) {
       tmp_image_for_swscale.linesize[i] =
           -resource_image_for_swscale.avpicture()->linesize[i];
     }
-    // 拡大縮小用の中間データを作成
-    error_tmp_image_for_padding =
-        tmp_image_for_padding.Create(pixel_format(),
-                                     splash_width,
-                                     splash_height);
-    if (error_tmp_image_for_padding != kNoError) {
-      return ErrorOccured(error_tmp_image_for_padding);
-    }
-    // 拡大縮小
-    scale_height =
+  }
+
+  // パディング不可能な場合はそのまま出力
+  if (!can_use_drawutils) {
+    const int scale_height =
+        sws_scale(scaler,
+                  tmp_image_for_swscale.data,
+                  tmp_image_for_swscale.linesize,
+                  0, resource_height,
+                  image->avpicture()->data,
+                  image->avpicture()->linesize);
+    ASSERT(scale_height == splash_height);
+    return NoError();
+  }
+
+  // パディング可能な場合は中間イメージを新たに作成
+  AVPictureImage tmp_image_for_padding;
+  const ErrorCode error_tmp_image_for_padding =
+      tmp_image_for_padding.Create(pixel_format(),
+                                    splash_width,
+                                    splash_height);
+  if (error_tmp_image_for_padding != kNoError) {
+    return ErrorOccured(error_tmp_image_for_padding);
+  }
+
+  // 拡大縮小
+  if (pixel_format() == kI420) {
+    const int scale_height =
         sws_scale(scaler,
                   tmp_image_for_swscale.data,
                   tmp_image_for_swscale.linesize,
@@ -228,49 +272,58 @@ ErrorCode SplashScreen::PullAVPictureImage(AVPictureImage *image) {
                   tmp_image_for_padding.avpicture()->data,
                   tmp_image_for_padding.avpicture()->linesize);
     ASSERT(scale_height == splash_height);
-    // パディング: YUV形式の黒色(PCスケール)で埋める
-    error_pad =
-        av_picture_pad(image->avpicture(), tmp_image_for_padding.avpicture(),
-                       height(), width(),
-                       Utilities::ToAVPicturePixelFormat(pixel_format()),
-                       padding_top, padding_bottom,
-                       padding_left, padding_right,
-                       padding_yuv_color);
-    ASSERT(error_pad == 0);
-    break;
-  case kUYVY:
-    /// @attention RGB->YUV変換時に上下が逆になるのを修正
-    ///- 取り込みデータの中身を操作せず、ポインタをいじるだけで対処してあります
-    for (int i = 0; i < 8; i++) {
-      tmp_image_for_swscale.data[i] =
-          resource_image_for_swscale.avpicture()->data[i]
-          + resource_image_for_swscale.avpicture()->linesize[i]
-              * (resource_height - 1);
-      tmp_image_for_swscale.linesize[i] =
-          -resource_image_for_swscale.avpicture()->linesize[i];
-    }
-    // 拡大縮小
-    scale_height =
-        sws_scale(scaler,
-                  tmp_image_for_swscale.data,
-                  tmp_image_for_swscale.linesize,
-                  0, resource_height,
-                  image->avpicture()->data,
-                  image->avpicture()->linesize);
-    ASSERT(scale_height == splash_height);
-    break;
-  case kRGB0:
-    // 拡大縮小
-    scale_height =
+  } else {
+    const int scale_height =
         sws_scale(scaler,
                   resource_image_for_swscale.avpicture()->data,
                   resource_image_for_swscale.avpicture()->linesize,
                   0, resource_height,
-                  image->avpicture()->data,
-                  image->avpicture()->linesize);
+                  tmp_image_for_padding.avpicture()->data,
+                  tmp_image_for_padding.avpicture()->linesize);
     ASSERT(scale_height == splash_height);
-    break;
   }
+
+  // パディング
+
+  // 上の枠を書く
+  ff_fill_rectangle(&draw_context, &padding_color,
+                    image->avpicture()->data,
+                    image->avpicture()->linesize,
+                    0, 0, width(), padding_top);
+
+  // 中央に画像を配置する
+  ff_copy_rectangle2(&draw_context,
+                     image->avpicture()->data,
+                     image->avpicture()->linesize,
+                     tmp_image_for_padding.avpicture()->data,
+                     tmp_image_for_padding.avpicture()->linesize,
+                     padding_left, padding_top,
+                     0, 0, 
+                     tmp_image_for_padding.width(),
+                     tmp_image_for_padding.height());
+
+  // 下の枠を書く
+  ff_fill_rectangle(&draw_context, &padding_color,
+                    image->avpicture()->data,
+                    image->avpicture()->linesize,
+                    0,
+                    padding_top + tmp_image_for_padding.height(),
+                    width(),
+                    padding_bottom);
+
+  // 左の枠を書く
+  ff_fill_rectangle(&draw_context, &padding_color,
+                    image->avpicture()->data,
+                    image->avpicture()->linesize,
+                    0, padding_top,
+                    padding_left, tmp_image_for_padding.height());
+
+  // 右の枠を書く
+  ff_fill_rectangle(&draw_context, &padding_color,
+                    image->avpicture()->data,
+                    image->avpicture()->linesize,
+                    padding_left + tmp_image_for_padding.width(), padding_top,
+                    padding_right, tmp_image_for_padding.height());
 
   // エラー発生なし
   return NoError();

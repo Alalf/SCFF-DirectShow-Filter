@@ -43,6 +43,7 @@ NativeLayout::NativeLayout(ImagePixelFormat pixel_format,
               bool stretch, bool keep_aspect_ratio)
     : Processor(pixel_format, width, height),
       parameter_(parameter),
+      can_use_drawutils_(false),
       stretch_(stretch),
       keep_aspect_ratio_(keep_aspect_ratio),
       padding_left_(-1),    // ありえない値
@@ -54,6 +55,11 @@ NativeLayout::NativeLayout(ImagePixelFormat pixel_format,
   MyDbgLog((LOG_MEMORY, kDbgNewDelete,
           TEXT("NativeLayout: NEW(%d, %d, %d, stretch:%d, keep-aspect:%d)"),
           pixel_format, width, height, stretch, keep_aspect_ratio));
+  // 配列の初期化
+  rgba_padding_color_[0] = 0;
+  rgba_padding_color_[1] = 0;
+  rgba_padding_color_[2] = 0;
+  rgba_padding_color_[3] = 0;
 }
 
 // デストラクタ
@@ -72,33 +78,47 @@ ErrorCode NativeLayout::Init() {
   MyDbgLog((LOG_TRACE, kDbgImportant,
           TEXT("NativeLayout: Init")));
 
-  /// @todo(me) 他の形式でもPadding対応する
-  int capture_width = width();
-  int capture_height = height();
-  padding_top_ = 0;
-  padding_bottom_ = 0;
-  padding_left_ = 0;
-  padding_right_ = 0;
-
-  /// @warning I420のみに対応
-  bool error = false;
+  /// @warning 2012/05/08現在drawutilsはPlaner Formatにしか対応していない
   switch (pixel_format()) {
   case kI420:
-    error = Utilities::CalculatePaddingSize(
+  case kRGB0:
+    can_use_drawutils_ = true;
+    break;
+  case kUYVY:
+    can_use_drawutils_ = false;
+    break;
+  }
+
+  // パディング用の変数の設定
+  int capture_width = width();
+  int capture_height = height();
+  if (can_use_drawutils_) {
+    // パディング用のコンテキスト・カラーの初期化
+    const int error_init =
+        ff_draw_init(&draw_context_,
+                     Utilities::ToAVPicturePixelFormat(pixel_format()),
+                     0);
+    ASSERT(error_init == 0);
+    rgba_padding_color_[0] = 0;
+    rgba_padding_color_[1] = 0;
+    rgba_padding_color_[2] = 0;
+    rgba_padding_color_[3] = 0;
+    ff_draw_color(&draw_context_,
+                  &padding_color_,
+                  rgba_padding_color_);
+
+    // パディングサイズの計算
+    const bool no_error = Utilities::CalculatePaddingSize(
         width(), height(),
         parameter_.clipping_width, parameter_.clipping_height,
         stretch_, keep_aspect_ratio_,
         &padding_top_, &padding_bottom_,
         &padding_left_, &padding_right_);
-    ASSERT(error == true);
+    ASSERT(no_error);
 
-    capture_width = width() - padding_left_ - padding_right_;
-    capture_height = height() - padding_top_ - padding_bottom_;
-    break;
-  case kUYVY:
-  case kRGB0:
-    // nop
-    break;
+    // パディング分だけサイズを小さくする
+    capture_width -= padding_left_ + padding_right_;
+    capture_height -= padding_top_ + padding_bottom_;
   }
 
   //-------------------------------------------------------------------
@@ -159,34 +179,64 @@ ErrorCode NativeLayout::PullAVPictureImage(AVPictureImage *image) {
   ASSERT(screen_capture_ != 0);   // NULL
   ASSERT(image != 0);             // NULL
 
-  /// @warning I420のみに対応
-  ErrorCode error = kNoError;
-  int error_pad = -1;
-  static int padding_yuv_color[3] = {0, 128, 128};
-  switch (pixel_format()) {
-  case kI420:
-    error = screen_capture_->PullAVPictureImage(&capture_image_);
+  // drawutilsがサポートしていないフォーマットはパディング非対応
+  if (!can_use_drawutils_) {
+    // スクリーンキャプチャ
+    const ErrorCode error =
+        screen_capture_->PullAVPictureImage(image);
     if (error != kNoError) {
       return ErrorOccured(error);
     }
-    // YUV形式の黒色(PCスケール)で埋める
-    error_pad =
-        av_picture_pad(image->avpicture(), capture_image_.avpicture(),
-                       height(), width(),
-                       Utilities::ToAVPicturePixelFormat(pixel_format()),
-                       padding_top_, padding_bottom_,
-                       padding_left_, padding_right_,
-                       padding_yuv_color);
-    ASSERT(error_pad == 0);
-    break;
-  case kUYVY:
-  case kRGB0:
-    error = screen_capture_->PullAVPictureImage(image);
-    if (error != kNoError) {
-      return ErrorOccured(error);
-    }
-    break;
+    return NoError();
   }
+
+  // 以下drawutilsによるパディング
+
+  // スクリーンキャプチャ
+  const ErrorCode error = screen_capture_->PullAVPictureImage(&capture_image_);
+  if (error != kNoError) {
+    return ErrorOccured(error);
+  }
+
+  // 上の枠を書く
+  ff_fill_rectangle(&draw_context_, &padding_color_,
+                    image->avpicture()->data,
+                    image->avpicture()->linesize,
+                    0, 0, width(), padding_top_);
+
+  // 中央に画像を配置する
+  ff_copy_rectangle2(&draw_context_,
+                     image->avpicture()->data,
+                     image->avpicture()->linesize,
+                     capture_image_.avpicture()->data,
+                     capture_image_.avpicture()->linesize,
+                     padding_left_, padding_top_,
+                     0, 0, 
+                     capture_image_.width(),
+                     capture_image_.height());
+
+  // 下の枠を書く
+  ff_fill_rectangle(&draw_context_, &padding_color_,
+                    image->avpicture()->data,
+                    image->avpicture()->linesize,
+                    0,
+                    padding_top_ + capture_image_.height(),
+                    width(),
+                    padding_bottom_);
+
+  // 左の枠を書く
+  ff_fill_rectangle(&draw_context_, &padding_color_,
+                    image->avpicture()->data,
+                    image->avpicture()->linesize,
+                    0, padding_top_,
+                    padding_left_, capture_image_.height());
+
+  // 右の枠を書く
+  ff_fill_rectangle(&draw_context_, &padding_color_,
+                    image->avpicture()->data,
+                    image->avpicture()->linesize,
+                    padding_left_ + capture_image_.width(), padding_top_,
+                    padding_right_, capture_image_.height());
 
   return NoError();
 }

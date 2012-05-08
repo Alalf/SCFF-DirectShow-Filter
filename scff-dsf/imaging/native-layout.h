@@ -75,9 +75,19 @@ class NativeLayout : public Processor {
   /// @brief スクリーンキャプチャパラメータ
   const ScreenCaptureParameter parameter_;
 
+  //-------------------------------------------------------------------
+  /// @brief ピクセルフォーマットがdrawutilsに対応しているかどうか
+  bool can_use_drawutils_;
+  /// @brief 描画用コンテキスト
+  FFDrawContext draw_context_;
+  /// @brief 枠描画用カラー
+  FFDrawColor padding_color_;
+  /// @brief 枠描画用カラー(RGBA)
+  uint8_t rgba_padding_color_[4];
+  //-------------------------------------------------------------------
+
   /// @brief 取り込み範囲が出力サイズより小さい場合拡張
   const bool stretch_;
-
   /// @brief アスペクト比の保持
   const bool keep_aspect_ratio_;
 
@@ -89,13 +99,6 @@ class NativeLayout : public Processor {
   int padding_top_;
   /// @brief パディング(bottom)
   int padding_bottom_;
-
-  /// @brief 描画用コンテキスト
-  FFDrawContext draw_context;
-  /// @brief 枠描画用カラー
-  FFDrawColor draw_color;
-  /// @brief 枠描画用カラー(RGBA)
-  uint8_t rgba_draw_color[4];
 };
 }   // namespace imaging
 

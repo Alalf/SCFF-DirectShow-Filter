@@ -50,17 +50,6 @@ class Utilities {
   // イメージの操作
   //-------------------------------------------------------------------
 
-  /// @brief 矩形を指定してビットマップをコピー
-  ///- outputイメージに収まらない場合、クリッピングされる
-  static void BitBlt(const AVPictureImage &input,
-                     AVPictureImage *output, int output_x, int output_y);
-  /// @brief 矩形を黒で塗りつぶし
-  ///- outputイメージに収まらない場合、クリッピングされる
-  static void FillRect(AVPictureImage *output, int output_x, int output_y,
-                       int output_width, int output_height);
-  /// @brief イメージ全体を黒で塗りつぶす
-  static void Clear(AVPictureImage *output);
-
   //-------------------------------------------------------------------
   // イメージのタイプ（サイズ、形式など）
   //-------------------------------------------------------------------

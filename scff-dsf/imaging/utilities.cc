@@ -56,38 +56,6 @@ void Utilities::set_dll_instance(HINSTANCE dll_instance) {
 // イメージの操作
 //-------------------------------------------------------------------
 
-// 矩形を指定してビットマップをコピー
-// outputイメージに収まらない場合、クリッピングされる
-/// @todo(me) libavfilter/drawutils.cのff_copy_rectangle/2を移植したい
-void Utilities::BitBlt(const AVPictureImage &input,
-                       AVPictureImage *output, int output_x, int output_y) {
-  /// @todo(me) 実装
-  ASSERT(false);
-}
-
-// brief 矩形を指定したRGBカラーで塗りつぶし
-// outputイメージに収まらない場合、クリッピングされる
-/// @todo(me) libavfilter/drawutils.cのff_fill_rectangleを移植したい
-void Utilities::FillRect(AVPictureImage *output, int output_x, int output_y,
-                         int output_width, int output_height) {
-  /// @todo(me) 実装
-  ASSERT(false);
-}
-
-/// @brief イメージ全体を黒で塗りつぶす
-/// @todo(me) FillRectがあればそれを利用して実装する
-void Utilities::Clear(AVPictureImage *output) {
-  /// @todo(me) 実装
-  ASSERT(false);
-
-  // RGB0限定ならZeroMemoryでよい
-  if (output->pixel_format() == kRGB0) {
-    const int data_size = CalcImageSize(*output);
-    ZeroMemory(output->avpicture()->data[0], data_size);
-    return;
-  }
-}
-
 //-------------------------------------------------------------------
 // イメージのタイプ
 //-------------------------------------------------------------------

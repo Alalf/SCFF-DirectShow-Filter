@@ -20,3 +20,4 @@
 /ipch
 *.suo
 /doc/html
+/scff-app/obj

@@ -3,7 +3,7 @@
 # Project related configuration options
 DOXYFILE_ENCODING      = UTF-8
 PROJECT_NAME           = "SCFF DSF"
-PROJECT_NUMBER         = $Revision: 91 $ ($Date: 2012-04-25 01:15:26 +0900 (水, 25 4 2012) $)
+PROJECT_NUMBER         = 0.0.1
 PROJECT_BRIEF          = Screen Capture for FFMpeg - DirectShow Filter
 PROJECT_LOGO           =
 OUTPUT_DIRECTORY       = doc

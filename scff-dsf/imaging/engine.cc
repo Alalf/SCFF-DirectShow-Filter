@@ -124,19 +124,25 @@ ErrorCode Engine::Init() {
   //-------------------------------------------------------------------
   // フロントイメージ
   const ErrorCode error_front_image =
-      front_image_.Create(output_pixel_format_, output_width_, output_height_);
+      front_image_.Create(output_pixel_format_,
+                          output_width_,
+                          output_height_);
   if (error_front_image != kNoError) {
     return ErrorOccured(error_front_image);
   }
   // バックイメージ
   // const ErrorCode error_back_image =
-  //     back_image_.Create(output_pixel_format_, output_width_, output_height_);
+  //     back_image_.Create(output_pixel_format_,
+  //                        output_width_,
+  //                        output_height_);
   // if (error_back_image != kNoError) {
   //   return ErrorOccured(error_back_image);
   // }
   // スプラッシュイメージ
   const ErrorCode error_splash_image =
-      splash_image_.Create(output_pixel_format_, output_width_, output_height_);
+      splash_image_.Create(output_pixel_format_,
+                           output_width_,
+                           output_height_);
   if (error_splash_image != kNoError) {
     return ErrorOccured(error_splash_image);
   }

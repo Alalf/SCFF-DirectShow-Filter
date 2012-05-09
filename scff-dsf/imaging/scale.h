@@ -33,10 +33,10 @@ namespace imaging {
 class Scale : public Processor<AVPictureWithFillImage, AVPictureImage> {
  public:
   /// @brief コンストラクタ
-  Scale(SWScaleFlags sws_flags);
+  explicit Scale(SWScaleFlags sws_flags);
   /// @brief デストラクタ
   ~Scale();
-  
+
   //-------------------------------------------------------------------
   /// @copydoc Processor::Init
   ErrorCode Init();

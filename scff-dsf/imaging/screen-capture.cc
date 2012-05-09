@@ -31,8 +31,9 @@ namespace imaging {
 //=====================================================================
 
 // コンストラクタ
-ScreenCapture::ScreenCapture(int size,
-                             ScreenCaptureParameter parameter[kMaxMultiProcessorSize])
+ScreenCapture::ScreenCapture(
+    int size,
+    ScreenCaptureParameter parameter[kMaxMultiProcessorSize])
     : Processor<void, AVPictureWithFillImage>(size) {
   MyDbgLog((LOG_MEMORY, kDbgNewDelete,
             TEXT("ScreenCapture: NEW(%d)"),

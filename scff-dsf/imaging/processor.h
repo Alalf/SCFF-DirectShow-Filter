@@ -39,7 +39,7 @@ template <class InputImageType, class OutputImageType>
 class Processor {
  public:
   /// @brief コンストラクタ
-  Processor(int size=1)
+  explicit Processor(int size = 1)
       : error_code_(kUninitialziedError),
         size_(size) {
     // nop
@@ -82,22 +82,22 @@ class Processor {
   }
 
   /// @brief Setter: input_image_
-  void SetInputImage(InputImageType *input_image, int index=0) {
+  void SetInputImage(InputImageType *input_image, int index = 0) {
     ASSERT(0 <= index && index < size());
     input_image_[index] = input_image;
   }
   /// @brief Getter: input_image_
-  InputImageType* GetInputImage(int index=0) const {
+  InputImageType* GetInputImage(int index = 0) const {
     ASSERT(0 <= index && index < size());
     return input_image_[index];
   }
   /// @brief Setter: output_image_
-  void SetOutputImage(OutputImageType* output_image, int index=0) {
+  void SetOutputImage(OutputImageType* output_image, int index = 0) {
     ASSERT(0 <= index && index < size());
     output_image_[index] = output_image;
   }
   /// @brief Getter: output_image_
-  OutputImageType* GetOutputImage(int index=0) const {
+  OutputImageType* GetOutputImage(int index = 0) const {
     ASSERT(0 <= index && index < size());
     return output_image_[index];
   }

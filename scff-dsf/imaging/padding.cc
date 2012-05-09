@@ -35,7 +35,7 @@ Padding::Padding(int padding_left, int padding_right,
     : padding_left_(padding_left),        // ありえない値
       padding_right_(padding_right),      // ありえない値
       padding_top_(padding_top),          // ありえない値
-      padding_bottom_(padding_bottom) {   // ありえない値 
+      padding_bottom_(padding_bottom) {   // ありえない値
   // 配列の初期化
   rgba_padding_color_[0] = 0;
   rgba_padding_color_[1] = 0;
@@ -129,7 +129,7 @@ ErrorCode Padding::Run() {
                      padding_left_,
                      padding_top_,
                      0,
-                     0, 
+                     0,
                      GetInputImage()->width(),
                      GetInputImage()->height());
 

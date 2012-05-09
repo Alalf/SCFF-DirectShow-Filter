@@ -40,6 +40,9 @@ class MultiProcessor {
                  int size,
                  int width[kMaxMultiProcessorSize],
                  int height[kMaxMultiProcessorSize]);
+  /// @brief コンストラクタ。出力一つの場合こちらを利用すること。
+  MultiProcessor(ImagePixelFormat pixel_format,
+                 int width, int height);
   /// @brief 仮想デストラクタ
   virtual ~MultiProcessor();
 
@@ -53,19 +56,19 @@ class MultiProcessor {
   /// @retval NoError()       Accept成功
   /// @retval ErrorOccured()  エラーが発生した場合
   virtual ErrorCode Accept(Request *request) = 0;
-  /// @brief 渡されたImageにイメージを設定する
-  /// @param[in,out] image    Imageインスタンス
+  /// @brief 渡されたImage配列にイメージを設定する
+  /// @param[in,out] images   Imageインスタンスの配列
   /// @retval NoError()       Pull成功
   /// @retval ErrorOccured()  エラーが発生した場合
   virtual ErrorCode PullAVPictureImages(
       AVPictureImage *images[kMaxMultiProcessorSize]);
-  /// @copydoc PullAVPictureImage
+  /// @copydoc PullAVPictureImages
   virtual ErrorCode PullAVPictureWithFillImages(
       AVPictureWithFillImage *images[kMaxMultiProcessorSize]);
-  /// @copydoc PullAVPictureImage
+  /// @copydoc PullAVPictureImages
   virtual ErrorCode PullRawBitmapImages(
       RawBitmapImage *images[kMaxMultiProcessorSize]);
-  /// @copydoc PullAVPictureImage
+  /// @copydoc PullAVPictureImages
   virtual ErrorCode PullWindowsDDBImages(
       WindowsDDBImage *images[kMaxMultiProcessorSize]);
   //-------------------------------------------------------------------

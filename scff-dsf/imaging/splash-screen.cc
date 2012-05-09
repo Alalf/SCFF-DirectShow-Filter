@@ -24,9 +24,6 @@
 #include "resource.h"   // NOLINT
 #include "base/debug.h"
 #include "imaging/utilities.h"
-#include "imaging/avpicture-image.h"
-#include "imaging/avpicture-with-fill-image.h"
-#include "imaging/windows-ddb-image.h"
 #include "imaging/scale.h"
 #include "imaging/padding.h"
 

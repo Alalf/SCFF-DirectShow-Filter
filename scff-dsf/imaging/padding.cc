@@ -20,8 +20,8 @@
 /// @brief imaging::Paddingの定義
 
 #include "imaging/padding.h"
+
 #include "imaging/avpicture-image.h"
-#include "imaging/utilities.h"
 
 namespace imaging {
 
@@ -93,17 +93,54 @@ ErrorCode Padding::Init() {
 
 // Processor::Run
 ErrorCode Padding::Run() {
-  // パディング
-  Utilities::PadImage(&draw_context_,
-                      &padding_color_,
-                      GetInputImage()->avpicture(),
-                      GetInputImage()->width(),
-                      GetInputImage()->height(),
-                      padding_left_, padding_right_,
-                      padding_top_, padding_bottom_,
-                      GetOutputImage()->width(),
-                      GetOutputImage()->height(),
-                      GetOutputImage()->avpicture());
+  // 左の枠を書く
+  ff_fill_rectangle(&draw_context_, &padding_color_,
+                    GetOutputImage()->avpicture()->data,
+                    GetOutputImage()->avpicture()->linesize,
+                    0,
+                    padding_top_,
+                    padding_left_,
+                    GetInputImage()->height());
+
+  // 右の枠を書く
+  ff_fill_rectangle(&draw_context_, &padding_color_,
+                    GetOutputImage()->avpicture()->data,
+                    GetOutputImage()->avpicture()->linesize,
+                    padding_left_ + GetInputImage()->width(),
+                    padding_top_,
+                    padding_right_,
+                    GetInputImage()->height());
+
+  // 上の枠を書く
+  ff_fill_rectangle(&draw_context_, &padding_color_,
+                    GetOutputImage()->avpicture()->data,
+                    GetOutputImage()->avpicture()->linesize,
+                    0,
+                    0,
+                    GetOutputImage()->width(),
+                    padding_top_);
+
+  // 中央に画像を配置する
+  ff_copy_rectangle2(&draw_context_,
+                     GetOutputImage()->avpicture()->data,
+                     GetOutputImage()->avpicture()->linesize,
+                     GetInputImage()->avpicture()->data,
+                     GetInputImage()->avpicture()->linesize,
+                     padding_left_,
+                     padding_top_,
+                     0,
+                     0, 
+                     GetInputImage()->width(),
+                     GetInputImage()->height());
+
+  // 下の枠を書く
+  ff_fill_rectangle(&draw_context_, &padding_color_,
+                    GetOutputImage()->avpicture()->data,
+                    GetOutputImage()->avpicture()->linesize,
+                    0,
+                    padding_top_ + GetInputImage()->height(),
+                    GetOutputImage()->width(),
+                    padding_bottom_);
 
   return NoError();
 }

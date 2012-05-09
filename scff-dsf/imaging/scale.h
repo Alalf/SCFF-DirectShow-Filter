@@ -22,12 +22,10 @@
 #ifndef SCFF_DSF_IMAGING_SCALE_H_
 #define SCFF_DSF_IMAGING_SCALE_H_
 
-extern "C" {
-#include <libswscale/swscale.h>
-}
-
 #include "imaging/imaging-types.h"
 #include "imaging/processor.h"
+
+struct SwsContext;
 
 namespace imaging {
 

@@ -29,9 +29,6 @@ extern "C" {
 
 #include "imaging/imaging-types.h"
 
-struct FFDrawContext;
-struct FFDrawColor;
-
 namespace imaging {
 
 class Image;
@@ -56,16 +53,6 @@ class Utilities {
   /// @brief 縦方向に回転したAVPictureを返す。実体は共通なので解放の必要はない。
   static void FlipHorizontal(const AVPicture *input, int input_height,
                              AVPicture *output);
-
-  /// @brief drawutilsを利用してパディングを行う。
-  static void PadImage(FFDrawContext *draw_context,
-                       FFDrawColor *padding_color,
-                       AVPicture *input,
-                       int input_width, int input_height,
-                       int padding_left, int padding_right,
-                       int padding_top, int padding_bottom,
-                       int output_width, int output_height,
-                       AVPicture *output);
 
   //-------------------------------------------------------------------
   // イメージのタイプ（サイズ、形式など）

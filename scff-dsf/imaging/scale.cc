@@ -21,9 +21,13 @@
 
 #include "imaging/scale.h"
 
-#include "imaging/avpicture-with-fill-image.h"
-#include "imaging/avpicture-image.h"
+extern "C" {
+#include <libswscale/swscale.h>
+}
+
 #include "imaging/utilities.h"
+#include "imaging/avpicture-image.h"
+#include "imaging/avpicture-with-fill-image.h"
 
 namespace imaging {
 

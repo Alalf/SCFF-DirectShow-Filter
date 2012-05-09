@@ -37,7 +37,7 @@ namespace imaging {
 // コンストラクタ
 Engine::Engine(ImagePixelFormat output_pixel_format,
                int output_width, int output_height, double output_fps)
-    : Processor<AVPictureImage, AVPictureImage>(),
+    : Processor<void, AVPictureImage>(),
       output_pixel_format_(output_pixel_format),
       output_width_(output_width),
       output_height_(output_height),
@@ -112,7 +112,7 @@ ErrorCode Engine::GetCurrentLayoutError() const {
 // Processor
 //---------------------------------------------------------------------
 
-// 初期化
+// Processor::Init
 ErrorCode Engine::Init() {
   MyDbgLog((LOG_TRACE, kDbgImportant,
           TEXT("Engine: Init")));
@@ -190,7 +190,7 @@ ErrorCode Engine::Accept(Request *request) {
   return NoError();
 }
 
-// 渡されたポインタにビットマップデータを設定する
+// Processor::Run
 ErrorCode Engine::Run() {
   if (GetCurrentError() != kNoError) {
     // 何かエラーが発生している場合は何もしない

@@ -30,7 +30,7 @@ namespace imaging {
 
 /// @brief 画像処理スレッドを管理する
 /// @todo(me) まずはシングルバッファで実装してみる
-class Engine : public Processor<AVPictureImage, AVPictureImage> {
+class Engine : public Processor<void, AVPictureImage> {
  public:
   /// @brief コンストラクタ
   Engine(ImagePixelFormat pixel_format, int width, int height, double fps);

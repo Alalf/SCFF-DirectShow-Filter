@@ -33,7 +33,7 @@ class Scale;
 class Padding;
 
 /// @brief スクリーンキャプチャ出力一つだけを処理するレイアウトプロセッサ
-class NativeLayout : public Processor<AVPictureImage, AVPictureImage> {
+class NativeLayout : public Processor<void, AVPictureImage> {
  public:
   /// @brief コンストラクタ
   NativeLayout(const ScreenCaptureParameter &parameter,

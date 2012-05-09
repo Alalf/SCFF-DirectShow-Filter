@@ -21,14 +21,11 @@
 
 #include "imaging/native-layout.h"
 
-#include <math.h>
-#include <algorithm>
-
 #include "base/debug.h"
-#include "imaging/image.h"
-#include "imaging/avpicture-image.h"
-#include "imaging/screen-capture.h"
 #include "imaging/utilities.h"
+#include "imaging/screen-capture.h"
+#include "imaging/scale.h"
+#include "imaging/padding.h"
 
 namespace imaging {
 
@@ -40,25 +37,16 @@ namespace imaging {
 NativeLayout::NativeLayout(
     const ScreenCaptureParameter &parameter,
     bool stretch, bool keep_aspect_ratio)
-    : Processor<AVPictureImage, AVPictureImage>(),
+    : Processor<void, AVPictureImage>(),
       parameter_(parameter),
-      can_use_drawutils_(false),
       stretch_(stretch),
       keep_aspect_ratio_(keep_aspect_ratio),
-      scaler_(0),           // NULL
-      padding_left_(-1),    // ありえない値
-      padding_right_(-1),   // ありえない値
-      padding_top_(-1),     // ありえない値
-      padding_bottom_(-1),  // ありえない値
-      screen_capture_(0) {  // NULL
+      screen_capture_(0),   // NULL
+      scale_(0),            // NULL
+      padding_(0) {         // NULL
   MyDbgLog((LOG_MEMORY, kDbgNewDelete,
           TEXT("NativeLayout: NEW(stretch:%d, keep-aspect:%d)"),
           stretch, keep_aspect_ratio));
-  // 配列の初期化
-  rgba_padding_color_[0] = 0;
-  rgba_padding_color_[1] = 0;
-  rgba_padding_color_[2] = 0;
-  rgba_padding_color_[3] = 0;
   // 明示的に初期化していない
   // captured_image_
   // converted_image_
@@ -73,110 +61,89 @@ NativeLayout::~NativeLayout() {
   if (screen_capture_ != 0) {
     delete screen_capture_;
   }
+  if (scale_ != 0) {  // NULL
+    delete scale_;
+  }
+  if (padding_ != 0) {  // NULL
+    delete padding_;
+  }
 }
+
+// 設定されたImageはPadding可能か？
+bool NativeLayout::CanUsePadding() const {
+  /// @warning 2012/05/08現在drawutilsはPlaner Formatにしか対応していない
+  switch (GetOutputImage()->pixel_format()) {
+  case kI420:
+  case kRGB0:
+    return true;
+  case kUYVY:
+  default:
+    return false;
+  }
+}
+
+//-------------------------------------------------------------------
 
 // Processor::Init
 ErrorCode NativeLayout::Init() {
   MyDbgLog((LOG_TRACE, kDbgImportant,
           TEXT("NativeLayout: Init")));
 
-
-  /// @warning 2012/05/08現在drawutilsはPlaner Formatにしか対応していない
-  switch (GetOutputImage()->pixel_format()) {
-  case kI420:
-  case kRGB0:
-    can_use_drawutils_ = true;
-    break;
-  case kUYVY:
-    can_use_drawutils_ = false;
-    break;
-  }
-
-  // パディング用の変数の設定
+  // あらかじめイメージのサイズを計算しておく
+  const int captured_width = parameter_.clipping_width;
+  const int captured_height = parameter_.clipping_height;
   int converted_width = GetOutputImage()->width();
   int converted_height = GetOutputImage()->height();
-  if (can_use_drawutils_) {
-    // パディング用のコンテキスト・カラーの初期化
-    const int error_init =
-        ff_draw_init(&draw_context_,
-                     Utilities::ToAVPicturePixelFormat(GetOutputImage()->pixel_format()),
-                     0);
-    ASSERT(error_init == 0);
-    rgba_padding_color_[0] = 0;
-    rgba_padding_color_[1] = 0;
-    rgba_padding_color_[2] = 0;
-    rgba_padding_color_[3] = 0;
-    ff_draw_color(&draw_context_,
-                  &padding_color_,
-                  rgba_padding_color_);
+  int padding_top = 0;
+  int padding_bottom = 0;
+  int padding_left = 0;
+  int padding_right = 0;
 
+  if (CanUsePadding()) {
     // パディングサイズの計算
     const bool no_error = Utilities::CalculatePaddingSize(
-        GetOutputImage()->width(), GetOutputImage()->height(),
-        parameter_.clipping_width, parameter_.clipping_height,
+        GetOutputImage()->width(),
+        GetOutputImage()->height(),
+        captured_width,
+        captured_height,
         stretch_, keep_aspect_ratio_,
-        &padding_top_, &padding_bottom_,
-        &padding_left_, &padding_right_);
+        &padding_top, &padding_bottom,
+        &padding_left, &padding_right);
     ASSERT(no_error);
 
     // パディング分だけサイズを小さくする
-    converted_width -= padding_left_ + padding_right_;
-    converted_height -= padding_top_ + padding_bottom_;
+    converted_width -= padding_left + padding_right;
+    converted_height -= padding_top + padding_bottom;
   }
-
-  // 拡大縮小用のコンテキストを作成
-  const int captured_width = parameter_.clipping_width;
-  const int captured_height = parameter_.clipping_height;
-
-  struct SwsContext *scaler = 0;    // NULL
-  PixelFormat input_pixel_format = PIX_FMT_NONE;
-  switch (GetOutputImage()->pixel_format()) {
-  case kI420:
-  case kUYVY:
-    // I420/UYVY: 入力:BGR0(32bit) 出力:I420(12bit)/UYVY(16bit)
-    /// @attention RGB->YUV変換時にUVが逆になるのを修正
-    ///- RGBデータをBGRデータとしてSwsContextに渡してあります
-    input_pixel_format = PIX_FMT_BGR0;
-    break;
-  case kRGB0:
-    // RGB0: 入力:RGB0(32bit) 出力:RGB0(32bit)
-    input_pixel_format = PIX_FMT_RGB0;
-    break;
-  }
-  scaler = sws_getCachedContext(NULL,
-      captured_width, captured_height, input_pixel_format,
-      converted_width, converted_height,
-      Utilities::ToAVPicturePixelFormat(GetOutputImage()->pixel_format()),
-      parameter_.sws_flags, NULL, NULL, NULL);
-  if (scaler == NULL) {
-    return ErrorOccured(kOutOfMemoryError);
-  }
-  scaler_ = scaler;
 
   //-------------------------------------------------------------------
   // 初期化の順番はイメージ→プロセッサの順
   //-------------------------------------------------------------------
   // Image
   //-------------------------------------------------------------------
-  // GetDIBits用なのでRGB0で作成
+  // GetDIBits用
   const ErrorCode error_captured_image =
       captured_image_.Create(kRGB0,
-                             parameter_.clipping_width,
-                             parameter_.clipping_height);
+                             captured_width,
+                             captured_height);
   if (error_captured_image != kNoError) {
     return ErrorOccured(error_captured_image);
   }
-  // ピクセル形式変換＋拡大縮小後のイメージ
-  const ErrorCode error_converted_image =
-      converted_image_.Create(GetOutputImage()->pixel_format(),
-                              converted_width,
-                              converted_height);
-  if (error_converted_image != kNoError) {
-    return ErrorOccured(error_converted_image);
+
+  // 変換後パディング用
+  if (CanUsePadding()) {
+    const ErrorCode error_converted_image =
+        converted_image_.Create(GetOutputImage()->pixel_format(),
+                                converted_width,
+                                converted_height);
+    if (error_converted_image != kNoError) {
+      return ErrorOccured(error_converted_image);
+    }
   }
   //-------------------------------------------------------------------
   // Processor
   //-------------------------------------------------------------------
+  // スクリーンキャプチャ
   ScreenCaptureParameter parameter_array[kMaxMultiProcessorSize];
   parameter_array[0] = parameter_;
   // NativeLayoutなのでsize=1
@@ -188,6 +155,36 @@ ErrorCode NativeLayout::Init() {
     return ErrorOccured(error_screen_capture);
   }
   screen_capture_ = screen_capture;
+
+  // 拡大縮小ピクセルフォーマット変換
+  Scale *scale = new Scale(parameter_.sws_flags);
+  scale->SetInputImage(&captured_image_);
+  if (CanUsePadding()) {
+    // パディング可能ならバッファをはさむ
+    scale->SetOutputImage(&converted_image_);
+  } else {
+    scale->SetOutputImage(GetOutputImage());
+  }
+  const ErrorCode error_scale_init = scale->Init();
+  if (error_scale_init != kNoError) {
+    delete scale;
+    return ErrorOccured(error_scale_init);
+  }
+  scale_ = scale;
+
+  // パディング
+  if (CanUsePadding()) {
+    Padding *padding =
+        new Padding(padding_left, padding_right, padding_top, padding_bottom);
+    padding->SetInputImage(&converted_image_);
+    padding->SetOutputImage(GetOutputImage());
+    const ErrorCode error_padding_init = padding->Init();
+    if (error_padding_init != kNoError) {
+      delete padding;
+      return ErrorOccured(error_padding_init);
+    }
+    padding_ = padding;
+  }
   //-------------------------------------------------------------------
 
   return InitDone();
@@ -200,79 +197,27 @@ ErrorCode NativeLayout::Run() {
     return GetCurrentError();
   }
 
-  ASSERT(screen_capture_ != 0);   // NULL
-  ASSERT(GetOutputImage() != 0);             // NULL
-
-  // まずはスクリーンキャプチャを行って変換
-  const ErrorCode error = screen_capture_->Run();
-  if (error != kNoError) {
-    return ErrorOccured(error);
-  }
-
-  int scale_height = -1;    // ありえない値
-  switch (GetOutputImage()->pixel_format()) {
-  case kI420:
-  case kUYVY:
-    /// @attention RGB->YUV変換時に上下が逆になるのを修正
-    AVPicture flip_horizontal_image_for_swscale;
-    Utilities::FlipHorizontal(
-        GetInputImage()->avpicture(),
-        GetInputImage()->height(),
-        &flip_horizontal_image_for_swscale);
-
-    // 拡大縮小
-    scale_height =
-        sws_scale(scaler_,
-                  flip_horizontal_image_for_swscale.data,
-                  flip_horizontal_image_for_swscale.linesize,
-                  0, GetInputImage()->height(),
-                  GetOutputImage()->avpicture()->data,
-                  GetOutputImage()->avpicture()->linesize);
-    ASSERT(scale_height == GetOutputImage()->height());
-    break;
-  case kRGB0:
-    // 拡大縮小
-    scale_height =
-        sws_scale(scaler_,
-                  GetInputImage()->avpicture()->data,
-                  GetInputImage()->avpicture()->linesize,
-                  0, GetInputImage()->height(),
-                  GetOutputImage()->avpicture()->data,
-                  GetOutputImage()->avpicture()->linesize);
-    ASSERT(scale_height == GetOutputImage()->height());
-    break;
-  }
-
-  // drawutilsがサポートしていないフォーマットはパディング非対応
-  if (!can_use_drawutils_) {
-    // スクリーンキャプチャ
-    const ErrorCode error = screen_capture_->Run();
-    if (error != kNoError) {
-      return ErrorOccured(error);
-    }
-    return NoError();
-  }
-
-  // 以下drawutilsによるパディング
-
   // スクリーンキャプチャ
-  const ErrorCode error_capture = screen_capture_->Run();
-  if (error_capture != kNoError) {
-    return ErrorOccured(error_capture);
+  const ErrorCode error_screen_capture = screen_capture_->Run();
+  if (error_screen_capture != kNoError) {
+    return ErrorOccured(error_screen_capture);
   }
 
-  // パディング
-  Utilities::PadImage(&draw_context_,
-                      &padding_color_,
-                      GetInputImage()->avpicture(),
-                      GetInputImage()->width(),
-                      GetInputImage()->height(),
-                      padding_left_, padding_right_,
-                      padding_top_, padding_bottom_,
-                      GetOutputImage()->width(),
-                      GetOutputImage()->height(),
-                      GetOutputImage()->avpicture());
+  // Scaleを利用して変換
+  const ErrorCode error_scale = scale_->Run();
+  if (error_scale != kNoError) {
+    return ErrorOccured(error_scale);
+  }
 
+  // Paddingを利用してパディングを行う
+  if (CanUsePadding()) {
+    const ErrorCode error_padding = padding_->Run();
+    if (error_padding != kNoError) {
+      return ErrorOccured(error_padding);
+    }
+  }
+
+  // エラー発生なし
   return NoError();
 }
 }   // namespace imaging

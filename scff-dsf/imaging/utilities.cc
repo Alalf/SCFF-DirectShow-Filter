@@ -24,7 +24,6 @@
 extern "C" {
 #include <libavcodec/avcodec.h>
 }
-#include <libavfilter/drawutils.h>
 
 #include "base/debug.h"
 #include "imaging/imaging-types.h"
@@ -65,56 +64,6 @@ void Utilities::FlipHorizontal(const AVPicture *input, int input_height,
     output->data[i] = input->data[i] + input->linesize[i] * (input_height - 1);
     output->linesize[i] = -input->linesize[i];
   }
-}
-
-// drawutilsを利用してパディングを行う。
-void Utilities::PadImage(FFDrawContext *draw_context,
-                         FFDrawColor *padding_color,
-                         AVPicture *input,
-                         int input_width, int input_height,
-                         int padding_left, int padding_right,
-                         int padding_top, int padding_bottom,
-                         int output_width, int output_height,
-                         AVPicture *output) {
-  // 左の枠を書く
-  ff_fill_rectangle(draw_context, padding_color,
-                    output->data,
-                    output->linesize,
-                    0, padding_top,
-                    padding_left, input_height);
-
-  // 右の枠を書く
-  ff_fill_rectangle(draw_context, padding_color,
-                    output->data,
-                    output->linesize,
-                    padding_left + input_width, padding_top,
-                    padding_right, input_height);
-
-  // 上の枠を書く
-  ff_fill_rectangle(draw_context, padding_color,
-                    output->data,
-                    output->linesize,
-                    0, 0, output_width, padding_top);
-
-  // 中央に画像を配置する
-  ff_copy_rectangle2(draw_context,
-                     output->data,
-                     output->linesize,
-                     input->data,
-                     input->linesize,
-                     padding_left, padding_top,
-                     0, 0, 
-                     input_width,
-                     input_height);
-
-  // 下の枠を書く
-  ff_fill_rectangle(draw_context, padding_color,
-                    output->data,
-                    output->linesize,
-                    0,
-                    padding_top + input_height,
-                    output_width,
-                    padding_bottom);
 }
 
 //-------------------------------------------------------------------

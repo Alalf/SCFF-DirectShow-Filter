@@ -21,11 +21,7 @@
 
 #include "imaging/screen-capture.h"
 
-#include <Windows.h>
-
 #include "base/debug.h"
-#include "imaging/windows-ddb-image.h"
-#include "imaging/avpicture-with-fill-image.h"
 #include "imaging/utilities.h"
 
 namespace imaging {
@@ -186,7 +182,7 @@ ErrorCode ScreenCapture::InitByIndex(int index) {
   return kNoError;
 }
 
-// 初期化
+// Processor::Init
 ErrorCode ScreenCapture::Init() {
   MyDbgLog((LOG_TRACE, kDbgImportant,
           TEXT("ScreenCapture: Init")));
@@ -232,7 +228,7 @@ void ScreenCapture::DrawCursor(HDC dc, HWND window) {
   }
 }
 
-// 渡されたポインタにデータを設定する
+// Processor::Run
 ErrorCode ScreenCapture::Run() {
   // 何かエラーが発生している場合は何もしない
   if (GetCurrentError() != kNoError) {

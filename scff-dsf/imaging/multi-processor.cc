@@ -16,56 +16,65 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file imaging/processor.cc
-/// @brief imaging::Processorの定義
+/// @file imaging/multi-processor.cc
+/// @brief imaging::MultiProcessorの定義
 
-#include "imaging/processor.h"
+#include "imaging/multi-processor.h"
 
 #include "base/debug.h"
 
 namespace imaging {
 
 //=====================================================================
-// imaging::Processor
+// imaging::MultiProcessor
 //=====================================================================
 
-/// コンストラクタ。継承クラスは必ずこれを呼ぶこと。
-Processor::Processor(ImagePixelFormat pixel_format, int width, int height)
+// コンストラクタ。継承クラスは必ずこれを呼ぶこと。
+MultiProcessor::MultiProcessor(
+    ImagePixelFormat pixel_format,
+    int size,
+    int width[kMaxMultiProcessorSize],
+    int height[kMaxMultiProcessorSize])
     : pixel_format_(pixel_format),
-      width_(width),
-      height_(height),
-      error_code_(kUninitialziedError) {
+      size_(size) {
+  // 配列の初期化
+  for (int i = 0; i < kMaxMultiProcessorSize; i++) {
+    width_[i] = width[i];
+    height_[i] = height[i];
+  }
 }
 
 // 仮想デストラクタ
-Processor::~Processor() {
+MultiProcessor::~MultiProcessor() {
   // nop
 }
 
 // プロセッサに異常が発生している場合NoError以外を返す
-ErrorCode Processor::GetCurrentError() const {
+ErrorCode MultiProcessor::GetCurrentError() const {
   return error_code_;
 }
 
-// 内部ピクセルフォーマットへのアクセッサ
-ImagePixelFormat Processor::pixel_format() const {
+/// @brief 内部ピクセルフォーマットへのアクセッサ
+ImagePixelFormat MultiProcessor::pixel_format() const {
   return pixel_format_;
 }
 
-// 出力widthへのアクセッサ
-int Processor::width() const {
-  return width_;
+/// @brief 出力widthへのアクセッサ
+int MultiProcessor::width(int index) const {
+  ASSERT(0 <= index && index < size_);
+  return width_[index];
 }
 
-// 出力heightへのアクセッサ
-int Processor::height() const {
-  return height_;
+/// @brief 出力heightへのアクセッサ
+int MultiProcessor::height(int index) const {
+  ASSERT(0 <= index && index < size_);
+  return height_[index];
 }
 
 //---------------------------------------------------------------------
 
 // 唯一エラーコードをkNoErrorにできるメソッド
-ErrorCode Processor::InitDone() {
+ErrorCode MultiProcessor::InitDone() {
   ASSERT(error_code_ == kUninitialziedError);
   if (error_code_ == kUninitialziedError) {
     error_code_ = kNoError;
@@ -74,12 +83,12 @@ ErrorCode Processor::InitDone() {
 }
 
 // kNoErrorを返すだけのメソッド
-ErrorCode Processor::NoError() const {
+ErrorCode MultiProcessor::NoError() const {
   return kNoError;
 }
 
 // エラーが発生したときに呼び出す。返り値は発生したエラーコード。
-ErrorCode Processor::ErrorOccured(ErrorCode error_code) {
+ErrorCode MultiProcessor::ErrorOccured(ErrorCode error_code) {
   if (error_code != kNoError) {
     // 後からkNoErrorにしようとしてもできない
     // ASSERT(false);
@@ -92,24 +101,27 @@ ErrorCode Processor::ErrorOccured(ErrorCode error_code) {
 }
 
 //---------------------------------------------------------------------
-// Processor::PullAVPictureImage
-ErrorCode Processor::PullAVPictureImage(AVPictureImage *image) {
+// MultiProcessor::PullAVPictureImages
+ErrorCode MultiProcessor::PullAVPictureImages(
+    AVPictureImage *images[kMaxMultiProcessorSize]) {
   ASSERT(false);
   return ErrorOccured(kImageTypeError);
 }
-// Processor::PullAVPictureWithFillImage
-ErrorCode Processor::PullAVPictureWithFillImage(
-    AVPictureWithFillImage *image) {
+// MultiProcessor::PullAVPictureWithFillImages
+ErrorCode MultiProcessor::PullAVPictureWithFillImages(
+    AVPictureWithFillImage *images[kMaxMultiProcessorSize]) {
   ASSERT(false);
   return ErrorOccured(kImageTypeError);
 }
-// Processor::PullRawBitmapImage
-ErrorCode Processor::PullRawBitmapImage(RawBitmapImage *image) {
+// MultiProcessor::PullRawBitmapImages
+ErrorCode MultiProcessor::PullRawBitmapImages(
+    RawBitmapImage *images[kMaxMultiProcessorSize]) {
   ASSERT(false);
   return ErrorOccured(kImageTypeError);
 }
-// Processor::PullWindowsDDBImage
-ErrorCode Processor::PullWindowsDDBImage(WindowsDDBImage *image) {
+// MultiProcessor::PullWindowsDDBImages
+ErrorCode MultiProcessor::PullWindowsDDBImages(
+    WindowsDDBImage *images[kMaxMultiProcessorSize]) {
   ASSERT(false);
   return ErrorOccured(kImageTypeError);
 }

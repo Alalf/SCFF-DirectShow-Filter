@@ -16,15 +16,14 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file imaging/processor.h
-/// @brief imaging::Processorの宣言
+/// @file imaging/multi-processor.h
+/// @brief imaging::MultiProcessorの宣言
 
-#ifndef SCFF_DSF_IMAGING_PROCESSOR_H_
-#define SCFF_DSF_IMAGING_PROCESSOR_H_
+#ifndef SCFF_DSF_IMAGING_MULTI_PROCESSOR_H_
+#define SCFF_DSF_IMAGING_MULTI_PROCESSOR_H_
 
 #include "imaging/imaging-types.h"
 
-/// @brief 画像処理を行うクラスをまとめたネームスペース
 namespace imaging {
 
 class Request;
@@ -33,13 +32,16 @@ class AVPictureWithFillImage;
 class RawBitmapImage;
 class WindowsDDBImage;
 
-/// @brief 実際に処理を行うクラス
-class Processor {
+/// @brief 複数のイメージの入出力に対応したプロセッサ
+class MultiProcessor {
  public:
   /// @brief コンストラクタ。継承クラスは必ずこれを呼ぶこと。
-  Processor(ImagePixelFormat pixel_format, int width, int height);
+  MultiProcessor(ImagePixelFormat pixel_format,
+                 int size,
+                 int width[kMaxMultiProcessorSize],
+                 int height[kMaxMultiProcessorSize]);
   /// @brief 仮想デストラクタ
-  virtual ~Processor();
+  virtual ~MultiProcessor();
 
   //-------------------------------------------------------------------
   /// @brief 初期化
@@ -55,14 +57,17 @@ class Processor {
   /// @param[in,out] image    Imageインスタンス
   /// @retval NoError()       Pull成功
   /// @retval ErrorOccured()  エラーが発生した場合
-  virtual ErrorCode PullAVPictureImage(AVPictureImage *image);
+  virtual ErrorCode PullAVPictureImages(
+      AVPictureImage *images[kMaxMultiProcessorSize]);
   /// @copydoc PullAVPictureImage
-  virtual ErrorCode PullAVPictureWithFillImage(
-      AVPictureWithFillImage *image);
+  virtual ErrorCode PullAVPictureWithFillImages(
+      AVPictureWithFillImage *images[kMaxMultiProcessorSize]);
   /// @copydoc PullAVPictureImage
-  virtual ErrorCode PullRawBitmapImage(RawBitmapImage *image);
+  virtual ErrorCode PullRawBitmapImages(
+      RawBitmapImage *images[kMaxMultiProcessorSize]);
   /// @copydoc PullAVPictureImage
-  virtual ErrorCode PullWindowsDDBImage(WindowsDDBImage *image);
+  virtual ErrorCode PullWindowsDDBImages(
+      WindowsDDBImage *images[kMaxMultiProcessorSize]);
   //-------------------------------------------------------------------
 
   /// @brief プロセッサに異常が発生している場合NoError以外を返す
@@ -71,9 +76,9 @@ class Processor {
   /// @brief 内部ピクセルフォーマットへのアクセッサ
   ImagePixelFormat pixel_format() const;
   /// @brief 出力widthへのアクセッサ
-  int width() const;
+  int width(int index) const;
   /// @brief 出力heightへのアクセッサ
-  int height() const;
+  int height(int index) const;
 
  protected:
   //-------------------------------------------------------------------
@@ -93,21 +98,25 @@ class Processor {
   // (copy禁止)
   //-------------------------------------------------------------------
   /// @brief コピーコンストラクタ
-  Processor(const Processor& processor);
+  MultiProcessor(const MultiProcessor& multi_processor);
   /// @brief 代入演算子(copy禁止)
-  void operator=(const Processor& processor);
+  void operator=(const MultiProcessor& multi_processor);
   //-------------------------------------------------------------------
+
+  /// @brief 内部ピクセルフォーマット
+  const ImagePixelFormat pixel_format_;
+  /// @brief 出力イメージの個数
+  const int size_;
 
   /// @brief エラーコード
   ErrorCode error_code_;
 
-  /// @brief 出力width
-  const int width_;
-  /// @brief 出力height
-  const int height_;
-  /// @brief 内部ピクセルフォーマット
-  const ImagePixelFormat pixel_format_;
+  /// @brief 出力widthの配列
+  int width_[kMaxMultiProcessorSize];
+  /// @brief 出力heightの配列
+  int height_[kMaxMultiProcessorSize];
 };
+
 }   // namespace imaging
 
-#endif  // SCFF_DSF_IMAGING_PROCESSOR_H_
+#endif  // SCFF_DSF_IMAGING_MULTI_PROCESSOR_H_

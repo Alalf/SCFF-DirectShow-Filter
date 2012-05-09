@@ -31,10 +31,10 @@ class RawBitmapImage: public Image {
  public:
   /// @brief コンストラクタ
   RawBitmapImage();
-
-  //-------------------------------------------------------------------
   /// @brief デストラクタ
   ~RawBitmapImage();
+
+  //-------------------------------------------------------------------
   /// @brief Create()などによって実体がまだ生成されていない場合
   bool IsEmpty() const;
   /// @brief 実体を作る

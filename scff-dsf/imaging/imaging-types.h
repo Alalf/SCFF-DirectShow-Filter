@@ -31,6 +31,9 @@
 
 namespace imaging {
 
+/// @brief MultiProcessor
+const int kMaxMultiProcessorSize = 8;
+
 //---------------------------------------------------------------------
 
 /// @brief 共通エラーコード
@@ -48,13 +51,13 @@ enum ErrorCode {
   /// @brief 対応してないPixelFormat
   kPixelFormatError,
   /// @brief 不正なウィンドウハンドル
-  kInvalidWindow,
+  kInvalidWindowError,
   /// @brief クリッピング領域が不正
-  kInvalidClippingRegion,
+  kInvalidClippingRegionError,
   /// @brief キャプチャ領域が動作中に不正になった
-  kInvalidCaptureRegion,
+  kInvalidCaptureRegionError,
   /// @brief 取り込み時に画面の色深度が32bitではなかった
-  kNot32bitColor
+  kNot32bitColorError
 };
 
 //---------------------------------------------------------------------

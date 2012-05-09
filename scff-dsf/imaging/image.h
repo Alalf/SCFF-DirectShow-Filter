@@ -34,6 +34,9 @@ namespace imaging {
 /// @attention Imageのインスタンスはメモリ領域の作成、解放まで責任を持つ
 class Image {
  public:
+  /// @brief 仮想デストラクタ
+  virtual ~Image();
+
   /// @brief Getter: イメージのピクセルフォーマット
   ImagePixelFormat pixel_format() const;
   /// @brief Getter: イメージの幅
@@ -42,8 +45,6 @@ class Image {
   int height() const;
 
   //-------------------------------------------------------------------
-  /// @brief 仮想デストラクタ
-  virtual ~Image();
   /// @brief Create()などによって実体がまだ生成されていない場合
   virtual bool IsEmpty() const = 0;
   //-------------------------------------------------------------------

@@ -86,6 +86,9 @@
     <ClCompile Include="..\ext\src\libavfilter\drawutils.cc">
       <Filter>ext</Filter>
     </ClCompile>
+    <ClCompile Include="imaging\multi-processor.cc">
+      <Filter>imaging</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="base\scff-dsf-amd64.def">
@@ -176,6 +179,9 @@
     </ClInclude>
     <ClInclude Include="..\ext\include\libavutil\colorspace.h">
       <Filter>ext</Filter>
+    </ClInclude>
+    <ClInclude Include="imaging\multi-processor.h">
+      <Filter>imaging</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

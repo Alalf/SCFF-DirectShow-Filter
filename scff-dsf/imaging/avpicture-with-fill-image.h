@@ -31,10 +31,10 @@ class AVPictureWithFillImage: public Image {
  public:
   /// @brief コンストラクタ
   AVPictureWithFillImage();
-
-  //-------------------------------------------------------------------
   /// @brief デストラクタ
   ~AVPictureWithFillImage();
+
+  //-------------------------------------------------------------------
   /// @brief Create()などによって実体がまだ生成されていない場合
   bool IsEmpty() const;
   /// @brief AVPictureと同時にRawBitmapの実体を作成する

@@ -38,10 +38,10 @@ class NativeLayout : public Processor {
   NativeLayout(ImagePixelFormat pixel_format, int width, int height,
                const ScreenCaptureParameter &parameter,
                bool stretch, bool keep_aspect_ratio);
-
-  //-------------------------------------------------------------------
   /// @brief デストラクタ
   ~NativeLayout();
+
+  //-------------------------------------------------------------------
   /// @copydoc Processor::Init
   ErrorCode Init();
   /// @copydoc Processor::Accept

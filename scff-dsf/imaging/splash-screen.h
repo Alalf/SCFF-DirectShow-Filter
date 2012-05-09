@@ -32,10 +32,10 @@ class SplashScreen : public Processor {
  public:
   /// @brief コンストラクタ
   SplashScreen(ImagePixelFormat pixel_format, int width, int height);
-
-  //-------------------------------------------------------------------
   /// @brief デストラクタ
   ~SplashScreen();
+
+  //-------------------------------------------------------------------
   /// @copydoc Processor::Init
   ErrorCode Init();
   /// @copydoc Processor::Accept

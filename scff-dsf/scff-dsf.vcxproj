@@ -34,6 +34,7 @@
     <ClCompile Include="imaging\avpicture-with-fill-image.cc" />
     <ClCompile Include="imaging\image.cc" />
     <ClCompile Include="imaging\engine.cc" />
+    <ClCompile Include="imaging\multi-processor.cc" />
     <ClCompile Include="imaging\native-layout.cc" />
     <ClCompile Include="imaging\processor.cc" />
     <ClCompile Include="imaging\raw-bitmap-image.cc" />
@@ -65,6 +66,7 @@
     <ClInclude Include="imaging\image.h" />
     <ClInclude Include="imaging\engine.h" />
     <ClInclude Include="imaging\imaging.h" />
+    <ClInclude Include="imaging\multi-processor.h" />
     <ClInclude Include="imaging\native-layout.h" />
     <ClInclude Include="imaging\processor.h" />
     <ClInclude Include="imaging\raw-bitmap-image.h" />

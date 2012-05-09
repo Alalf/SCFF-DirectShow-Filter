@@ -31,10 +31,10 @@ class AVPictureImage: public Image {
  public:
   /// @brief コンストラクタ
   AVPictureImage();
-
-  //-------------------------------------------------------------------
   /// @brief デストラクタ
   ~AVPictureImage();
+
+  //-------------------------------------------------------------------
   /// @brief Create()などによって実体がまだ生成されていない場合
   bool IsEmpty() const;
   /// @brief AVPictureの実体を作成する

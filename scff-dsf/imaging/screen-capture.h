@@ -39,10 +39,10 @@ class ScreenCapture : public Processor {
   /// @brief コンストラクタ
   ScreenCapture(ImagePixelFormat pixel_format, int width, int height,
                 const ScreenCaptureParameter &parameter);
-
-  //-------------------------------------------------------------------
   /// @brief デストラクタ
   ~ScreenCapture();
+
+  //-------------------------------------------------------------------
   /// @copydoc Processor::Init
   ErrorCode Init();
   /// @copydoc Processor::Accept

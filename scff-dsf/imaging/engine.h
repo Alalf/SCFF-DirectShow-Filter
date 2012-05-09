@@ -34,10 +34,10 @@ class Engine : public Processor {
  public:
   /// @brief コンストラクタ
   Engine(ImagePixelFormat pixel_format, int width, int height, double fps);
-
-  //-------------------------------------------------------------------
   /// @brief デストラクタ
   ~Engine();
+
+  //-------------------------------------------------------------------
   /// @copydoc Processor::Init
   ErrorCode Init();
   /// @copydoc Processor::Accept

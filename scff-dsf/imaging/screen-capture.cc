@@ -113,7 +113,7 @@ ErrorCode ScreenCapture::Init() {
 
   // ウィンドウのチェック
   if (!ValidateWindow()) {
-    return ErrorOccured(kInvalidWindow);
+    return ErrorOccured(kInvalidWindowError);
   }
 
   // クリッピング領域がウィンドウ内におさまっているか？
@@ -124,7 +124,7 @@ ErrorCode ScreenCapture::Init() {
                                        parameter_.clipping_height)) {
     // ok
   } else {
-    return ErrorOccured(kInvalidClippingRegion);
+    return ErrorOccured(kInvalidClippingRegionError);
   }
 
   const int capture_width = parameter_.clipping_width;
@@ -247,13 +247,13 @@ ErrorCode ScreenCapture::PullAVPictureImage(AVPictureImage *image) {
 
   // ウィンドウのチェック
   if (!ValidateWindow()) {
-    return ErrorOccured(kInvalidWindow);
+    return ErrorOccured(kInvalidWindowError);
   }
 
   /// @todo(me) カラーチェック。重いのでどこでやるか考え中
   //if (GetDeviceCaps(window_dc, BITSPIXEL) != 32) {
   //  ReleaseDC(parameter_.window, window_dc);
-  //  return ErrorOccured(kNot32bitColor);
+  //  return ErrorOccured(kNot32bitColorError);
   //}
 
   DWORD raster_operation = SRCCOPY;

@@ -41,10 +41,10 @@ class WindowsDDBImage: public Image {
 
   /// @brief コンストラクタ
   WindowsDDBImage();
-
-  //-------------------------------------------------------------------
   /// @brief デストラクタ
   ~WindowsDDBImage();
+
+  //-------------------------------------------------------------------
   /// @brief Create()などによって実体がまだ生成されていない場合
   bool IsEmpty() const;
   /// @brief リソースから実体を作る

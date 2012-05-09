@@ -78,9 +78,9 @@ class Image {
   // (copy禁止)
   //-------------------------------------------------------------------
   /// @brief コピーコンストラクタ
-  Image(const Image& image);
+  Image(const Image&);
   /// @brief 代入演算子(copy禁止)
-  void operator=(const Image& image);
+  void operator=(const Image&);
   //-------------------------------------------------------------------
 
   /// @brief イメージのピクセルフォーマット

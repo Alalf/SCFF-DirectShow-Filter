@@ -61,9 +61,9 @@ class Engine : public Processor<AVPictureImage, AVPictureImage> {
   // (copy禁止)
   //-------------------------------------------------------------------
   /// @brief コピーコンストラクタ
-  Engine(const Engine& engine);
+  Engine(const Engine&);
   /// @brief 代入演算子(copy禁止)
-  void operator=(const Engine& engine);
+  void operator=(const Engine&);
   //-------------------------------------------------------------------
 
   //-------------------------------------------------------------------
@@ -112,7 +112,6 @@ class Engine : public Processor<AVPictureImage, AVPictureImage> {
   const int output_width_;
   /// @brief イメージの高さ
   const int output_height_;
-
   /// @brief fps
   /// @todo(me) マルチスレッド化する場合、FPSに合わせて処理を行う
   const double output_fps_;

@@ -75,7 +75,7 @@ NativeLayout::~NativeLayout() {
   }
 }
 
-// 初期化
+// Processor::Init
 ErrorCode NativeLayout::Init() {
   MyDbgLog((LOG_TRACE, kDbgImportant,
           TEXT("NativeLayout: Init")));
@@ -193,7 +193,7 @@ ErrorCode NativeLayout::Init() {
   return InitDone();
 }
 
-// 渡されたポインタにビットマップデータを設定する
+// Processor::Run
 ErrorCode NativeLayout::Run() {
   if (GetCurrentError() != kNoError) {
     // 何かエラーが発生している場合は何もしない

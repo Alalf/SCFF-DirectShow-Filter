@@ -52,9 +52,9 @@ class SplashScreen : public Processor<void, AVPictureImage> {
   // (copy禁止)
   //-------------------------------------------------------------------
   /// @brief コピーコンストラクタ
-  SplashScreen(const SplashScreen& splash_screen);
+  SplashScreen(const SplashScreen&);
   /// @brief 代入演算子(copy禁止)
-  void operator=(const SplashScreen& splash_screen);
+  void operator=(const SplashScreen&);
   //-------------------------------------------------------------------
 
   /// @brief 設定されたImageはPadding可能か？

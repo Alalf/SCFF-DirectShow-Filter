@@ -51,9 +51,9 @@ class AVPictureWithFillImage: public Image {
   // (copy禁止)
   //-------------------------------------------------------------------
   /// @brief コピーコンストラクタ(copy禁止)
-  AVPictureWithFillImage(const AVPictureWithFillImage& image);
+  AVPictureWithFillImage(const AVPictureWithFillImage&);
   /// @brief 代入演算子(copy禁止)
-  void operator=(const AVPictureWithFillImage& image);
+  void operator=(const AVPictureWithFillImage&);
   //-------------------------------------------------------------------
 
   /// @brief 各種ビットマップ

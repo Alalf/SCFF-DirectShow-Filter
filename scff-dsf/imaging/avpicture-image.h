@@ -49,9 +49,9 @@ class AVPictureImage: public Image {
   // (copy禁止)
   //-------------------------------------------------------------------
   /// @brief コピーコンストラクタ(copy禁止)
-  AVPictureImage(const AVPictureImage& image);
+  AVPictureImage(const AVPictureImage&);
   /// @brief 代入演算子(copy禁止)
-  void operator=(const AVPictureImage& image);
+  void operator=(const AVPictureImage&);
   //-------------------------------------------------------------------
 
   /// @brief AVPictureへのポインタ

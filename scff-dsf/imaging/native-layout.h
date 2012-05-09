@@ -22,11 +22,6 @@
 #ifndef SCFF_DSF_IMAGING_NATIVE_LAYOUT_H_
 #define SCFF_DSF_IMAGING_NATIVE_LAYOUT_H_
 
-extern "C" {
-#include <libswscale/swscale.h>
-}
-#include <libavfilter/drawutils.h>
-
 #include "imaging/processor.h"
 #include "imaging/avpicture-with-fill-image.h"
 #include "imaging/avpicture-image.h"
@@ -34,6 +29,8 @@ extern "C" {
 namespace imaging {
 
 class ScreenCapture;
+class Scale;
+class Padding;
 
 /// @brief スクリーンキャプチャ出力一つだけを処理するレイアウトプロセッサ
 class NativeLayout : public Processor<AVPictureImage, AVPictureImage> {
@@ -56,16 +53,23 @@ class NativeLayout : public Processor<AVPictureImage, AVPictureImage> {
   // (copy禁止)
   //-------------------------------------------------------------------
   /// @brief コピーコンストラクタ
-  NativeLayout(const NativeLayout& layout);
+  NativeLayout(const NativeLayout&);
   /// @brief 代入演算子(copy禁止)
-  void operator=(const NativeLayout& layout);
+  void operator=(const NativeLayout&);
   //-------------------------------------------------------------------
+
+  /// @brief 設定されたImageはPadding可能か？
+  bool CanUsePadding() const;
 
   //-------------------------------------------------------------------
   // Processor
   //-------------------------------------------------------------------
   /// @brief スクリーンキャプチャ
   ScreenCapture *screen_capture_;
+  /// @brief 拡大縮小ピクセルフォーマット変換
+  Scale *scale_;
+  /// @brief パディング
+  Padding *padding_;
   //-------------------------------------------------------------------
   // Image
   //-------------------------------------------------------------------
@@ -75,35 +79,12 @@ class NativeLayout : public Processor<AVPictureImage, AVPictureImage> {
   AVPictureImage converted_image_;
   //-------------------------------------------------------------------
 
-  //-------------------------------------------------------------------
-  /// @brief ピクセルフォーマットがdrawutilsに対応しているかどうか
-  bool can_use_drawutils_;
-  /// @brief 描画用コンテキスト
-  FFDrawContext draw_context_;
-  /// @brief 枠描画用カラー
-  FFDrawColor padding_color_;
-  /// @brief 枠描画用カラー(RGBA)
-  uint8_t rgba_padding_color_[4];
-  //-------------------------------------------------------------------
-
-  /// @brief 拡大縮小用のコンテキスト
-  struct SwsContext *scaler_;
-
   /// @brief スクリーンキャプチャパラメータ
   const ScreenCaptureParameter parameter_;
   /// @brief 取り込み範囲が出力サイズより小さい場合拡張
   const bool stretch_;
   /// @brief アスペクト比の保持
   const bool keep_aspect_ratio_;
-
-  /// @brief パディング(left)
-  int padding_left_;
-  /// @brief パディング(right)
-  int padding_right_;
-  /// @brief パディング(top)
-  int padding_top_;
-  /// @brief パディング(bottom)
-  int padding_bottom_;
 };
 }   // namespace imaging
 

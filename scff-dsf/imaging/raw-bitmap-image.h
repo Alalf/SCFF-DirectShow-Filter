@@ -49,9 +49,9 @@ class RawBitmapImage: public Image {
   // (copy禁止)
   //-------------------------------------------------------------------
   /// @brief コピーコンストラクタ(copy禁止)
-  RawBitmapImage(const RawBitmapImage& image);
+  RawBitmapImage(const RawBitmapImage&);
   /// @brief 代入演算子(copy禁止)
-  void operator=(const RawBitmapImage& image);
+  void operator=(const RawBitmapImage&);
   //-------------------------------------------------------------------
 
   /// @brief 各種ビットマップ

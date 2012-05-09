@@ -21,12 +21,6 @@
 
 #include "imaging/engine.h"
 
-#include <Windows.h>
-
-extern "C" {
-#include <libavcodec/avcodec.h>
-}
-
 #include "base/debug.h"
 #include "imaging/avpicture-image.h"
 #include "imaging/native-layout.h"
@@ -187,9 +181,9 @@ ErrorCode Engine::Accept(Request *request) {
 
   // リクエストが送られてきているのならば、
   // thisを渡して処理を任せる(ダブルディスパッチ)
-  request->SendTo(this);
   // レイアウトエラーの設定はリクエストハンドラの中で行われているので
   // ここではチェックしない
+  request->SendTo(this);
 
   /// @attention 現状、Chain of Resiposibilityはない＝
   /// @attention 下位のプロセッサへリクエストは送らない
@@ -203,15 +197,12 @@ ErrorCode Engine::Run() {
     return GetCurrentError();
   }
 
-  // フロントイメージにlayoutの出力をつめる
   ASSERT(layout_ != 0);   // NULL
-  layout_->SetOutputImage(&front_image_);
   const ErrorCode error = layout_->Run();
   if (error != kNoError) {
-    LayoutErrorOccured(error);
     /// @attention layout_でエラーが発生してもEngine自体はエラー状態ではない
+    LayoutErrorOccured(error);
   }
-
   return NoError();
 }
 
@@ -242,6 +233,7 @@ ErrorCode Engine::CopyFrontImage(BYTE *sample, DWORD data_size) {
 
   // フロントイメージにデータを詰める
   /// @todo(me) マルチスレッド化した場合はダブルバッファ処理にする
+  layout_->SetOutputImage(&front_image_);
   Run();
 
   // フロントイメージからsampleにそのままコピー
@@ -275,16 +267,16 @@ void Engine::DoSetNativeLayout(
   //-------------------------------------------------------------------
   NativeLayout *native_layout =
       new NativeLayout(parameter, stretch, keep_aspect_ratio);
+  native_layout->SetOutputImage(&front_image_);
   const ErrorCode error_layout = native_layout->Init();
   if (error_layout != kNoError) {
+    // 失敗
     delete native_layout;
     LayoutErrorOccured(error_layout);
-    // エラーコードを設定して終了
-    return;
+  } else {
+    // 成功
+    layout_ = native_layout;
+    LayoutInitDone();
   }
-
-  // 成功
-  layout_ = native_layout;
-  LayoutInitDone();
 }
 }   // namespace imaging

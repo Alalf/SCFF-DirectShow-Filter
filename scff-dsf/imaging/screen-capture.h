@@ -52,9 +52,9 @@ class ScreenCapture : public Processor<void, AVPictureWithFillImage> {
   // (copy禁止)
   //-------------------------------------------------------------------
   /// @brief コピーコンストラクタ
-  ScreenCapture(const ScreenCapture& screen_capture);
+  ScreenCapture(const ScreenCapture&);
   /// @brief 代入演算子(copy禁止)
-  void operator=(const ScreenCapture& screen_capture);
+  void operator=(const ScreenCapture&);
   //-------------------------------------------------------------------
 
   /// @brief 渡されたDCにカーソルを描画する

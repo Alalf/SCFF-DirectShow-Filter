@@ -79,7 +79,7 @@ bool SplashScreen::CanUsePadding() const {
 
 //-------------------------------------------------------------------
 
-// Processor::Initの実装
+// Processor::Init
 ErrorCode SplashScreen::Init() {
   MyDbgLog((LOG_TRACE, kDbgImportant,
           TEXT("SplashScreen: Init")));
@@ -185,8 +185,7 @@ ErrorCode SplashScreen::Init() {
   return InitDone();
 }
 
-// Processor::PullImageの実装
-/// @todo(me) 全体的に汚すぎるので徹底的に書き直す
+// Processor::Run
 ErrorCode SplashScreen::Run() {
   if (GetCurrentError() != kNoError) {
     // 何かエラーが発生している場合は何もしない

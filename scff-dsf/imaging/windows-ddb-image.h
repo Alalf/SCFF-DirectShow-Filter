@@ -61,9 +61,9 @@ class WindowsDDBImage: public Image {
   // (copy禁止)
   //-------------------------------------------------------------------
   /// @brief コピーコンストラクタ(copy禁止)
-  WindowsDDBImage(const WindowsDDBImage& image);
+  WindowsDDBImage(const WindowsDDBImage&);
   /// @brief 代入演算子(copy禁止)
-  void operator=(const WindowsDDBImage& image);
+  void operator=(const WindowsDDBImage&);
   //-------------------------------------------------------------------
 
   /// @brief Windowsビットマップの生成方法

@@ -36,7 +36,8 @@ MultiProcessor::MultiProcessor(
     int width[kMaxMultiProcessorSize],
     int height[kMaxMultiProcessorSize])
     : pixel_format_(pixel_format),
-      size_(size) {
+      size_(size),
+      error_code_(kUninitialziedError) {
   // 配列の初期化
   for (int i = 0; i < kMaxMultiProcessorSize; i++) {
     width_[i] = width[i];

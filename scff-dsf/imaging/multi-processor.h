@@ -40,9 +40,6 @@ class MultiProcessor {
                  int size,
                  int width[kMaxMultiProcessorSize],
                  int height[kMaxMultiProcessorSize]);
-  /// @brief コンストラクタ。出力一つの場合こちらを利用すること。
-  MultiProcessor(ImagePixelFormat pixel_format,
-                 int width, int height);
   /// @brief 仮想デストラクタ
   virtual ~MultiProcessor();
 

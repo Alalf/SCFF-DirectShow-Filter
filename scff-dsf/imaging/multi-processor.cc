@@ -45,21 +45,6 @@ MultiProcessor::MultiProcessor(
   }
 }
 
-// コンストラクタ。出力一つの場合こちらを利用すること。
-MultiProcessor::MultiProcessor(
-    ImagePixelFormat pixel_format,
-    int width, int height)
-    : pixel_format_(pixel_format),
-      size_(1) {
-  // 配列の初期化
-  width_[0] = width;
-  height_[0] = height;
-  for (int i = 1; i < kMaxMultiProcessorSize; i++) {
-    width_[i] = -1;   // ありえない値
-    height_[i] = -1;  // ありえない値
-  }
-}
-
 // 仮想デストラクタ
 MultiProcessor::~MultiProcessor() {
   // nop

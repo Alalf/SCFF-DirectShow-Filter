@@ -41,16 +41,22 @@ namespace imaging {
 //=====================================================================
 
 // コンストラクタ
-Engine::Engine(ImagePixelFormat pixel_format, int width, int height, double fps)
-    : Processor(pixel_format, width, height),
-      fps_(fps),
+Engine::Engine(ImagePixelFormat output_pixel_format,
+               int output_width, int output_height, double output_fps)
+    : Processor<AVPictureImage, AVPictureImage>(),
+      output_pixel_format_(output_pixel_format),
+      output_width_(output_width),
+      output_height_(output_height),
+      output_fps_(output_fps),
       layout_(0),       // NULL
-      layout_error_code_(kUninitialziedError),
-      front_image_(),
-      back_image_() {
+      layout_error_code_(kUninitialziedError) {
   MyDbgLog((LOG_MEMORY, kDbgNewDelete,
           TEXT("Engine: NEW(%d, %d, %d, %.1f)"),
-          pixel_format, width, height, fps));
+          output_pixel_format, output_width, output_height, output_fps));
+  // 明示的に初期化していない
+  // front_image_
+  // back_image_
+  // splash_image_
 }
 
 // デストラクタ
@@ -124,31 +130,31 @@ ErrorCode Engine::Init() {
   //-------------------------------------------------------------------
   // フロントイメージ
   const ErrorCode error_front_image =
-      front_image_.Create(pixel_format(), width(), height());
+      front_image_.Create(output_pixel_format_, output_width_, output_height_);
   if (error_front_image != kNoError) {
     return ErrorOccured(error_front_image);
   }
   // バックイメージ
   // const ErrorCode error_back_image =
-  //     back_image_.Create(pixel_format(), width(), height());
+  //     back_image_.Create(output_pixel_format_, output_width_, output_height_);
   // if (error_back_image != kNoError) {
   //   return ErrorOccured(error_back_image);
   // }
   // スプラッシュイメージ
   const ErrorCode error_splash_image =
-      splash_image_.Create(pixel_format(), width(), height());
+      splash_image_.Create(output_pixel_format_, output_width_, output_height_);
   if (error_splash_image != kNoError) {
     return ErrorOccured(error_splash_image);
   }
 
   // 一時的にスプラッシュスクリーンプロセッサを作ってイメージを生成しておく
-  SplashScreen splash_screen(pixel_format(), width(), height());
+  SplashScreen splash_screen;
+  splash_screen.SetOutputImage(&splash_image_);
   const ErrorCode error_splash_screen = splash_screen.Init();
   if (error_splash_screen != kNoError) {
     return ErrorOccured(error_splash_screen);
   }
-  const ErrorCode error_splash_image_pull =
-      splash_screen.PullAVPictureImage(&splash_image_);
+  const ErrorCode error_splash_image_pull = splash_screen.Run();
   if (error_splash_image_pull != kNoError) {
     return ErrorOccured(error_splash_image_pull);
   }
@@ -191,16 +197,16 @@ ErrorCode Engine::Accept(Request *request) {
 }
 
 // 渡されたポインタにビットマップデータを設定する
-ErrorCode Engine::PullAVPictureImage(AVPictureImage *image) {
+ErrorCode Engine::Run() {
   if (GetCurrentError() != kNoError) {
     // 何かエラーが発生している場合は何もしない
     return GetCurrentError();
   }
 
-  // イメージにlayoutの出力をつめる
+  // フロントイメージにlayoutの出力をつめる
   ASSERT(layout_ != 0);   // NULL
-  ASSERT(image != 0);     // NULL
-  const ErrorCode error = layout_->PullAVPictureImage(image);
+  layout_->SetOutputImage(&front_image_);
+  const ErrorCode error = layout_->Run();
   if (error != kNoError) {
     LayoutErrorOccured(error);
     /// @attention layout_でエラーが発生してもEngine自体はエラー状態ではない
@@ -213,7 +219,7 @@ ErrorCode Engine::PullAVPictureImage(AVPictureImage *image) {
 
 // フロントイメージをサンプルにコピー
 /// @attention エラー発生中に追加の処理を行うのはEngineだけ
-ErrorCode Engine::PullFrontImage(BYTE *sample, DWORD data_size) {
+ErrorCode Engine::CopyFrontImage(BYTE *sample, DWORD data_size) {
   /// @attention processorのポインタがNULLであることはエラーではない
 
   // Engine自体にエラーが発生していたら0クリア
@@ -227,20 +233,24 @@ ErrorCode Engine::PullFrontImage(BYTE *sample, DWORD data_size) {
   if (GetCurrentLayoutError() != kNoError) {
     ASSERT(data_size == Utilities::CalculateImageSize(splash_image_));
     avpicture_layout(splash_image_.avpicture(),
-                      Utilities::ToAVPicturePixelFormat(pixel_format()),
-                      width(), height(), sample, data_size);
+                     splash_image_.avpicture_pixel_format(),
+                     splash_image_.width(),
+                     splash_image_.height(),
+                     sample, data_size);
     return GetCurrentError();
   }
 
   // フロントイメージにデータを詰める
   /// @todo(me) マルチスレッド化した場合はダブルバッファ処理にする
-  PullAVPictureImage(&front_image_);
+  Run();
 
   // フロントイメージからsampleにそのままコピー
   ASSERT(data_size == Utilities::CalculateImageSize(front_image_));
   avpicture_layout(front_image_.avpicture(),
-                    Utilities::ToAVPicturePixelFormat(pixel_format()),
-                    width(), height(), sample, data_size);
+                   front_image_.avpicture_pixel_format(),
+                   front_image_.width(),
+                   front_image_.height(),
+                   sample, data_size);
 
   return GetCurrentError();
 }
@@ -264,8 +274,7 @@ void Engine::DoSetNativeLayout(
 
   //-------------------------------------------------------------------
   NativeLayout *native_layout =
-      new NativeLayout(pixel_format(), width(), height(),
-                       parameter, stretch, keep_aspect_ratio);
+      new NativeLayout(parameter, stretch, keep_aspect_ratio);
   const ErrorCode error_layout = native_layout->Init();
   if (error_layout != kNoError) {
     delete native_layout;

@@ -66,7 +66,7 @@ ErrorCode AVPictureImage::Create(ImagePixelFormat pixel_format,
   AVPicture *avpicture = new AVPicture();
   int result_alloc =
       avpicture_alloc(avpicture,
-                      Utilities::ToAVPicturePixelFormat(pixel_format),
+                      avpicture_pixel_format(),
                       width, height);
   if (result_alloc != 0) {
     return kOutOfMemoryError;

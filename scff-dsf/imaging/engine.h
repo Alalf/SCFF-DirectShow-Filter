@@ -30,7 +30,7 @@ namespace imaging {
 
 /// @brief 画像処理スレッドを管理する
 /// @todo(me) まずはシングルバッファで実装してみる
-class Engine : public Processor {
+class Engine : public Processor<AVPictureImage, AVPictureImage> {
  public:
   /// @brief コンストラクタ
   Engine(ImagePixelFormat pixel_format, int width, int height, double fps);
@@ -45,7 +45,7 @@ class Engine : public Processor {
   //-------------------------------------------------------------------
 
   /// @brief フロントイメージをサンプルにコピー
-  ErrorCode PullFrontImage(BYTE *sample, DWORD data_size);
+  ErrorCode CopyFrontImage(BYTE *sample, DWORD data_size);
 
   //-------------------------------------------------------------------
   // リクエストハンドラ
@@ -67,8 +67,8 @@ class Engine : public Processor {
   //-------------------------------------------------------------------
 
   //-------------------------------------------------------------------
-  /// @copydoc Processor::PullAVPictureImage
-  ErrorCode PullAVPictureImage(AVPictureImage *image);
+  /// @copydoc Processor::Run
+  ErrorCode Run();
   //-------------------------------------------------------------------
 
   //-------------------------------------------------------------------
@@ -106,9 +106,16 @@ class Engine : public Processor {
   AVPictureImage splash_image_;
   //-------------------------------------------------------------------
 
+  /// @brief イメージのピクセルフォーマット
+  const ImagePixelFormat output_pixel_format_;
+  /// @brief イメージの幅
+  const int output_width_;
+  /// @brief イメージの高さ
+  const int output_height_;
+
   /// @brief fps
   /// @todo(me) マルチスレッド化する場合、FPSに合わせて処理を行う
-  const double fps_;
+  const double output_fps_;
 };
 }   // namespace imaging
 

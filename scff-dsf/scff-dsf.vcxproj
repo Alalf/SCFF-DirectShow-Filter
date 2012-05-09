@@ -34,11 +34,11 @@
     <ClCompile Include="imaging\avpicture-with-fill-image.cc" />
     <ClCompile Include="imaging\image.cc" />
     <ClCompile Include="imaging\engine.cc" />
-    <ClCompile Include="imaging\multi-processor.cc" />
     <ClCompile Include="imaging\native-layout.cc" />
-    <ClCompile Include="imaging\processor.cc" />
+    <ClCompile Include="imaging\padding.cc" />
     <ClCompile Include="imaging\raw-bitmap-image.cc" />
     <ClCompile Include="imaging\request.cc" />
+    <ClCompile Include="imaging\scale.cc" />
     <ClCompile Include="imaging\screen-capture.cc" />
     <ClCompile Include="imaging\splash-screen.cc" />
     <ClCompile Include="imaging\utilities.cc" />
@@ -66,11 +66,12 @@
     <ClInclude Include="imaging\image.h" />
     <ClInclude Include="imaging\engine.h" />
     <ClInclude Include="imaging\imaging.h" />
-    <ClInclude Include="imaging\multi-processor.h" />
     <ClInclude Include="imaging\native-layout.h" />
+    <ClInclude Include="imaging\padding.h" />
     <ClInclude Include="imaging\processor.h" />
     <ClInclude Include="imaging\raw-bitmap-image.h" />
     <ClInclude Include="imaging\request.h" />
+    <ClInclude Include="imaging\scale.h" />
     <ClInclude Include="imaging\screen-capture.h" />
     <ClInclude Include="imaging\imaging-types.h" />
     <ClInclude Include="imaging\splash-screen.h" />

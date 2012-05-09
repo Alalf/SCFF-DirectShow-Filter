@@ -23,6 +23,10 @@
 #define SCFF_DSF_IMAGING_IMAGE_H_
 
 #include <Windows.h>
+extern "C" {
+#include <libavcodec/avcodec.h>
+}
+
 #include <cstdint>
 #include "imaging/imaging-types.h"
 
@@ -39,6 +43,8 @@ class Image {
 
   /// @brief Getter: イメージのピクセルフォーマット
   ImagePixelFormat pixel_format() const;
+  /// @brief イメージのピクセルフォーマットをAVPicture用に変換
+  PixelFormat avpicture_pixel_format() const;
   /// @brief Getter: イメージの幅
   int width() const;
   /// @brief Getter: イメージの高さ

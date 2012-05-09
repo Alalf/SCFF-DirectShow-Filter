@@ -23,9 +23,6 @@
 #define SCFF_DSF_IMAGING_SCREEN_CAPTURE_H_
 
 #include <Windows.h>
-extern "C" {
-#include <libswscale/swscale.h>
-}
 
 #include "imaging/processor.h"
 #include "imaging/windows-ddb-image.h"
@@ -34,21 +31,20 @@ extern "C" {
 namespace imaging {
 
 /// @brief スクリーンキャプチャを行うプロセッサ
-class ScreenCapture : public Processor {
+class ScreenCapture : public Processor<void, AVPictureWithFillImage> {
  public:
   /// @brief コンストラクタ
-  ScreenCapture(ImagePixelFormat pixel_format, int width, int height,
-                const ScreenCaptureParameter &parameter);
+  ScreenCapture(
+      int size,
+      ScreenCaptureParameter parameter[kMaxMultiProcessorSize]);
   /// @brief デストラクタ
   ~ScreenCapture();
 
   //-------------------------------------------------------------------
   /// @copydoc Processor::Init
   ErrorCode Init();
-  /// @copydoc Processor::Accept
-  ErrorCode Accept(Request *request);
-  /// @copydoc Processor::PullAVPictureImage
-  ErrorCode PullAVPictureImage(AVPictureImage *image);
+  /// @copydoc Processor::Run
+  ErrorCode Run();
   //-------------------------------------------------------------------
 
  private:
@@ -62,10 +58,13 @@ class ScreenCapture : public Processor {
   //-------------------------------------------------------------------
 
   /// @brief 渡されたDCにカーソルを描画する
-  void DrawCursor(HDC dc);
+  void DrawCursor(HDC dc, HWND window);
 
   /// @brief Windowがキャプチャに適切な状態になっているか判定する
-  bool ValidateWindow();
+  bool ValidateWindow(int index);
+
+  /// @brief インデックスを指定して初期化
+  ErrorCode InitByIndex(int index);
 
   //-------------------------------------------------------------------
   // Processor
@@ -75,26 +74,23 @@ class ScreenCapture : public Processor {
   // Image
   //-------------------------------------------------------------------
   /// @brief BitBlt用DDB
-  WindowsDDBImage image_for_bitblt_;
-  /// @brief SWScale用AVPicture
-  AVPictureWithFillImage image_for_swscale_;
+  WindowsDDBImage image_for_bitblt_[kMaxMultiProcessorSize];
   //-------------------------------------------------------------------
 
   /// @brief BitBlt用DDBのデバイスコンテキスト
-  HDC dc_for_bitblt_;
+  HDC dc_for_bitblt_[kMaxMultiProcessorSize];
   /// @brief GetDIBits用BITMAPINFO
-  BITMAPINFO info_for_getdibits_;
-
-  /// @brief 拡大縮小用のコンテキスト
-  struct SwsContext *scaler_;
+  BITMAPINFO info_for_getdibits_[kMaxMultiProcessorSize];
 
   /// @brief Init呼び出し時のウィンドウの幅
-  int window_width_;
+  int window_width_[kMaxMultiProcessorSize];
   /// @brief Init呼び出し時のウィンドウの高さ
-  int window_height_;
+  int window_height_[kMaxMultiProcessorSize];
+  /// @brief BitBltに渡すラスターオペレーションコード
+  DWORD raster_operation_[kMaxMultiProcessorSize];
 
   /// @brief スクリーンキャプチャパラメータ
-  const ScreenCaptureParameter parameter_;
+  ScreenCaptureParameter parameter_[kMaxMultiProcessorSize];
 };
 }   // namespace imaging
 

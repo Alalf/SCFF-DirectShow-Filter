@@ -22,6 +22,7 @@
 #include "imaging/image.h"
 
 #include "base/debug.h"
+#include "imaging/utilities.h"
 
 namespace imaging {
 
@@ -45,6 +46,11 @@ Image::~Image() {
 // Getter: イメージのピクセルフォーマット
 ImagePixelFormat Image::pixel_format() const {
   return pixel_format_;
+}
+
+  /// @brief イメージのピクセルフォーマットをAVPicture用に変換
+PixelFormat Image::avpicture_pixel_format() const {
+  return Utilities::ToAVPicturePixelFormat(pixel_format());
 }
 
 /// Getter: イメージの幅

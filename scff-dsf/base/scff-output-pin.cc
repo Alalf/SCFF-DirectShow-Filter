@@ -598,7 +598,7 @@ HRESULT SCFFOutputPin::FillBufferWithImagingEngine(
   sample->SetActualDataLength(data_size);
 
   // sampleにデータを書き込み
-  engine.PullFrontImage(data, data_size);
+  engine.CopyFrontImage(data, data_size);
 
   /// @attention SetTimeおよびSetSyncは外部で行っている
 

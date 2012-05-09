@@ -23,6 +23,7 @@
 #define SCFF_DSF_IMAGING_PROCESSOR_H_
 
 #include "imaging/imaging-types.h"
+#include "base/debug.h"
 
 /// @brief 画像処理を行うクラスをまとめたネームスペース
 namespace imaging {
@@ -33,80 +34,115 @@ class AVPictureWithFillImage;
 class RawBitmapImage;
 class WindowsDDBImage;
 
-/// @brief 実際に処理を行うクラス
+/// @brief 実際に処理を行う仮想クラス
+template <class InputImageType, class OutputImageType>
 class Processor {
  public:
-  /// @brief コンストラクタ。継承クラスは必ずこれを呼ぶこと。
-  Processor(ImagePixelFormat pixel_format, int width, int height);
+  /// @brief コンストラクタ
+  Processor(int size=1)
+      : error_code_(kUninitialziedError),
+        size_(size) {
+    // nop
+  }
   /// @brief 仮想デストラクタ
-  virtual ~Processor();
+  virtual ~Processor() {
+    // nop
+  }
 
   //-------------------------------------------------------------------
   /// @brief 初期化
+  /// @pre SetXXXImageで入出力の形式がすでに定まっていること
+  /// @warning Init後にSetXXXImageを実行した場合、動作は不定だが
+  /// @warning ピクセルフォーマットもサイズも変わらない場合は問題ない。
   /// @retval InitDone()      初期化成功
   /// @retval ErrorOccured()  エラーが発生した場合
   virtual ErrorCode Init() = 0;
+  /// @brief 実際の処理を行う
+  /// @retval NoError()       Accept成功
+  /// @retval ErrorOccured()  エラーが発生した場合
+  virtual ErrorCode Run() = 0;
+
   /// @brief リクエストに対する処理を行う
   /// @param[in] request      リクエスト
   /// @retval NoError()       Accept成功
   /// @retval ErrorOccured()  エラーが発生した場合
-  virtual ErrorCode Accept(Request *request) = 0;
-  /// @brief 渡されたImageにイメージを設定する
-  /// @param[in,out] image    Imageインスタンス
-  /// @retval NoError()       Pull成功
-  /// @retval ErrorOccured()  エラーが発生した場合
-  virtual ErrorCode PullAVPictureImage(AVPictureImage *image);
-  /// @copydoc PullAVPictureImage
-  virtual ErrorCode PullAVPictureWithFillImage(
-      AVPictureWithFillImage *image);
-  /// @copydoc PullAVPictureImage
-  virtual ErrorCode PullRawBitmapImage(RawBitmapImage *image);
-  /// @copydoc PullAVPictureImage
-  virtual ErrorCode PullWindowsDDBImage(WindowsDDBImage *image);
+  virtual ErrorCode Accept(Request *request) {
+    ASSERT(false);
+    return NoError();
+  }
   //-------------------------------------------------------------------
 
   /// @brief プロセッサに異常が発生している場合NoError以外を返す
-  ErrorCode GetCurrentError() const;
+  ErrorCode GetCurrentError() const  {
+    return error_code_;
+  }
+  /// @brief Getter: 入出力のサイズ
+  int size() const {
+    return size_;
+  }
 
-  /// @brief 内部ピクセルフォーマットへのアクセッサ
-  ImagePixelFormat pixel_format() const;
-  /// @brief 出力widthへのアクセッサ
-  int width() const;
-  /// @brief 出力heightへのアクセッサ
-  int height() const;
+  /// @brief Setter: input_image_
+  void SetInputImage(InputImageType *input_image, int index=0) {
+    ASSERT(0 <= index && index < size());
+    input_image_[index] = input_image;
+  }
+  /// @brief Getter: input_image_
+  InputImageType* GetInputImage(int index=0) const {
+    ASSERT(0 <= index && index < size());
+    return input_image_[index];
+  }
+  /// @brief Setter: output_image_
+  void SetOutputImage(OutputImageType* output_image, int index=0) {
+    ASSERT(0 <= index && index < size());
+    output_image_[index] = output_image;
+  }
+  /// @brief Getter: output_image_
+  OutputImageType* GetOutputImage(int index=0) const {
+    ASSERT(0 <= index && index < size());
+    return output_image_[index];
+  }
 
  protected:
   //-------------------------------------------------------------------
   /// @brief 唯一エラーコードをkNoErrorにできる関数
   /// @attention Initが成功したらこちら
-  ErrorCode InitDone();
+  ErrorCode InitDone() {
+    ASSERT(error_code_ == kUninitialziedError);
+    if (error_code_ == kUninitialziedError) {
+      error_code_ = kNoError;
+    }
+    return error_code_;
+  }
   /// @brief kNoErrorを返すだけのメソッド
-  ErrorCode NoError() const;
+  ErrorCode NoError() const {
+    return kNoError;
+  }
   /// @brief エラーが発生したときに呼び出す。
   /// @return 発生したエラーコード。
   /// @attention エラーがいったんおきたら解除は不可能
-  ErrorCode ErrorOccured(ErrorCode error_code);
+  ErrorCode ErrorOccured(ErrorCode error_code) {
+    if (error_code != kNoError) {
+      // 後からkNoErrorにしようとしてもできない
+      // ASSERT(false);
+      MyDbgLog((LOG_TRACE, kDbgImportant,
+              TEXT("Processor: Error Occured(%d)"),
+              error_code));
+      error_code_ = error_code;
+    }
+    return error_code_;
+  }
   //-------------------------------------------------------------------
 
  private:
-  //-------------------------------------------------------------------
-  // (copy禁止)
-  //-------------------------------------------------------------------
-  /// @brief コピーコンストラクタ
-  Processor(const Processor& processor);
-  /// @brief 代入演算子(copy禁止)
-  void operator=(const Processor& processor);
-  //-------------------------------------------------------------------
-
   /// @brief エラーコード
   ErrorCode error_code_;
+  /// @brief 入出力のサイズ
+  const int size_;
 
-  /// @brief 出力width
-  const int width_;
-  /// @brief 出力height
-  const int height_;
-  /// @brief 内部ピクセルフォーマット
-  const ImagePixelFormat pixel_format_;
+  /// @brief 設定済みの入力
+  InputImageType *input_image_[kMaxMultiProcessorSize];
+  /// @brief 設定済みの出力
+  OutputImageType *output_image_[kMaxMultiProcessorSize];
 };
 }   // namespace imaging
 

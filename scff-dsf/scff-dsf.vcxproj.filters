@@ -47,9 +47,6 @@
     <ClCompile Include="base\debug.cc">
       <Filter>base</Filter>
     </ClCompile>
-    <ClCompile Include="imaging\processor.cc">
-      <Filter>imaging</Filter>
-    </ClCompile>
     <ClCompile Include="imaging\image.cc">
       <Filter>imaging</Filter>
     </ClCompile>
@@ -86,7 +83,10 @@
     <ClCompile Include="..\ext\src\libavfilter\drawutils.cc">
       <Filter>ext</Filter>
     </ClCompile>
-    <ClCompile Include="imaging\multi-processor.cc">
+    <ClCompile Include="imaging\padding.cc">
+      <Filter>imaging</Filter>
+    </ClCompile>
+    <ClCompile Include="imaging\scale.cc">
       <Filter>imaging</Filter>
     </ClCompile>
   </ItemGroup>
@@ -180,7 +180,10 @@
     <ClInclude Include="..\ext\include\libavutil\colorspace.h">
       <Filter>ext</Filter>
     </ClInclude>
-    <ClInclude Include="imaging\multi-processor.h">
+    <ClInclude Include="imaging\padding.h">
+      <Filter>imaging</Filter>
+    </ClInclude>
+    <ClInclude Include="imaging\scale.h">
       <Filter>imaging</Filter>
     </ClInclude>
   </ItemGroup>

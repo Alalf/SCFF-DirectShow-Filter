@@ -24,24 +24,27 @@
 
 #include "imaging/processor.h"
 #include "imaging/avpicture-image.h"
+#include "imaging/avpicture-with-fill-image.h"
+#include "imaging/windows-ddb-image.h"
 
 namespace imaging {
 
+class Scale;
+class Padding;
+
 /// @brief スプラッシュスクリーンを表示する
-class SplashScreen : public Processor {
+class SplashScreen : public Processor<void, AVPictureImage> {
  public:
   /// @brief コンストラクタ
-  SplashScreen(ImagePixelFormat pixel_format, int width, int height);
+  SplashScreen();
   /// @brief デストラクタ
   ~SplashScreen();
 
   //-------------------------------------------------------------------
   /// @copydoc Processor::Init
   ErrorCode Init();
-  /// @copydoc Processor::Accept
-  ErrorCode Accept(Request* request);
-  /// @copydoc Processor::PullAVPictureImage
-  ErrorCode PullAVPictureImage(AVPictureImage *image);
+  /// @copydoc Processor::Run
+  ErrorCode Run();
   //-------------------------------------------------------------------
 
  private:
@@ -54,16 +57,29 @@ class SplashScreen : public Processor {
   void operator=(const SplashScreen& splash_screen);
   //-------------------------------------------------------------------
 
+  /// @brief 設定されたImageはPadding可能か？
+  bool CanUsePadding() const;
+
   //-------------------------------------------------------------------
   // Processor
   //-------------------------------------------------------------------
-  // nop
+  /// @brief 拡大縮小ピクセルフォーマット変換
+  Scale *scale_;
+  /// @brief パディング
+  Padding *padding_;
   //-------------------------------------------------------------------
   // Image
   //-------------------------------------------------------------------
-  // nop
+  /// @brief リソースのビットマップ読み込み用
+  WindowsDDBImage resource_ddb_;
+  /// @brief GetDIBits用
+  AVPictureWithFillImage resource_image_;
+  /// @brief 変換後
+  AVPictureImage converted_image_;
   //-------------------------------------------------------------------
 
+  /// @brief 取り込み用BITMAPINFO
+  BITMAPINFO resource_ddb_info_;
 };
 }   // namespace imaging
 

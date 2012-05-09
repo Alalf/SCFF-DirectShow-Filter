@@ -22,9 +22,13 @@
 #ifndef SCFF_DSF_IMAGING_NATIVE_LAYOUT_H_
 #define SCFF_DSF_IMAGING_NATIVE_LAYOUT_H_
 
+extern "C" {
+#include <libswscale/swscale.h>
+}
 #include <libavfilter/drawutils.h>
 
 #include "imaging/processor.h"
+#include "imaging/avpicture-with-fill-image.h"
 #include "imaging/avpicture-image.h"
 
 namespace imaging {
@@ -32,11 +36,10 @@ namespace imaging {
 class ScreenCapture;
 
 /// @brief スクリーンキャプチャ出力一つだけを処理するレイアウトプロセッサ
-class NativeLayout : public Processor {
+class NativeLayout : public Processor<AVPictureImage, AVPictureImage> {
  public:
   /// @brief コンストラクタ
-  NativeLayout(ImagePixelFormat pixel_format, int width, int height,
-               const ScreenCaptureParameter &parameter,
+  NativeLayout(const ScreenCaptureParameter &parameter,
                bool stretch, bool keep_aspect_ratio);
   /// @brief デストラクタ
   ~NativeLayout();
@@ -44,10 +47,8 @@ class NativeLayout : public Processor {
   //-------------------------------------------------------------------
   /// @copydoc Processor::Init
   ErrorCode Init();
-  /// @copydoc Processor::Accept
-  ErrorCode Accept(Request *request);
-  /// @copydoc Processor::PullAVPictureImage
-  ErrorCode PullAVPictureImage(AVPictureImage *image);
+  /// @copydoc Processor::Run
+  ErrorCode Run();
   //-------------------------------------------------------------------
 
  private:
@@ -68,12 +69,11 @@ class NativeLayout : public Processor {
   //-------------------------------------------------------------------
   // Image
   //-------------------------------------------------------------------
-  /// @brief キャプチャ用イメージ
-  AVPictureImage capture_image_;
+  /// @brief ScreenCaptureから取得した変換処理前のイメージ
+  AVPictureWithFillImage captured_image_;
+  /// @brief SWScaleで拡大縮小ピクセルフォーマット変換を行った後のイメージ
+  AVPictureImage converted_image_;
   //-------------------------------------------------------------------
-
-  /// @brief スクリーンキャプチャパラメータ
-  const ScreenCaptureParameter parameter_;
 
   //-------------------------------------------------------------------
   /// @brief ピクセルフォーマットがdrawutilsに対応しているかどうか
@@ -86,6 +86,11 @@ class NativeLayout : public Processor {
   uint8_t rgba_padding_color_[4];
   //-------------------------------------------------------------------
 
+  /// @brief 拡大縮小用のコンテキスト
+  struct SwsContext *scaler_;
+
+  /// @brief スクリーンキャプチャパラメータ
+  const ScreenCaptureParameter parameter_;
   /// @brief 取り込み範囲が出力サイズより小さい場合拡張
   const bool stretch_;
   /// @brief アスペクト比の保持

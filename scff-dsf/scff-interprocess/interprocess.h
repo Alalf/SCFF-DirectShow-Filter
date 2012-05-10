@@ -124,32 +124,6 @@ enum SWScaleFlags {
   kSpline       = 0x400
 };
 
-/// @brief エラーコードを表す定数
-/// @sa scff-imaging/imaging-types.h
-/// @sa scff_imaging::ErrorCode
-enum ErrorCode {
-  /// @brief エラーはない
-  kNoError = 0,
-  /// @brief 初期化されていない
-  kUninitialziedError,
-  /// @brief 対応してないType
-  kImageTypeError,
-  /// @brief メモリの確保に失敗した
-  kOutOfMemoryError,
-  /// @brief 一回しか初期化・生成は許されていない
-  kMultipleCreateError,
-  /// @brief 対応してないPixelFormat
-  kPixelFormatError,
-  /// @brief 不正なウィンドウハンドル
-  kInvalidWindowError,
-  /// @brief クリッピング領域が不正
-  kInvalidClippingRegionError,
-  /// @brief キャプチャ領域が動作中に不正になった
-  kInvalidCaptureRegionError,
-  /// @brief 取り込み時に画面の色深度が32bitではなかった
-  kNot32bitColorError
-};
-
 //---------------------------------------------------------------------
 
 // アラインメントをコンパイラに変えられないように

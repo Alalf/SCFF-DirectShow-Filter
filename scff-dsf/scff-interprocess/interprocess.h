@@ -221,12 +221,8 @@ class Interprocess {
   /// @brief Directoryの初期化が成功したか
   bool IsDirectoryInitialized();
 
-  /// @brief Setter: プロセスID
-  void set_process_id(uint32_t process_id);
-
   /// @brief Message初期化
-  /// @pre set_process_id実行済み
-  bool InitMessage();
+  bool InitMessage(uint32_t process_id);
   /// @brief Messageの初期化が成功したか
   bool IsMessageInitialized();
 
@@ -236,14 +232,16 @@ class Interprocess {
   /// @brief エントリを作成する
   bool AddEntry(const Entry &entry);
   /// @brief エントリを削除する
-  bool RemoveEntry();
+  bool RemoveEntry(uint32_t process_id);
   /// @brief メッセージを受け取る
+  /// @pre 事前にInitMessageが実行されている必要がある
   bool ReceiveMessage(Message *message);
   //-------------------------------------------------------------------
 
   /// @brief ディレクトリを取得する
   bool GetDirectory(Directory *directory);
   /// @brief メッセージを作成する
+  /// @pre 事前にInitMessageが実行されている必要がある
   bool SendMessage(const Message &message);
 
  private:
@@ -258,9 +256,6 @@ class Interprocess {
   LPVOID view_of_directory_;
   /// @brief Mutex: Directory
   HANDLE mutex_directory_;
-
-  /// @brief プロセスID
-  uint32_t process_id_;
 
   /// @brief 共有メモリ: Message
   HANDLE message_;

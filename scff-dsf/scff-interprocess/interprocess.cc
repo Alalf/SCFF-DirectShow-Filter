@@ -36,7 +36,6 @@ Interprocess::Interprocess()
     : directory_(NULL),
       view_of_directory_(0),    // NULL
       mutex_directory_(NULL),
-      process_id_(0),           // NULL
       message_(NULL),
       view_of_message_(0),      // NULL
       mutex_message_(NULL) {    // NULL
@@ -141,15 +140,8 @@ void Interprocess::ReleaseDirectory() {
 
 //---------------------------------------------------------------------
 
-/// @brief Setter: プロセスID
-void Interprocess::set_process_id(uint32_t process_id) {
-  process_id_ = process_id;
-}
-
-//---------------------------------------------------------------------
-
 // Message初期化
-bool Interprocess::InitMessage() {
+bool Interprocess::InitMessage(uint32_t process_id) {
   // 念のため解放
   ReleaseMessage();
 
@@ -158,7 +150,7 @@ bool Interprocess::InitMessage() {
   ZeroMemory(message_name, sizeof(message_name));
   sprintf_s(message_name,
             256, "%s%d",
-            kMessageNamePrefix, process_id_);
+            kMessageNamePrefix, process_id);
 
   // 仮想メモリ(Message<process_id>)の作成
   HANDLE tmp_message =
@@ -196,7 +188,7 @@ bool Interprocess::InitMessage() {
   ZeroMemory(message_mutex_name, sizeof(message_mutex_name));
   sprintf_s(message_mutex_name,
             256, "%s%d",
-            kMessageMutexNamePrefix, process_id_);
+            kMessageMutexNamePrefix, process_id);
 
   // Mutexの作成
   HANDLE tmp_mutex_message =
@@ -288,7 +280,7 @@ bool Interprocess::AddEntry(const Entry &entry) {
 }
 
 // エントリを削除する
-bool Interprocess::RemoveEntry() {
+bool Interprocess::RemoveEntry(uint32_t process_id) {
   // 初期化されていなければ失敗
   if (!IsDirectoryInitialized()) {
     OutputDebugString(TEXT("****Interprocess: RemoveEntry FAILED\n"));
@@ -303,7 +295,7 @@ bool Interprocess::RemoveEntry() {
   Directory *directory =
       static_cast<Directory*>(view_of_directory_);
   for (int i = 0; i < kMaxEntry; i++) {
-    if (directory->entries[i].process_id == process_id_) {
+    if (directory->entries[i].process_id == process_id) {
       // 0クリア
       directory->entries[i].process_id = 0;
       directory->entries[i].process_name[0] = '\0';

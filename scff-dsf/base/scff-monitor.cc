@@ -40,19 +40,20 @@ SCFFMonitor::SCFFMonitor()
 // デストラクタ
 SCFFMonitor::~SCFFMonitor() {
   MyDbgLog((LOG_MEMORY, kDbgNewDelete, TEXT("DELETE SCFFMonitor")));
-  interprocess_.RemoveEntry();
+  // プロセスIDの取得
+  const DWORD process_id = GetCurrentProcessId();
+  interprocess_.RemoveEntry(process_id);
 }
 
 // 初期化
 bool SCFFMonitor::Init(scff_imaging::ImagePixelFormat pixel_format,
                        int width, int height, double fps) {
-  // プロセスIDを取得
+  // プロセスIDの取得
   const DWORD process_id = GetCurrentProcessId();
 
   // interprocessオブジェクトの初期化
   const bool success_directory = interprocess_.InitDirectory();
-  interprocess_.set_process_id(process_id);
-  const bool success_message = interprocess_.InitMessage();
+  const bool success_message = interprocess_.InitMessage(process_id);
   ASSERT(success_directory && success_message);
 
   // エントリの追加

@@ -2,8 +2,10 @@
 
 #include "scffappnet/data_source.h"
 
-class SCFFInterprocess;
-struct SCFFLayoutParameter;
+namespace scff_interprocess {
+class Interprocess;
+struct LayoutParameter;
+}
 
 namespace scffappnet {
 
@@ -834,11 +836,11 @@ private: System::Windows::Forms::NumericUpDown^  area_clipping_x;
   //-------------------------------------------------------------------
 
   /// @brief プロセス間通信用オブジェクト
-  SCFFInterprocess *interprocess_;
+  scff_interprocess::Interprocess *interprocess_;
   /// @brief 現在編集中のレイアウト番号
   property int editing_layout_index_;
   /// @brief 現在編集中のレイアウトパラメータ
-  SCFFLayoutParameter *layout_parameter_;
+  scff_interprocess::LayoutParameter *layout_parameter_;
 
   //-------------------------------------------------------------------
   // イベントハンドラ

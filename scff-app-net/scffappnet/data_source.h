@@ -19,41 +19,41 @@
 /// @file scffappnet/data_source.h
 /// @brief scffappnet::***Wrapperなどの宣言
 
-#ifndef SCFF_APP_NET_SCFFAPPNET_DATA_SOURCE_H_
-#define SCFF_APP_NET_SCFFAPPNET_DATA_SOURCE_H_
+#ifndef scffappnet_SCFFAPPNET_DATA_SOURCE_H_
+#define scffappnet_SCFFAPPNET_DATA_SOURCE_H_
 
-#include "base/scff-interprocess.h"
+#include "scff-interprocess/interprocess.h"
 
 namespace scffappnet {
 
 using namespace System;
 
-/// @brief SCFFEntryをマネージドクラス化したもの
-ref class ManagedSCFFEntry {
+/// @brief Entryをマネージドクラス化したもの
+ref class ManagedEntry {
  public:
-  ManagedSCFFEntry(const SCFFEntry &raw_entry) {
-    scff_entry_ = new SCFFEntry;
-    *scff_entry_ = raw_entry;
+  ManagedEntry(const scff_interprocess::Entry &raw_entry) {
+    entry_ = new scff_interprocess::Entry;
+    *entry_ = raw_entry;
   }
-  ~ManagedSCFFEntry() {
-    if (scff_entry_ != 0) {
-      delete scff_entry_;
+  ~ManagedEntry() {
+    if (entry_ != 0) {
+      delete entry_;
     }
   }
-  SCFFEntry* get_raw_entry() {
-    return scff_entry_;
+  scff_interprocess::Entry* get_raw_entry() {
+    return entry_;
   }
   property String^ Info {
     String^ get() {
       String^ pixel_format_string;
       switch (SamplePixelFormat) {
-      case kSCFFI420:
+      case scff_interprocess::kI420:
         pixel_format_string = "I420";
         break;
-      case kSCFFUYVY:
+      case scff_interprocess::kUYVY:
         pixel_format_string = "UYVY";
         break;
-      case kSCFFRGB0:
+      case scff_interprocess::kRGB0:
         pixel_format_string = "RGB0";
         break;
       }
@@ -65,15 +65,15 @@ ref class ManagedSCFFEntry {
   }
   property DWORD ProcessID {
     DWORD get() {
-      return scff_entry_->process_id;
+      return entry_->process_id;
     }
     void set(DWORD value) {
-      scff_entry_->process_id = value;
+      entry_->process_id = value;
     }
   }
   property String^ ProcessName {
     String^ get() {
-      return gcnew String(scff_entry_->process_name);
+      return gcnew String(entry_->process_name);
     }
     void set(String^ value) {
       using namespace System::Runtime::InteropServices;
@@ -81,7 +81,7 @@ ref class ManagedSCFFEntry {
       try {
         value_ptr = Marshal::StringToHGlobalAnsi(value);
         char* valur_char_ptr = static_cast<char*>(value_ptr.ToPointer());
-        strcpy_s(scff_entry_->process_name, MAX_PATH, valur_char_ptr);
+        strcpy_s(entry_->process_name, MAX_PATH, valur_char_ptr);
       }
       finally {
         Marshal::FreeHGlobal(value_ptr);
@@ -90,40 +90,40 @@ ref class ManagedSCFFEntry {
   }
   property int SampleWidth {
     int get() {
-      return scff_entry_->sample_width;
+      return entry_->sample_width;
     }
     void set(int value) {
-      scff_entry_->sample_width = value;
+      entry_->sample_width = value;
     }
   }
   property int SampleHeight {
     int get() {
-      return scff_entry_->sample_height;
+      return entry_->sample_height;
     }
     void set(int value) {
-      scff_entry_->sample_height = value;
+      entry_->sample_height = value;
     }
   }
   property int SamplePixelFormat {
     int get() {
-      return scff_entry_->sample_pixel_format;
+      return entry_->sample_image_pixel_format;
     }
     void set(int value) {
-      scff_entry_->sample_pixel_format = value;
+      entry_->sample_image_pixel_format = value;
     }
   }
   property double FPS {
     double get() {
-      return scff_entry_->fps;
+      return entry_->fps;
     }
     void set(double value) {
-      scff_entry_->fps = value;
+      entry_->fps = value;
     }
   }
 
  private:
-  SCFFEntry *scff_entry_;
+  scff_interprocess::Entry *entry_;
 };
 }
 
-#endif  // SCFF_APP_NET_SCFFAPPNET_DATA_SOURCE_H_
+#endif  // scffappnet_SCFFAPPNET_DATA_SOURCE_H_

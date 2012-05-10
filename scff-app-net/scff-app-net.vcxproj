@@ -164,7 +164,7 @@
     <None Include="app.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\scff-dsf\base\scff-interprocess.cc" />
+    <ClCompile Include="..\scff-dsf\scff-interprocess\interprocess.cc" />
     <ClCompile Include="AreaSelectForm.cpp" />
     <ClCompile Include="AssemblyInfo.cpp" />
     <ClCompile Include="scff-app-net.cpp" />
@@ -174,7 +174,7 @@
     <ClCompile Include="scffappnet\form1.cc" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\scff-dsf\base\scff-interprocess.h" />
+    <ClInclude Include="..\scff-dsf\scff-interprocess\interprocess.h" />
     <ClInclude Include="AreaSelectForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>

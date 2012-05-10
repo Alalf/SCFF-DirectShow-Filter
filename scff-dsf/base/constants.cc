@@ -20,7 +20,7 @@
 /// @brief グローバル定数定義
 
 #include "base/constants.h"
-#include "imaging/imaging.h"
+#include "scff-imaging/imaging.h"
 
 //=====================================================================
 // 定数
@@ -56,7 +56,7 @@ const int kSupportedPixelFormatsCount =
   // KoToEncoderは基本的に1ピクセルフォーマットしか対応していない
   1;
 #else
-  imaging::kSupportedPixelFormatsCount;
+  scff_imaging::kSupportedPixelFormatsCount;
 #endif
 
 // 優先フォーマットの数

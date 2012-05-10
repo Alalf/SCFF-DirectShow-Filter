@@ -22,12 +22,10 @@
 #include "Form1.h"
 
 #include <Windows.h>
-
 #include <ctime>
 
-#include "base/scff-interprocess.h"
+#include "scff-interprocess/interprocess.h"
 #include "scffappnet/data_source.h"
-
 
 namespace scffappnet {
 
@@ -51,10 +49,10 @@ Form1::Form1(void)
   }
 
   // プロセス間通信に必要なオブジェクトの生成
-  interprocess_ = new SCFFInterprocess;
+  interprocess_ = new scff_interprocess::Interprocess;
   // レイアウトパラメータを格納するためのオブジェクトを生成
-  layout_parameter_ = new SCFFLayoutParameter;
-  ZeroMemory(layout_parameter_,sizeof(SCFFLayoutParameter));
+  layout_parameter_ = new scff_interprocess::LayoutParameter;
+  ZeroMemory(layout_parameter_,sizeof(scff_interprocess::LayoutParameter));
 
   // コントロールの準備
   BuildResizeMethodCombobox();
@@ -91,12 +89,12 @@ Form1::~Form1() {
 // Tupleの動作が不安定との情報を聞いたのでしょうがなく作った
 ref class ResizeMethod {
  public:
-  ResizeMethod(String^ name, SCFFSWScaleFlags flags) {
+  ResizeMethod(String^ name, scff_interprocess::SWScaleFlags flags) {
     MethodName = name;
     SWScaleFlags = flags;
   }
   property String^ MethodName;
-  property SCFFSWScaleFlags SWScaleFlags;
+  property scff_interprocess::SWScaleFlags SWScaleFlags;
 };
 
 // ResizeMethod ComboBoxにデータソースを設定する
@@ -104,17 +102,17 @@ void Form1::BuildResizeMethodCombobox() {
   // リストを新しく作成する
   ArrayList^ resize_methods = gcnew ArrayList();
 
-  resize_methods->Add(gcnew ResizeMethod("fast bilinear", kSCFFFastBilinear));
-  resize_methods->Add(gcnew ResizeMethod("bilinear", kSCFFBilinear));
-  resize_methods->Add(gcnew ResizeMethod("bicubic", kSCFFBicubic));
-  resize_methods->Add(gcnew ResizeMethod("experimental", kSCFFX));
-  resize_methods->Add(gcnew ResizeMethod("nearest neighbor", kSCFFPoint));
-  resize_methods->Add(gcnew ResizeMethod("averaging area", kSCFFArea));
-  resize_methods->Add(gcnew ResizeMethod("luma bicubic, chroma bilinear", kSCFFBicublin));
-  resize_methods->Add(gcnew ResizeMethod("gaussian", kSCFFGauss));
-  resize_methods->Add(gcnew ResizeMethod("sinc", kSCFFSinc));
-  resize_methods->Add(gcnew ResizeMethod("natural", kSCFFLanczos));
-  resize_methods->Add(gcnew ResizeMethod("natural bicubic spline", kSCFFSpline));
+  resize_methods->Add(gcnew ResizeMethod("FastBilinear (fast bilinear)", scff_interprocess::kFastBilinear));
+  resize_methods->Add(gcnew ResizeMethod("Bilinear (bilinear)", scff_interprocess::kBilinear));
+  resize_methods->Add(gcnew ResizeMethod("Bicubic (bicubic)", scff_interprocess::kBicubic));
+  resize_methods->Add(gcnew ResizeMethod("X (experimental)", scff_interprocess::kX));
+  resize_methods->Add(gcnew ResizeMethod("Point (nearest neighbor)", scff_interprocess::kPoint));
+  resize_methods->Add(gcnew ResizeMethod("Area (averaging area)", scff_interprocess::kArea));
+  resize_methods->Add(gcnew ResizeMethod("Bicublin (luma bicubic, chroma bilinear)", scff_interprocess::kBicublin));
+  resize_methods->Add(gcnew ResizeMethod("Gauss (gaussian)", scff_interprocess::kGauss));
+  resize_methods->Add(gcnew ResizeMethod("Sinc (sinc)", scff_interprocess::kSinc));
+  resize_methods->Add(gcnew ResizeMethod("Lanczos (natural)", scff_interprocess::kLanczos));
+  resize_methods->Add(gcnew ResizeMethod("Spline (natural bicubic spline)", scff_interprocess::kSpline));
 
   this->option_resize_method_combo->DataSource = resize_methods;
   this->option_resize_method_combo->DisplayMember = "MethodName";
@@ -127,7 +125,7 @@ void Form1::BuildResizeMethodCombobox() {
 void Form1::UpdateDirectory() {
   // 共有メモリからデータを取得
   interprocess_->InitDirectory();
-  SCFFDirectory directory;
+  scff_interprocess::Directory directory;
   interprocess_->GetDirectory(&directory);
   Diagnostics::Debug::WriteLine("Get Directory");
 
@@ -135,9 +133,9 @@ void Form1::UpdateDirectory() {
   ArrayList^ managed_directory = gcnew ArrayList();
 
   // コンボボックスの内容を構築
-  for (int i = 0; i < kSCFFMaxEntry; i++) {
+  for (int i = 0; i < scff_interprocess::kMaxEntry; i++) {
     if (directory.entries[i].process_id == 0) continue;
-    ManagedSCFFEntry^ entry = gcnew ManagedSCFFEntry(directory.entries[i]);
+    ManagedEntry^ entry = gcnew ManagedEntry(directory.entries[i]);
     managed_directory->Add(entry);
   }
   this->process_combo->DataSource = managed_directory;
@@ -165,11 +163,11 @@ void Form1::UpdateDirectory() {
 // 共有メモリにNullLayoutリクエストを設定
 void Form1::SendNullLayoutRequest() {
   // メッセージを書いて送る
-  SCFFMessage message;
+  scff_interprocess::Message message;
   time_t timestamp;
   time(&timestamp);
   message.timestamp = static_cast<int32_t>(timestamp);
-  message.layout_type = kSCFFNullLayout;
+  message.layout_type = scff_interprocess::kNullLayout;
     
   // 共有メモリを開いて送る
   if (this->process_combo->SelectedValue != nullptr) {
@@ -182,11 +180,11 @@ void Form1::SendNullLayoutRequest() {
 /// @brief 共有メモリにNativeLayoutリクエストを設定
 void Form1::SendNativeLayoutRequest() {
   // メッセージを書いて送る
-  SCFFMessage message;
+  scff_interprocess::Message message;
   time_t timestamp;
   time(&timestamp);
   message.timestamp = static_cast<int64_t>(timestamp);
-  message.layout_type = kSCFFNativeLayout;
+  message.layout_type = scff_interprocess::kNativeLayout;
   // 無視される
   message.layout_element_count = 1;
   message.layout_parameters[0].bound_x = 0;
@@ -302,5 +300,4 @@ bool Form1::ValidateParameters() {
 
   return true;
 }
-
 }   // namespace scffappnet

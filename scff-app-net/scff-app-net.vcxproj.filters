@@ -26,9 +26,6 @@
     <ClCompile Include="AssemblyInfo.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="..\scff-dsf\base\scff-interprocess.cc">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="scffappnet\data_source.cc">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -44,6 +41,9 @@
     <ClCompile Include="scffappnet\form1-dwmapi.cc">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="..\scff-dsf\scff-interprocess\interprocess.cc">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Form1.h">
@@ -52,13 +52,13 @@
     <ClInclude Include="resource.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="..\scff-dsf\base\scff-interprocess.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="scffappnet\data_source.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="AreaSelectForm.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="..\scff-dsf\scff-interprocess\interprocess.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

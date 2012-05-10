@@ -28,9 +28,9 @@
 
 class SCFFSource;
 
-namespace imaging {
+namespace scff_imaging {
 class Engine;
-}
+}   // namespace scff_imaging
 
 /// @brief DirectShowビデオキャプチャフィルタの出力ピン
 class SCFFOutputPin : public CSourceStream,
@@ -167,7 +167,7 @@ class SCFFOutputPin : public CSourceStream,
   /// @brief （データの作成はすべてimaging::Engineに委譲）
   /// @sa CSourceStream::FillBuffer
   HRESULT FillBufferWithImagingEngine(
-      imaging::Engine &engine,
+      scff_imaging::Engine &engine,
       IMediaSample *sample);
 
   /// @brief 優先出力フォーマットを取得

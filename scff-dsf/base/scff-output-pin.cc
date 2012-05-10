@@ -31,7 +31,7 @@
 #include "base/scff-quality-controlled-time.h"
 #include "base/scff-monitor.h"
 
-#include "imaging/imaging.h"
+#include "scff-imaging/imaging.h"
 
 //=====================================================================
 // SCFFOutputPin
@@ -134,37 +134,41 @@ HRESULT SCFFOutputPin::GetMediaType(int position, CMediaType *media_type) {
   video_info->bmiHeader.biCompression   = MAKEFOURCC('I', '4', '2', '0');
   video_info->bmiHeader.biBitCount      = 12;
   data_size =
-      imaging::Utilities::CalcDataSize(imaging::kI420,
-                                        video_info->bmiHeader.biWidth,
-                                        video_info->bmiHeader.biHeight);
+      scff_imaging::Utilities::CalcDataSize(
+          scff_imaging::kI420,
+          video_info->bmiHeader.biWidth,
+          video_info->bmiHeader.biHeight);
 #else
   switch (position_in_pixel_formats) {
-  case imaging::kI420:
+  case scff_imaging::kI420:
     // I420(12bit)
     video_info->bmiHeader.biCompression   = MAKEFOURCC('I', '4', '2', '0');
     video_info->bmiHeader.biBitCount      = 12;
     data_size =
-        imaging::Utilities::CalculateDataSize(imaging::kI420,
-                                              video_info->bmiHeader.biWidth,
-                                              video_info->bmiHeader.biHeight);
+        scff_imaging::Utilities::CalculateDataSize(
+            scff_imaging::kI420,
+            video_info->bmiHeader.biWidth,
+            video_info->bmiHeader.biHeight);
     break;
-  case imaging::kUYVY:
+  case scff_imaging::kUYVY:
     // UYVY(16bit)
     video_info->bmiHeader.biCompression   = MAKEFOURCC('U', 'Y', 'V', 'Y');
     video_info->bmiHeader.biBitCount      = 16;
     data_size =
-        imaging::Utilities::CalculateDataSize(imaging::kUYVY,
-                                              video_info->bmiHeader.biWidth,
-                                              video_info->bmiHeader.biHeight);
+        scff_imaging::Utilities::CalculateDataSize(
+            scff_imaging::kUYVY,
+            video_info->bmiHeader.biWidth,
+            video_info->bmiHeader.biHeight);
     break;
-  case imaging::kRGB0:
+  case scff_imaging::kRGB0:
     // RGB0(32bit)
     video_info->bmiHeader.biCompression   = BI_RGB;
     video_info->bmiHeader.biBitCount      = 32;
     data_size =
-        imaging::Utilities::CalculateDataSize(imaging::kRGB0,
-                                              video_info->bmiHeader.biWidth,
-                                              video_info->bmiHeader.biHeight);
+        scff_imaging::Utilities::CalculateDataSize(
+            scff_imaging::kRGB0,
+            video_info->bmiHeader.biWidth,
+            video_info->bmiHeader.biHeight);
     break;
   }
 #endif
@@ -432,7 +436,7 @@ HRESULT SCFFOutputPin::DoBufferProcessingLoop(void) {
 
   OnThreadStartPlay();
 
-  // ImagingEngineを作成
+  // scff_imaging::Engineを作成
 
   /// @warning biBitCountでピクセルフォーマットを判断しているが、
   /// @warning これは正確ではない。
@@ -442,28 +446,29 @@ HRESULT SCFFOutputPin::DoBufferProcessingLoop(void) {
   ASSERT(m_mt.formattype == FORMAT_VideoInfo);
   VIDEOINFOHEADER *video_info =
     reinterpret_cast<VIDEOINFOHEADER*>(m_mt.pbFormat);
-  imaging::ImagePixelFormat pixel_format = imaging::kInvalidPixelFormat;
+  scff_imaging::ImagePixelFormat pixel_format =
+      scff_imaging::kInvalidPixelFormat;
   switch (video_info->bmiHeader.biBitCount) {
   case 12:
-    pixel_format = imaging::kI420;
+    pixel_format = scff_imaging::kI420;
     break;
   case 16:
-    pixel_format = imaging::kUYVY;
+    pixel_format = scff_imaging::kUYVY;
     break;
   case 32:
-    pixel_format = imaging::kRGB0;
+    pixel_format = scff_imaging::kRGB0;
     break;
   }
-  ASSERT(pixel_format != imaging::kInvalidPixelFormat);
+  ASSERT(pixel_format != scff_imaging::kInvalidPixelFormat);
 
-  imaging::Engine engine(pixel_format, width_, height_, fps_);
-  const imaging::ErrorCode error = engine.Init();
-  ASSERT(error == imaging::kNoError);
+  scff_imaging::Engine engine(pixel_format, width_, height_, fps_);
+  const scff_imaging::ErrorCode error = engine.Init();
+  ASSERT(error == scff_imaging::kNoError);
 
   // SCFFMonitorとリクエスト格納用変数を作成
   SCFFMonitor monitor;
   monitor.Init(pixel_format, width_, height_, fps_);
-  imaging::Request *request = 0;
+  scff_imaging::Request *request = 0;
 
   // タイムマネージャ用
   bool is_first_loop = true;
@@ -581,7 +586,7 @@ HRESULT SCFFOutputPin::FillBuffer(IMediaSample *sample) {
 /// @retval S_OK
 /// @retval S_FALSE ストリーム終了
 HRESULT SCFFOutputPin::FillBufferWithImagingEngine(
-    imaging::Engine &engine,
+    scff_imaging::Engine &engine,
     IMediaSample *sample) {
   CheckPointer(sample, E_POINTER);
 

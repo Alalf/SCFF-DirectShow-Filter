@@ -25,8 +25,8 @@
 #include <cstdint>
 #include <ctime>
 
-#include "base/scff-interprocess.h"
-#include "imaging/imaging.h"
+#include "scff-interprocess/interprocess.h"
+#include "scff-imaging/imaging.h"
 
 /// @brief SCFF DirectShow Filterの外部インターフェースを担当するクラス
 class SCFFMonitor {
@@ -37,17 +37,17 @@ class SCFFMonitor {
   ~SCFFMonitor();
 
   /// @brief 初期化
-  bool Init(imaging::ImagePixelFormat pixel_format,
+  bool Init(scff_imaging::ImagePixelFormat pixel_format,
             int width, int height, double fps);
 
   /// @brief リクエストがあるかどうか調べ、あれば実体を、なければNULLを返す
-  imaging::Request* CreateRequest();
+  scff_imaging::Request* CreateRequest();
   /// @brief 使い終わったリクエストを解放する
-  void ReleaseRequest(imaging::Request* request);
+  void ReleaseRequest(scff_imaging::Request* request);
 
  private:
   /// @brief プロセス間通信のためのインスタンス
-  SCFFInterprocess interprocess_;
+  scff_interprocess::Interprocess interprocess_;
 
   /// @brief 内部時刻を保持するための変数
   clock_t last_polling_clock_;

@@ -172,7 +172,8 @@ void Form1::SendNullLayoutRequest() {
   // 共有メモリを開いて送る
   if (this->process_combo->SelectedValue != nullptr) {
     uint32_t process_id = (uint32_t)(this->process_combo->SelectedValue);
-    interprocess_->InitMessage(process_id);
+    interprocess_->set_process_id(process_id);
+    interprocess_->InitMessage();
     interprocess_->SendMessage(message);
   }
 }
@@ -206,7 +207,8 @@ void Form1::SendNativeLayoutRequest() {
   // 共有メモリを開いて送る
   if (this->process_combo->SelectedValue != nullptr) {
     uint32_t process_id = (uint32_t)(this->process_combo->SelectedValue);
-    interprocess_->InitMessage(process_id);
+    interprocess_->set_process_id(process_id);
+    interprocess_->InitMessage();
     interprocess_->SendMessage(message);
   }
 }

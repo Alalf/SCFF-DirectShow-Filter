@@ -51,7 +51,8 @@ bool SCFFMonitor::Init(scff_imaging::ImagePixelFormat pixel_format,
 
   // interprocessオブジェクトの初期化
   const bool success_directory = interprocess_.InitDirectory();
-  const bool success_message = interprocess_.InitMessage(process_id);
+  interprocess_.set_process_id(process_id);
+  const bool success_message = interprocess_.InitMessage();
   ASSERT(success_directory && success_message);
 
   // エントリの追加

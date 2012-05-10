@@ -58,10 +58,10 @@ static const char kMessageNamePrefix[] = "scff-v0-message-";
 static const char kMessageMutexNamePrefix[] = "mutex-scff-v0-message-";
 
 /// @brief 共有メモリの接頭辞: SCFFの動作状態を格納する
-static const char kInformationNamePrefix[] = "scff-v0-monitoring-info-";
+static const char kInformationNamePrefix[] = "scff-v0-information-";
 
 /// @brief Informationの保護用Mutex名の接頭辞
-static const char kInformationMutexNamePrefix[] = "mutex-scff-v0-monitor-";
+static const char kInformationMutexNamePrefix[] = "mutex-scff-v0-information-";
 
 //---------------------------------------------------------------------
 
@@ -265,15 +265,20 @@ class Interprocess {
   /// @brief Directoryの初期化が成功したか
   bool IsDirectoryInitialized();
 
+  /// @brief Setter: プロセスID
+  void set_process_id(uint32_t process_id);
+
   /// @brief Message初期化
-  bool InitMessage(uint32_t process_id);
+  /// @pre set_process_id実行済み
+  bool InitMessage();
   /// @brief Messageの初期化が成功したか
   bool IsMessageInitialized();
 
   /// @brief Information初期化
-  bool InitMonitor(uint32_t process_id);
+  /// @pre set_process_id実行済み
+  bool InitInformation();
   /// @brief Informationの初期化が成功したか
-  bool IsMonitorInitialized();
+  bool IsInformationInitialized();
 
   //-------------------------------------------------------------------
   // for SCFF DirectShow Filter

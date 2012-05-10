@@ -57,12 +57,6 @@ static const char kMessageNamePrefix[] = "scff-v0-message-";
 /// @brief Messageの保護用Mutex名の接頭辞
 static const char kMessageMutexNamePrefix[] = "mutex-scff-v0-message-";
 
-/// @brief 共有メモリの接頭辞: SCFFの動作状態を格納する
-static const char kInformationNamePrefix[] = "scff-v0-information-";
-
-/// @brief Informationの保護用Mutex名の接頭辞
-static const char kInformationMutexNamePrefix[] = "mutex-scff-v0-information-";
-
 //---------------------------------------------------------------------
 
 /// @brief Directoryに格納されるEntryの最大の数
@@ -236,18 +230,6 @@ struct Message {
   LayoutParameter
       layout_parameters[kMaxComplexLayoutElements];
 };
-
-/// @brief 共有メモリ(Information)に格納する構造体
-struct Information {
-  /// @brief engineのエラーコード
-  /// @attention ErrorCodeを操作に使うこと
-  int32_t engine_error_code;
-  /// @brief engine.layout_のエラーコード
-  /// @attention ErrorCodeを操作に使うこと
-  int32_t layout_error_code;
-  /// @brief 1秒間あたりの処理時間(Sec)
-  double process_time;
-};
 #pragma pack(pop)
 
 //---------------------------------------------------------------------
@@ -274,12 +256,6 @@ class Interprocess {
   /// @brief Messageの初期化が成功したか
   bool IsMessageInitialized();
 
-  /// @brief Information初期化
-  /// @pre set_process_id実行済み
-  bool InitInformation();
-  /// @brief Informationの初期化が成功したか
-  bool IsInformationInitialized();
-
   //-------------------------------------------------------------------
   // for SCFF DirectShow Filter
   //-------------------------------------------------------------------
@@ -289,24 +265,18 @@ class Interprocess {
   bool RemoveEntry();
   /// @brief メッセージを受け取る
   bool ReceiveMessage(Message *message);
-  /// @brief モニタリング情報を更新する
-  bool UpdateInformation(const Information &information);
   //-------------------------------------------------------------------
 
   /// @brief ディレクトリを取得する
   bool GetDirectory(Directory *directory);
   /// @brief メッセージを作成する
   bool SendMessage(const Message &message);
-  /// @brief モニタリング情報を取得する
-  bool CheckInformation(const Information &information);
 
  private:
   /// @brief Directory解放
   void ReleaseDirectory();
   /// @brief Message解放
   void ReleaseMessage();
-  /// @brief Information解放
-  void ReleaseInformation();
 
   /// @brief 共有メモリ: Directory
   HANDLE directory_;
@@ -324,13 +294,6 @@ class Interprocess {
   LPVOID view_of_message_;
   /// @brief Mutex: Message
   HANDLE mutex_message_;
-
-  /// @brief 共有メモリ: Information
-  HANDLE information_;
-  /// @brief ビュー: Information
-  LPVOID view_of_information_;
-  /// @brief Mutex: Information
-  HANDLE mutex_information_;
 };
 }   // namespace scff_interprocess
 

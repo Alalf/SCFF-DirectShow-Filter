@@ -34,15 +34,12 @@ namespace scff_interprocess {
 // コンストラクタ
 Interprocess::Interprocess()
     : directory_(NULL),
-      view_of_directory_(0),      // NULL
+      view_of_directory_(0),    // NULL
       mutex_directory_(NULL),
-      process_id_(0),             // NULL
+      process_id_(0),           // NULL
       message_(NULL),
-      view_of_message_(0),        // NULL
-      mutex_message_(NULL),
-      information_(NULL),
-      view_of_information_(0),    // NULL
-      mutex_information_(NULL) {  // NULL
+      view_of_message_(0),      // NULL
+      mutex_message_(NULL) {    // NULL
   // nop
   OutputDebugString(TEXT("****Interprocess: NEW\n"));
 }
@@ -51,7 +48,6 @@ Interprocess::Interprocess()
 Interprocess::~Interprocess() {
   OutputDebugString(TEXT("****Interprocess: DELETE\n"));
   // 解放忘れがないように
-  ReleaseInformation();
   ReleaseMessage();
   ReleaseDirectory();
 }
@@ -251,107 +247,6 @@ void Interprocess::ReleaseMessage() {
   }
 }
 
-//---------------------------------------------------------------------
-
-// Information初期化
-bool Interprocess::InitInformation() {
-  // 念のため解放
-  ReleaseInformation();
-
-  // 仮想メモリの名前
-  char information_name[256];
-  ZeroMemory(information_name, sizeof(information_name));
-  sprintf_s(information_name,
-            256, "%s%d",
-            kInformationMutexNamePrefix, process_id_);
-
-  // 仮想メモリ(Information<process_id>)の作成
-  HANDLE tmp_information =
-      CreateFileMappingA(INVALID_HANDLE_VALUE,
-                         NULL,
-                         PAGE_READWRITE,
-                         0,
-                         sizeof(Information),
-                         information_name);
-  if (tmp_information == NULL) {
-    // 仮想メモリ作成失敗
-    return false;
-  }
-  DWORD error_create_file_mapping = GetLastError();
-
-  // ビューの作成
-  LPVOID tmp_view_of_information =
-      MapViewOfFile(tmp_information,
-                    FILE_MAP_ALL_ACCESS,
-                    0, 0, 0);
-  if (tmp_view_of_information == NULL) {
-    // ビュー作成失敗
-    CloseHandle(tmp_information);
-    return false;
-  }
-
-  // 最初に共有メモリを作成した場合は0クリアしておく
-  if (tmp_view_of_information != NULL &&
-      error_create_file_mapping != ERROR_ALREADY_EXISTS) {
-    ZeroMemory(tmp_view_of_information, sizeof(Information));
-  }
-
-  // Mutexの名前
-  char information_mutex_name[256];
-  ZeroMemory(information_mutex_name, sizeof(information_mutex_name));
-  sprintf_s(information_mutex_name,
-            256, "%s%d",
-            kInformationMutexNamePrefix, process_id_);
-
-  // Mutexの作成
-  HANDLE tmp_mutex_information =
-      CreateMutexA(NULL, false, information_mutex_name);
-  if (tmp_mutex_information == NULL) {
-    // Mutex作成失敗
-    UnmapViewOfFile(tmp_view_of_information);
-    CloseHandle(tmp_information);
-    return false;
-  }
-  DWORD error_create_mutex = GetLastError();
-
-  // 最初にMutexを作成した場合は…なにもしなくていい
-  if (tmp_mutex_information != NULL &&
-      error_create_mutex != ERROR_ALREADY_EXISTS) {
-    // nop
-  }
-
-  // メンバ変数に設定
-  information_ = tmp_information;
-  view_of_information_ = tmp_view_of_information;
-  mutex_information_ = tmp_mutex_information;
-
-  OutputDebugString(TEXT("****Interprocess: InitInformation Done\n"));
-  return true;
-}
-
-// Informationの初期化が成功したか
-bool Interprocess::IsInformationInitialized() {
-  return information_ != NULL &&
-         view_of_information_ != NULL &&
-         mutex_information_ != NULL;
-}
-
-// Information解放
-void Interprocess::ReleaseInformation() {
-  if (mutex_information_ != NULL) {
-    CloseHandle(mutex_information_);
-    mutex_information_ = NULL;
-  }
-  if (view_of_information_ != 0) {   // NULL
-    UnmapViewOfFile(view_of_information_);
-    view_of_information_ = 0;        // NULL
-  }
-  if (information_ != NULL) {
-    CloseHandle(information_);
-    information_ = NULL;
-  }
-}
-
 //-------------------------------------------------------------------
 // for SCFF DirectShow Filter
 //-------------------------------------------------------------------
@@ -445,28 +340,6 @@ bool Interprocess::ReceiveMessage(Message *message) {
 
   // ロック解放
   ReleaseMutex(mutex_message_);
-
-  return true;
-}
-
-// モニタリング情報を更新する
-bool Interprocess::UpdateInformation(const Information &information) {
-  // 初期化されていなければ失敗
-  if (!IsInformationInitialized()) {
-    OutputDebugString(TEXT("****Interprocess: UpdateInformation FAILED\n"));
-    return false;
-  }
-
-  OutputDebugString(TEXT("****Interprocess: UpdateInformation\n"));
-
-  // ロック取得
-  WaitForSingleObject(mutex_information_, INFINITE);
-
-  // そのままコピー
-  memcpy(view_of_information_, &information, sizeof(Information));
-
-  // ロック解放
-  ReleaseMutex(mutex_information_);
 
   return true;
 }

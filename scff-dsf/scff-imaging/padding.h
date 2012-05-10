@@ -24,6 +24,7 @@
 
 #include <libavfilter/drawutils.h>
 
+#include "scff-imaging/common.h"
 #include "scff-imaging/processor.h"
 
 namespace scff_imaging {
@@ -48,14 +49,8 @@ class Padding : public Processor<AVPictureImage, AVPictureImage> {
   //-------------------------------------------------------------------
 
  private:
-  //-------------------------------------------------------------------
-  // (copy禁止)
-  //-------------------------------------------------------------------
-  /// @brief コピーコンストラクタ
-  Padding(const Padding&);
-  /// @brief 代入演算子(copy禁止)
-  void operator=(const Padding&);
-  //-------------------------------------------------------------------
+  // コピー＆代入禁止
+  DISALLOW_COPY_AND_ASSIGN(Padding);
 
   /// @brief 描画用コンテキスト
   FFDrawContext draw_context_;

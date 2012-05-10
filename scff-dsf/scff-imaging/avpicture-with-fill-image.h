@@ -22,6 +22,7 @@
 #ifndef SCFF_DSF_SCFF_IMAGING_AVPICTURE_WITH_FILL_IMAGE_H_
 #define SCFF_DSF_SCFF_IMAGING_AVPICTURE_WITH_FILL_IMAGE_H_
 
+#include "scff-imaging/common.h"
 #include "scff-imaging/image.h"
 
 namespace scff_imaging {
@@ -47,14 +48,8 @@ class AVPictureWithFillImage: public Image {
   AVPicture* avpicture() const;
 
  private:
-  //-------------------------------------------------------------------
-  // (copy禁止)
-  //-------------------------------------------------------------------
-  /// @brief コピーコンストラクタ(copy禁止)
-  AVPictureWithFillImage(const AVPictureWithFillImage&);
-  /// @brief 代入演算子(copy禁止)
-  void operator=(const AVPictureWithFillImage&);
-  //-------------------------------------------------------------------
+  // コピー＆代入禁止
+  DISALLOW_COPY_AND_ASSIGN(AVPictureWithFillImage);
 
   /// @brief 各種ビットマップ
   uint8_t *raw_bitmap_;

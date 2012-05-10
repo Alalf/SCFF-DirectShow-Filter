@@ -22,6 +22,7 @@
 #ifndef SCFF_DSF_SCFF_IMAGING_ENGINE_H_
 #define SCFF_DSF_SCFF_IMAGING_ENGINE_H_
 
+#include "scff-imaging/common.h"
 #include "scff-imaging/processor.h"
 #include "scff-imaging/avpicture-image.h"
 
@@ -33,7 +34,8 @@ namespace scff_imaging {
 class Engine : public Processor<void, AVPictureImage> {
  public:
   /// @brief コンストラクタ
-  Engine(ImagePixelFormat pixel_format, int width, int height, double fps);
+  Engine(ImagePixelFormat output_pixel_format,
+         int output_width, int output_height, double output_fps);
   /// @brief デストラクタ
   ~Engine();
 
@@ -53,18 +55,11 @@ class Engine : public Processor<void, AVPictureImage> {
   /// @brief 現在のプロセッサを解放してスプラッシュを表示する
   void DoResetLayout();
   /// @brief 現在のプロセッサを新しいNativeLayoutに設定する
-  void DoSetNativeLayout(const ScreenCaptureParameter &parameter,
-                         bool stretch, bool keep_aspect_ratio);
+  void DoSetNativeLayout(const LayoutParameter &parameter);
 
  private:
-  //-------------------------------------------------------------------
-  // (copy禁止)
-  //-------------------------------------------------------------------
-  /// @brief コピーコンストラクタ
-  Engine(const Engine&);
-  /// @brief 代入演算子(copy禁止)
-  void operator=(const Engine&);
-  //-------------------------------------------------------------------
+  // コピー＆代入禁止
+  DISALLOW_COPY_AND_ASSIGN(Engine);
 
   //-------------------------------------------------------------------
   /// @copydoc Processor::Run

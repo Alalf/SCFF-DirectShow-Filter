@@ -16,29 +16,30 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file scff-imaging/splash-screen.h
-/// @brief scff_imaging::SplashScreenの宣言
+/// @file scff-imaging/complex-layout.h
+/// @brief scff_imaging::ComplexLayoutの宣言
 
-#ifndef SCFF_DSF_SCFF_IMAGING_SPLASH_SCREEN_H_
-#define SCFF_DSF_SCFF_IMAGING_SPLASH_SCREEN_H_
+#ifndef SCFF_DSF_SCFF_IMAGING_COMPLEX_LAYOUT_H_
+#define SCFF_DSF_SCFF_IMAGING_COMPLEX_LAYOUT_H_
 
+#include "scff-imaging/common.h"
 #include "scff-imaging/processor.h"
-#include "scff-imaging/avpicture-image.h"
 #include "scff-imaging/avpicture-with-fill-image.h"
-#include "scff-imaging/windows-ddb-image.h"
+#include "scff-imaging/avpicture-image.h"
 
 namespace scff_imaging {
 
+class ScreenCapture;
 class Scale;
 class Padding;
 
-/// @brief スプラッシュスクリーンを表示する
-class SplashScreen : public Processor<void, AVPictureImage> {
+/// @brief 複数のスクリーンキャプチャ領域を取り扱い可能なレイアウト
+class ComplexLayout : public Processor<void, AVPictureImage> {
  public:
   /// @brief コンストラクタ
-  SplashScreen();
+  ComplexLayout(const LayoutParameter &parameter);
   /// @brief デストラクタ
-  ~SplashScreen();
+  ~ComplexLayout();
 
   //-------------------------------------------------------------------
   /// @copydoc Processor::Init
@@ -49,7 +50,7 @@ class SplashScreen : public Processor<void, AVPictureImage> {
 
  private:
   // コピー＆代入禁止
-  DISALLOW_COPY_AND_ASSIGN(SplashScreen);
+  DISALLOW_COPY_AND_ASSIGN(ComplexLayout);
 
   /// @brief 設定されたImageはPadding可能か？
   bool CanUsePadding() const;
@@ -57,6 +58,8 @@ class SplashScreen : public Processor<void, AVPictureImage> {
   //-------------------------------------------------------------------
   // Processor
   //-------------------------------------------------------------------
+  /// @brief スクリーンキャプチャ
+  ScreenCapture *screen_capture_;
   /// @brief 拡大縮小ピクセルフォーマット変換
   Scale *scale_;
   /// @brief パディング
@@ -64,17 +67,15 @@ class SplashScreen : public Processor<void, AVPictureImage> {
   //-------------------------------------------------------------------
   // Image
   //-------------------------------------------------------------------
-  /// @brief リソースのビットマップ読み込み用
-  WindowsDDBImage resource_ddb_;
-  /// @brief GetDIBits用
-  AVPictureWithFillImage resource_image_;
-  /// @brief 変換後
+  /// @brief ScreenCaptureから取得した変換処理前のイメージ
+  AVPictureWithFillImage captured_image_;
+  /// @brief SWScaleで拡大縮小ピクセルフォーマット変換を行った後のイメージ
   AVPictureImage converted_image_;
   //-------------------------------------------------------------------
 
-  /// @brief 取り込み用BITMAPINFO
-  BITMAPINFO resource_ddb_info_;
+  /// @brief レイアウトパラメータ
+  const LayoutParameter parameter_;
 };
 }   // namespace scff_imaging
 
-#endif  // SCFF_DSF_SCFF_IMAGING_SPLASH_SCREEN_H_
+#endif  // SCFF_DSF_SCFF_IMAGING_COMPLEX_LAYOUT_H_

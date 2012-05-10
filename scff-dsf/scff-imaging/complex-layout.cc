@@ -16,10 +16,10 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file scff-imaging/native-layout.cc
-/// @brief scff_imaging::NativeLayoutの定義
+/// @file scff-imaging/complex-layout.cc
+/// @brief scff_imaging::ComplexLayoutの定義
 
-#include "scff-imaging/native-layout.h"
+#include "scff-imaging/complex-layout.h"
 
 #include "scff-imaging/debug.h"
 #include "scff-imaging/utilities.h"
@@ -30,19 +30,18 @@
 namespace scff_imaging {
 
 //=====================================================================
-// scff_imaging::NativeLayout
+// scff_imaging::ComplexLayout
 //=====================================================================
 
 // コンストラクタ
-NativeLayout::NativeLayout(
-    const LayoutParameter &parameter)
+ComplexLayout::ComplexLayout(const LayoutParameter &parameter)
     : Processor<void, AVPictureImage>(),
       parameter_(parameter),
       screen_capture_(0),   // NULL
       scale_(0),            // NULL
       padding_(0) {         // NULL
   MyDbgLog((LOG_MEMORY, kDbgNewDelete,
-          TEXT("NativeLayout: NEW(%dx%d)"),
+          TEXT("ComplexLayout: NEW(%dx%d)"),
           parameter_.clipping_width,
           parameter_.clipping_height));
   // 明示的に初期化していない
@@ -51,9 +50,9 @@ NativeLayout::NativeLayout(
 }
 
 // デストラクタ
-NativeLayout::~NativeLayout() {
+ComplexLayout::~ComplexLayout() {
   MyDbgLog((LOG_MEMORY, kDbgNewDelete,
-          TEXT("NativeLayout: DELETE")));
+          TEXT("ComplexLayout: DELETE")));
   // 管理しているインスタンスをすべて破棄
   // 破棄はプロセッサ→イメージの順
   if (screen_capture_ != 0) {
@@ -68,7 +67,7 @@ NativeLayout::~NativeLayout() {
 }
 
 // 設定されたImageはPadding可能か？
-bool NativeLayout::CanUsePadding() const {
+bool ComplexLayout::CanUsePadding() const {
   /// @warning 2012/05/08現在drawutilsはPlaner Formatにしか対応していない
   switch (GetOutputImage()->pixel_format()) {
   case kI420:
@@ -83,9 +82,9 @@ bool NativeLayout::CanUsePadding() const {
 //-------------------------------------------------------------------
 
 // Processor::Init
-ErrorCode NativeLayout::Init() {
+ErrorCode ComplexLayout::Init() {
   MyDbgLog((LOG_TRACE, kDbgImportant,
-          TEXT("NativeLayout: Init")));
+          TEXT("ComplexLayout: Init")));
 
   // あらかじめイメージのサイズを計算しておく
   const int captured_width = parameter_.clipping_width;
@@ -145,7 +144,7 @@ ErrorCode NativeLayout::Init() {
   // スクリーンキャプチャ
   LayoutParameter parameter_array[kMaxProcessorSize];
   parameter_array[0] = parameter_;
-  // NativeLayoutなのでsize=1
+  // ComplexLayoutなのでsize=1
   ScreenCapture *screen_capture = new ScreenCapture(1, parameter_array);
   screen_capture->SetOutputImage(&captured_image_);
   const ErrorCode error_screen_capture = screen_capture->Init();
@@ -190,7 +189,7 @@ ErrorCode NativeLayout::Init() {
 }
 
 // Processor::Run
-ErrorCode NativeLayout::Run() {
+ErrorCode ComplexLayout::Run() {
   if (GetCurrentError() != kNoError) {
     // 何かエラーが発生している場合は何もしない
     return GetCurrentError();

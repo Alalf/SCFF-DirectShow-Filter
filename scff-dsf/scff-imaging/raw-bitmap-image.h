@@ -45,14 +45,8 @@ class RawBitmapImage: public Image {
   uint8_t* raw_bitmap() const;
 
  private:
-  //-------------------------------------------------------------------
-  // (copy禁止)
-  //-------------------------------------------------------------------
-  /// @brief コピーコンストラクタ(copy禁止)
-  RawBitmapImage(const RawBitmapImage&);
-  /// @brief 代入演算子(copy禁止)
-  void operator=(const RawBitmapImage&);
-  //-------------------------------------------------------------------
+  // コピー＆代入禁止
+  DISALLOW_COPY_AND_ASSIGN(RawBitmapImage);
 
   /// @brief 各種ビットマップ
   uint8_t *raw_bitmap_;

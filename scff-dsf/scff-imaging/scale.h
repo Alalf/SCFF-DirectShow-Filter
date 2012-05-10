@@ -22,6 +22,7 @@
 #ifndef SCFF_DSF_SCFF_IMAGING_SCALE_H_
 #define SCFF_DSF_SCFF_IMAGING_SCALE_H_
 
+#include "scff-imaging/common.h"
 #include "scff-imaging/imaging-types.h"
 #include "scff-imaging/processor.h"
 
@@ -45,14 +46,8 @@ class Scale : public Processor<AVPictureWithFillImage, AVPictureImage> {
   //-------------------------------------------------------------------
 
  private:
-  //-------------------------------------------------------------------
-  // (copy禁止)
-  //-------------------------------------------------------------------
-  /// @brief コピーコンストラクタ
-  Scale(const Scale&);
-  /// @brief 代入演算子(copy禁止)
-  void operator=(const Scale&);
-  //-------------------------------------------------------------------
+  // コピー＆代入禁止
+  DISALLOW_COPY_AND_ASSIGN(Scale);
 
   /// @brief 拡大縮小パラメータ
   const SWScaleFlags sws_flags_;

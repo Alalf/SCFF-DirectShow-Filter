@@ -63,12 +63,9 @@ class ResetLayoutRequest : public Request {
 class SetNativeLayoutRequest : public Request {
  public:
   /// @brief コンストラクタ
-  SetNativeLayoutRequest(const ScreenCaptureParameter& parameter,
-                         bool stretch, bool keep_aspect_ratio)
+  SetNativeLayoutRequest(const LayoutParameter& parameter)
       : Request(),
-        parameter_(parameter),
-        stretch_(stretch),
-        keep_aspect_ratio_(keep_aspect_ratio) {
+        parameter_(parameter) {
     // nop
   }
   /// @brief デストラクタ
@@ -77,16 +74,12 @@ class SetNativeLayoutRequest : public Request {
   }
   /// @brief ダブルディスパッチ用
   void SendTo(Engine *engine) const {
-    engine->DoSetNativeLayout(parameter_, stretch_, keep_aspect_ratio_);
+    engine->DoSetNativeLayout(parameter_);
   }
 
  private:
   /// @copydoc NativeLayout::parameter_
-  const ScreenCaptureParameter parameter_;
-  /// @copydoc NativeLayout::stretch_
-  const bool stretch_;
-  /// @copydoc NativeLayout::keep_aspect_ratio_
-  const bool keep_aspect_ratio_;
+  const LayoutParameter parameter_;
 };
 
 }   // namespace scff_imaging

@@ -33,7 +33,7 @@ namespace scff_imaging {
 // コンストラクタ
 ScreenCapture::ScreenCapture(
     int size,
-    ScreenCaptureParameter parameter[kMaxProcessorSize])
+    LayoutParameter parameter[kMaxProcessorSize])
     : Processor<void, AVPictureWithFillImage>(size) {
   MyDbgLog((LOG_MEMORY, kDbgNewDelete,
             TEXT("ScreenCapture: NEW(%d)"),

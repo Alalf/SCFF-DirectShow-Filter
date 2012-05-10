@@ -107,21 +107,20 @@ enum SWScaleFlags {
 
 //---------------------------------------------------------------------
 
-/// @brief スクリーンキャプチャパラメータ
-struct ScreenCaptureParameter {
-  /// @brief 初期化用コンストラクタ
-  ScreenCaptureParameter()
-      : window(0),        // NULL
-        clipping_x(0),
-        clipping_y(0),
-        clipping_width(0),
-        clipping_height(0),
-        show_cursor(false),
-        show_layered_window(false),
-        sws_flags(kFastBilinear) {
-    // nop
-  }
-
+/// @brief レイアウトパラメータ
+struct LayoutParameter {
+  /// @brief サンプル内の原点のX座標
+  /// @warning NullLayout,NativeLayoutでは無視される
+  int bound_x;
+  /// @brief サンプル内の原点のY座標
+  /// @warning NullLayout,NativeLayoutでは無視される
+  int bound_y;
+  /// @brief サンプル内の幅
+  /// @warning NullLayout,NativeLayoutでは無視される
+  int bound_width;
+  /// @brief サンプル内の高さ
+  /// @warning NullLayout,NativeLayoutでは無視される
+  int bound_height;
   /// @brief キャプチャを行う対象となるウィンドウ
   HWND window;
   /// @brief 取り込み範囲の開始X座標
@@ -137,7 +136,12 @@ struct ScreenCaptureParameter {
   /// @brief レイヤードウィンドウの表示
   bool show_layered_window;
   /// @brief 拡大縮小アルゴリズムの選択
+  /// @attention SWScaleFlagsを操作に使うこと
   SWScaleFlags sws_flags;
+  /// @brief 取り込み範囲が出力サイズより小さい場合拡張
+  bool stretch;
+  /// @brief アスペクト比の保持
+  bool keep_aspect_ratio;
 };
 }   // namespace scff_imaging
 

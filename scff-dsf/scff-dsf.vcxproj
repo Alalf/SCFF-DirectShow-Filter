@@ -31,6 +31,7 @@
     <ClCompile Include="base\scff-source.cc" />
     <ClCompile Include="scff-imaging\avpicture-image.cc" />
     <ClCompile Include="scff-imaging\avpicture-with-fill-image.cc" />
+    <ClCompile Include="scff-imaging\complex-layout.cc" />
     <ClCompile Include="scff-imaging\engine.cc" />
     <ClCompile Include="scff-imaging\image.cc" />
     <ClCompile Include="scff-imaging\native-layout.cc" />
@@ -63,6 +64,8 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="scff-imaging\avpicture-image.h" />
     <ClInclude Include="scff-imaging\avpicture-with-fill-image.h" />
+    <ClInclude Include="scff-imaging\common.h" />
+    <ClInclude Include="scff-imaging\complex-layout.h" />
     <ClInclude Include="scff-imaging\debug.h" />
     <ClInclude Include="scff-imaging\engine.h" />
     <ClInclude Include="scff-imaging\image.h" />

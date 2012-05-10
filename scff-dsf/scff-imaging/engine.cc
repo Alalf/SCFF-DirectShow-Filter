@@ -264,15 +264,12 @@ void Engine::DoResetLayout() {
 }
 
 /// @brief 現在のプロセッサを新しいNativeLayoutに設定する
-void Engine::DoSetNativeLayout(
-    const ScreenCaptureParameter &parameter,
-    bool stretch, bool keep_aspect_ratio) {
+void Engine::DoSetNativeLayout(const LayoutParameter &parameter) {
   // 現在のプロセッサは必要ないので削除
   ReleaseLayout();
 
   //-------------------------------------------------------------------
-  NativeLayout *native_layout =
-      new NativeLayout(parameter, stretch, keep_aspect_ratio);
+  NativeLayout *native_layout = new NativeLayout(parameter);
   native_layout->SetOutputImage(&front_image_);
   const ErrorCode error_layout = native_layout->Init();
   if (error_layout != kNoError) {

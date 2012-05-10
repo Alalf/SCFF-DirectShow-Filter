@@ -22,6 +22,7 @@
 #ifndef SCFF_DSF_SCFF_IMAGING_NATIVE_LAYOUT_H_
 #define SCFF_DSF_SCFF_IMAGING_NATIVE_LAYOUT_H_
 
+#include "scff-imaging/common.h"
 #include "scff-imaging/processor.h"
 #include "scff-imaging/avpicture-with-fill-image.h"
 #include "scff-imaging/avpicture-image.h"
@@ -36,8 +37,7 @@ class Padding;
 class NativeLayout : public Processor<void, AVPictureImage> {
  public:
   /// @brief コンストラクタ
-  NativeLayout(const ScreenCaptureParameter &parameter,
-               bool stretch, bool keep_aspect_ratio);
+  NativeLayout(const LayoutParameter &parameter);
   /// @brief デストラクタ
   ~NativeLayout();
 
@@ -49,14 +49,8 @@ class NativeLayout : public Processor<void, AVPictureImage> {
   //-------------------------------------------------------------------
 
  private:
-  //-------------------------------------------------------------------
-  // (copy禁止)
-  //-------------------------------------------------------------------
-  /// @brief コピーコンストラクタ
-  NativeLayout(const NativeLayout&);
-  /// @brief 代入演算子(copy禁止)
-  void operator=(const NativeLayout&);
-  //-------------------------------------------------------------------
+  // コピー＆代入禁止
+  DISALLOW_COPY_AND_ASSIGN(NativeLayout);
 
   /// @brief 設定されたImageはPadding可能か？
   bool CanUsePadding() const;
@@ -79,12 +73,8 @@ class NativeLayout : public Processor<void, AVPictureImage> {
   AVPictureImage converted_image_;
   //-------------------------------------------------------------------
 
-  /// @brief スクリーンキャプチャパラメータ
-  const ScreenCaptureParameter parameter_;
-  /// @brief 取り込み範囲が出力サイズより小さい場合拡張
-  const bool stretch_;
-  /// @brief アスペクト比の保持
-  const bool keep_aspect_ratio_;
+  /// @brief レイアウトパラメータ
+  const LayoutParameter parameter_;
 };
 }   // namespace scff_imaging
 

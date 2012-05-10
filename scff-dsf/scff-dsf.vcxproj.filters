@@ -92,6 +92,9 @@
     <ClCompile Include="scff-interprocess\interprocess.cc">
       <Filter>scff-interprocess</Filter>
     </ClCompile>
+    <ClCompile Include="scff-imaging\complex-layout.cc">
+      <Filter>scff-imaging</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="base\scff-dsf-amd64.def">
@@ -190,6 +193,12 @@
       <Filter>scff-interprocess</Filter>
     </ClInclude>
     <ClInclude Include="scff-imaging\debug.h">
+      <Filter>scff-imaging</Filter>
+    </ClInclude>
+    <ClInclude Include="scff-imaging\complex-layout.h">
+      <Filter>scff-imaging</Filter>
+    </ClInclude>
+    <ClInclude Include="scff-imaging\common.h">
       <Filter>scff-imaging</Filter>
     </ClInclude>
   </ItemGroup>

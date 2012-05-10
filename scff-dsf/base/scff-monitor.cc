@@ -118,9 +118,7 @@ scff_imaging::Request* SCFFMonitor::CreateRequest() {
 
   // メッセージの内容を処理する
   scff_imaging::Request *tmp_request = 0;
-  scff_imaging::ScreenCaptureParameter parameter;
-  bool stretch;
-  bool keep_aspect_ratio;
+  scff_imaging::LayoutParameter parameter;
 
   switch (message.layout_type) {
   case scff_interprocess::kNullLayout:
@@ -200,13 +198,12 @@ scff_imaging::Request* SCFFMonitor::CreateRequest() {
       parameter.sws_flags = scff_imaging::kFastBilinear;
       break;
     }
-    stretch = message.layout_parameters[0].stretch != 0;
-    keep_aspect_ratio = message.layout_parameters[0].keep_aspect_ratio != 0;
+    parameter.stretch =
+        message.layout_parameters[0].stretch != 0;
+    parameter.keep_aspect_ratio =
+        message.layout_parameters[0].keep_aspect_ratio != 0;
 
-    tmp_request = new scff_imaging::SetNativeLayoutRequest(
-        parameter,
-        stretch,
-        keep_aspect_ratio);
+    tmp_request = new scff_imaging::SetNativeLayoutRequest(parameter);
     break;
 
   case scff_interprocess::kComplexLayout:

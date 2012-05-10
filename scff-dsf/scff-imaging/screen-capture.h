@@ -36,7 +36,7 @@ class ScreenCapture : public Processor<void, AVPictureWithFillImage> {
   /// @brief コンストラクタ
   ScreenCapture(
       int size,
-      ScreenCaptureParameter parameter[kMaxProcessorSize]);
+      LayoutParameter parameter[kMaxProcessorSize]);
   /// @brief デストラクタ
   ~ScreenCapture();
 
@@ -48,14 +48,8 @@ class ScreenCapture : public Processor<void, AVPictureWithFillImage> {
   //-------------------------------------------------------------------
 
  private:
-  //-------------------------------------------------------------------
-  // (copy禁止)
-  //-------------------------------------------------------------------
-  /// @brief コピーコンストラクタ
-  ScreenCapture(const ScreenCapture&);
-  /// @brief 代入演算子(copy禁止)
-  void operator=(const ScreenCapture&);
-  //-------------------------------------------------------------------
+  // コピー＆代入禁止
+  DISALLOW_COPY_AND_ASSIGN(ScreenCapture);
 
   /// @brief 渡されたDCにカーソルを描画する
   void DrawCursor(HDC dc, HWND window);
@@ -89,8 +83,8 @@ class ScreenCapture : public Processor<void, AVPictureWithFillImage> {
   /// @brief BitBltに渡すラスターオペレーションコード
   DWORD raster_operation_[kMaxProcessorSize];
 
-  /// @brief スクリーンキャプチャパラメータ
-  ScreenCaptureParameter parameter_[kMaxProcessorSize];
+  /// @brief レイアウトパラメータ
+  LayoutParameter parameter_[kMaxProcessorSize];
 };
 }   // namespace scff_imaging
 

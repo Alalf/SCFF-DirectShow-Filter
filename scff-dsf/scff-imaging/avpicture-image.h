@@ -22,6 +22,7 @@
 #ifndef SCFF_DSF_SCFF_IMAGING_AVPICTURE_IMAGE_H_
 #define SCFF_DSF_SCFF_IMAGING_AVPICTURE_IMAGE_H_
 
+#include "scff-imaging/common.h"
 #include "scff-imaging/image.h"
 
 namespace scff_imaging {
@@ -45,14 +46,8 @@ class AVPictureImage: public Image {
   AVPicture* avpicture() const;
 
  private:
-  //-------------------------------------------------------------------
-  // (copy禁止)
-  //-------------------------------------------------------------------
-  /// @brief コピーコンストラクタ(copy禁止)
-  AVPictureImage(const AVPictureImage&);
-  /// @brief 代入演算子(copy禁止)
-  void operator=(const AVPictureImage&);
-  //-------------------------------------------------------------------
+  // コピー＆代入禁止
+  DISALLOW_COPY_AND_ASSIGN(AVPictureImage);
 
   /// @brief AVPictureへのポインタ
   AVPicture *avpicture_;

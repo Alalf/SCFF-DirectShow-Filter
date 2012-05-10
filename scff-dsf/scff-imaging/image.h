@@ -28,6 +28,8 @@ extern "C" {
 }
 
 #include <cstdint>
+
+#include "scff-imaging/common.h"
 #include "scff-imaging/imaging-types.h"
 
 struct AVPicture;
@@ -74,14 +76,8 @@ class Image {
                            int width, int height);
   //-------------------------------------------------------------------
  private:
-  //-------------------------------------------------------------------
-  // (copy禁止)
-  //-------------------------------------------------------------------
-  /// @brief コピーコンストラクタ
-  Image(const Image&);
-  /// @brief 代入演算子(copy禁止)
-  void operator=(const Image&);
-  //-------------------------------------------------------------------
+  // コピー＆代入禁止
+  DISALLOW_COPY_AND_ASSIGN(Image);
 
   /// @brief イメージのピクセルフォーマット
   ImagePixelFormat pixel_format_;

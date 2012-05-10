@@ -57,14 +57,8 @@ class WindowsDDBImage: public Image {
   HBITMAP windows_ddb() const;
 
  private:
-  //-------------------------------------------------------------------
-  // (copy禁止)
-  //-------------------------------------------------------------------
-  /// @brief コピーコンストラクタ(copy禁止)
-  WindowsDDBImage(const WindowsDDBImage&);
-  /// @brief 代入演算子(copy禁止)
-  void operator=(const WindowsDDBImage&);
-  //-------------------------------------------------------------------
+  // コピー＆代入禁止
+  DISALLOW_COPY_AND_ASSIGN(WindowsDDBImage);
 
   /// @brief Windowsビットマップの生成方法
   Source from_;

@@ -107,6 +107,20 @@ enum SWScaleFlags {
 
 //---------------------------------------------------------------------
 
+/// @brief 回転方向を表す定数
+enum RotateDirection {
+  /// @brief 回転なし
+  kNoRotate = 0,
+  /// @brief 時計回り90度
+  k90Degrees,
+  /// @brief 時計回り180度
+  k180Degrees,
+  /// @brief 時計回り270度
+  k270Degrees
+};
+
+//---------------------------------------------------------------------
+
 /// @brief レイアウトパラメータ
 struct LayoutParameter {
   /// @brief サンプル内の原点のX座標
@@ -142,6 +156,8 @@ struct LayoutParameter {
   bool stretch;
   /// @brief アスペクト比の保持
   bool keep_aspect_ratio;
+  /// @brief 回転方向
+  RotateDirection rotate_direction;
 };
 }   // namespace scff_imaging
 

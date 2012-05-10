@@ -124,6 +124,20 @@ enum SWScaleFlags {
   kSpline       = 0x400
 };
 
+/// @brief 回転方向を表す定数
+/// @sa scff-imaging/imaging-types.h
+/// @sa scff_imaging::RotateDirection
+enum RotateDirection {
+  /// @brief 回転なし
+  kNoRotate = 0,
+  /// @brief 時計回り90度
+  k90Degrees,
+  /// @brief 時計回り180度
+  k180Degrees,
+  /// @brief 時計回り270度
+  k270Degrees
+};
+
 //---------------------------------------------------------------------
 
 // アラインメントをコンパイラに変えられないように
@@ -187,6 +201,9 @@ struct LayoutParameter {
   int8_t stretch;
   /// @brief アスペクト比の保持
   int8_t keep_aspect_ratio;
+  /// @brief 回転方向
+  /// @attention RotateDirectionを操作に使うこと
+  int32_t rotate_direction;
 };
 
 /// @brief 共有メモリ(Message)に格納する構造体

@@ -36,7 +36,7 @@ class ScreenCapture : public Processor<void, AVPictureWithFillImage> {
   /// @brief コンストラクタ
   ScreenCapture(
       int size,
-      ScreenCaptureParameter parameter[kMaxMultiProcessorSize]);
+      ScreenCaptureParameter parameter[kMaxProcessorSize]);
   /// @brief デストラクタ
   ~ScreenCapture();
 
@@ -74,23 +74,23 @@ class ScreenCapture : public Processor<void, AVPictureWithFillImage> {
   // Image
   //-------------------------------------------------------------------
   /// @brief BitBlt用DDB
-  WindowsDDBImage image_for_bitblt_[kMaxMultiProcessorSize];
+  WindowsDDBImage image_for_bitblt_[kMaxProcessorSize];
   //-------------------------------------------------------------------
 
   /// @brief BitBlt用DDBのデバイスコンテキスト
-  HDC dc_for_bitblt_[kMaxMultiProcessorSize];
+  HDC dc_for_bitblt_[kMaxProcessorSize];
   /// @brief GetDIBits用BITMAPINFO
-  BITMAPINFO info_for_getdibits_[kMaxMultiProcessorSize];
+  BITMAPINFO info_for_getdibits_[kMaxProcessorSize];
 
   /// @brief Init呼び出し時のウィンドウの幅
-  int window_width_[kMaxMultiProcessorSize];
+  int window_width_[kMaxProcessorSize];
   /// @brief Init呼び出し時のウィンドウの高さ
-  int window_height_[kMaxMultiProcessorSize];
+  int window_height_[kMaxProcessorSize];
   /// @brief BitBltに渡すラスターオペレーションコード
-  DWORD raster_operation_[kMaxMultiProcessorSize];
+  DWORD raster_operation_[kMaxProcessorSize];
 
   /// @brief スクリーンキャプチャパラメータ
-  ScreenCaptureParameter parameter_[kMaxMultiProcessorSize];
+  ScreenCaptureParameter parameter_[kMaxProcessorSize];
 };
 }   // namespace imaging
 

@@ -31,8 +31,8 @@
 
 namespace imaging {
 
-/// @brief MultiProcessor
-const int kMaxMultiProcessorSize = 8;
+/// @brief ProcessorのInput/Outputに設定できるImageの最大数
+const int kMaxProcessorSize = 8;
 
 //---------------------------------------------------------------------
 

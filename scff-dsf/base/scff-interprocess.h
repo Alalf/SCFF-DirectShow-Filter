@@ -55,10 +55,13 @@ static const char kSCFFMessageNamePrefix[] = "scff-v0-message-";
 /// @brief SCFFMessageの保護用Mutex名の接頭辞
 static const char kSCFFMessageMutexNamePrefix[] = "mutex-scff-v0-message-";
 
-//---------------------------------------------------------------------
+/// @brief 共有メモリの接頭辞: SCFFの動作状態を格納する
+static const char kSCFFInformationNamePrefix[] = "scff-v0-monitoring-info-";
 
-/// @brief プロセス名(BaseName)の最大の長さ
-static const int kSCFFMaxProcessNameLength = 32;
+/// @brief SCFFInformationの保護用Mutex名の接頭辞
+static const char kSCFFInformationMutexNamePrefix[] = "mutex-scff-v0-monitor-";
+
+//---------------------------------------------------------------------
 
 /// @brief SCFFDirectoryに格納されるSCFFEntryの最大の数
 static const int kSCFFMaxEntry = 8;
@@ -115,6 +118,31 @@ enum SCFFSWScaleFlags {
   kSCFFLanczos      = 0x200,
   /// @brief natural bicubic spline
   kSCFFSpline       = 0x400
+};
+
+/// @brief エラーコードを表す定数(from imaging-types.h)
+/// @sa imaging::ErrorCode
+enum SCFFErrorCode {
+  /// @brief エラーはない
+  kSCFFNoError = 0,
+  /// @brief 初期化されていない
+  kSCFFUninitialziedError,
+  /// @brief 対応してないType
+  kSCFFImageTypeError,
+  /// @brief メモリの確保に失敗した
+  kSCFFOutOfMemoryError,
+  /// @brief 一回しか初期化・生成は許されていない
+  kSCFFMultipleCreateError,
+  /// @brief 対応してないPixelFormat
+  kSCFFPixelFormatError,
+  /// @brief 不正なウィンドウハンドル
+  kSCFFInvalidWindowError,
+  /// @brief クリッピング領域が不正
+  kSCFFInvalidClippingRegionError,
+  /// @brief キャプチャ領域が動作中に不正になった
+  kSCFFInvalidCaptureRegionError,
+  /// @brief 取り込み時に画面の色深度が32bitではなかった
+  kSCFFNot32bitColorError
 };
 
 //---------------------------------------------------------------------
@@ -197,6 +225,18 @@ struct SCFFMessage {
   SCFFLayoutParameter
       layout_parameters[kSCFFMaxComplexLayoutElements];
 };
+
+/// @brief 共有メモリ(SCFFInformation)に格納する構造体
+struct SCFFInformation {
+  /// @brief engineのエラーコード
+  /// @attention SCFFErrorCodeを操作に使うこと
+  int32_t engine_error_code;
+  /// @brief engine.layout_のエラーコード
+  /// @attention SCFFErrorCodeを操作に使うこと
+  int32_t layout_error_code;
+  /// @brief 1秒間あたりの処理時間(Sec)
+  double process_time;
+};
 #pragma pack(pop)
 
 //---------------------------------------------------------------------
@@ -219,6 +259,11 @@ class SCFFInterprocess {
   /// @brief SCFFMessageの初期化が成功したか
   bool IsMessageInitialized();
 
+  /// @brief SCFFInformation初期化
+  bool InitMonitor(uint32_t process_id);
+  /// @brief SCFFInformationの初期化が成功したか
+  bool IsMonitorInitialized();
+
   //-------------------------------------------------------------------
   // for SCFF DirectShow Filter
   //-------------------------------------------------------------------
@@ -228,18 +273,24 @@ class SCFFInterprocess {
   bool RemoveEntry();
   /// @brief メッセージを受け取る
   bool ReceiveMessage(SCFFMessage *message);
+  /// @brief モニタリング情報を更新する
+  bool UpdateInformation(const SCFFInformation &information);
   //-------------------------------------------------------------------
 
   /// @brief ディレクトリを取得する
   bool GetDirectory(SCFFDirectory *directory);
   /// @brief メッセージを作成する
   bool SendMessage(const SCFFMessage &message);
+  /// @brief モニタリング情報を取得する
+  bool CheckInformation(SCFFInformation &information);
 
  private:
   /// @brief SCFFDirectory解放
   void ReleaseDirectory();
   /// @brief SCFFMessage解放
   void ReleaseMessage();
+  /// @brief SCFFInformation解放
+  void ReleaseInformation();
 
   /// @brief 共有メモリ: SCFFDirectory
   HANDLE scff_directory_;
@@ -257,6 +308,13 @@ class SCFFInterprocess {
   LPVOID view_of_scff_message_;
   /// @brief Mutex: SCFFMessage
   HANDLE mutex_scff_message_;
+
+  /// @brief 共有メモリ: SCFFInformation
+  HANDLE scff_information_;
+  /// @brief ビュー: SCFFInformation
+  LPVOID view_of_scff_information_;
+  /// @brief Mutex: SCFFInformation
+  HANDLE mutex_scff_information_;
 };
 
 #endif  // SCFF_DSF_BASE_SCFF_INTERPROCESS_H_

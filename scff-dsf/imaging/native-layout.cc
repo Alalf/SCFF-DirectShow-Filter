@@ -144,7 +144,7 @@ ErrorCode NativeLayout::Init() {
   // Processor
   //-------------------------------------------------------------------
   // スクリーンキャプチャ
-  ScreenCaptureParameter parameter_array[kMaxMultiProcessorSize];
+  ScreenCaptureParameter parameter_array[kMaxProcessorSize];
   parameter_array[0] = parameter_;
   // NativeLayoutなのでsize=1
   ScreenCapture *screen_capture = new ScreenCapture(1, parameter_array);

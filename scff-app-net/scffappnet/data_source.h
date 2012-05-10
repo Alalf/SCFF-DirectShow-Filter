@@ -45,8 +45,21 @@ ref class ManagedSCFFEntry {
   }
   property String^ Info {
     String^ get() {
+      String^ pixel_format_string;
+      switch (SamplePixelFormat) {
+      case kSCFFI420:
+        pixel_format_string = "I420";
+        break;
+      case kSCFFUYVY:
+        pixel_format_string = "UYVY";
+        break;
+      case kSCFFRGB0:
+        pixel_format_string = "RGB0";
+        break;
+      }
+
       return "[" + ProcessID +"] " + ProcessName +
-             " (" + SampleWidth + "x" + SampleHeight +
+             " (" + pixel_format_string + " " + SampleWidth + "x" + SampleHeight +
              " " + FPS.ToString("F0") + "fps)";
     }
   }
@@ -68,7 +81,7 @@ ref class ManagedSCFFEntry {
       try {
         value_ptr = Marshal::StringToHGlobalAnsi(value);
         char* valur_char_ptr = static_cast<char*>(value_ptr.ToPointer());
-        strcpy_s(scff_entry_->process_name, kSCFFMaxProcessNameLength, valur_char_ptr);
+        strcpy_s(scff_entry_->process_name, MAX_PATH, valur_char_ptr);
       }
       finally {
         Marshal::FreeHGlobal(value_ptr);

@@ -140,9 +140,9 @@ class Processor {
   const int size_;
 
   /// @brief 設定済みの入力
-  InputImageType *input_image_[kMaxMultiProcessorSize];
+  InputImageType *input_image_[kMaxProcessorSize];
   /// @brief 設定済みの出力
-  OutputImageType *output_image_[kMaxMultiProcessorSize];
+  OutputImageType *output_image_[kMaxProcessorSize];
 };
 }   // namespace imaging
 

@@ -33,13 +33,13 @@ namespace imaging {
 // コンストラクタ
 ScreenCapture::ScreenCapture(
     int size,
-    ScreenCaptureParameter parameter[kMaxMultiProcessorSize])
+    ScreenCaptureParameter parameter[kMaxProcessorSize])
     : Processor<void, AVPictureWithFillImage>(size) {
   MyDbgLog((LOG_MEMORY, kDbgNewDelete,
             TEXT("ScreenCapture: NEW(%d)"),
             size));
   // 配列の初期化
-  for (int i = 0; i < kMaxMultiProcessorSize; i++) {
+  for (int i = 0; i < kMaxProcessorSize; i++) {
     parameter_[i] = parameter[i];
     dc_for_bitblt_[i] = NULL;
     window_width_[i] = -1;    // ありえない値
@@ -57,7 +57,7 @@ ScreenCapture::~ScreenCapture() {
           TEXT("ScreenCapture: DELETE")));
   // 管理しているインスタンスをすべて破棄
   // 破棄はプロセッサ→イメージの順
-  for (int i = 0; i < kMaxMultiProcessorSize; i++) {
+  for (int i = 0; i < kMaxProcessorSize; i++) {
     if (dc_for_bitblt_[i] != NULL) {
       DeleteDC(dc_for_bitblt_[i]);
       dc_for_bitblt_[i] = NULL;

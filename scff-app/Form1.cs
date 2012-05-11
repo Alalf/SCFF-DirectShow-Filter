@@ -26,11 +26,31 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Collections;
+using System.Runtime.InteropServices;
 
 namespace scff_app
 {
     public partial class Form1 : Form
     {
+        [DllImport("kernel32")]
+        private static extern bool GetVersionEx(ref OSVERSIONINFO osvi);
+        [StructLayout(LayoutKind.Sequential)]
+        class OSVERSIONINFO
+        {
+            public uint dwOSVersionInfoSize;
+            public uint dwMajorVersion;
+            public uint dwMinorVersion;
+            public uint dwBuildNumber;
+            public uint dwPlatformId;
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
+            public string szCSDVersion;
+            public Int16 wServicePackMajor;
+            public Int16 wServicePackMinor;
+            public Int16 wSuiteMask;
+            public Byte wProductType;
+            public Byte wReserved;
+        }
+
         public Form1()
         {
             InitializeComponent();
@@ -40,14 +60,10 @@ namespace scff_app
             interprocess_ = 0;
 
             // DWMAPI.DLLが利用可能かどうか調べる
-            /*
-  OSVERSIONINFO os_info;
-  os_info.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
-  GetVersionEx(&os_info);
-  if (os_info.dwPlatformId == 2 && os_info.dwMajorVersion >= 6) {
-    can_use_dwmapi_dll_ = true;
-  }
-             */
+            if (System.Environment.OSVersion.Platform == PlatformID.Win32NT && System.Environment.OSVersion.Version.Major >= 6)
+            {
+                can_use_dwmapi_dll_ = true;
+            }
 
             /*
   // プロセス間通信に必要なオブジェクトの生成
@@ -395,12 +411,73 @@ namespace scff_app
 
         //-------------------------------------------------------------------
 
+        [DllImport("dwmapi.dll")]
+        private static extern int DwmIsCompositionEnabled(out bool enabled);
+        [DllImport("dwmapi.dll")]
+        private static extern int DwmEnableComposition(uint uCompositionAction);
+        const int DWM_EC_DISABLECOMPOSITION = 0;
+        const int DWM_EC_ENABLECOMPOSITION = 1;
         /// Dwmapi.dllを利用してAeroをOffに
-        private void DWMAPIOff() { throw new NotImplementedException(); }
+        private void DWMAPIOff()
+        {
+            if (!can_use_dwmapi_dll_)
+            {
+                // dwmapi.dllを利用できなければ何もしない
+                was_dwm_enabled_on_start_ = false;
+                return;
+            }
+
+            /// todo(Alalf) LoadLibraryで置き換える
+
+            bool was_dwm_enabled_on_start;
+            DwmIsCompositionEnabled(out was_dwm_enabled_on_start);
+            if (was_dwm_enabled_on_start)
+            {
+                DwmEnableComposition(DWM_EC_DISABLECOMPOSITION);
+            }
+            else
+            {
+            }
+            aero_on_item.Checked = false;
+            was_dwm_enabled_on_start_ = was_dwm_enabled_on_start == true;
+        }
         /// 強制的にAeroのOn/Offを切り替える
-        private void DWMAPIFlip() { throw new NotImplementedException(); }
+        private void DWMAPIFlip()
+        {
+            if (!can_use_dwmapi_dll_)
+            {
+                // dwmapi.dllを利用できなければ何もしない
+                return;
+            }
+
+            /// @todo(me) LoadLibraryで置き換える
+
+            if (aero_on_item.Checked)
+            {
+                DwmEnableComposition(DWM_EC_DISABLECOMPOSITION);
+            }
+            else
+            {
+                DwmEnableComposition(DWM_EC_ENABLECOMPOSITION);
+            }
+            aero_on_item.Checked = !(aero_on_item.Checked);
+        }
         /// AeroをOffにしていたらOnに戻す
-        private void DWMAPIRestore() { throw new NotImplementedException(); }
+        private void DWMAPIRestore()
+        {
+            if (!can_use_dwmapi_dll_)
+            {
+                // dwmapi.dllを利用できなければ何もしない
+                return;
+            }
+
+            /// @todo(me) LoadLibraryで置き換える
+
+            if (was_dwm_enabled_on_start_)
+            {
+                DwmEnableComposition(DWM_EC_ENABLECOMPOSITION);
+            }
+        }
         /// Dwmapi.dllが利用可能かどうか
         private bool can_use_dwmapi_dll_;
         /// Aeroが起動時にONになっていたかどうか
@@ -538,12 +615,12 @@ namespace scff_app
         private void area_clipping_width_ValueChanged(object sender, EventArgs e)
         {
             //GetCurrentLayoutParameter().clipping_width =
-                //area_clipping_width.Value;
+            //area_clipping_width.Value;
         }
         private void area_clipping_height_ValueChanged(object sender, EventArgs e)
         {
             //GetCurrentLayoutParameter().clipping_height =
-                //area_clipping_height.Value;
+            //area_clipping_height.Value;
         }
         private void option_show_mouse_cursor_CheckedChanged(object sender, EventArgs e)
         {

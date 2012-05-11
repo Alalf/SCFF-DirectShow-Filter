@@ -27,6 +27,7 @@
 #include <Windows.h>
 #include <cstdint>
 
+/// @brief SCFFのプロセス間通信モジュール
 namespace scff_interprocess {
 
 //=====================================================================
@@ -63,6 +64,7 @@ static const char kMessageMutexNamePrefix[] = "mutex-scff-v0-message-";
 static const int kMaxEntry = 8;
 
 /// @brief ComplexLayout利用時の最大の要素数
+/// @sa imaging::kMaxProcessorSize
 static const int kMaxComplexLayoutElements = 8;
 
 //---------------------------------------------------------------------
@@ -74,7 +76,6 @@ enum LayoutType {
   /// @brief 取り込み範囲1個で、境界は出力に強制的に合わせられる
   kNativeLayout,
   /// @brief 取り込み範囲が複数ある
-  /// @warning NOT IMPLEMENTED!
   kComplexLayout
 };
 
@@ -147,7 +148,7 @@ struct Entry {
   /// @brief SCFF DSFのDLLが使われれているプロセスID
   uint32_t process_id;
   /// @brief SCFF DSFのDLLが使われているプロセス名
-  /// @warning 長さが制限されているので注意！
+  /// @warning 長さが260バイトに制限されているので注意！
   char process_name[MAX_PATH];
   /// @brief サンプルの出力width
   int32_t sample_width;

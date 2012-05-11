@@ -57,7 +57,9 @@ enum ErrorCode {
   /// @brief キャプチャ領域が動作中に不正になった
   kInvalidCaptureRegionError,
   /// @brief 取り込み時に画面の色深度が32bitではなかった
-  kNot32bitColorError
+  kNot32bitColorError,
+  /// @brief 複合レイアウトに対応していないピクセルフォーマット
+  kComplexLayoutInvalidPixelFormatError,
 };
 
 //---------------------------------------------------------------------

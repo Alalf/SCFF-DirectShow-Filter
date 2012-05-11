@@ -36,11 +36,6 @@ Padding::Padding(int padding_left, int padding_right,
       padding_right_(padding_right),      // ありえない値
       padding_top_(padding_top),          // ありえない値
       padding_bottom_(padding_bottom) {   // ありえない値
-  // 配列の初期化
-  rgba_padding_color_[0] = 0;
-  rgba_padding_color_[1] = 0;
-  rgba_padding_color_[2] = 0;
-  rgba_padding_color_[3] = 0;
   // 明示的に初期化していない
   // draw_context_
   // padding_color_
@@ -73,20 +68,18 @@ bool Padding::CanUsePadding() const {
 ErrorCode Padding::Init() {
   ASSERT(GetInputImage()->pixel_format() == GetOutputImage()->pixel_format());
 
-  // パディング用のコンテキスト・カラーの初期化
+  // パディング用のコンテキストの初期化
   const int error_init =
       ff_draw_init(&draw_context_,
                    GetOutputImage()->avpicture_pixel_format(),
                    0);
   ASSERT(error_init == 0);
 
-  rgba_padding_color_[0] = 0;
-  rgba_padding_color_[1] = 0;
-  rgba_padding_color_[2] = 0;
-  rgba_padding_color_[3] = 0;
+  // パディング用のカラーを真っ黒に設定
+  uint8_t rgba_padding_color[4] = {0};
   ff_draw_color(&draw_context_,
                 &padding_color_,
-                rgba_padding_color_);
+                rgba_padding_color);
 
   return InitDone();
 }

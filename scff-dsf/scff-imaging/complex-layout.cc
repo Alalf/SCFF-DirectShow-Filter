@@ -34,19 +34,25 @@ namespace scff_imaging {
 //=====================================================================
 
 // コンストラクタ
-ComplexLayout::ComplexLayout(const LayoutParameter &parameter)
+ComplexLayout::ComplexLayout(int element_count, LayoutParameter parameter[kMaxProcessorSize])
     : Processor<void, AVPictureImage>(),
-      parameter_(parameter),
-      screen_capture_(0),   // NULL
-      scale_(0),            // NULL
-      padding_(0) {         // NULL
+      element_count_(element_count),
+      screen_capture_(0) {    // NULL
   MyDbgLog((LOG_MEMORY, kDbgNewDelete,
-          TEXT("ComplexLayout: NEW(%dx%d)"),
-          parameter_.clipping_width,
-          parameter_.clipping_height));
+          TEXT("ComplexLayout: NEW(%d)"),
+          element_count));
+  // 配列の初期化
+  for (int i = 0; i < kMaxProcessorSize; i++) {
+    parameter_[i] = parameter[i];
+    scale_[i] = 0;        // NULL
+    element_x_[i] = -1;    // ありえない値
+    element_y_[i] = -1;    // ありえない値
+  }
   // 明示的に初期化していない
-  // captured_image_
-  // converted_image_
+  // captured_image_[kMaxProcessorSize]
+  // converted_image_[kMaxProcessorSize]
+  // draw_context_
+  // background_color_
 }
 
 // デストラクタ
@@ -58,25 +64,83 @@ ComplexLayout::~ComplexLayout() {
   if (screen_capture_ != 0) {
     delete screen_capture_;
   }
-  if (scale_ != 0) {  // NULL
-    delete scale_;
-  }
-  if (padding_ != 0) {  // NULL
-    delete padding_;
+  for (int i = 0; i < kMaxProcessorSize; i++ ) {
+    if (scale_[i] != 0) {  // NULL
+      delete scale_[i];
+    }
   }
 }
 
-// 設定されたImageはPadding可能か？
-bool ComplexLayout::CanUsePadding() const {
-  /// @warning 2012/05/08現在drawutilsはPlaner Formatにしか対応していない
-  switch (GetOutputImage()->pixel_format()) {
-  case kI420:
-  case kRGB0:
-    return true;
-  case kUYVY:
-  default:
-    return false;
+// インデックスを指定して初期化
+ErrorCode ComplexLayout::InitByIndex(int index) {
+  ASSERT(0 <= index && index < element_count_);
+
+  // 仮想パディングサイズの計算
+  int virtual_padding_top = 0;
+  int virtual_padding_bottom = 0;
+  int virtual_padding_left = 0;
+  int virtual_padding_right = 0;
+  const bool no_error = Utilities::CalculatePaddingSize(
+      parameter_[index].bound_width,
+      parameter_[index].bound_height,
+      parameter_[index].clipping_width,
+      parameter_[index].clipping_height,
+      parameter_[index].stretch,
+      parameter_[index].keep_aspect_ratio,
+      &virtual_padding_top, &virtual_padding_bottom,
+      &virtual_padding_left, &virtual_padding_right);
+  ASSERT(no_error);
+
+  // 描画する原点の座標を計算
+  element_x_[index] = parameter_[index].bound_x + virtual_padding_left;
+  element_y_[index] = parameter_[index].bound_y + virtual_padding_top;
+
+  // パディング分だけサイズを小さくする
+  const int element_width =
+      parameter_[index].bound_width -
+          (virtual_padding_left + virtual_padding_right);
+  const int element_height =
+      parameter_[index].bound_height -
+          (virtual_padding_top + virtual_padding_bottom);
+
+  //-------------------------------------------------------------------
+  // 初期化の順番はイメージ→プロセッサの順
+  //-------------------------------------------------------------------
+  // Image
+  //-------------------------------------------------------------------
+  // ScreenCaptureから取得した変換処理前のイメージ
+  const ErrorCode error_captured_image =
+      captured_image_[index].Create(kRGB0,
+                                    parameter_[index].clipping_width,
+                                    parameter_[index].clipping_height);
+  if (error_captured_image != kNoError) {
+    return error_captured_image;
   }
+
+  // SWScaleで拡大縮小ピクセルフォーマット変換を行った後のイメージ
+  const ErrorCode error_converted_image =
+        converted_image_[index].Create(GetOutputImage()->pixel_format(),
+                                       element_width,
+                                       element_height);
+  if (error_converted_image != kNoError) {
+    return error_converted_image;
+  }
+  //-------------------------------------------------------------------
+  // Processor
+  //-------------------------------------------------------------------
+  // 拡大縮小ピクセルフォーマット変換
+  Scale *scale = new Scale(parameter_[index].sws_flags);
+  scale->SetInputImage(&(captured_image_[index]));
+  scale->SetOutputImage(&(converted_image_[index]));
+  const ErrorCode error_scale_init = scale->Init();
+  if (error_scale_init != kNoError) {
+    delete scale;
+    return error_scale_init;
+  }
+  scale_[index] = scale;
+  //-------------------------------------------------------------------
+
+  return kNoError;
 }
 
 //-------------------------------------------------------------------
@@ -86,104 +150,48 @@ ErrorCode ComplexLayout::Init() {
   MyDbgLog((LOG_TRACE, kDbgImportant,
           TEXT("ComplexLayout: Init")));
 
-  // あらかじめイメージのサイズを計算しておく
-  const int captured_width = parameter_.clipping_width;
-  const int captured_height = parameter_.clipping_height;
-  int converted_width = GetOutputImage()->width();
-  int converted_height = GetOutputImage()->height();
-  int padding_top = 0;
-  int padding_bottom = 0;
-  int padding_left = 0;
-  int padding_right = 0;
-
-  if (CanUsePadding()) {
-    // パディングサイズの計算
-    const bool no_error = Utilities::CalculatePaddingSize(
-        GetOutputImage()->width(),
-        GetOutputImage()->height(),
-        captured_width,
-        captured_height,
-        parameter_.stretch,
-        parameter_.keep_aspect_ratio,
-        &padding_top, &padding_bottom,
-        &padding_left, &padding_right);
-    ASSERT(no_error);
-
-    // パディング分だけサイズを小さくする
-    converted_width -= padding_left + padding_right;
-    converted_height -= padding_top + padding_bottom;
+  /// @warning ComplexLayoutはUYVYには対応していない
+  if (GetOutputImage()->pixel_format() == kUYVY) {
+    return ErrorOccured(kComplexLayoutInvalidPixelFormatError);
   }
 
-  //-------------------------------------------------------------------
-  // 初期化の順番はイメージ→プロセッサの順
-  //-------------------------------------------------------------------
-  // Image
-  //-------------------------------------------------------------------
-  // GetDIBits用
-  const ErrorCode error_captured_image =
-      captured_image_.Create(kRGB0,
-                             captured_width,
-                             captured_height);
-  if (error_captured_image != kNoError) {
-    return ErrorOccured(error_captured_image);
-  }
-
-  // 変換後パディング用
-  if (CanUsePadding()) {
-    const ErrorCode error_converted_image =
-        converted_image_.Create(GetOutputImage()->pixel_format(),
-                                converted_width,
-                                converted_height);
-    if (error_converted_image != kNoError) {
-      return ErrorOccured(error_converted_image);
+  // 要素を初期化
+  for (int i = 0; i < element_count_; i++) {
+    const ErrorCode error_element = InitByIndex(i);
+    if (error_element != kNoError) {
+      // 一つでも失敗したらエラー扱い
+      return ErrorOccured(error_element);
     }
   }
+
   //-------------------------------------------------------------------
   // Processor
   //-------------------------------------------------------------------
   // スクリーンキャプチャ
-  LayoutParameter parameter_array[kMaxProcessorSize];
-  parameter_array[0] = parameter_;
-  // ComplexLayoutなのでsize=1
-  ScreenCapture *screen_capture = new ScreenCapture(1, parameter_array);
-  screen_capture->SetOutputImage(&captured_image_);
+  ScreenCapture *screen_capture = new ScreenCapture(element_count_, parameter_);
+  for (int i = 0; i < element_count_; i++) {
+    screen_capture->SetOutputImage(&(captured_image_[i]),i);
+  }
   const ErrorCode error_screen_capture = screen_capture->Init();
   if (error_screen_capture != kNoError) {
     delete screen_capture;
     return ErrorOccured(error_screen_capture);
   }
   screen_capture_ = screen_capture;
-
-  // 拡大縮小ピクセルフォーマット変換
-  Scale *scale = new Scale(parameter_.sws_flags);
-  scale->SetInputImage(&captured_image_);
-  if (CanUsePadding()) {
-    // パディング可能ならバッファをはさむ
-    scale->SetOutputImage(&converted_image_);
-  } else {
-    scale->SetOutputImage(GetOutputImage());
-  }
-  const ErrorCode error_scale_init = scale->Init();
-  if (error_scale_init != kNoError) {
-    delete scale;
-    return ErrorOccured(error_scale_init);
-  }
-  scale_ = scale;
-
-  // パディング
-  if (CanUsePadding()) {
-    Padding *padding =
-        new Padding(padding_left, padding_right, padding_top, padding_bottom);
-    padding->SetInputImage(&converted_image_);
-    padding->SetOutputImage(GetOutputImage());
-    const ErrorCode error_padding_init = padding->Init();
-    if (error_padding_init != kNoError) {
-      delete padding;
-      return ErrorOccured(error_padding_init);
-    }
-    padding_ = padding;
-  }
   //-------------------------------------------------------------------
+
+  // 描画用コンテキストの初期化
+  const int error_init =
+      ff_draw_init(&draw_context_,
+                   GetOutputImage()->avpicture_pixel_format(),
+                   0);
+  ASSERT(error_init == 0);
+
+  // 真っ黒に設定
+  uint8_t rgba_background_color[4] = {0};
+  ff_draw_color(&draw_context_,
+                &background_color_,
+                rgba_background_color);
 
   return InitDone();
 }
@@ -195,24 +203,40 @@ ErrorCode ComplexLayout::Run() {
     return GetCurrentError();
   }
 
-  // スクリーンキャプチャ
+  // まとめてスクリーンキャプチャ
   const ErrorCode error_screen_capture = screen_capture_->Run();
   if (error_screen_capture != kNoError) {
     return ErrorOccured(error_screen_capture);
   }
 
   // Scaleを利用して変換
-  const ErrorCode error_scale = scale_->Run();
-  if (error_scale != kNoError) {
-    return ErrorOccured(error_scale);
-  }
-
-  // Paddingを利用してパディングを行う
-  if (CanUsePadding()) {
-    const ErrorCode error_padding = padding_->Run();
-    if (error_padding != kNoError) {
-      return ErrorOccured(error_padding);
+  // すこしでもCacheヒット率をあげるべく逆順に
+  for (int i = element_count_ - 1; i >= 0; i--) {
+    const ErrorCode error_scale = scale_[i]->Run();
+    if (error_scale != kNoError) {
+      return ErrorOccured(error_scale);
     }
+  }
+  
+  // 背景描画
+  ff_fill_rectangle(&draw_context_, &background_color_,
+                    GetOutputImage()->avpicture()->data,
+                    GetOutputImage()->avpicture()->linesize,
+                    0, 0,
+                    GetOutputImage()->width(),
+                    GetOutputImage()->height());
+
+  // 要素を順番に描画
+  for (int i = 0; i < element_count_; i++) {
+    ff_copy_rectangle2(&draw_context_,
+                       GetOutputImage()->avpicture()->data,
+                       GetOutputImage()->avpicture()->linesize,
+                       converted_image_[i].avpicture()->data,
+                       converted_image_[i].avpicture()->linesize,
+                       element_x_[i], element_y_[i],
+                       0, 0,
+                       converted_image_[i].width(),
+                       converted_image_[i].height());
   }
 
   // エラー発生なし

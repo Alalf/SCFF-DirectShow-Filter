@@ -61,7 +61,7 @@ SplashScreen::~SplashScreen() {
   }
 }
 
-// 設定されたImageはPadding可能か？
+// 設定されたOutputImageはPadding可能か？
 bool SplashScreen::CanUsePadding() const {
   /// @warning 2012/05/08現在drawutilsはPlaner Formatにしか対応していない
   switch (GetOutputImage()->pixel_format()) {

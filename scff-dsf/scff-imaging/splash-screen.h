@@ -51,7 +51,7 @@ class SplashScreen : public Processor<void, AVPictureImage> {
   // コピー＆代入禁止
   DISALLOW_COPY_AND_ASSIGN(SplashScreen);
 
-  /// @brief 設定されたImageはPadding可能か？
+  /// @brief 設定されたOutputImageはPadding可能か？
   bool CanUsePadding() const;
 
   //-------------------------------------------------------------------

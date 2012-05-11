@@ -56,8 +56,6 @@ class Padding : public Processor<AVPictureImage, AVPictureImage> {
   FFDrawContext draw_context_;
   /// @brief 枠描画用カラー
   FFDrawColor padding_color_;
-  /// @brief 枠描画用カラー(RGBA)
-  uint8_t rgba_padding_color_[4];
 
   /// @brief パディング(left)
   const int padding_left_;

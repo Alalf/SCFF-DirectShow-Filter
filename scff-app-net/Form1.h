@@ -537,6 +537,7 @@ private: System::Windows::Forms::NumericUpDown^  area_clipping_x;
     this->layout_status->Name = L"layout_status";
     this->layout_status->Size = System::Drawing::Size(71, 20);
     this->layout_status->Text = L"Layout";
+    this->layout_status->ButtonClick += gcnew System::EventHandler(this, &Form1::layout_status_ButtonClick);
     // 
     // layout2_item
     // 
@@ -544,7 +545,7 @@ private: System::Windows::Forms::NumericUpDown^  area_clipping_x;
       this->layout2_remove});
     this->layout2_item->Enabled = false;
     this->layout2_item->Name = L"layout2_item";
-    this->layout2_item->Size = System::Drawing::Size(114, 22);
+    this->layout2_item->Size = System::Drawing::Size(152, 22);
     this->layout2_item->Text = L"Layout 2";
     // 
     // layout2_add
@@ -568,7 +569,7 @@ private: System::Windows::Forms::NumericUpDown^  area_clipping_x;
     this->layout1_item->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {this->layout1_add, 
       this->layout1_remove});
     this->layout1_item->Name = L"layout1_item";
-    this->layout1_item->Size = System::Drawing::Size(114, 22);
+    this->layout1_item->Size = System::Drawing::Size(152, 22);
     this->layout1_item->Text = L"Layout 1";
     // 
     // layout1_add
@@ -589,7 +590,7 @@ private: System::Windows::Forms::NumericUpDown^  area_clipping_x;
     // 
     this->status_status->Name = L"status_status";
     this->status_status->RightToLeft = System::Windows::Forms::RightToLeft::No;
-    this->status_status->Size = System::Drawing::Size(206, 17);
+    this->status_status->Size = System::Drawing::Size(175, 17);
     this->status_status->Spring = true;
     this->status_status->Text = L"Error Code: ";
     this->status_status->TextAlign = System::Drawing::ContentAlignment::MiddleRight;
@@ -864,5 +865,6 @@ private: System::Void option_thread_num_ValueChanged(System::Object^  sender, Sy
 private: System::Void option_resize_method_combo_SelectedIndexChanged(System::Object^  sender, System::EventArgs^  e);
 private: System::Void target_area_select_Click(System::Object^  sender, System::EventArgs^  e);
 private: System::Void Form1_Shown(System::Object^  sender, System::EventArgs^  e);
+private: System::Void layout_status_ButtonClick(System::Object^  sender, System::EventArgs^  e);
 };
 }   // namepspace

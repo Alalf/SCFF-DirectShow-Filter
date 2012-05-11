@@ -41,6 +41,16 @@ System::Void Form1::aero_on_item_Click(System::Object^  sender, System::EventArg
 }
 
 //-------------------------------------------------------------------
+// Layout
+//-------------------------------------------------------------------
+
+System::Void Form1::layout_status_ButtonClick(System::Object^  sender, System::EventArgs^  e) {
+  if (ValidateParameters()) {
+    SendComplexLayoutRequest();
+  }
+}
+
+//-------------------------------------------------------------------
 // OK/Cancel (Apply/Splash)
 //-------------------------------------------------------------------
 

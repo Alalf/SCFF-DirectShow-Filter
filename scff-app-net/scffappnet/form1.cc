@@ -213,29 +213,45 @@ void Form1::SendNativeLayoutRequest() {
 
 /// @brief 共有メモリにComplexLayoutリクエストを設定
 void Form1::SendComplexLayoutRequest() {
+  /// @todo(me) テスト中！あとで直す！
+
   // メッセージを書いて送る
   scff_interprocess::Message message;
   time_t timestamp;
   time(&timestamp);
   message.timestamp = static_cast<int64_t>(timestamp);
-  message.layout_type = scff_interprocess::kNativeLayout;
-  // 無視される
-  message.layout_element_count = 1;
-  message.layout_parameters[0].bound_x = 0;
-  message.layout_parameters[0].bound_y = 0;
-  message.layout_parameters[0].bound_width = 0;
-  message.layout_parameters[0].bound_height = 0;
-  // ここまで無視
-  message.layout_parameters[0].window = this->layout_parameter_->window;
-  message.layout_parameters[0].clipping_x = this->layout_parameter_->clipping_x;
-  message.layout_parameters[0].clipping_y = this->layout_parameter_->clipping_y;
-  message.layout_parameters[0].clipping_width = this->layout_parameter_->clipping_width;
-  message.layout_parameters[0].clipping_height = this->layout_parameter_->clipping_height;
-  message.layout_parameters[0].show_cursor = this->layout_parameter_->show_cursor;
-  message.layout_parameters[0].show_layered_window = this->layout_parameter_->show_layered_window;
-  message.layout_parameters[0].sws_flags = this->layout_parameter_->sws_flags;
-  message.layout_parameters[0].stretch = this->layout_parameter_->stretch;
-  message.layout_parameters[0].keep_aspect_ratio = this->layout_parameter_->keep_aspect_ratio;
+  message.layout_type = scff_interprocess::kComplexLayout;
+  message.layout_element_count = 2;
+  // 1個目の取り込み範囲
+  message.layout_parameters[0].bound_x = 32;
+  message.layout_parameters[0].bound_y = 32;
+  message.layout_parameters[0].bound_width = 320;
+  message.layout_parameters[0].bound_height = 240;
+  message.layout_parameters[0].window = reinterpret_cast<uint64_t>(GetDesktopWindow());
+  message.layout_parameters[0].clipping_x = 0;
+  message.layout_parameters[0].clipping_y = 0;
+  message.layout_parameters[0].clipping_width = 1000;
+  message.layout_parameters[0].clipping_height = 500;
+  message.layout_parameters[0].show_cursor = 0;
+  message.layout_parameters[0].show_layered_window = 0;
+  message.layout_parameters[0].sws_flags = scff_interprocess::kLanczos;
+  message.layout_parameters[0].stretch = 1;
+  message.layout_parameters[0].keep_aspect_ratio = 1;
+  // 2個目の取り込み範囲
+  message.layout_parameters[1].bound_x = 300;
+  message.layout_parameters[1].bound_y = 0;
+  message.layout_parameters[1].bound_width = 300;
+  message.layout_parameters[1].bound_height = 100;
+  message.layout_parameters[1].window = reinterpret_cast<uint64_t>(GetDesktopWindow());
+  message.layout_parameters[1].clipping_x = 320;
+  message.layout_parameters[1].clipping_y = 320;
+  message.layout_parameters[1].clipping_width = 200;
+  message.layout_parameters[1].clipping_height = 200;
+  message.layout_parameters[1].show_cursor = 0;
+  message.layout_parameters[1].show_layered_window = 0;
+  message.layout_parameters[1].sws_flags = scff_interprocess::kLanczos;
+  message.layout_parameters[1].stretch = 1;
+  message.layout_parameters[1].keep_aspect_ratio = 1;
 
   // 共有メモリを開いて送る
   if (this->process_combo->SelectedValue != nullptr) {

@@ -230,7 +230,7 @@ class Interprocess {
     public System.Int32 layout_element_count;
     /// @brief レイアウトパラメータの配列
     [MarshalAs(UnmanagedType.ByValArray, SizeConst = kMaxComplexLayoutElements)] 
-    LayoutParameter[] layout_parameters;
+    public LayoutParameter[] layout_parameters;
   }
 
   /// @brief Directoryのサイズ

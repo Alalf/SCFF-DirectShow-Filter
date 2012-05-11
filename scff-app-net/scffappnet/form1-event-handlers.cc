@@ -44,9 +44,25 @@ System::Void Form1::aero_on_item_Click(System::Object^  sender, System::EventArg
 // Layout
 //-------------------------------------------------------------------
 
-System::Void Form1::layout_status_ButtonClick(System::Object^  sender, System::EventArgs^  e) {
-  if (ValidateParameters()) {
+System::Void Form1::layout_layout_Click(System::Object^  sender, System::EventArgs^  e) {
+ if (ValidateParameters()) {
     SendComplexLayoutRequest();
+  }
+}
+
+System::Void Form1::layout_add_Click(System::Object^  sender, System::EventArgs^  e) {
+
+}
+
+System::Void Form1::layout_remove_Click(System::Object^  sender, System::EventArgs^  e) {
+
+}
+
+System::Void Form1::layout_strip_ButtonClick(System::Object^  sender, System::EventArgs^  e) {
+  if (this->Width > 300) {
+    this->Width = 300;
+  } else {
+    this->Width = 488;
   }
 }
 
@@ -163,10 +179,10 @@ System::Void Form1::target_area_select_Click(System::Object^  sender, System::Ev
   DoCaptureDesktopWindow();
   // FitをはずしてClippingをかく
   this->area_fit->Checked = false;
-  this->area_clipping_x->Value = form->clipping_x;
-  this->area_clipping_y->Value = form->clipping_y;
-  this->area_clipping_width->Value = form->clipping_width;
-  this->area_clipping_height->Value = form->clipping_height;
+  this->area_clipping_x->Value = max(form->clipping_x, this->area_clipping_x->Minimum);
+  this->area_clipping_y->Value = max(form->clipping_y, this->area_clipping_y->Minimum);
+  this->area_clipping_width->Value = min(form->clipping_width, this->area_clipping_width->Maximum - this->area_clipping_x->Value);
+  this->area_clipping_height->Value = min(form->clipping_height, this->area_clipping_height->Maximum - this->area_clipping_y->Value);
 }
 
 //-------------------------------------------------------------------

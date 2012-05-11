@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="scff-interprocess">
+      <UniqueIdentifier>{9c36466f-d5db-4b78-85ce-01606360a48f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.ico">
@@ -42,7 +45,7 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="..\scff-dsf\scff-interprocess\interprocess.cc">
-      <Filter>ソース ファイル</Filter>
+      <Filter>scff-interprocess</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -59,7 +62,7 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="..\scff-dsf\scff-interprocess\interprocess.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>scff-interprocess</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

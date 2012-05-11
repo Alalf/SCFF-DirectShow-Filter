@@ -35,8 +35,8 @@ class ScreenCapture : public Processor<void, AVPictureWithFillImage> {
  public:
   /// @brief コンストラクタ
   ScreenCapture(
-      int size,
-      LayoutParameter parameter[kMaxProcessorSize]);
+      int count,
+      const LayoutParameter (&parameter)[kMaxProcessorSize]);
   /// @brief デストラクタ
   ~ScreenCapture();
 

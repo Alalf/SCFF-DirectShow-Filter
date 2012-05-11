@@ -39,7 +39,7 @@ class Padding;
 class ComplexLayout : public Processor<void, AVPictureImage> {
  public:
   /// @brief コンストラクタ
-  ComplexLayout(int element_count, LayoutParameter parameter[kMaxProcessorSize]);
+  ComplexLayout(int element_count, const LayoutParameter (&parameter)[kMaxProcessorSize]);
   /// @brief デストラクタ
   ~ComplexLayout();
 

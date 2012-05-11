@@ -32,12 +32,12 @@ namespace scff_imaging {
 
 // コンストラクタ
 ScreenCapture::ScreenCapture(
-    int size,
-    LayoutParameter parameter[kMaxProcessorSize])
-    : Processor<void, AVPictureWithFillImage>(size) {
+    int count,
+    const LayoutParameter (&parameter)[kMaxProcessorSize])
+    : Processor<void, AVPictureWithFillImage>(count) {
   MyDbgLog((LOG_MEMORY, kDbgNewDelete,
             TEXT("ScreenCapture: NEW(%d)"),
-            size));
+            count));
   // 配列の初期化
   for (int i = 0; i < kMaxProcessorSize; i++) {
     parameter_[i] = parameter[i];

@@ -34,7 +34,7 @@ namespace scff_imaging {
 //=====================================================================
 
 // コンストラクタ
-ComplexLayout::ComplexLayout(int element_count, LayoutParameter parameter[kMaxProcessorSize])
+ComplexLayout::ComplexLayout(int element_count, const LayoutParameter (&parameter)[kMaxProcessorSize])
     : Processor<void, AVPictureImage>(),
       element_count_(element_count),
       screen_capture_(0) {    // NULL

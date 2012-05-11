@@ -52,10 +52,12 @@ class Engine : public Processor<void, AVPictureImage> {
   //-------------------------------------------------------------------
   // リクエストハンドラ
   //-------------------------------------------------------------------
-  /// @brief 現在のプロセッサを解放してスプラッシュを表示する
+  /// @brief 現在のレイアウトを解放してスプラッシュを表示する
   void DoResetLayout();
-  /// @brief 現在のプロセッサを新しいNativeLayoutに設定する
+  /// @brief 現在のレイアウトを新しいNativeLayoutに設定する
   void DoSetNativeLayout(const LayoutParameter &parameter);
+  /// @brief 現在のレイアウトを新しいComplexLayoutに設定する
+  void DoSetComplexLayout(int element_count, const LayoutParameter (&parameter)[kMaxProcessorSize]);
 
  private:
   // コピー＆代入禁止

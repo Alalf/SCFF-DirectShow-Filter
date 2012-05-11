@@ -296,13 +296,7 @@ bool Interprocess::RemoveEntry(uint32_t process_id) {
       static_cast<Directory*>(view_of_directory_);
   for (int i = 0; i < kMaxEntry; i++) {
     if (directory->entries[i].process_id == process_id) {
-      // 0クリア
-      directory->entries[i].process_id = 0;
-      directory->entries[i].process_name[0] = '\0';
-      directory->entries[i].sample_image_pixel_format = 0;
-      directory->entries[i].sample_width = 0;
-      directory->entries[i].sample_height = 0;
-      directory->entries[i].fps = 0;
+      ZeroMemory(&(directory->entries[i]), sizeof(directory->entries[i]));
       OutputDebugString(TEXT("****Interprocess: RemoveEntry SUCCESS\n"));
       break;
     }

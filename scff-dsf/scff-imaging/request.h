@@ -82,6 +82,35 @@ class SetNativeLayoutRequest : public Request {
   const LayoutParameter parameter_;
 };
 
+/// @brief リクエスト: SetComplexLayout
+class SetComplexLayoutRequest : public Request {
+ public:
+  /// @brief コンストラクタ
+  SetComplexLayoutRequest(int element_count, const LayoutParameter (&parameter)[kMaxProcessorSize])
+      : Request(),
+        element_count_(element_count) {
+    // 配列の初期化
+    for (int i = 0; i < kMaxProcessorSize; i++) {
+      parameter_[i] = parameter[i];
+    }
+  }
+  /// @brief デストラクタ
+  ~SetComplexLayoutRequest() {
+    // nop
+  }
+  /// @brief ダブルディスパッチ用
+  void SendTo(Engine *engine) const {
+    engine->DoSetComplexLayout(element_count_, parameter_);
+  }
+
+ private:
+  /// @copydoc ComplexLayout::element_count_
+  const int element_count_;
+
+  /// @copydoc ComplexLayout::parameter_
+  LayoutParameter parameter_[kMaxProcessorSize];
+};
+
 }   // namespace scff_imaging
 
 #endif  // SCFF_DSF_SCFF_IMAGING_REQUEST_H_

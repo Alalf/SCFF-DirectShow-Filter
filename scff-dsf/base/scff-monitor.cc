@@ -77,6 +77,97 @@ bool SCFFMonitor::Init(scff_imaging::ImagePixelFormat pixel_format,
 // リクエスト
 //---------------------------------------------------------------------
 
+static void MessageToLayoutParameter(
+    const scff_interprocess::Message &message,
+    int index,
+    scff_imaging::LayoutParameter *parameter) {
+  ASSERT(0 <= index && index < message.layout_element_count);
+  
+  parameter->bound_x =
+      message.layout_parameters[index].bound_x;
+  parameter->bound_y =
+      message.layout_parameters[index].bound_y;
+  parameter->bound_width =
+      message.layout_parameters[index].bound_width;
+  parameter->bound_height =
+      message.layout_parameters[index].bound_height;
+  parameter->window =
+      reinterpret_cast<HWND>(message.layout_parameters[index].window);
+  parameter->clipping_x =
+      message.layout_parameters[index].clipping_x;
+  parameter->clipping_y =
+      message.layout_parameters[index].clipping_y;
+  parameter->clipping_width =
+      message.layout_parameters[index].clipping_width;
+  parameter->clipping_height =
+      message.layout_parameters[index].clipping_height;
+  parameter->show_cursor =
+      message.layout_parameters[index].show_cursor != 0;
+  parameter->show_layered_window =
+      message.layout_parameters[index].show_layered_window != 0;
+  switch (message.layout_parameters[index].sws_flags) {
+  case scff_interprocess::kFastBilinear:
+    parameter->sws_flags = scff_imaging::kFastBilinear;
+    break;
+  case scff_interprocess::kBilinear:
+    parameter->sws_flags = scff_imaging::kBilinear;
+    break;
+  case scff_interprocess::kBicubic:
+    parameter->sws_flags = scff_imaging::kBicubic;
+    break;
+  case scff_interprocess::kX:
+    parameter->sws_flags = scff_imaging::kX;
+    break;
+  case scff_interprocess::kPoint:
+    parameter->sws_flags = scff_imaging::kPoint;
+    break;
+  case scff_interprocess::kArea:
+    parameter->sws_flags = scff_imaging::kArea;
+    break;
+  case scff_interprocess::kBicublin:
+    parameter->sws_flags = scff_imaging::kBicublin;
+    break;
+  case scff_interprocess::kGauss:
+    parameter->sws_flags = scff_imaging::kGauss;
+    break;
+  case scff_interprocess::kSinc:
+    parameter->sws_flags = scff_imaging::kSinc;
+    break;
+  case scff_interprocess::kLanczos:
+    parameter->sws_flags = scff_imaging::kLanczos;
+    break;
+  case scff_interprocess::kSpline:
+    parameter->sws_flags = scff_imaging::kSpline;
+    break;
+  default:
+    ASSERT(false);
+    parameter->sws_flags = scff_imaging::kFastBilinear;
+    break;
+  }
+  parameter->stretch =
+      message.layout_parameters[index].stretch != 0;
+  parameter->keep_aspect_ratio =
+      message.layout_parameters[index].keep_aspect_ratio != 0;
+  switch (message.layout_parameters[index].rotate_direction) {
+  case scff_interprocess::kNoRotate:
+    parameter->rotate_direction = scff_imaging::kNoRotate;
+    break;
+  case scff_interprocess::k90Degrees:
+    parameter->rotate_direction = scff_imaging::k90Degrees;
+    break;
+  case scff_interprocess::k180Degrees:
+    parameter->rotate_direction = scff_imaging::k180Degrees;
+    break;
+  case scff_interprocess::k270Degrees:
+    parameter->rotate_direction = scff_imaging::k270Degrees;
+    break;
+  default:
+    ASSERT(false);
+    parameter->rotate_direction = scff_imaging::kNoRotate;
+    break;
+  }
+}
+
 // リクエストがあるかどうか調べ、あれば実体を、なければNULLを返す
 scff_imaging::Request* SCFFMonitor::CreateRequest() {
   // 前回のCreateRequestからの経過時間(Sec)
@@ -96,8 +187,7 @@ scff_imaging::Request* SCFFMonitor::CreateRequest() {
   // メッセージを確認する
   //-------------------------------------------------------------------
 
-  // プロセスIDを取得
-  const DWORD process_id = GetCurrentProcessId();
+  // メッセージを取得(InitMessage済みなのでProcessIDを指定する必要はない)
   scff_interprocess::Message message;
   interprocess_.ReceiveMessage(&message);
 
@@ -114,11 +204,8 @@ scff_imaging::Request* SCFFMonitor::CreateRequest() {
   // タイムスタンプを進めておく
   last_message_timestamp_ = message.timestamp;
 
-  /// @todo(me) ComplexLayoutのメッセージは来ても無視する
-
   // メッセージの内容を処理する
   scff_imaging::Request *tmp_request = 0;
-  scff_imaging::LayoutParameter parameter;
 
   switch (message.layout_type) {
   case scff_interprocess::kNullLayout:
@@ -136,73 +223,9 @@ scff_imaging::Request* SCFFMonitor::CreateRequest() {
     //-----------------------------------------------------------------
     MyDbgLog((LOG_TRACE, kDbgImportant,
               TEXT("SCFFMonitor: SetNativeLayoutRequest arrived.")));
-
-    // 以下のデータは無視される
-    // message.layout_element_count
-    // message.layout_parameters[0]以外の全てのエントリ
-    // message.layout_parameters[0].bound_x
-    // message.layout_parameters[0].bound_y
-    // message.layout_parameters[0].bound_width
-    // message.layout_parameters[0].bound_height
-
-    // 取り込みパラメータを読み取る
-    parameter.window =
-        reinterpret_cast<HWND>(message.layout_parameters[0].window);
-    parameter.clipping_x =
-        message.layout_parameters[0].clipping_x;
-    parameter.clipping_y =
-        message.layout_parameters[0].clipping_y;
-    parameter.clipping_width =
-        message.layout_parameters[0].clipping_width;
-    parameter.clipping_height =
-        message.layout_parameters[0].clipping_height;
-    parameter.show_cursor =
-        message.layout_parameters[0].show_cursor != 0;
-    parameter.show_layered_window =
-        message.layout_parameters[0].show_layered_window != 0;
-    switch (message.layout_parameters[0].sws_flags) {
-    case scff_interprocess::kFastBilinear:
-      parameter.sws_flags = scff_imaging::kFastBilinear;
-      break;
-    case scff_interprocess::kBilinear:
-      parameter.sws_flags = scff_imaging::kBilinear;
-      break;
-    case scff_interprocess::kBicubic:
-      parameter.sws_flags = scff_imaging::kBicubic;
-      break;
-    case scff_interprocess::kX:
-      parameter.sws_flags = scff_imaging::kX;
-      break;
-    case scff_interprocess::kPoint:
-      parameter.sws_flags = scff_imaging::kPoint;
-      break;
-    case scff_interprocess::kArea:
-      parameter.sws_flags = scff_imaging::kArea;
-      break;
-    case scff_interprocess::kBicublin:
-      parameter.sws_flags = scff_imaging::kBicublin;
-      break;
-    case scff_interprocess::kGauss:
-      parameter.sws_flags = scff_imaging::kGauss;
-      break;
-    case scff_interprocess::kSinc:
-      parameter.sws_flags = scff_imaging::kSinc;
-      break;
-    case scff_interprocess::kLanczos:
-      parameter.sws_flags = scff_imaging::kLanczos;
-      break;
-    case scff_interprocess::kSpline:
-      parameter.sws_flags = scff_imaging::kSpline;
-      break;
-    default:
-      parameter.sws_flags = scff_imaging::kFastBilinear;
-      break;
-    }
-    parameter.stretch =
-        message.layout_parameters[0].stretch != 0;
-    parameter.keep_aspect_ratio =
-        message.layout_parameters[0].keep_aspect_ratio != 0;
-
+    // パラメータをメッセージから抽出
+    scff_imaging::LayoutParameter parameter;
+    MessageToLayoutParameter(message, 0, &parameter);
     tmp_request = new scff_imaging::SetNativeLayoutRequest(parameter);
     break;
 
@@ -211,9 +234,15 @@ scff_imaging::Request* SCFFMonitor::CreateRequest() {
     // SetComplexLayoutRequest
     //-----------------------------------------------------------------
     MyDbgLog((LOG_TRACE, kDbgImportant,
-          TEXT("SCFFMonitor: SetComplexLayoutRequest is not implemented.")));
-    ASSERT(false);
-    tmp_request = 0;  // NULL
+          TEXT("SCFFMonitor: SetComplexLayoutRequest arrived.")));
+    // パラメータをメッセージから抽出
+    scff_imaging::LayoutParameter parameters[scff_imaging::kMaxProcessorSize];
+    for (int i = 0; i < message.layout_element_count; i++) {
+      MessageToLayoutParameter(message, i, &(parameters[i]));
+    }
+    tmp_request = new scff_imaging::SetComplexLayoutRequest(
+        message.layout_element_count,
+        parameters);
     break;
   }
   return tmp_request;

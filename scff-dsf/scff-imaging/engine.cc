@@ -23,8 +23,9 @@
 
 #include "scff-imaging/debug.h"
 #include "scff-imaging/avpicture-image.h"
-#include "scff-imaging/native-layout.h"
 #include "scff-imaging/splash-screen.h"
+#include "scff-imaging/native-layout.h"
+#include "scff-imaging/complex-layout.h"
 #include "scff-imaging/request.h"
 #include "scff-imaging/utilities.h"
 
@@ -279,6 +280,26 @@ void Engine::DoSetNativeLayout(const LayoutParameter &parameter) {
   } else {
     // 成功
     layout_ = native_layout;
+    LayoutInitDone();
+  }
+}
+
+/// @brief 現在のプロセッサを新しいComplexLayoutに設定する
+void Engine::DoSetComplexLayout(int element_count, const LayoutParameter (&parameter)[kMaxProcessorSize]) {
+  // 現在のプロセッサは必要ないので削除
+  ReleaseLayout();
+
+  //-------------------------------------------------------------------
+  ComplexLayout *complex_layout = new ComplexLayout(element_count, parameter);
+  complex_layout->SetOutputImage(&front_image_);
+  const ErrorCode error_layout = complex_layout->Init();
+  if (error_layout != kNoError) {
+    // 失敗
+    delete complex_layout;
+    LayoutErrorOccured(error_layout);
+  } else {
+    // 成功
+    layout_ = complex_layout;
     LayoutInitDone();
   }
 }

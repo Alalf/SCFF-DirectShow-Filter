@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem(new System.Windows.Forms.ListViewItem.ListViewSubItem[] {
+            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem(new System.Windows.Forms.ListViewItem.ListViewSubItem[] {
             new System.Windows.Forms.ListViewItem.ListViewSubItem(null, "Layout 1"),
             new System.Windows.Forms.ListViewItem.ListViewSubItem(null, "0.0 640x480", System.Drawing.SystemColors.WindowText, System.Drawing.SystemColors.Window, new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128))))}, "Image.png");
             this.layout_layout = new System.Windows.Forms.Button();
@@ -133,6 +133,7 @@
             this.layout_layout.TabIndex = 7;
             this.layout_layout.Text = "Layout";
             this.layout_layout.UseVisualStyleBackColor = true;
+            this.layout_layout.Click += new System.EventHandler(this.layout_layout_Click);
             // 
             // main_menu
             // 
@@ -187,6 +188,7 @@
             this.aero_on_item.Name = "aero_on_item";
             this.aero_on_item.Size = new System.Drawing.Size(279, 22);
             this.aero_on_item.Text = "Force Windows Aero Enabled";
+            this.aero_on_item.Click += new System.EventHandler(this.aero_on_item_Click);
             // 
             // language_menu
             // 
@@ -204,7 +206,7 @@
             this.english_item.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.english_item.Enabled = false;
             this.english_item.Name = "english_item";
-            this.english_item.Size = new System.Drawing.Size(124, 22);
+            this.english_item.Size = new System.Drawing.Size(152, 22);
             this.english_item.Text = "English";
             // 
             // external_item
@@ -212,7 +214,7 @@
             this.external_item.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.external_item.Enabled = false;
             this.external_item.Name = "external_item";
-            this.external_item.Size = new System.Drawing.Size(124, 22);
+            this.external_item.Size = new System.Drawing.Size(152, 22);
             this.external_item.Text = "External";
             // 
             // layout_bound_height
@@ -247,6 +249,7 @@
             this.window_desktop.TabIndex = 3;
             this.window_desktop.Text = "Desktop";
             this.window_desktop.UseVisualStyleBackColor = true;
+            this.window_desktop.Click += new System.EventHandler(this.window_desktop_Click);
             // 
             // layout_bound_width
             // 
@@ -296,6 +299,8 @@
             this.window_draghere.TabIndex = 2;
             this.window_draghere.Text = "Drag here.";
             this.window_draghere.UseVisualStyleBackColor = true;
+            this.window_draghere.MouseDown += new System.Windows.Forms.MouseEventHandler(this.window_draghere_MouseDown);
+            this.window_draghere.MouseUp += new System.Windows.Forms.MouseEventHandler(this.window_draghere_MouseUp);
             // 
             // window_handle
             // 
@@ -325,6 +330,7 @@
             this.area_fit.TabIndex = 0;
             this.area_fit.Text = "Fit";
             this.area_fit.UseVisualStyleBackColor = true;
+            this.area_fit.CheckedChanged += new System.EventHandler(this.area_fit_CheckedChanged);
             // 
             // target_apply
             // 
@@ -346,6 +352,7 @@
             this.target_area_select.TabIndex = 2;
             this.target_area_select.Text = "Area Selection";
             this.target_area_select.UseVisualStyleBackColor = true;
+            this.target_area_select.Click += new System.EventHandler(this.target_area_select_Click);
             // 
             // kArea
             // 
@@ -390,6 +397,7 @@
             0,
             0,
             0});
+            this.area_clipping_height.ValueChanged += new System.EventHandler(this.area_clipping_height_ValueChanged);
             // 
             // area_clipping_width
             // 
@@ -412,6 +420,7 @@
             0,
             0,
             0});
+            this.area_clipping_width.ValueChanged += new System.EventHandler(this.area_clipping_width_ValueChanged);
             // 
             // area_clipping_y
             // 
@@ -424,6 +433,7 @@
             this.area_clipping_y.Name = "area_clipping_y";
             this.area_clipping_y.Size = new System.Drawing.Size(43, 19);
             this.area_clipping_y.TabIndex = 4;
+            this.area_clipping_y.ValueChanged += new System.EventHandler(this.area_clipping_y_ValueChanged);
             // 
             // area_clipping_x
             // 
@@ -436,6 +446,7 @@
             this.area_clipping_x.Name = "area_clipping_x";
             this.area_clipping_x.Size = new System.Drawing.Size(43, 19);
             this.area_clipping_x.TabIndex = 3;
+            this.area_clipping_x.ValueChanged += new System.EventHandler(this.area_clipping_x_ValueChanged);
             // 
             // area_add
             // 
@@ -544,6 +555,7 @@
             this.process_refresh.TabIndex = 10;
             this.process_refresh.Text = "Refresh";
             this.process_refresh.UseVisualStyleBackColor = true;
+            this.process_refresh.Click += new System.EventHandler(this.process_refresh_Click);
             // 
             // kLayoutCross
             // 
@@ -561,6 +573,7 @@
             this.process_combo.Name = "process_combo";
             this.process_combo.Size = new System.Drawing.Size(215, 20);
             this.process_combo.TabIndex = 8;
+            this.process_combo.SelectedIndexChanged += new System.EventHandler(this.process_combo_SelectedIndexChanged);
             // 
             // kLayoutSize
             // 
@@ -622,6 +635,7 @@
             this.layout_remove.Size = new System.Drawing.Size(23, 23);
             this.layout_remove.TabIndex = 6;
             this.layout_remove.UseVisualStyleBackColor = true;
+            this.layout_remove.Click += new System.EventHandler(this.layout_remove_Click);
             // 
             // layout_add
             // 
@@ -648,7 +662,7 @@
             this.layout_list.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.layout_list.HideSelection = false;
             this.layout_list.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem2});
+            listViewItem1});
             this.layout_list.LargeImageList = this.scff_icons;
             this.layout_list.Location = new System.Drawing.Point(3, 3);
             this.layout_list.MultiSelect = false;
@@ -660,6 +674,7 @@
             this.layout_list.TileSize = new System.Drawing.Size(160, 30);
             this.layout_list.UseCompatibleStateImageBehavior = false;
             this.layout_list.View = System.Windows.Forms.View.Tile;
+            this.layout_list.SelectedIndexChanged += new System.EventHandler(this.layout_list_SelectedIndexChanged);
             // 
             // option_show_mouse_cursor
             // 
@@ -669,6 +684,7 @@
             this.option_show_mouse_cursor.TabIndex = 0;
             this.option_show_mouse_cursor.Text = "Show Mouse Cursor";
             this.option_show_mouse_cursor.UseVisualStyleBackColor = true;
+            this.option_show_mouse_cursor.CheckedChanged += new System.EventHandler(this.option_show_mouse_cursor_CheckedChanged);
             // 
             // option_show_layered_window
             // 
@@ -678,6 +694,7 @@
             this.option_show_layered_window.TabIndex = 1;
             this.option_show_layered_window.Text = "Show Layered Window";
             this.option_show_layered_window.UseVisualStyleBackColor = true;
+            this.option_show_layered_window.CheckedChanged += new System.EventHandler(this.option_show_layered_window_CheckedChanged);
             // 
             // kDirectShowFilter
             // 
@@ -710,11 +727,12 @@
             this.layout_strip.Name = "layout_strip";
             this.layout_strip.Size = new System.Drawing.Size(174, 22);
             this.layout_strip.Text = "Layout1 (Native Mode)";
+            this.layout_strip.ButtonClick += new System.EventHandler(this.layout_strip_ButtonClick);
             // 
             // layout_strip_remove
             // 
             this.layout_strip_remove.Name = "layout_strip_remove";
-            this.layout_strip_remove.Size = new System.Drawing.Size(124, 22);
+            this.layout_strip_remove.Size = new System.Drawing.Size(152, 22);
             this.layout_strip_remove.Text = "Remove";
             // 
             // status_status
@@ -782,6 +800,7 @@
             this.apply.TabIndex = 12;
             this.apply.Text = "Apply";
             this.apply.UseVisualStyleBackColor = true;
+            this.apply.Click += new System.EventHandler(this.apply_Click);
             // 
             // splash
             // 
@@ -793,6 +812,7 @@
             this.splash.TabIndex = 11;
             this.splash.Text = "Splash";
             this.splash.UseVisualStyleBackColor = true;
+            this.splash.Click += new System.EventHandler(this.splash_Click);
             // 
             // kOption
             // 
@@ -835,6 +855,7 @@
             0,
             0,
             0});
+            this.option_thread_num.ValueChanged += new System.EventHandler(this.option_thread_num_ValueChanged);
             // 
             // option_resize_method_combo
             // 
@@ -846,6 +867,7 @@
             this.option_resize_method_combo.Name = "option_resize_method_combo";
             this.option_resize_method_combo.Size = new System.Drawing.Size(118, 20);
             this.option_resize_method_combo.TabIndex = 6;
+            this.option_resize_method_combo.SelectedIndexChanged += new System.EventHandler(this.option_resize_method_combo_SelectedIndexChanged);
             // 
             // kResizeMethod
             // 
@@ -875,6 +897,7 @@
             this.option_over_sampling.TabIndex = 4;
             this.option_over_sampling.Text = "Over-Sampling";
             this.option_over_sampling.UseVisualStyleBackColor = true;
+            this.option_over_sampling.CheckedChanged += new System.EventHandler(this.option_over_sampling_CheckedChanged);
             // 
             // option_enable_enlargement
             // 
@@ -884,6 +907,7 @@
             this.option_enable_enlargement.TabIndex = 3;
             this.option_enable_enlargement.Text = "Enable Enlargement";
             this.option_enable_enlargement.UseVisualStyleBackColor = true;
+            this.option_enable_enlargement.CheckedChanged += new System.EventHandler(this.option_enable_enlargement_CheckedChanged);
             // 
             // option_keep_aspect_ratio
             // 
@@ -893,6 +917,7 @@
             this.option_keep_aspect_ratio.TabIndex = 2;
             this.option_keep_aspect_ratio.Text = "Keep Aspect Ratio";
             this.option_keep_aspect_ratio.UseVisualStyleBackColor = true;
+            this.option_keep_aspect_ratio.CheckedChanged += new System.EventHandler(this.option_keep_aspect_ratio_CheckedChanged);
             // 
             // kVersion
             // 
@@ -947,6 +972,8 @@
             this.MinimumSize = new System.Drawing.Size(300, 500);
             this.Name = "Form1";
             this.Text = "SCFF DirectShow Filter Ver.0.0.1";
+            this.Shown += new System.EventHandler(this.Form1_Shown);
+            this.Click += new System.EventHandler(this.layout_add_Click);
             this.main_menu.ResumeLayout(false);
             this.main_menu.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.layout_bound_height)).EndInit();

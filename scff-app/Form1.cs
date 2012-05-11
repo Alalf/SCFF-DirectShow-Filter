@@ -307,7 +307,7 @@ namespace scff_app
         //-------------------------------------------------------------------
 
         /// ウィンドウを指定する
-        private void SetWindow(IntPtr /*HWND*/ window_handle)
+        private void SetWindow(IntPtr window_handle)
         {
             /*
   uint64_t window = reinterpret_cast<uint64_t>(window_handle);
@@ -326,12 +326,11 @@ namespace scff_app
   ResetClippingRegion();
              */
         }
-        /// デスクトップを全画面で取り込む
+        [DllImport("user32.dll", SetLastError = false)]
+        static extern IntPtr GetDesktopWindow();        /// デスクトップを全画面で取り込む
         private void DoCaptureDesktopWindow()
         {
-            /*
             SetWindow(GetDesktopWindow());
-             */
         }
         /// クリッピング領域をリセットする
         private void ResetClippingRegion()
@@ -427,8 +426,6 @@ namespace scff_app
                 return;
             }
 
-            /// todo(Alalf) LoadLibraryで置き換える
-
             bool was_dwm_enabled_on_start;
             DwmIsCompositionEnabled(out was_dwm_enabled_on_start);
             if (was_dwm_enabled_on_start)
@@ -450,8 +447,6 @@ namespace scff_app
                 return;
             }
 
-            /// @todo(me) LoadLibraryで置き換える
-
             if (aero_on_item.Checked)
             {
                 DwmEnableComposition(DWM_EC_DISABLECOMPOSITION);
@@ -470,8 +465,6 @@ namespace scff_app
                 // dwmapi.dllを利用できなければ何もしない
                 return;
             }
-
-            /// @todo(me) LoadLibraryで置き換える
 
             if (was_dwm_enabled_on_start_)
             {
@@ -549,23 +542,24 @@ namespace scff_app
         {  // ディレクトリから更新
             UpdateDirectory();
         }
+        [DllImport("user32.dll")]
+        private static extern IntPtr WindowFromPoint(int xPoint, int yPoint);
         private void window_draghere_MouseUp(object sender, MouseEventArgs e)
         {
-            //this->window_draghere->BackColor = SystemColors::Control;
+            window_draghere.BackColor = SystemColors.Control;
 
-            //Point location = this->window_draghere->PointToScreen(e->Location);
-            //POINT point;
-            //point.x = location.X;
-            //point.y = location.Y;
+            Point location = window_draghere.PointToScreen(e.Location);
 
-            //HWND window_handle = WindowFromPoint(point);
-            //if (window_handle != NULL) {
-            //  // 見つかった場合
-            //  SetWindow(window_handle);
-            //  Diagnostics::Debug::WriteLine(location);
-            //} else {
-            //  // nop
-            //}
+            IntPtr window_handle = WindowFromPoint(location.X, location.Y);
+            if (window_handle != IntPtr.Zero)
+            {
+                // 見つかった場合
+                SetWindow(window_handle);
+            }
+            else
+            {
+                // nop
+            }
         }
         private void splash_Click(object sender, EventArgs e)
         {

@@ -33,8 +33,7 @@ namespace scffappnet {
 Form1::Form1(void)
     : can_use_dwmapi_dll_(false),
       was_dwm_enabled_on_start_(false),
-      interprocess_(0),         // NULL
-      layout_parameter_(0) {    // NULL
+      interprocess_(0) {    // NULL
   //---------------------------------------------------------------
   // DO NOT DELETE THIS!!!
   InitializeComponent();
@@ -51,14 +50,32 @@ Form1::Form1(void)
   // プロセス間通信に必要なオブジェクトの生成
   interprocess_ = new scff_interprocess::Interprocess;
   // レイアウトパラメータを格納するためのオブジェクトを生成
-  layout_parameter_ = new scff_interprocess::LayoutParameter;
-  ZeroMemory(layout_parameter_,sizeof(scff_interprocess::LayoutParameter));
+  layout1_parameter_ = new scff_interprocess::LayoutParameter;
+  ZeroMemory(layout1_parameter_, sizeof(scff_interprocess::LayoutParameter));
+  layout2_parameter_ = new scff_interprocess::LayoutParameter;
+  ZeroMemory(layout2_parameter_, sizeof(scff_interprocess::LayoutParameter));
+  layout3_parameter_ = new scff_interprocess::LayoutParameter;
+  ZeroMemory(layout3_parameter_, sizeof(scff_interprocess::LayoutParameter));
+  layout4_parameter_ = new scff_interprocess::LayoutParameter;
+  ZeroMemory(layout4_parameter_, sizeof(scff_interprocess::LayoutParameter));
+  layout5_parameter_ = new scff_interprocess::LayoutParameter;
+  ZeroMemory(layout5_parameter_, sizeof(scff_interprocess::LayoutParameter));
+  layout6_parameter_ = new scff_interprocess::LayoutParameter;
+  ZeroMemory(layout6_parameter_, sizeof(scff_interprocess::LayoutParameter));
+  layout7_parameter_ = new scff_interprocess::LayoutParameter;
+  ZeroMemory(layout7_parameter_, sizeof(scff_interprocess::LayoutParameter));
+  layout8_parameter_ = new scff_interprocess::LayoutParameter;
+  ZeroMemory(layout8_parameter_, sizeof(scff_interprocess::LayoutParameter));
 
   // コントロールの準備
   BuildResizeMethodCombobox();
 
   // 編集中のレイアウトインデックス
   editing_layout_index_ = 0;
+  // ListViewを選択する
+  this->layout_list->Items[editing_layout_index_]->Selected = true;
+  this->layout_list->Select();
+
   // ディレクトリ取得
   UpdateDirectory();
 
@@ -80,6 +97,16 @@ Form1::~Form1() {
   //---------------------------------------------------------------
 
   DWMAPIRestore();
+  
+  // レイアウトパラメータを全て消去
+  delete layout1_parameter_;
+  delete layout2_parameter_;
+  delete layout3_parameter_;
+  delete layout4_parameter_;
+  delete layout5_parameter_;
+  delete layout6_parameter_;
+  delete layout7_parameter_;
+  delete layout8_parameter_;
 
   // プロセス間通信に必要なオブジェクトの削除
   delete interprocess_;
@@ -192,16 +219,16 @@ void Form1::SendNativeLayoutRequest() {
   message.layout_parameters[0].bound_width = 0;
   message.layout_parameters[0].bound_height = 0;
   // ここまで無視
-  message.layout_parameters[0].window = this->layout_parameter_->window;
-  message.layout_parameters[0].clipping_x = this->layout_parameter_->clipping_x;
-  message.layout_parameters[0].clipping_y = this->layout_parameter_->clipping_y;
-  message.layout_parameters[0].clipping_width = this->layout_parameter_->clipping_width;
-  message.layout_parameters[0].clipping_height = this->layout_parameter_->clipping_height;
-  message.layout_parameters[0].show_cursor = this->layout_parameter_->show_cursor;
-  message.layout_parameters[0].show_layered_window = this->layout_parameter_->show_layered_window;
-  message.layout_parameters[0].sws_flags = this->layout_parameter_->sws_flags;
-  message.layout_parameters[0].stretch = this->layout_parameter_->stretch;
-  message.layout_parameters[0].keep_aspect_ratio = this->layout_parameter_->keep_aspect_ratio;
+  message.layout_parameters[0].window = GetCurrentLayoutParameter()->window;
+  message.layout_parameters[0].clipping_x = GetCurrentLayoutParameter()->clipping_x;
+  message.layout_parameters[0].clipping_y = GetCurrentLayoutParameter()->clipping_y;
+  message.layout_parameters[0].clipping_width = GetCurrentLayoutParameter()->clipping_width;
+  message.layout_parameters[0].clipping_height = GetCurrentLayoutParameter()->clipping_height;
+  message.layout_parameters[0].show_cursor = GetCurrentLayoutParameter()->show_cursor;
+  message.layout_parameters[0].show_layered_window = GetCurrentLayoutParameter()->show_layered_window;
+  message.layout_parameters[0].sws_flags = GetCurrentLayoutParameter()->sws_flags;
+  message.layout_parameters[0].stretch = GetCurrentLayoutParameter()->stretch;
+  message.layout_parameters[0].keep_aspect_ratio = GetCurrentLayoutParameter()->keep_aspect_ratio;
 
   // 共有メモリを開いて送る
   if (this->process_combo->SelectedValue != nullptr) {
@@ -268,7 +295,7 @@ void Form1::DoCaptureDesktopWindow() {
 // クリッピング領域をリセットする
 void Form1::ResetClippingRegion() {
   HWND window_handle = reinterpret_cast<HWND>(
-      this->layout_parameter_->window);
+      GetCurrentLayoutParameter()->window);
 
   if (window_handle == NULL || !IsWindow(window_handle)) {
     return;
@@ -291,16 +318,16 @@ void Form1::ResetClippingRegion() {
   this->area_clipping_width->Value = window_rect.right;
   this->area_clipping_height->Value = window_rect.bottom;
   
-  this->layout_parameter_->clipping_x = window_rect.left;
-  this->layout_parameter_->clipping_y = window_rect.top;
-  this->layout_parameter_->clipping_width = window_rect.right;
-  this->layout_parameter_->clipping_height = window_rect.bottom;  
+  GetCurrentLayoutParameter()->clipping_x = window_rect.left;
+  GetCurrentLayoutParameter()->clipping_y = window_rect.top;
+  GetCurrentLayoutParameter()->clipping_width = window_rect.right;
+  GetCurrentLayoutParameter()->clipping_height = window_rect.bottom;  
 }
 
 // ウィンドウを指定する
 void Form1::SetWindow(HWND window_handle) {
   uint64_t window = reinterpret_cast<uint64_t>(window_handle);
-  this->layout_parameter_->window = window;
+  GetCurrentLayoutParameter()->window = window;
   
   if (window_handle == NULL) {
     this->window_handle->Text = "(Splash)";
@@ -318,12 +345,12 @@ void Form1::SetWindow(HWND window_handle) {
 /// @brief パラメータのValidate
 bool Form1::ValidateParameters() {
   // もっとも危険な状態になりやすいウィンドウからチェック
-  if (this->layout_parameter_->window == 0) { // NULL
+  if (GetCurrentLayoutParameter()->window == 0) { // NULL
     MessageBox::Show("Specified window is invalid", "Invalid Window",
         MessageBoxButtons::OK, MessageBoxIcon::Error);
     return false;
   }
-  HWND window_handle = reinterpret_cast<HWND>(this->layout_parameter_->window);
+  HWND window_handle = reinterpret_cast<HWND>(GetCurrentLayoutParameter()->window);
   if (!IsWindow(window_handle)) {
     MessageBox::Show("Specified window is invalid", "Invalid Window",
         MessageBoxButtons::OK, MessageBoxIcon::Error);
@@ -333,14 +360,14 @@ bool Form1::ValidateParameters() {
   // クリッピングリージョンの判定
   RECT window_rect;
   GetClientRect(window_handle,&window_rect);
-  if (this->layout_parameter_->clipping_x +
-      this->layout_parameter_->clipping_width
+  if (GetCurrentLayoutParameter()->clipping_x +
+      GetCurrentLayoutParameter()->clipping_width
       <= window_rect.right &&
-      this->layout_parameter_->clipping_y +
-      this->layout_parameter_->clipping_height
+      GetCurrentLayoutParameter()->clipping_y +
+      GetCurrentLayoutParameter()->clipping_height
       <= window_rect.bottom &&
-      this->layout_parameter_->clipping_width > 0 &&
-      this->layout_parameter_->clipping_height > 0) {
+      GetCurrentLayoutParameter()->clipping_width > 0 &&
+      GetCurrentLayoutParameter()->clipping_height > 0) {
     // nop 問題なし
   } else {
     MessageBox::Show("Clipping region is invalid", "Invalid Clipping Region",

@@ -98,10 +98,6 @@ private: System::Windows::Forms::Button^  layout_layout;
       L"Layout 1")), (gcnew System::Windows::Forms::ListViewItem::ListViewSubItem(nullptr, L"0.0 640x480", System::Drawing::SystemColors::WindowText, 
       System::Drawing::SystemColors::Window, (gcnew System::Drawing::Font(L"MS UI Gothic", 9, System::Drawing::FontStyle::Regular, 
       System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(128)))))}, L"Image.png"));
-    System::Windows::Forms::ListViewItem^  listViewItem2 = (gcnew System::Windows::Forms::ListViewItem(gcnew cli::array< System::Windows::Forms::ListViewItem::ListViewSubItem^  >(2) {(gcnew System::Windows::Forms::ListViewItem::ListViewSubItem(nullptr, 
-      L"Layout 2")), (gcnew System::Windows::Forms::ListViewItem::ListViewSubItem(nullptr, L"12.12 640x480", System::Drawing::SystemColors::WindowText, 
-      System::Drawing::SystemColors::Window, (gcnew System::Drawing::Font(L"MS UI Gothic", 9, System::Drawing::FontStyle::Regular, 
-      System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(128)))))}, L"Image.png"));
     this->main_menu = (gcnew System::Windows::Forms::MenuStrip());
     this->tools_menu = (gcnew System::Windows::Forms::ToolStripMenuItem());
     this->cts_item = (gcnew System::Windows::Forms::ToolStripMenuItem());
@@ -165,12 +161,12 @@ private: System::Windows::Forms::Button^  layout_layout;
     this->scff_icons = (gcnew System::Windows::Forms::ImageList(this->components));
     this->layout_add = (gcnew System::Windows::Forms::Button());
     this->layout_list = (gcnew System::Windows::Forms::ListView());
+    this->layout_no_column = (gcnew System::Windows::Forms::ColumnHeader());
+    this->layout_info_column = (gcnew System::Windows::Forms::ColumnHeader());
     this->process_combo = (gcnew System::Windows::Forms::ComboBox());
     this->process_refresh = (gcnew System::Windows::Forms::Button());
     this->layout_profile_add = (gcnew System::Windows::Forms::Button());
     this->layout_profile_combo = (gcnew System::Windows::Forms::ComboBox());
-    this->layout_no_column = (gcnew System::Windows::Forms::ColumnHeader());
-    this->layout_info_column = (gcnew System::Windows::Forms::ColumnHeader());
     this->main_menu->SuspendLayout();
     this->kGreenPanel->SuspendLayout();
     this->main_status->SuspendLayout();
@@ -340,14 +336,14 @@ private: System::Windows::Forms::Button^  layout_layout;
     // layout_strip_remove
     // 
     this->layout_strip_remove->Name = L"layout_strip_remove";
-    this->layout_strip_remove->Size = System::Drawing::Size(152, 22);
+    this->layout_strip_remove->Size = System::Drawing::Size(111, 22);
     this->layout_strip_remove->Text = L"Remove";
     // 
     // status_status
     // 
     this->status_status->Name = L"status_status";
     this->status_status->RightToLeft = System::Windows::Forms::RightToLeft::No;
-    this->status_status->Size = System::Drawing::Size(281, 17);
+    this->status_status->Size = System::Drawing::Size(312, 17);
     this->status_status->Spring = true;
     this->status_status->TextAlign = System::Drawing::ContentAlignment::MiddleRight;
     // 
@@ -383,6 +379,7 @@ private: System::Windows::Forms::Button^  layout_layout;
     this->splitContainer1->Panel2->Controls->Add(this->layout_remove);
     this->splitContainer1->Panel2->Controls->Add(this->layout_add);
     this->splitContainer1->Panel2->Controls->Add(this->layout_list);
+    this->splitContainer1->Panel2MinSize = 0;
     this->splitContainer1->Size = System::Drawing::Size(480, 355);
     this->splitContainer1->SplitterDistance = 300;
     this->splitContainer1->SplitterWidth = 1;
@@ -391,13 +388,11 @@ private: System::Windows::Forms::Button^  layout_layout;
     // apply
     // 
     this->apply->Enabled = false;
-    this->apply->ImageKey = L"Go.png";
     this->apply->Location = System::Drawing::Point(153, 311);
     this->apply->Name = L"apply";
     this->apply->Size = System::Drawing::Size(136, 23);
     this->apply->TabIndex = 12;
     this->apply->Text = L"Apply";
-    this->apply->TextImageRelation = System::Windows::Forms::TextImageRelation::ImageBeforeText;
     this->apply->UseVisualStyleBackColor = true;
     this->apply->Click += gcnew System::EventHandler(this, &Form1::apply_Click);
     // 
@@ -405,7 +400,6 @@ private: System::Windows::Forms::Button^  layout_layout;
     // 
     this->splash->Enabled = false;
     this->splash->FlatStyle = System::Windows::Forms::FlatStyle::System;
-    this->splash->ImageKey = L"Splash.png";
     this->splash->Location = System::Drawing::Point(8, 311);
     this->splash->Name = L"splash";
     this->splash->Size = System::Drawing::Size(81, 23);
@@ -750,49 +744,54 @@ private: System::Windows::Forms::Button^  layout_layout;
     // 
     // layout_layout
     // 
+    this->layout_layout->Enabled = false;
     this->layout_layout->Location = System::Drawing::Point(99, 311);
     this->layout_layout->Name = L"layout_layout";
     this->layout_layout->Size = System::Drawing::Size(75, 23);
-    this->layout_layout->TabIndex = 16;
+    this->layout_layout->TabIndex = 7;
     this->layout_layout->Text = L"Layout";
     this->layout_layout->UseVisualStyleBackColor = true;
     this->layout_layout->Click += gcnew System::EventHandler(this, &Form1::layout_layout_Click);
     // 
     // layout_bound_height
     // 
+    this->layout_bound_height->Enabled = false;
     this->layout_bound_height->Location = System::Drawing::Point(117, 279);
     this->layout_bound_height->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) {4096, 0, 0, 0});
     this->layout_bound_height->Minimum = System::Decimal(gcnew cli::array< System::Int32 >(4) {1, 0, 0, 0});
     this->layout_bound_height->Name = L"layout_bound_height";
     this->layout_bound_height->Size = System::Drawing::Size(50, 19);
-    this->layout_bound_height->TabIndex = 14;
+    this->layout_bound_height->TabIndex = 4;
     this->layout_bound_height->Value = System::Decimal(gcnew cli::array< System::Int32 >(4) {360, 0, 0, 0});
     // 
     // layout_bound_width
     // 
+    this->layout_bound_width->Enabled = false;
     this->layout_bound_width->Location = System::Drawing::Point(43, 279);
     this->layout_bound_width->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) {4096, 0, 0, 0});
     this->layout_bound_width->Minimum = System::Decimal(gcnew cli::array< System::Int32 >(4) {1, 0, 0, 0});
     this->layout_bound_width->Name = L"layout_bound_width";
     this->layout_bound_width->Size = System::Drawing::Size(50, 19);
-    this->layout_bound_width->TabIndex = 12;
+    this->layout_bound_width->TabIndex = 3;
     this->layout_bound_width->Value = System::Decimal(gcnew cli::array< System::Int32 >(4) {640, 0, 0, 0});
     // 
     // layout_bound_y
     // 
+    this->layout_bound_y->Enabled = false;
     this->layout_bound_y->Location = System::Drawing::Point(117, 254);
     this->layout_bound_y->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) {4096, 0, 0, 0});
     this->layout_bound_y->Name = L"layout_bound_y";
     this->layout_bound_y->Size = System::Drawing::Size(50, 19);
-    this->layout_bound_y->TabIndex = 11;
+    this->layout_bound_y->TabIndex = 2;
     // 
     // layout_bound_x
     // 
+    this->layout_bound_x->Enabled = false;
     this->layout_bound_x->Location = System::Drawing::Point(43, 254);
     this->layout_bound_x->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) {4096, 0, 0, 0});
     this->layout_bound_x->Name = L"layout_bound_x";
     this->layout_bound_x->Size = System::Drawing::Size(50, 19);
-    this->layout_bound_x->TabIndex = 9;
+    this->layout_bound_x->TabIndex = 1;
     // 
     // kLayoutCross
     // 
@@ -828,12 +827,13 @@ private: System::Windows::Forms::Button^  layout_layout;
     // 
     // layout_remove
     // 
+    this->layout_remove->Enabled = false;
     this->layout_remove->ImageKey = L"Remove.png";
     this->layout_remove->ImageList = this->scff_icons;
     this->layout_remove->Location = System::Drawing::Point(30, 311);
     this->layout_remove->Name = L"layout_remove";
     this->layout_remove->Size = System::Drawing::Size(23, 23);
-    this->layout_remove->TabIndex = 2;
+    this->layout_remove->TabIndex = 6;
     this->layout_remove->UseVisualStyleBackColor = true;
     this->layout_remove->Click += gcnew System::EventHandler(this, &Form1::layout_remove_Click);
     // 
@@ -852,12 +852,13 @@ private: System::Windows::Forms::Button^  layout_layout;
     // 
     // layout_add
     // 
+    this->layout_add->Enabled = false;
     this->layout_add->ImageKey = L"Add.png";
     this->layout_add->ImageList = this->scff_icons;
     this->layout_add->Location = System::Drawing::Point(3, 311);
     this->layout_add->Name = L"layout_add";
     this->layout_add->Size = System::Drawing::Size(23, 23);
-    this->layout_add->TabIndex = 1;
+    this->layout_add->TabIndex = 5;
     this->layout_add->UseVisualStyleBackColor = true;
     this->layout_add->Click += gcnew System::EventHandler(this, &Form1::layout_add_Click);
     // 
@@ -868,23 +869,33 @@ private: System::Windows::Forms::Button^  layout_layout;
     this->layout_list->AutoArrange = false;
     this->layout_list->Columns->AddRange(gcnew cli::array< System::Windows::Forms::ColumnHeader^  >(2) {this->layout_no_column, 
       this->layout_info_column});
+    this->layout_list->Enabled = false;
     this->layout_list->Font = (gcnew System::Drawing::Font(L"MS UI Gothic", 9, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point, 
       static_cast<System::Byte>(128)));
     this->layout_list->FullRowSelect = true;
     this->layout_list->HeaderStyle = System::Windows::Forms::ColumnHeaderStyle::Nonclickable;
     this->layout_list->HideSelection = false;
-    this->layout_list->Items->AddRange(gcnew cli::array< System::Windows::Forms::ListViewItem^  >(2) {listViewItem1, listViewItem2});
+    this->layout_list->Items->AddRange(gcnew cli::array< System::Windows::Forms::ListViewItem^  >(1) {listViewItem1});
     this->layout_list->LargeImageList = this->scff_icons;
     this->layout_list->Location = System::Drawing::Point(3, 3);
     this->layout_list->MultiSelect = false;
     this->layout_list->Name = L"layout_list";
     this->layout_list->ShowGroups = false;
-    this->layout_list->Size = System::Drawing::Size(171, 245);
+    this->layout_list->Size = System::Drawing::Size(183, 245);
     this->layout_list->SmallImageList = this->scff_icons;
     this->layout_list->TabIndex = 0;
     this->layout_list->TileSize = System::Drawing::Size(160, 30);
     this->layout_list->UseCompatibleStateImageBehavior = false;
     this->layout_list->View = System::Windows::Forms::View::Tile;
+    this->layout_list->SelectedIndexChanged += gcnew System::EventHandler(this, &Form1::layout_list_SelectedIndexChanged);
+    // 
+    // layout_no_column
+    // 
+    this->layout_no_column->Text = L"No";
+    // 
+    // layout_info_column
+    // 
+    this->layout_info_column->Text = L"Info";
     // 
     // process_combo
     // 
@@ -893,16 +904,15 @@ private: System::Windows::Forms::Button^  layout_layout;
     this->process_combo->Location = System::Drawing::Point(8, 67);
     this->process_combo->Name = L"process_combo";
     this->process_combo->Size = System::Drawing::Size(215, 20);
-    this->process_combo->TabIndex = 9;
+    this->process_combo->TabIndex = 0;
     this->process_combo->SelectedIndexChanged += gcnew System::EventHandler(this, &Form1::process_combo_SelectedIndexChanged);
     // 
     // process_refresh
     // 
-    this->process_refresh->ImageKey = L"Refresh.png";
     this->process_refresh->Location = System::Drawing::Point(229, 66);
     this->process_refresh->Name = L"process_refresh";
     this->process_refresh->Size = System::Drawing::Size(60, 21);
-    this->process_refresh->TabIndex = 10;
+    this->process_refresh->TabIndex = 1;
     this->process_refresh->Text = L"Refresh";
     this->process_refresh->UseVisualStyleBackColor = true;
     this->process_refresh->Click += gcnew System::EventHandler(this, &Form1::process_refresh_Click);
@@ -913,7 +923,7 @@ private: System::Windows::Forms::Button^  layout_layout;
     this->layout_profile_add->Location = System::Drawing::Point(440, 67);
     this->layout_profile_add->Name = L"layout_profile_add";
     this->layout_profile_add->Size = System::Drawing::Size(35, 20);
-    this->layout_profile_add->TabIndex = 12;
+    this->layout_profile_add->TabIndex = 3;
     this->layout_profile_add->Text = L"Add";
     this->layout_profile_add->UseVisualStyleBackColor = true;
     // 
@@ -927,15 +937,7 @@ private: System::Windows::Forms::Button^  layout_layout;
     this->layout_profile_combo->Location = System::Drawing::Point(304, 67);
     this->layout_profile_combo->Name = L"layout_profile_combo";
     this->layout_profile_combo->Size = System::Drawing::Size(130, 20);
-    this->layout_profile_combo->TabIndex = 11;
-    // 
-    // layout_no_column
-    // 
-    this->layout_no_column->Text = L"No";
-    // 
-    // layout_info_column
-    // 
-    this->layout_info_column->Text = L"Info";
+    this->layout_profile_combo->TabIndex = 2;
     // 
     // Form1
     // 
@@ -1045,8 +1047,44 @@ private: System::Windows::Forms::Button^  layout_layout;
   scff_interprocess::Interprocess *interprocess_;
   /// @brief 現在編集中のレイアウト番号
   property int editing_layout_index_;
-  /// @brief 現在編集中のレイアウトパラメータ
-  scff_interprocess::LayoutParameter *layout_parameter_;
+
+  // もうやだC++/CLI...
+
+  scff_interprocess::LayoutParameter* GetLayoutParameterByIndex(int index) {
+    switch (index) {
+    case 0:
+      return layout1_parameter_;
+    case 1:
+      return layout2_parameter_;
+    case 2:
+      return layout3_parameter_;
+    case 3:
+      return layout4_parameter_;
+    case 4:
+      return layout5_parameter_;
+    case 5:
+      return layout6_parameter_;
+    case 6:
+      return layout7_parameter_;
+    case 7:
+      return layout8_parameter_;
+    }
+    return 0;
+  }
+
+  scff_interprocess::LayoutParameter* GetCurrentLayoutParameter() {
+    return GetLayoutParameterByIndex(editing_layout_index_);
+  }
+
+  /// @brief レイアウトパラメータ1
+  scff_interprocess::LayoutParameter *layout1_parameter_;
+  scff_interprocess::LayoutParameter *layout2_parameter_;
+  scff_interprocess::LayoutParameter *layout3_parameter_;
+  scff_interprocess::LayoutParameter *layout4_parameter_;
+  scff_interprocess::LayoutParameter *layout5_parameter_;
+  scff_interprocess::LayoutParameter *layout6_parameter_;
+  scff_interprocess::LayoutParameter *layout7_parameter_;
+  scff_interprocess::LayoutParameter *layout8_parameter_;
 
   //-------------------------------------------------------------------
   // イベントハンドラ
@@ -1077,5 +1115,6 @@ private: System::Void layout_layout_Click(System::Object^  sender, System::Event
 private: System::Void layout_add_Click(System::Object^  sender, System::EventArgs^  e);
 private: System::Void layout_remove_Click(System::Object^  sender, System::EventArgs^  e);
 private: System::Void layout_strip_ButtonClick(System::Object^  sender, System::EventArgs^  e);
+private: System::Void layout_list_SelectedIndexChanged(System::Object^  sender, System::EventArgs^  e);
 };
 }   // namepspace

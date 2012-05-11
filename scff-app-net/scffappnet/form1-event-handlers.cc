@@ -66,6 +66,10 @@ System::Void Form1::layout_strip_ButtonClick(System::Object^  sender, System::Ev
   }
 }
 
+System::Void Form1::layout_list_SelectedIndexChanged(System::Object^  sender, System::EventArgs^  e) {
+
+}
+
 //-------------------------------------------------------------------
 // OK/Cancel (Apply/Splash)
 //-------------------------------------------------------------------
@@ -146,22 +150,22 @@ System::Void Form1::area_fit_CheckedChanged(System::Object^  sender, System::Eve
 }
 
 System::Void Form1::area_clipping_x_ValueChanged(System::Object^  sender, System::EventArgs^  e) {
-  this->layout_parameter_->clipping_x =
+  GetCurrentLayoutParameter()->clipping_x =
       static_cast<int32_t>(this->area_clipping_x->Value);
 }
 
 System::Void Form1::area_clipping_y_ValueChanged(System::Object^  sender, System::EventArgs^  e) {
-  this->layout_parameter_->clipping_y =
+  GetCurrentLayoutParameter()->clipping_y =
       static_cast<int32_t>(this->area_clipping_y->Value);
 }
 
 System::Void Form1::area_clipping_width_ValueChanged(System::Object^  sender, System::EventArgs^  e) {
-  this->layout_parameter_->clipping_width =
+  GetCurrentLayoutParameter()->clipping_width =
       static_cast<int32_t>(this->area_clipping_width->Value);
 }
 
 System::Void Form1::area_clipping_height_ValueChanged(System::Object^  sender, System::EventArgs^  e) {
-  this->layout_parameter_->clipping_height =
+  GetCurrentLayoutParameter()->clipping_height =
       static_cast<int32_t>(this->area_clipping_height->Value);
 }
 
@@ -191,33 +195,33 @@ System::Void Form1::target_area_select_Click(System::Object^  sender, System::Ev
 
 System::Void Form1::option_show_mouse_cursor_CheckedChanged(System::Object^  sender, System::EventArgs^  e) {
   if (this->option_show_mouse_cursor->Checked) {
-    this->layout_parameter_->show_cursor = 1;
+    GetCurrentLayoutParameter()->show_cursor = 1;
   } else {
-    this->layout_parameter_->show_cursor = 0;
+    GetCurrentLayoutParameter()->show_cursor = 0;
   }
 }
 
 System::Void Form1::option_show_layered_window_CheckedChanged(System::Object^  sender, System::EventArgs^  e) {
   if (this->option_show_layered_window->Checked) {
-    this->layout_parameter_->show_layered_window = 1;
+    GetCurrentLayoutParameter()->show_layered_window = 1;
   } else {
-    this->layout_parameter_->show_layered_window = 0;
+    GetCurrentLayoutParameter()->show_layered_window = 0;
   }
 }
 
 System::Void Form1::option_keep_aspect_ratio_CheckedChanged(System::Object^  sender, System::EventArgs^  e) {
   if (this->option_keep_aspect_ratio->Checked) {
-    this->layout_parameter_->keep_aspect_ratio = 1;
+    GetCurrentLayoutParameter()->keep_aspect_ratio = 1;
   } else {
-    this->layout_parameter_->keep_aspect_ratio = 0;
+    GetCurrentLayoutParameter()->keep_aspect_ratio = 0;
   }
 }
 
 System::Void Form1::option_enable_enlargement_CheckedChanged(System::Object^  sender, System::EventArgs^  e) {
   if (this->option_enable_enlargement->Checked) {
-    this->layout_parameter_->stretch = 1;
+    GetCurrentLayoutParameter()->stretch = 1;
   } else {
-    this->layout_parameter_->stretch = 0;
+    GetCurrentLayoutParameter()->stretch = 0;
   }
 }
 
@@ -232,7 +236,7 @@ System::Void Form1::option_thread_num_ValueChanged(System::Object^  sender, Syst
 }
 
 System::Void Form1::option_resize_method_combo_SelectedIndexChanged(System::Object^  sender, System::EventArgs^  e) {
-  this->layout_parameter_->sws_flags =
+  GetCurrentLayoutParameter()->sws_flags =
       static_cast<int32_t>(this->option_resize_method_combo->SelectedValue);
 }
 }   // namespace scffappnet

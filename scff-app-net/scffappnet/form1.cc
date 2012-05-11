@@ -211,6 +211,40 @@ void Form1::SendNativeLayoutRequest() {
   }
 }
 
+/// @brief 共有メモリにComplexLayoutリクエストを設定
+void Form1::SendComplexLayoutRequest() {
+  // メッセージを書いて送る
+  scff_interprocess::Message message;
+  time_t timestamp;
+  time(&timestamp);
+  message.timestamp = static_cast<int64_t>(timestamp);
+  message.layout_type = scff_interprocess::kNativeLayout;
+  // 無視される
+  message.layout_element_count = 1;
+  message.layout_parameters[0].bound_x = 0;
+  message.layout_parameters[0].bound_y = 0;
+  message.layout_parameters[0].bound_width = 0;
+  message.layout_parameters[0].bound_height = 0;
+  // ここまで無視
+  message.layout_parameters[0].window = this->layout_parameter_->window;
+  message.layout_parameters[0].clipping_x = this->layout_parameter_->clipping_x;
+  message.layout_parameters[0].clipping_y = this->layout_parameter_->clipping_y;
+  message.layout_parameters[0].clipping_width = this->layout_parameter_->clipping_width;
+  message.layout_parameters[0].clipping_height = this->layout_parameter_->clipping_height;
+  message.layout_parameters[0].show_cursor = this->layout_parameter_->show_cursor;
+  message.layout_parameters[0].show_layered_window = this->layout_parameter_->show_layered_window;
+  message.layout_parameters[0].sws_flags = this->layout_parameter_->sws_flags;
+  message.layout_parameters[0].stretch = this->layout_parameter_->stretch;
+  message.layout_parameters[0].keep_aspect_ratio = this->layout_parameter_->keep_aspect_ratio;
+
+  // 共有メモリを開いて送る
+  if (this->process_combo->SelectedValue != nullptr) {
+    uint32_t process_id = (uint32_t)(this->process_combo->SelectedValue);
+    interprocess_->InitMessage(process_id);
+    interprocess_->SendMessage(message);
+  }
+}
+
 void Form1::DoCaptureDesktopWindow() {
   SetWindow(GetDesktopWindow());
 }

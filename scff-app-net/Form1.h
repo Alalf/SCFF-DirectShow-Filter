@@ -2,11 +2,6 @@
 
 #include "scffappnet/data_source.h"
 
-namespace scff_interprocess {
-class Interprocess;
-struct LayoutParameter;
-}
-
 namespace scffappnet {
 
 using namespace System;
@@ -802,6 +797,8 @@ private: System::Windows::Forms::NumericUpDown^  area_clipping_x;
   void SendNullLayoutRequest();
   /// @brief 共有メモリにNativeLayoutリクエストを設定
   void SendNativeLayoutRequest();
+  /// @brief 共有メモリにComplexLayoutリクエストを設定
+  void SendComplexLayoutRequest();
 
   //-------------------------------------------------------------------
 

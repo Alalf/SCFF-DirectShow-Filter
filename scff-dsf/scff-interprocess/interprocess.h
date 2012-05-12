@@ -19,7 +19,7 @@
 /// @file scff-interprocess/interprocess.h
 /// @brief SCFFのプロセス間通信に関するクラス、定数、型の宣言
 /// @warning To me: このファイルの中から別のファイルへのIncludeは禁止！
-///- 別の言語に移植する場合もh+srcで最大2ファイルでお願いします
+///- 別の言語に移植する場合も最大2ファイルでお願いします
 
 #ifndef SCFF_DSF_SCFF_INTERPROCESS_INTERPROCESS_H_
 #define SCFF_DSF_SCFF_INTERPROCESS_INTERPROCESS_H_
@@ -59,6 +59,9 @@ static const char kMessageNamePrefix[] = "scff-v0-message-";
 static const char kMessageMutexNamePrefix[] = "mutex-scff-v0-message-";
 
 //---------------------------------------------------------------------
+
+/// @brief Path文字列の長さ
+static const int kMaxPath = 260;
 
 /// @brief Directoryに格納されるEntryの最大の数
 static const int kMaxEntry = 8;
@@ -149,7 +152,7 @@ struct Entry {
   uint32_t process_id;
   /// @brief SCFF DSFのDLLが使われているプロセス名
   /// @warning 長さが260バイトに制限されているので注意！
-  char process_name[MAX_PATH];
+  char process_name[kMaxPath];
   /// @brief サンプルの出力width
   int32_t sample_width;
   /// @brief サンプルの出力height

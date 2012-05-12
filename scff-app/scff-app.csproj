@@ -75,13 +75,16 @@
     <Compile Include="AreaSelectForm.Designer.cs">
       <DependentUpon>AreaSelectForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="datasource.cs" />
+    <Compile Include="scff-app\data-classes.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="scff-app\app-implementation-dwmapi.cs" />
+    <Compile Include="scff-app\app-implementation.cs" />
+    <Compile Include="scff-interprocess\interprocess-class.cs" />
     <Compile Include="scff-interprocess\interprocess.cs">
       <SubType>Code</SubType>
     </Compile>

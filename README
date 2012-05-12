@@ -1,4 +1,4 @@
-* SCFF DirectShow Filter Ver 0.0.1 (2012/5/10)
+* SCFF DirectShow Filter Ver 0.0.1 (2012/5/13)
 
 ** ビルド+利用方法
 
@@ -12,14 +12,16 @@
    を
 > extern __declspec(dllimport) const AVPixFmtDescriptor av_pix_fmt_descriptors[];
    のように書き換えてください。一応tools/pixdesc.patchも添付してあります。
-3. ソリューションを開き、全てのビルドが通ることを確認
-  - Microsoft Visual Studio 2010 Express Edition + Windows SDK 7.1で確認済み
+3. scff-dsf.slnソリューションを開き、全てのビルドが通ることを確認
+  - Microsoft Visual C++ 2010 Express Edition + Windows SDK 7.1で確認済み
   - 必要ならばいくつかのプロジェクト設定を書き換えること
 4. tools/copy-binaries.batを実行してdistディレクトリにdllなどをコピー
 5. tools/install-debug.batかtools/install-release.batを実行
 6. 各種エンコーダを起動しフィルタが認識されているかチェック
-7. dist/*にあるヘルパーアプリケーションを起動し取り込み設定を行う
-8. デバッグバージョンを利用する場合:
+7. scff-app.slnソリューションを開き、全てのビルドが通ることを確認
+  - Microsoft Visual C# 2010 Express Editionで確認済み
+8. dist/Debugかdist/Releaseにあるヘルパーアプリケーションを起動し取り込み設定を行う
+9. （scff-dsfのデバッグバージョンを利用する場合:）
   - プロジェクト設定からローカルWindowsデバッガーを選ぶ
   - コマンドにWME/KTE/FMEなどを選択すればデバッグ文字列などを見ることが出来る。
 

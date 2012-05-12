@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual C# Express 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "scff-app", "scff-app.csproj", "{0BBF8DC0-C538-4841-BF39-8657EB9619EE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "scff-app", "scff-app\scff-app.csproj", "{0BBF8DC0-C538-4841-BF39-8657EB9619EE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

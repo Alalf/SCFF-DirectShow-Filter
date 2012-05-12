@@ -68,7 +68,7 @@ class Processor {
   /// @retval ErrorOccured()  エラーが発生した場合
   virtual ErrorCode Accept(Request *request) {
     ASSERT(false);
-    return NoError();
+    return GetCurrentError();
   }
   //-------------------------------------------------------------------
 
@@ -112,10 +112,6 @@ class Processor {
       error_code_ = kNoError;
     }
     return error_code_;
-  }
-  /// @brief kNoErrorを返すだけのメソッド
-  ErrorCode NoError() const {
-    return kNoError;
   }
   /// @brief エラーが発生したときに呼び出す。
   /// @return 発生したエラーコード。

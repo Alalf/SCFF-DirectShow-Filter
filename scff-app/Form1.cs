@@ -154,7 +154,7 @@ public partial class Form1 : Form {
     impl_.SendNullLayoutRequest();
   }
   private void apply_Click(object sender, EventArgs e) {
-    if (impl_.ValidateParameters()) {
+    if (impl_.ValidateParameters(true)) {
       impl_.SendLayoutRequest();
     }
   }
@@ -209,7 +209,7 @@ public partial class Form1 : Form {
     area_fit.Checked = true;
 
     if (target_auto_apply.Checked) {
-      if (impl_.ValidateParameters()) {
+      if (impl_.ValidateParameters(false)) {
         impl_.SendLayoutRequest();
       }
     }
@@ -224,7 +224,7 @@ public partial class Form1 : Form {
     area_fit.Checked = true;
 
     if (target_auto_apply.Checked) {
-      if (impl_.ValidateParameters()) {
+      if (impl_.ValidateParameters(false)) {
         impl_.SendLayoutRequest();
       }
     }
@@ -242,7 +242,7 @@ public partial class Form1 : Form {
       this.UpdateClippingRegion();
 
       if (target_auto_apply.Checked) {
-        if (impl_.ValidateParameters()) {
+        if (impl_.ValidateParameters(false)) {
           impl_.SendLayoutRequest();
         }
       }
@@ -255,16 +255,17 @@ public partial class Form1 : Form {
   }
 
   private void target_area_select_Click(object sender, EventArgs e) {
+    // AreaSelectFormを利用してクリッピング領域を取得
     AreaSelectForm form = new AreaSelectForm();
-    Point new_loc =
-        new Point((int)area_clipping_x.Value,
-                  (int)area_clipping_y.Value);
-    form.Location = new_loc;
+    Point new_location =
+        new Point((int)area_clipping_x.Value, (int)area_clipping_y.Value);
+    form.Location = new_location;
     Size new_size =
-        new Size((int)area_clipping_width.Value,
-                 (int)area_clipping_height.Value);
+        new Size((int)area_clipping_width.Value, (int)area_clipping_height.Value);
     form.Size = new_size;
     form.ShowDialog();
+    int clipping_x, clipping_y, clipping_width, clipping_height;
+    form.GetResult(out clipping_x, out clipping_y, out clipping_width, out clipping_height);
 
     // デスクトップキャプチャに変更
     impl_.SetWindowToDesktop();
@@ -273,23 +274,14 @@ public partial class Form1 : Form {
 
     // FitをはずしてClippingを更新
     area_fit.Checked = false;
-    impl_.JustifyClippingRegion(
-        form.clipping_x, form.clipping_y, form.clipping_width, form.clipping_height);
+    impl_.JustifyClippingRegion(clipping_x, clipping_y, clipping_width, clipping_height);
     area_clipping_x.DataBindings["Value"].ReadValue();
     area_clipping_y.DataBindings["Value"].ReadValue();
     area_clipping_width.DataBindings["Value"].ReadValue();
     area_clipping_height.DataBindings["Value"].ReadValue();
 
     if (target_auto_apply.Checked) {
-      if (impl_.ValidateParameters()) {
-        impl_.SendLayoutRequest();
-      }
-    }
-  }
-
-  private void area_clipping_ValueChanged(object sender, EventArgs e) {
-    if (target_auto_apply.Checked) {
-      if (impl_.ValidateParameters()) {
+      if (impl_.ValidateParameters(false)) {
         impl_.SendLayoutRequest();
       }
     }

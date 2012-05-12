@@ -21,7 +21,6 @@
 
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Windows.Forms;
 
 namespace scff_app {
@@ -180,17 +179,21 @@ public partial class AppImplementation {
   }
 
   /// @brief パラメータのValidate
-  public bool ValidateParameters() {
+  public bool ValidateParameters(bool show_message) {
     // もっとも危険な状態になりやすいウィンドウからチェック
     if (LayoutParameters[EditingLayoutIndex].Window == 0) { // NULL
-      MessageBox.Show("Specified window is invalid", "Invalid Window",
-          MessageBoxButtons.OK, MessageBoxIcon.Error);
+      if (show_message) {
+        MessageBox.Show("Specified window is invalid", "Invalid Window",
+            MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
       return false;
     }
     var window_handle = (System.IntPtr)(LayoutParameters[EditingLayoutIndex].Window);
     if (!IsWindow(window_handle)) {
-      MessageBox.Show("Specified window is invalid", "Invalid Window",
-          MessageBoxButtons.OK, MessageBoxIcon.Error);
+      if (show_message) {
+        MessageBox.Show("Specified window is invalid", "Invalid Window",
+            MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
       return false;
     }
 
@@ -207,8 +210,10 @@ public partial class AppImplementation {
         LayoutParameters[EditingLayoutIndex].ClippingHeight > 0) {
       // nop 問題なし
     } else {
-      MessageBox.Show("Clipping region is invalid", "Invalid Clipping Region",
-          MessageBoxButtons.OK, MessageBoxIcon.Error);
+      if (show_message) {
+        MessageBox.Show("Clipping region is invalid", "Invalid Clipping Region",
+            MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
       return false;
     }
 
@@ -244,65 +249,33 @@ public partial class AppImplementation {
   /// @brief 共有メモリにNativeLayoutリクエストを設定
   private void SendNativeLayoutRequest() {
     // メッセージを書いて送る
-    scff_interprocess.Message message = new scff_interprocess.Message();
-    message.timestamp = System.DateTime.Now.Ticks;
-    message.layout_type = (System.Int32)scff_interprocess.LayoutType.kNativeLayout;
-    // 無視される
-    message.layout_element_count = 1;
-    message.layout_parameters =
-        new scff_interprocess.LayoutParameter[scff_interprocess.Interprocess.kMaxComplexLayoutElements];
-    message.layout_parameters[0] = LayoutParameters[EditingLayoutIndex].ToInterprocessLayoutParameter();
+    Message message = new Message();
+    message.LayoutType = scff_interprocess.LayoutType.kNativeLayout;
+    message.LayoutElementCount = 1;
+    message.LayoutParameters.Add(LayoutParameters[EditingLayoutIndex]);
 
     // 共有メモリを開いて送る
     if (EditingProcessID != 0) {
       interprocess_.InitMessage(EditingProcessID);
-      interprocess_.SendMessage(message);
+      interprocess_.SendMessage(message.ToInterprocessMessage());
     }
   }
+
   /// @brief 共有メモリにComplexLayoutリクエストを設定
   private void SendComplexLayoutRequest() {
-    // todo(Alalf) テスト中！あとで直す！
-
     // メッセージを書いて送る
-    scff_interprocess.Message message = new scff_interprocess.Message();
-    message.timestamp = System.DateTime.Now.Ticks;
-    message.layout_type = (int)scff_interprocess.LayoutType.kComplexLayout;
-    message.layout_element_count = 2;
-    // 1個目の取り込み範囲
-    message.layout_parameters[0].bound_x = 32;
-    message.layout_parameters[0].bound_y = 32;
-    message.layout_parameters[0].bound_width = 320;
-    message.layout_parameters[0].bound_height = 240;
-    message.layout_parameters[0].window = (ulong)(GetDesktopWindow());
-    message.layout_parameters[0].clipping_x = 0;
-    message.layout_parameters[0].clipping_y = 0;
-    message.layout_parameters[0].clipping_width = 1000;
-    message.layout_parameters[0].clipping_height = 500;
-    message.layout_parameters[0].show_cursor = 0;
-    message.layout_parameters[0].show_layered_window = 0;
-    message.layout_parameters[0].sws_flags = (int)scff_interprocess.SWScaleFlags.kLanczos;
-    message.layout_parameters[0].stretch = 1;
-    message.layout_parameters[0].keep_aspect_ratio = 1;
-    // 2個目の取り込み範囲
-    message.layout_parameters[1].bound_x = 300;
-    message.layout_parameters[1].bound_y = 0;
-    message.layout_parameters[1].bound_width = 300;
-    message.layout_parameters[1].bound_height = 100;
-    message.layout_parameters[1].window = (ulong)(GetDesktopWindow());
-    message.layout_parameters[1].clipping_x = 320;
-    message.layout_parameters[1].clipping_y = 320;
-    message.layout_parameters[1].clipping_width = 200;
-    message.layout_parameters[1].clipping_height = 200;
-    message.layout_parameters[1].show_cursor = 0;
-    message.layout_parameters[1].show_layered_window = 0;
-    message.layout_parameters[1].sws_flags = (int)scff_interprocess.SWScaleFlags.kLanczos;
-    message.layout_parameters[1].stretch = 1;
-    message.layout_parameters[1].keep_aspect_ratio = 1;
+    Message message = new Message();
+    message.LayoutType = scff_interprocess.LayoutType.kComplexLayout;
+    message.LayoutElementCount = LayoutParameters.Count;
+
+    foreach (LayoutParameter i in LayoutParameters) {
+      message.LayoutParameters.Add(i);
+    }
 
     // 共有メモリを開いて送る
     if (EditingProcessID != 0) {
       interprocess_.InitMessage(EditingProcessID);
-      interprocess_.SendMessage(message);
+      interprocess_.SendMessage(message.ToInterprocessMessage());
     }
   }
 

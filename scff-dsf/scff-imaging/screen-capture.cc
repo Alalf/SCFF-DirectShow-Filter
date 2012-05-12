@@ -102,6 +102,10 @@ bool ScreenCapture::ValidateWindow(int index) {
   // ウィンドウサイズは変更禁止(かなり厳しい条件)
   if (window_width_[index] != current_window_width ||
       window_height_[index] != current_window_height) {
+    MyDbgLog((LOG_TRACE, kDbgImportant,
+            TEXT("ScreenCapture: Window Size Changed (%d,%d) -> (%d,%d)"),
+            window_width_[index], window_height_[index],
+            current_window_width, current_window_height));
     return false;
   }
 
@@ -201,14 +205,15 @@ ErrorCode ScreenCapture::Init() {
 }
 
 // 渡されたDCにカーソルを描画する
-void ScreenCapture::DrawCursor(HDC dc, HWND window) {
+void ScreenCapture::DrawCursor(HDC dc, HWND window,
+                               int clipping_x, int clipping_y) {
   POINT cursor_screen_point;
   GetCursorPos(&cursor_screen_point);
 
   RECT window_screen_rect;
   GetWindowRect(window, &window_screen_rect);
-  const int cursor_x = cursor_screen_point.x - window_screen_rect.left;
-  const int cursor_y = cursor_screen_point.y - window_screen_rect.top;
+  const int cursor_x = cursor_screen_point.x - (window_screen_rect.left + clipping_x);
+  const int cursor_y = cursor_screen_point.y - (window_screen_rect.top + clipping_y);
 
   CURSORINFO cursor_info;
   ZeroMemory(&cursor_info, sizeof(cursor_info));
@@ -261,7 +266,8 @@ ErrorCode ScreenCapture::Run() {
   // 以下オフスクリーンビットマップに対する操作
   for (int i = 0; i < size(); i++) {
     if (parameter_[i].show_cursor) {
-      DrawCursor(dc_for_bitblt_[i], parameter_[i].window);
+      DrawCursor(dc_for_bitblt_[i], parameter_[i].window,
+                 parameter_[i].clipping_x, parameter_[i].clipping_y);
     }
 
     // OutputImageへの書き込み
@@ -274,6 +280,6 @@ ErrorCode ScreenCapture::Run() {
   }
 
   // エラー発生なし
-  return NoError();
+  return GetCurrentError();
 }
 }   // namespace scff_imaging

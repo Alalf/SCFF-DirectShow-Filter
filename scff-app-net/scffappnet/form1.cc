@@ -193,7 +193,7 @@ void Form1::SendNullLayoutRequest() {
   scff_interprocess::Message message;
   time_t timestamp;
   time(&timestamp);
-  message.timestamp = static_cast<int32_t>(timestamp);
+  message.timestamp = timestamp;
   message.layout_type = scff_interprocess::kNullLayout;
     
   // 共有メモリを開いて送る
@@ -210,7 +210,7 @@ void Form1::SendNativeLayoutRequest() {
   scff_interprocess::Message message;
   time_t timestamp;
   time(&timestamp);
-  message.timestamp = static_cast<int64_t>(timestamp);
+  message.timestamp = timestamp;
   message.layout_type = scff_interprocess::kNativeLayout;
   // 無視される
   message.layout_element_count = 1;
@@ -246,7 +246,7 @@ void Form1::SendComplexLayoutRequest() {
   scff_interprocess::Message message;
   time_t timestamp;
   time(&timestamp);
-  message.timestamp = static_cast<int64_t>(timestamp);
+  message.timestamp = timestamp;
   message.layout_type = scff_interprocess::kComplexLayout;
   message.layout_element_count = 2;
   // 1個目の取り込み範囲

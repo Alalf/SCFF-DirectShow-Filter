@@ -45,7 +45,6 @@ namespace scff_interprocess {
 
 /// @brief プロセス間通信を担当するクラス
 partial class Interprocess {
-
   /// @brief 共有メモリ名: SCFFエントリを格納するディレクトリ
   const string kDirectoryName = "scff-v0-directory";
 
@@ -70,6 +69,8 @@ partial class Interprocess {
   /// @sa imaging::kMaxProcessorSize
   public const int kMaxComplexLayoutElements = 8;
 }
+
+//-------------------------------------------------------------------
 
 /// @brief レイアウトの種類
 public enum LayoutType {
@@ -143,9 +144,8 @@ public enum RotateDirection {
   k270Degrees
 }
 
-// アラインメントをコンパイラに変えられないように
-[StructLayout(LayoutKind.Sequential, Pack = 1)]
 /// @brief 共有メモリ(Directory)に格納する構造体のエントリ
+[StructLayout(LayoutKind.Sequential, Pack = 1)]
 public struct Entry {
   /// @brief SCFF DSFのDLLが使われれているプロセスID
   public System.UInt32 process_id;

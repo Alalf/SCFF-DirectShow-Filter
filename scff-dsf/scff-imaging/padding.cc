@@ -135,7 +135,7 @@ ErrorCode Padding::Run() {
                     GetOutputImage()->width(),
                     padding_bottom_);
 
-  return NoError();
+  return GetCurrentError();
 }
 //-------------------------------------------------------------------
 }   // namespace scff_imaging

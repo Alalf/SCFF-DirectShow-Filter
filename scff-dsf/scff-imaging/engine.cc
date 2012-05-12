@@ -194,7 +194,7 @@ ErrorCode Engine::Accept(Request *request) {
 
   /// @attention 現状、Chain of Resiposibilityはない＝
   /// @attention 下位のプロセッサへリクエストは送らない
-  return NoError();
+  return GetCurrentError();
 }
 
 // Processor::Run
@@ -210,7 +210,7 @@ ErrorCode Engine::Run() {
     /// @attention layout_でエラーが発生してもEngine自体はエラー状態ではない
     LayoutErrorOccured(error);
   }
-  return NoError();
+  return GetCurrentError();
 }
 
 //-------------------------------------------------------------------

@@ -370,7 +370,6 @@
             0,
             0,
             0});
-      this.area_clipping_height.ValueChanged += new System.EventHandler(this.area_clipping_ValueChanged);
       // 
       // area_clipping_width
       // 
@@ -388,7 +387,6 @@
             0,
             0,
             0});
-      this.area_clipping_width.ValueChanged += new System.EventHandler(this.area_clipping_ValueChanged);
       // 
       // area_clipping_y
       // 
@@ -401,7 +399,6 @@
       this.area_clipping_y.Name = "area_clipping_y";
       this.area_clipping_y.Size = new System.Drawing.Size(43, 19);
       this.area_clipping_y.TabIndex = 4;
-      this.area_clipping_y.ValueChanged += new System.EventHandler(this.area_clipping_ValueChanged);
       // 
       // area_clipping_x
       // 
@@ -414,7 +411,6 @@
       this.area_clipping_x.Name = "area_clipping_x";
       this.area_clipping_x.Size = new System.Drawing.Size(43, 19);
       this.area_clipping_x.TabIndex = 3;
-      this.area_clipping_x.ValueChanged += new System.EventHandler(this.area_clipping_ValueChanged);
       // 
       // area_add
       // 

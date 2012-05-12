@@ -52,7 +52,7 @@ class ScreenCapture : public Processor<void, AVPictureWithFillImage> {
   DISALLOW_COPY_AND_ASSIGN(ScreenCapture);
 
   /// @brief 渡されたDCにカーソルを描画する
-  void DrawCursor(HDC dc, HWND window);
+  void DrawCursor(HDC dc, HWND window, int clipping_x, int clipping_y);
 
   /// @brief Windowがキャプチャに適切な状態になっているか判定する
   bool ValidateWindow(int index);

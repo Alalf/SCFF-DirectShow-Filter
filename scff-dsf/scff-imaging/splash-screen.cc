@@ -214,7 +214,7 @@ ErrorCode SplashScreen::Run() {
   }
 
   // エラー発生なし
-  return NoError();
+  return GetCurrentError();
 }
 
 }   // namespace scff_imaging

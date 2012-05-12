@@ -1,4 +1,5 @@
-﻿// Copyright 2012 Progre <djyayutto_at_gmail.com>
+﻿
+// Copyright 2012 Progre <djyayutto_at_gmail.com>
 //
 // This file is part of SCFF DSF.
 //
@@ -15,94 +16,122 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
+/// @file AreaSelectForm.cs
+/// @brief エリア選択ウィンドウの定義
+
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace scff_app {
-  public partial class AreaSelectForm : Form {
-    public AreaSelectForm() {
-      InitializeComponent();
 
-      resizing = false;
-      last = new Point(0, 0);
-      clipping_x = 0;
-      clipping_y = 0;
-      clipping_width = 32;
-      clipping_height = 32;
-    }
-    public int clipping_x;
-    public int clipping_y;
-    public int clipping_width;
-    public int clipping_height;
+/// @brief エリア選択ウィンドウ
+public partial class AreaSelectForm : Form {
+  /// @brief コンストラクタ
+  public AreaSelectForm() {
+    //---------------------------------------------------------------
+    // DO NOT DELETE THIS!!!
+    InitializeComponent();
+    //---------------------------------------------------------------
 
-    private bool resizing;
-    private Point last;
-    private Point moving_start;
+    // 初期化
+    resizing_ = false;
+    last_location_ = new Point(0, 0);
+    moving_start_location_ = new Point(0, 0);
+    clipping_x_ = 0;
+    clipping_y_ = 0;
+    clipping_width_ = 32;
+    clipping_height_ = 32;
+  }
 
-    private void AreaSelectForm_DoubleClick(object sender, EventArgs e) {
-      Close();
-    }
-    private void AreaSelectForm_MouseDown(object sender, MouseEventArgs e) {
-      resizing = true;
-      last = e.Location;
-      moving_start = e.Location;
-    }
-    private void AreaSelectForm_MouseUp(object sender, MouseEventArgs e) {
-      resizing = false;
-    }
-    private void AreaSelectForm_MouseMove(object sender, MouseEventArgs e) {
-      if (resizing) {
-        int w = Size.Width;
-        int h = Size.Height;
+  /// @brief 結果を取得
+  public void GetResult(out int clipping_x, out int clipping_y, out int clipping_width, out int clipping_height) {
+    clipping_x = clipping_x_;
+    clipping_y = clipping_y_;
+    clipping_width = clipping_width_;
+    clipping_height = clipping_height_;
+  }
 
-        if (Cursor.Equals(Cursors.SizeNWSE)) {
-          Size my_size = new Size(w + (e.Location.X - last.X), h + (e.Location.Y - last.Y));
-          if (my_size.Width > 32 && my_size.Height > 32) {
-            Size = my_size;
-          }
-        } else if (Cursor.Equals(Cursors.SizeWE)) {
-          var my_size = new Size(w + (e.Location.X - last.X), h);
-          if (my_size.Width > 32 && my_size.Height > 32) {
-            Size = my_size;
-          }
-        } else if (Cursor.Equals(Cursors.SizeNS)) {
-          var my_size = new Size(w, h + (e.Location.Y - last.Y));
-          if (my_size.Width > 32 && my_size.Height > 32) {
-            this.Size = my_size;
-          }
-        } else if (Cursor.Equals(Cursors.SizeAll)) {
-          Left += e.Location.X - moving_start.X;
-          Top += e.Location.Y - moving_start.Y;
+  //===================================================================
+  // イベントハンドラ
+  //===================================================================
+
+  //-------------------------------------------------------------------
+  // フォーム
+  //-------------------------------------------------------------------
+  private void AreaSelectForm_DoubleClick(object sender, EventArgs e) {
+    Close();
+  }
+
+  private void AreaSelectForm_MouseDown(object sender, MouseEventArgs e) {
+    resizing_ = true;
+    last_location_ = e.Location;
+    moving_start_location_ = e.Location;
+  }
+
+  private void AreaSelectForm_MouseUp(object sender, MouseEventArgs e) {
+    resizing_ = false;
+  }
+
+  private void AreaSelectForm_MouseMove(object sender, MouseEventArgs e) {
+    if (resizing_) {
+      int w = Size.Width;
+      int h = Size.Height;
+
+      if (Cursor.Equals(Cursors.SizeNWSE)) {
+        Size my_size = new Size(w + (e.Location.X - last_location_.X), h + (e.Location.Y - last_location_.Y));
+        if (my_size.Width > 32 && my_size.Height > 32) {
+          Size = my_size;
         }
+      } else if (Cursor.Equals(Cursors.SizeWE)) {
+        var my_size = new Size(w + (e.Location.X - last_location_.X), h);
+        if (my_size.Width > 32 && my_size.Height > 32) {
+          Size = my_size;
+        }
+      } else if (Cursor.Equals(Cursors.SizeNS)) {
+        var my_size = new Size(w, h + (e.Location.Y - last_location_.Y));
+        if (my_size.Width > 32 && my_size.Height > 32) {
+          this.Size = my_size;
+        }
+      } else if (Cursor.Equals(Cursors.SizeAll)) {
+        Left += e.Location.X - moving_start_location_.X;
+        Top += e.Location.Y - moving_start_location_.Y;
+      }
 
-        last = e.Location;
+      last_location_ = e.Location;
+    } else {
+      bool resize_x = e.X > (Width - 16);
+      bool resize_y = e.Y > (Height - 16);
+
+      if (resize_x && resize_y) {
+        Cursor = Cursors.SizeNWSE;
+      } else if (resize_x) {
+        Cursor = Cursors.SizeWE;
+      } else if (resize_y) {
+        Cursor = Cursors.SizeNS;
       } else {
-        bool resize_x = e.X > (Width - 16);
-        bool resize_y = e.Y > (Height - 16);
-
-        if (resize_x && resize_y) {
-          Cursor = Cursors.SizeNWSE;
-        } else if (resize_x) {
-          Cursor = Cursors.SizeWE;
-        } else if (resize_y) {
-          Cursor = Cursors.SizeNS;
-        } else {
-          Cursor = Cursors.SizeAll;
-        }
+        Cursor = Cursors.SizeAll;
       }
     }
-    private void AreaSelectForm_FormClosed(object sender, FormClosedEventArgs e) {
-      Point origin = new Point(0, 0);
-      clipping_x = PointToScreen(origin).X;
-      clipping_y = PointToScreen(origin).Y;
-      clipping_width = Size.Width;
-      clipping_height = Size.Height;
-    }
   }
+  private void AreaSelectForm_FormClosed(object sender, FormClosedEventArgs e) {
+    Point origin = new Point(0, 0);
+    clipping_x_ = PointToScreen(origin).X;
+    clipping_y_ = PointToScreen(origin).Y;
+    clipping_width_ = Size.Width;
+    clipping_height_ = Size.Height;
+  }
+
+  //===================================================================
+  // メンバ変数
+  //===================================================================
+  private int clipping_x_;
+  private int clipping_y_;
+  private int clipping_width_;
+  private int clipping_height_;
+
+  private bool resizing_;
+  private Point last_location_;
+  private Point moving_start_location_;
+}
 }

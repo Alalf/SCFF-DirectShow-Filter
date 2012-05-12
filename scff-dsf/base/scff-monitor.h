@@ -53,7 +53,7 @@ class SCFFMonitor {
   clock_t last_polling_clock_;
 
   /// @brief 最後に受信したSCFFMessageのタイムスタンプ
-  int32_t last_message_timestamp_;
+  int64_t last_message_timestamp_;
 };
 
 #endif  // SCFF_DSF_BASE_SCFF_MONITOR_H_

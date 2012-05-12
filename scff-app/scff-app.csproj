@@ -67,6 +67,9 @@
     <Compile Include="AreaSelectForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Commons\ViewModels\ViewModelBase.cs" />
+    <Compile Include="Commons\Views\Forms\DragMover.cs" />
+    <Compile Include="Views\AreaSelectForm.Designer.cs">
     <Compile Include="AreaSelectForm.Designer.cs">
       <DependentUpon>AreaSelectForm.cs</DependentUpon>
     </Compile>

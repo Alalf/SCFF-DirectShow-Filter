@@ -18,7 +18,7 @@ namespace ScffApp.Views.Layouts
         {
             InitializeComponent();
 
-            dragMover = new DragMover(this, true);
+            dragMover = new DragMover(this);
         }
 
         private void innerPanel_MouseDown(object sender, MouseEventArgs e)

@@ -9,6 +9,11 @@ namespace ScffApp.Commons.Views.Forms
 {
     public class DragMover : IDisposable
     {
+        /// <remarks>
+        /// 座標系がレイアウトフォームとプレビュー領域に分散しないように注意する
+        /// マウスのlocationはプレビュー領域の座標系なのでGetTargetsLocationメソッドで変換する
+        /// </remarks>
+
         /// <summary>リサイズとする領域のサイズ</summary>
         private const int Border = 16;
         /// <summary>最小サイズ</summary>
@@ -17,16 +22,14 @@ namespace ScffApp.Commons.Views.Forms
         private Control target;
         private bool resizable;
         private int mode;
-        private Point startMouseLocation;
         private Point lastMouseLocation;
         private Rectangle startTargetRect;
         private Point virtualLocation;
         private Size virtualSize;
 
-        public DragMover(Control target, bool resizable)
+        public DragMover(Control target)
         {
             this.target = target;
-            this.resizable = resizable;
             target.MouseDown += target_MouseDown;
             target.MouseMove += target_MouseMove;
             target.MouseUp += target_MouseUp;
@@ -45,10 +48,9 @@ namespace ScffApp.Commons.Views.Forms
 
         private void target_MouseDown(object sender, MouseEventArgs e)
         {
-            var location = e.Location;
-            mode = GetArea(location);
-            startMouseLocation = location;
-            lastMouseLocation = location;
+            var previewsLocation = e.Location;
+            mode = GetArea(previewsLocation);
+            lastMouseLocation = GetTargetsLocation(previewsLocation);
             startTargetRect = new Rectangle(target.Location, target.Size);
             virtualLocation = target.Location;
             virtualSize = target.Size;
@@ -56,78 +58,19 @@ namespace ScffApp.Commons.Views.Forms
 
         private void target_MouseMove(object sender, MouseEventArgs e)
         {
-            var location = e.Location;
+            var previewsLocation = e.Location;
             if (mode == 0)
             {
-                target.Cursor = AreaToCursor(GetArea(location));
+                target.Cursor = AreaToCursor(GetArea(previewsLocation));
             }
             else
             {
+                var location = GetTargetsLocation(previewsLocation);
                 UpdateVirtualRect(location);
 
-                // UpdateRealRect()
-                // 真ん中
-                if (mode == 5)
-                {
-                    target.Location = virtualLocation;
-                }
-                else
-                {
-                    int newLocationX = virtualLocation.X;
-                    int newLocationY = virtualLocation.Y;
-                    int newSizeWidth = virtualSize.Width;
-                    int newSizeHeight = virtualSize.Height;
-                    // 左
-                    if (mode == 7 || mode == 4 || mode == 1)
-                    {
-                    }
-                    // 上
-                    if (mode == 7 || mode == 8 || mode == 9)
-                    {
-                        // TODO(progre): 実装
-                        /*
-                        if (virtualSize.Height < MinSize)
-                        {
-                            newSizeHeight = MinSize;
-                            newLocationY = startTargetRect.Y + startTargetRect.Height - MinSize+1;
-                        }
-                         * */
-                    }
-                    // 下
-                    if (mode == 1 || mode == 2 || mode == 3)
-                    {
-                        newSizeHeight = virtualSize.Height > MinSize ? virtualSize.Height : MinSize;
-                    }
-                    // 右
-                    if (mode == 9 || mode == 6 || mode == 3)
-                    {
-                        newSizeWidth = virtualSize.Width > MinSize ? virtualSize.Width : MinSize;
-                    }
-                    target.Location = new Point(newLocationX, newLocationY);
-                    target.Size = new Size(newSizeWidth, newSizeHeight);
-                }
-                if (false)
-                {
-
-                    int newLocationX;
-                    int newLocationY;
-                    if (virtualSize.Width > MinSize)
-                        newLocationX = virtualLocation.X;
-                    else
-                        newLocationX = startTargetRect.Left + startTargetRect.Width - MinSize;
-                    if (virtualSize.Height > MinSize)
-                        newLocationY = virtualLocation.Y;
-                    else
-                        newLocationY = startTargetRect.Top + startTargetRect.Height - MinSize;
-
-                    target.Location = new Point(
-                            newLocationX,
-                            newLocationY);
-                    target.Size = new Size(
-                            virtualSize.Width > MinSize ? virtualSize.Width : MinSize,
-                            virtualSize.Height > MinSize ? virtualSize.Height : MinSize);
-                }
-                lastMouseLocation = location;
+                var rect = GetFixedRect(virtualLocation, virtualSize, mode);
+                target.Size = rect.Size;
+                target.Location = rect.Location;
             }
         }
 
@@ -145,22 +88,22 @@ namespace ScffApp.Commons.Views.Forms
             // 真ん中
             if (mode == 5)
             {
-                virtualX += location.X - startMouseLocation.X;
-                virtualY += location.Y - startMouseLocation.Y;
+                virtualX += location.X - lastMouseLocation.X;
+                virtualY += location.Y - lastMouseLocation.Y;
             }
             else
             {
                 // 左
                 if (mode == 7 || mode == 4 || mode == 1)
                 {
-                    virtualX += location.X - startMouseLocation.X;
-                    virtualWidth -= location.X - startMouseLocation.X;
+                    virtualX += location.X - lastMouseLocation.X;
+                    virtualWidth -= location.X - lastMouseLocation.X;
                 }
                 // 上
                 if (mode == 7 || mode == 8 || mode == 9)
                 {
-                    virtualY += location.Y - startMouseLocation.Y;
-                    virtualHeight -= location.Y - startMouseLocation.Y;
+                    virtualY += location.Y - lastMouseLocation.Y;
+                    virtualHeight -= location.Y - lastMouseLocation.Y;
                 }
                 // 下
                 if (mode == 1 || mode == 2 || mode == 3)
@@ -175,17 +118,66 @@ namespace ScffApp.Commons.Views.Forms
             }
             virtualLocation = new Point(virtualX, virtualY);
             virtualSize = new Size(virtualWidth, virtualHeight);
+
+            lastMouseLocation = location;
+        }
+
+        private Rectangle GetFixedRect(Point location, Size size, int mode)
+        {
+            int newLocationX = location.X;
+            int newLocationY = location.Y;
+            int newSizeWidth = size.Width;
+            int newSizeHeight = size.Height;
+            // 真ん中以外
+            if (mode != 5)
+            {
+                // 左
+                if (mode == 7 || mode == 4 || mode == 1)
+                {
+                    if (size.Width < MinSize)
+                    {
+                        newSizeWidth = MinSize;
+                        newLocationX = startTargetRect.X + startTargetRect.Width - MinSize;
+                    }
+                }
+                // 上
+                if (mode == 7 || mode == 8 || mode == 9)
+                {
+                    if (size.Height < MinSize)
+                    {
+                        newSizeHeight = MinSize;
+                        newLocationY = startTargetRect.Y + startTargetRect.Height - MinSize;
+                    }
+                }
+                // 下
+                if (mode == 1 || mode == 2 || mode == 3)
+                {
+                    if (size.Height < MinSize)
+                    {
+                        newSizeHeight = MinSize;
+                    }
+                }
+                // 右
+                if (mode == 9 || mode == 6 || mode == 3)
+                {
+                    if (size.Width < MinSize)
+                    {
+                        newSizeWidth = MinSize;
+                    }
+                }
+            }
+            return new Rectangle(newLocationX, newLocationY, newSizeWidth, newSizeHeight);
         }
 
         /// <summary>
         /// locationがターゲットコントロールの上下左右斜めのどの領域にあるか
         /// </summary>
-        private int GetArea(Point location)
+        private int GetArea(Point previewsLocation)
         {
-            var onLeftBorder = location.X < Border;
-            var onTopBorder = location.Y < Border;
-            var onRightBorder = location.X > target.Width - Border;
-            var onBottomBorder = location.Y > target.Height - Border;
+            var onLeftBorder = previewsLocation.X < Border;
+            var onTopBorder = previewsLocation.Y < Border;
+            var onRightBorder = previewsLocation.X > target.Width - Border;
+            var onBottomBorder = previewsLocation.Y > target.Height - Border;
             if (onLeftBorder && onTopBorder)
                 return 7;
             if (onTopBorder && onRightBorder)
@@ -228,6 +220,11 @@ namespace ScffApp.Commons.Views.Forms
                 default:
                     return Cursors.Default;
             }
+        }
+
+        private Point GetTargetsLocation(Point previewsLocation)
+        {
+            return new Point(target.Left + previewsLocation.X, target.Top + previewsLocation.Y);
         }
     }
 }

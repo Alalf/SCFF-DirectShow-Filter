@@ -16,32 +16,29 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file scff-app/form1-dwmapi.cs
-/// @brief Form1(メインウィンドウ)のDWMAPI関連のメソッドの定義
+/// @file scff-app/app-implementation-dwmapi.cs
+/// @brief DWMAPI関連のメソッドの定義
 
-using System.Windows.Forms;
 using System.Runtime.InteropServices;
 
 namespace scff_app {
 
 // メインウィンドウ
 public partial class AppImplementation {
-
-  /// @brief API: DwmIsCompositionEnabled
+  //-------------------------------------------------------------------
+  // Wrappers
+  //-------------------------------------------------------------------
   [DllImport("dwmapi.dll")]
   private static extern int DwmIsCompositionEnabled(out bool enabled);
-  /// @brief API: DwmEnableComposition
   [DllImport("dwmapi.dll")]
   private static extern int DwmEnableComposition(uint uCompositionAction);
-
-  /// @brief Disable DWM
-  const int DWM_EC_DISABLECOMPOSITION = 0;
-  /// @brief Enable DWM
-  const int DWM_EC_ENABLECOMPOSITION = 1;
+  private const int DWM_EC_DISABLECOMPOSITION = 0;
+  private const int DWM_EC_ENABLECOMPOSITION = 1;
+  //-------------------------------------------------------------------
 
   /// @brief Dwmapi.dllを利用してAeroをOffに
   public void DWMAPIOff() {
-    if (!can_use_dwmapi_dll_) {
+    if (!CanUseDWMAPIDLL()) {
       // dwmapi.dllを利用できなければ何もしない
       was_dwm_enabled_on_start_ = false;
       return;
@@ -50,15 +47,14 @@ public partial class AppImplementation {
     bool was_dwm_enabled_on_start;
     DwmIsCompositionEnabled(out was_dwm_enabled_on_start);
     if (was_dwm_enabled_on_start) {
-      //DwmEnableComposition(DWM_EC_DISABLECOMPOSITION);
-    } else {
+      DwmEnableComposition(DWM_EC_DISABLECOMPOSITION);
     }
-    was_dwm_enabled_on_start_ = was_dwm_enabled_on_start == true;
+    was_dwm_enabled_on_start_ = was_dwm_enabled_on_start;
   }
 
   /// @brief 強制的にAeroのOn/Offを切り替える
   public void DWMAPIFlip(bool current) {
-    if (!can_use_dwmapi_dll_) {
+    if (!CanUseDWMAPIDLL()) {
       // dwmapi.dllを利用できなければ何もしない
       return;
     }
@@ -72,7 +68,7 @@ public partial class AppImplementation {
 
   /// @brief AeroをOffにしていたらOnに戻す
   public void DWMAPIRestore() {
-    if (!can_use_dwmapi_dll_) {
+    if (!CanUseDWMAPIDLL()) {
       // dwmapi.dllを利用できなければ何もしない
       return;
     }
@@ -82,9 +78,17 @@ public partial class AppImplementation {
     }
   }
 
-  /// @brief Dwmapi.dllが利用可能かどうか
-  private bool can_use_dwmapi_dll_;
+  /// @brief DWMAPI.DLLが利用可能かどうか
+  private bool CanUseDWMAPIDLL() {
+    if (System.Environment.OSVersion.Platform == System.PlatformID.Win32NT &&
+        System.Environment.OSVersion.Version.Major >= 6) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   /// @brief Aeroが起動時にONになっていたかどうか
-  private bool was_dwm_enabled_on_start_;
+  private bool was_dwm_enabled_on_start_ = false;
 }
 }   // namespace scff_app

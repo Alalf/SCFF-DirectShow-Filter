@@ -17,174 +17,128 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file Form1.cs
-/// @brief Form1のイベントハンドラの定義
-
-// TODO(progre): 移植未達部分が完了次第名称含め全体をリファクタリング
+/// @brief Form1のUIに関連するメソッドの定義
+/// @todo(progre) 移植未達部分が完了次第名称含め全体をリファクタリング
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using System.Collections;
-using System.Runtime.InteropServices;
 
 namespace scff_app {
 
 /// @brief メインウィンドウ
 public partial class Form1 : Form {
 
-  private AppImplementation impl;
+  /// @brief アプリケーションの実装(MVCパターンにおけるModel/Controller)
+  private AppImplementation impl_;
 
+  /// @brief コンストラクタ
   public Form1() {
     //---------------------------------------------------------------
     // DO NOT DELETE THIS!!!
     InitializeComponent();
     //---------------------------------------------------------------
 
-    impl = new AppImplementation();
+    // AppImplementationインスタンスを生成
+    impl_ = new AppImplementation();
 
-    // DataSoruce/DataBindingsの設定
+    // リサイズメソッドのコンボボックスのデータソースを設定
+    option_resize_method_combo.DisplayMember = "Item1";
+    option_resize_method_combo.ValueMember = "Item2";
+    option_resize_method_combo.DataSource = impl_.ResizeMethodList;
+
+    // 初期設定
+    this.UpdateCurrentDirectory();
+    this.UpdateEditingLayoutIndex(0);
+
+    area_fit.Checked = true;
   }
 
-  /// @brief Event: ウィンドウが閉じられた
-  protected override void OnClosed(EventArgs e) {
-    base.OnClosed(e);
-    impl.DWMAPIRestore();
-  }
-
-  private void aero_on_item_Click(object sender, EventArgs e) {
-    impl.DWMAPIFlip(aero_on_item.Checked);
-  }
-
-  private void window_draghere_MouseDown(object sender, MouseEventArgs e) {
-    window_draghere.BackColor = Color.Orange;
-  }
-
-  private void process_refresh_Click(object sender, EventArgs e) {
-    // ディレクトリから更新
-    impl.UpdateDirectory();
-  }
-
-  [DllImport("user32.dll")]
-  private static extern IntPtr WindowFromPoint(int xPoint, int yPoint);
-
-  private void window_draghere_MouseUp(object sender, MouseEventArgs e) {
-    window_draghere.BackColor = SystemColors.Control;
-
-    Point location = window_draghere.PointToScreen(e.Location);
-
-    IntPtr window_handle = WindowFromPoint(location.X, location.Y);
-    if (window_handle != IntPtr.Zero) {
-      // 見つかった場合
-      impl.SetWindow(window_handle);
+  /// @brief Processコンボボックスのデータソースを再設定
+  private void UpdateCurrentDirectory() {
+    process_combo.DataSource = null;
+    process_combo.DisplayMember = "EntryInfo";
+    process_combo.ValueMember = "ProcessID";
+    impl_.UpdateCurrentDirectory();
+    process_combo.DataSource = impl_.CurrentDirectory.Entries;
+    
+    if (impl_.CurrentDirectory.Entries.Count == 0) {
+      process_combo.Enabled = false;
+      splash.Enabled = false;
+      apply.Enabled = false;
+      target_auto_apply.Checked = false;
+      target_auto_apply.Enabled = false;
     } else {
-      // nop
+      process_combo.Enabled = true;
+      splash.Enabled = true;
+      apply.Enabled = true;
+      target_auto_apply.Enabled = true;
     }
   }
-  private void splash_Click(object sender, EventArgs e) {
-    impl.SendNullLayoutRequest();
-  }
-  private void apply_Click(object sender, EventArgs e) {
-    if (impl.ValidateParameters()) {
-      impl.SendNativeLayoutRequest();
-    }
-  }
-  private void process_combo_SelectedIndexChanged(object sender, EventArgs e) {
-  }
-  private void area_fit_CheckedChanged(object sender, EventArgs e) {
-    if (area_fit.Checked) {
-      area_clipping_x.Enabled = false;
-      area_clipping_y.Enabled = false;
-      area_clipping_width.Enabled = false;
-      area_clipping_height.Enabled = false;
 
-      impl.ResetClippingRegion();
-    } else {
-      area_clipping_x.Enabled = true;
-      area_clipping_y.Enabled = true;
-      area_clipping_width.Enabled = true;
-      area_clipping_height.Enabled = true;
-    }
+  /// @brief DataBindingsを再設定
+  private void UpdateEditingLayoutIndex(int editing_layout_index) {
+    impl_.EditingLayoutIndex = editing_layout_index;
+    layout_bound_x.DataBindings.Add(
+        "Value", impl_.LayoutParameters[impl_.EditingLayoutIndex], "BoundX");
+    layout_bound_y.DataBindings.Add(
+        "Value", impl_.LayoutParameters[impl_.EditingLayoutIndex], "BoundY");
+    layout_bound_width.DataBindings.Add(
+        "Value", impl_.LayoutParameters[impl_.EditingLayoutIndex], "BoundWidth");
+    layout_bound_height.DataBindings.Add(
+        "Value", impl_.LayoutParameters[impl_.EditingLayoutIndex], "BoundHeight");
+    window_handle.DataBindings.Add(
+        "Text", impl_.LayoutParameters[impl_.EditingLayoutIndex], "WindowText");
+    window_handle.DataBindings.Add(
+        "Tag", impl_.LayoutParameters[impl_.EditingLayoutIndex], "Window");
+    area_clipping_x.DataBindings.Add(
+        "Value", impl_.LayoutParameters[impl_.EditingLayoutIndex], "ClippingX");
+    area_clipping_y.DataBindings.Add(
+        "Value", impl_.LayoutParameters[impl_.EditingLayoutIndex], "ClippingY");
+    area_clipping_width.DataBindings.Add(
+        "Value", impl_.LayoutParameters[impl_.EditingLayoutIndex], "ClippingWidth");
+    area_clipping_height.DataBindings.Add(
+        "Value", impl_.LayoutParameters[impl_.EditingLayoutIndex], "ClippingHeight");
+    option_show_mouse_cursor.DataBindings.Add(
+        "Checked", impl_.LayoutParameters[impl_.EditingLayoutIndex], "ShowCursor");
+    option_show_layered_window.DataBindings.Add(
+        "Checked", impl_.LayoutParameters[impl_.EditingLayoutIndex], "ShowLayeredWindow");
+    option_resize_method_combo.DataBindings.Add(
+        "SelectedValue", impl_.LayoutParameters[impl_.EditingLayoutIndex], "SwsFlags");
+    option_enable_enlargement.DataBindings.Add(
+        "Checked", impl_.LayoutParameters[impl_.EditingLayoutIndex], "Stretch");
+    option_keep_aspect_ratio.DataBindings.Add(
+        "Checked", impl_.LayoutParameters[impl_.EditingLayoutIndex], "KeepAspectRatio");
   }
-  private void window_desktop_Click(object sender, EventArgs e) {
-    impl.DoCaptureDesktopWindow();
-  }
-  private void area_clipping_x_ValueChanged(object sender, EventArgs e) {
-    impl.LayoutParameters[impl.EditingLayoutIndex].ClippingX =
-        (int)area_clipping_x.Value;
-  }
-  private void area_clipping_y_ValueChanged(object sender, EventArgs e) {
-    impl.LayoutParameters[impl.EditingLayoutIndex].ClippingY =
-        (int)area_clipping_y.Value;
-  }
-  private void area_clipping_width_ValueChanged(object sender, EventArgs e) {
-    impl.LayoutParameters[impl.EditingLayoutIndex].ClippingWidth =
-        (int)area_clipping_width.Value;
-  }
-  private void area_clipping_height_ValueChanged(object sender, EventArgs e) {
-    impl.LayoutParameters[impl.EditingLayoutIndex].ClippingHeight =
-        (int)area_clipping_height.Value;
-  }
-  private void option_show_mouse_cursor_CheckedChanged(object sender, EventArgs e) {
-    impl.LayoutParameters[impl.EditingLayoutIndex].ShowCursor =
-        option_show_mouse_cursor.Checked;
-  }
-  private void option_show_layered_window_CheckedChanged(object sender, EventArgs e) {
-    impl.LayoutParameters[impl.EditingLayoutIndex].ShowLayeredWindow =
-        option_show_layered_window.Checked;
-  }
-  private void option_keep_aspect_ratio_CheckedChanged(object sender, EventArgs e) {
-    impl.LayoutParameters[impl.EditingLayoutIndex].KeepAspectRatio =
-        option_keep_aspect_ratio.Checked;
-  }
-  private void option_enable_enlargement_CheckedChanged(object sender, EventArgs e) {
-    impl.LayoutParameters[impl.EditingLayoutIndex].Stretch =
-        option_enable_enlargement.Checked;
-  }
-  private void option_over_sampling_CheckedChanged(object sender, EventArgs e) {
-    /// @todo(me) 実装
-  }
-  private void option_thread_num_ValueChanged(object sender, EventArgs e) {
-    /// @todo(me) 実装
-  }
-  private void option_resize_method_combo_SelectedIndexChanged(object sender, EventArgs e) {
-    impl.LayoutParameters[impl.EditingLayoutIndex].SwsFlags =
-        (scff_interprocess.SWScaleFlags)option_resize_method_combo.SelectedValue;
-  }
-  private void target_area_select_Click(object sender, EventArgs e) {
-    AreaSelectForm form = new AreaSelectForm();
-    Point new_loc = new Point((int)area_clipping_x.Value,
-                  (int)area_clipping_y.Value);
-    form.Location = new_loc;
-    Size new_size = new Size((int)area_clipping_width.Value,
-                                    (int)area_clipping_height.Value);
-    form.Size = new_size;
-    form.ShowDialog();
 
-    // デスクトップキャプチャに変更
-    impl.DoCaptureDesktopWindow();
-    // FitをはずしてClippingをかく
-    area_fit.Checked = false;
-    area_clipping_x.Value = Math.Max(form.clipping_x, area_clipping_x.Minimum);
-    area_clipping_y.Value = Math.Max(form.clipping_y, area_clipping_y.Minimum);
-    area_clipping_width.Value = Math.Min(form.clipping_width, area_clipping_width.Maximum - area_clipping_x.Value);
-    area_clipping_height.Value = Math.Min(form.clipping_height, area_clipping_height.Maximum - area_clipping_y.Value);
-  }
+  //===================================================================
+  // イベントハンドラ
+  //===================================================================
+
+  //-------------------------------------------------------------------
+  // フォーム
+  //-------------------------------------------------------------------
   private void Form1_Shown(object sender, EventArgs e) {
-    impl.DWMAPIOff();
+    // AeroをOffにしようと試みる
+    impl_.DWMAPIOff();
   }
-  private void layout_layout_Click(object sender, EventArgs e) {
-    if (impl.ValidateParameters()) {
-      impl.SendComplexLayoutRequest();
-    }
+  private void Form1_FormClosed(object sender, FormClosedEventArgs e) {
+    // Aeroの状態を元に戻す
+    impl_.DWMAPIRestore();
   }
-  private void layout_add_Click(object sender, EventArgs e) {
+
+  //-------------------------------------------------------------------
+  // メニュー
+  //-------------------------------------------------------------------
+  private void aero_on_item_Click(object sender, EventArgs e) {
+    // Aeroの状態を切り替える
+    impl_.DWMAPIFlip(aero_on_item.Checked);
+    aero_on_item.Checked = !aero_on_item.Checked;
   }
-  private void layout_remove_Click(object sender, EventArgs e) {}
+
+  //-------------------------------------------------------------------
+  // Stripメニュー
+  //-------------------------------------------------------------------
   private void layout_strip_ButtonClick(object sender, EventArgs e) {
     if (Width > 300) {
       Width = 300;
@@ -192,7 +146,173 @@ public partial class Form1 : Form {
       Width = 488;
     }
   }
-  private void layout_list_SelectedIndexChanged(object sender, EventArgs e) {}
+
+  //-------------------------------------------------------------------
+  // OK/CANCEL
+  //-------------------------------------------------------------------
+  private void splash_Click(object sender, EventArgs e) {
+    impl_.SendNullLayoutRequest();
+  }
+  private void apply_Click(object sender, EventArgs e) {
+    if (impl_.ValidateParameters()) {
+      impl_.SendLayoutRequest();
+    }
+  }
+
+  //-------------------------------------------------------------------
+  // Process
+  //-------------------------------------------------------------------
+  private void process_refresh_Click(object sender, EventArgs e) {
+    // ディレクトリから更新
+    this.UpdateCurrentDirectory();
+  }
+
+  private void process_combo_SelectedIndexChanged(object sender, EventArgs e) {
+    if (process_combo.SelectedValue != null) {
+      impl_.EditingProcessID = (System.UInt32)process_combo.SelectedValue;
+    }
+  }
+
+  //-------------------------------------------------------------------
+  // Layout Profile
+  //-------------------------------------------------------------------
+  private void layout_profile_add_Click(object sender, EventArgs e) {
+    MessageBox.Show(impl_.CurrentDirectory.Entries.ToString());
+  }
+
+  //-------------------------------------------------------------------
+  // Target/Window
+  //-------------------------------------------------------------------
+
+  /// @brief クリッピング領域の値の更新
+  private void UpdateClippingRegion() {
+    impl_.ResetClippingRegion();
+    area_clipping_x.DataBindings["Value"].ReadValue();
+    area_clipping_y.DataBindings["Value"].ReadValue();
+    area_clipping_width.DataBindings["Value"].ReadValue();
+    area_clipping_height.DataBindings["Value"].ReadValue();
+  }
+
+  private void window_draghere_MouseDown(object sender, MouseEventArgs e) {
+    window_draghere.BackColor = Color.Orange;
+  }
+
+  private void window_draghere_MouseUp(object sender, MouseEventArgs e) {
+    window_draghere.BackColor = SystemColors.Control;
+
+    Point screen_location = window_draghere.PointToScreen(e.Location);
+    impl_.SetWindowFromPoint(screen_location.X, screen_location.Y);
+    window_handle.DataBindings["Text"].ReadValue();
+    window_handle.DataBindings["Tag"].ReadValue();
+
+    UpdateClippingRegion();
+    area_fit.Checked = true;
+
+    if (target_auto_apply.Checked) {
+      if (impl_.ValidateParameters()) {
+        impl_.SendLayoutRequest();
+      }
+    }
+  }
+
+  private void window_desktop_Click(object sender, EventArgs e) {
+    impl_.SetWindowToDesktop();
+    window_handle.DataBindings["Text"].ReadValue();
+    window_handle.DataBindings["Tag"].ReadValue();
+
+    UpdateClippingRegion();
+    area_fit.Checked = true;
+
+    if (target_auto_apply.Checked) {
+      if (impl_.ValidateParameters()) {
+        impl_.SendLayoutRequest();
+      }
+    }
+  }
+
+  //-------------------------------------------------------------------
+  // Target/Area
+  //-------------------------------------------------------------------
+  private void area_fit_CheckedChanged(object sender, EventArgs e) {
+    if (area_fit.Checked) {
+      area_clipping_x.Enabled = false;
+      area_clipping_y.Enabled = false;
+      area_clipping_width.Enabled = false;
+      area_clipping_height.Enabled = false;
+      this.UpdateClippingRegion();
+
+      if (target_auto_apply.Checked) {
+        if (impl_.ValidateParameters()) {
+          impl_.SendLayoutRequest();
+        }
+      }
+    } else {
+      area_clipping_x.Enabled = true;
+      area_clipping_y.Enabled = true;
+      area_clipping_width.Enabled = true;
+      area_clipping_height.Enabled = true;
+    }
+  }
+
+  private void target_area_select_Click(object sender, EventArgs e) {
+    AreaSelectForm form = new AreaSelectForm();
+    Point new_loc =
+        new Point((int)area_clipping_x.Value,
+                  (int)area_clipping_y.Value);
+    form.Location = new_loc;
+    Size new_size =
+        new Size((int)area_clipping_width.Value,
+                 (int)area_clipping_height.Value);
+    form.Size = new_size;
+    form.ShowDialog();
+
+    // デスクトップキャプチャに変更
+    impl_.SetWindowToDesktop();
+    window_handle.DataBindings["Text"].ReadValue();
+    window_handle.DataBindings["Tag"].ReadValue();
+
+    // FitをはずしてClippingを更新
+    area_fit.Checked = false;
+    impl_.JustifyClippingRegion(
+        form.clipping_x, form.clipping_y, form.clipping_width, form.clipping_height);
+    area_clipping_x.DataBindings["Value"].ReadValue();
+    area_clipping_y.DataBindings["Value"].ReadValue();
+    area_clipping_width.DataBindings["Value"].ReadValue();
+    area_clipping_height.DataBindings["Value"].ReadValue();
+
+    if (target_auto_apply.Checked) {
+      if (impl_.ValidateParameters()) {
+        impl_.SendLayoutRequest();
+      }
+    }
+  }
+
+  private void area_clipping_ValueChanged(object sender, EventArgs e) {
+    if (target_auto_apply.Checked) {
+      if (impl_.ValidateParameters()) {
+        impl_.SendLayoutRequest();
+      }
+    }
+  }
+
+  //-------------------------------------------------------------------
+  // Layout
+  //-------------------------------------------------------------------
+  private void layout_add_Click(object sender, EventArgs e) {
+    // nop
+  }
+
+  private void layout_remove_Click(object sender, EventArgs e) {
+    // nop
+  }
+
+  private void layout_list_SelectedIndexChanged(object sender, EventArgs e) {
+    // nop  
+  }
+
+  private void layout_layout_Click(object sender, EventArgs e) {
+    // nop
+  }
 }
 }   // namespace scff_app
 

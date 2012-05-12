@@ -22,6 +22,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Runtime.InteropServices;
+using System.Text;
 
 namespace scff_app {
 
@@ -58,26 +60,28 @@ public class Entry {
     return interprocess_entry;
   }
   /// @brief 文字列に変換
-  public override string ToString() {
-    string pixel_format_string;
-    switch (SamplePixelFormat) {
-    case scff_interprocess.ImagePixelFormat.kI420:
-      pixel_format_string = "I420";
-      break;
-    case scff_interprocess.ImagePixelFormat.kUYVY:
-      pixel_format_string = "UYVY";
-      break;
-    case scff_interprocess.ImagePixelFormat.kRGB0:
-      pixel_format_string = "RGB0";
-      break;
-    default:
-      pixel_format_string = "(invalid)";
-      break;
-    }
+  public string EntryInfo {
+    get {
+      string pixel_format_string;
+      switch (SamplePixelFormat) {
+      case scff_interprocess.ImagePixelFormat.kI420:
+        pixel_format_string = "I420";
+        break;
+      case scff_interprocess.ImagePixelFormat.kUYVY:
+        pixel_format_string = "UYVY";
+        break;
+      case scff_interprocess.ImagePixelFormat.kRGB0:
+        pixel_format_string = "RGB0";
+        break;
+      default:
+        pixel_format_string = "(invalid)";
+        break;
+      }
 
-    return "[" + ProcessID + "] " + ProcessName +
-            " (" + pixel_format_string + " " + SampleWidth + "x" + SampleHeight +
-            " " + FPS.ToString("F0") + "fps)";
+      return "[" + ProcessID + "] " + ProcessName +
+              " (" + pixel_format_string + " " + SampleWidth + "x" + SampleHeight +
+              " " + FPS.ToString("F0") + "fps)";
+    }
   }
   public System.UInt32 ProcessID {get; set;}
   public string ProcessName {get; set;}
@@ -89,6 +93,11 @@ public class Entry {
 
 /// @brief scff_inteprocess.Directoryをマネージドクラス化したクラス
 public class Directory {
+  /// @brief デフォルトコンストラクタ。
+  public Directory() {
+    // Entryゼロのリストを作る
+    Entries = new List<Entry>();
+  }
   /// @brief コンストラクタ。引数はInterprocessの構造体。
   public Directory(scff_interprocess.Directory interprocess_directory) {
     Entries = new List<Entry>();
@@ -101,6 +110,8 @@ public class Directory {
   public scff_interprocess.Directory ToInterprocessDirectory() {
     scff_interprocess.Directory interprocess_directory = new scff_interprocess.Directory();
     // Listの前から順番に書き込む
+    interprocess_directory.entries =
+        new scff_interprocess.Entry[scff_interprocess.Interprocess.kMaxEntry];
     for (int i = 0; i < scff_interprocess.Interprocess.kMaxEntry; i++) {
       if (i < Entries.Count) {
         interprocess_directory.entries[i] = Entries[i].ToInterprocessEntry();
@@ -124,7 +135,10 @@ public class Directory {
 public class LayoutParameter {
   /// @brief デフォルトコンストラクタ。
   public LayoutParameter() {
-    // nop
+    // デフォルト値を設定
+    KeepAspectRatio = true;
+    Stretch = true;
+    SwsFlags = scff_interprocess.SWScaleFlags.kLanczos;
   }
   /// @brief コンストラクタ。引数はInterprocessの構造体。
   public LayoutParameter(scff_interprocess.LayoutParameter interprocess_layout_parameter) {
@@ -249,6 +263,25 @@ public class LayoutParameter {
   public System.Int32 BoundY { get; set; }
   public System.Int32 BoundWidth { get; set; }
   public System.Int32 BoundHeight { get; set; }
+
+  [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+  private static extern int GetClassName(System.IntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
+  [DllImport("user32.dll", SetLastError = false)]
+  static extern System.IntPtr GetDesktopWindow();
+
+  public string WindowText {
+    get {
+      if (Window == 0) {
+        return "(Splash)";
+      } else if (Window == (System.UInt64)GetDesktopWindow()) {
+        return "(Desktop)";
+      } else {
+        StringBuilder class_name = new StringBuilder(256);
+        GetClassName((System.IntPtr)Window, class_name, 256);
+        return class_name.ToString();
+      }
+    }
+  }
   public System.UInt64 Window { get; set; }
   public System.Int32 ClippingX { get; set; }
   public System.Int32 ClippingY { get; set; }
@@ -264,6 +297,14 @@ public class LayoutParameter {
 
 /// @brief scff_inteprocess.Directoryをマネージドクラス化したクラス
 public class Message {
+  /// @brief デフォルトコンストラクタ。
+  public Message() {
+    // デフォルト値を設定
+    Timestamp = System.DateTime.Now.Ticks;
+    LayoutType = scff_interprocess.LayoutType.kNullLayout;
+    LayoutElementCount = 0;
+    LayoutParameters = new List<LayoutParameter>();
+  }
  /// @brief コンストラクタ。引数はInterprocessの構造体。
   public Message(scff_interprocess.Message interprocess_message) {
     Timestamp = interprocess_message.timestamp;
@@ -292,6 +333,8 @@ public class Message {
     interprocess_message.layout_type = (System.Int32)LayoutType;
     interprocess_message.layout_element_count = LayoutElementCount;
     // Listの前から順番に書き込む
+    interprocess_message.layout_parameters =
+        new scff_interprocess.LayoutParameter[scff_interprocess.Interprocess.kMaxComplexLayoutElements];
     for (int i = 0; i < scff_interprocess.Interprocess.kMaxComplexLayoutElements; i++) {
       if (i < LayoutParameters.Count) {
         interprocess_message.layout_parameters[i] = LayoutParameters[i].ToInterprocessLayoutParameter();

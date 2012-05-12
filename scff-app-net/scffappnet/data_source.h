@@ -81,7 +81,7 @@ ref class ManagedEntry {
       try {
         value_ptr = Marshal::StringToHGlobalAnsi(value);
         char* valur_char_ptr = static_cast<char*>(value_ptr.ToPointer());
-        strcpy_s(entry_->process_name, kMaxPath, valur_char_ptr);
+        strcpy_s(entry_->process_name, scff_interprocess::kMaxPath, valur_char_ptr);
       }
       finally {
         Marshal::FreeHGlobal(value_ptr);

@@ -35,15 +35,18 @@
             // 
             // innerPanel
             // 
+            this.innerPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.innerPanel.BackColor = System.Drawing.Color.ForestGreen;
             this.innerPanel.Controls.Add(this.label1);
             this.innerPanel.Location = new System.Drawing.Point(2, 2);
             this.innerPanel.Name = "innerPanel";
             this.innerPanel.Size = new System.Drawing.Size(146, 146);
             this.innerPanel.TabIndex = 0;
-            this.innerPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.PreviewControl_MouseDown);
-            this.innerPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.PreviewControl_MouseMove);
-            this.innerPanel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.PreviewControl_MouseUp);
+            this.innerPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.innerPanel_MouseDown);
+            this.innerPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.innerPanel_MouseMove);
+            this.innerPanel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.innerPanel_MouseUp);
             // 
             // label1
             // 
@@ -61,9 +64,6 @@
             this.BackColor = System.Drawing.Color.GreenYellow;
             this.Controls.Add(this.innerPanel);
             this.Name = "PreviewControl";
-            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.PreviewControl_MouseDown);
-            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.PreviewControl_MouseMove);
-            this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.PreviewControl_MouseUp);
             this.innerPanel.ResumeLayout(false);
             this.innerPanel.PerformLayout();
             this.ResumeLayout(false);

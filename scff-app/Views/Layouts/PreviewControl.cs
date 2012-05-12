@@ -18,22 +18,22 @@ namespace ScffApp.Views.Layouts
         {
             InitializeComponent();
 
-            dragMover = new DragMover(this);
+            dragMover = new DragMover(this, true);
         }
 
-        private void PreviewControl_MouseDown(object sender, MouseEventArgs e)
+        private void innerPanel_MouseDown(object sender, MouseEventArgs e)
         {
-            dragMover.OnMouseDown(e.Location);
+            OnMouseDown(e);
         }
 
-        private void PreviewControl_MouseMove(object sender, MouseEventArgs e)
+        private void innerPanel_MouseMove(object sender, MouseEventArgs e)
         {
-            dragMover.OnMouseMove(e.Location);
+            OnMouseMove(e);
         }
 
-        private void PreviewControl_MouseUp(object sender, MouseEventArgs e)
+        private void innerPanel_MouseUp(object sender, MouseEventArgs e)
         {
-            dragMover.OnMouseUp();
+            OnMouseUp(e);
         }
     }
 }

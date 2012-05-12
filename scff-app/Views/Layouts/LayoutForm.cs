@@ -18,7 +18,9 @@ namespace ScffApp.Views.Layouts
 
         private void addingToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Controls.Add(new PreviewControl());
+            var previewControl = new PreviewControl();
+            previewControl.ContextMenu = null;
+            Controls.Add(previewControl);
         }
     }
 }

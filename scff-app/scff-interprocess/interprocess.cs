@@ -64,16 +64,16 @@ class Interprocess {
   //-------------------------------------------------------------------
 
   /// @brief Directoryに格納されるEntryの最大の数
-  const int kMaxEntry = 8;
+  public const int kMaxEntry = 8;
 
   /// @brief ComplexLayout利用時の最大の要素数
   /// @sa imaging::kMaxProcessorSize
-  const int kMaxComplexLayoutElements = 8;
+  public const int kMaxComplexLayoutElements = 8;
 
   //-------------------------------------------------------------------
 
   /// @brief レイアウトの種類
-  enum LayoutType {
+  public enum LayoutType {
     /// @brief 何も表示しない
     kNullLayout = 0,
     /// @brief 取り込み範囲1個で、境界は出力に強制的に合わせられる
@@ -87,7 +87,7 @@ class Interprocess {
   /// @brief ピクセルフォーマットの種類
   /// @sa scff-imaging/imaging-types.h
   /// @sa scff_imaging::ImagePixelFormat
-  enum ImagePixelFormat {
+  public enum ImagePixelFormat {
     /// @brief 不正なピクセルフォーマット
     kInvalidPixelFormat = -1,
     /// @brief I420(12bit)
@@ -105,7 +105,7 @@ class Interprocess {
   /// @brief 拡大縮小メソッドをあらわす定数
   /// @sa scff-imaging/imaging-types.h
   /// @sa scff_imaging::SWScaleFlags
-  enum SWScaleFlags {
+  public enum SWScaleFlags {
     /// @brief fast bilinear
     kFastBilinear = 1,
     /// @brief bilinear

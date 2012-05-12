@@ -58,14 +58,14 @@ class Processor {
   /// @retval ErrorOccured()  エラーが発生した場合
   virtual ErrorCode Init() = 0;
   /// @brief 実際の処理を行う
-  /// @retval NoError()       Accept成功
-  /// @retval ErrorOccured()  エラーが発生した場合
+  /// @retval GetCurrentError()   Accept成功
+  /// @retval ErrorOccured()      エラーが発生した場合
   virtual ErrorCode Run() = 0;
 
   /// @brief リクエストに対する処理を行う
-  /// @param[in] request      リクエスト
-  /// @retval NoError()       Accept成功
-  /// @retval ErrorOccured()  エラーが発生した場合
+  /// @param[in] request          リクエスト
+  /// @retval GetCurrentError()   Accept成功
+  /// @retval ErrorOccured()      エラーが発生した場合
   virtual ErrorCode Accept(Request *request) {
     ASSERT(false);
     return GetCurrentError();

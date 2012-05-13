@@ -5,10 +5,10 @@ namespace scff_app.views.layouts {
   public partial class PreviewControl : UserControl {
     private DragMover drag_mover_;
 
-    public PreviewControl() {
+    public PreviewControl(int bound_width, int bound_height) {
       InitializeComponent();
 
-      drag_mover_ = new DragMover(this);
+      drag_mover_ = new DragMover(this, bound_width, bound_height);
     }
 
     private void innerPanel_MouseDown(object sender, MouseEventArgs e) {

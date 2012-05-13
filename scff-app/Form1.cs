@@ -66,6 +66,7 @@ public partial class Form1 : Form {
       apply.Enabled = false;
       auto_apply.Checked = false;
       auto_apply.Enabled = false;
+      layout_layout.Enabled = false;
     } else {
       foreach (Entry i in current_directory.Entries) {
         entryBindingSource.Add(i);
@@ -75,6 +76,7 @@ public partial class Form1 : Form {
       splash.Enabled = true;
       apply.Enabled = true;
       auto_apply.Enabled = true;
+      layout_layout.Enabled = true;
     }
   }
 
@@ -156,9 +158,6 @@ public partial class Form1 : Form {
   private void process_refresh_Click(object sender, EventArgs e) {
     // ディレクトリから更新
     this.UpdateCurrentDirectory();
-  }
-
-  private void process_combo_SelectedIndexChanged(object sender, EventArgs e) {
   }
 
   //-------------------------------------------------------------------
@@ -308,7 +307,8 @@ public partial class Form1 : Form {
   }
 
   private void layout_layout_Click(object sender, EventArgs e) {
-    scff_app.views.layouts.LayoutForm layout_form = new scff_app.views.layouts.LayoutForm();
+    scff_app.views.layouts.LayoutForm layout_form =
+        new scff_app.views.layouts.LayoutForm(layoutParameterBindingSource, entryBindingSource);
     layout_form.ShowDialog();
   }
 }

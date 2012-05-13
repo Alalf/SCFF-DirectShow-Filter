@@ -124,7 +124,7 @@
       // 
       // layout_layout
       // 
-      this.layout_layout.Location = new System.Drawing.Point(99, 311);
+      this.layout_layout.Location = new System.Drawing.Point(100, 311);
       this.layout_layout.Name = "layout_layout";
       this.layout_layout.Size = new System.Drawing.Size(75, 23);
       this.layout_layout.TabIndex = 7;
@@ -143,7 +143,7 @@
       this.main_menu.Location = new System.Drawing.Point(0, 34);
       this.main_menu.Name = "main_menu";
       this.main_menu.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-      this.main_menu.Size = new System.Drawing.Size(484, 25);
+      this.main_menu.Size = new System.Drawing.Size(492, 25);
       this.main_menu.TabIndex = 9;
       this.main_menu.Text = "main_menu";
       // 
@@ -219,7 +219,7 @@
       this.layout_bound_relative_bottom.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameterBindingSource, "BoundRelativeBottom", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
       this.layout_bound_relative_bottom.DecimalPlaces = 1;
       this.layout_bound_relative_bottom.Enabled = false;
-      this.layout_bound_relative_bottom.Location = new System.Drawing.Point(62, 280);
+      this.layout_bound_relative_bottom.Location = new System.Drawing.Point(63, 280);
       this.layout_bound_relative_bottom.Minimum = new decimal(new int[] {
             1,
             0,
@@ -254,7 +254,7 @@
       this.layout_bound_relative_right.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameterBindingSource, "BoundRelativeRight", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
       this.layout_bound_relative_right.DecimalPlaces = 1;
       this.layout_bound_relative_right.Enabled = false;
-      this.layout_bound_relative_right.Location = new System.Drawing.Point(89, 259);
+      this.layout_bound_relative_right.Location = new System.Drawing.Point(90, 259);
       this.layout_bound_relative_right.Minimum = new decimal(new int[] {
             1,
             0,
@@ -494,7 +494,7 @@
       this.layout_bound_relative_top.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameterBindingSource, "BoundRelativeTop", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
       this.layout_bound_relative_top.DecimalPlaces = 1;
       this.layout_bound_relative_top.Enabled = false;
-      this.layout_bound_relative_top.Location = new System.Drawing.Point(62, 237);
+      this.layout_bound_relative_top.Location = new System.Drawing.Point(63, 237);
       this.layout_bound_relative_top.Maximum = new decimal(new int[] {
             99,
             0,
@@ -531,7 +531,7 @@
       // 
       // process_refresh
       // 
-      this.process_refresh.Location = new System.Drawing.Point(225, 66);
+      this.process_refresh.Location = new System.Drawing.Point(229, 66);
       this.process_refresh.Name = "process_refresh";
       this.process_refresh.Size = new System.Drawing.Size(60, 21);
       this.process_refresh.TabIndex = 10;
@@ -541,7 +541,7 @@
       // 
       // kLayoutBoundRelativeBottom
       // 
-      this.kLayoutBoundRelativeBottom.Location = new System.Drawing.Point(116, 283);
+      this.kLayoutBoundRelativeBottom.Location = new System.Drawing.Point(117, 283);
       this.kLayoutBoundRelativeBottom.Name = "kLayoutBoundRelativeBottom";
       this.kLayoutBoundRelativeBottom.Size = new System.Drawing.Size(46, 16);
       this.kLayoutBoundRelativeBottom.TabIndex = 15;
@@ -553,12 +553,11 @@
       this.process_combo.DisplayMember = "EntryInfo";
       this.process_combo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
       this.process_combo.FormattingEnabled = true;
-      this.process_combo.Location = new System.Drawing.Point(4, 67);
+      this.process_combo.Location = new System.Drawing.Point(8, 67);
       this.process_combo.Name = "process_combo";
       this.process_combo.Size = new System.Drawing.Size(215, 20);
       this.process_combo.TabIndex = 8;
       this.process_combo.ValueMember = "ProcessID";
-      this.process_combo.SelectedIndexChanged += new System.EventHandler(this.process_combo_SelectedIndexChanged);
       // 
       // entryBindingSource
       // 
@@ -567,7 +566,7 @@
       // kLayoutBoundRelativeRight
       // 
       this.kLayoutBoundRelativeRight.AutoSize = true;
-      this.kLayoutBoundRelativeRight.Location = new System.Drawing.Point(143, 262);
+      this.kLayoutBoundRelativeRight.Location = new System.Drawing.Point(144, 262);
       this.kLayoutBoundRelativeRight.Name = "kLayoutBoundRelativeRight";
       this.kLayoutBoundRelativeRight.Size = new System.Drawing.Size(32, 12);
       this.kLayoutBoundRelativeRight.TabIndex = 13;
@@ -575,7 +574,7 @@
       // 
       // kLayoutBoundRelativeTop
       // 
-      this.kLayoutBoundRelativeTop.Location = new System.Drawing.Point(35, 240);
+      this.kLayoutBoundRelativeTop.Location = new System.Drawing.Point(36, 240);
       this.kLayoutBoundRelativeTop.Name = "kLayoutBoundRelativeTop";
       this.kLayoutBoundRelativeTop.Size = new System.Drawing.Size(28, 17);
       this.kLayoutBoundRelativeTop.TabIndex = 10;
@@ -606,7 +605,7 @@
       // kLayoutBoundRelativeLeft
       // 
       this.kLayoutBoundRelativeLeft.AutoSize = true;
-      this.kLayoutBoundRelativeLeft.Location = new System.Drawing.Point(6, 262);
+      this.kLayoutBoundRelativeLeft.Location = new System.Drawing.Point(7, 262);
       this.kLayoutBoundRelativeLeft.Name = "kLayoutBoundRelativeLeft";
       this.kLayoutBoundRelativeLeft.Size = new System.Drawing.Size(25, 12);
       this.kLayoutBoundRelativeLeft.TabIndex = 8;
@@ -629,7 +628,7 @@
       // 
       this.layout_remove.ImageKey = "Remove.png";
       this.layout_remove.ImageList = this.scff_icons;
-      this.layout_remove.Location = new System.Drawing.Point(30, 311);
+      this.layout_remove.Location = new System.Drawing.Point(31, 311);
       this.layout_remove.Name = "layout_remove";
       this.layout_remove.Size = new System.Drawing.Size(23, 23);
       this.layout_remove.TabIndex = 6;
@@ -640,7 +639,7 @@
       // 
       this.layout_add.ImageKey = "Add.png";
       this.layout_add.ImageList = this.scff_icons;
-      this.layout_add.Location = new System.Drawing.Point(3, 311);
+      this.layout_add.Location = new System.Drawing.Point(4, 311);
       this.layout_add.Name = "layout_add";
       this.layout_add.Size = new System.Drawing.Size(23, 23);
       this.layout_add.TabIndex = 5;
@@ -684,7 +683,7 @@
             this.status_status});
       this.main_status.Location = new System.Drawing.Point(0, 451);
       this.main_status.Name = "main_status";
-      this.main_status.Size = new System.Drawing.Size(484, 22);
+      this.main_status.Size = new System.Drawing.Size(492, 22);
       this.main_status.TabIndex = 14;
       this.main_status.Text = "main_status";
       // 
@@ -701,7 +700,7 @@
       // 
       this.status_status.Name = "status_status";
       this.status_status.RightToLeft = System.Windows.Forms.RightToLeft.No;
-      this.status_status.Size = new System.Drawing.Size(398, 17);
+      this.status_status.Size = new System.Drawing.Size(406, 17);
       this.status_status.Spring = true;
       this.status_status.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
       // 
@@ -717,8 +716,6 @@
       // 
       // splitContainer1
       // 
-      this.splitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
       this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
       this.splitContainer1.IsSplitterFixed = true;
       this.splitContainer1.Location = new System.Drawing.Point(0, 93);
@@ -887,9 +884,9 @@
       this.layout_list.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
       this.layout_list.FormattingEnabled = true;
       this.layout_list.ItemHeight = 16;
-      this.layout_list.Location = new System.Drawing.Point(3, 0);
+      this.layout_list.Location = new System.Drawing.Point(4, 0);
       this.layout_list.Name = "layout_list";
-      this.layout_list.Size = new System.Drawing.Size(171, 228);
+      this.layout_list.Size = new System.Drawing.Size(172, 228);
       this.layout_list.TabIndex = 15;
       // 
       // kVersion
@@ -897,7 +894,7 @@
       this.kVersion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
       this.kVersion.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.kVersion.ForeColor = System.Drawing.Color.White;
-      this.kVersion.Location = new System.Drawing.Point(414, 11);
+      this.kVersion.Location = new System.Drawing.Point(422, 11);
       this.kVersion.Name = "kVersion";
       this.kVersion.Size = new System.Drawing.Size(65, 13);
       this.kVersion.TabIndex = 5;
@@ -912,7 +909,7 @@
       this.kGreenPanel.Dock = System.Windows.Forms.DockStyle.Top;
       this.kGreenPanel.Location = new System.Drawing.Point(0, 0);
       this.kGreenPanel.Name = "kGreenPanel";
-      this.kGreenPanel.Size = new System.Drawing.Size(484, 34);
+      this.kGreenPanel.Size = new System.Drawing.Size(492, 34);
       this.kGreenPanel.TabIndex = 12;
       // 
       // layout_profile_combo
@@ -929,7 +926,7 @@
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(484, 473);
+      this.ClientSize = new System.Drawing.Size(492, 473);
       this.Controls.Add(this.main_menu);
       this.Controls.Add(this.layout_profile_add);
       this.Controls.Add(this.process_refresh);

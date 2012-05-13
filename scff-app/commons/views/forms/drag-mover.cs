@@ -5,7 +5,7 @@ using System.Text;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace ScffApp.Commons.Views.Forms
+namespace scff_app.Commons.Views.Forms
 {
     public class DragMover : IDisposable
     {
@@ -15,21 +15,21 @@ namespace ScffApp.Commons.Views.Forms
         /// </remarks>
 
         /// <summary>リサイズとする領域のサイズ</summary>
-        private const int Border = 16;
+        private const int kBorder = 16;
         /// <summary>最小サイズ</summary>
-        private const int MinSize = Border * 2;
+        private const int kMinSize = kBorder * 2;
 
-        private Control target;
-        private bool resizable;
-        private int mode;
-        private Point lastMouseLocation;
-        private Rectangle startTargetRect;
-        private Point virtualLocation;
-        private Size virtualSize;
+        private Control target_;
+        private bool resizable_;
+        private int mode_;
+        private Point last_mouse_location_;
+        private Rectangle start_target_rect_;
+        private Point virtual_location_;
+        private Size virtual_size_;
 
         public DragMover(Control target)
         {
-            this.target = target;
+            this.target_ = target;
             target.MouseDown += target_MouseDown;
             target.MouseMove += target_MouseMove;
             target.MouseUp += target_MouseUp;
@@ -39,9 +39,9 @@ namespace ScffApp.Commons.Views.Forms
 
         public void Dispose()
         {
-            target.MouseDown -= target_MouseDown;
-            target.MouseMove -= target_MouseMove;
-            target.MouseUp -= target_MouseUp;
+            target_.MouseDown -= target_MouseDown;
+            target_.MouseMove -= target_MouseMove;
+            target_.MouseUp -= target_MouseUp;
         }
 
         #endregion
@@ -49,77 +49,77 @@ namespace ScffApp.Commons.Views.Forms
         private void target_MouseDown(object sender, MouseEventArgs e)
         {
             var previewsLocation = e.Location;
-            mode = GetArea(previewsLocation);
-            lastMouseLocation = GetTargetsLocation(previewsLocation);
-            startTargetRect = new Rectangle(target.Location, target.Size);
-            virtualLocation = target.Location;
-            virtualSize = target.Size;
+            mode_ = GetArea(previewsLocation);
+            last_mouse_location_ = GetTargetsLocation(previewsLocation);
+            start_target_rect_ = new Rectangle(target_.Location, target_.Size);
+            virtual_location_ = target_.Location;
+            virtual_size_ = target_.Size;
         }
 
         private void target_MouseMove(object sender, MouseEventArgs e)
         {
             var previewsLocation = e.Location;
-            if (mode == 0)
+            if (mode_ == 0)
             {
-                target.Cursor = AreaToCursor(GetArea(previewsLocation));
+                target_.Cursor = AreaToCursor(GetArea(previewsLocation));
             }
             else
             {
                 var location = GetTargetsLocation(previewsLocation);
                 UpdateVirtualRect(location);
 
-                var rect = GetFixedRect(virtualLocation, virtualSize, mode);
-                target.Size = rect.Size;
-                target.Location = rect.Location;
+                var rect = GetFixedRect(virtual_location_, virtual_size_, mode_);
+                target_.Size = rect.Size;
+                target_.Location = rect.Location;
             }
         }
 
         private void target_MouseUp(object sender, MouseEventArgs e)
         {
-            mode = 0;
+            mode_ = 0;
         }
 
         private void UpdateVirtualRect(Point location)
         {
-            int virtualX = virtualLocation.X;
-            int virtualY = virtualLocation.Y;
-            int virtualWidth = virtualSize.Width;
-            int virtualHeight = virtualSize.Height;
+            int virtualX = virtual_location_.X;
+            int virtualY = virtual_location_.Y;
+            int virtualWidth = virtual_size_.Width;
+            int virtualHeight = virtual_size_.Height;
             // 真ん中
-            if (mode == 5)
+            if (mode_ == 5)
             {
-                virtualX += location.X - lastMouseLocation.X;
-                virtualY += location.Y - lastMouseLocation.Y;
+                virtualX += location.X - last_mouse_location_.X;
+                virtualY += location.Y - last_mouse_location_.Y;
             }
             else
             {
                 // 左
-                if (mode == 7 || mode == 4 || mode == 1)
+                if (mode_ == 7 || mode_ == 4 || mode_ == 1)
                 {
-                    virtualX += location.X - lastMouseLocation.X;
-                    virtualWidth -= location.X - lastMouseLocation.X;
+                    virtualX += location.X - last_mouse_location_.X;
+                    virtualWidth -= location.X - last_mouse_location_.X;
                 }
                 // 上
-                if (mode == 7 || mode == 8 || mode == 9)
+                if (mode_ == 7 || mode_ == 8 || mode_ == 9)
                 {
-                    virtualY += location.Y - lastMouseLocation.Y;
-                    virtualHeight -= location.Y - lastMouseLocation.Y;
+                    virtualY += location.Y - last_mouse_location_.Y;
+                    virtualHeight -= location.Y - last_mouse_location_.Y;
                 }
                 // 下
-                if (mode == 1 || mode == 2 || mode == 3)
+                if (mode_ == 1 || mode_ == 2 || mode_ == 3)
                 {
-                    virtualHeight += location.Y - lastMouseLocation.Y;
+                    virtualHeight += location.Y - last_mouse_location_.Y;
                 }
                 // 右
-                if (mode == 9 || mode == 6 || mode == 3)
+                if (mode_ == 9 || mode_ == 6 || mode_ == 3)
                 {
-                    virtualWidth += location.X - lastMouseLocation.X;
+                    virtualWidth += location.X - last_mouse_location_.X;
                 }
             }
-            virtualLocation = new Point(virtualX, virtualY);
-            virtualSize = new Size(virtualWidth, virtualHeight);
+            virtual_location_ = new Point(virtualX, virtualY);
+            virtual_size_ = new Size(virtualWidth, virtualHeight);
 
-            lastMouseLocation = location;
+            last_mouse_location_ = location;
         }
 
         private Rectangle GetFixedRect(Point location, Size size, int mode)
@@ -134,35 +134,35 @@ namespace ScffApp.Commons.Views.Forms
                 // 左
                 if (mode == 7 || mode == 4 || mode == 1)
                 {
-                    if (size.Width < MinSize)
+                    if (size.Width < kMinSize)
                     {
-                        newSizeWidth = MinSize;
-                        newLocationX = startTargetRect.X + startTargetRect.Width - MinSize;
+                        newSizeWidth = kMinSize;
+                        newLocationX = start_target_rect_.X + start_target_rect_.Width - kMinSize;
                     }
                 }
                 // 上
                 if (mode == 7 || mode == 8 || mode == 9)
                 {
-                    if (size.Height < MinSize)
+                    if (size.Height < kMinSize)
                     {
-                        newSizeHeight = MinSize;
-                        newLocationY = startTargetRect.Y + startTargetRect.Height - MinSize;
+                        newSizeHeight = kMinSize;
+                        newLocationY = start_target_rect_.Y + start_target_rect_.Height - kMinSize;
                     }
                 }
                 // 下
                 if (mode == 1 || mode == 2 || mode == 3)
                 {
-                    if (size.Height < MinSize)
+                    if (size.Height < kMinSize)
                     {
-                        newSizeHeight = MinSize;
+                        newSizeHeight = kMinSize;
                     }
                 }
                 // 右
                 if (mode == 9 || mode == 6 || mode == 3)
                 {
-                    if (size.Width < MinSize)
+                    if (size.Width < kMinSize)
                     {
-                        newSizeWidth = MinSize;
+                        newSizeWidth = kMinSize;
                     }
                 }
             }
@@ -174,10 +174,10 @@ namespace ScffApp.Commons.Views.Forms
         /// </summary>
         private int GetArea(Point previewsLocation)
         {
-            var onLeftBorder = previewsLocation.X < Border;
-            var onTopBorder = previewsLocation.Y < Border;
-            var onRightBorder = previewsLocation.X > target.Width - Border;
-            var onBottomBorder = previewsLocation.Y > target.Height - Border;
+            var onLeftBorder = previewsLocation.X < kBorder;
+            var onTopBorder = previewsLocation.Y < kBorder;
+            var onRightBorder = previewsLocation.X > target_.Width - kBorder;
+            var onBottomBorder = previewsLocation.Y > target_.Height - kBorder;
             if (onLeftBorder && onTopBorder)
                 return 7;
             if (onTopBorder && onRightBorder)
@@ -224,7 +224,7 @@ namespace ScffApp.Commons.Views.Forms
 
         private Point GetTargetsLocation(Point previewsLocation)
         {
-            return new Point(target.Left + previewsLocation.X, target.Top + previewsLocation.Y);
+            return new Point(target_.Left + previewsLocation.X, target_.Top + previewsLocation.Y);
         }
     }
 }

@@ -32,7 +32,7 @@ static class Program {
     Application.EnableVisualStyles();
     Application.SetCompatibleTextRenderingDefault(false);
     //Application.Run(new Form1());
-    Application.Run(new ScffApp.Views.Layouts.LayoutForm());
+    Application.Run(new scff_app.views.layouts.LayoutForm());
   }
 }
 }

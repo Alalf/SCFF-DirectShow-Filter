@@ -1,4 +1,4 @@
-﻿namespace ScffApp.Views.Layouts
+﻿namespace scff_app.views.layouts
 {
     partial class PreviewControl
     {
@@ -28,25 +28,25 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.innerPanel = new System.Windows.Forms.Panel();
+            this.inner_panel = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
-            this.innerPanel.SuspendLayout();
+            this.inner_panel.SuspendLayout();
             this.SuspendLayout();
             // 
             // innerPanel
             // 
-            this.innerPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.inner_panel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.innerPanel.BackColor = System.Drawing.Color.ForestGreen;
-            this.innerPanel.Controls.Add(this.label1);
-            this.innerPanel.Location = new System.Drawing.Point(2, 2);
-            this.innerPanel.Name = "innerPanel";
-            this.innerPanel.Size = new System.Drawing.Size(146, 146);
-            this.innerPanel.TabIndex = 0;
-            this.innerPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.innerPanel_MouseDown);
-            this.innerPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.innerPanel_MouseMove);
-            this.innerPanel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.innerPanel_MouseUp);
+            this.inner_panel.BackColor = System.Drawing.Color.ForestGreen;
+            this.inner_panel.Controls.Add(this.label1);
+            this.inner_panel.Location = new System.Drawing.Point(2, 2);
+            this.inner_panel.Name = "innerPanel";
+            this.inner_panel.Size = new System.Drawing.Size(146, 146);
+            this.inner_panel.TabIndex = 0;
+            this.inner_panel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.innerPanel_MouseDown);
+            this.inner_panel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.innerPanel_MouseMove);
+            this.inner_panel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.innerPanel_MouseUp);
             // 
             // label1
             // 
@@ -62,17 +62,17 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.GreenYellow;
-            this.Controls.Add(this.innerPanel);
+            this.Controls.Add(this.inner_panel);
             this.Name = "PreviewControl";
-            this.innerPanel.ResumeLayout(false);
-            this.innerPanel.PerformLayout();
+            this.inner_panel.ResumeLayout(false);
+            this.inner_panel.PerformLayout();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Panel innerPanel;
+        private System.Windows.Forms.Panel inner_panel;
         private System.Windows.Forms.Label label1;
     }
 }

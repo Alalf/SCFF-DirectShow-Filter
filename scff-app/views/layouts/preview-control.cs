@@ -6,19 +6,19 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using ScffApp.Commons.Views.Forms;
+using scff_app.Commons.Views.Forms;
 
-namespace ScffApp.Views.Layouts
+namespace scff_app.views.layouts
 {
     public partial class PreviewControl : UserControl
     {
-        private DragMover dragMover;
+        private DragMover drag_mover_;
 
         public PreviewControl()
         {
             InitializeComponent();
 
-            dragMover = new DragMover(this);
+            drag_mover_ = new DragMover(this);
         }
 
         private void innerPanel_MouseDown(object sender, MouseEventArgs e)

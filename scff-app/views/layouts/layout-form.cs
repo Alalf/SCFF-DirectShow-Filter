@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace ScffApp.Views.Layouts
+namespace scff_app.views.layouts
 {
     public partial class LayoutForm : Form
     {

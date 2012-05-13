@@ -1,4 +1,4 @@
-﻿namespace ScffApp.Views.Layouts
+﻿namespace scff_app.views.layouts
 {
     partial class LayoutForm
     {
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.previewControl1 = new ScffApp.Views.Layouts.PreviewControl();
+            this.previewControl1 = new scff_app.views.layouts.PreviewControl();
             this.SuspendLayout();
             // 
             // previewControl1

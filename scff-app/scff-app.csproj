@@ -67,23 +67,22 @@
     <Compile Include="AreaSelectForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Commons\ViewModels\ViewModelBase.cs" />
-    <Compile Include="Commons\Views\Forms\DragMover.cs" />
+    <Compile Include="commons\views\forms\drag-mover.cs" />
     <Compile Include="AreaSelectForm.Designer.cs">
       <DependentUpon>AreaSelectForm.cs</DependentUpon>
     </Compile>
     <Compile Include="scff-app\data-classes.cs" />
-    <Compile Include="Views\Layouts\LayoutForm.cs">
+    <Compile Include="views\layouts\layout-form.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Views\Layouts\LayoutForm.Designer.cs">
-      <DependentUpon>LayoutForm.cs</DependentUpon>
+    <Compile Include="views\layouts\layout-form.Designer.cs">
+      <DependentUpon>layout-form.cs</DependentUpon>
     </Compile>
-    <Compile Include="Views\Layouts\PreviewControl.cs">
+    <Compile Include="views\layouts\preview-control.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Views\Layouts\PreviewControl.Designer.cs">
-      <DependentUpon>PreviewControl.cs</DependentUpon>
+    <Compile Include="views\layouts\preview-control.Designer.cs">
+      <DependentUpon>preview-control.cs</DependentUpon>
     </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
@@ -105,11 +104,11 @@
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Views\Layouts\LayoutForm.resx">
-      <DependentUpon>LayoutForm.cs</DependentUpon>
+    <EmbeddedResource Include="views\layouts\layout-form.resx">
+      <DependentUpon>layout-form.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Views\Layouts\PreviewControl.resx">
-      <DependentUpon>PreviewControl.cs</DependentUpon>
+    <EmbeddedResource Include="views\layouts\preview-control.resx">
+      <DependentUpon>preview-control.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

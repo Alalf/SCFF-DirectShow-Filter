@@ -83,6 +83,15 @@ public class DragMover : IDisposable {
     UpdateCurrentRectInContainer(mouse_container_location);
 
     var rect = JustifyRectInContainer(current_container_location_, current_size_, mode_);
+
+    // ここでBoundによる最終調整を行う]
+    rect.X = Math.Max(0, rect.X);
+    rect.Y = Math.Max(0, rect.Y);
+    rect.X = Math.Min(bound_width_ - kMinimumSize, rect.X);
+    rect.Y = Math.Min(bound_height_ - kMinimumSize, rect.Y);
+    rect.Width = Math.Min(bound_width_ - rect.X, rect.Width);
+    rect.Height = Math.Min(bound_height_ - rect.Y, rect.Height);
+
     target_.Size = rect.Size;
     target_.Location = rect.Location;
   }
@@ -129,13 +138,30 @@ public class DragMover : IDisposable {
     } else {
       // 左
       if (IsLeft(mode_)) {
-        current_container_x += container_location.X - last_mouse_container_location_.X;
-        current_width -= container_location.X - last_mouse_container_location_.X;
+        // 基本的には境界内でしか更新しない
+        if (container_location.X >= 0) {
+          current_container_x += container_location.X - last_mouse_container_location_.X;
+          current_width -= container_location.X - last_mouse_container_location_.X;
+        }
+        // マウスカーソルが境界内にもどってきたときは若干の誤差があるが境界から
+        if (last_mouse_container_location_.X < 0 && container_location.X >= 0) {
+          current_container_x = 0;
+        }
+        // マウスカーソルを急激に移動して境界外に言った場合は境界へ
+        if (last_mouse_container_location_.X >= 0 && container_location.X < 0) {
+          current_container_x = 0;
+          current_width += (last_mouse_container_location_.X - container_location.X);
+        }
       }
       // 上
       if (IsTop(mode_)) {
-        current_container_y += container_location.Y - last_mouse_container_location_.Y;
-        current_height -= container_location.Y - last_mouse_container_location_.Y;
+        if (container_location.Y >= 0) {
+          current_container_y += container_location.Y - last_mouse_container_location_.Y;
+          current_height -= container_location.Y - last_mouse_container_location_.Y;
+        }
+        if (last_mouse_container_location_.Y < 0 && container_location.Y >= 0) {
+          current_container_y = 0;
+        }
       }
       // 下
       if (IsBottom(mode_)) {
@@ -159,15 +185,16 @@ public class DragMover : IDisposable {
     int new_width = size.Width;
     int new_height = size.Height;
 
-    // 真ん中
+    // 移動中は全体が境界をはみ出ないように
     if (mode == Mode.kMove) {
       new_container_x = Math.Max(0, new_container_x);
-      new_container_x = Math.Min(bound_width_ - new_width, new_container_x);
       new_container_y = Math.Max(0, new_container_y);
+      new_container_x = Math.Min(bound_width_ - new_width, new_container_x);
       new_container_y = Math.Min(bound_height_ - new_height, new_container_y);
       return new Rectangle(new_container_x, new_container_y, new_width, new_height);
     }
 
+    // 規定サイズより小さくならないようにする
     // 左
     if (IsLeft(mode) && size.Width < kMinimumSize) {
       new_width = kMinimumSize;
@@ -186,11 +213,6 @@ public class DragMover : IDisposable {
     if (IsRight(mode) && size.Width < kMinimumSize) {
       new_width = kMinimumSize;
     }
-
-    new_container_x = Math.Max(0, new_container_x);
-    new_container_x = Math.Min(bound_width_ - new_width, new_container_x);
-    new_container_y = Math.Max(0, new_container_y);
-    new_container_y = Math.Min(bound_height_ - new_height, new_container_y);
 
     return new Rectangle(new_container_x, new_container_y, new_width, new_height);
   }

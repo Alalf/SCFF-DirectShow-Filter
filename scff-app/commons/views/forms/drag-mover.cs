@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Runtime.InteropServices;
 
 namespace scff_app.Commons.Views.Forms {
 
@@ -15,7 +16,22 @@ namespace scff_app.Commons.Views.Forms {
 public class DragMover : IDisposable {
 
   //-------------------------------------------------------------------
-  // 定数
+  // Wrapper
+  //-------------------------------------------------------------------
+  [DllImport("user32.dll")]
+  public static extern bool ReleaseCapture();
+  [DllImport("user32.dll", CharSet = CharSet.Auto)]
+  public static extern IntPtr SendMessage(IntPtr hWnd, UInt32 Msg, IntPtr wParam, IntPtr lParam);
+  private const uint WM_NCLBUTTONDOWN = 0x00A1;
+  private const int HTTRANSPARENT = -1;
+  private const int HTLEFT        = 10;
+  private const int HTRIGHT       = 11;
+  private const int HTTOP         = 12;
+  private const int HTTOPLEFT     = 13;
+  private const int HTTOPRIGHT    = 14;
+  private const int HTBOTTOM      = 15;
+  private const int HTBOTTOMLEFT  = 16;
+  private const int HTBOTTOMRIGHT = 17;
   //-------------------------------------------------------------------
 
   /// @brief リサイズとする領域のサイズ
@@ -64,40 +80,46 @@ public class DragMover : IDisposable {
   //-------------------------------------------------------------------
 
   private void target_MouseDown(object sender, MouseEventArgs e) {
-    var mouse_down_control_location = e.Location;
-    mode_ = GetModeFromControlLocation(mouse_down_control_location);
-    last_mouse_container_location_ = ControlToContainer(mouse_down_control_location);
-    start_rect_in_container_ = new Rectangle(target_.Location, target_.Size);
-    current_container_location_ = target_.Location;
-    current_size_ = target_.Size;
+    int msg = HTTRANSPARENT; //if (msg == -1) at the end of this, then the mousedown is not a drag.
+
+    if (e.Y < 8) {
+      msg = HTTOP; //Top
+      if (e.X < 25)
+        msg = HTTOPLEFT; //Top Left
+      if (e.X > target_.Width - 25)
+        msg = HTTOPRIGHT; //Top Right
+    } else if (e.X < 8) {
+      msg = HTLEFT; //Left
+      if (e.Y < 17)
+        msg = HTTOPLEFT;
+      if (e.Y > target_.Height - 17)
+        msg = HTBOTTOMLEFT;
+    } else if (e.Y > target_.Height - 9) {
+      msg = HTBOTTOM; //Bottom
+      if (e.X < 25)
+        msg = HTBOTTOMLEFT;
+      if (e.X > target_.Width - 25)
+        msg = HTBOTTOMRIGHT;
+    } else if (e.X > target_.Width - 9) {
+      msg = HTRIGHT; //Right
+      if (e.Y < 17)
+        msg = HTTOPRIGHT;
+      if (e.Y > target_.Height - 17)
+        msg = HTBOTTOMRIGHT;
+    }
+
+    if (msg != -1) {
+      ReleaseCapture();
+      SendMessage(target_.Handle, WM_NCLBUTTONDOWN, new IntPtr(msg), IntPtr.Zero);
+    }
   }
 
   private void target_MouseMove(object sender, MouseEventArgs e) {
-    var mouse_control_location = e.Location;
-    if (mode_ == Mode.kNop) {
-      target_.Cursor = GetCursorFromMode(GetModeFromControlLocation(mouse_control_location));
-      return;
-    }
-
-    var mouse_container_location = ControlToContainer(mouse_control_location);
-    UpdateCurrentRectInContainer(mouse_container_location);
-
-    var rect = JustifyRectInContainer(current_container_location_, current_size_, mode_);
-
-    // ここでBoundによる最終調整を行う]
-    rect.X = Math.Max(0, rect.X);
-    rect.Y = Math.Max(0, rect.Y);
-    rect.X = Math.Min(bound_width_ - kMinimumSize, rect.X);
-    rect.Y = Math.Min(bound_height_ - kMinimumSize, rect.Y);
-    rect.Width = Math.Min(bound_width_ - rect.X, rect.Width);
-    rect.Height = Math.Min(bound_height_ - rect.Y, rect.Height);
-
-    target_.Size = rect.Size;
-    target_.Location = rect.Location;
+    target_.Cursor = GetCursorFromMode(GetModeFromControlLocation(e.Location));
   }
 
   private void target_MouseUp(object sender, MouseEventArgs e) {
-    mode_ = Mode.kNop;
+    ReleaseCapture();
   }
 
   //-------------------------------------------------------------------

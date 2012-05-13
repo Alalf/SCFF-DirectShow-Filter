@@ -308,7 +308,8 @@ public partial class Form1 : Form {
   }
 
   private void layout_layout_Click(object sender, EventArgs e) {
-    // nop
+    scff_app.views.layouts.LayoutForm layout_form = new scff_app.views.layouts.LayoutForm();
+    layout_form.ShowDialog();
   }
 }
 }   // namespace scff_app

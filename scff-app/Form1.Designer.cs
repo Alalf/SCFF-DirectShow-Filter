@@ -124,7 +124,6 @@
       // 
       // layout_layout
       // 
-      this.layout_layout.Enabled = false;
       this.layout_layout.Location = new System.Drawing.Point(99, 311);
       this.layout_layout.Name = "layout_layout";
       this.layout_layout.Size = new System.Drawing.Size(75, 23);

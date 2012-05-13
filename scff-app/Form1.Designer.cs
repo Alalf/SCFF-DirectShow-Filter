@@ -145,7 +145,7 @@
       this.main_menu.Location = new System.Drawing.Point(0, 34);
       this.main_menu.Name = "main_menu";
       this.main_menu.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-      this.main_menu.Size = new System.Drawing.Size(472, 25);
+      this.main_menu.Size = new System.Drawing.Size(484, 25);
       this.main_menu.TabIndex = 9;
       this.main_menu.Text = "main_menu";
       // 
@@ -523,7 +523,7 @@
       // 
       // layout_profile_add
       // 
-      this.layout_profile_add.Location = new System.Drawing.Point(436, 67);
+      this.layout_profile_add.Location = new System.Drawing.Point(440, 67);
       this.layout_profile_add.Name = "layout_profile_add";
       this.layout_profile_add.Size = new System.Drawing.Size(35, 20);
       this.layout_profile_add.TabIndex = 13;
@@ -686,7 +686,7 @@
             this.status_status});
       this.main_status.Location = new System.Drawing.Point(0, 451);
       this.main_status.Name = "main_status";
-      this.main_status.Size = new System.Drawing.Size(472, 22);
+      this.main_status.Size = new System.Drawing.Size(484, 22);
       this.main_status.SizingGrip = false;
       this.main_status.TabIndex = 14;
       this.main_status.Text = "main_status";
@@ -705,14 +705,14 @@
       // layout_strip_remove
       // 
       this.layout_strip_remove.Name = "layout_strip_remove";
-      this.layout_strip_remove.Size = new System.Drawing.Size(111, 22);
+      this.layout_strip_remove.Size = new System.Drawing.Size(152, 22);
       this.layout_strip_remove.Text = "Remove";
       // 
       // status_status
       // 
       this.status_status.Name = "status_status";
       this.status_status.RightToLeft = System.Windows.Forms.RightToLeft.No;
-      this.status_status.Size = new System.Drawing.Size(304, 17);
+      this.status_status.Size = new System.Drawing.Size(316, 17);
       this.status_status.Spring = true;
       this.status_status.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
       // 
@@ -732,7 +732,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
       this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
       this.splitContainer1.IsSplitterFixed = true;
-      this.splitContainer1.Location = new System.Drawing.Point(-4, 93);
+      this.splitContainer1.Location = new System.Drawing.Point(0, 93);
       this.splitContainer1.Margin = new System.Windows.Forms.Padding(0);
       this.splitContainer1.Name = "splitContainer1";
       // 
@@ -747,7 +747,6 @@
       // 
       // splitContainer1.Panel2
       // 
-      this.splitContainer1.Panel2.AutoScroll = true;
       this.splitContainer1.Panel2.Controls.Add(this.layout_list);
       this.splitContainer1.Panel2.Controls.Add(this.layout_layout);
       this.splitContainer1.Panel2.Controls.Add(this.layout_bound_relative_bottom);
@@ -761,7 +760,7 @@
       this.splitContainer1.Panel2.Controls.Add(this.layout_remove);
       this.splitContainer1.Panel2.Controls.Add(this.layout_add);
       this.splitContainer1.Panel2MinSize = 0;
-      this.splitContainer1.Size = new System.Drawing.Size(480, 355);
+      this.splitContainer1.Size = new System.Drawing.Size(484, 345);
       this.splitContainer1.SplitterDistance = 300;
       this.splitContainer1.SplitterWidth = 1;
       this.splitContainer1.TabIndex = 15;
@@ -909,7 +908,7 @@
       this.kVersion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
       this.kVersion.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.kVersion.ForeColor = System.Drawing.Color.White;
-      this.kVersion.Location = new System.Drawing.Point(402, 11);
+      this.kVersion.Location = new System.Drawing.Point(414, 11);
       this.kVersion.Name = "kVersion";
       this.kVersion.Size = new System.Drawing.Size(65, 13);
       this.kVersion.TabIndex = 5;
@@ -924,7 +923,7 @@
       this.kGreenPanel.Dock = System.Windows.Forms.DockStyle.Top;
       this.kGreenPanel.Location = new System.Drawing.Point(0, 0);
       this.kGreenPanel.Name = "kGreenPanel";
-      this.kGreenPanel.Size = new System.Drawing.Size(472, 34);
+      this.kGreenPanel.Size = new System.Drawing.Size(484, 34);
       this.kGreenPanel.TabIndex = 12;
       // 
       // layout_profile_combo
@@ -932,7 +931,7 @@
       this.layout_profile_combo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
       this.layout_profile_combo.Enabled = false;
       this.layout_profile_combo.FormattingEnabled = true;
-      this.layout_profile_combo.Location = new System.Drawing.Point(300, 67);
+      this.layout_profile_combo.Location = new System.Drawing.Point(304, 68);
       this.layout_profile_combo.Name = "layout_profile_combo";
       this.layout_profile_combo.Size = new System.Drawing.Size(130, 20);
       this.layout_profile_combo.TabIndex = 11;
@@ -941,8 +940,7 @@
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.AutoScroll = true;
-      this.ClientSize = new System.Drawing.Size(472, 473);
+      this.ClientSize = new System.Drawing.Size(484, 473);
       this.Controls.Add(this.main_menu);
       this.Controls.Add(this.layout_profile_add);
       this.Controls.Add(this.process_refresh);
@@ -953,8 +951,8 @@
       this.Controls.Add(this.layout_profile_combo);
       this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
       this.MaximizeBox = false;
-      this.MaximumSize = new System.Drawing.Size(480, 500);
-      this.MinimumSize = new System.Drawing.Size(300, 500);
+      this.MaximumSize = new System.Drawing.Size(500, 500);
+      this.MinimumSize = new System.Drawing.Size(310, 500);
       this.Name = "Form1";
       this.Text = "SCFF DirectShow Filter Ver.0.0.1";
       this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);

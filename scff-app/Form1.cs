@@ -129,10 +129,10 @@ public partial class Form1 : Form {
   // Stripメニュー
   //-------------------------------------------------------------------
   private void layout_strip_ButtonClick(object sender, EventArgs e) {
-    if (Width > 300) {
-      Width = 300;
+    if (Width > 310) {
+      Width = 310;
     } else {
-      Width = 488;
+      Width = 500;
     }
   }
 

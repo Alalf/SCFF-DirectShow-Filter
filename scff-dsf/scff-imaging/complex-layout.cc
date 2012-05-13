@@ -74,13 +74,15 @@ ComplexLayout::~ComplexLayout() {
 // インデックスを指定して初期化
 ErrorCode ComplexLayout::InitByIndex(int index) {
   ASSERT(0 <= index && index < element_count_);
-  ASSERT(Utilities::Contains(0, 0,
-                             GetOutputImage()->width(),
-                             GetOutputImage()->height(),
-                             parameter_[index].bound_x,
-                             parameter_[index].bound_y,
-                             parameter_[index].bound_width,
-                             parameter_[index].bound_height));
+  if (!Utilities::Contains(0, 0,
+                           GetOutputImage()->width(),
+                           GetOutputImage()->height(),
+                           parameter_[index].bound_x,
+                           parameter_[index].bound_y,
+                           parameter_[index].bound_width,
+                           parameter_[index].bound_height)) {
+    return kComplexLayoutBoundError;
+  }
 
   // 仮想パディングサイズの計算
   int virtual_padding_top = 0;

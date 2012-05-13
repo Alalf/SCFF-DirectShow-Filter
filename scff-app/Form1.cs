@@ -23,6 +23,7 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Collections.Generic;
 
 namespace scff_app {
 
@@ -51,37 +52,52 @@ public partial class Form1 : Form {
     this.UpdateCurrentDirectory();
 
     // デフォルトの設定を書き込む
-    AddDefaultLayoutParameter();
-  }
-
-  /// @brief デフォルトの設定をBindingSourceに追加する
-  private void AddDefaultLayoutParameter() {
-    LayoutParameter default_layout_parameter = new LayoutParameter();
-    default_layout_parameter.Window = impl_.GetWindowFromDesktop();
-    default_layout_parameter.Fit = true;
-    layoutParameterBindingSource.Add(default_layout_parameter);
+    layoutParameterBindingSource.AddNew();
   }
 
   /// @brief Processコンボボックスのデータソースを再設定
   private void UpdateCurrentDirectory() {
-    process_combo.DataSource = null;
-    process_combo.DisplayMember = "EntryInfo";
-    process_combo.ValueMember = "ProcessID";
-    impl_.UpdateCurrentDirectory();
-    process_combo.DataSource = impl_.CurrentDirectory.Entries;
-    
-    if (impl_.CurrentDirectory.Entries.Count == 0) {
+    Directory current_directory = impl_.GetCurrentDirectory();
+    entryBindingSource.Clear();
+
+    if (current_directory.Entries.Count == 0) {
       process_combo.Enabled = false;
       splash.Enabled = false;
       apply.Enabled = false;
-      target_auto_apply.Checked = false;
-      target_auto_apply.Enabled = false;
+      auto_apply.Checked = false;
+      auto_apply.Enabled = false;
     } else {
+      foreach (Entry i in current_directory.Entries) {
+        entryBindingSource.Add(i);
+      }
+
       process_combo.Enabled = true;
       splash.Enabled = true;
       apply.Enabled = true;
-      target_auto_apply.Enabled = true;
+      auto_apply.Enabled = true;
     }
+  }
+
+  /// @brief 現在の設定をメッセージにして送信する
+  private void SendRequest(bool show_message) {
+    if (entryBindingSource.Current == null) {
+      return;
+    }
+
+
+    List<LayoutParameter> list = new List<LayoutParameter>();
+    foreach (LayoutParameter i in layoutParameterBindingSource.List) {
+      list.Add(i);
+    }
+    if (!impl_.ValidateParameters(list, show_message)) {
+      return;
+    }
+
+    UInt32 process_id = ((Entry)entryBindingSource.Current).ProcessID;
+    int bound_width = ((Entry)entryBindingSource.Current).SampleWidth;
+    int bound_height = ((Entry)entryBindingSource.Current).SampleHeight;
+
+    impl_.SendLayoutRequest(process_id, list, bound_width, bound_height);
   }
 
   //===================================================================
@@ -124,18 +140,14 @@ public partial class Form1 : Form {
   // OK/CANCEL
   //-------------------------------------------------------------------
   private void splash_Click(object sender, EventArgs e) {
-    if (process_combo.SelectedValue != null) {
+    if (entryBindingSource.Current == null) {
       return;
     }
-    UInt32 process_id = (UInt32)process_combo.SelectedValue;
+    UInt32 process_id = ((Entry)entryBindingSource.Current).ProcessID;
     impl_.SendNullLayoutRequest(process_id);
   }
   private void apply_Click(object sender, EventArgs e) {
-    /*
-    if (impl_.ValidateParameters(true)) {
-      impl_.SendLayoutRequest();
-    }
-    */
+    this.SendRequest(true);
   }
 
   //-------------------------------------------------------------------
@@ -153,12 +165,24 @@ public partial class Form1 : Form {
   // Layout Profile
   //-------------------------------------------------------------------
   private void layout_profile_add_Click(object sender, EventArgs e) {
-    MessageBox.Show(impl_.CurrentDirectory.Entries.ToString());
   }
 
   //-------------------------------------------------------------------
   // Target/Window
   //-------------------------------------------------------------------
+
+  private void SetWindow(UInt64 window) {
+    ((LayoutParameter)layoutParameterBindingSource.Current).Window = window;
+    int clipping_x, clipping_y, clipping_width, clipping_height;
+    impl_.GetClippingRegion(window,
+        out clipping_x, out clipping_y, out clipping_width, out clipping_height);
+    ((LayoutParameter)layoutParameterBindingSource.Current).ClippingX = clipping_x;
+    ((LayoutParameter)layoutParameterBindingSource.Current).ClippingY = clipping_y;
+    ((LayoutParameter)layoutParameterBindingSource.Current).ClippingWidth = clipping_width;
+    ((LayoutParameter)layoutParameterBindingSource.Current).ClippingHeight = clipping_height;
+    ((LayoutParameter)layoutParameterBindingSource.Current).Fit = true;
+    layoutParameterBindingSource.ResetCurrentItem();
+  }
 
   private void window_draghere_MouseDown(object sender, MouseEventArgs e) {
     window_draghere.BackColor = Color.Orange;
@@ -168,35 +192,21 @@ public partial class Form1 : Form {
     window_draghere.BackColor = SystemColors.Control;
 
     Point screen_location = window_draghere.PointToScreen(e.Location);
-    /*
-    impl_.SetWindowFromPoint(screen_location.X, screen_location.Y);
-    window_handle.DataBindings["Text"].ReadValue();
-    window_handle.DataBindings["Tag"].ReadValue();
-    */
+    UInt64 window = impl_.GetWindowFromPoint(screen_location.X, screen_location.Y);
+    this.SetWindow(window);
 
-    /*
-    if (target_auto_apply.Checked) {
-      if (impl_.ValidateParameters(false)) {
-        impl_.SendLayoutRequest();
-      }
+    if (auto_apply.Checked) {
+      SendRequest(false);
     }
-    */
   }
 
   private void window_desktop_Click(object sender, EventArgs e) {
-    /*
-    impl_.SetWindowToDesktop();
-    window_handle.DataBindings["Text"].ReadValue();
-    window_handle.DataBindings["Tag"].ReadValue();
-    */
+    UInt64 window = impl_.GetWindowFromDesktop();
+    this.SetWindow(window);
 
-    /*
-    if (target_auto_apply.Checked) {
-      if (impl_.ValidateParameters(false)) {
-        impl_.SendLayoutRequest();
-      }
+    if (auto_apply.Checked) {
+      SendRequest(false);
     }
-    */
   }
 
   //-------------------------------------------------------------------
@@ -209,13 +219,20 @@ public partial class Form1 : Form {
       area_clipping_width.Enabled = false;
       area_clipping_height.Enabled = false;
 
-      /*
-      if (target_auto_apply.Checked) {
-        if (impl_.ValidateParameters(false)) {
-          impl_.SendLayoutRequest();
-        }
+      UInt64 window = ((LayoutParameter)layoutParameterBindingSource.Current).Window;
+      int clipping_x, clipping_y, clipping_width, clipping_height;
+      impl_.GetClippingRegion(window,
+          out clipping_x, out clipping_y, out clipping_width, out clipping_height);
+      ((LayoutParameter)layoutParameterBindingSource.Current).ClippingX = clipping_x;
+      ((LayoutParameter)layoutParameterBindingSource.Current).ClippingY = clipping_y;
+      ((LayoutParameter)layoutParameterBindingSource.Current).ClippingWidth = clipping_width;
+      ((LayoutParameter)layoutParameterBindingSource.Current).ClippingHeight = clipping_height;
+      ((LayoutParameter)layoutParameterBindingSource.Current).Fit = true;
+      layoutParameterBindingSource.ResetCurrentItem();
+
+      if (auto_apply.Checked) {
+        SendRequest(false);
       }
-      */
     } else {
       area_clipping_x.Enabled = true;
       area_clipping_y.Enabled = true;
@@ -234,32 +251,30 @@ public partial class Form1 : Form {
         new Size((int)area_clipping_width.Value, (int)area_clipping_height.Value);
     form.Size = new_size;
     form.ShowDialog();
-    int clipping_x, clipping_y, clipping_width, clipping_height;
-    form.GetResult(out clipping_x, out clipping_y, out clipping_width, out clipping_height);
+    int raw_x, raw_y, raw_width, raw_height;
+    form.GetResult(out raw_x, out raw_y, out raw_width, out raw_height);
 
     // デスクトップキャプチャに変更
-    /*
-    impl_.SetWindowToDesktop();
-    window_handle.DataBindings["Text"].ReadValue();
-    window_handle.DataBindings["Tag"].ReadValue();
-    */
+    UInt64 window = impl_.GetWindowFromDesktop();
+    ((LayoutParameter)layoutParameterBindingSource.Current).Window = window;
 
     // FitをはずしてClippingを更新
-    /*
-    impl_.JustifyClippingRegion(clipping_x, clipping_y, clipping_width, clipping_height);
-    area_clipping_x.DataBindings["Value"].ReadValue();
-    area_clipping_y.DataBindings["Value"].ReadValue();
-    area_clipping_width.DataBindings["Value"].ReadValue();
-    area_clipping_height.DataBindings["Value"].ReadValue();
-    */
+    int clipping_x, clipping_y, clipping_width, clipping_height;
+    impl_.JustifyClippingRegion(
+        window,
+        raw_x, raw_y, raw_width, raw_height,
+        out clipping_x, out clipping_y, out clipping_width, out clipping_height);
+    ((LayoutParameter)layoutParameterBindingSource.Current).Fit = false;
+    ((LayoutParameter)layoutParameterBindingSource.Current).ClippingX = clipping_x;
+    ((LayoutParameter)layoutParameterBindingSource.Current).ClippingY = clipping_y;
+    ((LayoutParameter)layoutParameterBindingSource.Current).ClippingWidth = clipping_width;
+    ((LayoutParameter)layoutParameterBindingSource.Current).ClippingHeight = clipping_height;
 
-    /*
-    if (target_auto_apply.Checked) {
-      if (impl_.ValidateParameters(false)) {
-        impl_.SendLayoutRequest();
-      }
+    layoutParameterBindingSource.ResetCurrentItem();
+
+    if (auto_apply.Checked) {
+      SendRequest(false);
     }
-    */
   }
 
   //-------------------------------------------------------------------
@@ -268,13 +283,23 @@ public partial class Form1 : Form {
   private void layout_add_Click(object sender, EventArgs e) {
     if (layoutParameterBindingSource.Count <
         scff_interprocess.Interprocess.kMaxComplexLayoutElements) {
-      AddDefaultLayoutParameter();
+      layoutParameterBindingSource.AddNew();
+      layout_bound_relative_top.Enabled = true;
+      layout_bound_relative_bottom.Enabled = true;
+      layout_bound_relative_left.Enabled = true;
+      layout_bound_relative_right.Enabled = true;
     }
   }
 
   private void layout_remove_Click(object sender, EventArgs e) {
     if (layoutParameterBindingSource.Count > 1) {
       layoutParameterBindingSource.RemoveCurrent();
+    }
+    if (layoutParameterBindingSource.Count == 1) {
+      layout_bound_relative_top.Enabled = false;
+      layout_bound_relative_bottom.Enabled = false;
+      layout_bound_relative_left.Enabled = false;
+      layout_bound_relative_right.Enabled = false;
     }
   }
 

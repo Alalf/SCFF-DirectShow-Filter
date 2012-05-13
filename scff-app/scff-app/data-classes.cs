@@ -156,6 +156,29 @@ public class LayoutParameter {
     KeepAspectRatio = true;
     Stretch = true;
     SwsFlags = scff_interprocess.SWScaleFlags.kLanczos;
+
+    // Windowまわり
+    IntPtr window_handle = GetDesktopWindow();
+    Window = (UInt64)window_handle;
+    RECT window_rect;
+    GetClientRect(window_handle, out window_rect);
+    ClippingX = window_rect.left;
+    ClippingY = window_rect.top;
+    ClippingWidth = window_rect.right;
+    ClippingHeight = window_rect.bottom;
+    Fit = true;
+
+    // GUIクライアントからは使わないが一応
+    BoundX = 0;
+    BoundY = 0;
+    BoundWidth = 1;
+    BoundHeight = 1;
+    //----
+
+    BoundRelativeLeft = 0.0;
+    BoundRelativeRight = 100.0;
+    BoundRelativeTop = 0.0;
+    BoundRelativeBottom = 100.0;
   }
   /// @brief コンストラクタ。引数はInterprocessの構造体。
   public LayoutParameter(scff_interprocess.LayoutParameter interprocess_layout_parameter) {
@@ -239,12 +262,18 @@ public class LayoutParameter {
     }
   }
   /// @brief Interprocessで利用可能な構造体に変換
-  public scff_interprocess.LayoutParameter ToInterprocessLayoutParameter() {
+  public scff_interprocess.LayoutParameter ToInterprocessLayoutParameter(int bound_width, int bound_height) {
     scff_interprocess.LayoutParameter interprocess_layout_parameter = new scff_interprocess.LayoutParameter();
-    interprocess_layout_parameter.bound_x = BoundX;
-    interprocess_layout_parameter.bound_y = BoundY;
-    interprocess_layout_parameter.bound_width = BoundWidth;
-    interprocess_layout_parameter.bound_height = BoundHeight;
+
+    //-- GUIクライアント限定の処理！
+    interprocess_layout_parameter.bound_x = (Int32)(bound_width * BoundRelativeLeft) / 100;
+    interprocess_layout_parameter.bound_y = (Int32)(bound_height * BoundRelativeTop) / 100;
+    interprocess_layout_parameter.bound_width =
+        (Int32)(bound_width * BoundRelativeRight) / 100 - interprocess_layout_parameter.bound_x;
+    interprocess_layout_parameter.bound_height =
+        (Int32)(bound_height * BoundRelativeBottom) / 100 - interprocess_layout_parameter.bound_y;
+    //--
+
     interprocess_layout_parameter.window = Window;
     interprocess_layout_parameter.clipping_x = ClippingX;
     interprocess_layout_parameter.clipping_y = ClippingY;
@@ -276,6 +305,11 @@ public class LayoutParameter {
     return interprocess_layout_parameter;
   }
 
+  public Double BoundRelativeLeft { get; set; }
+  public Double BoundRelativeRight { get; set; }
+  public Double BoundRelativeTop { get; set; }
+  public Double BoundRelativeBottom { get; set; }
+
   public Int32 BoundX { get; set; }
   public Int32 BoundY { get; set; }
   public Int32 BoundWidth { get; set; }
@@ -288,34 +322,20 @@ public class LayoutParameter {
       } else if (Window == (UInt64)GetDesktopWindow()) {
         return "(Desktop)";
       } else {
-        StringBuilder class_name = new StringBuilder(256);
-        GetClassName((IntPtr)Window, class_name, 256);
-        return class_name.ToString();
+        IntPtr window_handle = (IntPtr)Window;
+        if (window_handle == null || !IsWindow(window_handle)) {
+          return "*** INVALID WINDOW ***";
+        } else {
+          StringBuilder class_name = new StringBuilder(256);
+          GetClassName(window_handle, class_name, 256);
+          return class_name.ToString();
+        }
       }
     }
   }
   public UInt64 Window { get; set; }
 
-  private Boolean fit_;
-  public Boolean Fit {
-    get {
-      return fit_;
-    }
-    set {
-      fit_ = value;
-      IntPtr window_handle = (IntPtr)Window;
-      if (window_handle == null || !IsWindow(window_handle)) {
-        return;
-      }
-
-      RECT window_rect;
-      GetClientRect(window_handle, out window_rect);
-      ClippingX = window_rect.left;
-      ClippingY = window_rect.top;
-      ClippingWidth = window_rect.right;
-      ClippingHeight = window_rect.bottom;
-    }
-  }
+  public Boolean Fit { get; set; }
 
   public Int32 ClippingX { get; set; }
   public Int32 ClippingY { get; set; }
@@ -361,7 +381,7 @@ public class Message {
     }
   }
   /// @brief Interprocessで利用可能な構造体に変換
-  public scff_interprocess.Message ToInterprocessMessage() {
+  public scff_interprocess.Message ToInterprocessMessage(int bound_width, int bound_height) {
     scff_interprocess.Message interprocess_message = new scff_interprocess.Message();
     interprocess_message.timestamp = Timestamp;
     interprocess_message.layout_type = (Int32)LayoutType;
@@ -371,7 +391,8 @@ public class Message {
         new scff_interprocess.LayoutParameter[scff_interprocess.Interprocess.kMaxComplexLayoutElements];
     for (int i = 0; i < scff_interprocess.Interprocess.kMaxComplexLayoutElements; i++) {
       if (i < LayoutParameters.Count) {
-        interprocess_message.layout_parameters[i] = LayoutParameters[i].ToInterprocessLayoutParameter();
+        interprocess_message.layout_parameters[i] =
+            LayoutParameters[i].ToInterprocessLayoutParameter(bound_width, bound_height);
       } else {
         // 念のためゼロクリア
         interprocess_message.layout_parameters[i].bound_x = 0;

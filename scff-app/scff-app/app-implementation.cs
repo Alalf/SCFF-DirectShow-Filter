@@ -53,9 +53,6 @@ public partial class AppImplementation {
     // プロセス間通信に必要なオブジェクトの生成
     interprocess_ = new scff_interprocess.Interprocess();
 
-    // ディレクトリを用意しておく
-    CurrentDirectory = new Directory();
-
     // リサイズ方法のリストを作成
     BuildResizeMethodList();
   }
@@ -87,14 +84,14 @@ public partial class AppImplementation {
   }
 
   /// @brief 共有メモリからディレクトリを取得し、CurrentDirectoryを更新
-  public void UpdateCurrentDirectory() {
+  public Directory GetCurrentDirectory() {
     // 共有メモリからデータを取得
     interprocess_.InitDirectory();
     scff_interprocess.Directory interprocess_directory;
     interprocess_.GetDirectory(out interprocess_directory);
 
     // リストを新しく作成する
-    CurrentDirectory = new Directory(interprocess_directory);
+    return new Directory(interprocess_directory);
   }
 
   //-------------------------------------------------------------------
@@ -188,20 +185,26 @@ public partial class AppImplementation {
     clipping_height = dst_height;
   }
 
+  public bool ValidateParameters(List<LayoutParameter> parameters, bool show_message) {
+    foreach (LayoutParameter i in parameters) {
+      if (!ValidateParameter(i, show_message)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   /// @brief パラメータのValidate
-  public bool ValidateParameters(UInt64 window,
-      int clipping_x, int clipping_y,
-      int clipping_width, int clipping_height,
-      bool show_message) {
+  private bool ValidateParameter(LayoutParameter parameter, bool show_message) {
     // もっとも危険な状態になりやすいウィンドウからチェック
-    if (window == 0) { // NULL
+    if (parameter.Window == 0) { // NULL
       if (show_message) {
         MessageBox.Show("Specified window is invalid", "Invalid Window",
             MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
       return false;
     }
-    var window_handle = (IntPtr)window;
+    var window_handle = (IntPtr)parameter.Window;
     if (!IsWindow(window_handle)) {
       if (show_message) {
         MessageBox.Show("Specified window is invalid", "Invalid Window",
@@ -210,13 +213,25 @@ public partial class AppImplementation {
       return false;
     }
 
+    // 境界設定のチェック
+    if (parameter.BoundRelativeTop < parameter.BoundRelativeBottom &&
+        parameter.BoundRelativeLeft < parameter.BoundRelativeRight) {
+      // ok
+    } else {
+      if (show_message) {
+        MessageBox.Show("Specified bound-rect is invalid", "Invalid Bound-rect",
+            MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+      return false;
+    }
+
     // クリッピングリージョンの判定
     RECT window_rect;
     GetClientRect(window_handle, out window_rect);
-    if (clipping_x + clipping_width <= window_rect.right &&
-        clipping_y + clipping_height <= window_rect.bottom &&
-        clipping_width > 0 &&
-        clipping_height > 0) {
+    if (parameter.ClippingX + parameter.ClippingWidth <= window_rect.right &&
+        parameter.ClippingY + parameter.ClippingHeight <= window_rect.bottom &&
+        parameter.ClippingWidth > 0 &&
+        parameter.ClippingHeight > 0) {
       // nop 問題なし
     } else {
       if (show_message) {
@@ -238,20 +253,23 @@ public partial class AppImplementation {
     message.LayoutType = scff_interprocess.LayoutType.kNullLayout;
 
     // 共有メモリを開いて送る
-    if (process_id != 0) {
-      interprocess_.InitMessage(process_id);
-      interprocess_.SendMessage(message.ToInterprocessMessage());
-    }
+    interprocess_.InitMessage(process_id);
+    // Bound関連の値は無視されるのでダミーの100をいれておく
+    interprocess_.SendMessage(message.ToInterprocessMessage(100,100));
   }
 
   /// @brief 共有メモリにLayoutリクエストを設定
-  public void SendLayoutRequest(UInt32 process_id, List<LayoutParameter> parameters) {
+  public void SendLayoutRequest(UInt32 process_id, List<LayoutParameter> parameters, int bound_width, int bound_height) {
+    if (process_id == 0) {
+      return;
+    }
+
     if (parameters.Count == 0) {
       SendNullLayoutRequest(process_id);
     } else if (parameters.Count == 1) {
       SendNativeLayoutRequest(process_id, parameters[0]);
     } else {
-      SendComplexLayoutRequest(process_id, parameters);
+      SendComplexLayoutRequest(process_id, parameters, bound_width, bound_height);
     }
   }
 
@@ -264,14 +282,13 @@ public partial class AppImplementation {
     message.LayoutParameters.Add(parameter);
 
     // 共有メモリを開いて送る
-    if (process_id != 0) {
-      interprocess_.InitMessage(process_id);
-      interprocess_.SendMessage(message.ToInterprocessMessage());
-    }
+    interprocess_.InitMessage(process_id);
+    // Bound関連の値は無視されるのでダミーの100を入れておく
+    interprocess_.SendMessage(message.ToInterprocessMessage(100,100));
   }
 
   /// @brief 共有メモリにComplexLayoutリクエストを設定
-  private void SendComplexLayoutRequest(UInt32 process_id, List<LayoutParameter> parameters) {
+  private void SendComplexLayoutRequest(UInt32 process_id, List<LayoutParameter> parameters, int bound_width, int bound_height) {
     // メッセージを書いて送る
     Message message = new Message();
     message.LayoutType = scff_interprocess.LayoutType.kComplexLayout;
@@ -282,19 +299,14 @@ public partial class AppImplementation {
     }
 
     // 共有メモリを開いて送る
-    if (process_id != 0) {
-      interprocess_.InitMessage(process_id);
-      interprocess_.SendMessage(message.ToInterprocessMessage());
-    }
+    interprocess_.InitMessage(process_id);
+    interprocess_.SendMessage(message.ToInterprocessMessage(bound_width, bound_height));
   }
 
   //-------------------------------------------------------------------
 
   /// @brief ResizeMethodコンボボックス用リスト
   public List<System.Tuple<string, scff_interprocess.SWScaleFlags>> ResizeMethodList { get; private set; }
-
-  /// @brief 最後に取得したディレクトリ
-  public Directory CurrentDirectory { get; private set; }
 
   /// @brief プロセス間通信用オブジェクト
   private scff_interprocess.Interprocess interprocess_;

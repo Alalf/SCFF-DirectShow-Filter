@@ -21,6 +21,7 @@
 /// @warning To me: このファイルの中から別のファイルへのusingは禁止！
 ///- 別の言語に移植する場合も最大2ファイルでお願いします
 
+using System;
 using System.Runtime.InteropServices;
 using System.IO;
 using System.IO.MemoryMappedFiles;
@@ -112,7 +113,7 @@ partial class Interprocess {
   //-------------------------------------------------------------------
 
   /// @brief Message初期化
-  public bool InitMessage(System.UInt32 process_id) {
+  public bool InitMessage(UInt32 process_id) {
     // 念のため解放
     ReleaseMessage();
 
@@ -208,7 +209,7 @@ partial class Interprocess {
   }
 
   /// @brief エントリを削除する
-  public bool RemoveEntry(System.UInt32 process_id) {
+  public bool RemoveEntry(UInt32 process_id) {
     // 初期化されていなければ失敗
     if (!IsDirectoryInitialized()) {
       Trace.WriteLine("****Interprocess: RemoveEntry FAILED");
@@ -366,7 +367,7 @@ partial class Interprocess {
   /// @brief Messageを書き込む
   private void WriteMessage(Message message) {
     byte[] buffer = new byte[size_of_message_];
-    System.IntPtr ptr = Marshal.AllocHGlobal(size_of_message_);
+    IntPtr ptr = Marshal.AllocHGlobal(size_of_message_);
     Marshal.StructureToPtr(message, ptr, false);
     Marshal.Copy(ptr, buffer, 0, size_of_message_);
     Marshal.FreeHGlobal(ptr);
@@ -384,7 +385,7 @@ partial class Interprocess {
   /// @brief Directoryを書き込む
   private void WriteDirectory(Directory directory) {
     byte[] buffer = new byte[size_of_directory_];
-    System.IntPtr ptr = Marshal.AllocHGlobal(size_of_directory_);
+    IntPtr ptr = Marshal.AllocHGlobal(size_of_directory_);
     Marshal.StructureToPtr(directory, ptr, false);
     Marshal.Copy(ptr, buffer, 0, size_of_directory_);
     Marshal.FreeHGlobal(ptr);

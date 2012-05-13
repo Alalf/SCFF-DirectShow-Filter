@@ -19,6 +19,7 @@
 /// @file scff-app/data-classes.cs
 /// @brief scff-appで利用するマネージドデータクラス
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -34,13 +35,13 @@ public class Entry {
     ProcessID = interprocess_entry.process_id;
     ProcessName = interprocess_entry.process_name;
     switch (interprocess_entry.sample_pixel_format) {
-    case (System.Int32)scff_interprocess.ImagePixelFormat.kI420:
+    case (Int32)scff_interprocess.ImagePixelFormat.kI420:
       SamplePixelFormat = scff_interprocess.ImagePixelFormat.kI420;
       break;
-    case (System.Int32)scff_interprocess.ImagePixelFormat.kUYVY:
+    case (Int32)scff_interprocess.ImagePixelFormat.kUYVY:
       SamplePixelFormat = scff_interprocess.ImagePixelFormat.kUYVY;
       break;
-    case (System.Int32)scff_interprocess.ImagePixelFormat.kRGB0:
+    case (Int32)scff_interprocess.ImagePixelFormat.kRGB0:
       SamplePixelFormat = scff_interprocess.ImagePixelFormat.kRGB0;
       break;
     }
@@ -53,7 +54,7 @@ public class Entry {
     scff_interprocess.Entry interprocess_entry = new scff_interprocess.Entry();
     interprocess_entry.process_id = ProcessID;
     interprocess_entry.process_name = ProcessName;
-    interprocess_entry.sample_pixel_format = (System.Int32)SamplePixelFormat;
+    interprocess_entry.sample_pixel_format = (Int32)SamplePixelFormat;
     interprocess_entry.sample_width = SampleWidth;
     interprocess_entry.sample_height = SampleHeight;
     interprocess_entry.fps = FPS;
@@ -83,12 +84,12 @@ public class Entry {
               " " + FPS.ToString("F0") + "fps)";
     }
   }
-  public System.UInt32 ProcessID {get; set;}
+  public UInt32 ProcessID {get; set;}
   public string ProcessName {get; set;}
-  public System.Int32 SampleWidth {get; set;}
-  public System.Int32 SampleHeight {get; set;}
+  public Int32 SampleWidth {get; set;}
+  public Int32 SampleHeight {get; set;}
   public scff_interprocess.ImagePixelFormat SamplePixelFormat { get; set; }
-  public System.Double FPS {get; set;}
+  public Double FPS {get; set;}
 };
 
 /// @brief scff_inteprocess.Directoryをマネージドクラス化したクラス
@@ -133,6 +134,22 @@ public class Directory {
 
 /// @brief scff_inteprocess.LayoutParameterをマネージドクラス化したクラス
 public class LayoutParameter {
+  //-------------------------------------------------------------------
+  // Wrappers
+  //-------------------------------------------------------------------
+  [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+  private static extern int GetClassName(IntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
+  [DllImport("user32.dll", SetLastError = false)]
+  static extern IntPtr GetDesktopWindow();
+  [StructLayout(LayoutKind.Sequential)]
+  struct RECT { public int left, top, right, bottom; }
+  [DllImport("user32.dll")]
+  [return: MarshalAs(UnmanagedType.Bool)]
+  static extern bool IsWindow(IntPtr hWnd);
+  [DllImport("user32.dll")]
+  static extern bool GetClientRect(IntPtr hWnd, out RECT lpRect);
+  //-------------------------------------------------------------------
+
   /// @brief デフォルトコンストラクタ。
   public LayoutParameter() {
     // デフォルト値を設定
@@ -162,37 +179,37 @@ public class LayoutParameter {
       ShowLayeredWindow = false;
     }
     switch (interprocess_layout_parameter.sws_flags) {
-    case (System.Int32)scff_interprocess.SWScaleFlags.kFastBilinear:
+    case (Int32)scff_interprocess.SWScaleFlags.kFastBilinear:
       SwsFlags = scff_interprocess.SWScaleFlags.kFastBilinear;
       break;
-    case (System.Int32)scff_interprocess.SWScaleFlags.kBilinear:
+    case (Int32)scff_interprocess.SWScaleFlags.kBilinear:
       SwsFlags = scff_interprocess.SWScaleFlags.kBilinear;
       break;
-    case (System.Int32)scff_interprocess.SWScaleFlags.kBicubic:
+    case (Int32)scff_interprocess.SWScaleFlags.kBicubic:
       SwsFlags = scff_interprocess.SWScaleFlags.kBicubic;
       break;
-    case (System.Int32)scff_interprocess.SWScaleFlags.kX:
+    case (Int32)scff_interprocess.SWScaleFlags.kX:
       SwsFlags = scff_interprocess.SWScaleFlags.kX;
       break;
-    case (System.Int32)scff_interprocess.SWScaleFlags.kPoint:
+    case (Int32)scff_interprocess.SWScaleFlags.kPoint:
       SwsFlags = scff_interprocess.SWScaleFlags.kPoint;
       break;
-    case (System.Int32)scff_interprocess.SWScaleFlags.kArea:
+    case (Int32)scff_interprocess.SWScaleFlags.kArea:
       SwsFlags = scff_interprocess.SWScaleFlags.kArea;
       break;
-    case (System.Int32)scff_interprocess.SWScaleFlags.kBicublin:
+    case (Int32)scff_interprocess.SWScaleFlags.kBicublin:
       SwsFlags = scff_interprocess.SWScaleFlags.kBicublin;
       break;
-    case (System.Int32)scff_interprocess.SWScaleFlags.kGauss:
+    case (Int32)scff_interprocess.SWScaleFlags.kGauss:
       SwsFlags = scff_interprocess.SWScaleFlags.kGauss;
       break;
-    case (System.Int32)scff_interprocess.SWScaleFlags.kSinc:
+    case (Int32)scff_interprocess.SWScaleFlags.kSinc:
       SwsFlags = scff_interprocess.SWScaleFlags.kSinc;
       break;
-    case (System.Int32)scff_interprocess.SWScaleFlags.kLanczos:
+    case (Int32)scff_interprocess.SWScaleFlags.kLanczos:
       SwsFlags = scff_interprocess.SWScaleFlags.kLanczos;
       break;
-    case (System.Int32)scff_interprocess.SWScaleFlags.kSpline:
+    case (Int32)scff_interprocess.SWScaleFlags.kSpline:
       SwsFlags = scff_interprocess.SWScaleFlags.kSpline;
       break;
     }
@@ -207,16 +224,16 @@ public class LayoutParameter {
       KeepAspectRatio = false;
     }
     switch (interprocess_layout_parameter.rotate_direction) {
-    case (System.Int32)scff_interprocess.RotateDirection.kNoRotate:
+    case (Int32)scff_interprocess.RotateDirection.kNoRotate:
       RotateDirection = scff_interprocess.RotateDirection.kNoRotate;
       break;
-    case (System.Int32)scff_interprocess.RotateDirection.k90Degrees:
+    case (Int32)scff_interprocess.RotateDirection.k90Degrees:
       RotateDirection = scff_interprocess.RotateDirection.k90Degrees;
       break;
-    case (System.Int32)scff_interprocess.RotateDirection.k180Degrees:
+    case (Int32)scff_interprocess.RotateDirection.k180Degrees:
       RotateDirection = scff_interprocess.RotateDirection.k180Degrees;
       break;
-    case (System.Int32)scff_interprocess.RotateDirection.k270Degrees:
+    case (Int32)scff_interprocess.RotateDirection.k270Degrees:
       RotateDirection = scff_interprocess.RotateDirection.k270Degrees;
       break;
     }
@@ -243,7 +260,7 @@ public class LayoutParameter {
     } else {
       interprocess_layout_parameter.show_layered_window = 0;
     }
-    interprocess_layout_parameter.sws_flags = (System.Int32)SwsFlags;
+    interprocess_layout_parameter.sws_flags = (Int32)SwsFlags;
     if (Stretch) {
       interprocess_layout_parameter.stretch = 1;
     } else {
@@ -254,44 +271,61 @@ public class LayoutParameter {
     } else {
       interprocess_layout_parameter.keep_aspect_ratio = 0;
     }
-    interprocess_layout_parameter.rotate_direction = (System.Int32)RotateDirection;
+    interprocess_layout_parameter.rotate_direction = (Int32)RotateDirection;
 
     return interprocess_layout_parameter;
   }
 
-  public System.Int32 BoundX { get; set; }
-  public System.Int32 BoundY { get; set; }
-  public System.Int32 BoundWidth { get; set; }
-  public System.Int32 BoundHeight { get; set; }
-
-  [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-  private static extern int GetClassName(System.IntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
-  [DllImport("user32.dll", SetLastError = false)]
-  static extern System.IntPtr GetDesktopWindow();
+  public Int32 BoundX { get; set; }
+  public Int32 BoundY { get; set; }
+  public Int32 BoundWidth { get; set; }
+  public Int32 BoundHeight { get; set; }
 
   public string WindowText {
     get {
       if (Window == 0) {
         return "(Splash)";
-      } else if (Window == (System.UInt64)GetDesktopWindow()) {
+      } else if (Window == (UInt64)GetDesktopWindow()) {
         return "(Desktop)";
       } else {
         StringBuilder class_name = new StringBuilder(256);
-        GetClassName((System.IntPtr)Window, class_name, 256);
+        GetClassName((IntPtr)Window, class_name, 256);
         return class_name.ToString();
       }
     }
   }
-  public System.UInt64 Window { get; set; }
-  public System.Int32 ClippingX { get; set; }
-  public System.Int32 ClippingY { get; set; }
-  public System.Int32 ClippingWidth { get; set; }
-  public System.Int32 ClippingHeight { get; set; }
-  public System.Boolean ShowCursor { get; set; }
-  public System.Boolean ShowLayeredWindow { get; set; }
+  public UInt64 Window { get; set; }
+
+  private Boolean fit_;
+  public Boolean Fit {
+    get {
+      return fit_;
+    }
+    set {
+      fit_ = value;
+      IntPtr window_handle = (IntPtr)Window;
+      if (window_handle == null || !IsWindow(window_handle)) {
+        return;
+      }
+
+      RECT window_rect;
+      GetClientRect(window_handle, out window_rect);
+      ClippingX = window_rect.left;
+      ClippingY = window_rect.top;
+      ClippingWidth = window_rect.right;
+      ClippingHeight = window_rect.bottom;
+    }
+  }
+
+  public Int32 ClippingX { get; set; }
+  public Int32 ClippingY { get; set; }
+  public Int32 ClippingWidth { get; set; }
+  public Int32 ClippingHeight { get; set; }
+  public Boolean ShowCursor { get; set; }
+  public Boolean ShowLayeredWindow { get; set; }
   public scff_interprocess.SWScaleFlags SwsFlags { get; set; }
-  public System.Boolean Stretch { get; set; }
-  public System.Boolean KeepAspectRatio { get; set; }
+  public Boolean Stretch { get; set; }
+  public Boolean KeepAspectRatio { get; set; }
   public scff_interprocess.RotateDirection RotateDirection { get; set; }
 }
 
@@ -300,7 +334,7 @@ public class Message {
   /// @brief デフォルトコンストラクタ。
   public Message() {
     // デフォルト値を設定
-    Timestamp = System.DateTime.Now.Ticks;
+    Timestamp = DateTime.Now.Ticks;
     LayoutType = scff_interprocess.LayoutType.kNullLayout;
     LayoutElementCount = 0;
     LayoutParameters = new List<LayoutParameter>();
@@ -309,13 +343,13 @@ public class Message {
   public Message(scff_interprocess.Message interprocess_message) {
     Timestamp = interprocess_message.timestamp;
     switch (interprocess_message.layout_type) {
-    case (System.Int32)scff_interprocess.LayoutType.kNullLayout:
+    case (Int32)scff_interprocess.LayoutType.kNullLayout:
       LayoutType = scff_interprocess.LayoutType.kNullLayout;
       break;
-    case (System.Int32)scff_interprocess.LayoutType.kNativeLayout:
+    case (Int32)scff_interprocess.LayoutType.kNativeLayout:
       LayoutType = scff_interprocess.LayoutType.kNativeLayout;
       break;
-    case (System.Int32)scff_interprocess.LayoutType.kComplexLayout:
+    case (Int32)scff_interprocess.LayoutType.kComplexLayout:
       LayoutType = scff_interprocess.LayoutType.kComplexLayout;
       break;
     }
@@ -330,7 +364,7 @@ public class Message {
   public scff_interprocess.Message ToInterprocessMessage() {
     scff_interprocess.Message interprocess_message = new scff_interprocess.Message();
     interprocess_message.timestamp = Timestamp;
-    interprocess_message.layout_type = (System.Int32)LayoutType;
+    interprocess_message.layout_type = (Int32)LayoutType;
     interprocess_message.layout_element_count = LayoutElementCount;
     // Listの前から順番に書き込む
     interprocess_message.layout_parameters =
@@ -360,9 +394,9 @@ public class Message {
     return interprocess_message;
   }
 
-  public System.Int64 Timestamp { get; set; }
+  public Int64 Timestamp { get; set; }
   public scff_interprocess.LayoutType LayoutType { get; set; }
-  public System.Int32 LayoutElementCount { get; set; }
+  public Int32 LayoutElementCount { get; set; }
   public List<LayoutParameter> LayoutParameters { get; set; }
 }
 }   // namespace scff_app

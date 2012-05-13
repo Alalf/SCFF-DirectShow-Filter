@@ -21,6 +21,7 @@
 /// @warning To me: このファイルの中から別のファイルへのusingは禁止！
 ///- 別の言語に移植する場合も最大2ファイルでお願いします
 
+using System;
 using System.Runtime.InteropServices;
 
 /// @brief scff-interprocessモジュールのC#版(オリジナルはC++)
@@ -33,12 +34,12 @@ namespace scff_interprocess {
 // - Windows固有の型名はビットサイズが分かりにくいので
 ///  System.***で置き換える
 //   - 対応表
-//     - DWORD        = System.UInt32 32bit
-//     - HWND(void*)  = System.UInt64 64bit
+//     - DWORD        = UInt32 32bit
+//     - HWND(void*)  = UInt64 64bit
 //       - SCFHから変更: 念のため32bitから64bitに
-//     - bool         = System.Byte 8bit
+//     - bool         = Byte 8bit
 // - 不動小数点数はdoubleに統一すること
-//   - System.Double: 64bit
+//   - Double: 64bit
 // - すべての構造体はPOD(Plain Old Data)であること
 //   - 基本型、コンストラクタ、デストラクタ、仮想関数を持たない構造体のみ
 //=====================================================================
@@ -148,19 +149,19 @@ public enum RotateDirection {
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public struct Entry {
   /// @brief SCFF DSFのDLLが使われれているプロセスID
-  public System.UInt32 process_id;
+  public UInt32 process_id;
   /// @brief SCFF DSFのDLLが使われているプロセス名
   [MarshalAs(UnmanagedType.ByValTStr, SizeConst = Interprocess.kMaxPath)]
   public string process_name;
   /// @brief サンプルの出力width
-  public System.Int32 sample_width;
+  public Int32 sample_width;
   /// @brief サンプルの出力height
-  public System.Int32 sample_height;
+  public Int32 sample_height;
   /// @brief サンプルの出力ピクセルフォーマット
   /// @attention ImagePixelFormatを操作に使うこと
-  public System.Int32 sample_pixel_format;
+  public Int32 sample_pixel_format;
   /// @brief 目標fps
-  public System.Double fps;
+  public Double fps;
 }
 
 /// @brief 共有メモリ(Directory)に格納する構造体
@@ -176,40 +177,40 @@ public struct Directory {
 public struct LayoutParameter {
   /// @brief サンプル内の原点のX座標
   /// @warning NullLayout,NativeLayoutでは無視される
-  public System.Int32 bound_x;
+  public Int32 bound_x;
   /// @brief サンプル内の原点のY座標
   /// @warning NullLayout,NativeLayoutでは無視される
-  public System.Int32 bound_y;
+  public Int32 bound_y;
   /// @brief サンプル内の幅
   /// @warning NullLayout,NativeLayoutでは無視される
-  public System.Int32 bound_width;
+  public Int32 bound_width;
   /// @brief サンプル内の高さ
   /// @warning NullLayout,NativeLayoutでは無視される
-  public System.Int32 bound_height;
+  public Int32 bound_height;
   /// @brief キャプチャを行う対象となるウィンドウ
-  public System.UInt64 window;
+  public UInt64 window;
   /// @brief 取り込み範囲の開始X座標
-  public System.Int32 clipping_x;
+  public Int32 clipping_x;
   /// @brief 取り込み範囲の開始y座標
-  public System.Int32 clipping_y;
+  public Int32 clipping_y;
   /// @brief 取り込み範囲の幅
-  public System.Int32 clipping_width;
+  public Int32 clipping_width;
   /// @brief 取り込み範囲の高さ
-  public System.Int32 clipping_height;
+  public Int32 clipping_height;
   /// @brief マウスカーソルの表示
-  public System.Byte show_cursor;
+  public Byte show_cursor;
   /// @brief レイヤードウィンドウの表示
-  public System.Byte show_layered_window;
+  public Byte show_layered_window;
   /// @brief 拡大縮小アルゴリズムの選択
   /// @attention SWScaleFlagsを操作に使うこと
-  public System.Int32 sws_flags;
+  public Int32 sws_flags;
   /// @brief 取り込み範囲が出力サイズより小さい場合拡張
-  public System.Byte stretch;
+  public Byte stretch;
   /// @brief アスペクト比の保持
-  public System.Byte keep_aspect_ratio;
+  public Byte keep_aspect_ratio;
   /// @brief 回転方向
   /// @attention RotateDirectionを操作に使うこと
-  public System.Int32 rotate_direction;
+  public Int32 rotate_direction;
 }
 
 /// @brief 共有メモリ(Message)に格納する構造体
@@ -218,12 +219,12 @@ public struct Message {
   /// @brief タイムスタンプ(time()で求められたものを想定)
   /// @warning 1ではじまり単調増加が必須条件
   /// @warning (0および負数は無効なメッセージを示す)
-  public System.Int64 timestamp;
+  public Int64 timestamp;
   /// @brief レイアウトの種類
   /// @attention LayoutTypeを操作に使うこと
-  public System.Int32 layout_type;
+  public Int32 layout_type;
   /// @brief 有効なレイアウト要素の数
-  public System.Int32 layout_element_count;
+  public Int32 layout_element_count;
   /// @brief レイアウトパラメータの配列
   [MarshalAs(UnmanagedType.ByValArray, SizeConst = Interprocess.kMaxComplexLayoutElements)]
   public LayoutParameter[] layout_parameters;

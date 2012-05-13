@@ -30,9 +30,6 @@
         {
       this.components = new System.ComponentModel.Container();
       System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-      System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem(new System.Windows.Forms.ListViewItem.ListViewSubItem[] {
-            new System.Windows.Forms.ListViewItem.ListViewSubItem(null, "Layout 1"),
-            new System.Windows.Forms.ListViewItem.ListViewSubItem(null, "0.0 640x480", System.Drawing.SystemColors.WindowText, System.Drawing.SystemColors.Window, new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128))))}, "Image.png");
       this.layout_layout = new System.Windows.Forms.Button();
       this.main_menu = new System.Windows.Forms.MenuStrip();
       this.tools_menu = new System.Windows.Forms.ToolStripMenuItem();
@@ -44,6 +41,7 @@
       this.english_item = new System.Windows.Forms.ToolStripMenuItem();
       this.external_item = new System.Windows.Forms.ToolStripMenuItem();
       this.layout_bound_height = new System.Windows.Forms.NumericUpDown();
+      this.layoutParameterBindingSource = new System.Windows.Forms.BindingSource(this.components);
       this.window_desktop = new System.Windows.Forms.Button();
       this.layout_bound_width = new System.Windows.Forms.NumericUpDown();
       this.kWindow = new System.Windows.Forms.GroupBox();
@@ -65,8 +63,6 @@
       this.kX = new System.Windows.Forms.Label();
       this.layout_bound_y = new System.Windows.Forms.NumericUpDown();
       this.layout_bound_x = new System.Windows.Forms.NumericUpDown();
-      this.layout_info_column = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-      this.layout_no_column = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
       this.layout_profile_add = new System.Windows.Forms.Button();
       this.process_refresh = new System.Windows.Forms.Button();
       this.kLayoutCross = new System.Windows.Forms.Label();
@@ -79,7 +75,6 @@
       this.scff_icons = new System.Windows.Forms.ImageList(this.components);
       this.layout_remove = new System.Windows.Forms.Button();
       this.layout_add = new System.Windows.Forms.Button();
-      this.layout_list = new System.Windows.Forms.ListView();
       this.option_show_mouse_cursor = new System.Windows.Forms.CheckBox();
       this.option_show_layered_window = new System.Windows.Forms.CheckBox();
       this.kDirectShowFilter = new System.Windows.Forms.Label();
@@ -99,11 +94,13 @@
       this.option_over_sampling = new System.Windows.Forms.CheckBox();
       this.option_enable_enlargement = new System.Windows.Forms.CheckBox();
       this.option_keep_aspect_ratio = new System.Windows.Forms.CheckBox();
+      this.layout_list = new System.Windows.Forms.ListBox();
       this.kVersion = new System.Windows.Forms.Label();
       this.kGreenPanel = new System.Windows.Forms.Panel();
       this.layout_profile_combo = new System.Windows.Forms.ComboBox();
       this.main_menu.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.layout_bound_height)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.layoutParameterBindingSource)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.layout_bound_width)).BeginInit();
       this.kWindow.SuspendLayout();
       this.kArea.SuspendLayout();
@@ -219,6 +216,7 @@
       // 
       // layout_bound_height
       // 
+      this.layout_bound_height.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameterBindingSource, "BoundHeight", true));
       this.layout_bound_height.Enabled = false;
       this.layout_bound_height.Location = new System.Drawing.Point(117, 279);
       this.layout_bound_height.Maximum = new decimal(new int[] {
@@ -235,6 +233,10 @@
             0,
             0});
       // 
+      // layoutParameterBindingSource
+      // 
+      this.layoutParameterBindingSource.DataSource = typeof(scff_app.LayoutParameter);
+      // 
       // window_desktop
       // 
       this.window_desktop.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -248,6 +250,7 @@
       // 
       // layout_bound_width
       // 
+      this.layout_bound_width.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameterBindingSource, "BoundWidth", true));
       this.layout_bound_width.Enabled = false;
       this.layout_bound_width.Location = new System.Drawing.Point(43, 279);
       this.layout_bound_width.Maximum = new decimal(new int[] {
@@ -296,6 +299,8 @@
       // 
       this.window_handle.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+      this.window_handle.DataBindings.Add(new System.Windows.Forms.Binding("Tag", this.layoutParameterBindingSource, "Window", true));
+      this.window_handle.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.layoutParameterBindingSource, "WindowText", true));
       this.window_handle.Location = new System.Drawing.Point(55, 16);
       this.window_handle.Name = "window_handle";
       this.window_handle.ReadOnly = true;
@@ -314,6 +319,7 @@
       // area_fit
       // 
       this.area_fit.AutoSize = true;
+      this.area_fit.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.layoutParameterBindingSource, "Fit", true));
       this.area_fit.Location = new System.Drawing.Point(19, 17);
       this.area_fit.Name = "area_fit";
       this.area_fit.Size = new System.Drawing.Size(38, 16);
@@ -356,6 +362,7 @@
       // 
       // area_clipping_height
       // 
+      this.area_clipping_height.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameterBindingSource, "ClippingHeight", true));
       this.area_clipping_height.Location = new System.Drawing.Point(214, 41);
       this.area_clipping_height.Maximum = new decimal(new int[] {
             4096,
@@ -373,6 +380,7 @@
       // 
       // area_clipping_width
       // 
+      this.area_clipping_width.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameterBindingSource, "ClippingWidth", true));
       this.area_clipping_width.Location = new System.Drawing.Point(151, 41);
       this.area_clipping_width.Maximum = new decimal(new int[] {
             4096,
@@ -390,6 +398,7 @@
       // 
       // area_clipping_y
       // 
+      this.area_clipping_y.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameterBindingSource, "ClippingY", true));
       this.area_clipping_y.Location = new System.Drawing.Point(78, 41);
       this.area_clipping_y.Maximum = new decimal(new int[] {
             4096,
@@ -402,6 +411,7 @@
       // 
       // area_clipping_x
       // 
+      this.area_clipping_x.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameterBindingSource, "ClippingX", true));
       this.area_clipping_x.Location = new System.Drawing.Point(19, 41);
       this.area_clipping_x.Maximum = new decimal(new int[] {
             4096,
@@ -469,6 +479,7 @@
       // 
       // layout_bound_y
       // 
+      this.layout_bound_y.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameterBindingSource, "BoundY", true));
       this.layout_bound_y.Enabled = false;
       this.layout_bound_y.Location = new System.Drawing.Point(117, 254);
       this.layout_bound_y.Maximum = new decimal(new int[] {
@@ -482,6 +493,7 @@
       // 
       // layout_bound_x
       // 
+      this.layout_bound_x.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameterBindingSource, "BoundX", true));
       this.layout_bound_x.Enabled = false;
       this.layout_bound_x.Location = new System.Drawing.Point(43, 254);
       this.layout_bound_x.Maximum = new decimal(new int[] {
@@ -492,14 +504,6 @@
       this.layout_bound_x.Name = "layout_bound_x";
       this.layout_bound_x.Size = new System.Drawing.Size(50, 19);
       this.layout_bound_x.TabIndex = 1;
-      // 
-      // layout_info_column
-      // 
-      this.layout_info_column.Text = "Info";
-      // 
-      // layout_no_column
-      // 
-      this.layout_no_column.Text = "No";
       // 
       // layout_profile_add
       // 
@@ -601,7 +605,6 @@
       // 
       // layout_remove
       // 
-      this.layout_remove.Enabled = false;
       this.layout_remove.ImageKey = "Remove.png";
       this.layout_remove.ImageList = this.scff_icons;
       this.layout_remove.Location = new System.Drawing.Point(30, 311);
@@ -613,7 +616,6 @@
       // 
       // layout_add
       // 
-      this.layout_add.Enabled = false;
       this.layout_add.ImageKey = "Add.png";
       this.layout_add.ImageList = this.scff_icons;
       this.layout_add.Location = new System.Drawing.Point(3, 311);
@@ -623,34 +625,9 @@
       this.layout_add.UseVisualStyleBackColor = true;
       this.layout_add.Click += new System.EventHandler(this.layout_add_Click);
       // 
-      // layout_list
-      // 
-      this.layout_list.AutoArrange = false;
-      this.layout_list.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.layout_no_column,
-            this.layout_info_column});
-      this.layout_list.Enabled = false;
-      this.layout_list.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-      this.layout_list.FullRowSelect = true;
-      this.layout_list.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-      this.layout_list.HideSelection = false;
-      this.layout_list.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem1});
-      this.layout_list.LargeImageList = this.scff_icons;
-      this.layout_list.Location = new System.Drawing.Point(3, 3);
-      this.layout_list.MultiSelect = false;
-      this.layout_list.Name = "layout_list";
-      this.layout_list.ShowGroups = false;
-      this.layout_list.Size = new System.Drawing.Size(171, 245);
-      this.layout_list.SmallImageList = this.scff_icons;
-      this.layout_list.TabIndex = 0;
-      this.layout_list.TileSize = new System.Drawing.Size(160, 30);
-      this.layout_list.UseCompatibleStateImageBehavior = false;
-      this.layout_list.View = System.Windows.Forms.View.Tile;
-      this.layout_list.SelectedIndexChanged += new System.EventHandler(this.layout_list_SelectedIndexChanged);
-      // 
       // option_show_mouse_cursor
       // 
+      this.option_show_mouse_cursor.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.layoutParameterBindingSource, "ShowCursor", true));
       this.option_show_mouse_cursor.Location = new System.Drawing.Point(7, 15);
       this.option_show_mouse_cursor.Name = "option_show_mouse_cursor";
       this.option_show_mouse_cursor.Size = new System.Drawing.Size(126, 16);
@@ -660,6 +637,7 @@
       // 
       // option_show_layered_window
       // 
+      this.option_show_layered_window.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.layoutParameterBindingSource, "ShowLayeredWindow", true));
       this.option_show_layered_window.Location = new System.Drawing.Point(7, 31);
       this.option_show_layered_window.Name = "option_show_layered_window";
       this.option_show_layered_window.Size = new System.Drawing.Size(137, 16);
@@ -744,6 +722,8 @@
       // 
       // splitContainer1.Panel2
       // 
+      this.splitContainer1.Panel2.AutoScroll = true;
+      this.splitContainer1.Panel2.Controls.Add(this.layout_list);
       this.splitContainer1.Panel2.Controls.Add(this.layout_layout);
       this.splitContainer1.Panel2.Controls.Add(this.layout_bound_height);
       this.splitContainer1.Panel2.Controls.Add(this.layout_bound_width);
@@ -755,7 +735,6 @@
       this.splitContainer1.Panel2.Controls.Add(this.kLayoutX);
       this.splitContainer1.Panel2.Controls.Add(this.layout_remove);
       this.splitContainer1.Panel2.Controls.Add(this.layout_add);
-      this.splitContainer1.Panel2.Controls.Add(this.layout_list);
       this.splitContainer1.Panel2MinSize = 0;
       this.splitContainer1.Size = new System.Drawing.Size(480, 355);
       this.splitContainer1.SplitterDistance = 300;
@@ -831,6 +810,7 @@
       // 
       this.option_resize_method_combo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+      this.option_resize_method_combo.DataBindings.Add(new System.Windows.Forms.Binding("SelectedValue", this.layoutParameterBindingSource, "SwsFlags", true));
       this.option_resize_method_combo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
       this.option_resize_method_combo.FormattingEnabled = true;
       this.option_resize_method_combo.Location = new System.Drawing.Point(157, 75);
@@ -869,6 +849,7 @@
       // 
       // option_enable_enlargement
       // 
+      this.option_enable_enlargement.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.layoutParameterBindingSource, "Stretch", true));
       this.option_enable_enlargement.Location = new System.Drawing.Point(7, 63);
       this.option_enable_enlargement.Name = "option_enable_enlargement";
       this.option_enable_enlargement.Size = new System.Drawing.Size(125, 16);
@@ -878,12 +859,25 @@
       // 
       // option_keep_aspect_ratio
       // 
+      this.option_keep_aspect_ratio.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.layoutParameterBindingSource, "KeepAspectRatio", true));
       this.option_keep_aspect_ratio.Location = new System.Drawing.Point(7, 47);
       this.option_keep_aspect_ratio.Name = "option_keep_aspect_ratio";
       this.option_keep_aspect_ratio.Size = new System.Drawing.Size(120, 16);
       this.option_keep_aspect_ratio.TabIndex = 2;
       this.option_keep_aspect_ratio.Text = "Keep Aspect Ratio";
       this.option_keep_aspect_ratio.UseVisualStyleBackColor = true;
+      // 
+      // layout_list
+      // 
+      this.layout_list.DataSource = this.layoutParameterBindingSource;
+      this.layout_list.DisplayMember = "WindowText";
+      this.layout_list.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+      this.layout_list.FormattingEnabled = true;
+      this.layout_list.ItemHeight = 16;
+      this.layout_list.Location = new System.Drawing.Point(3, 0);
+      this.layout_list.Name = "layout_list";
+      this.layout_list.Size = new System.Drawing.Size(171, 244);
+      this.layout_list.TabIndex = 15;
       // 
       // kVersion
       // 
@@ -942,6 +936,7 @@
       this.main_menu.ResumeLayout(false);
       this.main_menu.PerformLayout();
       ((System.ComponentModel.ISupportInitialize)(this.layout_bound_height)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.layoutParameterBindingSource)).EndInit();
       ((System.ComponentModel.ISupportInitialize)(this.layout_bound_width)).EndInit();
       this.kWindow.ResumeLayout(false);
       this.kWindow.PerformLayout();
@@ -1003,8 +998,6 @@
         private System.Windows.Forms.Label kX;
         private System.Windows.Forms.NumericUpDown layout_bound_y;
         private System.Windows.Forms.NumericUpDown layout_bound_x;
-        private System.Windows.Forms.ColumnHeader layout_info_column;
-        private System.Windows.Forms.ColumnHeader layout_no_column;
         private System.Windows.Forms.Button layout_profile_add;
         private System.Windows.Forms.Button process_refresh;
         private System.Windows.Forms.Label kLayoutCross;
@@ -1016,7 +1009,6 @@
         private System.Windows.Forms.ImageList scff_icons;
         private System.Windows.Forms.Button layout_remove;
         private System.Windows.Forms.Button layout_add;
-        private System.Windows.Forms.ListView layout_list;
         private System.Windows.Forms.CheckBox option_show_mouse_cursor;
         private System.Windows.Forms.CheckBox option_show_layered_window;
         private System.Windows.Forms.Label kDirectShowFilter;
@@ -1040,6 +1032,8 @@
         private System.Windows.Forms.Panel kGreenPanel;
         private System.Windows.Forms.ComboBox layout_profile_combo;
         private System.Windows.Forms.CheckBox target_auto_apply;
+        private System.Windows.Forms.ListBox layout_list;
+        private System.Windows.Forms.BindingSource layoutParameterBindingSource;
 
 
 

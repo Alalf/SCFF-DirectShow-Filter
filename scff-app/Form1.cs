@@ -46,12 +46,20 @@ public partial class Form1 : Form {
     option_resize_method_combo.DisplayMember = "Item1";
     option_resize_method_combo.ValueMember = "Item2";
     option_resize_method_combo.DataSource = impl_.ResizeMethodList;
-
+    
     // 初期設定
     this.UpdateCurrentDirectory();
-    this.UpdateEditingLayoutIndex(0);
 
-    area_fit.Checked = true;
+    // デフォルトの設定を書き込む
+    AddDefaultLayoutParameter();
+  }
+
+  /// @brief デフォルトの設定をBindingSourceに追加する
+  private void AddDefaultLayoutParameter() {
+    LayoutParameter default_layout_parameter = new LayoutParameter();
+    default_layout_parameter.Window = impl_.GetWindowFromDesktop();
+    default_layout_parameter.Fit = true;
+    layoutParameterBindingSource.Add(default_layout_parameter);
   }
 
   /// @brief Processコンボボックスのデータソースを再設定
@@ -74,41 +82,6 @@ public partial class Form1 : Form {
       apply.Enabled = true;
       target_auto_apply.Enabled = true;
     }
-  }
-
-  /// @brief DataBindingsを再設定
-  private void UpdateEditingLayoutIndex(int editing_layout_index) {
-    impl_.EditingLayoutIndex = editing_layout_index;
-    layout_bound_x.DataBindings.Add(
-        "Value", impl_.LayoutParameters[impl_.EditingLayoutIndex], "BoundX");
-    layout_bound_y.DataBindings.Add(
-        "Value", impl_.LayoutParameters[impl_.EditingLayoutIndex], "BoundY");
-    layout_bound_width.DataBindings.Add(
-        "Value", impl_.LayoutParameters[impl_.EditingLayoutIndex], "BoundWidth");
-    layout_bound_height.DataBindings.Add(
-        "Value", impl_.LayoutParameters[impl_.EditingLayoutIndex], "BoundHeight");
-    window_handle.DataBindings.Add(
-        "Text", impl_.LayoutParameters[impl_.EditingLayoutIndex], "WindowText");
-    window_handle.DataBindings.Add(
-        "Tag", impl_.LayoutParameters[impl_.EditingLayoutIndex], "Window");
-    area_clipping_x.DataBindings.Add(
-        "Value", impl_.LayoutParameters[impl_.EditingLayoutIndex], "ClippingX");
-    area_clipping_y.DataBindings.Add(
-        "Value", impl_.LayoutParameters[impl_.EditingLayoutIndex], "ClippingY");
-    area_clipping_width.DataBindings.Add(
-        "Value", impl_.LayoutParameters[impl_.EditingLayoutIndex], "ClippingWidth");
-    area_clipping_height.DataBindings.Add(
-        "Value", impl_.LayoutParameters[impl_.EditingLayoutIndex], "ClippingHeight");
-    option_show_mouse_cursor.DataBindings.Add(
-        "Checked", impl_.LayoutParameters[impl_.EditingLayoutIndex], "ShowCursor");
-    option_show_layered_window.DataBindings.Add(
-        "Checked", impl_.LayoutParameters[impl_.EditingLayoutIndex], "ShowLayeredWindow");
-    option_resize_method_combo.DataBindings.Add(
-        "SelectedValue", impl_.LayoutParameters[impl_.EditingLayoutIndex], "SwsFlags");
-    option_enable_enlargement.DataBindings.Add(
-        "Checked", impl_.LayoutParameters[impl_.EditingLayoutIndex], "Stretch");
-    option_keep_aspect_ratio.DataBindings.Add(
-        "Checked", impl_.LayoutParameters[impl_.EditingLayoutIndex], "KeepAspectRatio");
   }
 
   //===================================================================
@@ -151,12 +124,18 @@ public partial class Form1 : Form {
   // OK/CANCEL
   //-------------------------------------------------------------------
   private void splash_Click(object sender, EventArgs e) {
-    impl_.SendNullLayoutRequest();
+    if (process_combo.SelectedValue != null) {
+      return;
+    }
+    UInt32 process_id = (UInt32)process_combo.SelectedValue;
+    impl_.SendNullLayoutRequest(process_id);
   }
   private void apply_Click(object sender, EventArgs e) {
+    /*
     if (impl_.ValidateParameters(true)) {
       impl_.SendLayoutRequest();
     }
+    */
   }
 
   //-------------------------------------------------------------------
@@ -168,9 +147,6 @@ public partial class Form1 : Form {
   }
 
   private void process_combo_SelectedIndexChanged(object sender, EventArgs e) {
-    if (process_combo.SelectedValue != null) {
-      impl_.EditingProcessID = (System.UInt32)process_combo.SelectedValue;
-    }
   }
 
   //-------------------------------------------------------------------
@@ -184,15 +160,6 @@ public partial class Form1 : Form {
   // Target/Window
   //-------------------------------------------------------------------
 
-  /// @brief クリッピング領域の値の更新
-  private void UpdateClippingRegion() {
-    impl_.ResetClippingRegion();
-    area_clipping_x.DataBindings["Value"].ReadValue();
-    area_clipping_y.DataBindings["Value"].ReadValue();
-    area_clipping_width.DataBindings["Value"].ReadValue();
-    area_clipping_height.DataBindings["Value"].ReadValue();
-  }
-
   private void window_draghere_MouseDown(object sender, MouseEventArgs e) {
     window_draghere.BackColor = Color.Orange;
   }
@@ -201,33 +168,35 @@ public partial class Form1 : Form {
     window_draghere.BackColor = SystemColors.Control;
 
     Point screen_location = window_draghere.PointToScreen(e.Location);
+    /*
     impl_.SetWindowFromPoint(screen_location.X, screen_location.Y);
     window_handle.DataBindings["Text"].ReadValue();
     window_handle.DataBindings["Tag"].ReadValue();
+    */
 
-    UpdateClippingRegion();
-    area_fit.Checked = true;
-
+    /*
     if (target_auto_apply.Checked) {
       if (impl_.ValidateParameters(false)) {
         impl_.SendLayoutRequest();
       }
     }
+    */
   }
 
   private void window_desktop_Click(object sender, EventArgs e) {
+    /*
     impl_.SetWindowToDesktop();
     window_handle.DataBindings["Text"].ReadValue();
     window_handle.DataBindings["Tag"].ReadValue();
+    */
 
-    UpdateClippingRegion();
-    area_fit.Checked = true;
-
+    /*
     if (target_auto_apply.Checked) {
       if (impl_.ValidateParameters(false)) {
         impl_.SendLayoutRequest();
       }
     }
+    */
   }
 
   //-------------------------------------------------------------------
@@ -239,13 +208,14 @@ public partial class Form1 : Form {
       area_clipping_y.Enabled = false;
       area_clipping_width.Enabled = false;
       area_clipping_height.Enabled = false;
-      this.UpdateClippingRegion();
 
+      /*
       if (target_auto_apply.Checked) {
         if (impl_.ValidateParameters(false)) {
           impl_.SendLayoutRequest();
         }
       }
+      */
     } else {
       area_clipping_x.Enabled = true;
       area_clipping_y.Enabled = true;
@@ -268,34 +238,44 @@ public partial class Form1 : Form {
     form.GetResult(out clipping_x, out clipping_y, out clipping_width, out clipping_height);
 
     // デスクトップキャプチャに変更
+    /*
     impl_.SetWindowToDesktop();
     window_handle.DataBindings["Text"].ReadValue();
     window_handle.DataBindings["Tag"].ReadValue();
+    */
 
     // FitをはずしてClippingを更新
-    area_fit.Checked = false;
+    /*
     impl_.JustifyClippingRegion(clipping_x, clipping_y, clipping_width, clipping_height);
     area_clipping_x.DataBindings["Value"].ReadValue();
     area_clipping_y.DataBindings["Value"].ReadValue();
     area_clipping_width.DataBindings["Value"].ReadValue();
     area_clipping_height.DataBindings["Value"].ReadValue();
+    */
 
+    /*
     if (target_auto_apply.Checked) {
       if (impl_.ValidateParameters(false)) {
         impl_.SendLayoutRequest();
       }
     }
+    */
   }
 
   //-------------------------------------------------------------------
   // Layout
   //-------------------------------------------------------------------
   private void layout_add_Click(object sender, EventArgs e) {
-    // nop
+    if (layoutParameterBindingSource.Count <
+        scff_interprocess.Interprocess.kMaxComplexLayoutElements) {
+      AddDefaultLayoutParameter();
+    }
   }
 
   private void layout_remove_Click(object sender, EventArgs e) {
-    // nop
+    if (layoutParameterBindingSource.Count > 1) {
+      layoutParameterBindingSource.RemoveCurrent();
+    }
   }
 
   private void layout_list_SelectedIndexChanged(object sender, EventArgs e) {

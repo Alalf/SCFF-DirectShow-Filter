@@ -19,6 +19,7 @@
 /// @file scff-app/app-implementation-dwmapi.cs
 /// @brief DWMAPI関連のメソッドの定義
 
+using System;
 using System.Runtime.InteropServices;
 
 namespace scff_app {
@@ -80,8 +81,8 @@ public partial class AppImplementation {
 
   /// @brief DWMAPI.DLLが利用可能かどうか
   private bool CanUseDWMAPIDLL() {
-    if (System.Environment.OSVersion.Platform == System.PlatformID.Win32NT &&
-        System.Environment.OSVersion.Version.Major >= 6) {
+    if (Environment.OSVersion.Platform == PlatformID.Win32NT &&
+        Environment.OSVersion.Version.Major >= 6) {
       return true;
     } else {
       return false;

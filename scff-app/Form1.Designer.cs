@@ -917,7 +917,7 @@
       this.layout_profile_combo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
       this.layout_profile_combo.Enabled = false;
       this.layout_profile_combo.FormattingEnabled = true;
-      this.layout_profile_combo.Location = new System.Drawing.Point(304, 68);
+      this.layout_profile_combo.Location = new System.Drawing.Point(305, 67);
       this.layout_profile_combo.Name = "layout_profile_combo";
       this.layout_profile_combo.Size = new System.Drawing.Size(130, 20);
       this.layout_profile_combo.TabIndex = 11;

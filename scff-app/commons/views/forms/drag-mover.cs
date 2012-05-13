@@ -121,6 +121,7 @@ public class DragMover : IDisposable {
     int current_container_y = current_container_location_.Y;
     int current_width = current_size_.Width;
     int current_height = current_size_.Height;
+
     // 真ん中
     if (mode_ == Mode.kMove) {
       current_container_x += container_location.X - last_mouse_container_location_.X;
@@ -148,6 +149,7 @@ public class DragMover : IDisposable {
     current_container_location_ = new Point(current_container_x, current_container_y);
     current_size_ = new Size(current_width, current_height);
 
+    // 与えられた座標が領域内なら更新
     last_mouse_container_location_ = container_location;
   }
 
@@ -160,7 +162,9 @@ public class DragMover : IDisposable {
     // 真ん中
     if (mode == Mode.kMove) {
       new_container_x = Math.Max(0, new_container_x);
+      new_container_x = Math.Min(bound_width_ - new_width, new_container_x);
       new_container_y = Math.Max(0, new_container_y);
+      new_container_y = Math.Min(bound_height_ - new_height, new_container_y);
       return new Rectangle(new_container_x, new_container_y, new_width, new_height);
     }
 
@@ -184,7 +188,9 @@ public class DragMover : IDisposable {
     }
 
     new_container_x = Math.Max(0, new_container_x);
+    new_container_x = Math.Min(bound_width_ - new_width, new_container_x);
     new_container_y = Math.Max(0, new_container_y);
+    new_container_y = Math.Min(bound_height_ - new_height, new_container_y);
 
     return new Rectangle(new_container_x, new_container_y, new_width, new_height);
   }

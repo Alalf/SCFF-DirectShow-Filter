@@ -185,9 +185,9 @@ public partial class AppImplementation {
     clipping_height = dst_height;
   }
 
-  public bool ValidateParameters(List<LayoutParameter> parameters, bool show_message) {
+  public bool ValidateParameters(List<LayoutParameter> parameters, int bound_width, int bound_height, bool show_message) {
     foreach (LayoutParameter i in parameters) {
-      if (!ValidateParameter(i, show_message)) {
+      if (!ValidateParameter(i, bound_width, bound_height, show_message)) {
         return false;
       }
     }
@@ -195,7 +195,7 @@ public partial class AppImplementation {
   }
 
   /// @brief パラメータのValidate
-  private bool ValidateParameter(LayoutParameter parameter, bool show_message) {
+  private bool ValidateParameter(LayoutParameter parameter, int bound_width, int bound_height, bool show_message) {
     // もっとも危険な状態になりやすいウィンドウからチェック
     if (parameter.Window == 0) { // NULL
       if (show_message) {
@@ -224,6 +224,20 @@ public partial class AppImplementation {
       }
       return false;
     }
+
+    // 縮小した結果があまりにも小さくならないように
+    /// @todo(me) 思ったより判定が難しい。要調査。
+    //int new_width = (int)(((parameter.BoundRelativeBottom - parameter.BoundRelativeTop) * bound_width) / 100);
+    //int new_height = (int)(((parameter.BoundRelativeRight - parameter.BoundRelativeLeft) * bound_height) / 100);
+    //if (new_width > 64 && new_height > 64) {
+      // ok
+    //} else {
+    //  if (show_message) {
+    //    MessageBox.Show("Specified bound-rect is too small", "Too small bound-rect",
+    //        MessageBoxButtons.OK, MessageBoxIcon.Error);
+    //  }
+    //  return false;
+    //}
 
     // クリッピングリージョンの判定
     RECT window_rect;

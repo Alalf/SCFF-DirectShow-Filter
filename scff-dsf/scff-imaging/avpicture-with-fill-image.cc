@@ -69,14 +69,14 @@ ErrorCode AVPictureWithFillImage::Create(ImagePixelFormat pixel_format,
   int size = Utilities::CalculateDataSize(pixel_format, width, height);
   uint8_t *raw_bitmap = static_cast<uint8_t*>(av_mallocz(size));
   if (raw_bitmap == NULL) {
-    return kOutOfMemoryError;
+    return kAVPictureWithFillImageOutOfMemoryError;
   }
 
   // 取り込み用AVPictureを作成
   AVPicture *avpicture = new AVPicture();
   if (avpicture == 0) {    // NULL
     av_freep(raw_bitmap);
-    return kOutOfMemoryError;
+    return kAVPictureWithFillImageCannotCreateAVPictureError;
   }
 
   // 取り込みバッファとAVPictureを関連付け
@@ -86,7 +86,7 @@ ErrorCode AVPictureWithFillImage::Create(ImagePixelFormat pixel_format,
                      width, height);
   if (result_fill != size) {
     av_freep(raw_bitmap);
-    return kOutOfMemoryError;
+    return kAVPictureWithFillImageCannotFillError;
   }
 
   avpicture_ = avpicture;

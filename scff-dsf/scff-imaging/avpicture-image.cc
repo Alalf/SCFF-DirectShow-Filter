@@ -69,7 +69,7 @@ ErrorCode AVPictureImage::Create(ImagePixelFormat pixel_format,
                       avpicture_pixel_format(),
                       width, height);
   if (result_alloc != 0) {
-    return kOutOfMemoryError;
+    return kAVPictureImageOutOfMemoryError;
   }
   avpicture_ = avpicture;
 

@@ -89,14 +89,14 @@ public partial class Form1 : Form {
     foreach (LayoutParameter i in layoutParameterBindingSource.List) {
       list.Add(i);
     }
-    if (!impl_.ValidateParameters(list, show_message)) {
+
+    int bound_width = ((Entry)entryBindingSource.Current).SampleWidth;
+    int bound_height = ((Entry)entryBindingSource.Current).SampleHeight;
+    if (!impl_.ValidateParameters(list, bound_width, bound_height, show_message)) {
       return;
     }
 
     UInt32 process_id = ((Entry)entryBindingSource.Current).ProcessID;
-    int bound_width = ((Entry)entryBindingSource.Current).SampleWidth;
-    int bound_height = ((Entry)entryBindingSource.Current).SampleHeight;
-
     impl_.SendLayoutRequest(process_id, list, bound_width, bound_height);
   }
 

@@ -40,7 +40,7 @@ class Processor {
  public:
   /// @brief コンストラクタ
   explicit Processor(int size = 1)
-      : error_code_(kUninitialziedError),
+      : error_code_(kProcessorUninitializedError),
         size_(size) {
     // nop
   }
@@ -107,8 +107,8 @@ class Processor {
   /// @brief 唯一エラーコードをkNoErrorにできる関数
   /// @attention Initが成功したらこちら
   ErrorCode InitDone() {
-    ASSERT(error_code_ == kUninitialziedError);
-    if (error_code_ == kUninitialziedError) {
+    ASSERT(error_code_ == kProcessorUninitializedError);
+    if (error_code_ == kProcessorUninitializedError) {
       error_code_ = kNoError;
     }
     return error_code_;

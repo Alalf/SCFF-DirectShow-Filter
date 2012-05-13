@@ -81,7 +81,6 @@
       this.kDirectShowFilter = new System.Windows.Forms.Label();
       this.main_status = new System.Windows.Forms.StatusStrip();
       this.layout_strip = new System.Windows.Forms.ToolStripSplitButton();
-      this.layout_strip_remove = new System.Windows.Forms.ToolStripMenuItem();
       this.status_status = new System.Windows.Forms.ToolStripStatusLabel();
       this.kSCFF = new System.Windows.Forms.Label();
       this.splitContainer1 = new System.Windows.Forms.SplitContainer();
@@ -256,7 +255,7 @@
       this.layout_bound_relative_right.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameterBindingSource, "BoundRelativeRight", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
       this.layout_bound_relative_right.DecimalPlaces = 1;
       this.layout_bound_relative_right.Enabled = false;
-      this.layout_bound_relative_right.Location = new System.Drawing.Point(89, 254);
+      this.layout_bound_relative_right.Location = new System.Drawing.Point(89, 259);
       this.layout_bound_relative_right.Minimum = new decimal(new int[] {
             1,
             0,
@@ -496,7 +495,7 @@
       this.layout_bound_relative_top.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameterBindingSource, "BoundRelativeTop", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
       this.layout_bound_relative_top.DecimalPlaces = 1;
       this.layout_bound_relative_top.Enabled = false;
-      this.layout_bound_relative_top.Location = new System.Drawing.Point(62, 227);
+      this.layout_bound_relative_top.Location = new System.Drawing.Point(62, 237);
       this.layout_bound_relative_top.Maximum = new decimal(new int[] {
             99,
             0,
@@ -511,7 +510,7 @@
       this.layout_bound_relative_left.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameterBindingSource, "BoundRelativeLeft", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
       this.layout_bound_relative_left.DecimalPlaces = 1;
       this.layout_bound_relative_left.Enabled = false;
-      this.layout_bound_relative_left.Location = new System.Drawing.Point(33, 254);
+      this.layout_bound_relative_left.Location = new System.Drawing.Point(33, 259);
       this.layout_bound_relative_left.Maximum = new decimal(new int[] {
             99,
             0,
@@ -543,7 +542,7 @@
       // 
       // kLayoutBoundRelativeBottom
       // 
-      this.kLayoutBoundRelativeBottom.Location = new System.Drawing.Point(117, 282);
+      this.kLayoutBoundRelativeBottom.Location = new System.Drawing.Point(116, 283);
       this.kLayoutBoundRelativeBottom.Name = "kLayoutBoundRelativeBottom";
       this.kLayoutBoundRelativeBottom.Size = new System.Drawing.Size(46, 16);
       this.kLayoutBoundRelativeBottom.TabIndex = 15;
@@ -569,7 +568,7 @@
       // kLayoutBoundRelativeRight
       // 
       this.kLayoutBoundRelativeRight.AutoSize = true;
-      this.kLayoutBoundRelativeRight.Location = new System.Drawing.Point(143, 257);
+      this.kLayoutBoundRelativeRight.Location = new System.Drawing.Point(143, 262);
       this.kLayoutBoundRelativeRight.Name = "kLayoutBoundRelativeRight";
       this.kLayoutBoundRelativeRight.Size = new System.Drawing.Size(32, 12);
       this.kLayoutBoundRelativeRight.TabIndex = 13;
@@ -577,7 +576,7 @@
       // 
       // kLayoutBoundRelativeTop
       // 
-      this.kLayoutBoundRelativeTop.Location = new System.Drawing.Point(31, 229);
+      this.kLayoutBoundRelativeTop.Location = new System.Drawing.Point(35, 240);
       this.kLayoutBoundRelativeTop.Name = "kLayoutBoundRelativeTop";
       this.kLayoutBoundRelativeTop.Size = new System.Drawing.Size(28, 17);
       this.kLayoutBoundRelativeTop.TabIndex = 10;
@@ -608,7 +607,7 @@
       // kLayoutBoundRelativeLeft
       // 
       this.kLayoutBoundRelativeLeft.AutoSize = true;
-      this.kLayoutBoundRelativeLeft.Location = new System.Drawing.Point(6, 257);
+      this.kLayoutBoundRelativeLeft.Location = new System.Drawing.Point(6, 262);
       this.kLayoutBoundRelativeLeft.Name = "kLayoutBoundRelativeLeft";
       this.kLayoutBoundRelativeLeft.Size = new System.Drawing.Size(25, 12);
       this.kLayoutBoundRelativeLeft.TabIndex = 8;
@@ -687,32 +686,23 @@
       this.main_status.Location = new System.Drawing.Point(0, 451);
       this.main_status.Name = "main_status";
       this.main_status.Size = new System.Drawing.Size(484, 22);
-      this.main_status.SizingGrip = false;
       this.main_status.TabIndex = 14;
       this.main_status.Text = "main_status";
       // 
       // layout_strip
       // 
-      this.layout_strip.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.layout_strip_remove});
       this.layout_strip.Image = ((System.Drawing.Image)(resources.GetObject("layout_strip.Image")));
       this.layout_strip.ImageTransparentColor = System.Drawing.Color.Magenta;
       this.layout_strip.Name = "layout_strip";
-      this.layout_strip.Size = new System.Drawing.Size(153, 20);
-      this.layout_strip.Text = "Layout1 (Native Mode)";
+      this.layout_strip.Size = new System.Drawing.Size(71, 20);
+      this.layout_strip.Text = "Layout";
       this.layout_strip.ButtonClick += new System.EventHandler(this.layout_strip_ButtonClick);
-      // 
-      // layout_strip_remove
-      // 
-      this.layout_strip_remove.Name = "layout_strip_remove";
-      this.layout_strip_remove.Size = new System.Drawing.Size(152, 22);
-      this.layout_strip_remove.Text = "Remove";
       // 
       // status_status
       // 
       this.status_status.Name = "status_status";
       this.status_status.RightToLeft = System.Windows.Forms.RightToLeft.No;
-      this.status_status.Size = new System.Drawing.Size(316, 17);
+      this.status_status.Size = new System.Drawing.Size(398, 17);
       this.status_status.Spring = true;
       this.status_status.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
       // 
@@ -900,7 +890,7 @@
       this.layout_list.ItemHeight = 16;
       this.layout_list.Location = new System.Drawing.Point(3, 0);
       this.layout_list.Name = "layout_list";
-      this.layout_list.Size = new System.Drawing.Size(171, 212);
+      this.layout_list.Size = new System.Drawing.Size(171, 228);
       this.layout_list.TabIndex = 15;
       // 
       // kVersion
@@ -1040,7 +1030,6 @@
         private System.Windows.Forms.Label kDirectShowFilter;
         private System.Windows.Forms.StatusStrip main_status;
         private System.Windows.Forms.ToolStripSplitButton layout_strip;
-        private System.Windows.Forms.ToolStripMenuItem layout_strip_remove;
         private System.Windows.Forms.ToolStripStatusLabel status_status;
         private System.Windows.Forms.Label kSCFF;
         private System.Windows.Forms.SplitContainer splitContainer1;
@@ -1059,8 +1048,8 @@
         private System.Windows.Forms.ComboBox layout_profile_combo;
         private System.Windows.Forms.CheckBox auto_apply;
         private System.Windows.Forms.ListBox layout_list;
-        private System.Windows.Forms.BindingSource layoutParameterBindingSource;
-        private System.Windows.Forms.BindingSource entryBindingSource;
+        public System.Windows.Forms.BindingSource layoutParameterBindingSource;
+        public System.Windows.Forms.BindingSource entryBindingSource;
 
 
 

@@ -81,7 +81,7 @@ ErrorCode Scale::Init() {
       GetOutputImage()->avpicture_pixel_format(),
       sws_flags_, NULL, NULL, NULL);
   if (scaler == NULL) {
-    return ErrorOccured(kOutOfMemoryError);
+    return ErrorOccured(kScaleCannotGetContextError);
   }
   scaler_ = scaler;
 

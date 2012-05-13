@@ -73,7 +73,7 @@ ErrorCode WindowsDDBImage::CreateFromResource(int width, int height,
 
   // ロード失敗
   if (windows_ddb == NULL) {
-    return kImageTypeError;
+    return kWindowsDDBImageCannotLoadResourceImageError;
   }
 
   windows_ddb_ = windows_ddb;
@@ -94,21 +94,21 @@ ErrorCode WindowsDDBImage::CreateFromWindow(int width, int height,
   // ウィンドウから情報を得るためのDC
   HDC original_dc = GetDC(window);
   if (original_dc == NULL) {
-    return kImageTypeError;
+    return kWindowsDDBImageCannotGetDCFromWindowError;
   }
 
   // 32Bitイメージ以外は作成できない
   const int bpp = GetDeviceCaps(original_dc, BITSPIXEL);
   if (bpp != 32) {
     ASSERT(false);
-    return kImageTypeError;
+    return kWindowsDDBImageNotRGB32WindowError;
   }
 
   HBITMAP windows_ddb =
       CreateCompatibleBitmap(original_dc, width, height);
   if (windows_ddb == NULL) {
     ReleaseDC(window, original_dc);
-    return kImageTypeError;
+    return kWindowsDDBImageOutOfMemoryError;
   }
   ReleaseDC(window, original_dc);
 

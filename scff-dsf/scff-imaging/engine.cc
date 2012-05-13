@@ -44,7 +44,7 @@ Engine::Engine(ImagePixelFormat output_pixel_format,
       output_height_(output_height),
       output_fps_(output_fps),
       layout_(0),       // NULL
-      layout_error_code_(kUninitialziedError) {
+      layout_error_code_(kProcessorUninitializedError) {
   MyDbgLog((LOG_MEMORY, kDbgNewDelete,
           TEXT("Engine: NEW(%d, %d, %d, %.1f)"),
           output_pixel_format, output_width, output_height, output_fps));
@@ -79,13 +79,13 @@ void Engine::ReleaseLayout() {
     layout_ = 0;            // NULL
   }
   // 未初期化
-  layout_error_code_ = kUninitialziedError;
+  layout_error_code_ = kProcessorUninitializedError;
 }
 
 // 唯一レイアウトエラーコードをkNoErrorにできるメソッド
 ErrorCode Engine::LayoutInitDone() {
-  ASSERT(layout_error_code_ == kUninitialziedError);
-  if (layout_error_code_ == kUninitialziedError) {
+  ASSERT(layout_error_code_ == kProcessorUninitializedError);
+  if (layout_error_code_ == kProcessorUninitializedError) {
     layout_error_code_ = kNoError;
   }
   return layout_error_code_;

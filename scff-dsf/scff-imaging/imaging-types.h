@@ -38,30 +38,63 @@ const int kMaxProcessorSize = 8;
 
 /// @brief 共通エラーコード
 enum ErrorCode {
+  //-------------------------------------------------------------------
+  // Common
+  //-------------------------------------------------------------------
   /// @brief エラーはない
   kNoError = 0,
-  /// @brief 初期化されていない
-  kUninitialziedError,
-  /// @brief 対応してないType
-  kImageTypeError,
-  /// @brief メモリの確保に失敗した
-  kOutOfMemoryError,
-  /// @brief 一回しか初期化・生成は許されていない
-  kMultipleCreateError,
-  /// @brief 対応してないPixelFormat
-  kPixelFormatError,
-  /// @brief 不正なウィンドウハンドル
-  kInvalidWindowError,
-  /// @brief クリッピング領域が不正
-  kInvalidClippingRegionError,
-  /// @brief キャプチャ領域が動作中に不正になった
-  kInvalidCaptureRegionError,
-  /// @brief 取り込み時に画面の色深度が32bitではなかった
-  kNot32bitColorError,
+
+  //-------------------------------------------------------------------
+  // Image
+  //-------------------------------------------------------------------
+
+  /// @brief RawBitmapイメージのメモリ確保に失敗した
+  kRawBitmapImageOutOfMemoryError = 1000,
+
+  /// @brief AVPictureイメージのメモリ確保に失敗した
+  kAVPictureImageOutOfMemoryError = 1001,
+
+  /// @brief AVPictureWithFillイメージのメモリ確保に失敗した
+  kAVPictureWithFillImageOutOfMemoryError = 1002,
+  /// @brief AVPictureWithFillイメージのAVPicture作成に失敗した
+  kAVPictureWithFillImageCannotCreateAVPictureError = 1003,
+  /// @brief AVPictureWithFillイメージのfillに失敗した
+  kAVPictureWithFillImageCannotFillError = 1004,
+
+  /// @brief WindowsDDBイメージ作成時のリソース画像のLoadImageに失敗した
+  kWindowsDDBImageCannotLoadResourceImageError = 1005,
+  /// @brief WindowsDDBイメージ作成時にWindowからDCを得ることに失敗した
+  kWindowsDDBImageCannotGetDCFromWindowError = 1006,
+  /// @brief 32bit以外のWindowからWindowsDDBイメージを作成しようとした
+  kWindowsDDBImageNotRGB32WindowError = 1007,
+  /// @brief WindowsDDBイメージのメモリ確保に失敗した
+  kWindowsDDBImageOutOfMemoryError = 1008,
+
+  //-------------------------------------------------------------------
+  // Processor
+  //-------------------------------------------------------------------
+
+  /// @brief 初期化されていないプロセッサである
+  kProcessorUninitializedError = 2000,
+
+  /// @brief SWScaleコンテキストの作成に失敗した
+  kScaleCannotGetContextError = 2001,
+
+  /// @brief ScreenCapture時、取り込み対象のWindowが適切な状態ではなかった
+  kScreenCaptureInvalidWindowError = 2002,
+  /// @brief ScreenCapture時、クリッピング領域の設定が適切ではなかった
+  kScreenCaptureInvalidClippingRegionError = 2003,
+  /// @brief ScreenCapture時、画面の色深度が32bitではなかった
+  kScreenCaptureNot32bitColorError= 2004,
+
+  //-------------------------------------------------------------------
+  // Layout
+  //-------------------------------------------------------------------
+
   /// @brief 複合レイアウトで出力画像より外の範囲に要素レイアウトを配置しようとした
-  kComplexLayoutBoundError,
+  kComplexLayoutBoundError = 3000,
   /// @brief 複合レイアウトに対応していないピクセルフォーマット
-  kComplexLayoutInvalidPixelFormatError,
+  kComplexLayoutInvalidPixelFormatError = 3001,
 };
 
 //---------------------------------------------------------------------

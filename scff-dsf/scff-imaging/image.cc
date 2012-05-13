@@ -66,11 +66,7 @@ int Image::height() const {
 //-------------------------------------------------------------------
 // 実体を生成する
 ErrorCode Image::Create(ImagePixelFormat pixel_format, int width, int height) {
-  if (!IsEmpty()) {
-    ASSERT(false);
-    return kMultipleCreateError;
-  }
-
+  ASSERT(IsEmpty());
   pixel_format_ = pixel_format;
   width_ = width;
   height_ = height;

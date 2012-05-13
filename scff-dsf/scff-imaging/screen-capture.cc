@@ -112,7 +112,7 @@ bool ScreenCapture::ValidateWindow(int index) {
   /// @todo(me) カラーチェック。オンスクリーンDCが必要なことに注意
   /// @code
   /// if (GetDeviceCaps(window_dc, BITSPIXEL) != 32) {
-  ///   return ErrorOccured(kNot32bitColorError);
+  ///   return ErrorOccured(kScreenCaptureNot32bitColorError);
   /// }
   /// @endcode
 
@@ -129,7 +129,7 @@ ErrorCode ScreenCapture::InitByIndex(int index) {
   ASSERT(GetOutputImage(index)->pixel_format() == kRGB0);
 
   if (!ValidateWindow(index)) {
-    return kInvalidWindowError;
+    return kScreenCaptureInvalidWindowError;
   }
 
   // クリッピング領域がウィンドウ内におさまっているか？
@@ -141,7 +141,7 @@ ErrorCode ScreenCapture::InitByIndex(int index) {
                                        parameter_[index].clipping_height)) {
     // ok
   } else {
-    return kInvalidClippingRegionError;
+    return kScreenCaptureInvalidClippingRegionError;
   }
 
   const int capture_width = parameter_[index].clipping_width;
@@ -244,7 +244,7 @@ ErrorCode ScreenCapture::Run() {
   // 全てのウインドウのチェック
   for (int i = 0; i < size(); i++) {
     if (!ValidateWindow(i)) {
-      return ErrorOccured(kInvalidWindowError);
+      return ErrorOccured(kScreenCaptureInvalidWindowError);
     }
   }
 

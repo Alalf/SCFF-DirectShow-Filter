@@ -28,33 +28,16 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.addingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.removingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.contextMenuStrip.SuspendLayout();
+            this.previewControl1 = new ScffApp.Views.Layouts.PreviewControl();
             this.SuspendLayout();
             // 
-            // contextMenuStrip
+            // previewControl1
             // 
-            this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.addingToolStripMenuItem,
-            this.removingToolStripMenuItem});
-            this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(125, 48);
-            // 
-            // addingToolStripMenuItem
-            // 
-            this.addingToolStripMenuItem.Name = "addingToolStripMenuItem";
-            this.addingToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.addingToolStripMenuItem.Text = "Add";
-            this.addingToolStripMenuItem.Click += new System.EventHandler(this.addingToolStripMenuItem_Click);
-            // 
-            // removingToolStripMenuItem
-            // 
-            this.removingToolStripMenuItem.Name = "removingToolStripMenuItem";
-            this.removingToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.removingToolStripMenuItem.Text = "Remove";
+            this.previewControl1.BackColor = System.Drawing.Color.GreenYellow;
+            this.previewControl1.Location = new System.Drawing.Point(0, 0);
+            this.previewControl1.Name = "previewControl1";
+            this.previewControl1.Size = new System.Drawing.Size(150, 150);
+            this.previewControl1.TabIndex = 0;
             // 
             // LayoutForm
             // 
@@ -62,19 +45,17 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(284, 262);
-            this.ContextMenuStrip = this.contextMenuStrip;
+            this.Controls.Add(this.previewControl1);
             this.Name = "LayoutForm";
             this.Text = "LayoutForm";
-            this.contextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
-        private System.Windows.Forms.ToolStripMenuItem addingToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem removingToolStripMenuItem;
+        private PreviewControl previewControl1;
+
 
     }
 }

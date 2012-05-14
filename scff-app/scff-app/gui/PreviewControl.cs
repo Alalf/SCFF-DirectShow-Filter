@@ -88,6 +88,17 @@ public partial class PreviewControl : UserControl {
     movable_and_resizable_ = new MovableAndResizable(this, bound_width, bound_height);
   }
 
+  private void fit_item_Click(object sender, EventArgs e) {
+    int padding_top, padding_bottom, padding_left, padding_right;
+    scff_imaging.Utilities.CalculatePaddingSize(Width, Height,
+        captured_bitmap_.Width, captured_bitmap_.Height,
+        layout_parameter_.Stretch,
+        layout_parameter_.KeepAspectRatio,
+        out padding_top, out padding_bottom, out padding_left, out padding_right);
+
+    Size = new Size(Width - padding_left - padding_right, Height - padding_top - padding_bottom);
+  }
+
   public override string ToString() {
     string output = "[";
     output += (IndexInLayoutParameterBindingSource+1).ToString();
@@ -143,11 +154,11 @@ public partial class PreviewControl : UserControl {
   }
 
   private void ScreenCapture() {
-    IntPtr window_hundle = (IntPtr)layout_parameter_.Window;
-    if (!IsWindow(window_hundle)) {
+    IntPtr window_handle = (IntPtr)layout_parameter_.Window;
+    if (!IsWindow(window_handle)) {
       return;
     }
-    IntPtr window_dc = GetDC(window_hundle);
+    IntPtr window_dc = GetDC(window_handle);
     if (window_dc == null) {
       // 不正なウィンドウなので何もしない
       return;
@@ -162,7 +173,7 @@ public partial class PreviewControl : UserControl {
     graphics.ReleaseHdc(captured_bitmap_dc);
     graphics.Dispose();
     
-    ReleaseDC(window_hundle, window_dc);
+    ReleaseDC(window_handle, window_dc);
   }
 
   //-------------------------------------------------------------------

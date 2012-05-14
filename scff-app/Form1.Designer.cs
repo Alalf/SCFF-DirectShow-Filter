@@ -864,7 +864,7 @@
       this.kVersion.Name = "kVersion";
       this.kVersion.Size = new System.Drawing.Size(65, 13);
       this.kVersion.TabIndex = 2;
-      this.kVersion.Text = "Ver.0.0.1";
+      this.kVersion.Text = "Ver.0.1.0";
       // 
       // kGreenPanel
       // 
@@ -917,7 +917,7 @@
       this.MaximumSize = new System.Drawing.Size(500, 500);
       this.MinimumSize = new System.Drawing.Size(310, 500);
       this.Name = "Form1";
-      this.Text = "SCFF DirectShow Filter Ver.0.0.1";
+      this.Text = "SCFF DirectShow Filter Ver.0.1.0";
       this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
       this.Shown += new System.EventHandler(this.Form1_Shown);
       this.main_menu.ResumeLayout(false);

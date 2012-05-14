@@ -67,7 +67,6 @@ public partial class Form1 : Form {
       apply.Enabled = false;
       auto_apply.Checked = false;
       auto_apply.Enabled = false;
-      layout_layout.Enabled = false;
     } else {
       foreach (Entry i in current_directory.Entries) {
         entryBindingSource.Add(i);
@@ -77,7 +76,6 @@ public partial class Form1 : Form {
       splash.Enabled = true;
       apply.Enabled = true;
       auto_apply.Enabled = true;
-      layout_layout.Enabled = true;
     }
   }
 
@@ -289,6 +287,7 @@ public partial class Form1 : Form {
       layout_bound_relative_bottom.Enabled = true;
       layout_bound_relative_left.Enabled = true;
       layout_bound_relative_right.Enabled = true;
+      layout_layout.Enabled = true;
     }
   }
 
@@ -301,6 +300,7 @@ public partial class Form1 : Form {
       layout_bound_relative_bottom.Enabled = false;
       layout_bound_relative_left.Enabled = false;
       layout_bound_relative_right.Enabled = false;
+      layout_layout.Enabled = false;
     }
   }
 

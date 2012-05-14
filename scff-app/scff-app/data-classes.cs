@@ -20,9 +20,7 @@
 /// @brief scff-appで利用するマネージドデータクラス
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Runtime.InteropServices;
 using System.Text;
 

@@ -65,25 +65,25 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="scff-app\data-classes.cs" />
-    <Compile Include="scff-app\forms\AreaSelectForm.cs">
+    <Compile Include="scff-app\gui\AreaSelectForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="scff-app\forms\AreaSelectForm.designer.cs">
+    <Compile Include="scff-app\gui\AreaSelectForm.designer.cs">
       <DependentUpon>AreaSelectForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="scff-app\forms\LayoutForm.cs">
+    <Compile Include="scff-app\gui\LayoutForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="scff-app\forms\LayoutForm.designer.cs">
+    <Compile Include="scff-app\gui\LayoutForm.designer.cs">
       <DependentUpon>LayoutForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="scff-app\forms\PreviewControl.cs">
+    <Compile Include="scff-app\gui\PreviewControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="scff-app\forms\PreviewControl.designer.cs">
+    <Compile Include="scff-app\gui\PreviewControl.designer.cs">
       <DependentUpon>PreviewControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="scff-app\forms\movable_and_resizable.cs" />
+    <Compile Include="scff-app\gui\movable_and_resizable.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -101,7 +101,7 @@
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="scff-app\forms\AreaSelectForm.resx">
+    <EmbeddedResource Include="scff-app\gui\AreaSelectForm.resx">
       <DependentUpon>AreaSelectForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -113,10 +113,10 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="scff-app\forms\LayoutForm.resx">
+    <EmbeddedResource Include="scff-app\gui\LayoutForm.resx">
       <DependentUpon>LayoutForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="scff-app\forms\PreviewControl.resx">
+    <EmbeddedResource Include="scff-app\gui\PreviewControl.resx">
       <DependentUpon>PreviewControl.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\DataSources\Entry.datasource" />

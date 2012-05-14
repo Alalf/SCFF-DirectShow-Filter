@@ -32,6 +32,7 @@ static class Program {
     Application.EnableVisualStyles();
     Application.SetCompatibleTextRenderingDefault(false);
 
+    // 32bit以外では起動しない
     if (Screen.PrimaryScreen.BitsPerPixel != 32) {
       MessageBox.Show("SCFF requires primary screen is configured 32bit color mode.",
                       "Not 32bit color mode",

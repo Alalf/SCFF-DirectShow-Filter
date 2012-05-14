@@ -20,8 +20,8 @@
 /// @brief Form1(メインウィンドウ)のイベントハンドラ以外の定義
 
 using System;
-using System.Diagnostics;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -222,17 +222,17 @@ public partial class AppImplementation {
 
     // 縮小した結果があまりにも小さくならないように
     /// @todo(me) 思ったより判定が難しい。要調査。
-    //int new_width = (int)(((parameter.BoundRelativeBottom - parameter.BoundRelativeTop) * bound_width) / 100);
-    //int new_height = (int)(((parameter.BoundRelativeRight - parameter.BoundRelativeLeft) * bound_height) / 100);
-    //if (new_width > 64 && new_height > 64) {
-      // ok
-    //} else {
-    //  if (show_message) {
-    //    MessageBox.Show("Specified bound-rect is too small", "Too small bound-rect",
-    //        MessageBoxButtons.OK, MessageBoxIcon.Error);
-    //  }
-    //  return false;
-    //}
+    // int new_width = (int)(((parameter.BoundRelativeBottom - parameter.BoundRelativeTop) * bound_width) / 100);
+    // int new_height = (int)(((parameter.BoundRelativeRight - parameter.BoundRelativeLeft) * bound_height) / 100);
+    // if (new_width > 64 && new_height > 64) {
+    //   // ok
+    // } else {
+    //   if (show_message) {
+    //     MessageBox.Show("Specified bound-rect is too small", "Too small bound-rect",
+    //         MessageBoxButtons.OK, MessageBoxIcon.Error);
+    //   }
+    //   return false;
+    // }
 
     // クリッピングリージョンの判定
     RECT window_rect;

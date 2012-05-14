@@ -122,10 +122,11 @@
       // 
       // layout_layout
       // 
+      this.layout_layout.Enabled = false;
       this.layout_layout.Location = new System.Drawing.Point(105, 311);
       this.layout_layout.Name = "layout_layout";
       this.layout_layout.Size = new System.Drawing.Size(70, 23);
-      this.layout_layout.TabIndex = 7;
+      this.layout_layout.TabIndex = 11;
       this.layout_layout.Text = "Layout";
       this.layout_layout.UseVisualStyleBackColor = true;
       this.layout_layout.Click += new System.EventHandler(this.layout_layout_Click);
@@ -142,7 +143,7 @@
       this.main_menu.Name = "main_menu";
       this.main_menu.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
       this.main_menu.Size = new System.Drawing.Size(492, 25);
-      this.main_menu.TabIndex = 9;
+      this.main_menu.TabIndex = 1;
       this.main_menu.Text = "main_menu";
       // 
       // tools_menu
@@ -225,7 +226,7 @@
             0});
       this.layout_bound_relative_bottom.Name = "layout_bound_relative_bottom";
       this.layout_bound_relative_bottom.Size = new System.Drawing.Size(50, 19);
-      this.layout_bound_relative_bottom.TabIndex = 4;
+      this.layout_bound_relative_bottom.TabIndex = 7;
       this.layout_bound_relative_bottom.Value = new decimal(new int[] {
             100,
             0,
@@ -260,7 +261,7 @@
             0});
       this.layout_bound_relative_right.Name = "layout_bound_relative_right";
       this.layout_bound_relative_right.Size = new System.Drawing.Size(50, 19);
-      this.layout_bound_relative_right.TabIndex = 3;
+      this.layout_bound_relative_right.TabIndex = 5;
       this.layout_bound_relative_right.Value = new decimal(new int[] {
             100,
             0,
@@ -374,7 +375,7 @@
             0});
       this.area_clipping_height.Name = "area_clipping_height";
       this.area_clipping_height.Size = new System.Drawing.Size(50, 19);
-      this.area_clipping_height.TabIndex = 6;
+      this.area_clipping_height.TabIndex = 8;
       this.area_clipping_height.Value = new decimal(new int[] {
             360,
             0,
@@ -397,7 +398,7 @@
             0});
       this.area_clipping_width.Name = "area_clipping_width";
       this.area_clipping_width.Size = new System.Drawing.Size(50, 19);
-      this.area_clipping_width.TabIndex = 5;
+      this.area_clipping_width.TabIndex = 6;
       this.area_clipping_width.Value = new decimal(new int[] {
             640,
             0,
@@ -428,7 +429,7 @@
             0});
       this.area_clipping_x.Name = "area_clipping_x";
       this.area_clipping_x.Size = new System.Drawing.Size(50, 19);
-      this.area_clipping_x.TabIndex = 3;
+      this.area_clipping_x.TabIndex = 2;
       // 
       // kCross
       // 
@@ -490,14 +491,14 @@
             0});
       this.layout_bound_relative_left.Name = "layout_bound_relative_left";
       this.layout_bound_relative_left.Size = new System.Drawing.Size(50, 19);
-      this.layout_bound_relative_left.TabIndex = 1;
+      this.layout_bound_relative_left.TabIndex = 4;
       // 
       // process_refresh
       // 
       this.process_refresh.Location = new System.Drawing.Point(229, 66);
       this.process_refresh.Name = "process_refresh";
       this.process_refresh.Size = new System.Drawing.Size(60, 21);
-      this.process_refresh.TabIndex = 10;
+      this.process_refresh.TabIndex = 3;
       this.process_refresh.Text = "Refresh";
       this.process_refresh.UseVisualStyleBackColor = true;
       this.process_refresh.Click += new System.EventHandler(this.process_refresh_Click);
@@ -507,7 +508,7 @@
       this.kLayoutBoundRelativeBottom.Location = new System.Drawing.Point(117, 283);
       this.kLayoutBoundRelativeBottom.Name = "kLayoutBoundRelativeBottom";
       this.kLayoutBoundRelativeBottom.Size = new System.Drawing.Size(46, 16);
-      this.kLayoutBoundRelativeBottom.TabIndex = 15;
+      this.kLayoutBoundRelativeBottom.TabIndex = 8;
       this.kLayoutBoundRelativeBottom.Text = "Bottom";
       // 
       // process_combo
@@ -519,7 +520,7 @@
       this.process_combo.Location = new System.Drawing.Point(8, 67);
       this.process_combo.Name = "process_combo";
       this.process_combo.Size = new System.Drawing.Size(215, 20);
-      this.process_combo.TabIndex = 8;
+      this.process_combo.TabIndex = 2;
       this.process_combo.ValueMember = "ProcessID";
       // 
       // entryBindingSource
@@ -532,7 +533,7 @@
       this.kLayoutBoundRelativeRight.Location = new System.Drawing.Point(144, 262);
       this.kLayoutBoundRelativeRight.Name = "kLayoutBoundRelativeRight";
       this.kLayoutBoundRelativeRight.Size = new System.Drawing.Size(32, 12);
-      this.kLayoutBoundRelativeRight.TabIndex = 13;
+      this.kLayoutBoundRelativeRight.TabIndex = 6;
       this.kLayoutBoundRelativeRight.Text = "Right";
       // 
       // kLayoutBoundRelativeTop
@@ -540,7 +541,7 @@
       this.kLayoutBoundRelativeTop.Location = new System.Drawing.Point(36, 240);
       this.kLayoutBoundRelativeTop.Name = "kLayoutBoundRelativeTop";
       this.kLayoutBoundRelativeTop.Size = new System.Drawing.Size(28, 17);
-      this.kLayoutBoundRelativeTop.TabIndex = 10;
+      this.kLayoutBoundRelativeTop.TabIndex = 1;
       this.kLayoutBoundRelativeTop.Text = "Top";
       // 
       // kTarget
@@ -551,7 +552,7 @@
       this.kTarget.Location = new System.Drawing.Point(8, 3);
       this.kTarget.Name = "kTarget";
       this.kTarget.Size = new System.Drawing.Size(281, 197);
-      this.kTarget.TabIndex = 9;
+      this.kTarget.TabIndex = 0;
       this.kTarget.TabStop = false;
       this.kTarget.Text = "Target";
       // 
@@ -571,7 +572,7 @@
       this.kLayoutBoundRelativeLeft.Location = new System.Drawing.Point(7, 262);
       this.kLayoutBoundRelativeLeft.Name = "kLayoutBoundRelativeLeft";
       this.kLayoutBoundRelativeLeft.Size = new System.Drawing.Size(25, 12);
-      this.kLayoutBoundRelativeLeft.TabIndex = 8;
+      this.kLayoutBoundRelativeLeft.TabIndex = 3;
       this.kLayoutBoundRelativeLeft.Text = "Left";
       // 
       // scff_icons
@@ -596,7 +597,7 @@
       this.layout_remove.Location = new System.Drawing.Point(29, 311);
       this.layout_remove.Name = "layout_remove";
       this.layout_remove.Size = new System.Drawing.Size(23, 23);
-      this.layout_remove.TabIndex = 6;
+      this.layout_remove.TabIndex = 10;
       this.layout_remove.UseVisualStyleBackColor = true;
       this.layout_remove.Click += new System.EventHandler(this.layout_remove_Click);
       // 
@@ -607,7 +608,7 @@
       this.layout_add.Location = new System.Drawing.Point(4, 311);
       this.layout_add.Name = "layout_add";
       this.layout_add.Size = new System.Drawing.Size(23, 23);
-      this.layout_add.TabIndex = 5;
+      this.layout_add.TabIndex = 9;
       this.layout_add.UseVisualStyleBackColor = true;
       this.layout_add.Click += new System.EventHandler(this.layout_add_Click);
       // 
@@ -638,7 +639,7 @@
       this.kDirectShowFilter.Location = new System.Drawing.Point(52, 11);
       this.kDirectShowFilter.Name = "kDirectShowFilter";
       this.kDirectShowFilter.Size = new System.Drawing.Size(119, 13);
-      this.kDirectShowFilter.TabIndex = 4;
+      this.kDirectShowFilter.TabIndex = 1;
       this.kDirectShowFilter.Text = "DirectShow Filter";
       // 
       // main_status
@@ -649,7 +650,7 @@
       this.main_status.Location = new System.Drawing.Point(0, 451);
       this.main_status.Name = "main_status";
       this.main_status.Size = new System.Drawing.Size(492, 22);
-      this.main_status.TabIndex = 14;
+      this.main_status.TabIndex = 7;
       this.main_status.Text = "main_status";
       // 
       // layout_strip
@@ -676,7 +677,7 @@
       this.kSCFF.Location = new System.Drawing.Point(5, 8);
       this.kSCFF.Name = "kSCFF";
       this.kSCFF.Size = new System.Drawing.Size(51, 18);
-      this.kSCFF.TabIndex = 3;
+      this.kSCFF.TabIndex = 0;
       this.kSCFF.Text = "SCFF";
       // 
       // splitContainer1
@@ -714,7 +715,7 @@
       this.splitContainer1.Size = new System.Drawing.Size(484, 345);
       this.splitContainer1.SplitterDistance = 300;
       this.splitContainer1.SplitterWidth = 1;
-      this.splitContainer1.TabIndex = 15;
+      this.splitContainer1.TabIndex = 6;
       // 
       // apply
       // 
@@ -722,7 +723,7 @@
       this.apply.Location = new System.Drawing.Point(153, 311);
       this.apply.Name = "apply";
       this.apply.Size = new System.Drawing.Size(136, 23);
-      this.apply.TabIndex = 12;
+      this.apply.TabIndex = 4;
       this.apply.Text = "Apply";
       this.apply.UseVisualStyleBackColor = true;
       this.apply.Click += new System.EventHandler(this.apply_Click);
@@ -734,7 +735,7 @@
       this.splash.Location = new System.Drawing.Point(8, 311);
       this.splash.Name = "splash";
       this.splash.Size = new System.Drawing.Size(68, 23);
-      this.splash.TabIndex = 11;
+      this.splash.TabIndex = 2;
       this.splash.Text = "Splash";
       this.splash.UseVisualStyleBackColor = true;
       this.splash.Click += new System.EventHandler(this.splash_Click);
@@ -753,7 +754,7 @@
       this.kOption.Location = new System.Drawing.Point(8, 201);
       this.kOption.Name = "kOption";
       this.kOption.Size = new System.Drawing.Size(281, 104);
-      this.kOption.TabIndex = 10;
+      this.kOption.TabIndex = 1;
       this.kOption.TabStop = false;
       this.kOption.Text = "Option";
       // 
@@ -774,7 +775,7 @@
             0});
       this.option_thread_num.Name = "option_thread_num";
       this.option_thread_num.Size = new System.Drawing.Size(47, 19);
-      this.option_thread_num.TabIndex = 5;
+      this.option_thread_num.TabIndex = 6;
       this.option_thread_num.Value = new decimal(new int[] {
             1,
             0,
@@ -791,7 +792,7 @@
       this.option_resize_method_combo.Location = new System.Drawing.Point(157, 75);
       this.option_resize_method_combo.Name = "option_resize_method_combo";
       this.option_resize_method_combo.Size = new System.Drawing.Size(118, 20);
-      this.option_resize_method_combo.TabIndex = 6;
+      this.option_resize_method_combo.TabIndex = 8;
       // 
       // kResizeMethod
       // 
@@ -852,7 +853,7 @@
       this.layout_list.Location = new System.Drawing.Point(4, 0);
       this.layout_list.Name = "layout_list";
       this.layout_list.Size = new System.Drawing.Size(172, 228);
-      this.layout_list.TabIndex = 15;
+      this.layout_list.TabIndex = 0;
       // 
       // kVersion
       // 
@@ -862,7 +863,7 @@
       this.kVersion.Location = new System.Drawing.Point(422, 11);
       this.kVersion.Name = "kVersion";
       this.kVersion.Size = new System.Drawing.Size(65, 13);
-      this.kVersion.TabIndex = 5;
+      this.kVersion.TabIndex = 2;
       this.kVersion.Text = "Ver.0.0.1";
       // 
       // kGreenPanel
@@ -875,7 +876,7 @@
       this.kGreenPanel.Location = new System.Drawing.Point(0, 0);
       this.kGreenPanel.Name = "kGreenPanel";
       this.kGreenPanel.Size = new System.Drawing.Size(492, 34);
-      this.kGreenPanel.TabIndex = 12;
+      this.kGreenPanel.TabIndex = 0;
       // 
       // layout_profile_combo
       // 
@@ -885,7 +886,7 @@
       this.layout_profile_combo.Location = new System.Drawing.Point(347, 67);
       this.layout_profile_combo.Name = "layout_profile_combo";
       this.layout_profile_combo.Size = new System.Drawing.Size(130, 20);
-      this.layout_profile_combo.TabIndex = 11;
+      this.layout_profile_combo.TabIndex = 5;
       // 
       // kProfile
       // 
@@ -893,7 +894,7 @@
       this.kProfile.Location = new System.Drawing.Point(303, 70);
       this.kProfile.Name = "kProfile";
       this.kProfile.Size = new System.Drawing.Size(38, 12);
-      this.kProfile.TabIndex = 16;
+      this.kProfile.TabIndex = 4;
       this.kProfile.Text = "Profile";
       // 
       // Form1

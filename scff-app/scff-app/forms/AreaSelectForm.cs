@@ -23,13 +23,13 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace scff_app {
+namespace scff_app.forms {
 
 /// @brief エリア選択ウィンドウ
 public partial class AreaSelectForm : Form {
 
   /// @brief ウィンドウにドラッグによる移動・リサイズ機能を付加
-  scff_app.MovableAndResizable movable_and_resizable_;
+  MovableAndResizable movable_and_resizable_;
 
   /// @brief コンストラクタ
   public AreaSelectForm(int bound_width, int bound_height, int screen_x, int screen_y, int width, int height) {
@@ -38,7 +38,7 @@ public partial class AreaSelectForm : Form {
     InitializeComponent();
     //---------------------------------------------------------------
 
-    movable_and_resizable_ = new scff_app.MovableAndResizable(this, bound_width, bound_height);
+    movable_and_resizable_ = new MovableAndResizable(this, bound_width, bound_height);
 
     // オリジナルの値を保持しておく
     original_x_ = screen_x;

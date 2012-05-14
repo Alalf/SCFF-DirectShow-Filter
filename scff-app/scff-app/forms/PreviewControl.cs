@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 
-namespace scff_app.views.layouts {
+namespace scff_app.forms {
   public partial class PreviewControl : UserControl {
     private MovableAndResizable drag_mover_;
 

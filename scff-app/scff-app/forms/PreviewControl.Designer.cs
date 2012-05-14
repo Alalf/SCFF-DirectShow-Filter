@@ -1,4 +1,4 @@
-﻿namespace scff_app.views.layouts
+﻿namespace scff_app.forms
 {
     partial class PreviewControl
     {

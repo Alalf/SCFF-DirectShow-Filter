@@ -26,6 +26,7 @@ using System.Windows.Forms;
 using System.Collections.Generic;
 
 namespace scff_app {
+using forms;
 
 /// @brief メインウィンドウ
 public partial class Form1 : Form {
@@ -308,8 +309,8 @@ public partial class Form1 : Form {
   }
 
   private void layout_layout_Click(object sender, EventArgs e) {
-    scff_app.views.layouts.LayoutForm layout_form =
-        new scff_app.views.layouts.LayoutForm(layoutParameterBindingSource, entryBindingSource);
+    LayoutForm layout_form =
+        new LayoutForm(layoutParameterBindingSource, entryBindingSource);
     layout_form.ShowDialog();
   }
 }

@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 
-namespace scff_app.views.layouts {
+namespace scff_app.forms {
   public partial class LayoutForm : Form {
     private BindingSource layoutParameterBindingSource_;
     private BindingSource entryBindingSource_;

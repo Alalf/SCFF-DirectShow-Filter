@@ -134,7 +134,7 @@ HRESULT SCFFOutputPin::GetMediaType(int position, CMediaType *media_type) {
   video_info->bmiHeader.biCompression   = MAKEFOURCC('I', '4', '2', '0');
   video_info->bmiHeader.biBitCount      = 12;
   data_size =
-      scff_imaging::Utilities::CalcDataSize(
+      scff_imaging::Utilities::CalculateDataSize(
           scff_imaging::kI420,
           video_info->bmiHeader.biWidth,
           video_info->bmiHeader.biHeight);

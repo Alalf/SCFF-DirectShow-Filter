@@ -1,0 +1,1 @@
+regsvrex64 /s scff-dsf-amd64.ax

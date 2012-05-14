@@ -1,0 +1,1 @@
+regsvrex32 /s scff-dsf-x86.ax

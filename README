@@ -1,4 +1,4 @@
-* SCFF DirectShow Filter Ver 0.1.0 (2012/5/13)
+* SCFF DirectShow Filter Ver 0.1.0 (2012/5/14)
 
 SCFF directShow FilterはWindows用スクリーンキャプチャプログラム(DirectShowフィルタ)です。
 ffmpegやWindows Media Encoderの映像入力として使われることを想定しています。

@@ -209,11 +209,10 @@ void ScreenCapture::DrawCursor(HDC dc, HWND window,
                                int clipping_x, int clipping_y) {
   POINT cursor_screen_point;
   GetCursorPos(&cursor_screen_point);
-
-  RECT window_screen_rect;
-  GetWindowRect(window, &window_screen_rect);
-  const int cursor_x = cursor_screen_point.x - (window_screen_rect.left + clipping_x);
-  const int cursor_y = cursor_screen_point.y - (window_screen_rect.top + clipping_y);
+  POINT cursor_client_point = cursor_screen_point;
+  ScreenToClient(window, &cursor_client_point);
+  const int cursor_x = cursor_client_point.x - clipping_x;
+  const int cursor_y = cursor_client_point.y - clipping_y;
 
   CURSORINFO cursor_info;
   ZeroMemory(&cursor_info, sizeof(cursor_info));

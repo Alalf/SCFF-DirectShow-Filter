@@ -23,7 +23,7 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace scff_app.forms {
+namespace scff_app.gui {
 
 /// @brief エリア選択ウィンドウ
 public partial class AreaSelectForm : Form {

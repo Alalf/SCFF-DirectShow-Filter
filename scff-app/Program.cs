@@ -31,6 +31,14 @@ static class Program {
   static void Main() {
     Application.EnableVisualStyles();
     Application.SetCompatibleTextRenderingDefault(false);
+
+    if (Screen.PrimaryScreen.BitsPerPixel != 32) {
+      MessageBox.Show("SCFF requires primary screen is configured 32bit color mode.",
+                      "Not 32bit color mode",
+                      MessageBoxButtons.OK, MessageBoxIcon.Error);
+      return;
+    }
+
     Application.Run(new Form1());
   }
 }

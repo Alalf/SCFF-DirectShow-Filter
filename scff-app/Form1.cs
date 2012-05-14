@@ -26,7 +26,7 @@ using System.Windows.Forms;
 using System.Collections.Generic;
 
 namespace scff_app {
-using forms;
+using gui;
 
 /// @brief メインウィンドウ
 public partial class Form1 : Form {
@@ -304,6 +304,16 @@ public partial class Form1 : Form {
     }
   }
 
+  private void layout_up_Click(object sender, EventArgs e) {
+    layoutParameterBindingSource.MovePrevious();
+  }
+
+  private void layout_down_Click(object sender, EventArgs e) {
+    layoutParameterBindingSource.MoveNext();
+  }
+
+
+
   private void layout_list_SelectedIndexChanged(object sender, EventArgs e) {
     // nop  
   }
@@ -313,6 +323,9 @@ public partial class Form1 : Form {
         new LayoutForm(layoutParameterBindingSource, entryBindingSource);
     layout_form.ShowDialog();
   }
+
+
+
 }
 }   // namespace scff_app
 

@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 
-namespace scff_app.forms {
+namespace scff_app.gui {
 
 /// @brief コントロールに対し、ドラッグでの移動/リサイズ機能を付加するためのクラス
 // メモ:

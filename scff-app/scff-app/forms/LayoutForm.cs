@@ -1,51 +1,55 @@
 ﻿using System.Windows.Forms;
+using System.Diagnostics;
+using System.Drawing;
 
-namespace scff_app.forms {
-  public partial class LayoutForm : Form {
-    private BindingSource layoutParameterBindingSource_;
-    private BindingSource entryBindingSource_;
+namespace scff_app.gui {
 
-    public LayoutForm(BindingSource layoutParameterBindingSource, BindingSource entryBindingSource) {
-      InitializeComponent();
+public partial class LayoutForm : Form {
+  private BindingSource layoutParameterBindingSource_;
+  private BindingSource entryBindingSource_;
 
-      layoutParameterBindingSource_ = layoutParameterBindingSource;
-      entryBindingSource_ = entryBindingSource;
+  public LayoutForm(BindingSource layoutParameterBindingSource, BindingSource entryBindingSource) {
+    InitializeComponent();
 
-      int bound_width, bound_height;
-      if (entryBindingSource_.Current != null) {
-        bound_width = ((Entry)entryBindingSource_.Current).SampleWidth;
-        bound_height = ((Entry)entryBindingSource_.Current).SampleHeight;
-      } else {
-        // ダミーの値。こちらが使われることがあってはならない！
-        bound_width = 640;
-        bound_height = 480;
-      }
+    layoutParameterBindingSource_ = layoutParameterBindingSource;
+    entryBindingSource_ = entryBindingSource;
 
-      layout_panel.Width = bound_width;
-      layout_panel.Height = bound_height;
+    int bound_width, bound_height;
+    Debug.Assert(entryBindingSource_.Current != null);
 
-      PreviewControl preview = new PreviewControl(bound_width, bound_height);
-      layout_panel.Controls.Add(preview);
-    }
+    bound_width = ((Entry)entryBindingSource_.Current).SampleWidth;
+    bound_height = ((Entry)entryBindingSource_.Current).SampleHeight;
 
-    private void LayoutForm_Load(object sender, System.EventArgs e) {
+    layout_panel.Width = bound_width;
+    layout_panel.Height = bound_height;
 
-    }
-
-    private void add_item_Click(object sender, System.EventArgs e) {
-      int bound_width, bound_height;
-      if (entryBindingSource_.Current != null) {
-        bound_width = ((Entry)entryBindingSource_.Current).SampleWidth;
-        bound_height = ((Entry)entryBindingSource_.Current).SampleHeight;
-      } else {
-        // ダミーの値。こちらが使われることがあってはならない！
-        bound_width = 640;
-        bound_height = 480;
-      }
-
-      PreviewControl preview = new PreviewControl(bound_width, bound_height);
+    // BindingSourceを見て必要な分だけ
+    int index = 0;
+    foreach (LayoutParameter i in layoutParameterBindingSource_.List) {
+      PreviewControl preview = new PreviewControl(bound_width, bound_height, index, i);
+      int x = (int)((i.BoundRelativeLeft * bound_width) / 100);
+      int y = (int)((i.BoundRelativeTop * bound_height) / 100);
+      int width = (int)(((i.BoundRelativeRight - i.BoundRelativeLeft) * bound_width) / 100);
+      int height = (int)(((i.BoundRelativeBottom - i.BoundRelativeTop) * bound_height) / 100);
+      preview.Location = new Point(x, y);
+      preview.Size = new Size(width, height);
+      
       layout_panel.Controls.Add(preview);
       preview.BringToFront();
+      ++index;
     }
   }
+
+  private void LayoutForm_Load(object sender, System.EventArgs e) {
+
+  }
+
+  private void add_item_Click(object sender, System.EventArgs e) {
+
+  }
+
+  private void apply_item_Click(object sender, System.EventArgs e) {
+    Close();
+  }
+}
 }

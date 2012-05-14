@@ -1,4 +1,4 @@
-﻿namespace scff_app.forms
+﻿namespace scff_app.gui
 {
     partial class AreaSelectForm
     {
@@ -33,13 +33,12 @@
       // 
       // kDoubleClick
       // 
-      this.kDoubleClick.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+      this.kDoubleClick.AutoSize = true;
       this.kDoubleClick.Enabled = false;
+      this.kDoubleClick.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
       this.kDoubleClick.Location = new System.Drawing.Point(12, 9);
       this.kDoubleClick.Name = "kDoubleClick";
-      this.kDoubleClick.Size = new System.Drawing.Size(135, 68);
+      this.kDoubleClick.Size = new System.Drawing.Size(172, 16);
       this.kDoubleClick.TabIndex = 0;
       this.kDoubleClick.Text = "Double-click to Apply";
       this.kDoubleClick.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -48,7 +47,7 @@
       // 
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
       this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-      this.ClientSize = new System.Drawing.Size(157, 86);
+      this.ClientSize = new System.Drawing.Size(187, 121);
       this.ControlBox = false;
       this.Controls.Add(this.kDoubleClick);
       this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
@@ -61,6 +60,7 @@
       this.Shown += new System.EventHandler(this.AreaSelectForm_Shown);
       this.DoubleClick += new System.EventHandler(this.AreaSelectForm_DoubleClick);
       this.ResumeLayout(false);
+      this.PerformLayout();
 
         }
 

@@ -1,4 +1,4 @@
-﻿namespace scff_app.forms {
+﻿namespace scff_app.gui {
   partial class LayoutForm {
     /// <summary>
     /// Required designer variable.
@@ -28,6 +28,8 @@
       this.add_item = new System.Windows.Forms.ToolStripButton();
       this.remove_item = new System.Windows.Forms.ToolStripButton();
       this.layout_panel = new System.Windows.Forms.Panel();
+      this.kSeparator = new System.Windows.Forms.ToolStripSeparator();
+      this.apply_item = new System.Windows.Forms.ToolStripButton();
       this.main_strip.SuspendLayout();
       this.SuspendLayout();
       // 
@@ -36,7 +38,9 @@
       this.main_strip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
       this.main_strip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.add_item,
-            this.remove_item});
+            this.remove_item,
+            this.kSeparator,
+            this.apply_item});
       this.main_strip.Location = new System.Drawing.Point(0, 0);
       this.main_strip.Name = "main_strip";
       this.main_strip.Size = new System.Drawing.Size(38, 25);
@@ -45,6 +49,7 @@
       // 
       // add_item
       // 
+      this.add_item.Enabled = false;
       this.add_item.Image = ((System.Drawing.Image)(resources.GetObject("add_item.Image")));
       this.add_item.ImageTransparentColor = System.Drawing.Color.Magenta;
       this.add_item.Name = "add_item";
@@ -54,6 +59,7 @@
       // 
       // remove_item
       // 
+      this.remove_item.Enabled = false;
       this.remove_item.Image = ((System.Drawing.Image)(resources.GetObject("remove_item.Image")));
       this.remove_item.ImageTransparentColor = System.Drawing.Color.Magenta;
       this.remove_item.Name = "remove_item";
@@ -68,6 +74,20 @@
       this.layout_panel.Name = "layout_panel";
       this.layout_panel.Size = new System.Drawing.Size(38, 39);
       this.layout_panel.TabIndex = 1;
+      // 
+      // kSeparator
+      // 
+      this.kSeparator.Name = "kSeparator";
+      this.kSeparator.Size = new System.Drawing.Size(6, 6);
+      // 
+      // apply_item
+      // 
+      this.apply_item.Image = ((System.Drawing.Image)(resources.GetObject("apply_item.Image")));
+      this.apply_item.ImageTransparentColor = System.Drawing.Color.Magenta;
+      this.apply_item.Name = "apply_item";
+      this.apply_item.Size = new System.Drawing.Size(54, 20);
+      this.apply_item.Text = "Apply";
+      this.apply_item.Click += new System.EventHandler(this.apply_item_Click);
       // 
       // LayoutForm
       // 
@@ -96,6 +116,8 @@
     private System.Windows.Forms.Panel layout_panel;
     private System.Windows.Forms.ToolStripButton add_item;
     private System.Windows.Forms.ToolStripButton remove_item;
+    private System.Windows.Forms.ToolStripSeparator kSeparator;
+    private System.Windows.Forms.ToolStripButton apply_item;
 
 
 

@@ -34,11 +34,15 @@ public partial class LayoutForm : Form {
   private BindingSource layoutParameterBindingSource_;
   private BindingSource entryBindingSource_;
 
-  private List<PreviewControl> previews_; 
+  private List<PreviewControl> previews_;
+
+  private bool result_;
 
   /// @brief コンストラクタ
   public LayoutForm(BindingSource layoutParameterBindingSource, BindingSource entryBindingSource) {
     InitializeComponent();
+
+    result_ = false;
 
     layoutParameterBindingSource_ = layoutParameterBindingSource;
     entryBindingSource_ = entryBindingSource;
@@ -100,11 +104,16 @@ public partial class LayoutForm : Form {
     }
     // 更新を他のコントロールに伝える
     layoutParameterBindingSource_.ResetBindings(false);
+    result_ = true;
     Close();
   }
 
   private void cancel_item_Click(object sender, System.EventArgs e) {
     Close();
+  }
+
+  public bool GetResult() {
+    return result_;
   }
 }
 }

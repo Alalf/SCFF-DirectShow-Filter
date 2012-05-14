@@ -27,9 +27,9 @@
       this.main_strip = new System.Windows.Forms.ToolStrip();
       this.add_item = new System.Windows.Forms.ToolStripButton();
       this.remove_item = new System.Windows.Forms.ToolStripButton();
+      this.cancel_item = new System.Windows.Forms.ToolStripButton();
       this.apply_item = new System.Windows.Forms.ToolStripButton();
       this.layout_panel = new System.Windows.Forms.Panel();
-      this.cancel_item = new System.Windows.Forms.ToolStripButton();
       this.main_strip.SuspendLayout();
       this.SuspendLayout();
       // 
@@ -67,6 +67,16 @@
       this.remove_item.Text = "Remove";
       this.remove_item.Click += new System.EventHandler(this.remove_item_Click);
       // 
+      // cancel_item
+      // 
+      this.cancel_item.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+      this.cancel_item.Image = ((System.Drawing.Image)(resources.GetObject("cancel_item.Image")));
+      this.cancel_item.ImageTransparentColor = System.Drawing.Color.Magenta;
+      this.cancel_item.Name = "cancel_item";
+      this.cancel_item.Size = new System.Drawing.Size(60, 20);
+      this.cancel_item.Text = "Cancel";
+      this.cancel_item.Click += new System.EventHandler(this.cancel_item_Click);
+      // 
       // apply_item
       // 
       this.apply_item.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
@@ -85,16 +95,6 @@
       this.layout_panel.Name = "layout_panel";
       this.layout_panel.Size = new System.Drawing.Size(38, 39);
       this.layout_panel.TabIndex = 1;
-      // 
-      // cancel_item
-      // 
-      this.cancel_item.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-      this.cancel_item.Image = ((System.Drawing.Image)(resources.GetObject("cancel_item.Image")));
-      this.cancel_item.ImageTransparentColor = System.Drawing.Color.Magenta;
-      this.cancel_item.Name = "cancel_item";
-      this.cancel_item.Size = new System.Drawing.Size(60, 20);
-      this.cancel_item.Text = "Cancel";
-      this.cancel_item.Click += new System.EventHandler(this.cancel_item_Click);
       // 
       // LayoutForm
       // 

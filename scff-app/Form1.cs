@@ -322,10 +322,13 @@ public partial class Form1 : Form {
     LayoutForm layout_form =
         new LayoutForm(layoutParameterBindingSource, entryBindingSource);
     layout_form.ShowDialog();
+    
+    if (layout_form.GetResult()) {
+      if (auto_apply.Checked) {
+        SendRequest(false);
+      }
+    }
   }
-
-
-
 }
 }   // namespace scff_app
 

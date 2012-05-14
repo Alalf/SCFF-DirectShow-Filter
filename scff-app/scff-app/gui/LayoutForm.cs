@@ -74,6 +74,11 @@ public partial class LayoutForm : Form {
     }
   }
 
+  protected override void OnPaintBackground(PaintEventArgs pevent) {
+    // 何もしない
+    // base.OnPaintBackground(pevent);
+  }
+
   private void add_item_Click(object sender, System.EventArgs e) {
     /// @todo(me) 実装
   }

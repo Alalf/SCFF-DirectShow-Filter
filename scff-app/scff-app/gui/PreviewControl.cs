@@ -21,20 +21,50 @@
 
 using System.Windows.Forms;
 using System.Drawing;
+using System.Runtime.InteropServices;
+using System;
 
 namespace scff_app.gui {
 
 /// @brief LayoutForm内で使用するプレビューコントロール
 public partial class PreviewControl : UserControl {
-  private MovableAndResizable drag_mover_;
-  private LayoutParameter layout_parameter_;
 
-  private Font info_font_;
-  private PointF info_point_f_;
-  private string info_;
+  //-------------------------------------------------------------------
+  // Wrapper
+  //-------------------------------------------------------------------
+  private const int SRCCOPY = 13369376;
+  private const int CAPTUREBLT = 1073741824;
+  [StructLayout(LayoutKind.Sequential)]
+  private struct RECT {
+    public int left;
+    public int top;
+    public int right;
+    public int bottom;
+  }
+  [DllImport("user32.dll")]
+  private static extern IntPtr GetDC(IntPtr hwnd);
+  [DllImport("gdi32.dll")]
+  private static extern int BitBlt(IntPtr hDestDC,
+      int x,
+      int y,
+      int nWidth,
+      int nHeight,
+      IntPtr hSrcDC,
+      int xSrc,
+      int ySrc,
+      int dwRop);
+  [DllImport("user32.dll")]
+  private static extern IntPtr ReleaseDC(IntPtr hwnd, IntPtr hdc);
+  [DllImport("user32.dll")]
+  [return: MarshalAs(UnmanagedType.Bool)]
+  static extern bool IsWindow(IntPtr hWnd);
+  //-------------------------------------------------------------------
 
-  public int IndexInLayoutParameterBindingSource { get; set; }
+  //-------------------------------------------------------------------
+  // メソッド
+  //-------------------------------------------------------------------
 
+  /// @brief コンストラクタ
   public PreviewControl(int bound_width, int bound_height,
                         int index_in_layout_parameter_binding_source,
                         LayoutParameter layout_parameter) {
@@ -48,23 +78,102 @@ public partial class PreviewControl : UserControl {
     info_point_f_ = new PointF(0, 0);
     info_ = IndexInLayoutParameterBindingSource.ToString() + ": " + layout_parameter_.WindowText;
 
-    drag_mover_ = new MovableAndResizable(this, bound_width, bound_height);
+    // ビットマップ作成
+    captured_bitmap_ = new Bitmap(layout_parameter_.ClippingWidth,
+                                  layout_parameter_.ClippingHeight);
+    // とりあえず一回キャプチャ
+    ScreenCapture();
+    // タイマーon
+    capture_timer.Enabled = true;
+
+    movable_and_resizable_ = new MovableAndResizable(this, bound_width, bound_height);
   }
 
-  private void innerPanel_MouseDown(object sender, MouseEventArgs e) {
-    OnMouseDown(e);
-  }
+  private void PreviewControl_Paint(object sender, PaintEventArgs e) {
+    // 描画位置を計算
+    int new_x, new_y, new_width, new_height;
+    scff_imaging.Utilities.CalculateLayout(0,0,Width,Height,
+        captured_bitmap_.Width, captured_bitmap_.Height,
+        layout_parameter_.Stretch,
+        layout_parameter_.KeepAspectRatio,
+        out new_x, out new_y, out new_width, out new_height);
+    
+    // しょうがないので枠は黒で塗りつぶす
+    int padding_left = new_x;
+    int padding_top = new_y;
+    int padding_right = Width - (new_x + new_width);
+    int padding_bottom = Height - (new_y + new_height);
 
-  private void innerPanel_MouseMove(object sender, MouseEventArgs e) {
-    OnMouseMove(e);
-  }
+    // 上
+    e.Graphics.FillRectangle(Brushes.Black, 0, 0, Width, padding_top);
+    // 下
+    e.Graphics.FillRectangle(Brushes.Black, 0, padding_top + new_height, Width, padding_bottom);
+    // 左
+    e.Graphics.FillRectangle(Brushes.Black, 0, padding_top, padding_left, new_height);
+    // 右
+    e.Graphics.FillRectangle(Brushes.Black, padding_left + new_width, padding_top, padding_right, new_height);
 
-  private void innerPanel_MouseUp(object sender, MouseEventArgs e) {
-    OnMouseUp(e);
-  }
+    e.Graphics.DrawImage(captured_bitmap_, new Rectangle(new_x, new_y, new_width, new_height));
 
-  private void inner_panel_Paint(object sender, PaintEventArgs e) {
     e.Graphics.DrawString(info_, info_font_, Brushes.DarkOrange, info_point_f_);
+    e.Graphics.DrawRectangle(Pens.DarkOrange, 0, 0, Width - 1, Height - 1);
   }
+
+  protected override void OnPaintBackground(PaintEventArgs pevent) {
+    // 何もしない
+    // base.OnPaintBackground(pevent);
+  }
+
+  //-------------------------------------------------------------------
+  // スクリーンキャプチャ
+  //-------------------------------------------------------------------
+
+  private void capture_timer_Tick(object sender, EventArgs e) {
+    // キャプチャする
+    ScreenCapture();
+    Invalidate();
+  }
+
+  private void ScreenCapture() {
+    IntPtr window_hundle = (IntPtr)layout_parameter_.Window;
+    if (!IsWindow(window_hundle)) {
+      return;
+    }
+    IntPtr window_dc = GetDC(window_hundle);
+    if (window_dc == null) {
+      // 不正なウィンドウなので何もしない
+      return;
+    }
+
+    Graphics graphics = Graphics.FromImage(captured_bitmap_);
+    IntPtr captured_bitmap_dc = graphics.GetHdc();
+
+    // BitBlt
+    BitBlt(captured_bitmap_dc, 0, 0, captured_bitmap_.Width, captured_bitmap_.Height,
+           window_dc, 0, 0, SRCCOPY);
+    graphics.ReleaseHdc(captured_bitmap_dc);
+    graphics.Dispose();
+    
+    ReleaseDC(window_hundle, window_dc);
+  }
+
+  //-------------------------------------------------------------------
+  // メンバ変数
+  //-------------------------------------------------------------------
+
+  public int IndexInLayoutParameterBindingSource { get; set; }
+
+  private MovableAndResizable movable_and_resizable_;
+
+  // レイアウトパラメータ
+  private LayoutParameter layout_parameter_;
+
+  // 3秒に一回更新するスクリーンキャプチャビットマップ
+  Bitmap captured_bitmap_;
+
+  // 情報表示用
+  private Font info_font_;
+  private PointF info_point_f_;
+  private string info_;
 }
 }

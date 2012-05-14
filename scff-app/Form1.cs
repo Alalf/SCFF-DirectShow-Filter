@@ -172,13 +172,12 @@ public partial class Form1 : Form {
 
   private void SetWindow(UInt64 window) {
     ((LayoutParameter)layoutParameterBindingSource.Current).Window = window;
-    int clipping_x, clipping_y, clipping_width, clipping_height;
-    impl_.GetClippingRegion(window,
-        out clipping_x, out clipping_y, out clipping_width, out clipping_height);
-    ((LayoutParameter)layoutParameterBindingSource.Current).ClippingX = clipping_x;
-    ((LayoutParameter)layoutParameterBindingSource.Current).ClippingY = clipping_y;
-    ((LayoutParameter)layoutParameterBindingSource.Current).ClippingWidth = clipping_width;
-    ((LayoutParameter)layoutParameterBindingSource.Current).ClippingHeight = clipping_height;
+    int window_width, window_height;
+    impl_.GetWindowSize(window, out window_width, out window_height);
+    ((LayoutParameter)layoutParameterBindingSource.Current).ClippingX = 0;
+    ((LayoutParameter)layoutParameterBindingSource.Current).ClippingY = 0;
+    ((LayoutParameter)layoutParameterBindingSource.Current).ClippingWidth = window_width;
+    ((LayoutParameter)layoutParameterBindingSource.Current).ClippingHeight = window_height;
     ((LayoutParameter)layoutParameterBindingSource.Current).Fit = true;
     layoutParameterBindingSource.ResetCurrentItem();
   }
@@ -219,13 +218,12 @@ public partial class Form1 : Form {
       area_clipping_height.Enabled = false;
 
       UInt64 window = ((LayoutParameter)layoutParameterBindingSource.Current).Window;
-      int clipping_x, clipping_y, clipping_width, clipping_height;
-      impl_.GetClippingRegion(window,
-          out clipping_x, out clipping_y, out clipping_width, out clipping_height);
-      ((LayoutParameter)layoutParameterBindingSource.Current).ClippingX = clipping_x;
-      ((LayoutParameter)layoutParameterBindingSource.Current).ClippingY = clipping_y;
-      ((LayoutParameter)layoutParameterBindingSource.Current).ClippingWidth = clipping_width;
-      ((LayoutParameter)layoutParameterBindingSource.Current).ClippingHeight = clipping_height;
+      int window_width, window_height;
+      impl_.GetWindowSize(window, out window_width, out window_height);
+      ((LayoutParameter)layoutParameterBindingSource.Current).ClippingX = 0;
+      ((LayoutParameter)layoutParameterBindingSource.Current).ClippingY = 0;
+      ((LayoutParameter)layoutParameterBindingSource.Current).ClippingWidth = window_width;
+      ((LayoutParameter)layoutParameterBindingSource.Current).ClippingHeight = window_height;
       ((LayoutParameter)layoutParameterBindingSource.Current).Fit = true;
       layoutParameterBindingSource.ResetCurrentItem();
 
@@ -241,20 +239,23 @@ public partial class Form1 : Form {
   }
 
   private void target_area_select_Click(object sender, EventArgs e) {
+    // デスクトップの情報を得る
+    UInt64 window = impl_.GetWindowFromDesktop();
+    int window_width, window_height;
+    impl_.GetWindowSize(window, out window_width, out window_height);
+
     // AreaSelectFormを利用してクリッピング領域を取得
-    AreaSelectForm form = new AreaSelectForm();
-    Point new_location =
-        new Point((int)area_clipping_x.Value, (int)area_clipping_y.Value);
-    form.Location = new_location;
-    Size new_size =
-        new Size((int)area_clipping_width.Value, (int)area_clipping_height.Value);
-    form.Size = new_size;
+    AreaSelectForm form =
+        new AreaSelectForm(window_width, window_height,
+                           ((LayoutParameter)layoutParameterBindingSource.Current).ClippingX,
+                           ((LayoutParameter)layoutParameterBindingSource.Current).ClippingY,
+                           ((LayoutParameter)layoutParameterBindingSource.Current).ClippingWidth,
+                           ((LayoutParameter)layoutParameterBindingSource.Current).ClippingHeight);
     form.ShowDialog();
     int raw_x, raw_y, raw_width, raw_height;
     form.GetResult(out raw_x, out raw_y, out raw_width, out raw_height);
 
     // デスクトップキャプチャに変更
-    UInt64 window = impl_.GetWindowFromDesktop();
     ((LayoutParameter)layoutParameterBindingSource.Current).Window = window;
 
     // FitをはずしてClippingを更新

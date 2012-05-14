@@ -67,11 +67,11 @@
     <Compile Include="AreaSelectForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="commons\views\forms\drag-mover.cs" />
     <Compile Include="AreaSelectForm.Designer.cs">
       <DependentUpon>AreaSelectForm.cs</DependentUpon>
     </Compile>
     <Compile Include="scff-app\data-classes.cs" />
+    <Compile Include="scff-app\movable_and_resizable.cs" />
     <Compile Include="views\layouts\layout-form.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -28,43 +28,45 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.label1 = new System.Windows.Forms.Label();
-            this.SuspendLayout();
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 9);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(117, 12);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Double-click to Apply";
-            // 
-            // AreaSelectForm
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.ClientSize = new System.Drawing.Size(320, 240);
-            this.Controls.Add(this.label1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Name = "AreaSelectForm";
-            this.Opacity = 0.5D;
-            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-            this.Text = "AreaSelectForm";
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.AreaSelectForm_FormClosed);
-            this.DoubleClick += new System.EventHandler(this.AreaSelectForm_DoubleClick);
-            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.AreaSelectForm_MouseDown);
-            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.AreaSelectForm_MouseMove);
-            this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.AreaSelectForm_MouseUp);
-            this.ResumeLayout(false);
-            this.PerformLayout();
+      this.kDoubleClick = new System.Windows.Forms.Label();
+      this.SuspendLayout();
+      // 
+      // kDoubleClick
+      // 
+      this.kDoubleClick.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+      this.kDoubleClick.Enabled = false;
+      this.kDoubleClick.Location = new System.Drawing.Point(12, 9);
+      this.kDoubleClick.Name = "kDoubleClick";
+      this.kDoubleClick.Size = new System.Drawing.Size(135, 68);
+      this.kDoubleClick.TabIndex = 0;
+      this.kDoubleClick.Text = "Double-click to Apply";
+      this.kDoubleClick.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+      // 
+      // AreaSelectForm
+      // 
+      this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+      this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+      this.ClientSize = new System.Drawing.Size(157, 86);
+      this.ControlBox = false;
+      this.Controls.Add(this.kDoubleClick);
+      this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+      this.Name = "AreaSelectForm";
+      this.Opacity = 0.5D;
+      this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
+      this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
+      this.Text = "AreaSelectForm";
+      this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.AreaSelectForm_FormClosed);
+      this.Shown += new System.EventHandler(this.AreaSelectForm_Shown);
+      this.DoubleClick += new System.EventHandler(this.AreaSelectForm_DoubleClick);
+      this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label kDoubleClick;
+
     }
 }

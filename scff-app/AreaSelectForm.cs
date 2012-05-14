@@ -27,21 +27,34 @@ namespace scff_app {
 
 /// @brief エリア選択ウィンドウ
 public partial class AreaSelectForm : Form {
+
+  /// @brief ウィンドウにドラッグによる移動・リサイズ機能を付加
+  scff_app.MovableAndResizable movable_and_resizable_;
+
   /// @brief コンストラクタ
-  public AreaSelectForm() {
+  public AreaSelectForm(int bound_width, int bound_height, int screen_x, int screen_y, int width, int height) {
     //---------------------------------------------------------------
     // DO NOT DELETE THIS!!!
     InitializeComponent();
     //---------------------------------------------------------------
 
+    movable_and_resizable_ = new scff_app.MovableAndResizable(this, bound_width, bound_height);
+
+    // オリジナルの値を保持しておく
+    original_x_ = screen_x;
+    original_y_ = screen_y;
+    original_width_ = width;
+    original_height_ = height;
+
+    // HACK!: 一応ここでも更新するが信頼できない
+    Location = new Point(original_x_, original_y_);
+    Size = new Size(original_width_, original_height_);
+
     // 初期化
-    resizing_ = false;
-    last_location_ = new Point(0, 0);
-    moving_start_location_ = new Point(0, 0);
-    clipping_x_ = 0;
-    clipping_y_ = 0;
-    clipping_width_ = 32;
-    clipping_height_ = 32;
+    clipping_x_ = screen_x;
+    clipping_y_ = screen_y;
+    clipping_width_ = width;
+    clipping_height_ = height;
   }
 
   /// @brief 結果を取得
@@ -59,67 +72,24 @@ public partial class AreaSelectForm : Form {
   //-------------------------------------------------------------------
   // フォーム
   //-------------------------------------------------------------------
+
+  private void AreaSelectForm_Shown(object sender, EventArgs e) {
+    // HACK!: コンストラクタで設定したLocation/Sizeは信頼できないのでここで変更
+    Location = new Point(original_x_, original_y_);
+    Size = new Size(original_width_, original_height_);
+  }
+
   private void AreaSelectForm_DoubleClick(object sender, EventArgs e) {
     Close();
   }
 
-  private void AreaSelectForm_MouseDown(object sender, MouseEventArgs e) {
-    resizing_ = true;
-    last_location_ = e.Location;
-    moving_start_location_ = e.Location;
-  }
-
-  private void AreaSelectForm_MouseUp(object sender, MouseEventArgs e) {
-    resizing_ = false;
-  }
-
-  private void AreaSelectForm_MouseMove(object sender, MouseEventArgs e) {
-    if (resizing_) {
-      int w = Size.Width;
-      int h = Size.Height;
-
-      if (Cursor.Equals(Cursors.SizeNWSE)) {
-        Size my_size = new Size(w + (e.Location.X - last_location_.X), h + (e.Location.Y - last_location_.Y));
-        if (my_size.Width > 32 && my_size.Height > 32) {
-          Size = my_size;
-        }
-      } else if (Cursor.Equals(Cursors.SizeWE)) {
-        var my_size = new Size(w + (e.Location.X - last_location_.X), h);
-        if (my_size.Width > 32 && my_size.Height > 32) {
-          Size = my_size;
-        }
-      } else if (Cursor.Equals(Cursors.SizeNS)) {
-        var my_size = new Size(w, h + (e.Location.Y - last_location_.Y));
-        if (my_size.Width > 32 && my_size.Height > 32) {
-          this.Size = my_size;
-        }
-      } else if (Cursor.Equals(Cursors.SizeAll)) {
-        Left += e.Location.X - moving_start_location_.X;
-        Top += e.Location.Y - moving_start_location_.Y;
-      }
-
-      last_location_ = e.Location;
-    } else {
-      bool resize_x = e.X > (Width - 16);
-      bool resize_y = e.Y > (Height - 16);
-
-      if (resize_x && resize_y) {
-        Cursor = Cursors.SizeNWSE;
-      } else if (resize_x) {
-        Cursor = Cursors.SizeWE;
-      } else if (resize_y) {
-        Cursor = Cursors.SizeNS;
-      } else {
-        Cursor = Cursors.SizeAll;
-      }
-    }
-  }
   private void AreaSelectForm_FormClosed(object sender, FormClosedEventArgs e) {
+    // HACK!: フォームの左上をスクリーン座標に変換
     Point origin = new Point(0, 0);
     clipping_x_ = PointToScreen(origin).X;
     clipping_y_ = PointToScreen(origin).Y;
-    clipping_width_ = Size.Width;
-    clipping_height_ = Size.Height;
+    clipping_width_ = Width;
+    clipping_height_ = Height;
   }
 
   //===================================================================
@@ -130,8 +100,9 @@ public partial class AreaSelectForm : Form {
   private int clipping_width_;
   private int clipping_height_;
 
-  private bool resizing_;
-  private Point last_location_;
-  private Point moving_start_location_;
+  private int original_x_;
+  private int original_y_;
+  private int original_width_;
+  private int original_height_;
 }
 }

@@ -115,25 +115,20 @@ public partial class AppImplementation {
     return (UInt64)GetDesktopWindow();
   }
 
-  /// @brief クリッピング領域を得る
-  public void GetClippingRegion(UInt64 window,
-      out int clipping_x, out int clipping_y,
-      out int clipping_width, out int clipping_height) {
+  /// @brief ウィンドウのサイズを得る
+  public void GetWindowSize(UInt64 window,
+      out int window_width, out int window_height) {
     IntPtr window_handle = (IntPtr)window;
     if (window_handle == null || !IsWindow(window_handle)) {
-      clipping_x = 0;
-      clipping_y = 0;
-      clipping_width = 0;
-      clipping_height = 0;
+      window_width = 0;
+      window_height = 0;
       return;
     }
 
     RECT window_rect;
     GetClientRect(window_handle, out window_rect);
-    clipping_x = window_rect.left;
-    clipping_y = window_rect.top;
-    clipping_width = window_rect.right;
-    clipping_height = window_rect.bottom;
+    window_width = window_rect.right;
+    window_height = window_rect.bottom;
   }
 
   /// @brief クリッピング領域を適切な値に調整してから設定

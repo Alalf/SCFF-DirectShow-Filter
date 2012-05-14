@@ -76,7 +76,6 @@ public partial class PreviewControl : UserControl {
 
     info_font_ = new Font("Verdana", 10, FontStyle.Bold);
     info_point_f_ = new PointF(0, 0);
-    info_ = IndexInLayoutParameterBindingSource.ToString() + ": " + layout_parameter_.WindowText;
 
     // ビットマップ作成
     captured_bitmap_ = new Bitmap(layout_parameter_.ClippingWidth,
@@ -87,6 +86,15 @@ public partial class PreviewControl : UserControl {
     capture_timer.Enabled = true;
 
     movable_and_resizable_ = new MovableAndResizable(this, bound_width, bound_height);
+  }
+
+  public override string ToString() {
+    string output = "[";
+    output += (IndexInLayoutParameterBindingSource+1).ToString();
+    output += "] ";
+    output += Width.ToString() + "x" + Height.ToString();
+    output += " " + layout_parameter_.WindowText;
+    return output;
   }
 
   private void PreviewControl_Paint(object sender, PaintEventArgs e) {
@@ -115,7 +123,7 @@ public partial class PreviewControl : UserControl {
 
     e.Graphics.DrawImage(captured_bitmap_, new Rectangle(new_x, new_y, new_width, new_height));
 
-    e.Graphics.DrawString(info_, info_font_, Brushes.DarkOrange, info_point_f_);
+    e.Graphics.DrawString(ToString(), info_font_, Brushes.DarkOrange, info_point_f_);
     e.Graphics.DrawRectangle(Pens.DarkOrange, 0, 0, Width - 1, Height - 1);
   }
 
@@ -174,6 +182,5 @@ public partial class PreviewControl : UserControl {
   // 情報表示用
   private Font info_font_;
   private PointF info_point_f_;
-  private string info_;
 }
 }

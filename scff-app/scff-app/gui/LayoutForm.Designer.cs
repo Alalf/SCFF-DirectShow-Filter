@@ -55,6 +55,7 @@
       this.add_item.Name = "add_item";
       this.add_item.Size = new System.Drawing.Size(45, 20);
       this.add_item.Text = "Add";
+      this.add_item.Visible = false;
       this.add_item.Click += new System.EventHandler(this.add_item_Click);
       // 
       // remove_item
@@ -65,6 +66,7 @@
       this.remove_item.Name = "remove_item";
       this.remove_item.Size = new System.Drawing.Size(66, 20);
       this.remove_item.Text = "Remove";
+      this.remove_item.Visible = false;
       this.remove_item.Click += new System.EventHandler(this.remove_item_Click);
       // 
       // cancel_item

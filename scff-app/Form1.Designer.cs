@@ -887,6 +887,7 @@
       this.layout_profile_combo.Name = "layout_profile_combo";
       this.layout_profile_combo.Size = new System.Drawing.Size(130, 20);
       this.layout_profile_combo.TabIndex = 5;
+      this.layout_profile_combo.Visible = false;
       // 
       // kProfile
       // 
@@ -896,6 +897,7 @@
       this.kProfile.Size = new System.Drawing.Size(38, 12);
       this.kProfile.TabIndex = 4;
       this.kProfile.Text = "Profile";
+      this.kProfile.Visible = false;
       // 
       // Form1
       // 

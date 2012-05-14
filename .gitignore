@@ -21,3 +21,4 @@
 *.suo
 /doc/html
 /scff-app/obj
+/package

@@ -156,10 +156,9 @@ public class LayoutParameter {
     SwsFlags = scff_interprocess.SWScaleFlags.kLanczos;
 
     // Windowまわり
-    IntPtr window_handle = GetDesktopWindow();
-    Window = (UInt64)window_handle;
+    Window = GetDesktopWindow();
     RECT window_rect;
-    GetClientRect(window_handle, out window_rect);
+    GetClientRect(Window, out window_rect);
     ClippingX = window_rect.left;
     ClippingY = window_rect.top;
     ClippingWidth = window_rect.right;
@@ -184,7 +183,7 @@ public class LayoutParameter {
     BoundY = interprocess_layout_parameter.bound_y;
     BoundWidth = interprocess_layout_parameter.bound_width;
     BoundHeight = interprocess_layout_parameter.bound_height;
-    Window = interprocess_layout_parameter.window;
+    Window = unchecked((IntPtr)interprocess_layout_parameter.window);
     ClippingX = interprocess_layout_parameter.clipping_x;
     ClippingY = interprocess_layout_parameter.clipping_y;
     ClippingWidth = interprocess_layout_parameter.clipping_width;
@@ -272,7 +271,7 @@ public class LayoutParameter {
         (Int32)(bound_height * BoundRelativeBottom) / 100 - interprocess_layout_parameter.bound_y;
     //--
 
-    interprocess_layout_parameter.window = Window;
+    interprocess_layout_parameter.window = (UInt64)Window;
     interprocess_layout_parameter.clipping_x = ClippingX;
     interprocess_layout_parameter.clipping_y = ClippingY;
     interprocess_layout_parameter.clipping_width = ClippingWidth;
@@ -315,23 +314,22 @@ public class LayoutParameter {
 
   public string WindowText {
     get {
-      if (Window == 0) {
+      if (Window == IntPtr.Zero) {
         return "(Splash)";
-      } else if (Window == (UInt64)GetDesktopWindow()) {
+      } else if (Window == GetDesktopWindow()) {
         return "(Desktop)";
       } else {
-        IntPtr window_handle = (IntPtr)Window;
-        if (window_handle == null || !IsWindow(window_handle)) {
+        if (!IsWindow(Window)) {
           return "*** INVALID WINDOW ***";
         } else {
           StringBuilder class_name = new StringBuilder(256);
-          GetClassName(window_handle, class_name, 256);
+          GetClassName(Window, class_name, 256);
           return class_name.ToString();
         }
       }
     }
   }
-  public UInt64 Window { get; set; }
+  public IntPtr Window { get; set; }
 
   public Boolean Fit { get; set; }
 

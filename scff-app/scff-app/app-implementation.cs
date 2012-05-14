@@ -99,45 +99,43 @@ public partial class AppImplementation {
   //-------------------------------------------------------------------
 
   /// @brief スクリーン座標からウィンドウハンドルを設定する
-  public UInt64 GetWindowFromPoint(int screen_x, int screen_y) {
+  public IntPtr GetWindowFromPoint(int screen_x, int screen_y) {
     Trace.WriteLine("Cursor: " + screen_x + "," + screen_y);
-    IntPtr window_handle = WindowFromPoint(screen_x, screen_y);
-    if (window_handle != null) {
+    IntPtr window = WindowFromPoint(screen_x, screen_y);
+    if (window != IntPtr.Zero) {
       // 見つかった場合
-      return (UInt64)window_handle;
+      return window;
     } else {
-      return 0;
+      return IntPtr.Zero;
     }
   }
 
   /// @brief デスクトップを全画面で取り込む
-  public UInt64 GetWindowFromDesktop() {
-    return (UInt64)GetDesktopWindow();
+  public IntPtr GetWindowFromDesktop() {
+    return GetDesktopWindow();
   }
 
   /// @brief ウィンドウのサイズを得る
-  public void GetWindowSize(UInt64 window,
+  public void GetWindowSize(IntPtr window,
       out int window_width, out int window_height) {
-    IntPtr window_handle = (IntPtr)window;
-    if (window_handle == null || !IsWindow(window_handle)) {
+    if (window == IntPtr.Zero || !IsWindow(window)) {
       window_width = 0;
       window_height = 0;
       return;
     }
 
     RECT window_rect;
-    GetClientRect(window_handle, out window_rect);
+    GetClientRect(window, out window_rect);
     window_width = window_rect.right;
     window_height = window_rect.bottom;
   }
 
   /// @brief クリッピング領域を適切な値に調整してから設定
-  public void JustifyClippingRegion(UInt64 window,
+  public void JustifyClippingRegion(IntPtr window,
       int src_x, int src_y, int src_width, int src_height,
       out int clipping_x, out int clipping_y,
       out int clipping_width, out int clipping_height) {
-    IntPtr window_handle = (IntPtr)window;
-    if (window_handle == null || !IsWindow(window_handle)) {
+    if (window == IntPtr.Zero || !IsWindow(window)) {
       clipping_x = 0;
       clipping_y = 0;
       clipping_width = 0;
@@ -146,7 +144,7 @@ public partial class AppImplementation {
     }
 
     RECT window_rect;
-    GetClientRect(window_handle, out window_rect);
+    GetClientRect(window, out window_rect);
 
     int dst_x = src_x;
     int dst_y = src_y;
@@ -192,15 +190,14 @@ public partial class AppImplementation {
   /// @brief パラメータのValidate
   private bool ValidateParameter(LayoutParameter parameter, int bound_width, int bound_height, bool show_message) {
     // もっとも危険な状態になりやすいウィンドウからチェック
-    if (parameter.Window == 0) { // NULL
+    if (parameter.Window == IntPtr.Zero) { // NULL
       if (show_message) {
         MessageBox.Show("Specified window is invalid", "Invalid Window",
             MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
       return false;
     }
-    var window_handle = (IntPtr)parameter.Window;
-    if (!IsWindow(window_handle)) {
+    if (!IsWindow(parameter.Window)) {
       if (show_message) {
         MessageBox.Show("Specified window is invalid", "Invalid Window",
             MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -236,7 +233,7 @@ public partial class AppImplementation {
 
     // クリッピングリージョンの判定
     RECT window_rect;
-    GetClientRect(window_handle, out window_rect);
+    GetClientRect(parameter.Window, out window_rect);
     if (parameter.ClippingX + parameter.ClippingWidth <= window_rect.right &&
         parameter.ClippingY + parameter.ClippingHeight <= window_rect.bottom &&
         parameter.ClippingWidth > 0 &&

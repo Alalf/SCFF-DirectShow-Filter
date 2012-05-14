@@ -154,12 +154,12 @@ public partial class PreviewControl : UserControl {
   }
 
   private void ScreenCapture() {
-    IntPtr window_handle = (IntPtr)layout_parameter_.Window;
-    if (!IsWindow(window_handle)) {
+    IntPtr window = layout_parameter_.Window;
+    if (!IsWindow(window)) {
       return;
     }
-    IntPtr window_dc = GetDC(window_handle);
-    if (window_dc == null) {
+    IntPtr window_dc = GetDC(window);
+    if (window_dc == IntPtr.Zero) {
       // 不正なウィンドウなので何もしない
       return;
     }
@@ -173,7 +173,7 @@ public partial class PreviewControl : UserControl {
     graphics.ReleaseHdc(captured_bitmap_dc);
     graphics.Dispose();
     
-    ReleaseDC(window_handle, window_dc);
+    ReleaseDC(window, window_dc);
   }
 
   //-------------------------------------------------------------------

@@ -73,19 +73,32 @@ public partial class PreviewControl : UserControl {
     // メンバの設定
     layout_parameter_ = layout_parameter;
     IndexInLayoutParameterBindingSource = index_in_layout_parameter_binding_source;
+    movable_and_resizable_ = new MovableAndResizable(this, bound_width, bound_height);
+  }
 
+  private void PreviewControl_Load(object sender, EventArgs e) {
     info_font_ = new Font("Verdana", 10, FontStyle.Bold);
     info_point_f_ = new PointF(0, 0);
 
-    // ビットマップ作成
+    // ビットマップ作成/キャプチャ/タイマーOn
     captured_bitmap_ = new Bitmap(layout_parameter_.ClippingWidth,
                                   layout_parameter_.ClippingHeight);
-    // とりあえず一回キャプチャ
     ScreenCapture();
-    // タイマーon
     capture_timer.Enabled = true;
 
-    movable_and_resizable_ = new MovableAndResizable(this, bound_width, bound_height);
+    // Unloadでビットマップを解放
+    this.Disposed += PreviewControl_UnLoad;
+
+    // ダブルバッファ設定
+    this.SetStyle(ControlStyles.DoubleBuffer, true);
+    this.SetStyle(ControlStyles.UserPaint, true);
+    this.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
+  }
+
+  public void PreviewControl_UnLoad(object sender, EventArgs e) {
+    capture_timer.Enabled = false;
+    info_font_.Dispose();
+    captured_bitmap_.Dispose();
   }
 
   private void fit_item_Click(object sender, EventArgs e) {
@@ -136,6 +149,10 @@ public partial class PreviewControl : UserControl {
 
     e.Graphics.DrawString(ToString(), info_font_, Brushes.DarkOrange, info_point_f_);
     e.Graphics.DrawRectangle(Pens.DarkOrange, 0, 0, Width - 1, Height - 1);
+  }
+
+  private void PreviewControl_SizeChanged(object sender, EventArgs e) {
+    Invalidate();
   }
 
   protected override void OnPaintBackground(PaintEventArgs pevent) {

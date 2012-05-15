@@ -61,6 +61,8 @@
       this.BackColor = System.Drawing.Color.Transparent;
       this.ContextMenuStrip = this.fit_menu;
       this.Name = "PreviewControl";
+      this.Load += new System.EventHandler(this.PreviewControl_Load);
+      this.SizeChanged += new System.EventHandler(this.PreviewControl_SizeChanged);
       this.Paint += new System.Windows.Forms.PaintEventHandler(this.PreviewControl_Paint);
       this.fit_menu.ResumeLayout(false);
       this.ResumeLayout(false);

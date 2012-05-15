@@ -244,15 +244,16 @@ public partial class Form1 : Form {
     impl_.GetWindowSize(window, out window_width, out window_height);
 
     // AreaSelectFormを利用してクリッピング領域を取得
-    AreaSelectForm form =
+    int raw_x, raw_y, raw_width, raw_height;
+    using (AreaSelectForm form =
         new AreaSelectForm(window_width, window_height,
                            ((LayoutParameter)layoutParameterBindingSource.Current).ClippingX,
                            ((LayoutParameter)layoutParameterBindingSource.Current).ClippingY,
                            ((LayoutParameter)layoutParameterBindingSource.Current).ClippingWidth,
-                           ((LayoutParameter)layoutParameterBindingSource.Current).ClippingHeight);
-    form.ShowDialog();
-    int raw_x, raw_y, raw_width, raw_height;
-    form.GetResult(out raw_x, out raw_y, out raw_width, out raw_height);
+                           ((LayoutParameter)layoutParameterBindingSource.Current).ClippingHeight)) {
+      form.ShowDialog();
+      form.GetResult(out raw_x, out raw_y, out raw_width, out raw_height);
+    }
 
     // デスクトップキャプチャに変更
     ((LayoutParameter)layoutParameterBindingSource.Current).Window = window;
@@ -319,13 +320,23 @@ public partial class Form1 : Form {
   }
 
   private void layout_layout_Click(object sender, EventArgs e) {
-    LayoutForm layout_form =
-        new LayoutForm(layoutParameterBindingSource, entryBindingSource);
-    layout_form.ShowDialog();
+    int bound_width, bound_height;
+    if (entryBindingSource.Current == null) {
+      // 一応ダミーで調整できるように
+      bound_width = 640;
+      bound_height = 360;
+    } else {
+      bound_width = ((Entry)entryBindingSource.Current).SampleWidth;
+      bound_height = ((Entry)entryBindingSource.Current).SampleHeight;
+    }
+
+    using (LayoutForm layout_form = new LayoutForm(layoutParameterBindingSource, bound_width, bound_height)) {
+      layout_form.ShowDialog();
     
-    if (layout_form.GetResult()) {
-      if (auto_apply.Checked) {
-        SendRequest(false);
+      if (layout_form.GetResult()) {
+        if (auto_apply.Checked) {
+          SendRequest(false);
+        }
       }
     }
   }

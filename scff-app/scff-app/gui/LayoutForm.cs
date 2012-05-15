@@ -32,26 +32,21 @@ namespace scff_app.gui {
 /// @brief レイアウトをGUIで編集するためのフォーム
 public partial class LayoutForm : Form {
   private BindingSource layoutParameterBindingSource_;
-  private BindingSource entryBindingSource_;
 
   private List<PreviewControl> previews_;
 
   private bool result_;
+  private int bound_width_;
+  private int bound_height_;
 
   /// @brief コンストラクタ
-  public LayoutForm(BindingSource layoutParameterBindingSource, BindingSource entryBindingSource) {
+  public LayoutForm(BindingSource layoutParameterBindingSource, int bound_width, int bound_height) {
     InitializeComponent();
 
     result_ = false;
-
     layoutParameterBindingSource_ = layoutParameterBindingSource;
-    entryBindingSource_ = entryBindingSource;
-
-    int bound_width, bound_height;
-    Debug.Assert(entryBindingSource_.Current != null);
-
-    bound_width = ((Entry)entryBindingSource_.Current).SampleWidth;
-    bound_height = ((Entry)entryBindingSource_.Current).SampleHeight;
+    bound_width_ = bound_width;
+    bound_height_ = bound_height;
 
     layout_panel.Width = bound_width;
     layout_panel.Height = bound_height;
@@ -88,16 +83,13 @@ public partial class LayoutForm : Form {
   }
 
   private void apply_item_Click(object sender, System.EventArgs e) {
-    int bound_width = ((Entry)entryBindingSource_.Current).SampleWidth;
-    int bound_height = ((Entry)entryBindingSource_.Current).SampleHeight;
-
     // 値をPreviewControlから集めてBindingSourceに書き戻す
     foreach(PreviewControl i in previews_) {
       int index = i.IndexInLayoutParameterBindingSource;
-      double bound_relative_left = ((double)i.Left * 100.0) / bound_width;
-      double bound_relative_right = ((double)i.Right * 100.0) / bound_width;
-      double bound_relative_top = ((double)i.Top * 100.0) / bound_height;
-      double bound_relative_bottom = ((double)i.Bottom * 100.0) / bound_height;
+      double bound_relative_left = ((double)i.Left * 100.0) / bound_width_;
+      double bound_relative_right = ((double)i.Right * 100.0) / bound_width_;
+      double bound_relative_top = ((double)i.Top * 100.0) / bound_height_;
+      double bound_relative_bottom = ((double)i.Bottom * 100.0) / bound_height_;
       ((LayoutParameter)layoutParameterBindingSource_[index]).BoundRelativeLeft =
           bound_relative_left;
       ((LayoutParameter)layoutParameterBindingSource_[index]).BoundRelativeRight =

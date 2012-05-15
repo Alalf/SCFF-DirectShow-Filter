@@ -45,9 +45,7 @@
       this.window_desktop = new System.Windows.Forms.Button();
       this.layout_bound_relative_right = new System.Windows.Forms.NumericUpDown();
       this.kWindow = new System.Windows.Forms.GroupBox();
-      this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
       this.window_draghere = new System.Windows.Forms.Button();
-      this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
       this.window_handle = new System.Windows.Forms.TextBox();
       this.kCaption = new System.Windows.Forms.Label();
       this.area_fit = new System.Windows.Forms.CheckBox();
@@ -99,13 +97,12 @@
       this.kGreenPanel = new System.Windows.Forms.Panel();
       this.layout_profile_combo = new System.Windows.Forms.ComboBox();
       this.kProfile = new System.Windows.Forms.Label();
+      this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
       this.main_menu.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.layout_bound_relative_bottom)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.layoutParameterBindingSource)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.layout_bound_relative_right)).BeginInit();
       this.kWindow.SuspendLayout();
-      this.tableLayoutPanel3.SuspendLayout();
-      this.tableLayoutPanel2.SuspendLayout();
       this.kArea.SuspendLayout();
       this.tableLayoutPanel1.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.area_clipping_x)).BeginInit();
@@ -117,6 +114,7 @@
       ((System.ComponentModel.ISupportInitialize)(this.entryBindingSource)).BeginInit();
       this.kTarget.SuspendLayout();
       this.main_status.SuspendLayout();
+      this.tableLayoutPanel4.SuspendLayout();
       this.kOption.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.option_thread_num)).BeginInit();
       this.kGreenPanel.SuspendLayout();
@@ -240,9 +238,9 @@
       // 
       // window_desktop
       // 
-      this.window_desktop.Location = new System.Drawing.Point(124, 3);
+      this.window_desktop.Location = new System.Drawing.Point(184, 28);
       this.window_desktop.Name = "window_desktop";
-      this.window_desktop.Size = new System.Drawing.Size(76, 23);
+      this.window_desktop.Size = new System.Drawing.Size(56, 23);
       this.window_desktop.TabIndex = 3;
       this.window_desktop.Text = "Desktop";
       this.window_desktop.UseVisualStyleBackColor = true;
@@ -270,62 +268,35 @@
       // 
       // kWindow
       // 
-      this.kWindow.Controls.Add(this.tableLayoutPanel3);
-      this.kWindow.Controls.Add(this.tableLayoutPanel2);
+      this.kWindow.Controls.Add(this.tableLayoutPanel4);
       this.kWindow.Location = new System.Drawing.Point(10, 15);
       this.kWindow.Name = "kWindow";
-      this.kWindow.Size = new System.Drawing.Size(280, 83);
+      this.kWindow.Size = new System.Drawing.Size(276, 87);
       this.kWindow.TabIndex = 0;
       this.kWindow.TabStop = false;
       this.kWindow.Text = "Window";
       // 
-      // tableLayoutPanel3
-      // 
-      this.tableLayoutPanel3.ColumnCount = 2;
-      this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-      this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-      this.tableLayoutPanel3.Controls.Add(this.window_draghere, 0, 0);
-      this.tableLayoutPanel3.Controls.Add(this.window_desktop, 1, 0);
-      this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 51);
-      this.tableLayoutPanel3.Name = "tableLayoutPanel3";
-      this.tableLayoutPanel3.RowCount = 1;
-      this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-      this.tableLayoutPanel3.Size = new System.Drawing.Size(274, 29);
-      this.tableLayoutPanel3.TabIndex = 6;
-      // 
       // window_draghere
       // 
-      this.window_draghere.Location = new System.Drawing.Point(3, 3);
+      this.tableLayoutPanel4.SetColumnSpan(this.window_draghere, 2);
+      this.window_draghere.Location = new System.Drawing.Point(3, 28);
       this.window_draghere.Name = "window_draghere";
-      this.window_draghere.Size = new System.Drawing.Size(115, 23);
+      this.window_draghere.Size = new System.Drawing.Size(85, 23);
       this.window_draghere.TabIndex = 2;
       this.window_draghere.Text = "Drag here.";
       this.window_draghere.UseVisualStyleBackColor = true;
       this.window_draghere.MouseDown += new System.Windows.Forms.MouseEventHandler(this.window_draghere_MouseDown);
       this.window_draghere.MouseUp += new System.Windows.Forms.MouseEventHandler(this.window_draghere_MouseUp);
       // 
-      // tableLayoutPanel2
-      // 
-      this.tableLayoutPanel2.ColumnCount = 2;
-      this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-      this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-      this.tableLayoutPanel2.Controls.Add(this.window_handle, 1, 0);
-      this.tableLayoutPanel2.Controls.Add(this.kCaption, 0, 0);
-      this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 15);
-      this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-      this.tableLayoutPanel2.RowCount = 1;
-      this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-      this.tableLayoutPanel2.Size = new System.Drawing.Size(274, 25);
-      this.tableLayoutPanel2.TabIndex = 6;
-      // 
       // window_handle
       // 
+      this.tableLayoutPanel4.SetColumnSpan(this.window_handle, 2);
       this.window_handle.DataBindings.Add(new System.Windows.Forms.Binding("Tag", this.layoutParameterBindingSource, "Window", true));
       this.window_handle.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.layoutParameterBindingSource, "WindowText", true));
-      this.window_handle.Location = new System.Drawing.Point(53, 3);
+      this.window_handle.Location = new System.Drawing.Point(63, 3);
       this.window_handle.Name = "window_handle";
       this.window_handle.ReadOnly = true;
-      this.window_handle.Size = new System.Drawing.Size(218, 19);
+      this.window_handle.Size = new System.Drawing.Size(177, 19);
       this.window_handle.TabIndex = 1;
       this.window_handle.TabStop = false;
       // 
@@ -352,7 +323,7 @@
       // 
       // target_area_select
       // 
-      this.target_area_select.Location = new System.Drawing.Point(10, 98);
+      this.target_area_select.Location = new System.Drawing.Point(436, 351);
       this.target_area_select.Name = "target_area_select";
       this.target_area_select.Size = new System.Drawing.Size(280, 23);
       this.target_area_select.TabIndex = 2;
@@ -363,10 +334,10 @@
       // kArea
       // 
       this.kArea.Controls.Add(this.tableLayoutPanel1);
-      this.kArea.Location = new System.Drawing.Point(408, 309);
+      this.kArea.Location = new System.Drawing.Point(21, 135);
       this.kArea.Name = "kArea";
       this.kArea.Padding = new System.Windows.Forms.Padding(10, 3, 10, 10);
-      this.kArea.Size = new System.Drawing.Size(226, 75);
+      this.kArea.Size = new System.Drawing.Size(265, 75);
       this.kArea.TabIndex = 1;
       this.kArea.TabStop = false;
       this.kArea.Text = "Area";
@@ -374,11 +345,11 @@
       // tableLayoutPanel1
       // 
       this.tableLayoutPanel1.ColumnCount = 5;
-      this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-      this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-      this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-      this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-      this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+      this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+      this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 10F));
+      this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30F));
+      this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 10F));
+      this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30F));
       this.tableLayoutPanel1.Controls.Add(this.kX, 1, 0);
       this.tableLayoutPanel1.Controls.Add(this.area_fit, 0, 0);
       this.tableLayoutPanel1.Controls.Add(this.area_clipping_x, 2, 0);
@@ -393,12 +364,12 @@
       this.tableLayoutPanel1.RowCount = 2;
       this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
       this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-      this.tableLayoutPanel1.Size = new System.Drawing.Size(206, 50);
+      this.tableLayoutPanel1.Size = new System.Drawing.Size(228, 50);
       this.tableLayoutPanel1.TabIndex = 9;
       // 
       // kX
       // 
-      this.kX.Location = new System.Drawing.Point(47, 0);
+      this.kX.Location = new System.Drawing.Point(48, 0);
       this.kX.Name = "kX";
       this.kX.Size = new System.Drawing.Size(12, 12);
       this.kX.TabIndex = 1;
@@ -408,7 +379,7 @@
       // area_clipping_x
       // 
       this.area_clipping_x.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameterBindingSource, "ClippingX", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-      this.area_clipping_x.Location = new System.Drawing.Point(79, 3);
+      this.area_clipping_x.Location = new System.Drawing.Point(70, 3);
       this.area_clipping_x.Maximum = new decimal(new int[] {
             4096,
             0,
@@ -426,7 +397,7 @@
       // area_clipping_height
       // 
       this.area_clipping_height.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameterBindingSource, "ClippingHeight", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-      this.area_clipping_height.Location = new System.Drawing.Point(153, 28);
+      this.area_clipping_height.Location = new System.Drawing.Point(160, 28);
       this.area_clipping_height.Maximum = new decimal(new int[] {
             4096,
             0,
@@ -448,7 +419,7 @@
       // 
       // kY
       // 
-      this.kY.Location = new System.Drawing.Point(135, 0);
+      this.kY.Location = new System.Drawing.Point(138, 0);
       this.kY.Name = "kY";
       this.kY.Size = new System.Drawing.Size(12, 12);
       this.kY.TabIndex = 3;
@@ -457,7 +428,7 @@
       // 
       // kCross
       // 
-      this.kCross.Location = new System.Drawing.Point(135, 25);
+      this.kCross.Location = new System.Drawing.Point(138, 25);
       this.kCross.Name = "kCross";
       this.kCross.Size = new System.Drawing.Size(11, 12);
       this.kCross.TabIndex = 7;
@@ -467,7 +438,7 @@
       // area_clipping_width
       // 
       this.area_clipping_width.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameterBindingSource, "ClippingWidth", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-      this.area_clipping_width.Location = new System.Drawing.Point(79, 28);
+      this.area_clipping_width.Location = new System.Drawing.Point(70, 28);
       this.area_clipping_width.Maximum = new decimal(new int[] {
             4096,
             0,
@@ -490,7 +461,7 @@
       // area_clipping_y
       // 
       this.area_clipping_y.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameterBindingSource, "ClippingY", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-      this.area_clipping_y.Location = new System.Drawing.Point(153, 3);
+      this.area_clipping_y.Location = new System.Drawing.Point(160, 3);
       this.area_clipping_y.Maximum = new decimal(new int[] {
             4096,
             0,
@@ -507,9 +478,9 @@
       // 
       // kSize
       // 
-      this.kSize.Location = new System.Drawing.Point(47, 25);
+      this.kSize.Location = new System.Drawing.Point(48, 25);
       this.kSize.Name = "kSize";
-      this.kSize.Size = new System.Drawing.Size(26, 12);
+      this.kSize.Size = new System.Drawing.Size(16, 12);
       this.kSize.TabIndex = 5;
       this.kSize.Text = "Size";
       this.kSize.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -596,12 +567,12 @@
       // 
       // kTarget
       // 
-      this.kTarget.Controls.Add(this.target_area_select);
       this.kTarget.Controls.Add(this.kWindow);
+      this.kTarget.Controls.Add(this.kArea);
       this.kTarget.Location = new System.Drawing.Point(55, 132);
       this.kTarget.Name = "kTarget";
       this.kTarget.Padding = new System.Windows.Forms.Padding(10, 3, 10, 3);
-      this.kTarget.Size = new System.Drawing.Size(300, 124);
+      this.kTarget.Size = new System.Drawing.Size(303, 242);
       this.kTarget.TabIndex = 0;
       this.kTarget.TabStop = false;
       this.kTarget.Text = "Target";
@@ -731,15 +702,19 @@
       // tableLayoutPanel4
       // 
       this.tableLayoutPanel4.ColumnCount = 3;
-      this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 55.46218F));
-      this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 44.53782F));
-      this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 83F));
-      this.tableLayoutPanel4.Location = new System.Drawing.Point(497, 178);
+      this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+      this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+      this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+      this.tableLayoutPanel4.Controls.Add(this.window_desktop, 2, 1);
+      this.tableLayoutPanel4.Controls.Add(this.window_draghere, 0, 1);
+      this.tableLayoutPanel4.Controls.Add(this.window_handle, 1, 0);
+      this.tableLayoutPanel4.Controls.Add(this.kCaption, 0, 0);
+      this.tableLayoutPanel4.Location = new System.Drawing.Point(6, 18);
       this.tableLayoutPanel4.Name = "tableLayoutPanel4";
       this.tableLayoutPanel4.RowCount = 2;
-      this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-      this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-      this.tableLayoutPanel4.Size = new System.Drawing.Size(200, 66);
+      this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
+      this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
+      this.tableLayoutPanel4.Size = new System.Drawing.Size(243, 58);
       this.tableLayoutPanel4.TabIndex = 6;
       // 
       // apply
@@ -916,17 +891,29 @@
       this.kProfile.Text = "Profile";
       this.kProfile.Visible = false;
       // 
+      // tableLayoutPanel2
+      // 
+      this.tableLayoutPanel2.ColumnCount = 1;
+      this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+      this.tableLayoutPanel2.Location = new System.Drawing.Point(516, 132);
+      this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+      this.tableLayoutPanel2.RowCount = 2;
+      this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+      this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+      this.tableLayoutPanel2.Size = new System.Drawing.Size(200, 100);
+      this.tableLayoutPanel2.TabIndex = 12;
+      // 
       // Form1
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.ClientSize = new System.Drawing.Size(1177, 646);
-      this.Controls.Add(this.kArea);
+      this.Controls.Add(this.tableLayoutPanel2);
+      this.Controls.Add(this.target_area_select);
       this.Controls.Add(this.kOption);
       this.Controls.Add(this.splash);
       this.Controls.Add(this.apply);
       this.Controls.Add(this.auto_apply);
-      this.Controls.Add(this.tableLayoutPanel4);
       this.Controls.Add(this.layout_layout);
       this.Controls.Add(this.layout_list);
       this.Controls.Add(this.layout_bound_relative_bottom);
@@ -959,9 +946,6 @@
       ((System.ComponentModel.ISupportInitialize)(this.layoutParameterBindingSource)).EndInit();
       ((System.ComponentModel.ISupportInitialize)(this.layout_bound_relative_right)).EndInit();
       this.kWindow.ResumeLayout(false);
-      this.tableLayoutPanel3.ResumeLayout(false);
-      this.tableLayoutPanel2.ResumeLayout(false);
-      this.tableLayoutPanel2.PerformLayout();
       this.kArea.ResumeLayout(false);
       this.tableLayoutPanel1.ResumeLayout(false);
       ((System.ComponentModel.ISupportInitialize)(this.area_clipping_x)).EndInit();
@@ -974,6 +958,8 @@
       this.kTarget.ResumeLayout(false);
       this.main_status.ResumeLayout(false);
       this.main_status.PerformLayout();
+      this.tableLayoutPanel4.ResumeLayout(false);
+      this.tableLayoutPanel4.PerformLayout();
       this.kOption.ResumeLayout(false);
       ((System.ComponentModel.ISupportInitialize)(this.option_thread_num)).EndInit();
       this.kGreenPanel.ResumeLayout(false);
@@ -1050,9 +1036,8 @@
         public System.Windows.Forms.BindingSource entryBindingSource;
         private System.Windows.Forms.Label kProfile;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
 
 
 

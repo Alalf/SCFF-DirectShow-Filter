@@ -45,6 +45,7 @@
       this.window_desktop = new System.Windows.Forms.Button();
       this.layout_bound_relative_right = new System.Windows.Forms.NumericUpDown();
       this.kWindow = new System.Windows.Forms.GroupBox();
+      this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
       this.window_draghere = new System.Windows.Forms.Button();
       this.window_handle = new System.Windows.Forms.TextBox();
       this.kCaption = new System.Windows.Forms.Label();
@@ -69,6 +70,7 @@
       this.kLayoutBoundRelativeRight = new System.Windows.Forms.Label();
       this.kLayoutBoundRelativeTop = new System.Windows.Forms.Label();
       this.kTarget = new System.Windows.Forms.GroupBox();
+      this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
       this.auto_apply = new System.Windows.Forms.CheckBox();
       this.kLayoutBoundRelativeLeft = new System.Windows.Forms.Label();
       this.scff_icons = new System.Windows.Forms.ImageList(this.components);
@@ -81,28 +83,36 @@
       this.layout_strip = new System.Windows.Forms.ToolStripSplitButton();
       this.status_status = new System.Windows.Forms.ToolStripStatusLabel();
       this.kSCFF = new System.Windows.Forms.Label();
-      this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
       this.apply = new System.Windows.Forms.Button();
       this.splash = new System.Windows.Forms.Button();
       this.kOption = new System.Windows.Forms.GroupBox();
-      this.option_thread_num = new System.Windows.Forms.NumericUpDown();
+      this.tableLayoutPanel7 = new System.Windows.Forms.TableLayoutPanel();
       this.option_resize_method_combo = new System.Windows.Forms.ComboBox();
-      this.kResizeMethod = new System.Windows.Forms.Label();
-      this.kThreadNum = new System.Windows.Forms.Label();
-      this.option_over_sampling = new System.Windows.Forms.CheckBox();
-      this.option_enable_enlargement = new System.Windows.Forms.CheckBox();
+      this.option_thread_num = new System.Windows.Forms.NumericUpDown();
       this.option_keep_aspect_ratio = new System.Windows.Forms.CheckBox();
+      this.kThreadNum = new System.Windows.Forms.Label();
+      this.option_enable_enlargement = new System.Windows.Forms.CheckBox();
+      this.option_over_sampling = new System.Windows.Forms.CheckBox();
+      this.kResizeMethod = new System.Windows.Forms.Label();
       this.layout_list = new System.Windows.Forms.ListBox();
       this.kVersion = new System.Windows.Forms.Label();
-      this.kGreenPanel = new System.Windows.Forms.Panel();
       this.layout_profile_combo = new System.Windows.Forms.ComboBox();
       this.kProfile = new System.Windows.Forms.Label();
-      this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+      this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+      this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
+      this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
+      this.tableLayoutPanel8 = new System.Windows.Forms.TableLayoutPanel();
+      this.tableLayoutPanel9 = new System.Windows.Forms.TableLayoutPanel();
+      this.tableLayoutPanel10 = new System.Windows.Forms.TableLayoutPanel();
+      this.tableLayoutPanel11 = new System.Windows.Forms.TableLayoutPanel();
+      this.tableLayoutPanel12 = new System.Windows.Forms.TableLayoutPanel();
+      this.tableLayoutPanel13 = new System.Windows.Forms.TableLayoutPanel();
       this.main_menu.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.layout_bound_relative_bottom)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.layoutParameterBindingSource)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.layout_bound_relative_right)).BeginInit();
       this.kWindow.SuspendLayout();
+      this.tableLayoutPanel4.SuspendLayout();
       this.kArea.SuspendLayout();
       this.tableLayoutPanel1.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.area_clipping_x)).BeginInit();
@@ -113,17 +123,26 @@
       ((System.ComponentModel.ISupportInitialize)(this.layout_bound_relative_left)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.entryBindingSource)).BeginInit();
       this.kTarget.SuspendLayout();
+      this.tableLayoutPanel2.SuspendLayout();
       this.main_status.SuspendLayout();
-      this.tableLayoutPanel4.SuspendLayout();
       this.kOption.SuspendLayout();
+      this.tableLayoutPanel7.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.option_thread_num)).BeginInit();
-      this.kGreenPanel.SuspendLayout();
+      this.tableLayoutPanel3.SuspendLayout();
+      this.tableLayoutPanel5.SuspendLayout();
+      this.tableLayoutPanel6.SuspendLayout();
+      this.tableLayoutPanel8.SuspendLayout();
+      this.tableLayoutPanel9.SuspendLayout();
+      this.tableLayoutPanel10.SuspendLayout();
+      this.tableLayoutPanel11.SuspendLayout();
+      this.tableLayoutPanel12.SuspendLayout();
+      this.tableLayoutPanel13.SuspendLayout();
       this.SuspendLayout();
       // 
       // layout_layout
       // 
       this.layout_layout.Enabled = false;
-      this.layout_layout.Location = new System.Drawing.Point(1079, 463);
+      this.layout_layout.Location = new System.Drawing.Point(72, 3);
       this.layout_layout.Name = "layout_layout";
       this.layout_layout.Size = new System.Drawing.Size(70, 23);
       this.layout_layout.TabIndex = 11;
@@ -141,7 +160,7 @@
       this.main_menu.Location = new System.Drawing.Point(0, 0);
       this.main_menu.Name = "main_menu";
       this.main_menu.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-      this.main_menu.Size = new System.Drawing.Size(1177, 20);
+      this.main_menu.Size = new System.Drawing.Size(631, 20);
       this.main_menu.TabIndex = 1;
       this.main_menu.Text = "main_menu";
       // 
@@ -217,7 +236,7 @@
       this.layout_bound_relative_bottom.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameterBindingSource, "BoundRelativeBottom", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
       this.layout_bound_relative_bottom.DecimalPlaces = 1;
       this.layout_bound_relative_bottom.Enabled = false;
-      this.layout_bound_relative_bottom.Location = new System.Drawing.Point(1037, 432);
+      this.layout_bound_relative_bottom.Location = new System.Drawing.Point(37, 53);
       this.layout_bound_relative_bottom.Minimum = new decimal(new int[] {
             1,
             0,
@@ -251,7 +270,7 @@
       this.layout_bound_relative_right.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameterBindingSource, "BoundRelativeRight", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
       this.layout_bound_relative_right.DecimalPlaces = 1;
       this.layout_bound_relative_right.Enabled = false;
-      this.layout_bound_relative_right.Location = new System.Drawing.Point(1064, 411);
+      this.layout_bound_relative_right.Location = new System.Drawing.Point(101, 28);
       this.layout_bound_relative_right.Minimum = new decimal(new int[] {
             1,
             0,
@@ -269,12 +288,31 @@
       // kWindow
       // 
       this.kWindow.Controls.Add(this.tableLayoutPanel4);
-      this.kWindow.Location = new System.Drawing.Point(10, 15);
+      this.kWindow.Location = new System.Drawing.Point(3, 3);
       this.kWindow.Name = "kWindow";
+      this.kWindow.Padding = new System.Windows.Forms.Padding(10, 3, 10, 10);
       this.kWindow.Size = new System.Drawing.Size(276, 87);
       this.kWindow.TabIndex = 0;
       this.kWindow.TabStop = false;
       this.kWindow.Text = "Window";
+      // 
+      // tableLayoutPanel4
+      // 
+      this.tableLayoutPanel4.ColumnCount = 3;
+      this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+      this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+      this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+      this.tableLayoutPanel4.Controls.Add(this.window_desktop, 2, 1);
+      this.tableLayoutPanel4.Controls.Add(this.window_draghere, 0, 1);
+      this.tableLayoutPanel4.Controls.Add(this.window_handle, 1, 0);
+      this.tableLayoutPanel4.Controls.Add(this.kCaption, 0, 0);
+      this.tableLayoutPanel4.Location = new System.Drawing.Point(6, 18);
+      this.tableLayoutPanel4.Name = "tableLayoutPanel4";
+      this.tableLayoutPanel4.RowCount = 2;
+      this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
+      this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
+      this.tableLayoutPanel4.Size = new System.Drawing.Size(243, 58);
+      this.tableLayoutPanel4.TabIndex = 6;
       // 
       // window_draghere
       // 
@@ -323,7 +361,7 @@
       // 
       // target_area_select
       // 
-      this.target_area_select.Location = new System.Drawing.Point(436, 351);
+      this.target_area_select.Location = new System.Drawing.Point(3, 177);
       this.target_area_select.Name = "target_area_select";
       this.target_area_select.Size = new System.Drawing.Size(280, 23);
       this.target_area_select.TabIndex = 2;
@@ -334,7 +372,7 @@
       // kArea
       // 
       this.kArea.Controls.Add(this.tableLayoutPanel1);
-      this.kArea.Location = new System.Drawing.Point(21, 135);
+      this.kArea.Location = new System.Drawing.Point(3, 96);
       this.kArea.Name = "kArea";
       this.kArea.Padding = new System.Windows.Forms.Padding(10, 3, 10, 10);
       this.kArea.Size = new System.Drawing.Size(265, 75);
@@ -487,10 +525,11 @@
       // 
       // layout_bound_relative_top
       // 
+      this.tableLayoutPanel10.SetColumnSpan(this.layout_bound_relative_top, 2);
       this.layout_bound_relative_top.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameterBindingSource, "BoundRelativeTop", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
       this.layout_bound_relative_top.DecimalPlaces = 1;
       this.layout_bound_relative_top.Enabled = false;
-      this.layout_bound_relative_top.Location = new System.Drawing.Point(1037, 389);
+      this.layout_bound_relative_top.Location = new System.Drawing.Point(37, 3);
       this.layout_bound_relative_top.Maximum = new decimal(new int[] {
             99,
             0,
@@ -505,7 +544,7 @@
       this.layout_bound_relative_left.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameterBindingSource, "BoundRelativeLeft", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
       this.layout_bound_relative_left.DecimalPlaces = 1;
       this.layout_bound_relative_left.Enabled = false;
-      this.layout_bound_relative_left.Location = new System.Drawing.Point(1007, 411);
+      this.layout_bound_relative_left.Location = new System.Drawing.Point(37, 28);
       this.layout_bound_relative_left.Maximum = new decimal(new int[] {
             99,
             0,
@@ -517,7 +556,7 @@
       // 
       // process_refresh
       // 
-      this.process_refresh.Location = new System.Drawing.Point(229, 66);
+      this.process_refresh.Location = new System.Drawing.Point(172, 3);
       this.process_refresh.Name = "process_refresh";
       this.process_refresh.Size = new System.Drawing.Size(60, 21);
       this.process_refresh.TabIndex = 3;
@@ -527,7 +566,7 @@
       // 
       // kLayoutBoundRelativeBottom
       // 
-      this.kLayoutBoundRelativeBottom.Location = new System.Drawing.Point(1091, 435);
+      this.kLayoutBoundRelativeBottom.Location = new System.Drawing.Point(160, 50);
       this.kLayoutBoundRelativeBottom.Name = "kLayoutBoundRelativeBottom";
       this.kLayoutBoundRelativeBottom.Size = new System.Drawing.Size(46, 16);
       this.kLayoutBoundRelativeBottom.TabIndex = 8;
@@ -539,9 +578,9 @@
       this.process_combo.DisplayMember = "EntryInfo";
       this.process_combo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
       this.process_combo.FormattingEnabled = true;
-      this.process_combo.Location = new System.Drawing.Point(8, 67);
+      this.process_combo.Location = new System.Drawing.Point(3, 3);
       this.process_combo.Name = "process_combo";
-      this.process_combo.Size = new System.Drawing.Size(215, 20);
+      this.process_combo.Size = new System.Drawing.Size(163, 20);
       this.process_combo.TabIndex = 2;
       this.process_combo.ValueMember = "ProcessID";
       // 
@@ -551,7 +590,7 @@
       // 
       // kLayoutBoundRelativeRight
       // 
-      this.kLayoutBoundRelativeRight.Location = new System.Drawing.Point(1118, 414);
+      this.kLayoutBoundRelativeRight.Location = new System.Drawing.Point(160, 25);
       this.kLayoutBoundRelativeRight.Name = "kLayoutBoundRelativeRight";
       this.kLayoutBoundRelativeRight.Size = new System.Drawing.Size(32, 12);
       this.kLayoutBoundRelativeRight.TabIndex = 6;
@@ -559,7 +598,7 @@
       // 
       // kLayoutBoundRelativeTop
       // 
-      this.kLayoutBoundRelativeTop.Location = new System.Drawing.Point(1010, 392);
+      this.kLayoutBoundRelativeTop.Location = new System.Drawing.Point(3, 0);
       this.kLayoutBoundRelativeTop.Name = "kLayoutBoundRelativeTop";
       this.kLayoutBoundRelativeTop.Size = new System.Drawing.Size(28, 17);
       this.kLayoutBoundRelativeTop.TabIndex = 1;
@@ -567,19 +606,34 @@
       // 
       // kTarget
       // 
-      this.kTarget.Controls.Add(this.kWindow);
-      this.kTarget.Controls.Add(this.kArea);
-      this.kTarget.Location = new System.Drawing.Point(55, 132);
+      this.kTarget.Controls.Add(this.tableLayoutPanel2);
+      this.kTarget.Location = new System.Drawing.Point(3, 3);
       this.kTarget.Name = "kTarget";
-      this.kTarget.Padding = new System.Windows.Forms.Padding(10, 3, 10, 3);
-      this.kTarget.Size = new System.Drawing.Size(303, 242);
+      this.kTarget.Padding = new System.Windows.Forms.Padding(10, 3, 10, 10);
+      this.kTarget.Size = new System.Drawing.Size(316, 242);
       this.kTarget.TabIndex = 0;
       this.kTarget.TabStop = false;
       this.kTarget.Text = "Target";
       // 
+      // tableLayoutPanel2
+      // 
+      this.tableLayoutPanel2.ColumnCount = 1;
+      this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+      this.tableLayoutPanel2.Controls.Add(this.kArea, 0, 1);
+      this.tableLayoutPanel2.Controls.Add(this.target_area_select, 0, 2);
+      this.tableLayoutPanel2.Controls.Add(this.kWindow, 0, 0);
+      this.tableLayoutPanel2.Location = new System.Drawing.Point(13, 18);
+      this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+      this.tableLayoutPanel2.RowCount = 3;
+      this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+      this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+      this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+      this.tableLayoutPanel2.Size = new System.Drawing.Size(298, 218);
+      this.tableLayoutPanel2.TabIndex = 12;
+      // 
       // auto_apply
       // 
-      this.auto_apply.Location = new System.Drawing.Point(163, 431);
+      this.auto_apply.Location = new System.Drawing.Point(106, 3);
       this.auto_apply.Name = "auto_apply";
       this.auto_apply.Size = new System.Drawing.Size(60, 20);
       this.auto_apply.TabIndex = 3;
@@ -588,7 +642,7 @@
       // 
       // kLayoutBoundRelativeLeft
       // 
-      this.kLayoutBoundRelativeLeft.Location = new System.Drawing.Point(981, 414);
+      this.kLayoutBoundRelativeLeft.Location = new System.Drawing.Point(3, 25);
       this.kLayoutBoundRelativeLeft.Name = "kLayoutBoundRelativeLeft";
       this.kLayoutBoundRelativeLeft.Size = new System.Drawing.Size(25, 12);
       this.kLayoutBoundRelativeLeft.TabIndex = 3;
@@ -613,7 +667,7 @@
       // 
       this.layout_remove.ImageKey = "Remove.png";
       this.layout_remove.ImageList = this.scff_icons;
-      this.layout_remove.Location = new System.Drawing.Point(1003, 463);
+      this.layout_remove.Location = new System.Drawing.Point(36, 3);
       this.layout_remove.Name = "layout_remove";
       this.layout_remove.Size = new System.Drawing.Size(23, 23);
       this.layout_remove.TabIndex = 10;
@@ -624,7 +678,7 @@
       // 
       this.layout_add.ImageKey = "Add.png";
       this.layout_add.ImageList = this.scff_icons;
-      this.layout_add.Location = new System.Drawing.Point(978, 463);
+      this.layout_add.Location = new System.Drawing.Point(3, 3);
       this.layout_add.Name = "layout_add";
       this.layout_add.Size = new System.Drawing.Size(23, 23);
       this.layout_add.TabIndex = 9;
@@ -634,9 +688,9 @@
       // option_show_mouse_cursor
       // 
       this.option_show_mouse_cursor.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.layoutParameterBindingSource, "ShowCursor", true));
-      this.option_show_mouse_cursor.Location = new System.Drawing.Point(7, 15);
+      this.option_show_mouse_cursor.Location = new System.Drawing.Point(3, 3);
       this.option_show_mouse_cursor.Name = "option_show_mouse_cursor";
-      this.option_show_mouse_cursor.Size = new System.Drawing.Size(126, 16);
+      this.option_show_mouse_cursor.Size = new System.Drawing.Size(126, 15);
       this.option_show_mouse_cursor.TabIndex = 0;
       this.option_show_mouse_cursor.Text = "Show Mouse Cursor";
       this.option_show_mouse_cursor.UseVisualStyleBackColor = true;
@@ -644,9 +698,9 @@
       // option_show_layered_window
       // 
       this.option_show_layered_window.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.layoutParameterBindingSource, "ShowLayeredWindow", true));
-      this.option_show_layered_window.Location = new System.Drawing.Point(7, 31);
+      this.option_show_layered_window.Location = new System.Drawing.Point(3, 24);
       this.option_show_layered_window.Name = "option_show_layered_window";
-      this.option_show_layered_window.Size = new System.Drawing.Size(137, 16);
+      this.option_show_layered_window.Size = new System.Drawing.Size(137, 15);
       this.option_show_layered_window.TabIndex = 1;
       this.option_show_layered_window.Text = "Show Layered Window";
       this.option_show_layered_window.UseVisualStyleBackColor = true;
@@ -655,7 +709,7 @@
       // 
       this.kDirectShowFilter.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.kDirectShowFilter.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(184)))), ((int)(((byte)(184)))), ((int)(((byte)(184)))));
-      this.kDirectShowFilter.Location = new System.Drawing.Point(52, 11);
+      this.kDirectShowFilter.Location = new System.Drawing.Point(75, 0);
       this.kDirectShowFilter.Name = "kDirectShowFilter";
       this.kDirectShowFilter.Size = new System.Drawing.Size(119, 13);
       this.kDirectShowFilter.TabIndex = 1;
@@ -666,9 +720,9 @@
       this.main_status.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.layout_strip,
             this.status_status});
-      this.main_status.Location = new System.Drawing.Point(0, 624);
+      this.main_status.Location = new System.Drawing.Point(0, 602);
       this.main_status.Name = "main_status";
-      this.main_status.Size = new System.Drawing.Size(1177, 22);
+      this.main_status.Size = new System.Drawing.Size(631, 22);
       this.main_status.TabIndex = 7;
       this.main_status.Text = "main_status";
       // 
@@ -685,7 +739,7 @@
       // 
       this.status_status.Name = "status_status";
       this.status_status.RightToLeft = System.Windows.Forms.RightToLeft.No;
-      this.status_status.Size = new System.Drawing.Size(1091, 17);
+      this.status_status.Size = new System.Drawing.Size(545, 17);
       this.status_status.Spring = true;
       this.status_status.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
       // 
@@ -693,36 +747,18 @@
       // 
       this.kSCFF.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.kSCFF.ForeColor = System.Drawing.Color.White;
-      this.kSCFF.Location = new System.Drawing.Point(5, 8);
+      this.kSCFF.Location = new System.Drawing.Point(3, 0);
       this.kSCFF.Name = "kSCFF";
       this.kSCFF.Size = new System.Drawing.Size(51, 18);
       this.kSCFF.TabIndex = 0;
       this.kSCFF.Text = "SCFF";
       // 
-      // tableLayoutPanel4
-      // 
-      this.tableLayoutPanel4.ColumnCount = 3;
-      this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-      this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-      this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-      this.tableLayoutPanel4.Controls.Add(this.window_desktop, 2, 1);
-      this.tableLayoutPanel4.Controls.Add(this.window_draghere, 0, 1);
-      this.tableLayoutPanel4.Controls.Add(this.window_handle, 1, 0);
-      this.tableLayoutPanel4.Controls.Add(this.kCaption, 0, 0);
-      this.tableLayoutPanel4.Location = new System.Drawing.Point(6, 18);
-      this.tableLayoutPanel4.Name = "tableLayoutPanel4";
-      this.tableLayoutPanel4.RowCount = 2;
-      this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
-      this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
-      this.tableLayoutPanel4.Size = new System.Drawing.Size(243, 58);
-      this.tableLayoutPanel4.TabIndex = 6;
-      // 
       // apply
       // 
       this.apply.Enabled = false;
-      this.apply.Location = new System.Drawing.Point(232, 427);
+      this.apply.Location = new System.Drawing.Point(209, 3);
       this.apply.Name = "apply";
-      this.apply.Size = new System.Drawing.Size(57, 29);
+      this.apply.Size = new System.Drawing.Size(86, 23);
       this.apply.TabIndex = 4;
       this.apply.Text = "Apply";
       this.apply.UseVisualStyleBackColor = true;
@@ -732,9 +768,9 @@
       // 
       this.splash.Enabled = false;
       this.splash.FlatStyle = System.Windows.Forms.FlatStyle.System;
-      this.splash.Location = new System.Drawing.Point(41, 431);
+      this.splash.Location = new System.Drawing.Point(3, 3);
       this.splash.Name = "splash";
-      this.splash.Size = new System.Drawing.Size(107, 32);
+      this.splash.Size = new System.Drawing.Size(69, 23);
       this.splash.TabIndex = 2;
       this.splash.Text = "Splash";
       this.splash.UseVisualStyleBackColor = true;
@@ -742,26 +778,56 @@
       // 
       // kOption
       // 
-      this.kOption.Controls.Add(this.option_thread_num);
-      this.kOption.Controls.Add(this.option_resize_method_combo);
-      this.kOption.Controls.Add(this.kResizeMethod);
-      this.kOption.Controls.Add(this.kThreadNum);
-      this.kOption.Controls.Add(this.option_over_sampling);
-      this.kOption.Controls.Add(this.option_enable_enlargement);
-      this.kOption.Controls.Add(this.option_keep_aspect_ratio);
-      this.kOption.Controls.Add(this.option_show_layered_window);
-      this.kOption.Controls.Add(this.option_show_mouse_cursor);
-      this.kOption.Location = new System.Drawing.Point(370, 414);
+      this.kOption.Controls.Add(this.tableLayoutPanel7);
+      this.kOption.Location = new System.Drawing.Point(3, 251);
       this.kOption.Name = "kOption";
-      this.kOption.Size = new System.Drawing.Size(300, 104);
+      this.kOption.Padding = new System.Windows.Forms.Padding(10, 3, 10, 10);
+      this.kOption.Size = new System.Drawing.Size(310, 143);
       this.kOption.TabIndex = 1;
       this.kOption.TabStop = false;
       this.kOption.Text = "Option";
       // 
+      // tableLayoutPanel7
+      // 
+      this.tableLayoutPanel7.ColumnCount = 3;
+      this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 52.65018F));
+      this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 26.85512F));
+      this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20.4947F));
+      this.tableLayoutPanel7.Controls.Add(this.option_resize_method_combo, 1, 4);
+      this.tableLayoutPanel7.Controls.Add(this.option_thread_num, 2, 1);
+      this.tableLayoutPanel7.Controls.Add(this.option_show_mouse_cursor, 0, 0);
+      this.tableLayoutPanel7.Controls.Add(this.option_show_layered_window, 0, 1);
+      this.tableLayoutPanel7.Controls.Add(this.option_keep_aspect_ratio, 0, 2);
+      this.tableLayoutPanel7.Controls.Add(this.kThreadNum, 1, 1);
+      this.tableLayoutPanel7.Controls.Add(this.option_enable_enlargement, 0, 3);
+      this.tableLayoutPanel7.Controls.Add(this.option_over_sampling, 0, 4);
+      this.tableLayoutPanel7.Controls.Add(this.kResizeMethod, 1, 3);
+      this.tableLayoutPanel7.Location = new System.Drawing.Point(13, 18);
+      this.tableLayoutPanel7.Name = "tableLayoutPanel7";
+      this.tableLayoutPanel7.RowCount = 5;
+      this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+      this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+      this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+      this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+      this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+      this.tableLayoutPanel7.Size = new System.Drawing.Size(283, 109);
+      this.tableLayoutPanel7.TabIndex = 15;
+      // 
+      // option_resize_method_combo
+      // 
+      this.tableLayoutPanel7.SetColumnSpan(this.option_resize_method_combo, 2);
+      this.option_resize_method_combo.DataBindings.Add(new System.Windows.Forms.Binding("SelectedValue", this.layoutParameterBindingSource, "SwsFlags", true));
+      this.option_resize_method_combo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+      this.option_resize_method_combo.FormattingEnabled = true;
+      this.option_resize_method_combo.Location = new System.Drawing.Point(152, 87);
+      this.option_resize_method_combo.Name = "option_resize_method_combo";
+      this.option_resize_method_combo.Size = new System.Drawing.Size(128, 20);
+      this.option_resize_method_combo.TabIndex = 8;
+      // 
       // option_thread_num
       // 
       this.option_thread_num.Enabled = false;
-      this.option_thread_num.Location = new System.Drawing.Point(247, 28);
+      this.option_thread_num.Location = new System.Drawing.Point(227, 24);
       this.option_thread_num.Maximum = new decimal(new int[] {
             8,
             0,
@@ -781,62 +847,53 @@
             0,
             0});
       // 
-      // option_resize_method_combo
+      // option_keep_aspect_ratio
       // 
-      this.option_resize_method_combo.DataBindings.Add(new System.Windows.Forms.Binding("SelectedValue", this.layoutParameterBindingSource, "SwsFlags", true));
-      this.option_resize_method_combo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-      this.option_resize_method_combo.FormattingEnabled = true;
-      this.option_resize_method_combo.Location = new System.Drawing.Point(157, 75);
-      this.option_resize_method_combo.Name = "option_resize_method_combo";
-      this.option_resize_method_combo.Size = new System.Drawing.Size(137, 20);
-      this.option_resize_method_combo.TabIndex = 8;
-      // 
-      // kResizeMethod
-      // 
-      this.kResizeMethod.Location = new System.Drawing.Point(214, 60);
-      this.kResizeMethod.Name = "kResizeMethod";
-      this.kResizeMethod.Size = new System.Drawing.Size(80, 12);
-      this.kResizeMethod.TabIndex = 7;
-      this.kResizeMethod.Text = "Resize Method";
+      this.option_keep_aspect_ratio.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.layoutParameterBindingSource, "KeepAspectRatio", true));
+      this.option_keep_aspect_ratio.Location = new System.Drawing.Point(3, 45);
+      this.option_keep_aspect_ratio.Name = "option_keep_aspect_ratio";
+      this.option_keep_aspect_ratio.Size = new System.Drawing.Size(120, 15);
+      this.option_keep_aspect_ratio.TabIndex = 2;
+      this.option_keep_aspect_ratio.Text = "Keep Aspect Ratio";
+      this.option_keep_aspect_ratio.UseVisualStyleBackColor = true;
       // 
       // kThreadNum
       // 
       this.kThreadNum.Enabled = false;
-      this.kThreadNum.Location = new System.Drawing.Point(174, 31);
+      this.kThreadNum.Location = new System.Drawing.Point(152, 21);
       this.kThreadNum.Name = "kThreadNum";
       this.kThreadNum.Size = new System.Drawing.Size(67, 12);
       this.kThreadNum.TabIndex = 5;
       this.kThreadNum.Text = "Thread Num";
       // 
+      // option_enable_enlargement
+      // 
+      this.option_enable_enlargement.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.layoutParameterBindingSource, "Stretch", true));
+      this.option_enable_enlargement.Location = new System.Drawing.Point(3, 66);
+      this.option_enable_enlargement.Name = "option_enable_enlargement";
+      this.option_enable_enlargement.Size = new System.Drawing.Size(125, 15);
+      this.option_enable_enlargement.TabIndex = 3;
+      this.option_enable_enlargement.Text = "Enable Enlargement";
+      this.option_enable_enlargement.UseVisualStyleBackColor = true;
+      // 
       // option_over_sampling
       // 
       this.option_over_sampling.Enabled = false;
-      this.option_over_sampling.Location = new System.Drawing.Point(7, 79);
+      this.option_over_sampling.Location = new System.Drawing.Point(3, 87);
       this.option_over_sampling.Name = "option_over_sampling";
       this.option_over_sampling.Size = new System.Drawing.Size(100, 16);
       this.option_over_sampling.TabIndex = 4;
       this.option_over_sampling.Text = "Over-Sampling";
       this.option_over_sampling.UseVisualStyleBackColor = true;
       // 
-      // option_enable_enlargement
+      // kResizeMethod
       // 
-      this.option_enable_enlargement.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.layoutParameterBindingSource, "Stretch", true));
-      this.option_enable_enlargement.Location = new System.Drawing.Point(7, 63);
-      this.option_enable_enlargement.Name = "option_enable_enlargement";
-      this.option_enable_enlargement.Size = new System.Drawing.Size(125, 16);
-      this.option_enable_enlargement.TabIndex = 3;
-      this.option_enable_enlargement.Text = "Enable Enlargement";
-      this.option_enable_enlargement.UseVisualStyleBackColor = true;
-      // 
-      // option_keep_aspect_ratio
-      // 
-      this.option_keep_aspect_ratio.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.layoutParameterBindingSource, "KeepAspectRatio", true));
-      this.option_keep_aspect_ratio.Location = new System.Drawing.Point(7, 47);
-      this.option_keep_aspect_ratio.Name = "option_keep_aspect_ratio";
-      this.option_keep_aspect_ratio.Size = new System.Drawing.Size(120, 16);
-      this.option_keep_aspect_ratio.TabIndex = 2;
-      this.option_keep_aspect_ratio.Text = "Keep Aspect Ratio";
-      this.option_keep_aspect_ratio.UseVisualStyleBackColor = true;
+      this.tableLayoutPanel7.SetColumnSpan(this.kResizeMethod, 2);
+      this.kResizeMethod.Location = new System.Drawing.Point(152, 63);
+      this.kResizeMethod.Name = "kResizeMethod";
+      this.kResizeMethod.Size = new System.Drawing.Size(80, 12);
+      this.kResizeMethod.TabIndex = 7;
+      this.kResizeMethod.Text = "Resize Method";
       // 
       // layout_list
       // 
@@ -845,38 +902,27 @@
       this.layout_list.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
       this.layout_list.FormattingEnabled = true;
       this.layout_list.ItemHeight = 16;
-      this.layout_list.Location = new System.Drawing.Point(974, 132);
+      this.layout_list.Location = new System.Drawing.Point(3, 3);
       this.layout_list.Name = "layout_list";
-      this.layout_list.Size = new System.Drawing.Size(173, 228);
+      this.layout_list.Size = new System.Drawing.Size(210, 324);
       this.layout_list.TabIndex = 0;
       // 
       // kVersion
       // 
       this.kVersion.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.kVersion.ForeColor = System.Drawing.Color.White;
-      this.kVersion.Location = new System.Drawing.Point(736, 11);
+      this.kVersion.Location = new System.Drawing.Point(394, 0);
       this.kVersion.Name = "kVersion";
       this.kVersion.Size = new System.Drawing.Size(65, 13);
       this.kVersion.TabIndex = 2;
       this.kVersion.Text = "Ver.0.1.0";
-      // 
-      // kGreenPanel
-      // 
-      this.kGreenPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(59)))), ((int)(((byte)(0)))));
-      this.kGreenPanel.Controls.Add(this.kVersion);
-      this.kGreenPanel.Controls.Add(this.kDirectShowFilter);
-      this.kGreenPanel.Controls.Add(this.kSCFF);
-      this.kGreenPanel.Location = new System.Drawing.Point(0, 23);
-      this.kGreenPanel.Name = "kGreenPanel";
-      this.kGreenPanel.Size = new System.Drawing.Size(806, 34);
-      this.kGreenPanel.TabIndex = 0;
       // 
       // layout_profile_combo
       // 
       this.layout_profile_combo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
       this.layout_profile_combo.Enabled = false;
       this.layout_profile_combo.FormattingEnabled = true;
-      this.layout_profile_combo.Location = new System.Drawing.Point(347, 67);
+      this.layout_profile_combo.Location = new System.Drawing.Point(350, 3);
       this.layout_profile_combo.Name = "layout_profile_combo";
       this.layout_profile_combo.Size = new System.Drawing.Size(130, 20);
       this.layout_profile_combo.TabIndex = 5;
@@ -884,61 +930,182 @@
       // 
       // kProfile
       // 
-      this.kProfile.Location = new System.Drawing.Point(303, 70);
+      this.kProfile.Location = new System.Drawing.Point(293, 0);
       this.kProfile.Name = "kProfile";
       this.kProfile.Size = new System.Drawing.Size(38, 12);
       this.kProfile.TabIndex = 4;
       this.kProfile.Text = "Profile";
       this.kProfile.Visible = false;
       // 
-      // tableLayoutPanel2
+      // tableLayoutPanel3
       // 
-      this.tableLayoutPanel2.ColumnCount = 1;
-      this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-      this.tableLayoutPanel2.Location = new System.Drawing.Point(516, 132);
-      this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-      this.tableLayoutPanel2.RowCount = 2;
-      this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-      this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-      this.tableLayoutPanel2.Size = new System.Drawing.Size(200, 100);
-      this.tableLayoutPanel2.TabIndex = 12;
+      this.tableLayoutPanel3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(59)))), ((int)(((byte)(0)))));
+      this.tableLayoutPanel3.ColumnCount = 4;
+      this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 13.87665F));
+      this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 35.90308F));
+      this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+      this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+      this.tableLayoutPanel3.Controls.Add(this.kVersion, 3, 0);
+      this.tableLayoutPanel3.Controls.Add(this.kSCFF, 0, 0);
+      this.tableLayoutPanel3.Controls.Add(this.kDirectShowFilter, 1, 0);
+      this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 3);
+      this.tableLayoutPanel3.Name = "tableLayoutPanel3";
+      this.tableLayoutPanel3.RowCount = 1;
+      this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
+      this.tableLayoutPanel3.Size = new System.Drawing.Size(524, 30);
+      this.tableLayoutPanel3.TabIndex = 12;
+      // 
+      // tableLayoutPanel5
+      // 
+      this.tableLayoutPanel5.ColumnCount = 5;
+      this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 32.06107F));
+      this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 14.31298F));
+      this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 8.778625F));
+      this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 10.87786F));
+      this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+      this.tableLayoutPanel5.Controls.Add(this.process_combo, 0, 0);
+      this.tableLayoutPanel5.Controls.Add(this.process_refresh, 1, 0);
+      this.tableLayoutPanel5.Controls.Add(this.kProfile, 3, 0);
+      this.tableLayoutPanel5.Controls.Add(this.layout_profile_combo, 4, 0);
+      this.tableLayoutPanel5.Location = new System.Drawing.Point(3, 39);
+      this.tableLayoutPanel5.Name = "tableLayoutPanel5";
+      this.tableLayoutPanel5.RowCount = 1;
+      this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
+      this.tableLayoutPanel5.Size = new System.Drawing.Size(524, 38);
+      this.tableLayoutPanel5.TabIndex = 13;
+      // 
+      // tableLayoutPanel6
+      // 
+      this.tableLayoutPanel6.ColumnCount = 1;
+      this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+      this.tableLayoutPanel6.Controls.Add(this.tableLayoutPanel3, 0, 0);
+      this.tableLayoutPanel6.Controls.Add(this.tableLayoutPanel5, 0, 1);
+      this.tableLayoutPanel6.Location = new System.Drawing.Point(2, 23);
+      this.tableLayoutPanel6.Name = "tableLayoutPanel6";
+      this.tableLayoutPanel6.RowCount = 2;
+      this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
+      this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
+      this.tableLayoutPanel6.Size = new System.Drawing.Size(611, 89);
+      this.tableLayoutPanel6.TabIndex = 14;
+      // 
+      // tableLayoutPanel8
+      // 
+      this.tableLayoutPanel8.ColumnCount = 1;
+      this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+      this.tableLayoutPanel8.Controls.Add(this.tableLayoutPanel9, 0, 2);
+      this.tableLayoutPanel8.Controls.Add(this.kOption, 0, 1);
+      this.tableLayoutPanel8.Controls.Add(this.kTarget, 0, 0);
+      this.tableLayoutPanel8.Location = new System.Drawing.Point(3, 3);
+      this.tableLayoutPanel8.Name = "tableLayoutPanel8";
+      this.tableLayoutPanel8.RowCount = 3;
+      this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 54.20945F));
+      this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 34.11514F));
+      this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 11.9403F));
+      this.tableLayoutPanel8.Size = new System.Drawing.Size(344, 460);
+      this.tableLayoutPanel8.TabIndex = 15;
+      // 
+      // tableLayoutPanel9
+      // 
+      this.tableLayoutPanel9.ColumnCount = 3;
+      this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+      this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+      this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+      this.tableLayoutPanel9.Controls.Add(this.splash, 0, 0);
+      this.tableLayoutPanel9.Controls.Add(this.auto_apply, 1, 0);
+      this.tableLayoutPanel9.Controls.Add(this.apply, 2, 0);
+      this.tableLayoutPanel9.Location = new System.Drawing.Point(3, 407);
+      this.tableLayoutPanel9.Name = "tableLayoutPanel9";
+      this.tableLayoutPanel9.RowCount = 1;
+      this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle());
+      this.tableLayoutPanel9.Size = new System.Drawing.Size(311, 35);
+      this.tableLayoutPanel9.TabIndex = 16;
+      // 
+      // tableLayoutPanel10
+      // 
+      this.tableLayoutPanel10.ColumnCount = 4;
+      this.tableLayoutPanel10.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.60377F));
+      this.tableLayoutPanel10.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30.6383F));
+      this.tableLayoutPanel10.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 28.51064F));
+      this.tableLayoutPanel10.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 24.15094F));
+      this.tableLayoutPanel10.Controls.Add(this.layout_bound_relative_left, 1, 1);
+      this.tableLayoutPanel10.Controls.Add(this.layout_bound_relative_right, 2, 1);
+      this.tableLayoutPanel10.Controls.Add(this.kLayoutBoundRelativeRight, 3, 1);
+      this.tableLayoutPanel10.Controls.Add(this.kLayoutBoundRelativeLeft, 0, 1);
+      this.tableLayoutPanel10.Controls.Add(this.layout_bound_relative_bottom, 1, 2);
+      this.tableLayoutPanel10.Controls.Add(this.kLayoutBoundRelativeBottom, 3, 2);
+      this.tableLayoutPanel10.Controls.Add(this.kLayoutBoundRelativeTop, 0, 0);
+      this.tableLayoutPanel10.Controls.Add(this.layout_bound_relative_top, 1, 0);
+      this.tableLayoutPanel10.Location = new System.Drawing.Point(3, 337);
+      this.tableLayoutPanel10.Name = "tableLayoutPanel10";
+      this.tableLayoutPanel10.RowCount = 3;
+      this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
+      this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
+      this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
+      this.tableLayoutPanel10.Size = new System.Drawing.Size(210, 83);
+      this.tableLayoutPanel10.TabIndex = 16;
+      // 
+      // tableLayoutPanel11
+      // 
+      this.tableLayoutPanel11.ColumnCount = 3;
+      this.tableLayoutPanel11.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16F));
+      this.tableLayoutPanel11.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 17.5F));
+      this.tableLayoutPanel11.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 66.5F));
+      this.tableLayoutPanel11.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+      this.tableLayoutPanel11.Controls.Add(this.layout_add, 0, 0);
+      this.tableLayoutPanel11.Controls.Add(this.layout_remove, 1, 0);
+      this.tableLayoutPanel11.Controls.Add(this.layout_layout, 2, 0);
+      this.tableLayoutPanel11.Location = new System.Drawing.Point(3, 428);
+      this.tableLayoutPanel11.Name = "tableLayoutPanel11";
+      this.tableLayoutPanel11.RowCount = 1;
+      this.tableLayoutPanel11.RowStyles.Add(new System.Windows.Forms.RowStyle());
+      this.tableLayoutPanel11.Size = new System.Drawing.Size(210, 29);
+      this.tableLayoutPanel11.TabIndex = 17;
+      // 
+      // tableLayoutPanel12
+      // 
+      this.tableLayoutPanel12.ColumnCount = 1;
+      this.tableLayoutPanel12.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+      this.tableLayoutPanel12.Controls.Add(this.layout_list, 0, 0);
+      this.tableLayoutPanel12.Controls.Add(this.tableLayoutPanel11, 0, 2);
+      this.tableLayoutPanel12.Controls.Add(this.tableLayoutPanel10, 0, 1);
+      this.tableLayoutPanel12.Location = new System.Drawing.Point(358, 3);
+      this.tableLayoutPanel12.Name = "tableLayoutPanel12";
+      this.tableLayoutPanel12.RowCount = 3;
+      this.tableLayoutPanel12.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 78.42227F));
+      this.tableLayoutPanel12.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 21.57773F));
+      this.tableLayoutPanel12.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
+      this.tableLayoutPanel12.Size = new System.Drawing.Size(224, 460);
+      this.tableLayoutPanel12.TabIndex = 18;
+      // 
+      // tableLayoutPanel13
+      // 
+      this.tableLayoutPanel13.ColumnCount = 2;
+      this.tableLayoutPanel13.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 58.55263F));
+      this.tableLayoutPanel13.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 41.44737F));
+      this.tableLayoutPanel13.Controls.Add(this.tableLayoutPanel8, 0, 0);
+      this.tableLayoutPanel13.Controls.Add(this.tableLayoutPanel12, 1, 0);
+      this.tableLayoutPanel13.Location = new System.Drawing.Point(5, 123);
+      this.tableLayoutPanel13.Name = "tableLayoutPanel13";
+      this.tableLayoutPanel13.RowCount = 1;
+      this.tableLayoutPanel13.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+      this.tableLayoutPanel13.Size = new System.Drawing.Size(608, 466);
+      this.tableLayoutPanel13.TabIndex = 19;
       // 
       // Form1
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(1177, 646);
-      this.Controls.Add(this.tableLayoutPanel2);
-      this.Controls.Add(this.target_area_select);
-      this.Controls.Add(this.kOption);
-      this.Controls.Add(this.splash);
-      this.Controls.Add(this.apply);
-      this.Controls.Add(this.auto_apply);
-      this.Controls.Add(this.layout_layout);
-      this.Controls.Add(this.layout_list);
-      this.Controls.Add(this.layout_bound_relative_bottom);
-      this.Controls.Add(this.kProfile);
-      this.Controls.Add(this.layout_bound_relative_right);
+      this.ClientSize = new System.Drawing.Size(631, 624);
+      this.Controls.Add(this.tableLayoutPanel13);
+      this.Controls.Add(this.tableLayoutPanel6);
       this.Controls.Add(this.main_menu);
-      this.Controls.Add(this.kTarget);
-      this.Controls.Add(this.layout_bound_relative_top);
-      this.Controls.Add(this.layout_bound_relative_left);
-      this.Controls.Add(this.process_refresh);
-      this.Controls.Add(this.kLayoutBoundRelativeBottom);
-      this.Controls.Add(this.process_combo);
-      this.Controls.Add(this.kLayoutBoundRelativeRight);
       this.Controls.Add(this.main_status);
-      this.Controls.Add(this.kLayoutBoundRelativeTop);
-      this.Controls.Add(this.kLayoutBoundRelativeLeft);
-      this.Controls.Add(this.kGreenPanel);
-      this.Controls.Add(this.layout_remove);
-      this.Controls.Add(this.layout_profile_combo);
-      this.Controls.Add(this.layout_add);
       this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
       this.MaximizeBox = false;
       this.Name = "Form1";
       this.Text = "SCFF DirectShow Filter Ver.0.1.0";
       this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
+      this.Load += new System.EventHandler(this.Form1_Load);
       this.Shown += new System.EventHandler(this.Form1_Shown);
       this.main_menu.ResumeLayout(false);
       this.main_menu.PerformLayout();
@@ -946,6 +1113,8 @@
       ((System.ComponentModel.ISupportInitialize)(this.layoutParameterBindingSource)).EndInit();
       ((System.ComponentModel.ISupportInitialize)(this.layout_bound_relative_right)).EndInit();
       this.kWindow.ResumeLayout(false);
+      this.tableLayoutPanel4.ResumeLayout(false);
+      this.tableLayoutPanel4.PerformLayout();
       this.kArea.ResumeLayout(false);
       this.tableLayoutPanel1.ResumeLayout(false);
       ((System.ComponentModel.ISupportInitialize)(this.area_clipping_x)).EndInit();
@@ -956,13 +1125,21 @@
       ((System.ComponentModel.ISupportInitialize)(this.layout_bound_relative_left)).EndInit();
       ((System.ComponentModel.ISupportInitialize)(this.entryBindingSource)).EndInit();
       this.kTarget.ResumeLayout(false);
+      this.tableLayoutPanel2.ResumeLayout(false);
       this.main_status.ResumeLayout(false);
       this.main_status.PerformLayout();
-      this.tableLayoutPanel4.ResumeLayout(false);
-      this.tableLayoutPanel4.PerformLayout();
       this.kOption.ResumeLayout(false);
+      this.tableLayoutPanel7.ResumeLayout(false);
       ((System.ComponentModel.ISupportInitialize)(this.option_thread_num)).EndInit();
-      this.kGreenPanel.ResumeLayout(false);
+      this.tableLayoutPanel3.ResumeLayout(false);
+      this.tableLayoutPanel5.ResumeLayout(false);
+      this.tableLayoutPanel6.ResumeLayout(false);
+      this.tableLayoutPanel8.ResumeLayout(false);
+      this.tableLayoutPanel9.ResumeLayout(false);
+      this.tableLayoutPanel10.ResumeLayout(false);
+      this.tableLayoutPanel11.ResumeLayout(false);
+      this.tableLayoutPanel12.ResumeLayout(false);
+      this.tableLayoutPanel13.ResumeLayout(false);
       this.ResumeLayout(false);
       this.PerformLayout();
 
@@ -1028,7 +1205,6 @@
         private System.Windows.Forms.CheckBox option_enable_enlargement;
         private System.Windows.Forms.CheckBox option_keep_aspect_ratio;
         private System.Windows.Forms.Label kVersion;
-        private System.Windows.Forms.Panel kGreenPanel;
         private System.Windows.Forms.ComboBox layout_profile_combo;
         private System.Windows.Forms.CheckBox auto_apply;
         private System.Windows.Forms.ListBox layout_list;
@@ -1038,6 +1214,16 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel6;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel7;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel8;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel9;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel10;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel11;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel12;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel13;
 
 
 

@@ -45,20 +45,23 @@
       this.window_desktop = new System.Windows.Forms.Button();
       this.layout_bound_relative_right = new System.Windows.Forms.NumericUpDown();
       this.kWindow = new System.Windows.Forms.GroupBox();
+      this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
       this.window_draghere = new System.Windows.Forms.Button();
+      this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
       this.window_handle = new System.Windows.Forms.TextBox();
       this.kCaption = new System.Windows.Forms.Label();
       this.area_fit = new System.Windows.Forms.CheckBox();
       this.target_area_select = new System.Windows.Forms.Button();
       this.kArea = new System.Windows.Forms.GroupBox();
+      this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+      this.kX = new System.Windows.Forms.Label();
+      this.area_clipping_x = new System.Windows.Forms.NumericUpDown();
       this.area_clipping_height = new System.Windows.Forms.NumericUpDown();
+      this.kY = new System.Windows.Forms.Label();
+      this.kCross = new System.Windows.Forms.Label();
       this.area_clipping_width = new System.Windows.Forms.NumericUpDown();
       this.area_clipping_y = new System.Windows.Forms.NumericUpDown();
-      this.area_clipping_x = new System.Windows.Forms.NumericUpDown();
-      this.kCross = new System.Windows.Forms.Label();
       this.kSize = new System.Windows.Forms.Label();
-      this.kY = new System.Windows.Forms.Label();
-      this.kX = new System.Windows.Forms.Label();
       this.layout_bound_relative_top = new System.Windows.Forms.NumericUpDown();
       this.layout_bound_relative_left = new System.Windows.Forms.NumericUpDown();
       this.process_refresh = new System.Windows.Forms.Button();
@@ -80,7 +83,7 @@
       this.layout_strip = new System.Windows.Forms.ToolStripSplitButton();
       this.status_status = new System.Windows.Forms.ToolStripStatusLabel();
       this.kSCFF = new System.Windows.Forms.Label();
-      this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+      this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
       this.apply = new System.Windows.Forms.Button();
       this.splash = new System.Windows.Forms.Button();
       this.kOption = new System.Windows.Forms.GroupBox();
@@ -101,20 +104,19 @@
       ((System.ComponentModel.ISupportInitialize)(this.layoutParameterBindingSource)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.layout_bound_relative_right)).BeginInit();
       this.kWindow.SuspendLayout();
+      this.tableLayoutPanel3.SuspendLayout();
+      this.tableLayoutPanel2.SuspendLayout();
       this.kArea.SuspendLayout();
+      this.tableLayoutPanel1.SuspendLayout();
+      ((System.ComponentModel.ISupportInitialize)(this.area_clipping_x)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.area_clipping_height)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.area_clipping_width)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.area_clipping_y)).BeginInit();
-      ((System.ComponentModel.ISupportInitialize)(this.area_clipping_x)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.layout_bound_relative_top)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.layout_bound_relative_left)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.entryBindingSource)).BeginInit();
       this.kTarget.SuspendLayout();
       this.main_status.SuspendLayout();
-      ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
-      this.splitContainer1.Panel1.SuspendLayout();
-      this.splitContainer1.Panel2.SuspendLayout();
-      this.splitContainer1.SuspendLayout();
       this.kOption.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.option_thread_num)).BeginInit();
       this.kGreenPanel.SuspendLayout();
@@ -123,7 +125,7 @@
       // layout_layout
       // 
       this.layout_layout.Enabled = false;
-      this.layout_layout.Location = new System.Drawing.Point(105, 311);
+      this.layout_layout.Location = new System.Drawing.Point(1079, 463);
       this.layout_layout.Name = "layout_layout";
       this.layout_layout.Size = new System.Drawing.Size(70, 23);
       this.layout_layout.TabIndex = 11;
@@ -133,16 +135,15 @@
       // 
       // main_menu
       // 
-      this.main_menu.AutoSize = false;
       this.main_menu.GripMargin = new System.Windows.Forms.Padding(2);
       this.main_menu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tools_menu,
             this.language_menu});
       this.main_menu.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow;
-      this.main_menu.Location = new System.Drawing.Point(0, 34);
+      this.main_menu.Location = new System.Drawing.Point(0, 0);
       this.main_menu.Name = "main_menu";
       this.main_menu.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-      this.main_menu.Size = new System.Drawing.Size(492, 25);
+      this.main_menu.Size = new System.Drawing.Size(1177, 20);
       this.main_menu.TabIndex = 1;
       this.main_menu.Text = "main_menu";
       // 
@@ -218,7 +219,7 @@
       this.layout_bound_relative_bottom.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameterBindingSource, "BoundRelativeBottom", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
       this.layout_bound_relative_bottom.DecimalPlaces = 1;
       this.layout_bound_relative_bottom.Enabled = false;
-      this.layout_bound_relative_bottom.Location = new System.Drawing.Point(63, 280);
+      this.layout_bound_relative_bottom.Location = new System.Drawing.Point(1037, 432);
       this.layout_bound_relative_bottom.Minimum = new decimal(new int[] {
             1,
             0,
@@ -239,10 +240,9 @@
       // 
       // window_desktop
       // 
-      this.window_desktop.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-      this.window_desktop.Location = new System.Drawing.Point(195, 42);
+      this.window_desktop.Location = new System.Drawing.Point(124, 3);
       this.window_desktop.Name = "window_desktop";
-      this.window_desktop.Size = new System.Drawing.Size(69, 23);
+      this.window_desktop.Size = new System.Drawing.Size(76, 23);
       this.window_desktop.TabIndex = 3;
       this.window_desktop.Text = "Desktop";
       this.window_desktop.UseVisualStyleBackColor = true;
@@ -253,7 +253,7 @@
       this.layout_bound_relative_right.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameterBindingSource, "BoundRelativeRight", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
       this.layout_bound_relative_right.DecimalPlaces = 1;
       this.layout_bound_relative_right.Enabled = false;
-      this.layout_bound_relative_right.Location = new System.Drawing.Point(90, 259);
+      this.layout_bound_relative_right.Location = new System.Drawing.Point(1064, 411);
       this.layout_bound_relative_right.Minimum = new decimal(new int[] {
             1,
             0,
@@ -270,60 +270,81 @@
       // 
       // kWindow
       // 
-      this.kWindow.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-      this.kWindow.Controls.Add(this.window_desktop);
-      this.kWindow.Controls.Add(this.window_draghere);
-      this.kWindow.Controls.Add(this.window_handle);
-      this.kWindow.Controls.Add(this.kCaption);
-      this.kWindow.Location = new System.Drawing.Point(6, 13);
+      this.kWindow.Controls.Add(this.tableLayoutPanel3);
+      this.kWindow.Controls.Add(this.tableLayoutPanel2);
+      this.kWindow.Location = new System.Drawing.Point(10, 15);
       this.kWindow.Name = "kWindow";
-      this.kWindow.Size = new System.Drawing.Size(269, 73);
+      this.kWindow.Size = new System.Drawing.Size(280, 83);
       this.kWindow.TabIndex = 0;
       this.kWindow.TabStop = false;
       this.kWindow.Text = "Window";
       // 
+      // tableLayoutPanel3
+      // 
+      this.tableLayoutPanel3.ColumnCount = 2;
+      this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+      this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+      this.tableLayoutPanel3.Controls.Add(this.window_draghere, 0, 0);
+      this.tableLayoutPanel3.Controls.Add(this.window_desktop, 1, 0);
+      this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 51);
+      this.tableLayoutPanel3.Name = "tableLayoutPanel3";
+      this.tableLayoutPanel3.RowCount = 1;
+      this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+      this.tableLayoutPanel3.Size = new System.Drawing.Size(274, 29);
+      this.tableLayoutPanel3.TabIndex = 6;
+      // 
       // window_draghere
       // 
-      this.window_draghere.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-      this.window_draghere.Location = new System.Drawing.Point(7, 42);
+      this.window_draghere.Location = new System.Drawing.Point(3, 3);
       this.window_draghere.Name = "window_draghere";
-      this.window_draghere.Size = new System.Drawing.Size(182, 23);
+      this.window_draghere.Size = new System.Drawing.Size(115, 23);
       this.window_draghere.TabIndex = 2;
       this.window_draghere.Text = "Drag here.";
       this.window_draghere.UseVisualStyleBackColor = true;
       this.window_draghere.MouseDown += new System.Windows.Forms.MouseEventHandler(this.window_draghere_MouseDown);
       this.window_draghere.MouseUp += new System.Windows.Forms.MouseEventHandler(this.window_draghere_MouseUp);
       // 
+      // tableLayoutPanel2
+      // 
+      this.tableLayoutPanel2.ColumnCount = 2;
+      this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+      this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+      this.tableLayoutPanel2.Controls.Add(this.window_handle, 1, 0);
+      this.tableLayoutPanel2.Controls.Add(this.kCaption, 0, 0);
+      this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 15);
+      this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+      this.tableLayoutPanel2.RowCount = 1;
+      this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+      this.tableLayoutPanel2.Size = new System.Drawing.Size(274, 25);
+      this.tableLayoutPanel2.TabIndex = 6;
+      // 
       // window_handle
       // 
-      this.window_handle.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
       this.window_handle.DataBindings.Add(new System.Windows.Forms.Binding("Tag", this.layoutParameterBindingSource, "Window", true));
       this.window_handle.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.layoutParameterBindingSource, "WindowText", true));
-      this.window_handle.Location = new System.Drawing.Point(55, 16);
+      this.window_handle.Location = new System.Drawing.Point(53, 3);
       this.window_handle.Name = "window_handle";
       this.window_handle.ReadOnly = true;
-      this.window_handle.Size = new System.Drawing.Size(208, 19);
+      this.window_handle.Size = new System.Drawing.Size(218, 19);
       this.window_handle.TabIndex = 1;
       this.window_handle.TabStop = false;
       // 
       // kCaption
       // 
-      this.kCaption.Location = new System.Drawing.Point(7, 19);
+      this.kCaption.Location = new System.Drawing.Point(3, 0);
       this.kCaption.Name = "kCaption";
-      this.kCaption.Size = new System.Drawing.Size(44, 12);
+      this.kCaption.Size = new System.Drawing.Size(44, 25);
       this.kCaption.TabIndex = 0;
       this.kCaption.Text = "Caption";
+      this.kCaption.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
       // 
       // area_fit
       // 
-      this.area_fit.AutoSize = true;
       this.area_fit.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.layoutParameterBindingSource, "Fit", true));
-      this.area_fit.Location = new System.Drawing.Point(24, 29);
+      this.area_fit.Location = new System.Drawing.Point(3, 3);
       this.area_fit.Name = "area_fit";
-      this.area_fit.Size = new System.Drawing.Size(38, 16);
+      this.tableLayoutPanel1.SetRowSpan(this.area_fit, 2);
+      this.area_fit.Size = new System.Drawing.Size(38, 44);
       this.area_fit.TabIndex = 0;
       this.area_fit.Text = "Fit";
       this.area_fit.UseVisualStyleBackColor = true;
@@ -331,9 +352,9 @@
       // 
       // target_area_select
       // 
-      this.target_area_select.Location = new System.Drawing.Point(76, 165);
+      this.target_area_select.Location = new System.Drawing.Point(10, 98);
       this.target_area_select.Name = "target_area_select";
-      this.target_area_select.Size = new System.Drawing.Size(136, 23);
+      this.target_area_select.Size = new System.Drawing.Size(280, 23);
       this.target_area_select.TabIndex = 2;
       this.target_area_select.Text = "Area Selection";
       this.target_area_select.UseVisualStyleBackColor = true;
@@ -341,28 +362,71 @@
       // 
       // kArea
       // 
-      this.kArea.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-      this.kArea.Controls.Add(this.area_fit);
-      this.kArea.Controls.Add(this.area_clipping_height);
-      this.kArea.Controls.Add(this.area_clipping_width);
-      this.kArea.Controls.Add(this.area_clipping_y);
-      this.kArea.Controls.Add(this.area_clipping_x);
-      this.kArea.Controls.Add(this.kCross);
-      this.kArea.Controls.Add(this.kSize);
-      this.kArea.Controls.Add(this.kY);
-      this.kArea.Controls.Add(this.kX);
-      this.kArea.Location = new System.Drawing.Point(6, 89);
+      this.kArea.Controls.Add(this.tableLayoutPanel1);
+      this.kArea.Location = new System.Drawing.Point(408, 309);
       this.kArea.Name = "kArea";
-      this.kArea.Size = new System.Drawing.Size(269, 70);
+      this.kArea.Padding = new System.Windows.Forms.Padding(10, 3, 10, 10);
+      this.kArea.Size = new System.Drawing.Size(226, 75);
       this.kArea.TabIndex = 1;
       this.kArea.TabStop = false;
       this.kArea.Text = "Area";
       // 
+      // tableLayoutPanel1
+      // 
+      this.tableLayoutPanel1.ColumnCount = 5;
+      this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+      this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+      this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+      this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+      this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+      this.tableLayoutPanel1.Controls.Add(this.kX, 1, 0);
+      this.tableLayoutPanel1.Controls.Add(this.area_fit, 0, 0);
+      this.tableLayoutPanel1.Controls.Add(this.area_clipping_x, 2, 0);
+      this.tableLayoutPanel1.Controls.Add(this.area_clipping_height, 4, 1);
+      this.tableLayoutPanel1.Controls.Add(this.kY, 3, 0);
+      this.tableLayoutPanel1.Controls.Add(this.kCross, 3, 1);
+      this.tableLayoutPanel1.Controls.Add(this.area_clipping_width, 2, 1);
+      this.tableLayoutPanel1.Controls.Add(this.area_clipping_y, 4, 0);
+      this.tableLayoutPanel1.Controls.Add(this.kSize, 1, 1);
+      this.tableLayoutPanel1.Location = new System.Drawing.Point(10, 15);
+      this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+      this.tableLayoutPanel1.RowCount = 2;
+      this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+      this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+      this.tableLayoutPanel1.Size = new System.Drawing.Size(206, 50);
+      this.tableLayoutPanel1.TabIndex = 9;
+      // 
+      // kX
+      // 
+      this.kX.Location = new System.Drawing.Point(47, 0);
+      this.kX.Name = "kX";
+      this.kX.Size = new System.Drawing.Size(12, 12);
+      this.kX.TabIndex = 1;
+      this.kX.Text = "X";
+      this.kX.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+      // 
+      // area_clipping_x
+      // 
+      this.area_clipping_x.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameterBindingSource, "ClippingX", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+      this.area_clipping_x.Location = new System.Drawing.Point(79, 3);
+      this.area_clipping_x.Maximum = new decimal(new int[] {
+            4096,
+            0,
+            0,
+            0});
+      this.area_clipping_x.Name = "area_clipping_x";
+      this.area_clipping_x.Size = new System.Drawing.Size(50, 19);
+      this.area_clipping_x.TabIndex = 2;
+      this.area_clipping_x.Value = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+      // 
       // area_clipping_height
       // 
       this.area_clipping_height.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameterBindingSource, "ClippingHeight", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-      this.area_clipping_height.Location = new System.Drawing.Point(179, 41);
+      this.area_clipping_height.Location = new System.Drawing.Point(153, 28);
       this.area_clipping_height.Maximum = new decimal(new int[] {
             4096,
             0,
@@ -377,15 +441,33 @@
       this.area_clipping_height.Size = new System.Drawing.Size(50, 19);
       this.area_clipping_height.TabIndex = 8;
       this.area_clipping_height.Value = new decimal(new int[] {
-            360,
+            1000,
             0,
             0,
             0});
       // 
+      // kY
+      // 
+      this.kY.Location = new System.Drawing.Point(135, 0);
+      this.kY.Name = "kY";
+      this.kY.Size = new System.Drawing.Size(12, 12);
+      this.kY.TabIndex = 3;
+      this.kY.Text = "Y";
+      this.kY.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+      // 
+      // kCross
+      // 
+      this.kCross.Location = new System.Drawing.Point(135, 25);
+      this.kCross.Name = "kCross";
+      this.kCross.Size = new System.Drawing.Size(11, 12);
+      this.kCross.TabIndex = 7;
+      this.kCross.Text = "x";
+      this.kCross.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+      // 
       // area_clipping_width
       // 
       this.area_clipping_width.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameterBindingSource, "ClippingWidth", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-      this.area_clipping_width.Location = new System.Drawing.Point(107, 41);
+      this.area_clipping_width.Location = new System.Drawing.Point(79, 28);
       this.area_clipping_width.Maximum = new decimal(new int[] {
             4096,
             0,
@@ -400,7 +482,7 @@
       this.area_clipping_width.Size = new System.Drawing.Size(50, 19);
       this.area_clipping_width.TabIndex = 6;
       this.area_clipping_width.Value = new decimal(new int[] {
-            640,
+            1000,
             0,
             0,
             0});
@@ -408,7 +490,7 @@
       // area_clipping_y
       // 
       this.area_clipping_y.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameterBindingSource, "ClippingY", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-      this.area_clipping_y.Location = new System.Drawing.Point(179, 16);
+      this.area_clipping_y.Location = new System.Drawing.Point(153, 3);
       this.area_clipping_y.Maximum = new decimal(new int[] {
             4096,
             0,
@@ -417,58 +499,27 @@
       this.area_clipping_y.Name = "area_clipping_y";
       this.area_clipping_y.Size = new System.Drawing.Size(50, 19);
       this.area_clipping_y.TabIndex = 4;
-      // 
-      // area_clipping_x
-      // 
-      this.area_clipping_x.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameterBindingSource, "ClippingX", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-      this.area_clipping_x.Location = new System.Drawing.Point(107, 16);
-      this.area_clipping_x.Maximum = new decimal(new int[] {
-            4096,
+      this.area_clipping_y.Value = new decimal(new int[] {
+            1000,
             0,
             0,
             0});
-      this.area_clipping_x.Name = "area_clipping_x";
-      this.area_clipping_x.Size = new System.Drawing.Size(50, 19);
-      this.area_clipping_x.TabIndex = 2;
-      // 
-      // kCross
-      // 
-      this.kCross.Location = new System.Drawing.Point(162, 43);
-      this.kCross.Name = "kCross";
-      this.kCross.Size = new System.Drawing.Size(10, 14);
-      this.kCross.TabIndex = 7;
-      this.kCross.Text = "x";
       // 
       // kSize
       // 
-      this.kSize.Location = new System.Drawing.Point(76, 44);
+      this.kSize.Location = new System.Drawing.Point(47, 25);
       this.kSize.Name = "kSize";
       this.kSize.Size = new System.Drawing.Size(26, 12);
       this.kSize.TabIndex = 5;
       this.kSize.Text = "Size";
-      // 
-      // kY
-      // 
-      this.kY.Location = new System.Drawing.Point(162, 19);
-      this.kY.Name = "kY";
-      this.kY.Size = new System.Drawing.Size(12, 12);
-      this.kY.TabIndex = 3;
-      this.kY.Text = "Y";
-      // 
-      // kX
-      // 
-      this.kX.Location = new System.Drawing.Point(90, 19);
-      this.kX.Name = "kX";
-      this.kX.Size = new System.Drawing.Size(12, 12);
-      this.kX.TabIndex = 1;
-      this.kX.Text = "X";
+      this.kSize.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
       // 
       // layout_bound_relative_top
       // 
       this.layout_bound_relative_top.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameterBindingSource, "BoundRelativeTop", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
       this.layout_bound_relative_top.DecimalPlaces = 1;
       this.layout_bound_relative_top.Enabled = false;
-      this.layout_bound_relative_top.Location = new System.Drawing.Point(63, 237);
+      this.layout_bound_relative_top.Location = new System.Drawing.Point(1037, 389);
       this.layout_bound_relative_top.Maximum = new decimal(new int[] {
             99,
             0,
@@ -483,7 +534,7 @@
       this.layout_bound_relative_left.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameterBindingSource, "BoundRelativeLeft", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
       this.layout_bound_relative_left.DecimalPlaces = 1;
       this.layout_bound_relative_left.Enabled = false;
-      this.layout_bound_relative_left.Location = new System.Drawing.Point(33, 259);
+      this.layout_bound_relative_left.Location = new System.Drawing.Point(1007, 411);
       this.layout_bound_relative_left.Maximum = new decimal(new int[] {
             99,
             0,
@@ -505,7 +556,7 @@
       // 
       // kLayoutBoundRelativeBottom
       // 
-      this.kLayoutBoundRelativeBottom.Location = new System.Drawing.Point(117, 283);
+      this.kLayoutBoundRelativeBottom.Location = new System.Drawing.Point(1091, 435);
       this.kLayoutBoundRelativeBottom.Name = "kLayoutBoundRelativeBottom";
       this.kLayoutBoundRelativeBottom.Size = new System.Drawing.Size(46, 16);
       this.kLayoutBoundRelativeBottom.TabIndex = 8;
@@ -529,8 +580,7 @@
       // 
       // kLayoutBoundRelativeRight
       // 
-      this.kLayoutBoundRelativeRight.AutoSize = true;
-      this.kLayoutBoundRelativeRight.Location = new System.Drawing.Point(144, 262);
+      this.kLayoutBoundRelativeRight.Location = new System.Drawing.Point(1118, 414);
       this.kLayoutBoundRelativeRight.Name = "kLayoutBoundRelativeRight";
       this.kLayoutBoundRelativeRight.Size = new System.Drawing.Size(32, 12);
       this.kLayoutBoundRelativeRight.TabIndex = 6;
@@ -538,7 +588,7 @@
       // 
       // kLayoutBoundRelativeTop
       // 
-      this.kLayoutBoundRelativeTop.Location = new System.Drawing.Point(36, 240);
+      this.kLayoutBoundRelativeTop.Location = new System.Drawing.Point(1010, 392);
       this.kLayoutBoundRelativeTop.Name = "kLayoutBoundRelativeTop";
       this.kLayoutBoundRelativeTop.Size = new System.Drawing.Size(28, 17);
       this.kLayoutBoundRelativeTop.TabIndex = 1;
@@ -547,29 +597,27 @@
       // kTarget
       // 
       this.kTarget.Controls.Add(this.target_area_select);
-      this.kTarget.Controls.Add(this.kArea);
       this.kTarget.Controls.Add(this.kWindow);
-      this.kTarget.Location = new System.Drawing.Point(8, 3);
+      this.kTarget.Location = new System.Drawing.Point(55, 132);
       this.kTarget.Name = "kTarget";
-      this.kTarget.Size = new System.Drawing.Size(281, 197);
+      this.kTarget.Padding = new System.Windows.Forms.Padding(10, 3, 10, 3);
+      this.kTarget.Size = new System.Drawing.Size(300, 124);
       this.kTarget.TabIndex = 0;
       this.kTarget.TabStop = false;
       this.kTarget.Text = "Target";
       // 
       // auto_apply
       // 
-      this.auto_apply.AutoSize = true;
-      this.auto_apply.Location = new System.Drawing.Point(99, 315);
+      this.auto_apply.Location = new System.Drawing.Point(163, 431);
       this.auto_apply.Name = "auto_apply";
-      this.auto_apply.Size = new System.Drawing.Size(48, 16);
+      this.auto_apply.Size = new System.Drawing.Size(60, 20);
       this.auto_apply.TabIndex = 3;
       this.auto_apply.Text = "Auto";
       this.auto_apply.UseVisualStyleBackColor = true;
       // 
       // kLayoutBoundRelativeLeft
       // 
-      this.kLayoutBoundRelativeLeft.AutoSize = true;
-      this.kLayoutBoundRelativeLeft.Location = new System.Drawing.Point(7, 262);
+      this.kLayoutBoundRelativeLeft.Location = new System.Drawing.Point(981, 414);
       this.kLayoutBoundRelativeLeft.Name = "kLayoutBoundRelativeLeft";
       this.kLayoutBoundRelativeLeft.Size = new System.Drawing.Size(25, 12);
       this.kLayoutBoundRelativeLeft.TabIndex = 3;
@@ -594,7 +642,7 @@
       // 
       this.layout_remove.ImageKey = "Remove.png";
       this.layout_remove.ImageList = this.scff_icons;
-      this.layout_remove.Location = new System.Drawing.Point(29, 311);
+      this.layout_remove.Location = new System.Drawing.Point(1003, 463);
       this.layout_remove.Name = "layout_remove";
       this.layout_remove.Size = new System.Drawing.Size(23, 23);
       this.layout_remove.TabIndex = 10;
@@ -605,7 +653,7 @@
       // 
       this.layout_add.ImageKey = "Add.png";
       this.layout_add.ImageList = this.scff_icons;
-      this.layout_add.Location = new System.Drawing.Point(4, 311);
+      this.layout_add.Location = new System.Drawing.Point(978, 463);
       this.layout_add.Name = "layout_add";
       this.layout_add.Size = new System.Drawing.Size(23, 23);
       this.layout_add.TabIndex = 9;
@@ -647,9 +695,9 @@
       this.main_status.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.layout_strip,
             this.status_status});
-      this.main_status.Location = new System.Drawing.Point(0, 451);
+      this.main_status.Location = new System.Drawing.Point(0, 624);
       this.main_status.Name = "main_status";
-      this.main_status.Size = new System.Drawing.Size(492, 22);
+      this.main_status.Size = new System.Drawing.Size(1177, 22);
       this.main_status.TabIndex = 7;
       this.main_status.Text = "main_status";
       // 
@@ -666,7 +714,7 @@
       // 
       this.status_status.Name = "status_status";
       this.status_status.RightToLeft = System.Windows.Forms.RightToLeft.No;
-      this.status_status.Size = new System.Drawing.Size(406, 17);
+      this.status_status.Size = new System.Drawing.Size(1091, 17);
       this.status_status.Spring = true;
       this.status_status.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
       // 
@@ -680,49 +728,26 @@
       this.kSCFF.TabIndex = 0;
       this.kSCFF.Text = "SCFF";
       // 
-      // splitContainer1
+      // tableLayoutPanel4
       // 
-      this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
-      this.splitContainer1.IsSplitterFixed = true;
-      this.splitContainer1.Location = new System.Drawing.Point(0, 93);
-      this.splitContainer1.Margin = new System.Windows.Forms.Padding(0);
-      this.splitContainer1.Name = "splitContainer1";
-      // 
-      // splitContainer1.Panel1
-      // 
-      this.splitContainer1.Panel1.Controls.Add(this.auto_apply);
-      this.splitContainer1.Panel1.Controls.Add(this.apply);
-      this.splitContainer1.Panel1.Controls.Add(this.splash);
-      this.splitContainer1.Panel1.Controls.Add(this.kOption);
-      this.splitContainer1.Panel1.Controls.Add(this.kTarget);
-      this.splitContainer1.Panel1MinSize = 300;
-      // 
-      // splitContainer1.Panel2
-      // 
-      this.splitContainer1.Panel2.Controls.Add(this.layout_list);
-      this.splitContainer1.Panel2.Controls.Add(this.layout_layout);
-      this.splitContainer1.Panel2.Controls.Add(this.layout_bound_relative_bottom);
-      this.splitContainer1.Panel2.Controls.Add(this.layout_bound_relative_right);
-      this.splitContainer1.Panel2.Controls.Add(this.layout_bound_relative_top);
-      this.splitContainer1.Panel2.Controls.Add(this.layout_bound_relative_left);
-      this.splitContainer1.Panel2.Controls.Add(this.kLayoutBoundRelativeBottom);
-      this.splitContainer1.Panel2.Controls.Add(this.kLayoutBoundRelativeRight);
-      this.splitContainer1.Panel2.Controls.Add(this.kLayoutBoundRelativeTop);
-      this.splitContainer1.Panel2.Controls.Add(this.kLayoutBoundRelativeLeft);
-      this.splitContainer1.Panel2.Controls.Add(this.layout_remove);
-      this.splitContainer1.Panel2.Controls.Add(this.layout_add);
-      this.splitContainer1.Panel2MinSize = 0;
-      this.splitContainer1.Size = new System.Drawing.Size(484, 345);
-      this.splitContainer1.SplitterDistance = 300;
-      this.splitContainer1.SplitterWidth = 1;
-      this.splitContainer1.TabIndex = 6;
+      this.tableLayoutPanel4.ColumnCount = 3;
+      this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 55.46218F));
+      this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 44.53782F));
+      this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 83F));
+      this.tableLayoutPanel4.Location = new System.Drawing.Point(497, 178);
+      this.tableLayoutPanel4.Name = "tableLayoutPanel4";
+      this.tableLayoutPanel4.RowCount = 2;
+      this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+      this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+      this.tableLayoutPanel4.Size = new System.Drawing.Size(200, 66);
+      this.tableLayoutPanel4.TabIndex = 6;
       // 
       // apply
       // 
       this.apply.Enabled = false;
-      this.apply.Location = new System.Drawing.Point(153, 311);
+      this.apply.Location = new System.Drawing.Point(232, 427);
       this.apply.Name = "apply";
-      this.apply.Size = new System.Drawing.Size(136, 23);
+      this.apply.Size = new System.Drawing.Size(57, 29);
       this.apply.TabIndex = 4;
       this.apply.Text = "Apply";
       this.apply.UseVisualStyleBackColor = true;
@@ -732,9 +757,9 @@
       // 
       this.splash.Enabled = false;
       this.splash.FlatStyle = System.Windows.Forms.FlatStyle.System;
-      this.splash.Location = new System.Drawing.Point(8, 311);
+      this.splash.Location = new System.Drawing.Point(41, 431);
       this.splash.Name = "splash";
-      this.splash.Size = new System.Drawing.Size(68, 23);
+      this.splash.Size = new System.Drawing.Size(107, 32);
       this.splash.TabIndex = 2;
       this.splash.Text = "Splash";
       this.splash.UseVisualStyleBackColor = true;
@@ -751,18 +776,17 @@
       this.kOption.Controls.Add(this.option_keep_aspect_ratio);
       this.kOption.Controls.Add(this.option_show_layered_window);
       this.kOption.Controls.Add(this.option_show_mouse_cursor);
-      this.kOption.Location = new System.Drawing.Point(8, 201);
+      this.kOption.Location = new System.Drawing.Point(370, 414);
       this.kOption.Name = "kOption";
-      this.kOption.Size = new System.Drawing.Size(281, 104);
+      this.kOption.Size = new System.Drawing.Size(300, 104);
       this.kOption.TabIndex = 1;
       this.kOption.TabStop = false;
       this.kOption.Text = "Option";
       // 
       // option_thread_num
       // 
-      this.option_thread_num.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
       this.option_thread_num.Enabled = false;
-      this.option_thread_num.Location = new System.Drawing.Point(228, 28);
+      this.option_thread_num.Location = new System.Drawing.Point(247, 28);
       this.option_thread_num.Maximum = new decimal(new int[] {
             8,
             0,
@@ -784,20 +808,17 @@
       // 
       // option_resize_method_combo
       // 
-      this.option_resize_method_combo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
       this.option_resize_method_combo.DataBindings.Add(new System.Windows.Forms.Binding("SelectedValue", this.layoutParameterBindingSource, "SwsFlags", true));
       this.option_resize_method_combo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
       this.option_resize_method_combo.FormattingEnabled = true;
       this.option_resize_method_combo.Location = new System.Drawing.Point(157, 75);
       this.option_resize_method_combo.Name = "option_resize_method_combo";
-      this.option_resize_method_combo.Size = new System.Drawing.Size(118, 20);
+      this.option_resize_method_combo.Size = new System.Drawing.Size(137, 20);
       this.option_resize_method_combo.TabIndex = 8;
       // 
       // kResizeMethod
       // 
-      this.kResizeMethod.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-      this.kResizeMethod.Location = new System.Drawing.Point(195, 60);
+      this.kResizeMethod.Location = new System.Drawing.Point(214, 60);
       this.kResizeMethod.Name = "kResizeMethod";
       this.kResizeMethod.Size = new System.Drawing.Size(80, 12);
       this.kResizeMethod.TabIndex = 7;
@@ -805,9 +826,8 @@
       // 
       // kThreadNum
       // 
-      this.kThreadNum.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
       this.kThreadNum.Enabled = false;
-      this.kThreadNum.Location = new System.Drawing.Point(155, 31);
+      this.kThreadNum.Location = new System.Drawing.Point(174, 31);
       this.kThreadNum.Name = "kThreadNum";
       this.kThreadNum.Size = new System.Drawing.Size(67, 12);
       this.kThreadNum.TabIndex = 5;
@@ -850,17 +870,16 @@
       this.layout_list.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
       this.layout_list.FormattingEnabled = true;
       this.layout_list.ItemHeight = 16;
-      this.layout_list.Location = new System.Drawing.Point(4, 0);
+      this.layout_list.Location = new System.Drawing.Point(974, 132);
       this.layout_list.Name = "layout_list";
-      this.layout_list.Size = new System.Drawing.Size(172, 228);
+      this.layout_list.Size = new System.Drawing.Size(173, 228);
       this.layout_list.TabIndex = 0;
       // 
       // kVersion
       // 
-      this.kVersion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
       this.kVersion.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.kVersion.ForeColor = System.Drawing.Color.White;
-      this.kVersion.Location = new System.Drawing.Point(422, 11);
+      this.kVersion.Location = new System.Drawing.Point(736, 11);
       this.kVersion.Name = "kVersion";
       this.kVersion.Size = new System.Drawing.Size(65, 13);
       this.kVersion.TabIndex = 2;
@@ -872,10 +891,9 @@
       this.kGreenPanel.Controls.Add(this.kVersion);
       this.kGreenPanel.Controls.Add(this.kDirectShowFilter);
       this.kGreenPanel.Controls.Add(this.kSCFF);
-      this.kGreenPanel.Dock = System.Windows.Forms.DockStyle.Top;
-      this.kGreenPanel.Location = new System.Drawing.Point(0, 0);
+      this.kGreenPanel.Location = new System.Drawing.Point(0, 23);
       this.kGreenPanel.Name = "kGreenPanel";
-      this.kGreenPanel.Size = new System.Drawing.Size(492, 34);
+      this.kGreenPanel.Size = new System.Drawing.Size(806, 34);
       this.kGreenPanel.TabIndex = 0;
       // 
       // layout_profile_combo
@@ -891,7 +909,6 @@
       // 
       // kProfile
       // 
-      this.kProfile.AutoSize = true;
       this.kProfile.Location = new System.Drawing.Point(303, 70);
       this.kProfile.Name = "kProfile";
       this.kProfile.Size = new System.Drawing.Size(38, 12);
@@ -903,19 +920,35 @@
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(492, 473);
+      this.ClientSize = new System.Drawing.Size(1177, 646);
+      this.Controls.Add(this.kArea);
+      this.Controls.Add(this.kOption);
+      this.Controls.Add(this.splash);
+      this.Controls.Add(this.apply);
+      this.Controls.Add(this.auto_apply);
+      this.Controls.Add(this.tableLayoutPanel4);
+      this.Controls.Add(this.layout_layout);
+      this.Controls.Add(this.layout_list);
+      this.Controls.Add(this.layout_bound_relative_bottom);
       this.Controls.Add(this.kProfile);
+      this.Controls.Add(this.layout_bound_relative_right);
       this.Controls.Add(this.main_menu);
+      this.Controls.Add(this.kTarget);
+      this.Controls.Add(this.layout_bound_relative_top);
+      this.Controls.Add(this.layout_bound_relative_left);
       this.Controls.Add(this.process_refresh);
+      this.Controls.Add(this.kLayoutBoundRelativeBottom);
       this.Controls.Add(this.process_combo);
+      this.Controls.Add(this.kLayoutBoundRelativeRight);
       this.Controls.Add(this.main_status);
-      this.Controls.Add(this.splitContainer1);
+      this.Controls.Add(this.kLayoutBoundRelativeTop);
+      this.Controls.Add(this.kLayoutBoundRelativeLeft);
       this.Controls.Add(this.kGreenPanel);
+      this.Controls.Add(this.layout_remove);
       this.Controls.Add(this.layout_profile_combo);
+      this.Controls.Add(this.layout_add);
       this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
       this.MaximizeBox = false;
-      this.MaximumSize = new System.Drawing.Size(500, 500);
-      this.MinimumSize = new System.Drawing.Size(310, 500);
       this.Name = "Form1";
       this.Text = "SCFF DirectShow Filter Ver.0.1.0";
       this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
@@ -926,25 +959,21 @@
       ((System.ComponentModel.ISupportInitialize)(this.layoutParameterBindingSource)).EndInit();
       ((System.ComponentModel.ISupportInitialize)(this.layout_bound_relative_right)).EndInit();
       this.kWindow.ResumeLayout(false);
-      this.kWindow.PerformLayout();
+      this.tableLayoutPanel3.ResumeLayout(false);
+      this.tableLayoutPanel2.ResumeLayout(false);
+      this.tableLayoutPanel2.PerformLayout();
       this.kArea.ResumeLayout(false);
-      this.kArea.PerformLayout();
+      this.tableLayoutPanel1.ResumeLayout(false);
+      ((System.ComponentModel.ISupportInitialize)(this.area_clipping_x)).EndInit();
       ((System.ComponentModel.ISupportInitialize)(this.area_clipping_height)).EndInit();
       ((System.ComponentModel.ISupportInitialize)(this.area_clipping_width)).EndInit();
       ((System.ComponentModel.ISupportInitialize)(this.area_clipping_y)).EndInit();
-      ((System.ComponentModel.ISupportInitialize)(this.area_clipping_x)).EndInit();
       ((System.ComponentModel.ISupportInitialize)(this.layout_bound_relative_top)).EndInit();
       ((System.ComponentModel.ISupportInitialize)(this.layout_bound_relative_left)).EndInit();
       ((System.ComponentModel.ISupportInitialize)(this.entryBindingSource)).EndInit();
       this.kTarget.ResumeLayout(false);
       this.main_status.ResumeLayout(false);
       this.main_status.PerformLayout();
-      this.splitContainer1.Panel1.ResumeLayout(false);
-      this.splitContainer1.Panel1.PerformLayout();
-      this.splitContainer1.Panel2.ResumeLayout(false);
-      this.splitContainer1.Panel2.PerformLayout();
-      ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
-      this.splitContainer1.ResumeLayout(false);
       this.kOption.ResumeLayout(false);
       ((System.ComponentModel.ISupportInitialize)(this.option_thread_num)).EndInit();
       this.kGreenPanel.ResumeLayout(false);
@@ -1002,7 +1031,6 @@
         private System.Windows.Forms.ToolStripSplitButton layout_strip;
         private System.Windows.Forms.ToolStripStatusLabel status_status;
         private System.Windows.Forms.Label kSCFF;
-        private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.Button apply;
         private System.Windows.Forms.Button splash;
         private System.Windows.Forms.GroupBox kOption;
@@ -1021,6 +1049,10 @@
         public System.Windows.Forms.BindingSource layoutParameterBindingSource;
         public System.Windows.Forms.BindingSource entryBindingSource;
         private System.Windows.Forms.Label kProfile;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
 
 
 

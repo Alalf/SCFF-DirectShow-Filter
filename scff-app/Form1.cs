@@ -169,7 +169,7 @@ public partial class Form1 : Form {
   // Target/Window
   //-------------------------------------------------------------------
 
-  private void SetWindow(IntPtr window) {
+  private void SetWindow(UIntPtr window) {
     ((LayoutParameter)layoutParameterBindingSource.Current).Window = window;
     int window_width, window_height;
     impl_.GetWindowSize(window, out window_width, out window_height);
@@ -189,7 +189,7 @@ public partial class Form1 : Form {
     window_draghere.BackColor = SystemColors.Control;
 
     Point screen_location = window_draghere.PointToScreen(e.Location);
-    IntPtr window = impl_.GetWindowFromPoint(screen_location.X, screen_location.Y);
+    UIntPtr window = impl_.GetWindowFromPoint(screen_location.X, screen_location.Y);
     this.SetWindow(window);
 
     if (auto_apply.Checked) {
@@ -198,7 +198,7 @@ public partial class Form1 : Form {
   }
 
   private void window_desktop_Click(object sender, EventArgs e) {
-    IntPtr window = impl_.GetWindowFromDesktop();
+    UIntPtr window = impl_.GetWindowFromDesktop();
     this.SetWindow(window);
 
     if (auto_apply.Checked) {
@@ -216,7 +216,7 @@ public partial class Form1 : Form {
       area_clipping_width.Enabled = false;
       area_clipping_height.Enabled = false;
 
-      IntPtr window = ((LayoutParameter)layoutParameterBindingSource.Current).Window;
+      UIntPtr window = ((LayoutParameter)layoutParameterBindingSource.Current).Window;
       int window_width, window_height;
       impl_.GetWindowSize(window, out window_width, out window_height);
       ((LayoutParameter)layoutParameterBindingSource.Current).ClippingX = 0;
@@ -239,7 +239,7 @@ public partial class Form1 : Form {
 
   private void target_area_select_Click(object sender, EventArgs e) {
     // デスクトップの情報を得る
-    IntPtr window = impl_.GetWindowFromDesktop();
+    UIntPtr window = impl_.GetWindowFromDesktop();
     int window_width, window_height;
     impl_.GetWindowSize(window, out window_width, out window_height);
 

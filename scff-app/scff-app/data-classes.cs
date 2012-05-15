@@ -136,16 +136,16 @@ public class LayoutParameter {
   // Wrappers
   //-------------------------------------------------------------------
   [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-  private static extern int GetClassName(IntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
+  private static extern int GetClassName(UIntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
   [DllImport("user32.dll", SetLastError = false)]
-  static extern IntPtr GetDesktopWindow();
+  static extern UIntPtr GetDesktopWindow();
   [StructLayout(LayoutKind.Sequential)]
   struct RECT { public int left, top, right, bottom; }
   [DllImport("user32.dll")]
   [return: MarshalAs(UnmanagedType.Bool)]
-  static extern bool IsWindow(IntPtr hWnd);
+  static extern bool IsWindow(UIntPtr hWnd);
   [DllImport("user32.dll")]
-  static extern bool GetClientRect(IntPtr hWnd, out RECT lpRect);
+  static extern bool GetClientRect(UIntPtr hWnd, out RECT lpRect);
   //-------------------------------------------------------------------
 
   /// @brief デフォルトコンストラクタ。
@@ -183,7 +183,7 @@ public class LayoutParameter {
     BoundY = interprocess_layout_parameter.bound_y;
     BoundWidth = interprocess_layout_parameter.bound_width;
     BoundHeight = interprocess_layout_parameter.bound_height;
-    Window = unchecked((IntPtr)interprocess_layout_parameter.window);
+    Window = unchecked((UIntPtr)interprocess_layout_parameter.window);
     ClippingX = interprocess_layout_parameter.clipping_x;
     ClippingY = interprocess_layout_parameter.clipping_y;
     ClippingWidth = interprocess_layout_parameter.clipping_width;
@@ -314,7 +314,7 @@ public class LayoutParameter {
 
   public string WindowText {
     get {
-      if (Window == IntPtr.Zero) {
+      if (Window == UIntPtr.Zero) {
         return "(Splash)";
       } else if (Window == GetDesktopWindow()) {
         return "(Desktop)";
@@ -329,7 +329,7 @@ public class LayoutParameter {
       }
     }
   }
-  public IntPtr Window { get; set; }
+  public UIntPtr Window { get; set; }
 
   public Boolean Fit { get; set; }
 

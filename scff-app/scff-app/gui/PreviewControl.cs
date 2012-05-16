@@ -42,7 +42,7 @@ public partial class PreviewControl : UserControl {
     public int bottom;
   }
   [DllImport("user32.dll")]
-  private static extern IntPtr GetDC(IntPtr hwnd);
+  private static extern IntPtr GetDC(UIntPtr hwnd);
   [DllImport("gdi32.dll")]
   private static extern int BitBlt(IntPtr hDestDC,
       int x,
@@ -54,10 +54,10 @@ public partial class PreviewControl : UserControl {
       int ySrc,
       int dwRop);
   [DllImport("user32.dll")]
-  private static extern IntPtr ReleaseDC(IntPtr hwnd, IntPtr hdc);
+  private static extern IntPtr ReleaseDC(UIntPtr hwnd, IntPtr hdc);
   [DllImport("user32.dll")]
   [return: MarshalAs(UnmanagedType.Bool)]
-  static extern bool IsWindow(IntPtr hWnd);
+  static extern bool IsWindow(UIntPtr hWnd);
   //-------------------------------------------------------------------
 
   //-------------------------------------------------------------------
@@ -171,7 +171,7 @@ public partial class PreviewControl : UserControl {
   }
 
   private void ScreenCapture() {
-    IntPtr window = layout_parameter_.Window;
+    UIntPtr window = layout_parameter_.Window;
     if (!IsWindow(window)) {
       return;
     }

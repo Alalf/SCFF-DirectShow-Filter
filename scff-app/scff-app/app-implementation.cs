@@ -36,13 +36,13 @@ public partial class AppImplementation {
   struct RECT { public int left, top, right, bottom; }
   [DllImport("user32.dll")]
   [return: MarshalAs(UnmanagedType.Bool)]
-  static extern bool IsWindow(IntPtr hWnd);
+  static extern bool IsWindow(UIntPtr hWnd);
   [DllImport("user32.dll")]
-  static extern bool GetClientRect(IntPtr hWnd, out RECT lpRect);
+  static extern bool GetClientRect(UIntPtr hWnd, out RECT lpRect);
   [DllImport("user32.dll", SetLastError = false)]
-  static extern IntPtr GetDesktopWindow();
+  static extern UIntPtr GetDesktopWindow();
   [DllImport("user32.dll")]
-  private static extern IntPtr WindowFromPoint(int xPoint, int yPoint);
+  private static extern UIntPtr WindowFromPoint(int xPoint, int yPoint);
   //-------------------------------------------------------------------
 
   /// @brief コンストラクタ
@@ -99,26 +99,26 @@ public partial class AppImplementation {
   //-------------------------------------------------------------------
 
   /// @brief スクリーン座標からウィンドウハンドルを設定する
-  public IntPtr GetWindowFromPoint(int screen_x, int screen_y) {
+  public UIntPtr GetWindowFromPoint(int screen_x, int screen_y) {
     Trace.WriteLine("Cursor: " + screen_x + "," + screen_y);
-    IntPtr window = WindowFromPoint(screen_x, screen_y);
-    if (window != IntPtr.Zero) {
+    UIntPtr window = WindowFromPoint(screen_x, screen_y);
+    if (window != UIntPtr.Zero) {
       // 見つかった場合
       return window;
     } else {
-      return IntPtr.Zero;
+      return UIntPtr.Zero;
     }
   }
 
   /// @brief デスクトップを全画面で取り込む
-  public IntPtr GetWindowFromDesktop() {
+  public UIntPtr GetWindowFromDesktop() {
     return GetDesktopWindow();
   }
 
   /// @brief ウィンドウのサイズを得る
-  public void GetWindowSize(IntPtr window,
+  public void GetWindowSize(UIntPtr window,
       out int window_width, out int window_height) {
-    if (window == IntPtr.Zero || !IsWindow(window)) {
+    if (window == UIntPtr.Zero || !IsWindow(window)) {
       window_width = 0;
       window_height = 0;
       return;
@@ -131,11 +131,11 @@ public partial class AppImplementation {
   }
 
   /// @brief クリッピング領域を適切な値に調整してから設定
-  public void JustifyClippingRegion(IntPtr window,
+  public void JustifyClippingRegion(UIntPtr window,
       int src_x, int src_y, int src_width, int src_height,
       out int clipping_x, out int clipping_y,
       out int clipping_width, out int clipping_height) {
-    if (window == IntPtr.Zero || !IsWindow(window)) {
+    if (window == UIntPtr.Zero || !IsWindow(window)) {
       clipping_x = 0;
       clipping_y = 0;
       clipping_width = 0;
@@ -190,7 +190,7 @@ public partial class AppImplementation {
   /// @brief パラメータのValidate
   private bool ValidateParameter(LayoutParameter parameter, int bound_width, int bound_height, bool show_message) {
     // もっとも危険な状態になりやすいウィンドウからチェック
-    if (parameter.Window == IntPtr.Zero) { // NULL
+    if (parameter.Window == UIntPtr.Zero) { // NULL
       if (show_message) {
         MessageBox.Show("Specified window is invalid", "Invalid Window",
             MessageBoxButtons.OK, MessageBoxIcon.Error);

@@ -139,6 +139,39 @@ static void MessageToLayoutParameter(
   case scff_interprocess::kSpline:
     parameter->sws_flags = scff_imaging::kSpline;
     break;
+  case scff_interprocess::kHQFastBilinear:
+    parameter->sws_flags = scff_imaging::kHQFastBilinear;
+    break;
+  case scff_interprocess::kHQBilinear:
+    parameter->sws_flags = scff_imaging::kHQBilinear;
+    break;
+  case scff_interprocess::kHQBicubic:
+    parameter->sws_flags = scff_imaging::kHQBicubic;
+    break;
+  case scff_interprocess::kHQX:
+    parameter->sws_flags = scff_imaging::kHQX;
+    break;
+  case scff_interprocess::kHQPoint:
+    parameter->sws_flags = scff_imaging::kHQPoint;
+    break;
+  case scff_interprocess::kHQArea:
+    parameter->sws_flags = scff_imaging::kHQArea;
+    break;
+  case scff_interprocess::kHQBicublin:
+    parameter->sws_flags = scff_imaging::kHQBicublin;
+    break;
+  case scff_interprocess::kHQGauss:
+    parameter->sws_flags = scff_imaging::kHQGauss;
+    break;
+  case scff_interprocess::kHQSinc:
+    parameter->sws_flags = scff_imaging::kHQSinc;
+    break;
+  case scff_interprocess::kHQLanczos:
+    parameter->sws_flags = scff_imaging::kHQLanczos;
+    break;
+  case scff_interprocess::kHQSpline:
+    parameter->sws_flags = scff_imaging::kHQSpline;
+    break;
   default:
     ASSERT(false);
     parameter->sws_flags = scff_imaging::kFastBilinear;

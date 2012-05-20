@@ -136,10 +136,32 @@ enum SWScaleFlags {
   kGauss        = 0x80,
   /// @brief sinc
   kSinc         = 0x100,
-  /// @brief natural
+  /// @brief lanczos
   kLanczos      = 0x200,
   /// @brief natural bicubic spline
-  kSpline       = 0x400
+  kSpline       = 0x400,
+  /// @brief fast bilinear + accurate_rnd
+  kHQFastBilinear = 1 + 0x40000,
+  /// @brief bilinear + accurate_rnd
+  kHQBilinear     = 2 + 0x40000,
+  /// @brief bicubic + accurate_rnd
+  kHQBicubic      = 4 + 0x40000,
+  /// @brief experimental + accurate_rnd
+  kHQX            = 8 + 0x40000,
+  /// @brief nearest neighbor + accurate_rnd
+  kHQPoint        = 0x10 + 0x40000,
+  /// @brief averaging area + accurate_rnd
+  kHQArea         = 0x20 + 0x40000,
+  /// @brief luma bicubic, chroma bilinear + accurate_rnd
+  kHQBicublin     = 0x40 + 0x40000,
+  /// @brief gaussian + accurate_rnd
+  kHQGauss        = 0x80 + 0x40000,
+  /// @brief sinc + accurate_rnd
+  kHQSinc         = 0x100 + 0x40000,
+  /// @brief lanczos + accurate_rnd
+  kHQLanczos      = 0x200 + 0x40000,
+  /// @brief natural bicubic spline + accurate_rnd
+  kHQSpline       = 0x400 + 0x40000
 };
 
 //---------------------------------------------------------------------

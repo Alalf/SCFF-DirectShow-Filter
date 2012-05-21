@@ -232,6 +232,39 @@ public class LayoutParameter {
     case (Int32)scff_interprocess.SWScaleFlags.kSpline:
       SwsFlags = scff_interprocess.SWScaleFlags.kSpline;
       break;
+    case (Int32)scff_interprocess.SWScaleFlags.kHQFastBilinear:
+      SwsFlags = scff_interprocess.SWScaleFlags.kHQFastBilinear;
+      break;
+    case (Int32)scff_interprocess.SWScaleFlags.kHQBilinear:
+      SwsFlags = scff_interprocess.SWScaleFlags.kHQBilinear;
+      break;
+    case (Int32)scff_interprocess.SWScaleFlags.kHQBicubic:
+      SwsFlags = scff_interprocess.SWScaleFlags.kHQBicubic;
+      break;
+    case (Int32)scff_interprocess.SWScaleFlags.kHQX:
+      SwsFlags = scff_interprocess.SWScaleFlags.kHQX;
+      break;
+    case (Int32)scff_interprocess.SWScaleFlags.kHQPoint:
+      SwsFlags = scff_interprocess.SWScaleFlags.kHQPoint;
+      break;
+    case (Int32)scff_interprocess.SWScaleFlags.kHQArea:
+      SwsFlags = scff_interprocess.SWScaleFlags.kHQArea;
+      break;
+    case (Int32)scff_interprocess.SWScaleFlags.kHQBicublin:
+      SwsFlags = scff_interprocess.SWScaleFlags.kHQBicublin;
+      break;
+    case (Int32)scff_interprocess.SWScaleFlags.kHQGauss:
+      SwsFlags = scff_interprocess.SWScaleFlags.kHQGauss;
+      break;
+    case (Int32)scff_interprocess.SWScaleFlags.kHQSinc:
+      SwsFlags = scff_interprocess.SWScaleFlags.kHQSinc;
+      break;
+    case (Int32)scff_interprocess.SWScaleFlags.kHQLanczos:
+      SwsFlags = scff_interprocess.SWScaleFlags.kHQLanczos;
+      break;
+    case (Int32)scff_interprocess.SWScaleFlags.kHQSpline:
+      SwsFlags = scff_interprocess.SWScaleFlags.kHQSpline;
+      break;
     }
     if (interprocess_layout_parameter.stretch != 0) {
       Stretch = true;

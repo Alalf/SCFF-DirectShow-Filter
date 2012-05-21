@@ -79,8 +79,19 @@ public partial class AppImplementation {
     ResizeMethodList.Add(System.Tuple.Create("Bicublin (luma bicubic, chroma bilinear)", scff_interprocess.SWScaleFlags.kBicublin));
     ResizeMethodList.Add(System.Tuple.Create("Gauss (gaussian)", scff_interprocess.SWScaleFlags.kGauss));
     ResizeMethodList.Add(System.Tuple.Create("Sinc (sinc)", scff_interprocess.SWScaleFlags.kSinc));
-    ResizeMethodList.Add(System.Tuple.Create("Lanczos (natural)", scff_interprocess.SWScaleFlags.kLanczos));
+    ResizeMethodList.Add(System.Tuple.Create("Lanczos (lanczos)", scff_interprocess.SWScaleFlags.kLanczos));
     ResizeMethodList.Add(System.Tuple.Create("Spline (natural bicubic spline)", scff_interprocess.SWScaleFlags.kSpline));
+    ResizeMethodList.Add(System.Tuple.Create("HQ FastBilinear (fast bilinear + accurate_rnd)", scff_interprocess.SWScaleFlags.kHQFastBilinear));
+    ResizeMethodList.Add(System.Tuple.Create("HQ Bilinear (bilinear + accurate_rnd)", scff_interprocess.SWScaleFlags.kHQBilinear));
+    ResizeMethodList.Add(System.Tuple.Create("HQ Bicubic (bicubic + accurate_rnd)", scff_interprocess.SWScaleFlags.kHQBicubic));
+    ResizeMethodList.Add(System.Tuple.Create("HQ X (experimental + accurate_rnd)", scff_interprocess.SWScaleFlags.kHQX));
+    ResizeMethodList.Add(System.Tuple.Create("HQ Point (nearest neighbor + accurate_rnd)", scff_interprocess.SWScaleFlags.kHQPoint));
+    ResizeMethodList.Add(System.Tuple.Create("HQ Area (averaging area + accurate_rnd)", scff_interprocess.SWScaleFlags.kHQArea));
+    ResizeMethodList.Add(System.Tuple.Create("HQ Bicublin (luma bicubic, chroma bilinear + accurate_rnd)", scff_interprocess.SWScaleFlags.kHQBicublin));
+    ResizeMethodList.Add(System.Tuple.Create("HQ Gauss (gaussian + accurate_rnd)", scff_interprocess.SWScaleFlags.kHQGauss));
+    ResizeMethodList.Add(System.Tuple.Create("HQ Sinc (sinc + accurate_rnd)", scff_interprocess.SWScaleFlags.kHQSinc));
+    ResizeMethodList.Add(System.Tuple.Create("HQ Lanczos (lanczos + accurate_rnd)", scff_interprocess.SWScaleFlags.kHQLanczos));
+    ResizeMethodList.Add(System.Tuple.Create("HQ Spline (natural bicubic spline + accurate_rnd)", scff_interprocess.SWScaleFlags.kHQSpline));
   }
 
   /// @brief 共有メモリからディレクトリを取得し、CurrentDirectoryを更新

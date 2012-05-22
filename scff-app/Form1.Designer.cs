@@ -719,7 +719,7 @@
       this.kTarget.Controls.Add(this.kArea);
       this.kTarget.Controls.Add(this.kWindow);
       this.kTarget.Font = new System.Drawing.Font("MS UI Gothic", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-      this.kTarget.Location = new System.Drawing.Point(0, 91);
+      this.kTarget.Location = new System.Drawing.Point(5, 99);
       this.kTarget.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
       this.kTarget.Name = "kTarget";
       this.kTarget.Padding = new System.Windows.Forms.Padding(6, 3, 6, 8);
@@ -874,7 +874,7 @@
       this.kOption.AutoSize = true;
       this.kOption.Controls.Add(this.tableLayoutPanel7);
       this.kOption.Font = new System.Drawing.Font("MS UI Gothic", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-      this.kOption.Location = new System.Drawing.Point(0, 292);
+      this.kOption.Location = new System.Drawing.Point(5, 300);
       this.kOption.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
       this.kOption.Name = "kOption";
       this.kOption.Padding = new System.Windows.Forms.Padding(6, 3, 6, 8);
@@ -1112,7 +1112,7 @@
       this.groupBox1.AutoSize = true;
       this.groupBox1.Controls.Add(this.tableLayoutPanel2);
       this.groupBox1.Font = new System.Drawing.Font("MS UI Gothic", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-      this.groupBox1.Location = new System.Drawing.Point(0, 382);
+      this.groupBox1.Location = new System.Drawing.Point(5, 390);
       this.groupBox1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
       this.groupBox1.Name = "groupBox1";
       this.groupBox1.Padding = new System.Windows.Forms.Padding(6, 3, 6, 8);
@@ -1304,7 +1304,7 @@
       this.panel3.Controls.Add(this.auto_apply);
       this.panel3.Controls.Add(this.splash);
       this.panel3.Font = new System.Drawing.Font("MS UI Gothic", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-      this.panel3.Location = new System.Drawing.Point(0, 518);
+      this.panel3.Location = new System.Drawing.Point(5, 526);
       this.panel3.Name = "panel3";
       this.panel3.Size = new System.Drawing.Size(276, 28);
       this.panel3.TabIndex = 26;
@@ -1315,7 +1315,7 @@
       this.kLayout.Controls.Add(this.tableLayoutPanel11);
       this.kLayout.Controls.Add(this.layout_list);
       this.kLayout.Font = new System.Drawing.Font("MS UI Gothic", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-      this.kLayout.Location = new System.Drawing.Point(279, 91);
+      this.kLayout.Location = new System.Drawing.Point(284, 99);
       this.kLayout.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
       this.kLayout.Name = "kLayout";
       this.kLayout.Padding = new System.Windows.Forms.Padding(6, 3, 6, 8);
@@ -1329,7 +1329,7 @@
       this.panel2.AutoSize = true;
       this.panel2.Controls.Add(this.process_combo);
       this.panel2.Controls.Add(this.process_refresh);
-      this.panel2.Location = new System.Drawing.Point(0, 58);
+      this.panel2.Location = new System.Drawing.Point(5, 66);
       this.panel2.Name = "panel2";
       this.panel2.Size = new System.Drawing.Size(275, 31);
       this.panel2.TabIndex = 28;
@@ -1337,7 +1337,7 @@
       // panel1
       // 
       this.panel1.Controls.Add(this.layout_profile_combo);
-      this.panel1.Location = new System.Drawing.Point(279, 58);
+      this.panel1.Location = new System.Drawing.Point(284, 66);
       this.panel1.Name = "panel1";
       this.panel1.Size = new System.Drawing.Size(195, 31);
       this.panel1.TabIndex = 29;
@@ -1349,15 +1349,15 @@
       this.AutoSize = true;
       this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
       this.ClientSize = new System.Drawing.Size(530, 585);
-      this.Controls.Add(this.panel1);
       this.Controls.Add(this.panel2);
+      this.Controls.Add(this.tableLayoutPanel3);
+      this.Controls.Add(this.panel1);
+      this.Controls.Add(this.main_menu);
       this.Controls.Add(this.panel3);
       this.Controls.Add(this.groupBox1);
       this.Controls.Add(this.kTarget);
       this.Controls.Add(this.kLayout);
-      this.Controls.Add(this.tableLayoutPanel3);
       this.Controls.Add(this.kOption);
-      this.Controls.Add(this.main_menu);
       this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
       this.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
       this.MaximizeBox = false;

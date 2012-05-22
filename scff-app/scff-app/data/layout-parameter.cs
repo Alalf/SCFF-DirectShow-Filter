@@ -32,10 +32,13 @@ public partial class LayoutParameter {
     SWScaleConfig = new SWScaleConfig();
   }
 
+  // GUIクライアント独自の値
   public Double BoundRelativeLeft { get; set; }
   public Double BoundRelativeRight { get; set; }
   public Double BoundRelativeTop { get; set; }
   public Double BoundRelativeBottom { get; set; }
+
+
   public Int32 BoundX { get; set; }
   public Int32 BoundY { get; set; }
   public Int32 BoundWidth { get; set; }

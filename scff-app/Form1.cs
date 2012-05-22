@@ -44,9 +44,9 @@ public partial class Form1 : Form {
     impl_ = new AppImplementation();
 
     // リサイズメソッドのコンボボックスのデータソースを設定
-    option_resize_method_combo.DisplayMember = "Item1";
-    option_resize_method_combo.ValueMember = "Item2";
-    option_resize_method_combo.DataSource = impl_.ResizeMethodList;
+    resize_method_combo.DisplayMember = "Item1";
+    resize_method_combo.ValueMember = "Item2";
+    resize_method_combo.DataSource = impl_.ResizeMethodList;
     
     // 初期設定
     this.UpdateCurrentDirectory();

@@ -156,7 +156,7 @@ ErrorCode NativeLayout::Init() {
   screen_capture_ = screen_capture;
 
   // 拡大縮小ピクセルフォーマット変換
-  Scale *scale = new Scale(parameter_.sws_flags);
+  Scale *scale = new Scale(parameter_.swscale_config);
   scale->SetInputImage(&captured_image_);
   if (CanUsePadding()) {
     // パディング可能ならバッファをはさむ

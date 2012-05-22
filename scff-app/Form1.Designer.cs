@@ -1,33 +1,28 @@
-﻿namespace scff_app
-{
-    partial class Form1
-    {
-        /// <summary>
-        /// 必要なデザイナー変数です。
-        /// </summary>
-        private System.ComponentModel.IContainer components = null;
+﻿namespace scff_app {
+  partial class Form1 {
+    /// <summary>
+    /// 必要なデザイナー変数です。
+    /// </summary>
+    private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        /// 使用中のリソースをすべてクリーンアップします。
-        /// </summary>
-        /// <param name="disposing">マネージ リソースが破棄される場合 true、破棄されない場合は false です。</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && (components != null))
-            {
-                components.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+    /// <summary>
+    /// 使用中のリソースをすべてクリーンアップします。
+    /// </summary>
+    /// <param name="disposing">マネージ リソースが破棄される場合 true、破棄されない場合は false です。</param>
+    protected override void Dispose(bool disposing) {
+      if (disposing && (components != null)) {
+        components.Dispose();
+      }
+      base.Dispose(disposing);
+    }
 
-        #region Windows フォーム デザイナーで生成されたコード
+    #region Windows フォーム デザイナーで生成されたコード
 
-        /// <summary>
-        /// デザイナー サポートに必要なメソッドです。このメソッドの内容を
-        /// コード エディターで変更しないでください。
-        /// </summary>
-        private void InitializeComponent()
-        {
+    /// <summary>
+    /// デザイナー サポートに必要なメソッドです。このメソッドの内容を
+    /// コード エディターで変更しないでください。
+    /// </summary>
+    private void InitializeComponent() {
       this.components = new System.ComponentModel.Container();
       System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
       this.layout_layout = new System.Windows.Forms.Button();
@@ -160,7 +155,7 @@
       this.main_menu.Location = new System.Drawing.Point(0, 0);
       this.main_menu.Name = "main_menu";
       this.main_menu.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-      this.main_menu.Size = new System.Drawing.Size(728, 20);
+      this.main_menu.Size = new System.Drawing.Size(649, 20);
       this.main_menu.TabIndex = 1;
       this.main_menu.Text = "main_menu";
       // 
@@ -722,9 +717,9 @@
       this.main_status.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.layout_strip,
             this.status_status});
-      this.main_status.Location = new System.Drawing.Point(0, 602);
+      this.main_status.Location = new System.Drawing.Point(0, 619);
       this.main_status.Name = "main_status";
-      this.main_status.Size = new System.Drawing.Size(728, 22);
+      this.main_status.Size = new System.Drawing.Size(649, 22);
       this.main_status.TabIndex = 7;
       this.main_status.Text = "main_status";
       // 
@@ -741,7 +736,7 @@
       // 
       this.status_status.Name = "status_status";
       this.status_status.RightToLeft = System.Windows.Forms.RightToLeft.No;
-      this.status_status.Size = new System.Drawing.Size(642, 17);
+      this.status_status.Size = new System.Drawing.Size(563, 17);
       this.status_status.Spring = true;
       this.status_status.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
       // 
@@ -1101,7 +1096,7 @@
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(728, 624);
+      this.ClientSize = new System.Drawing.Size(649, 641);
       this.Controls.Add(this.main_menu);
       this.Controls.Add(this.main_status);
       this.Controls.Add(this.tableLayoutPanel13);
@@ -1148,90 +1143,90 @@
       this.ResumeLayout(false);
       this.PerformLayout();
 
-        }
-
-        #endregion
-
-        private System.Windows.Forms.Button layout_layout;
-        private System.Windows.Forms.MenuStrip main_menu;
-        private System.Windows.Forms.ToolStripMenuItem tools_menu;
-        private System.Windows.Forms.ToolStripMenuItem cts_item;
-        private System.Windows.Forms.ToolStripMenuItem ctc_item;
-        private System.Windows.Forms.ToolStripSeparator kToolsSeparator;
-        private System.Windows.Forms.ToolStripMenuItem aero_on_item;
-        private System.Windows.Forms.ToolStripMenuItem language_menu;
-        private System.Windows.Forms.ToolStripMenuItem english_item;
-        private System.Windows.Forms.ToolStripMenuItem external_item;
-        private System.Windows.Forms.NumericUpDown layout_bound_relative_bottom;
-        private System.Windows.Forms.Button window_desktop;
-        private System.Windows.Forms.NumericUpDown layout_bound_relative_right;
-        private System.Windows.Forms.GroupBox kWindow;
-        private System.Windows.Forms.Button window_draghere;
-        private System.Windows.Forms.TextBox window_handle;
-        private System.Windows.Forms.Label kCaption;
-        private System.Windows.Forms.CheckBox area_fit;
-        private System.Windows.Forms.Button target_area_select;
-        private System.Windows.Forms.GroupBox kArea;
-        private System.Windows.Forms.NumericUpDown area_clipping_height;
-        private System.Windows.Forms.NumericUpDown area_clipping_width;
-        private System.Windows.Forms.NumericUpDown area_clipping_y;
-        private System.Windows.Forms.NumericUpDown area_clipping_x;
-        private System.Windows.Forms.Label kCross;
-        private System.Windows.Forms.Label kSize;
-        private System.Windows.Forms.Label kY;
-        private System.Windows.Forms.Label kX;
-        private System.Windows.Forms.NumericUpDown layout_bound_relative_top;
-        private System.Windows.Forms.NumericUpDown layout_bound_relative_left;
-        private System.Windows.Forms.Button process_refresh;
-        private System.Windows.Forms.Label kLayoutBoundRelativeBottom;
-        private System.Windows.Forms.ComboBox process_combo;
-        private System.Windows.Forms.Label kLayoutBoundRelativeRight;
-        private System.Windows.Forms.Label kLayoutBoundRelativeTop;
-        private System.Windows.Forms.GroupBox kTarget;
-        private System.Windows.Forms.Label kLayoutBoundRelativeLeft;
-        private System.Windows.Forms.ImageList scff_icons;
-        private System.Windows.Forms.Button layout_remove;
-        private System.Windows.Forms.Button layout_add;
-        private System.Windows.Forms.CheckBox option_show_mouse_cursor;
-        private System.Windows.Forms.CheckBox option_show_layered_window;
-        private System.Windows.Forms.Label kDirectShowFilter;
-        private System.Windows.Forms.StatusStrip main_status;
-        private System.Windows.Forms.ToolStripSplitButton layout_strip;
-        private System.Windows.Forms.ToolStripStatusLabel status_status;
-        private System.Windows.Forms.Label kSCFF;
-        private System.Windows.Forms.Button apply;
-        private System.Windows.Forms.Button splash;
-        private System.Windows.Forms.GroupBox kOption;
-        private System.Windows.Forms.NumericUpDown option_thread_num;
-        private System.Windows.Forms.ComboBox option_resize_method_combo;
-        private System.Windows.Forms.Label kResizeMethod;
-        private System.Windows.Forms.Label kThreadNum;
-        private System.Windows.Forms.CheckBox option_over_sampling;
-        private System.Windows.Forms.CheckBox option_enable_enlargement;
-        private System.Windows.Forms.CheckBox option_keep_aspect_ratio;
-        private System.Windows.Forms.Label kVersion;
-        private System.Windows.Forms.ComboBox layout_profile_combo;
-        private System.Windows.Forms.CheckBox auto_apply;
-        private System.Windows.Forms.ListBox layout_list;
-        public System.Windows.Forms.BindingSource layoutParameterBindingSource;
-        public System.Windows.Forms.BindingSource entryBindingSource;
-        private System.Windows.Forms.Label kProfile;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
-        private System.Windows.Forms.TableLayoutPanel kSCFFInfoTable;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
-        private System.Windows.Forms.TableLayoutPanel kHeaderTable;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel7;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel8;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel9;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel10;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel11;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel12;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel13;
-
-
-
     }
+
+    #endregion
+
+    private System.Windows.Forms.Button layout_layout;
+    private System.Windows.Forms.MenuStrip main_menu;
+    private System.Windows.Forms.ToolStripMenuItem tools_menu;
+    private System.Windows.Forms.ToolStripMenuItem cts_item;
+    private System.Windows.Forms.ToolStripMenuItem ctc_item;
+    private System.Windows.Forms.ToolStripSeparator kToolsSeparator;
+    private System.Windows.Forms.ToolStripMenuItem aero_on_item;
+    private System.Windows.Forms.ToolStripMenuItem language_menu;
+    private System.Windows.Forms.ToolStripMenuItem english_item;
+    private System.Windows.Forms.ToolStripMenuItem external_item;
+    private System.Windows.Forms.NumericUpDown layout_bound_relative_bottom;
+    private System.Windows.Forms.Button window_desktop;
+    private System.Windows.Forms.NumericUpDown layout_bound_relative_right;
+    private System.Windows.Forms.GroupBox kWindow;
+    private System.Windows.Forms.Button window_draghere;
+    private System.Windows.Forms.TextBox window_handle;
+    private System.Windows.Forms.Label kCaption;
+    private System.Windows.Forms.CheckBox area_fit;
+    private System.Windows.Forms.Button target_area_select;
+    private System.Windows.Forms.GroupBox kArea;
+    private System.Windows.Forms.NumericUpDown area_clipping_height;
+    private System.Windows.Forms.NumericUpDown area_clipping_width;
+    private System.Windows.Forms.NumericUpDown area_clipping_y;
+    private System.Windows.Forms.NumericUpDown area_clipping_x;
+    private System.Windows.Forms.Label kCross;
+    private System.Windows.Forms.Label kSize;
+    private System.Windows.Forms.Label kY;
+    private System.Windows.Forms.Label kX;
+    private System.Windows.Forms.NumericUpDown layout_bound_relative_top;
+    private System.Windows.Forms.NumericUpDown layout_bound_relative_left;
+    private System.Windows.Forms.Button process_refresh;
+    private System.Windows.Forms.Label kLayoutBoundRelativeBottom;
+    private System.Windows.Forms.ComboBox process_combo;
+    private System.Windows.Forms.Label kLayoutBoundRelativeRight;
+    private System.Windows.Forms.Label kLayoutBoundRelativeTop;
+    private System.Windows.Forms.GroupBox kTarget;
+    private System.Windows.Forms.Label kLayoutBoundRelativeLeft;
+    private System.Windows.Forms.ImageList scff_icons;
+    private System.Windows.Forms.Button layout_remove;
+    private System.Windows.Forms.Button layout_add;
+    private System.Windows.Forms.CheckBox option_show_mouse_cursor;
+    private System.Windows.Forms.CheckBox option_show_layered_window;
+    private System.Windows.Forms.Label kDirectShowFilter;
+    private System.Windows.Forms.StatusStrip main_status;
+    private System.Windows.Forms.ToolStripSplitButton layout_strip;
+    private System.Windows.Forms.ToolStripStatusLabel status_status;
+    private System.Windows.Forms.Label kSCFF;
+    private System.Windows.Forms.Button apply;
+    private System.Windows.Forms.Button splash;
+    private System.Windows.Forms.GroupBox kOption;
+    private System.Windows.Forms.NumericUpDown option_thread_num;
+    private System.Windows.Forms.ComboBox option_resize_method_combo;
+    private System.Windows.Forms.Label kResizeMethod;
+    private System.Windows.Forms.Label kThreadNum;
+    private System.Windows.Forms.CheckBox option_over_sampling;
+    private System.Windows.Forms.CheckBox option_enable_enlargement;
+    private System.Windows.Forms.CheckBox option_keep_aspect_ratio;
+    private System.Windows.Forms.Label kVersion;
+    private System.Windows.Forms.ComboBox layout_profile_combo;
+    private System.Windows.Forms.CheckBox auto_apply;
+    private System.Windows.Forms.ListBox layout_list;
+    public System.Windows.Forms.BindingSource layoutParameterBindingSource;
+    public System.Windows.Forms.BindingSource entryBindingSource;
+    private System.Windows.Forms.Label kProfile;
+    private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+    private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
+    private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+    private System.Windows.Forms.TableLayoutPanel kSCFFInfoTable;
+    private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
+    private System.Windows.Forms.TableLayoutPanel kHeaderTable;
+    private System.Windows.Forms.TableLayoutPanel tableLayoutPanel7;
+    private System.Windows.Forms.TableLayoutPanel tableLayoutPanel8;
+    private System.Windows.Forms.TableLayoutPanel tableLayoutPanel9;
+    private System.Windows.Forms.TableLayoutPanel tableLayoutPanel10;
+    private System.Windows.Forms.TableLayoutPanel tableLayoutPanel11;
+    private System.Windows.Forms.TableLayoutPanel tableLayoutPanel12;
+    private System.Windows.Forms.TableLayoutPanel tableLayoutPanel13;
+
+
+
+  }
 }
 

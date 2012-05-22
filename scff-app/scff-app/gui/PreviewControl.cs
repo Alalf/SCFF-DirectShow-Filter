@@ -54,7 +54,7 @@ public partial class PreviewControl : UserControl {
       int ySrc,
       int dwRop);
   [DllImport("user32.dll")]
-  private static extern IntPtr ReleaseDC(UIntPtr hwnd, IntPtr hdc);
+  private static extern int ReleaseDC(UIntPtr hwnd, IntPtr hdc);
   [DllImport("user32.dll")]
   [return: MarshalAs(UnmanagedType.Bool)]
   static extern bool IsWindow(UIntPtr hWnd);

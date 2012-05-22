@@ -40,8 +40,9 @@ namespace scff_interprocess {
 //     - HWND(void*)  = uint64_t 64bit
 //       - SCFHから変更: 念のため32bitから64bitに
 //     - bool         = int8_t 8bit
-// - 不動小数点数はdoubleに統一すること
-//   - double: 64bit
+// - 不動小数点数は基本的にはdoubleでやりとりすること
+//   - double = 64bit
+//   = float  = 32bit
 // - すべての構造体はPOD(Plain Old Data)であること
 //   - 基本型、コンストラクタ、デストラクタ、仮想関数を持たない構造体のみ
 //=====================================================================
@@ -169,8 +170,31 @@ struct Directory {
   Entry entries[kMaxEntry];
 };
 
+/// @brief 拡大縮小設定
+/// @sa scff_imaging::SWScaleConfig
+struct SWScaleConfig {
+  /// @brief 拡大縮小メソッド(Chroma/Luma共通)
+  int32_t flags;
+  /// @brief 正確な丸め処理
+  int8_t accurate_rnd;
+  /// @brief 変換前にフィルタをかけるか
+  int8_t is_src_filter;
+  /// @brief 輝度のガウスぼかし
+  float luma_gblur;
+  /// @brief 色差のガウスぼかし
+  float chroma_gblur;
+  /// @brief 輝度のシャープ化
+  float luma_sharpen;
+  /// @brief 色差のシャープ化
+  float chroma_sharpen;
+  /// @brief 水平方向のワープ
+  float chroma_hshift;
+  /// @brief 垂直方向のワープ
+  float chroma_vshift;
+};
+
 /// @brief レイアウトパラメータ
-/// @sa scff_imaging::ScreenCaptureParameter
+/// @sa scff_imaging::LayoutParameter
 struct LayoutParameter {
   /// @brief サンプル内の原点のX座標
   /// @warning NullLayout,NativeLayoutでは無視される
@@ -198,9 +222,8 @@ struct LayoutParameter {
   int8_t show_cursor;
   /// @brief レイヤードウィンドウの表示
   int8_t show_layered_window;
-  /// @brief 拡大縮小アルゴリズムの選択
-  /// @attention SWScaleFlagsを操作に使うこと
-  int32_t sws_flags;
+  /// @brief 拡大縮小設定
+  SWScaleConfig swscale_config;
   /// @brief 取り込み範囲が出力サイズより小さい場合拡張
   int8_t stretch;
   /// @brief アスペクト比の保持

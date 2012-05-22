@@ -77,95 +77,110 @@ bool SCFFMonitor::Init(scff_imaging::ImagePixelFormat pixel_format,
 // リクエスト
 //---------------------------------------------------------------------
 
+// モジュール間のSWScaleConfigの変換
+static void ConvertSWScaleConfig(
+    const scff_interprocess::SWScaleConfig &input,
+    scff_imaging::SWScaleConfig *output) {
+  // enumは無理にキャストせずswitchで変換
+  switch (input.flags) {
+  case scff_interprocess::kFastBilinear:
+    output->flags = scff_imaging::kFastBilinear;
+    break;
+  case scff_interprocess::kBilinear:
+    output->flags = scff_imaging::kBilinear;
+    break;
+  case scff_interprocess::kBicubic:
+    output->flags = scff_imaging::kBicubic;
+    break;
+  case scff_interprocess::kX:
+    output->flags = scff_imaging::kX;
+    break;
+  case scff_interprocess::kPoint:
+    output->flags = scff_imaging::kPoint;
+    break;
+  case scff_interprocess::kArea:
+    output->flags = scff_imaging::kArea;
+    break;
+  case scff_interprocess::kBicublin:
+    output->flags = scff_imaging::kBicublin;
+    break;
+  case scff_interprocess::kGauss:
+    output->flags = scff_imaging::kGauss;
+    break;
+  case scff_interprocess::kSinc:
+    output->flags = scff_imaging::kSinc;
+    break;
+  case scff_interprocess::kLanczos:
+    output->flags = scff_imaging::kLanczos;
+    break;
+  case scff_interprocess::kSpline:
+    output->flags = scff_imaging::kSpline;
+    break;
+  default:
+    ASSERT(false);
+    output->flags = scff_imaging::kFastBilinear;
+    break;
+  }
+
+  output->accurate_rnd = input.accurate_rnd != 0;
+  output->is_src_filter = input.is_src_filter != 0;
+  output->luma_gblur = input.luma_gblur;
+  output->chroma_gblur = input.chroma_gblur;
+  output->luma_sharpen = input.luma_sharpen;
+  output->chroma_sharpen = input.chroma_sharpen;
+  output->chroma_hshift = input.chroma_hshift;
+  output->chroma_vshift = input.chroma_vshift;
+}
+
+// モジュール間のLayoutParameterの変換
+static void ConvertLayoutParameter(
+    const scff_interprocess::LayoutParameter &input,
+    scff_imaging::LayoutParameter *output) {
+  output->bound_x = input.bound_x;
+  output->bound_y = input.bound_y;
+  output->bound_width = input.bound_width;
+  output->bound_height = input.bound_height;
+  output->window = reinterpret_cast<HWND>(input.window);
+  output->clipping_x = input.clipping_x;
+  output->clipping_y = input.clipping_y;
+  output->clipping_width = input.clipping_width;
+  output->clipping_height = input.clipping_height;
+  output->show_cursor = input.show_cursor != 0;
+  output->show_layered_window = input.show_layered_window != 0;
+
+  // SWScaleConfigの変換
+  ConvertSWScaleConfig(input.swscale_config, &(output->swscale_config));
+
+  output->stretch = input.stretch != 0;
+  output->keep_aspect_ratio = input.keep_aspect_ratio != 0;
+
+  // enumは無理にキャストせずswitchで変換
+  switch (input.rotate_direction) {
+  case scff_interprocess::kNoRotate:
+    output->rotate_direction = scff_imaging::kNoRotate;
+    break;
+  case scff_interprocess::k90Degrees:
+    output->rotate_direction = scff_imaging::k90Degrees;
+    break;
+  case scff_interprocess::k180Degrees:
+    output->rotate_direction = scff_imaging::k180Degrees;
+    break;
+  case scff_interprocess::k270Degrees:
+    output->rotate_direction = scff_imaging::k270Degrees;
+    break;
+  default:
+    ASSERT(false);
+    output->rotate_direction = scff_imaging::kNoRotate;
+    break;
+  }
+}
+
 static void MessageToLayoutParameter(
     const scff_interprocess::Message &message,
     int index,
     scff_imaging::LayoutParameter *parameter) {
   ASSERT(0 <= index && index < message.layout_element_count);
-  
-  parameter->bound_x =
-      message.layout_parameters[index].bound_x;
-  parameter->bound_y =
-      message.layout_parameters[index].bound_y;
-  parameter->bound_width =
-      message.layout_parameters[index].bound_width;
-  parameter->bound_height =
-      message.layout_parameters[index].bound_height;
-  parameter->window =
-      reinterpret_cast<HWND>(message.layout_parameters[index].window);
-  parameter->clipping_x =
-      message.layout_parameters[index].clipping_x;
-  parameter->clipping_y =
-      message.layout_parameters[index].clipping_y;
-  parameter->clipping_width =
-      message.layout_parameters[index].clipping_width;
-  parameter->clipping_height =
-      message.layout_parameters[index].clipping_height;
-  parameter->show_cursor =
-      message.layout_parameters[index].show_cursor != 0;
-  parameter->show_layered_window =
-      message.layout_parameters[index].show_layered_window != 0;
-  switch (message.layout_parameters[index].sws_flags) {
-  case scff_interprocess::kFastBilinear:
-    parameter->sws_flags = scff_imaging::kFastBilinear;
-    break;
-  case scff_interprocess::kBilinear:
-    parameter->sws_flags = scff_imaging::kBilinear;
-    break;
-  case scff_interprocess::kBicubic:
-    parameter->sws_flags = scff_imaging::kBicubic;
-    break;
-  case scff_interprocess::kX:
-    parameter->sws_flags = scff_imaging::kX;
-    break;
-  case scff_interprocess::kPoint:
-    parameter->sws_flags = scff_imaging::kPoint;
-    break;
-  case scff_interprocess::kArea:
-    parameter->sws_flags = scff_imaging::kArea;
-    break;
-  case scff_interprocess::kBicublin:
-    parameter->sws_flags = scff_imaging::kBicublin;
-    break;
-  case scff_interprocess::kGauss:
-    parameter->sws_flags = scff_imaging::kGauss;
-    break;
-  case scff_interprocess::kSinc:
-    parameter->sws_flags = scff_imaging::kSinc;
-    break;
-  case scff_interprocess::kLanczos:
-    parameter->sws_flags = scff_imaging::kLanczos;
-    break;
-  case scff_interprocess::kSpline:
-    parameter->sws_flags = scff_imaging::kSpline;
-    break;
-  default:
-    ASSERT(false);
-    parameter->sws_flags = scff_imaging::kFastBilinear;
-    break;
-  }
-  parameter->stretch =
-      message.layout_parameters[index].stretch != 0;
-  parameter->keep_aspect_ratio =
-      message.layout_parameters[index].keep_aspect_ratio != 0;
-  switch (message.layout_parameters[index].rotate_direction) {
-  case scff_interprocess::kNoRotate:
-    parameter->rotate_direction = scff_imaging::kNoRotate;
-    break;
-  case scff_interprocess::k90Degrees:
-    parameter->rotate_direction = scff_imaging::k90Degrees;
-    break;
-  case scff_interprocess::k180Degrees:
-    parameter->rotate_direction = scff_imaging::k180Degrees;
-    break;
-  case scff_interprocess::k270Degrees:
-    parameter->rotate_direction = scff_imaging::k270Degrees;
-    break;
-  default:
-    ASSERT(false);
-    parameter->rotate_direction = scff_imaging::kNoRotate;
-    break;
-  }
+  ConvertLayoutParameter(message.layout_parameters[index], parameter);
 }
 
 // リクエストがあるかどうか調べ、あれば実体を、なければNULLを返す

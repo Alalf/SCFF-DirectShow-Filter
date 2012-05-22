@@ -22,6 +22,9 @@
 #ifndef SCFF_DSF_SCFF_IMAGING_IMAGING_TYPES_H_
 #define SCFF_DSF_SCFF_IMAGING_IMAGING_TYPES_H_
 
+extern "C" {
+#include <libswscale/swscale.h>
+}
 #include <Windows.h>
 #include <cstdint>
 
@@ -119,27 +122,73 @@ enum ImagePixelFormat {
 /// @sa libswscale/swscale.h
 enum SWScaleFlags {
   /// @brief fast bilinear
-  kFastBilinear = 1,
+  kFastBilinear = SWS_FAST_BILINEAR,
   /// @brief bilinear
-  kBilinear     = 2,
+  kBilinear     = SWS_BILINEAR,
   /// @brief bicubic
-  kBicubic      = 4,
+  kBicubic      = SWS_BICUBIC,
   /// @brief experimental
-  kX            = 8,
+  kX            = SWS_X,
   /// @brief nearest neighbor
-  kPoint        = 0x10,
+  kPoint        = SWS_POINT,
   /// @brief averaging area
-  kArea         = 0x20,
+  kArea         = SWS_AREA,
   /// @brief luma bicubic, chroma bilinear
-  kBicublin     = 0x40,
+  kBicublin     = SWS_BICUBLIN,
   /// @brief gaussian
-  kGauss        = 0x80,
+  kGauss        = SWS_GAUSS,
   /// @brief sinc
-  kSinc         = 0x100,
+  kSinc         = SWS_SINC,
   /// @brief natural
-  kLanczos      = 0x200,
+  kLanczos      = SWS_LANCZOS,
   /// @brief natural bicubic spline
-  kSpline       = 0x400
+  kSpline       = SWS_SPLINE
+};
+
+/// @brief 拡大縮小メソッドの設定
+// #define SWS_FULL_CHR_H_INT    0x2000
+// #define SWS_FULL_CHR_H_INP    0x4000
+// #define SWS_DIRECT_BGR        0x8000
+// #define SWS_ACCURATE_RND      0x40000
+// #define SWS_BITEXACT          0x80000
+struct SWScaleConfig {
+  //-------------------------------------------------------------------
+  // 拡大縮小メソッド
+  //-------------------------------------------------------------------
+  /// @brief 拡大縮小メソッド(Chroma/Luma共通)
+  SWScaleFlags flags;
+
+  /// @brief 正確な丸め処理
+  bool accurate_rnd;
+
+  //-------------------------------------------------------------------
+  // フィルタ
+  //-------------------------------------------------------------------
+  /// @brief 変換前にフィルタをかけるか
+  /// @attention false推奨
+  bool is_src_filter;
+
+  /// @brief 輝度のガウスぼかし
+  float luma_gblur;
+  /// @brief 色差のガウスぼかし
+  float chroma_gblur;
+  /// @brief 輝度のシャープ化
+  float luma_sharpen;
+  /// @brief 色差のシャープ化
+  float chroma_sharpen;
+  /// @brief 水平方向のワープ
+  float chroma_hshift;
+  /// @brief 垂直方向のワープ
+  float chroma_vshift;
+
+  //-------------------------------------------------------------------
+  // 未使用
+  //-------------------------------------------------------------------
+  // bool full_chr_h_int;
+  // bool full_chr_h_inp;
+  // bool direct_bgr;
+  // bool bitexact;       // リファレンスエンコーダとの比較用？
+  //-------------------------------------------------------------------
 };
 
 //---------------------------------------------------------------------
@@ -186,9 +235,8 @@ struct LayoutParameter {
   bool show_cursor;
   /// @brief レイヤードウィンドウの表示
   bool show_layered_window;
-  /// @brief 拡大縮小アルゴリズムの選択
-  /// @attention SWScaleFlagsを操作に使うこと
-  SWScaleFlags sws_flags;
+  /// @brief 拡大縮小設定
+  SWScaleConfig swscale_config;
   /// @brief 取り込み範囲が出力サイズより小さい場合拡張
   bool stretch;
   /// @brief アスペクト比の保持

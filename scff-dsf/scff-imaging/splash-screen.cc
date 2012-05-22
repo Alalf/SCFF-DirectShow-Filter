@@ -146,7 +146,11 @@ ErrorCode SplashScreen::Init() {
   // Processor
   //-------------------------------------------------------------------
   // 拡大縮小ピクセルフォーマット変換
-  Scale *scale = new Scale(kLanczos);
+  SWScaleConfig config;
+  ZeroMemory(&config, sizeof(config));
+  config.flags = kLanczos;
+
+  Scale *scale = new Scale(config);
   scale->SetInputImage(&resource_image_);
   if (CanUsePadding()) {
     // パディング可能ならバッファをはさむ

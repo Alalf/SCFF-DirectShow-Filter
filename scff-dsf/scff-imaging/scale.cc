@@ -36,9 +36,9 @@ namespace scff_imaging {
 //=====================================================================
 
 /// @brief コンストラクタ
-Scale::Scale(SWScaleFlags sws_flags)
+Scale::Scale(SWScaleConfig swscale_config)
     : Processor<AVPictureWithFillImage, AVPictureImage>(),
-      sws_flags_(sws_flags),
+      swscale_config_(swscale_config),
       scaler_(0) {  // NULL
   // nop
 }
@@ -72,6 +72,7 @@ ErrorCode Scale::Init() {
     input_pixel_format = PIX_FMT_RGB0;
     break;
   }
+  /// @todo(me) SWScaleConfigの設定を使ったフィルタ処理
   scaler = sws_getCachedContext(NULL,
       GetInputImage()->width(),
       GetInputImage()->height(),
@@ -79,7 +80,7 @@ ErrorCode Scale::Init() {
       GetOutputImage()->width(),
       GetOutputImage()->height(),
       GetOutputImage()->avpicture_pixel_format(),
-      sws_flags_, NULL, NULL, NULL);
+      swscale_config_.flags, NULL, NULL, NULL);
   if (scaler == NULL) {
     return ErrorOccured(kScaleCannotGetContextError);
   }

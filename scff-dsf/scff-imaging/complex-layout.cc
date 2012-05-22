@@ -138,7 +138,7 @@ ErrorCode ComplexLayout::InitByIndex(int index) {
   // Processor
   //-------------------------------------------------------------------
   // 拡大縮小ピクセルフォーマット変換
-  Scale *scale = new Scale(parameter_[index].sws_flags);
+  Scale *scale = new Scale(parameter_[index].swscale_config);
   scale->SetInputImage(&(captured_image_[index]));
   scale->SetOutputImage(&(converted_image_[index]));
   const ErrorCode error_scale_init = scale->Init();

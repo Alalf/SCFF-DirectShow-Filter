@@ -34,7 +34,7 @@ namespace scff_imaging {
 class Scale : public Processor<AVPictureWithFillImage, AVPictureImage> {
  public:
   /// @brief コンストラクタ
-  explicit Scale(SWScaleFlags sws_flags);
+  explicit Scale(SWScaleConfig swscale_config);
   /// @brief デストラクタ
   ~Scale();
 
@@ -50,7 +50,7 @@ class Scale : public Processor<AVPictureWithFillImage, AVPictureImage> {
   DISALLOW_COPY_AND_ASSIGN(Scale);
 
   /// @brief 拡大縮小パラメータ
-  const SWScaleFlags sws_flags_;
+  const SWScaleConfig swscale_config_;
 
   /// @brief 拡大縮小用のコンテキスト
   struct SwsContext *scaler_;

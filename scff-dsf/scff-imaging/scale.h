@@ -52,8 +52,10 @@ class Scale : public Processor<AVPictureWithFillImage, AVPictureImage> {
   /// @brief 拡大縮小パラメータ
   const SWScaleConfig swscale_config_;
 
+  /// @brief 拡大縮小時に設定するフィルタ
+  SwsFilter *filter_;
   /// @brief 拡大縮小用のコンテキスト
-  struct SwsContext *scaler_;
+  SwsContext *scaler_;
 };
 }   // namespace scff_imaging
 

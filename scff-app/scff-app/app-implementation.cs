@@ -42,7 +42,7 @@ public partial class AppImplementation {
   [DllImport("user32.dll", SetLastError = false)]
   static extern UIntPtr GetDesktopWindow();
   [DllImport("user32.dll")]
-  private static extern UIntPtr WindowFromPoint(int xPoint, int yPoint);
+  static extern UIntPtr WindowFromPoint(int xPoint, int yPoint);
   //-------------------------------------------------------------------
 
   /// @brief コンストラクタ
@@ -69,29 +69,29 @@ public partial class AppImplementation {
   /// @brief ResizeMethodコンボボックス用にリストを生成する
   private void BuildResizeMethodList() {
     // リストを新しく作成する
-    ResizeMethodList = new List<System.Tuple<string, scff_interprocess.SWScaleFlags>>();
-    ResizeMethodList.Add(System.Tuple.Create("FastBilinear (fast bilinear)", scff_interprocess.SWScaleFlags.kFastBilinear));
-    ResizeMethodList.Add(System.Tuple.Create("Bilinear (bilinear)", scff_interprocess.SWScaleFlags.kBilinear));
-    ResizeMethodList.Add(System.Tuple.Create("Bicubic (bicubic)", scff_interprocess.SWScaleFlags.kBicubic));
-    ResizeMethodList.Add(System.Tuple.Create("X (experimental)", scff_interprocess.SWScaleFlags.kX));
-    ResizeMethodList.Add(System.Tuple.Create("Point (nearest neighbor)", scff_interprocess.SWScaleFlags.kPoint));
-    ResizeMethodList.Add(System.Tuple.Create("Area (averaging area)", scff_interprocess.SWScaleFlags.kArea));
-    ResizeMethodList.Add(System.Tuple.Create("Bicublin (luma bicubic, chroma bilinear)", scff_interprocess.SWScaleFlags.kBicublin));
-    ResizeMethodList.Add(System.Tuple.Create("Gauss (gaussian)", scff_interprocess.SWScaleFlags.kGauss));
-    ResizeMethodList.Add(System.Tuple.Create("Sinc (sinc)", scff_interprocess.SWScaleFlags.kSinc));
-    ResizeMethodList.Add(System.Tuple.Create("Lanczos (natural)", scff_interprocess.SWScaleFlags.kLanczos));
-    ResizeMethodList.Add(System.Tuple.Create("Spline (natural bicubic spline)", scff_interprocess.SWScaleFlags.kSpline));
+    ResizeMethodList = new List<Tuple<string, scff_interprocess.SWScaleFlags>>();
+    ResizeMethodList.Add(Tuple.Create("FastBilinear (fast bilinear)", scff_interprocess.SWScaleFlags.kFastBilinear));
+    ResizeMethodList.Add(Tuple.Create("Bilinear (bilinear)", scff_interprocess.SWScaleFlags.kBilinear));
+    ResizeMethodList.Add(Tuple.Create("Bicubic (bicubic)", scff_interprocess.SWScaleFlags.kBicubic));
+    ResizeMethodList.Add(Tuple.Create("X (experimental)", scff_interprocess.SWScaleFlags.kX));
+    ResizeMethodList.Add(Tuple.Create("Point (nearest neighbor)", scff_interprocess.SWScaleFlags.kPoint));
+    ResizeMethodList.Add(Tuple.Create("Area (averaging area)", scff_interprocess.SWScaleFlags.kArea));
+    ResizeMethodList.Add(Tuple.Create("Bicublin (luma bicubic, chroma bilinear)", scff_interprocess.SWScaleFlags.kBicublin));
+    ResizeMethodList.Add(Tuple.Create("Gauss (gaussian)", scff_interprocess.SWScaleFlags.kGauss));
+    ResizeMethodList.Add(Tuple.Create("Sinc (sinc)", scff_interprocess.SWScaleFlags.kSinc));
+    ResizeMethodList.Add(Tuple.Create("Lanczos (natural)", scff_interprocess.SWScaleFlags.kLanczos));
+    ResizeMethodList.Add(Tuple.Create("Spline (natural bicubic spline)", scff_interprocess.SWScaleFlags.kSpline));
   }
 
   /// @brief 共有メモリからディレクトリを取得し、CurrentDirectoryを更新
-  public Directory GetCurrentDirectory() {
+  public data.Directory GetCurrentDirectory() {
     // 共有メモリからデータを取得
     interprocess_.InitDirectory();
     scff_interprocess.Directory interprocess_directory;
     interprocess_.GetDirectory(out interprocess_directory);
 
     // リストを新しく作成する
-    return new Directory(interprocess_directory);
+    return data.DirectoryFactory.FromInterprocess(interprocess_directory);
   }
 
   //-------------------------------------------------------------------
@@ -178,8 +178,8 @@ public partial class AppImplementation {
     clipping_height = dst_height;
   }
 
-  public bool ValidateParameters(List<LayoutParameter> parameters, int bound_width, int bound_height, bool show_message) {
-    foreach (LayoutParameter i in parameters) {
+  public bool ValidateParameters(List<data.LayoutParameter> parameters, int bound_width, int bound_height, bool show_message) {
+    foreach (data.LayoutParameter i in parameters) {
       if (!ValidateParameter(i, bound_width, bound_height, show_message)) {
         return false;
       }
@@ -188,7 +188,7 @@ public partial class AppImplementation {
   }
 
   /// @brief パラメータのValidate
-  private bool ValidateParameter(LayoutParameter parameter, int bound_width, int bound_height, bool show_message) {
+  private bool ValidateParameter(data.LayoutParameter parameter, int bound_width, int bound_height, bool show_message) {
     // もっとも危険な状態になりやすいウィンドウからチェック
     if (parameter.Window == UIntPtr.Zero) { // NULL
       if (show_message) {
@@ -255,17 +255,17 @@ public partial class AppImplementation {
   /// @brief 共有メモリにNullLayoutリクエストを設定
   public void SendNullLayoutRequest(UInt32 process_id) {
     // メッセージを書いて送る
-    Message message = new Message();
+    data.Message message = data.MessageFactory.Default();
     message.LayoutType = scff_interprocess.LayoutType.kNullLayout;
 
     // 共有メモリを開いて送る
     interprocess_.InitMessage(process_id);
     // Bound関連の値は無視されるのでダミーの100をいれておく
-    interprocess_.SendMessage(message.ToInterprocessMessage(100,100));
+    interprocess_.SendMessage(data.MessageFactory.ToInterprocess(message, 100, 100));
   }
 
   /// @brief 共有メモリにLayoutリクエストを設定
-  public void SendLayoutRequest(UInt32 process_id, List<LayoutParameter> parameters, int bound_width, int bound_height) {
+  public void SendLayoutRequest(UInt32 process_id, List<data.LayoutParameter> parameters, int bound_width, int bound_height) {
     if (process_id == 0) {
       return;
     }
@@ -280,9 +280,9 @@ public partial class AppImplementation {
   }
 
   /// @brief 共有メモリにNativeLayoutリクエストを設定
-  private void SendNativeLayoutRequest(UInt32 process_id, LayoutParameter parameter) {
+  private void SendNativeLayoutRequest(UInt32 process_id, data.LayoutParameter parameter) {
     // メッセージを書いて送る
-    Message message = new Message();
+    data.Message message = data.MessageFactory.Default();
     message.LayoutType = scff_interprocess.LayoutType.kNativeLayout;
     message.LayoutElementCount = 1;
     message.LayoutParameters.Add(parameter);
@@ -290,29 +290,29 @@ public partial class AppImplementation {
     // 共有メモリを開いて送る
     interprocess_.InitMessage(process_id);
     // Bound関連の値は無視されるのでダミーの100を入れておく
-    interprocess_.SendMessage(message.ToInterprocessMessage(100,100));
+    interprocess_.SendMessage(data.MessageFactory.ToInterprocess(message, 100, 100));
   }
 
   /// @brief 共有メモリにComplexLayoutリクエストを設定
-  private void SendComplexLayoutRequest(UInt32 process_id, List<LayoutParameter> parameters, int bound_width, int bound_height) {
+  private void SendComplexLayoutRequest(UInt32 process_id, List<data.LayoutParameter> parameters, int bound_width, int bound_height) {
     // メッセージを書いて送る
-    Message message = new Message();
+    data.Message message = data.MessageFactory.Default();
     message.LayoutType = scff_interprocess.LayoutType.kComplexLayout;
     message.LayoutElementCount = parameters.Count;
 
-    foreach (LayoutParameter i in parameters) {
+    foreach (data.LayoutParameter i in parameters) {
       message.LayoutParameters.Add(i);
     }
 
     // 共有メモリを開いて送る
     interprocess_.InitMessage(process_id);
-    interprocess_.SendMessage(message.ToInterprocessMessage(bound_width, bound_height));
+    interprocess_.SendMessage(data.MessageFactory.ToInterprocess(message, bound_width, bound_height));
   }
 
   //-------------------------------------------------------------------
 
   /// @brief ResizeMethodコンボボックス用リスト
-  public List<System.Tuple<string, scff_interprocess.SWScaleFlags>> ResizeMethodList { get; private set; }
+  public List<Tuple<string, scff_interprocess.SWScaleFlags>> ResizeMethodList { get; private set; }
 
   /// @brief プロセス間通信用オブジェクト
   private scff_interprocess.Interprocess interprocess_;

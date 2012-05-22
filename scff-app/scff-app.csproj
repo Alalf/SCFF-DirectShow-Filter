@@ -64,7 +64,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="scff-app\data-classes.cs" />
+    <Compile Include="scff-app\data\directory.cs" />
+    <Compile Include="scff-app\data\entry.cs" />
+    <Compile Include="scff-app\data\layout-parameter.cs" />
+    <Compile Include="scff-app\data\layout-parameter-factory.cs" />
+    <Compile Include="scff-app\data\message.cs" />
+    <Compile Include="scff-app\data\layout-parameter-view.cs" />
+    <Compile Include="scff-app\data\swscale-config.cs" />
+    <Compile Include="scff-app\data\message-factory.cs" />
+    <Compile Include="scff-app\data\entry-factory.cs" />
+    <Compile Include="scff-app\data\entry-view.cs" />
+    <Compile Include="scff-app\data\directory-factory.cs" />
+    <Compile Include="scff-app\data\swscale-config-factory.cs" />
     <Compile Include="scff-app\gui\AreaSelectForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -120,8 +131,8 @@
     <EmbeddedResource Include="scff-app\gui\PreviewControl.resx">
       <DependentUpon>PreviewControl.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="Properties\DataSources\Entry.datasource" />
-    <None Include="Properties\DataSources\LayoutParameter.datasource" />
+    <None Include="Properties\DataSources\scff_app.data.Entry.datasource" />
+    <None Include="Properties\DataSources\scff_app.data.LayoutParameter.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -157,6 +168,7 @@
   <ItemGroup>
     <Content Include="app.ico" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

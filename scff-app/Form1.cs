@@ -26,7 +26,6 @@ using System.Windows.Forms;
 using System.Collections.Generic;
 
 namespace scff_app {
-using gui;
 
 /// @brief メインウィンドウ
 public partial class Form1 : Form {
@@ -53,12 +52,12 @@ public partial class Form1 : Form {
     this.UpdateCurrentDirectory();
 
     // デフォルトの設定を書き込む
-    layoutParameterBindingSource.AddNew();
+    layoutParameterBindingSource.Add(data.LayoutParameterFactory.Default());
   }
 
   /// @brief Processコンボボックスのデータソースを再設定
   private void UpdateCurrentDirectory() {
-    Directory current_directory = impl_.GetCurrentDirectory();
+    data.Directory current_directory = impl_.GetCurrentDirectory();
     entryBindingSource.Clear();
 
     if (current_directory.Entries.Count == 0) {
@@ -68,7 +67,7 @@ public partial class Form1 : Form {
       auto_apply.Checked = false;
       auto_apply.Enabled = false;
     } else {
-      foreach (Entry i in current_directory.Entries) {
+      foreach (data.Entry i in current_directory.Entries) {
         entryBindingSource.Add(i);
       }
 
@@ -86,18 +85,18 @@ public partial class Form1 : Form {
     }
 
 
-    List<LayoutParameter> list = new List<LayoutParameter>();
-    foreach (LayoutParameter i in layoutParameterBindingSource.List) {
+    List<data.LayoutParameter> list = new List<data.LayoutParameter>();
+    foreach (data.LayoutParameter i in layoutParameterBindingSource.List) {
       list.Add(i);
     }
 
-    int bound_width = ((Entry)entryBindingSource.Current).SampleWidth;
-    int bound_height = ((Entry)entryBindingSource.Current).SampleHeight;
+    int bound_width = ((data.Entry)entryBindingSource.Current).SampleWidth;
+    int bound_height = ((data.Entry)entryBindingSource.Current).SampleHeight;
     if (!impl_.ValidateParameters(list, bound_width, bound_height, show_message)) {
       return;
     }
 
-    UInt32 process_id = ((Entry)entryBindingSource.Current).ProcessID;
+    UInt32 process_id = ((data.Entry)entryBindingSource.Current).ProcessID;
     impl_.SendLayoutRequest(process_id, list, bound_width, bound_height);
   }
 
@@ -144,7 +143,7 @@ public partial class Form1 : Form {
     if (entryBindingSource.Current == null) {
       return;
     }
-    UInt32 process_id = ((Entry)entryBindingSource.Current).ProcessID;
+    UInt32 process_id = ((data.Entry)entryBindingSource.Current).ProcessID;
     impl_.SendNullLayoutRequest(process_id);
   }
   private void apply_Click(object sender, EventArgs e) {
@@ -170,14 +169,14 @@ public partial class Form1 : Form {
   //-------------------------------------------------------------------
 
   private void SetWindow(UIntPtr window) {
-    ((LayoutParameter)layoutParameterBindingSource.Current).Window = window;
+    ((data.LayoutParameter)layoutParameterBindingSource.Current).Window = window;
     int window_width, window_height;
     impl_.GetWindowSize(window, out window_width, out window_height);
-    ((LayoutParameter)layoutParameterBindingSource.Current).ClippingX = 0;
-    ((LayoutParameter)layoutParameterBindingSource.Current).ClippingY = 0;
-    ((LayoutParameter)layoutParameterBindingSource.Current).ClippingWidth = window_width;
-    ((LayoutParameter)layoutParameterBindingSource.Current).ClippingHeight = window_height;
-    ((LayoutParameter)layoutParameterBindingSource.Current).Fit = true;
+    ((data.LayoutParameter)layoutParameterBindingSource.Current).ClippingX = 0;
+    ((data.LayoutParameter)layoutParameterBindingSource.Current).ClippingY = 0;
+    ((data.LayoutParameter)layoutParameterBindingSource.Current).ClippingWidth = window_width;
+    ((data.LayoutParameter)layoutParameterBindingSource.Current).ClippingHeight = window_height;
+    ((data.LayoutParameter)layoutParameterBindingSource.Current).Fit = true;
     layoutParameterBindingSource.ResetCurrentItem();
   }
 
@@ -216,14 +215,14 @@ public partial class Form1 : Form {
       area_clipping_width.Enabled = false;
       area_clipping_height.Enabled = false;
 
-      UIntPtr window = ((LayoutParameter)layoutParameterBindingSource.Current).Window;
+      UIntPtr window = ((data.LayoutParameter)layoutParameterBindingSource.Current).Window;
       int window_width, window_height;
       impl_.GetWindowSize(window, out window_width, out window_height);
-      ((LayoutParameter)layoutParameterBindingSource.Current).ClippingX = 0;
-      ((LayoutParameter)layoutParameterBindingSource.Current).ClippingY = 0;
-      ((LayoutParameter)layoutParameterBindingSource.Current).ClippingWidth = window_width;
-      ((LayoutParameter)layoutParameterBindingSource.Current).ClippingHeight = window_height;
-      ((LayoutParameter)layoutParameterBindingSource.Current).Fit = true;
+      ((data.LayoutParameter)layoutParameterBindingSource.Current).ClippingX = 0;
+      ((data.LayoutParameter)layoutParameterBindingSource.Current).ClippingY = 0;
+      ((data.LayoutParameter)layoutParameterBindingSource.Current).ClippingWidth = window_width;
+      ((data.LayoutParameter)layoutParameterBindingSource.Current).ClippingHeight = window_height;
+      ((data.LayoutParameter)layoutParameterBindingSource.Current).Fit = true;
       layoutParameterBindingSource.ResetCurrentItem();
 
       if (auto_apply.Checked) {
@@ -245,18 +244,18 @@ public partial class Form1 : Form {
 
     // AreaSelectFormを利用してクリッピング領域を取得
     int raw_x, raw_y, raw_width, raw_height;
-    using (AreaSelectForm form =
-        new AreaSelectForm(window_width, window_height,
-                           ((LayoutParameter)layoutParameterBindingSource.Current).ClippingX,
-                           ((LayoutParameter)layoutParameterBindingSource.Current).ClippingY,
-                           ((LayoutParameter)layoutParameterBindingSource.Current).ClippingWidth,
-                           ((LayoutParameter)layoutParameterBindingSource.Current).ClippingHeight)) {
+    using (gui.AreaSelectForm form =
+        new gui.AreaSelectForm(window_width, window_height,
+                           ((data.LayoutParameter)layoutParameterBindingSource.Current).ClippingX,
+                           ((data.LayoutParameter)layoutParameterBindingSource.Current).ClippingY,
+                           ((data.LayoutParameter)layoutParameterBindingSource.Current).ClippingWidth,
+                           ((data.LayoutParameter)layoutParameterBindingSource.Current).ClippingHeight)) {
       form.ShowDialog();
       form.GetResult(out raw_x, out raw_y, out raw_width, out raw_height);
     }
 
     // デスクトップキャプチャに変更
-    ((LayoutParameter)layoutParameterBindingSource.Current).Window = window;
+    ((data.LayoutParameter)layoutParameterBindingSource.Current).Window = window;
 
     // FitをはずしてClippingを更新
     int clipping_x, clipping_y, clipping_width, clipping_height;
@@ -264,11 +263,11 @@ public partial class Form1 : Form {
         window,
         raw_x, raw_y, raw_width, raw_height,
         out clipping_x, out clipping_y, out clipping_width, out clipping_height);
-    ((LayoutParameter)layoutParameterBindingSource.Current).Fit = false;
-    ((LayoutParameter)layoutParameterBindingSource.Current).ClippingX = clipping_x;
-    ((LayoutParameter)layoutParameterBindingSource.Current).ClippingY = clipping_y;
-    ((LayoutParameter)layoutParameterBindingSource.Current).ClippingWidth = clipping_width;
-    ((LayoutParameter)layoutParameterBindingSource.Current).ClippingHeight = clipping_height;
+    ((data.LayoutParameter)layoutParameterBindingSource.Current).Fit = false;
+    ((data.LayoutParameter)layoutParameterBindingSource.Current).ClippingX = clipping_x;
+    ((data.LayoutParameter)layoutParameterBindingSource.Current).ClippingY = clipping_y;
+    ((data.LayoutParameter)layoutParameterBindingSource.Current).ClippingWidth = clipping_width;
+    ((data.LayoutParameter)layoutParameterBindingSource.Current).ClippingHeight = clipping_height;
 
     layoutParameterBindingSource.ResetCurrentItem();
 
@@ -283,7 +282,7 @@ public partial class Form1 : Form {
   private void layout_add_Click(object sender, EventArgs e) {
     if (layoutParameterBindingSource.Count <
         scff_interprocess.Interprocess.kMaxComplexLayoutElements) {
-      layoutParameterBindingSource.AddNew();
+      layoutParameterBindingSource.Add(data.LayoutParameterFactory.Default());
       layout_bound_relative_top.Enabled = true;
       layout_bound_relative_bottom.Enabled = true;
       layout_bound_relative_left.Enabled = true;
@@ -326,11 +325,11 @@ public partial class Form1 : Form {
       bound_width = 640;
       bound_height = 360;
     } else {
-      bound_width = ((Entry)entryBindingSource.Current).SampleWidth;
-      bound_height = ((Entry)entryBindingSource.Current).SampleHeight;
+      bound_width = ((data.Entry)entryBindingSource.Current).SampleWidth;
+      bound_height = ((data.Entry)entryBindingSource.Current).SampleHeight;
     }
 
-    using (LayoutForm layout_form = new LayoutForm(layoutParameterBindingSource, bound_width, bound_height)) {
+    using (gui.LayoutForm layout_form = new gui.LayoutForm(layoutParameterBindingSource, bound_width, bound_height)) {
       layout_form.ShowDialog();
     
       if (layout_form.GetResult()) {

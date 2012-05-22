@@ -30,11 +30,11 @@ public partial class AppImplementation {
   // Wrappers
   //-------------------------------------------------------------------
   [DllImport("dwmapi.dll")]
-  private static extern int DwmIsCompositionEnabled(out bool enabled);
+  static extern int DwmIsCompositionEnabled(out bool enabled);
   [DllImport("dwmapi.dll")]
-  private static extern int DwmEnableComposition(uint uCompositionAction);
-  private const int DWM_EC_DISABLECOMPOSITION = 0;
-  private const int DWM_EC_ENABLECOMPOSITION = 1;
+  static extern int DwmEnableComposition(uint uCompositionAction);
+  const int DWM_EC_DISABLECOMPOSITION = 0;
+  const int DWM_EC_ENABLECOMPOSITION = 1;
   //-------------------------------------------------------------------
 
   /// @brief Dwmapi.dllを利用してAeroをOffに

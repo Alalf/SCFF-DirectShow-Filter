@@ -31,7 +31,7 @@
 namespace scff_interprocess {
 
 //=====================================================================
-// SCFF Messaging Protocol v0 (by 2012/05/02 Alalf)
+// SCFF Messaging Protocol v1 (by 2012/05/22 Alalf)
 //
 // [全体的な注意点]
 // - Windows固有の型名はビットサイズが分かりにくいのでcstdintで置き換える
@@ -48,16 +48,16 @@ namespace scff_interprocess {
 //=====================================================================
 
 /// @brief 共有メモリ名: SCFFエントリを格納するディレクトリ
-static const char kDirectoryName[] = "scff-v0-directory";
+static const char kDirectoryName[] = "scff-v1-directory";
 
 /// @brief Directoryの保護用Mutex名
-static const char kDirectoryMutexName[] = "mutex-scff-v0-directory";
+static const char kDirectoryMutexName[] = "mutex-scff-v1-directory";
 
 /// @brief 共有メモリ名の接頭辞: SCFFで使うメッセージを格納する
-static const char kMessageNamePrefix[] = "scff-v0-message-";
+static const char kMessageNamePrefix[] = "scff-v1-message-";
 
 /// @brief Messageの保護用Mutex名の接頭辞
-static const char kMessageMutexNamePrefix[] = "mutex-scff-v0-message-";
+static const char kMessageMutexNamePrefix[] = "mutex-scff-v1-message-";
 
 //---------------------------------------------------------------------
 

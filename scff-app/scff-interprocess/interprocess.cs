@@ -24,11 +24,11 @@
 using System;
 using System.Runtime.InteropServices;
 
-/// @brief scff-interprocessモジュールのC#版(オリジナルはC++)
+/// @brief scff_interprocessモジュールのC#版(オリジナルはC++)
 namespace scff_interprocess {
 
 //=====================================================================
-// SCFF Messaging Protocol v0 (by 2012/05/02 Alalf)
+// SCFF Messaging Protocol v1 (by 2012/05/22 Alalf)
 //
 // [全体的な注意点]
 // - Windows固有の型名はビットサイズが分かりにくいので
@@ -38,8 +38,9 @@ namespace scff_interprocess {
 //     - HWND(void*)  = UInt64 64bit
 //       - SCFHから変更: 念のため32bitから64bitに
 //     - bool         = Byte 8bit
-// - 不動小数点数はdoubleに統一すること
-//   - Double: 64bit
+// - 不動小数点数は基本的にはdoubleでやりとりすること
+//   - Double = 64bit
+//   - Single = 32bit
 // - すべての構造体はPOD(Plain Old Data)であること
 //   - 基本型、コンストラクタ、デストラクタ、仮想関数を持たない構造体のみ
 //=====================================================================
@@ -47,16 +48,16 @@ namespace scff_interprocess {
 /// @brief プロセス間通信を担当するクラス
 partial class Interprocess {
   /// @brief 共有メモリ名: SCFFエントリを格納するディレクトリ
-  const string kDirectoryName = "scff-v0-directory";
+  const string kDirectoryName = "scff-v1-directory";
 
   /// @brief Directoryの保護用Mutex名
-  const string kDirectoryMutexName = "mutex-scff-v0-directory";
+  const string kDirectoryMutexName = "mutex-scff-v1-directory";
 
   /// @brief 共有メモリ名の接頭辞: SCFFで使うメッセージを格納する
-  const string kMessageNamePrefix = "scff-v0-message-";
+  const string kMessageNamePrefix = "scff-v1-message-";
 
   /// @brief Messageの保護用Mutex名の接頭辞
-  const string kMessageMutexNamePrefix = "mutex-scff-v0-message-";
+  const string kMessageMutexNamePrefix = "mutex-scff-v1-message-";
 
   //-------------------------------------------------------------------
 
@@ -171,6 +172,31 @@ public struct Directory {
   public Entry[] entries;
 }
 
+/// @brief 拡大縮小設定
+/// @sa scff_imaging::SWScaleConfig
+[StructLayout(LayoutKind.Sequential, Pack = 1)]
+public struct SWScaleConfig {
+  /// @brief 拡大縮小メソッド(Chroma/Luma共通)
+  /// @attention 操作にはSWScaleFlagsを使うこと！
+  public Int32 flags;
+  /// @brief 正確な丸め処理
+  public Byte accurate_rnd;
+  /// @brief 変換前にフィルタをかけるか
+  public Byte is_src_filter;
+  /// @brief 輝度のガウスぼかし
+  public Single luma_gblur;
+  /// @brief 色差のガウスぼかし
+  public Single chroma_gblur;
+  /// @brief 輝度のシャープ化
+  public Single luma_sharpen;
+  /// @brief 色差のシャープ化
+  public Single chroma_sharpen;
+  /// @brief 水平方向のワープ
+  public Single chroma_hshift;
+  /// @brief 垂直方向のワープ
+  public Single chroma_vshift;
+};
+
 /// @brief レイアウトパラメータ
 /// @sa scff_imaging::ScreenCaptureParameter
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
@@ -201,9 +227,8 @@ public struct LayoutParameter {
   public Byte show_cursor;
   /// @brief レイヤードウィンドウの表示
   public Byte show_layered_window;
-  /// @brief 拡大縮小アルゴリズムの選択
-  /// @attention SWScaleFlagsを操作に使うこと
-  public Int32 sws_flags;
+  /// @brief 拡大縮小設定
+  public SWScaleConfig swscale_config;
   /// @brief 取り込み範囲が出力サイズより小さい場合拡張
   public Byte stretch;
   /// @brief アスペクト比の保持

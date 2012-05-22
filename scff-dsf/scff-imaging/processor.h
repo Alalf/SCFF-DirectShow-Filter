@@ -92,7 +92,7 @@ class Processor {
     return input_image_[index];
   }
   /// @brief Setter: output_image_
-  void SetOutputImage(OutputImageType* output_image, int index = 0) {
+  void SetOutputImage(OutputImageType *output_image, int index = 0) {
     ASSERT(0 <= index && index < size());
     output_image_[index] = output_image;
   }

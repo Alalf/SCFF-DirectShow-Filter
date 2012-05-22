@@ -32,19 +32,19 @@ public partial class PreviewControl : UserControl {
   //-------------------------------------------------------------------
   // Wrapper
   //-------------------------------------------------------------------
-  private const int SRCCOPY = 13369376;
-  private const int CAPTUREBLT = 1073741824;
+  const int SRCCOPY = 13369376;
+  const int CAPTUREBLT = 1073741824;
   [StructLayout(LayoutKind.Sequential)]
-  private struct RECT {
+  struct RECT {
     public int left;
     public int top;
     public int right;
     public int bottom;
   }
   [DllImport("user32.dll")]
-  private static extern IntPtr GetDC(UIntPtr hwnd);
+  static extern IntPtr GetDC(UIntPtr hwnd);
   [DllImport("gdi32.dll")]
-  private static extern int BitBlt(IntPtr hDestDC,
+  static extern int BitBlt(IntPtr hDestDC,
       int x,
       int y,
       int nWidth,
@@ -54,7 +54,7 @@ public partial class PreviewControl : UserControl {
       int ySrc,
       int dwRop);
   [DllImport("user32.dll")]
-  private static extern int ReleaseDC(UIntPtr hwnd, IntPtr hdc);
+  static extern int ReleaseDC(UIntPtr hwnd, IntPtr hdc);
   [DllImport("user32.dll")]
   [return: MarshalAs(UnmanagedType.Bool)]
   static extern bool IsWindow(UIntPtr hWnd);
@@ -67,7 +67,7 @@ public partial class PreviewControl : UserControl {
   /// @brief コンストラクタ
   public PreviewControl(int bound_width, int bound_height,
                         int index_in_layout_parameter_binding_source,
-                        LayoutParameter layout_parameter) {
+                        data.LayoutParameter layout_parameter) {
     InitializeComponent();
 
     // メンバの設定
@@ -202,7 +202,7 @@ public partial class PreviewControl : UserControl {
   private MovableAndResizable movable_and_resizable_;
 
   // レイアウトパラメータ
-  private LayoutParameter layout_parameter_;
+  private data.LayoutParameter layout_parameter_;
 
   // 3秒に一回更新するスクリーンキャプチャビットマップ
   Bitmap captured_bitmap_;

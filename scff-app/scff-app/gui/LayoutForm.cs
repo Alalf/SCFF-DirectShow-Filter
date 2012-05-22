@@ -54,7 +54,7 @@ public partial class LayoutForm : Form {
     // BindingSourceを見て必要な分だけ
     int index = 0;
     previews_ = new List<PreviewControl>();
-    foreach (LayoutParameter i in layoutParameterBindingSource_.List) {
+    foreach (data.LayoutParameter i in layoutParameterBindingSource_.List) {
       PreviewControl preview = new PreviewControl(bound_width, bound_height, index, i);
       int x = (int)((i.BoundRelativeLeft * bound_width) / 100);
       int y = (int)((i.BoundRelativeTop * bound_height) / 100);
@@ -90,13 +90,13 @@ public partial class LayoutForm : Form {
       double bound_relative_right = ((double)i.Right * 100.0) / bound_width_;
       double bound_relative_top = ((double)i.Top * 100.0) / bound_height_;
       double bound_relative_bottom = ((double)i.Bottom * 100.0) / bound_height_;
-      ((LayoutParameter)layoutParameterBindingSource_[index]).BoundRelativeLeft =
+      ((data.LayoutParameter)layoutParameterBindingSource_[index]).BoundRelativeLeft =
           bound_relative_left;
-      ((LayoutParameter)layoutParameterBindingSource_[index]).BoundRelativeRight =
+      ((data.LayoutParameter)layoutParameterBindingSource_[index]).BoundRelativeRight =
           bound_relative_right;
-      ((LayoutParameter)layoutParameterBindingSource_[index]).BoundRelativeTop =
+      ((data.LayoutParameter)layoutParameterBindingSource_[index]).BoundRelativeTop =
           bound_relative_top;
-      ((LayoutParameter)layoutParameterBindingSource_[index]).BoundRelativeBottom =
+      ((data.LayoutParameter)layoutParameterBindingSource_[index]).BoundRelativeBottom =
           bound_relative_bottom;
     }
     // 更新を他のコントロールに伝える

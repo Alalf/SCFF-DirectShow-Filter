@@ -148,8 +148,10 @@ static void ConvertLayoutParameter(
   output->show_cursor = input.show_cursor != 0;
   output->show_layered_window = input.show_layered_window != 0;
 
+  //-------------------------------------------------------------------
   // SWScaleConfigの変換
   ConvertSWScaleConfig(input.swscale_config, &(output->swscale_config));
+  //-------------------------------------------------------------------
 
   output->stretch = input.stretch != 0;
   output->keep_aspect_ratio = input.keep_aspect_ratio != 0;
@@ -267,7 +269,7 @@ scff_imaging::Request* SCFFMonitor::CreateRequest() {
 }
 
 // 使い終わったリクエストを解放する
-void SCFFMonitor::ReleaseRequest(scff_imaging::Request* request) {
+void SCFFMonitor::ReleaseRequest(scff_imaging::Request *request) {
   if (request == 0) {   // NULL
     // NULLなら何もしない
     return;

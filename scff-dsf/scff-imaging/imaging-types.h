@@ -82,6 +82,8 @@ enum ErrorCode {
 
   /// @brief SWScaleコンテキストの作成に失敗した
   kScaleCannotGetContextError = 2001,
+  /// @brief SWScaleフィルタの作成に失敗した
+  kScaleCannotGetDefaultFilterError = 2002,
 
   /// @brief ScreenCapture時、取り込み対象のWindowが適切な状態ではなかった
   kScreenCaptureInvalidWindowError = 2002,

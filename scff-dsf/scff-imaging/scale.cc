@@ -45,6 +45,9 @@ Scale::Scale(SWScaleConfig swscale_config)
 
 /// @brief デストラクタ
 Scale::~Scale() {
+  if (filter_ != 0) {   // NULL
+    sws_freeFilter(filter_);
+  }
   if (scaler_ != 0) {   // NULL
     sws_freeContext(scaler_);
   }
@@ -56,8 +59,27 @@ ErrorCode Scale::Init() {
   // 入力はRGB0限定
   ASSERT(GetInputImage()->pixel_format() == kRGB0);
 
+  // 拡大縮小時のフィルタを作成
+  SwsFilter *filter = 0;    //NULL
+  filter = sws_getDefaultFilter(
+      swscale_config_.luma_gblur,
+      swscale_config_.chroma_gblur,
+      swscale_config_.luma_sharpen,
+      swscale_config_.chroma_sharpen,
+      swscale_config_.chroma_hshift,
+      swscale_config_.chroma_vshift,
+      0);
+  if (filter == 0) {    // NULL
+    return ErrorOccured(kScaleCannotGetDefaultFilterError);
+  }
+  filter_ = filter;
+
+  //-------------------------------------------------------------------
   // 拡大縮小用のコンテキストを作成
+  //-------------------------------------------------------------------
   struct SwsContext *scaler = 0;    // NULL
+
+  // ピクセルフォーマットの調整
   PixelFormat input_pixel_format = PIX_FMT_NONE;
   switch (GetOutputImage()->pixel_format()) {
   case kI420:
@@ -72,7 +94,25 @@ ErrorCode Scale::Init() {
     input_pixel_format = PIX_FMT_RGB0;
     break;
   }
-  /// @todo(me) SWScaleConfigの設定を使ったフィルタ処理
+
+  // フィルタの設定
+  SwsFilter *src_filter = 0;    // NULL
+  SwsFilter *dst_filter = 0;    // NULL
+  if (swscale_config_.is_src_filter) {
+    // 変換前
+    src_filter = filter_;
+  } else {
+    // 変換後
+    dst_filter = filter_;
+  }
+
+  // 丸め処理
+  int flags = swscale_config_.flags;
+  if (swscale_config_.accurate_rnd) {
+    flags |= SWS_ACCURATE_RND;
+  }
+
+  // SWScalerの作成
   scaler = sws_getCachedContext(NULL,
       GetInputImage()->width(),
       GetInputImage()->height(),
@@ -80,7 +120,7 @@ ErrorCode Scale::Init() {
       GetOutputImage()->width(),
       GetOutputImage()->height(),
       GetOutputImage()->avpicture_pixel_format(),
-      swscale_config_.flags, NULL, NULL, NULL);
+      flags, src_filter, dst_filter, NULL);
   if (scaler == NULL) {
     return ErrorOccured(kScaleCannotGetContextError);
   }

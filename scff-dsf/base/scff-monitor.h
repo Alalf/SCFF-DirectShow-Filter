@@ -43,7 +43,7 @@ class SCFFMonitor {
   /// @brief リクエストがあるかどうか調べ、あれば実体を、なければNULLを返す
   scff_imaging::Request* CreateRequest();
   /// @brief 使い終わったリクエストを解放する
-  void ReleaseRequest(scff_imaging::Request* request);
+  void ReleaseRequest(scff_imaging::Request *request);
 
  private:
   /// @brief プロセス間通信のためのインスタンス

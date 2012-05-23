@@ -17,7 +17,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scff-imaging/imaging.h
-/// @brief scff-imagingモジュールの外部公開ヘッダー
+/// @brief scff_imagingモジュールの外部公開ヘッダー
 
 #ifndef SCFF_DSF_SCFF_IMAGING_IMAGING_H_
 #define SCFF_DSF_SCFF_IMAGING_IMAGING_H_

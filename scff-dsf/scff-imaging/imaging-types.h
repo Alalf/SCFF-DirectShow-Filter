@@ -17,7 +17,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scff-imaging/imaging-types.h
-/// @brief scff-imagingモジュール用型宣言
+/// @brief scff_imagingモジュール用型宣言
 
 #ifndef SCFF_DSF_SCFF_IMAGING_IMAGING_TYPES_H_
 #define SCFF_DSF_SCFF_IMAGING_IMAGING_TYPES_H_

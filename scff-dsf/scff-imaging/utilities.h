@@ -34,7 +34,7 @@ namespace scff_imaging {
 class Image;
 class AVPictureImage;
 
-/// @brief scff-imagingモジュールを使う上で便利な機能を集めたクラス
+/// @brief scff_imagingモジュールを使う上で便利な機能を集めたクラス
 class Utilities {
  public:
   //-------------------------------------------------------------------

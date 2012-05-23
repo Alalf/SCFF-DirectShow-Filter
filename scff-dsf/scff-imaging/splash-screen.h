@@ -22,8 +22,7 @@
 #ifndef SCFF_DSF_SCFF_IMAGING_SPLASH_SCREEN_H_
 #define SCFF_DSF_SCFF_IMAGING_SPLASH_SCREEN_H_
 
-#include "scff-imaging/processor.h"
-#include "scff-imaging/avpicture-image.h"
+#include "scff-imaging/layout.h"
 #include "scff-imaging/avpicture-with-fill-image.h"
 #include "scff-imaging/windows-ddb-image.h"
 
@@ -33,7 +32,7 @@ class Scale;
 class Padding;
 
 /// @brief スプラッシュスクリーンを表示する
-class SplashScreen : public Processor<void, AVPictureImage> {
+class SplashScreen : public Layout {
  public:
   /// @brief コンストラクタ
   SplashScreen();
@@ -48,9 +47,6 @@ class SplashScreen : public Processor<void, AVPictureImage> {
   //-------------------------------------------------------------------
 
  private:
-  // コピー＆代入禁止
-  DISALLOW_COPY_AND_ASSIGN(SplashScreen);
-
   /// @brief 設定されたOutputImageはPadding可能か？
   bool CanUsePadding() const;
 
@@ -74,6 +70,9 @@ class SplashScreen : public Processor<void, AVPictureImage> {
 
   /// @brief 取り込み用BITMAPINFO
   BITMAPINFO resource_ddb_info_;
+
+  // コピー＆代入禁止
+  DISALLOW_COPY_AND_ASSIGN(SplashScreen);
 };
 }   // namespace scff_imaging
 

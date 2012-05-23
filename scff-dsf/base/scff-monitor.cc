@@ -59,7 +59,11 @@ bool SCFFMonitor::Init(scff_imaging::ImagePixelFormat pixel_format,
   // エントリの追加
   scff_interprocess::Entry entry;
   entry.process_id = process_id;
-  GetModuleBaseNameA(GetCurrentProcess(), NULL, entry.process_name, scff_interprocess::kMaxPath);
+  GetModuleBaseNameA(
+      GetCurrentProcess(),
+      NULL,
+      entry.process_name,
+      scff_interprocess::kMaxPath);
   entry.sample_image_pixel_format = pixel_format;
   entry.sample_width = width;
   entry.sample_height = height;

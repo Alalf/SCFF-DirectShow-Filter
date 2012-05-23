@@ -16,15 +16,20 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file scff-imaging/common.h
-/// @brief scff_imagingで使うマクロなどを定義
+/// @file scff-imaging/layout.h
+/// @brief scff_imaging::Layoutの宣言
 
-#ifndef SCFF_DSF_SCFF_IMAGING_COMMON_H_
-#define SCFF_DSF_SCFF_IMAGING_COMMON_H_
+#ifndef SCFF_DSF_SCFF_IMAGING_LAYOUT_H_
+#define SCFF_DSF_SCFF_IMAGING_LAYOUT_H_
 
-#undef DISALLOW_COPY_AND_ASSIGN
-#define DISALLOW_COPY_AND_ASSIGN(TypeName)  \
-  TypeName(const TypeName&);                \
-  void operator=(const TypeName&)
+#include "scff-imaging/processor.h"
+#include "scff-imaging/avpicture-image.h"
 
-#endif  // SCFF_DSF_SCFF_IMAGING_COMMON_H_
+namespace scff_imaging {
+
+/// @brief レイアウト: 入力がない特殊なプロセッサ
+typedef Processor<void, AVPictureImage> Layout;
+
+}   // namespace scff_imaging
+
+#endif  // SCFF_DSF_SCFF_IMAGING_LAYOUT_H_

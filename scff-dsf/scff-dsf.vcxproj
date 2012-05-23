@@ -71,6 +71,7 @@
     <ClInclude Include="scff-imaging\image.h" />
     <ClInclude Include="scff-imaging\imaging-types.h" />
     <ClInclude Include="scff-imaging\imaging.h" />
+    <ClInclude Include="scff-imaging\layout.h" />
     <ClInclude Include="scff-imaging\native-layout.h" />
     <ClInclude Include="scff-imaging\padding.h" />
     <ClInclude Include="scff-imaging\processor.h" />

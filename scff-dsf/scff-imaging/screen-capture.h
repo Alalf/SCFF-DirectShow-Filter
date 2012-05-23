@@ -48,9 +48,6 @@ class ScreenCapture : public Processor<void, AVPictureWithFillImage> {
   //-------------------------------------------------------------------
 
  private:
-  // コピー＆代入禁止
-  DISALLOW_COPY_AND_ASSIGN(ScreenCapture);
-
   /// @brief 渡されたDCにカーソルを描画する
   void DrawCursor(HDC dc, HWND window, int clipping_x, int clipping_y);
 
@@ -85,6 +82,9 @@ class ScreenCapture : public Processor<void, AVPictureWithFillImage> {
 
   /// @brief レイアウトパラメータ
   LayoutParameter parameter_[kMaxProcessorSize];
+
+  // コピー＆代入禁止
+  DISALLOW_COPY_AND_ASSIGN(ScreenCapture);
 };
 }   // namespace scff_imaging
 

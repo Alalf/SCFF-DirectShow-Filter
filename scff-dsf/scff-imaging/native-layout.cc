@@ -36,7 +36,7 @@ namespace scff_imaging {
 // コンストラクタ
 NativeLayout::NativeLayout(
     const LayoutParameter &parameter)
-    : Processor<void, AVPictureImage>(),
+    : Layout(),
       parameter_(parameter),
       screen_capture_(0),   // NULL
       scale_(0),            // NULL

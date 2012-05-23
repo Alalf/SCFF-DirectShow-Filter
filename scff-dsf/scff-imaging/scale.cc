@@ -36,7 +36,7 @@ namespace scff_imaging {
 //=====================================================================
 
 /// @brief コンストラクタ
-Scale::Scale(SWScaleConfig swscale_config)
+Scale::Scale(const SWScaleConfig &swscale_config)
     : Processor<AVPictureWithFillImage, AVPictureImage>(),
       swscale_config_(swscale_config),
       scaler_(0) {  // NULL

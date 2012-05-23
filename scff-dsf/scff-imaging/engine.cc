@@ -38,7 +38,7 @@ namespace scff_imaging {
 // コンストラクタ
 Engine::Engine(ImagePixelFormat output_pixel_format,
                int output_width, int output_height, double output_fps)
-    : Processor<void, AVPictureImage>(),
+    : Layout(),
       output_pixel_format_(output_pixel_format),
       output_width_(output_width),
       output_height_(output_height),
@@ -285,7 +285,9 @@ void Engine::DoSetNativeLayout(const LayoutParameter &parameter) {
 }
 
 /// @brief 現在のプロセッサを新しいComplexLayoutに設定する
-void Engine::DoSetComplexLayout(int element_count, const LayoutParameter (&parameter)[kMaxProcessorSize]) {
+void Engine::DoSetComplexLayout(
+    int element_count,
+    const LayoutParameter (&parameter)[kMaxProcessorSize]) {
   // 現在のプロセッサは必要ないので削除
   ReleaseLayout();
 

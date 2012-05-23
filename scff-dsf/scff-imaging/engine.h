@@ -23,15 +23,14 @@
 #define SCFF_DSF_SCFF_IMAGING_ENGINE_H_
 
 #include "scff-imaging/common.h"
-#include "scff-imaging/processor.h"
-#include "scff-imaging/avpicture-image.h"
+#include "scff-imaging/layout.h"
 
 /// @brief 画像処理を行うクラスをまとめたネームスペース
 namespace scff_imaging {
 
 /// @brief 画像処理スレッドを管理する
 /// @todo(me) まずはシングルバッファで実装してみる
-class Engine : public Processor<void, AVPictureImage> {
+class Engine : public Layout {
  public:
   /// @brief コンストラクタ
   Engine(ImagePixelFormat output_pixel_format,
@@ -57,12 +56,11 @@ class Engine : public Processor<void, AVPictureImage> {
   /// @brief 現在のレイアウトを新しいNativeLayoutに設定する
   void DoSetNativeLayout(const LayoutParameter &parameter);
   /// @brief 現在のレイアウトを新しいComplexLayoutに設定する
-  void DoSetComplexLayout(int element_count, const LayoutParameter (&parameter)[kMaxProcessorSize]);
+  void DoSetComplexLayout(
+      int element_count,
+      const LayoutParameter (&parameter)[kMaxProcessorSize]);
 
  private:
-  // コピー＆代入禁止
-  DISALLOW_COPY_AND_ASSIGN(Engine);
-
   //-------------------------------------------------------------------
   /// @copydoc Processor::Run
   ErrorCode Run();
@@ -91,7 +89,7 @@ class Engine : public Processor<void, AVPictureImage> {
   // Processor
   //-------------------------------------------------------------------
   /// @brief レイアウト
-  Processor *layout_;
+  Layout *layout_;
   //-------------------------------------------------------------------
   // Image
   //-------------------------------------------------------------------
@@ -112,6 +110,9 @@ class Engine : public Processor<void, AVPictureImage> {
   /// @brief fps
   /// @todo(me) マルチスレッド化する場合、FPSに合わせて処理を行う
   const double output_fps_;
+
+  // コピー＆代入禁止
+  DISALLOW_COPY_AND_ASSIGN(Engine);
 };
 }   // namespace scff_imaging
 

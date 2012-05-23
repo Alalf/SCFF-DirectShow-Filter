@@ -49,9 +49,6 @@ class Padding : public Processor<AVPictureImage, AVPictureImage> {
   //-------------------------------------------------------------------
 
  private:
-  // コピー＆代入禁止
-  DISALLOW_COPY_AND_ASSIGN(Padding);
-
   /// @brief 描画用コンテキスト
   FFDrawContext draw_context_;
   /// @brief 枠描画用カラー
@@ -65,6 +62,9 @@ class Padding : public Processor<AVPictureImage, AVPictureImage> {
   const int padding_top_;
   /// @brief パディング(bottom)
   const int padding_bottom_;
+
+  // コピー＆代入禁止
+  DISALLOW_COPY_AND_ASSIGN(Padding);
 };
 }   // namespace scff_imaging
 

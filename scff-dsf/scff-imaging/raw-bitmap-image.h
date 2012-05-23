@@ -45,11 +45,11 @@ class RawBitmapImage: public Image {
   uint8_t* raw_bitmap() const;
 
  private:
-  // コピー＆代入禁止
-  DISALLOW_COPY_AND_ASSIGN(RawBitmapImage);
-
   /// @brief 各種ビットマップ
   uint8_t *raw_bitmap_;
+
+  // コピー＆代入禁止
+  DISALLOW_COPY_AND_ASSIGN(RawBitmapImage);
 };
 }   // namespace scff_imaging
 

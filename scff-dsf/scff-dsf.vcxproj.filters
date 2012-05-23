@@ -201,6 +201,9 @@
     <ClInclude Include="scff-imaging\common.h">
       <Filter>scff-imaging</Filter>
     </ClInclude>
+    <ClInclude Include="scff-imaging\layout.h">
+      <Filter>scff-imaging</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="scff-dsf.rc">

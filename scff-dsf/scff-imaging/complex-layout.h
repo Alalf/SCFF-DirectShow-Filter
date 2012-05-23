@@ -25,9 +25,8 @@
 #include <libavfilter/drawutils.h>
 
 #include "scff-imaging/common.h"
-#include "scff-imaging/processor.h"
+#include "scff-imaging/layout.h"
 #include "scff-imaging/avpicture-with-fill-image.h"
-#include "scff-imaging/avpicture-image.h"
 
 namespace scff_imaging {
 
@@ -36,10 +35,12 @@ class Scale;
 class Padding;
 
 /// @brief 複数のスクリーンキャプチャ領域を取り扱い可能なレイアウト
-class ComplexLayout : public Processor<void, AVPictureImage> {
+class ComplexLayout : public Layout {
  public:
   /// @brief コンストラクタ
-  ComplexLayout(int element_count, const LayoutParameter (&parameter)[kMaxProcessorSize]);
+  ComplexLayout(
+      int element_count,
+      const LayoutParameter (&parameter)[kMaxProcessorSize]);
   /// @brief デストラクタ
   ~ComplexLayout();
 
@@ -51,9 +52,6 @@ class ComplexLayout : public Processor<void, AVPictureImage> {
   //-------------------------------------------------------------------
 
  private:
-  // コピー＆代入禁止
-  DISALLOW_COPY_AND_ASSIGN(ComplexLayout);
-
   /// @brief インデックスを指定して初期化
   ErrorCode InitByIndex(int index);
 
@@ -88,6 +86,9 @@ class ComplexLayout : public Processor<void, AVPictureImage> {
 
   /// @brief レイアウトパラメータ
   LayoutParameter parameter_[kMaxProcessorSize];
+
+  // コピー＆代入禁止
+  DISALLOW_COPY_AND_ASSIGN(ComplexLayout);
 };
 }   // namespace scff_imaging
 

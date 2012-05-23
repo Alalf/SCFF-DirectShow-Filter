@@ -48,13 +48,13 @@ class AVPictureWithFillImage: public Image {
   AVPicture* avpicture() const;
 
  private:
-  // コピー＆代入禁止
-  DISALLOW_COPY_AND_ASSIGN(AVPictureWithFillImage);
-
   /// @brief 各種ビットマップ
   uint8_t *raw_bitmap_;
   /// @brief AVPictureへのポインタ
   AVPicture *avpicture_;
+
+  // コピー＆代入禁止
+  DISALLOW_COPY_AND_ASSIGN(AVPictureWithFillImage);
 };
 }   // namespace scff_imaging
 

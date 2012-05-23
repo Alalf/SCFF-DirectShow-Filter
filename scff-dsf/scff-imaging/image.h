@@ -76,15 +76,15 @@ class Image {
                            int width, int height);
   //-------------------------------------------------------------------
  private:
-  // コピー＆代入禁止
-  DISALLOW_COPY_AND_ASSIGN(Image);
-
   /// @brief イメージのピクセルフォーマット
   ImagePixelFormat pixel_format_;
   /// @brief イメージの幅
   int width_;
   /// @brief イメージの高さ
   int height_;
+
+  // コピー＆代入禁止
+  DISALLOW_COPY_AND_ASSIGN(Image);
 };
 }   // namespace scff_imaging
 

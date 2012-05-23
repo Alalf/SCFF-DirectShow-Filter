@@ -35,7 +35,7 @@ namespace scff_imaging {
 
 //コンストラクタ
 SplashScreen::SplashScreen()
-    : Processor<void, AVPictureImage>(),
+    : Layout(),
       scale_(0),      // NULL
       padding_(0) {   // NULL
   MyDbgLog((LOG_MEMORY, kDbgNewDelete,

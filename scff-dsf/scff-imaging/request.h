@@ -63,7 +63,7 @@ class ResetLayoutRequest : public Request {
 class SetNativeLayoutRequest : public Request {
  public:
   /// @brief コンストラクタ
-  SetNativeLayoutRequest(const LayoutParameter& parameter)
+  explicit SetNativeLayoutRequest(const LayoutParameter& parameter)
       : Request(),
         parameter_(parameter) {
     // nop
@@ -86,7 +86,9 @@ class SetNativeLayoutRequest : public Request {
 class SetComplexLayoutRequest : public Request {
  public:
   /// @brief コンストラクタ
-  SetComplexLayoutRequest(int element_count, const LayoutParameter (&parameter)[kMaxProcessorSize])
+  SetComplexLayoutRequest(
+      int element_count,
+      const LayoutParameter (&parameter)[kMaxProcessorSize])
       : Request(),
         element_count_(element_count) {
     // 配列の初期化

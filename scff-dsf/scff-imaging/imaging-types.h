@@ -28,11 +28,11 @@ extern "C" {
 #include <Windows.h>
 #include <cstdint>
 
+namespace scff_imaging {
+
 //=====================================================================
 // 定数
 //=====================================================================
-
-namespace scff_imaging {
 
 /// @brief ProcessorのInput/Outputに設定できるImageの最大数
 const int kMaxProcessorSize = 8;
@@ -96,7 +96,7 @@ enum ErrorCode {
   // Layout
   //-------------------------------------------------------------------
 
-  /// @brief 複合レイアウトで出力画像より外の範囲に要素レイアウトを配置しようとした
+  /// @brief 複合レイアウトで出力画像より外の範囲に要素を配置しようとした
   kComplexLayoutBoundError = 3000,
   /// @brief 複合レイアウトに対応していないピクセルフォーマット
   kComplexLayoutInvalidPixelFormatError = 3001,
@@ -147,6 +147,24 @@ enum SWScaleFlags {
   kSpline       = SWS_SPLINE
 };
 
+//---------------------------------------------------------------------
+
+/// @brief 回転方向を表す定数
+enum RotateDirection {
+  /// @brief 回転なし
+  kNoRotate = 0,
+  /// @brief 時計回り90度
+  k90Degrees,
+  /// @brief 時計回り180度
+  k180Degrees,
+  /// @brief 時計回り270度
+  k270Degrees
+};
+
+//=====================================================================
+// タイプ
+//=====================================================================
+
 /// @brief 拡大縮小メソッドの設定
 // #define SWS_FULL_CHR_H_INT    0x2000
 // #define SWS_FULL_CHR_H_INP    0x4000
@@ -192,22 +210,6 @@ struct SWScaleConfig {
   // bool bitexact;       // リファレンスエンコーダとの比較用？
   //-------------------------------------------------------------------
 };
-
-//---------------------------------------------------------------------
-
-/// @brief 回転方向を表す定数
-enum RotateDirection {
-  /// @brief 回転なし
-  kNoRotate = 0,
-  /// @brief 時計回り90度
-  k90Degrees,
-  /// @brief 時計回り180度
-  k180Degrees,
-  /// @brief 時計回り270度
-  k270Degrees
-};
-
-//---------------------------------------------------------------------
 
 /// @brief レイアウトパラメータ
 struct LayoutParameter {

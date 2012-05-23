@@ -46,11 +46,11 @@ class AVPictureImage: public Image {
   AVPicture* avpicture() const;
 
  private:
-  // コピー＆代入禁止
-  DISALLOW_COPY_AND_ASSIGN(AVPictureImage);
-
   /// @brief AVPictureへのポインタ
   AVPicture *avpicture_;
+
+  // コピー＆代入禁止
+  DISALLOW_COPY_AND_ASSIGN(AVPictureImage);
 };
 }   // namespace scff_imaging
 

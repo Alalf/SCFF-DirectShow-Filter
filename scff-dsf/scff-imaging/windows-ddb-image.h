@@ -57,14 +57,14 @@ class WindowsDDBImage: public Image {
   HBITMAP windows_ddb() const;
 
  private:
-  // コピー＆代入禁止
-  DISALLOW_COPY_AND_ASSIGN(WindowsDDBImage);
-
   /// @brief Windowsビットマップの生成方法
   Source from_;
 
   /// @brief Windowsビットマップハンドル
   HBITMAP windows_ddb_;
+
+  // コピー＆代入禁止
+  DISALLOW_COPY_AND_ASSIGN(WindowsDDBImage);
 };
 }   // namespace scff_imaging
 

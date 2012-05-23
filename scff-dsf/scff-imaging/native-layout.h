@@ -23,9 +23,8 @@
 #define SCFF_DSF_SCFF_IMAGING_NATIVE_LAYOUT_H_
 
 #include "scff-imaging/common.h"
-#include "scff-imaging/processor.h"
+#include "scff-imaging/layout.h"
 #include "scff-imaging/avpicture-with-fill-image.h"
-#include "scff-imaging/avpicture-image.h"
 
 namespace scff_imaging {
 
@@ -34,10 +33,10 @@ class Scale;
 class Padding;
 
 /// @brief スクリーンキャプチャ出力一つだけを処理するレイアウトプロセッサ
-class NativeLayout : public Processor<void, AVPictureImage> {
+class NativeLayout : public Layout {
  public:
   /// @brief コンストラクタ
-  NativeLayout(const LayoutParameter &parameter);
+  explicit NativeLayout(const LayoutParameter &parameter);
   /// @brief デストラクタ
   ~NativeLayout();
 
@@ -49,9 +48,6 @@ class NativeLayout : public Processor<void, AVPictureImage> {
   //-------------------------------------------------------------------
 
  private:
-  // コピー＆代入禁止
-  DISALLOW_COPY_AND_ASSIGN(NativeLayout);
-
   /// @brief 設定されたOutputImageはPadding可能か？
   bool CanUsePadding() const;
 
@@ -75,6 +71,9 @@ class NativeLayout : public Processor<void, AVPictureImage> {
 
   /// @brief レイアウトパラメータ
   const LayoutParameter parameter_;
+
+  // コピー＆代入禁止
+  DISALLOW_COPY_AND_ASSIGN(NativeLayout);
 };
 }   // namespace scff_imaging
 

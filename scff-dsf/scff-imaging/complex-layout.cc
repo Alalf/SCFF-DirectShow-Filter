@@ -34,8 +34,10 @@ namespace scff_imaging {
 //=====================================================================
 
 // コンストラクタ
-ComplexLayout::ComplexLayout(int element_count, const LayoutParameter (&parameter)[kMaxProcessorSize])
-    : Processor<void, AVPictureImage>(),
+ComplexLayout::ComplexLayout(
+    int element_count,
+    const LayoutParameter (&parameter)[kMaxProcessorSize])
+    : Layout(),
       element_count_(element_count),
       screen_capture_(0) {    // NULL
   MyDbgLog((LOG_MEMORY, kDbgNewDelete,
@@ -64,7 +66,7 @@ ComplexLayout::~ComplexLayout() {
   if (screen_capture_ != 0) {
     delete screen_capture_;
   }
-  for (int i = 0; i < kMaxProcessorSize; i++ ) {
+  for (int i = 0; i < kMaxProcessorSize; i++) {
     if (scale_[i] != 0) {  // NULL
       delete scale_[i];
     }
@@ -179,7 +181,7 @@ ErrorCode ComplexLayout::Init() {
   // スクリーンキャプチャ
   ScreenCapture *screen_capture = new ScreenCapture(element_count_, parameter_);
   for (int i = 0; i < element_count_; i++) {
-    screen_capture->SetOutputImage(&(captured_image_[i]),i);
+    screen_capture->SetOutputImage(&(captured_image_[i]), i);
   }
   const ErrorCode error_screen_capture = screen_capture->Init();
   if (error_screen_capture != kNoError) {
@@ -226,7 +228,7 @@ ErrorCode ComplexLayout::Run() {
       return ErrorOccured(error_scale);
     }
   }
-  
+
   // 背景描画
   ff_fill_rectangle(&draw_context_, &background_color_,
                     GetOutputImage()->avpicture()->data,

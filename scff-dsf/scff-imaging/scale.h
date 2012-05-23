@@ -34,7 +34,7 @@ namespace scff_imaging {
 class Scale : public Processor<AVPictureWithFillImage, AVPictureImage> {
  public:
   /// @brief コンストラクタ
-  explicit Scale(SWScaleConfig swscale_config);
+  explicit Scale(const SWScaleConfig &swscale_config);
   /// @brief デストラクタ
   ~Scale();
 
@@ -46,9 +46,6 @@ class Scale : public Processor<AVPictureWithFillImage, AVPictureImage> {
   //-------------------------------------------------------------------
 
  private:
-  // コピー＆代入禁止
-  DISALLOW_COPY_AND_ASSIGN(Scale);
-
   /// @brief 拡大縮小パラメータ
   const SWScaleConfig swscale_config_;
 
@@ -56,6 +53,9 @@ class Scale : public Processor<AVPictureWithFillImage, AVPictureImage> {
   SwsFilter *filter_;
   /// @brief 拡大縮小用のコンテキスト
   SwsContext *scaler_;
+
+  // コピー＆代入禁止
+  DISALLOW_COPY_AND_ASSIGN(Scale);
 };
 }   // namespace scff_imaging
 

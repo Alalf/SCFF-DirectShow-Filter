@@ -312,12 +312,6 @@ public partial class Form1 : Form {
     layoutParameterBindingSource.MoveNext();
   }
 
-
-
-  private void layout_list_SelectedIndexChanged(object sender, EventArgs e) {
-    // nop  
-  }
-
   private void layout_layout_Click(object sender, EventArgs e) {
     int bound_width, bound_height;
     if (entryBindingSource.Current == null) {
@@ -338,10 +332,6 @@ public partial class Form1 : Form {
         }
       }
     }
-  }
-
-  private void Form1_Load(object sender, EventArgs e) {
-
   }
 }
 }   // namespace scff_app

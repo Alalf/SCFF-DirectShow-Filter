@@ -1367,7 +1367,6 @@
       this.Name = "Form1";
       this.Text = "SCFF DirectShow Filter Ver.0.1.0";
       this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
-      this.Load += new System.EventHandler(this.Form1_Load);
       this.Shown += new System.EventHandler(this.Form1_Shown);
       this.main_menu.ResumeLayout(false);
       this.main_menu.PerformLayout();

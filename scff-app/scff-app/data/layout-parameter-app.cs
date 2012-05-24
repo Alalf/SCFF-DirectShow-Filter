@@ -16,11 +16,11 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file scff-app/data/layout-parameter-view.cs
-/// @brief LayoutParameterの表示用メソッドの定義
+/// @file scff-app/data/layout-parameter-app.cs
+/// @brief LayoutParameterのscff_app用拡張
 
-using System.Runtime.InteropServices;
 using System;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace scff_app.data {
@@ -58,7 +58,20 @@ public partial class LayoutParameter {
     }
   }
 
-  /// @brief Clipping領域のFitオプション(Messageには書き込まれない)
+  //-------------------------------------------------------------------
+  // scff_app独自の値 (Messageには書き込まれない)
+  //-------------------------------------------------------------------
+
+  /// @brief 0.0-1.0を境界の幅としたときの境界内の左端の座標
+  public Double BoundRelativeLeft { get; set; }
+  /// @brief 0.0-1.0を境界の幅としたときの境界内の右端の座標
+  public Double BoundRelativeRight { get; set; }
+  /// @brief 0.0-1.0を境界の高さとしたときの境界内の上端の座標
+  public Double BoundRelativeTop { get; set; }
+  /// @brief 0.0-1.0を境界の高さとしたときの境界内の下端の座標
+  public Double BoundRelativeBottom { get; set; }
+
+  /// @brief Clipping領域のFitオプション
   public Boolean Fit { get; set; }
 }
 }

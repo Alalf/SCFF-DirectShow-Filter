@@ -97,13 +97,8 @@ ErrorCode Scale::Init() {
 
   // フィルタの設定
   SwsFilter *src_filter = 0;    // NULL
-  SwsFilter *dst_filter = 0;    // NULL
-  if (swscale_config_.is_src_filter) {
-    // 変換前
+  if (swscale_config_.is_filter_enabled) {
     src_filter = filter_;
-  } else {
-    // 変換後
-    dst_filter = filter_;
   }
 
   // 丸め処理
@@ -120,7 +115,7 @@ ErrorCode Scale::Init() {
       GetOutputImage()->width(),
       GetOutputImage()->height(),
       GetOutputImage()->avpicture_pixel_format(),
-      flags, src_filter, dst_filter, NULL);
+      flags, src_filter, NULL, NULL);
   if (scaler == NULL) {
     return ErrorOccured(kScaleCannotGetContextError);
   }

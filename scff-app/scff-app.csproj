@@ -69,7 +69,7 @@
     <Compile Include="scff-app\data\layout-parameter.cs" />
     <Compile Include="scff-app\data\layout-parameter-factory.cs" />
     <Compile Include="scff-app\data\message.cs" />
-    <Compile Include="scff-app\data\layout-parameter-view.cs" />
+    <Compile Include="scff-app\data\layout-parameter-app.cs" />
     <Compile Include="scff-app\data\swscale-config.cs" />
     <Compile Include="scff-app\data\message-factory.cs" />
     <Compile Include="scff-app\data\entry-factory.cs" />

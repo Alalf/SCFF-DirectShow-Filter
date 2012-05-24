@@ -186,7 +186,7 @@ struct SWScaleConfig {
   //-------------------------------------------------------------------
   /// @brief 変換前にフィルタをかけるか
   /// @attention false推奨
-  bool is_src_filter;
+  bool is_filter_enabled;
 
   /// @brief 輝度のガウスぼかし
   float luma_gblur;

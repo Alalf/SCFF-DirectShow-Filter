@@ -27,7 +27,7 @@ namespace scff_app.data {
 public class SWScaleConfig {
   public scff_interprocess.SWScaleFlags Flags { get; set; }
   public Boolean AccurateRnd { get; set; }
-  public Boolean IsSrcFilter { get; set; }
+  public Boolean IsFilterEnabled { get; set; }
   public Single LumaGBlur { get; set; }
   public Single ChromaGBlur { get; set; }
   public Single LumaSharpen { get; set; }

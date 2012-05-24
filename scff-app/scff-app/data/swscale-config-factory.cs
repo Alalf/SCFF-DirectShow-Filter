@@ -33,6 +33,7 @@ public class SWScaleConfigFactory {
     output.Flags = (scff_interprocess.SWScaleFlags)
         Enum.ToObject(typeof(scff_interprocess.SWScaleFlags), input.flags);
     output.AccurateRnd = Convert.ToBoolean(input.accurate_rnd);
+    output.IsFilterEnabled = Convert.ToBoolean(input.is_filter_enabled);
     output.LumaGBlur = input.luma_gblur;
     output.ChromaGBlur = input.chroma_gblur;
     output.LumaSharpen = input.luma_sharpen;
@@ -49,6 +50,7 @@ public class SWScaleConfigFactory {
 
     output.flags = (Int32)input.Flags;
     output.accurate_rnd = Convert.ToByte(input.AccurateRnd);
+    output.is_filter_enabled = Convert.ToByte(input.IsFilterEnabled);
     output.luma_gblur = input.LumaGBlur;
     output.chroma_gblur = input.ChromaGBlur;
     output.luma_sharpen = input.LumaSharpen;

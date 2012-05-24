@@ -48,6 +48,9 @@ class LayoutParameterFactory {
 
     // 拡大縮小設定
     output.SWScaleConfig.Flags = scff_interprocess.SWScaleFlags.kArea;
+    output.SWScaleConfig.IsFilterEnabled = false;
+    output.SWScaleConfig.ChromaHShift = 1.0F;
+    output.SWScaleConfig.ChromaVShift = 1.0F;
 
     // Windowまわり
     output.Window = GetDesktopWindow();

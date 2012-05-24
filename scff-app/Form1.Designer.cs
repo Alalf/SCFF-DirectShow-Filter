@@ -78,34 +78,36 @@
       this.splash = new System.Windows.Forms.Button();
       this.kOption = new System.Windows.Forms.GroupBox();
       this.kOptionTable = new System.Windows.Forms.TableLayoutPanel();
-      this.option_enable_enlargement = new System.Windows.Forms.CheckBox();
-      this.option_keep_aspect_ratio = new System.Windows.Forms.CheckBox();
-      this.option_over_sampling = new System.Windows.Forms.CheckBox();
-      this.resize_method_accurate_rnd = new System.Windows.Forms.CheckBox();
+      this.option_thread_num = new System.Windows.Forms.NumericUpDown();
       this.kThreadNum = new System.Windows.Forms.Label();
+      this.option_enable_enlargement = new System.Windows.Forms.CheckBox();
+      this.option_over_sampling = new System.Windows.Forms.CheckBox();
+      this.option_keep_aspect_ratio = new System.Windows.Forms.CheckBox();
+      this.resize_method_accurate_rnd = new System.Windows.Forms.CheckBox();
       this.resize_method_combo = new System.Windows.Forms.ComboBox();
       this.layout_list = new System.Windows.Forms.ListBox();
       this.kVersion = new System.Windows.Forms.Label();
       this.layout_profile_combo = new System.Windows.Forms.ComboBox();
       this.layout_bound_table = new System.Windows.Forms.TableLayoutPanel();
       this.kLayoutButtonTable = new System.Windows.Forms.TableLayoutPanel();
-      this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-      this.resize_method_lgblur = new System.Windows.Forms.TrackBar();
       this.kHeaderTable = new System.Windows.Forms.TableLayoutPanel();
-      this.groupBox1 = new System.Windows.Forms.GroupBox();
-      this.kResizeMethodTable = new System.Windows.Forms.TableLayoutPanel();
-      this.kCVShift = new System.Windows.Forms.Label();
+      this.kResizeMethod = new System.Windows.Forms.GroupBox();
+      this.kResizeMethodFilter = new System.Windows.Forms.GroupBox();
+      this.kResizeMethodFilterTable = new System.Windows.Forms.TableLayoutPanel();
+      this.resize_method_is_filter_enabled = new System.Windows.Forms.CheckBox();
       this.kCHShift = new System.Windows.Forms.Label();
-      this.kCSharpen = new System.Windows.Forms.Label();
+      this.resize_method_chshift = new System.Windows.Forms.NumericUpDown();
+      this.kCVShift = new System.Windows.Forms.Label();
+      this.resize_method_cvshift = new System.Windows.Forms.NumericUpDown();
       this.kLSharpen = new System.Windows.Forms.Label();
-      this.kLGBlur = new System.Windows.Forms.Label();
-      this.resize_method_lsharpen = new System.Windows.Forms.TrackBar();
-      this.resize_method_chshift = new System.Windows.Forms.TrackBar();
-      this.resize_method_cgblur = new System.Windows.Forms.TrackBar();
-      this.resize_method_csharpen = new System.Windows.Forms.TrackBar();
-      this.resize_method_cvshift = new System.Windows.Forms.TrackBar();
+      this.resize_method_lsharpen = new System.Windows.Forms.NumericUpDown();
+      this.kCSharpen = new System.Windows.Forms.Label();
+      this.resize_method_csharpen = new System.Windows.Forms.NumericUpDown();
       this.kCGBlur = new System.Windows.Forms.Label();
-      this.option_thread_num = new System.Windows.Forms.NumericUpDown();
+      this.kLGBlur = new System.Windows.Forms.Label();
+      this.resize_method_lgblur = new System.Windows.Forms.NumericUpDown();
+      this.resize_method_cgblur = new System.Windows.Forms.NumericUpDown();
+      this.kResizeMethodTable = new System.Windows.Forms.TableLayoutPanel();
       this.kMainButtonPanel = new System.Windows.Forms.Panel();
       this.kLayout = new System.Windows.Forms.GroupBox();
       this.kProcessPanel = new System.Windows.Forms.Panel();
@@ -128,18 +130,20 @@
       this.kTarget.SuspendLayout();
       this.kOption.SuspendLayout();
       this.kOptionTable.SuspendLayout();
+      ((System.ComponentModel.ISupportInitialize)(this.option_thread_num)).BeginInit();
       this.layout_bound_table.SuspendLayout();
       this.kLayoutButtonTable.SuspendLayout();
-      ((System.ComponentModel.ISupportInitialize)(this.resize_method_lgblur)).BeginInit();
       this.kHeaderTable.SuspendLayout();
-      this.groupBox1.SuspendLayout();
-      this.kResizeMethodTable.SuspendLayout();
-      ((System.ComponentModel.ISupportInitialize)(this.resize_method_lsharpen)).BeginInit();
+      this.kResizeMethod.SuspendLayout();
+      this.kResizeMethodFilter.SuspendLayout();
+      this.kResizeMethodFilterTable.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.resize_method_chshift)).BeginInit();
-      ((System.ComponentModel.ISupportInitialize)(this.resize_method_cgblur)).BeginInit();
-      ((System.ComponentModel.ISupportInitialize)(this.resize_method_csharpen)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.resize_method_cvshift)).BeginInit();
-      ((System.ComponentModel.ISupportInitialize)(this.option_thread_num)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.resize_method_lsharpen)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.resize_method_csharpen)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.resize_method_lgblur)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.resize_method_cgblur)).BeginInit();
+      this.kResizeMethodTable.SuspendLayout();
       this.kMainButtonPanel.SuspendLayout();
       this.kLayout.SuspendLayout();
       this.kProcessPanel.SuspendLayout();
@@ -171,7 +175,7 @@
       this.main_menu.Name = "main_menu";
       this.main_menu.Padding = new System.Windows.Forms.Padding(6, 3, 0, 3);
       this.main_menu.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-      this.main_menu.Size = new System.Drawing.Size(530, 22);
+      this.main_menu.Size = new System.Drawing.Size(942, 22);
       this.main_menu.TabIndex = 1;
       this.main_menu.Text = "main_menu";
       // 
@@ -456,6 +460,7 @@
       this.kAreaTable.RowCount = 2;
       this.kAreaTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
       this.kAreaTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
+      this.kAreaTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
       this.kAreaTable.Size = new System.Drawing.Size(251, 48);
       this.kAreaTable.TabIndex = 9;
       // 
@@ -732,7 +737,7 @@
       // 
       // auto_apply
       // 
-      this.auto_apply.Location = new System.Drawing.Point(135, 4);
+      this.auto_apply.Location = new System.Drawing.Point(134, 4);
       this.auto_apply.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
       this.auto_apply.Name = "auto_apply";
       this.auto_apply.Size = new System.Drawing.Size(48, 17);
@@ -849,7 +854,7 @@
       // apply
       // 
       this.apply.Enabled = false;
-      this.apply.Location = new System.Drawing.Point(188, 0);
+      this.apply.Location = new System.Drawing.Point(187, 0);
       this.apply.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
       this.apply.Name = "apply";
       this.apply.Size = new System.Drawing.Size(86, 25);
@@ -880,7 +885,7 @@
       this.kOption.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
       this.kOption.Name = "kOption";
       this.kOption.Padding = new System.Windows.Forms.Padding(6, 3, 6, 8);
-      this.kOption.Size = new System.Drawing.Size(275, 89);
+      this.kOption.Size = new System.Drawing.Size(275, 109);
       this.kOption.TabIndex = 1;
       this.kOption.TabStop = false;
       this.kOption.Text = "Option";
@@ -894,24 +899,67 @@
       this.kOptionTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
       this.kOptionTable.Controls.Add(this.option_show_mouse_cursor, 0, 0);
       this.kOptionTable.Controls.Add(this.option_show_layered_window, 0, 1);
-      this.kOptionTable.Controls.Add(this.option_enable_enlargement, 1, 0);
-      this.kOptionTable.Controls.Add(this.option_keep_aspect_ratio, 1, 1);
-      this.kOptionTable.Controls.Add(this.option_over_sampling, 0, 2);
+      this.kOptionTable.Controls.Add(this.option_thread_num, 1, 3);
+      this.kOptionTable.Controls.Add(this.kThreadNum, 1, 2);
+      this.kOptionTable.Controls.Add(this.option_enable_enlargement, 0, 3);
+      this.kOptionTable.Controls.Add(this.option_over_sampling, 1, 0);
+      this.kOptionTable.Controls.Add(this.option_keep_aspect_ratio, 0, 2);
       this.kOptionTable.Dock = System.Windows.Forms.DockStyle.Top;
       this.kOptionTable.Location = new System.Drawing.Point(6, 14);
       this.kOptionTable.Name = "kOptionTable";
-      this.kOptionTable.RowCount = 3;
-      this.kOptionTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-      this.kOptionTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-      this.kOptionTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-      this.kOptionTable.Size = new System.Drawing.Size(263, 63);
+      this.kOptionTable.RowCount = 4;
+      this.kOptionTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+      this.kOptionTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+      this.kOptionTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+      this.kOptionTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
+      this.kOptionTable.Size = new System.Drawing.Size(263, 87);
       this.kOptionTable.TabIndex = 15;
+      // 
+      // option_thread_num
+      // 
+      this.option_thread_num.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+      this.option_thread_num.Enabled = false;
+      this.option_thread_num.Location = new System.Drawing.Point(133, 66);
+      this.option_thread_num.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+      this.option_thread_num.Maximum = new decimal(new int[] {
+            8,
+            0,
+            0,
+            0});
+      this.option_thread_num.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+      this.option_thread_num.Name = "option_thread_num";
+      this.option_thread_num.Size = new System.Drawing.Size(129, 18);
+      this.option_thread_num.TabIndex = 6;
+      this.option_thread_num.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+      // 
+      // kThreadNum
+      // 
+      this.kThreadNum.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+      this.kThreadNum.AutoSize = true;
+      this.kThreadNum.Enabled = false;
+      this.kThreadNum.Location = new System.Drawing.Point(201, 42);
+      this.kThreadNum.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+      this.kThreadNum.Name = "kThreadNum";
+      this.kThreadNum.Size = new System.Drawing.Size(61, 21);
+      this.kThreadNum.TabIndex = 5;
+      this.kThreadNum.Text = "Thread Num";
+      this.kThreadNum.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
       // 
       // option_enable_enlargement
       // 
       this.option_enable_enlargement.AutoSize = true;
       this.option_enable_enlargement.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.layoutParameterBindingSource, "Stretch", true));
-      this.option_enable_enlargement.Location = new System.Drawing.Point(133, 3);
+      this.option_enable_enlargement.Location = new System.Drawing.Point(2, 66);
       this.option_enable_enlargement.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
       this.option_enable_enlargement.Name = "option_enable_enlargement";
       this.option_enable_enlargement.Size = new System.Drawing.Size(115, 15);
@@ -919,23 +967,11 @@
       this.option_enable_enlargement.Text = "Enable Enlargement";
       this.option_enable_enlargement.UseVisualStyleBackColor = true;
       // 
-      // option_keep_aspect_ratio
-      // 
-      this.option_keep_aspect_ratio.AutoSize = true;
-      this.option_keep_aspect_ratio.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.layoutParameterBindingSource, "KeepAspectRatio", true));
-      this.option_keep_aspect_ratio.Location = new System.Drawing.Point(133, 24);
-      this.option_keep_aspect_ratio.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-      this.option_keep_aspect_ratio.Name = "option_keep_aspect_ratio";
-      this.option_keep_aspect_ratio.Size = new System.Drawing.Size(111, 15);
-      this.option_keep_aspect_ratio.TabIndex = 2;
-      this.option_keep_aspect_ratio.Text = "Keep Aspect Ratio";
-      this.option_keep_aspect_ratio.UseVisualStyleBackColor = true;
-      // 
       // option_over_sampling
       // 
       this.option_over_sampling.AutoSize = true;
       this.option_over_sampling.Enabled = false;
-      this.option_over_sampling.Location = new System.Drawing.Point(2, 45);
+      this.option_over_sampling.Location = new System.Drawing.Point(133, 3);
       this.option_over_sampling.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
       this.option_over_sampling.Name = "option_over_sampling";
       this.option_over_sampling.Size = new System.Drawing.Size(93, 15);
@@ -943,48 +979,43 @@
       this.option_over_sampling.Text = "Over-Sampling";
       this.option_over_sampling.UseVisualStyleBackColor = true;
       // 
+      // option_keep_aspect_ratio
+      // 
+      this.option_keep_aspect_ratio.AutoSize = true;
+      this.option_keep_aspect_ratio.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.layoutParameterBindingSource, "KeepAspectRatio", true));
+      this.option_keep_aspect_ratio.Location = new System.Drawing.Point(2, 45);
+      this.option_keep_aspect_ratio.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+      this.option_keep_aspect_ratio.Name = "option_keep_aspect_ratio";
+      this.option_keep_aspect_ratio.Size = new System.Drawing.Size(111, 15);
+      this.option_keep_aspect_ratio.TabIndex = 2;
+      this.option_keep_aspect_ratio.Text = "Keep Aspect Ratio";
+      this.option_keep_aspect_ratio.UseVisualStyleBackColor = true;
+      // 
       // resize_method_accurate_rnd
       // 
       this.resize_method_accurate_rnd.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
       this.resize_method_accurate_rnd.AutoSize = true;
-      this.kResizeMethodTable.SetColumnSpan(this.resize_method_accurate_rnd, 2);
       this.resize_method_accurate_rnd.DataBindings.Add(new System.Windows.Forms.Binding("CheckState", this.layoutParameterBindingSource, "SWScaleConfig.AccurateRnd", true));
-      this.resize_method_accurate_rnd.Location = new System.Drawing.Point(132, 3);
+      this.resize_method_accurate_rnd.Location = new System.Drawing.Point(133, 3);
       this.resize_method_accurate_rnd.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
       this.resize_method_accurate_rnd.Name = "resize_method_accurate_rnd";
-      this.resize_method_accurate_rnd.Size = new System.Drawing.Size(89, 19);
+      this.resize_method_accurate_rnd.Size = new System.Drawing.Size(89, 22);
       this.resize_method_accurate_rnd.TabIndex = 20;
       this.resize_method_accurate_rnd.Text = "Accurate Rnd";
       this.resize_method_accurate_rnd.UseVisualStyleBackColor = true;
-      // 
-      // kThreadNum
-      // 
-      this.kThreadNum.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-      this.kThreadNum.AutoSize = true;
-      this.kResizeMethodTable.SetColumnSpan(this.kThreadNum, 2);
-      this.kThreadNum.Enabled = false;
-      this.kThreadNum.Location = new System.Drawing.Point(67, 85);
-      this.kThreadNum.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-      this.kThreadNum.Name = "kThreadNum";
-      this.kThreadNum.Size = new System.Drawing.Size(61, 24);
-      this.kThreadNum.TabIndex = 5;
-      this.kThreadNum.Text = "Thread Num";
-      this.kThreadNum.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
       // 
       // resize_method_combo
       // 
       this.resize_method_combo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-      this.kResizeMethodTable.SetColumnSpan(this.resize_method_combo, 2);
       this.resize_method_combo.DataBindings.Add(new System.Windows.Forms.Binding("SelectedValue", this.layoutParameterBindingSource, "SWScaleConfig.Flags", true));
       this.resize_method_combo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
       this.resize_method_combo.FormattingEnabled = true;
       this.resize_method_combo.Location = new System.Drawing.Point(2, 3);
       this.resize_method_combo.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
       this.resize_method_combo.Name = "resize_method_combo";
-      this.resize_method_combo.Size = new System.Drawing.Size(126, 19);
+      this.resize_method_combo.Size = new System.Drawing.Size(127, 19);
       this.resize_method_combo.TabIndex = 8;
       // 
       // layout_list
@@ -1008,7 +1039,7 @@
       this.kVersion.AutoSize = true;
       this.kVersion.Font = new System.Drawing.Font("Verdana", 7F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.kVersion.ForeColor = System.Drawing.Color.White;
-      this.kVersion.Location = new System.Drawing.Point(464, 0);
+      this.kVersion.Location = new System.Drawing.Point(876, 0);
       this.kVersion.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
       this.kVersion.Name = "kVersion";
       this.kVersion.Size = new System.Drawing.Size(64, 35);
@@ -1077,20 +1108,6 @@
       this.kLayoutButtonTable.Size = new System.Drawing.Size(183, 32);
       this.kLayoutButtonTable.TabIndex = 15;
       // 
-      // contextMenuStrip1
-      // 
-      this.contextMenuStrip1.Name = "contextMenuStrip1";
-      this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
-      // 
-      // resize_method_lgblur
-      // 
-      this.resize_method_lgblur.AutoSize = false;
-      this.resize_method_lgblur.Location = new System.Drawing.Point(67, 28);
-      this.resize_method_lgblur.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-      this.resize_method_lgblur.Name = "resize_method_lgblur";
-      this.resize_method_lgblur.Size = new System.Drawing.Size(61, 14);
-      this.resize_method_lgblur.TabIndex = 20;
-      // 
       // kHeaderTable
       // 
       this.kHeaderTable.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(59)))), ((int)(((byte)(0)))));
@@ -1107,198 +1124,312 @@
       this.kHeaderTable.Name = "kHeaderTable";
       this.kHeaderTable.RowCount = 1;
       this.kHeaderTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
-      this.kHeaderTable.Size = new System.Drawing.Size(530, 35);
+      this.kHeaderTable.Size = new System.Drawing.Size(942, 35);
       this.kHeaderTable.TabIndex = 22;
       // 
-      // groupBox1
+      // kResizeMethod
       // 
-      this.groupBox1.AutoSize = true;
-      this.groupBox1.Controls.Add(this.kResizeMethodTable);
-      this.groupBox1.Font = new System.Drawing.Font("MS UI Gothic", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-      this.groupBox1.Location = new System.Drawing.Point(5, 390);
-      this.groupBox1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-      this.groupBox1.Name = "groupBox1";
-      this.groupBox1.Padding = new System.Windows.Forms.Padding(6, 3, 6, 8);
-      this.groupBox1.Size = new System.Drawing.Size(275, 134);
-      this.groupBox1.TabIndex = 24;
-      this.groupBox1.TabStop = false;
-      this.groupBox1.Text = "Resize Method";
+      this.kResizeMethod.AutoSize = true;
+      this.kResizeMethod.Controls.Add(this.kResizeMethodFilter);
+      this.kResizeMethod.Controls.Add(this.kResizeMethodTable);
+      this.kResizeMethod.Font = new System.Drawing.Font("MS UI Gothic", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+      this.kResizeMethod.Location = new System.Drawing.Point(5, 411);
+      this.kResizeMethod.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+      this.kResizeMethod.Name = "kResizeMethod";
+      this.kResizeMethod.Padding = new System.Windows.Forms.Padding(6, 3, 6, 8);
+      this.kResizeMethod.Size = new System.Drawing.Size(275, 163);
+      this.kResizeMethod.TabIndex = 24;
+      this.kResizeMethod.TabStop = false;
+      this.kResizeMethod.Text = "Resize Method";
       // 
-      // kResizeMethodTable
+      // kResizeMethodFilter
       // 
-      this.kResizeMethodTable.AutoSize = true;
-      this.kResizeMethodTable.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-      this.kResizeMethodTable.ColumnCount = 4;
-      this.kResizeMethodTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-      this.kResizeMethodTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-      this.kResizeMethodTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-      this.kResizeMethodTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-      this.kResizeMethodTable.Controls.Add(this.kCVShift, 2, 3);
-      this.kResizeMethodTable.Controls.Add(this.kCHShift, 0, 3);
-      this.kResizeMethodTable.Controls.Add(this.kCSharpen, 2, 2);
-      this.kResizeMethodTable.Controls.Add(this.kLSharpen, 0, 2);
-      this.kResizeMethodTable.Controls.Add(this.kLGBlur, 0, 1);
-      this.kResizeMethodTable.Controls.Add(this.resize_method_combo, 0, 0);
-      this.kResizeMethodTable.Controls.Add(this.resize_method_lgblur, 1, 1);
-      this.kResizeMethodTable.Controls.Add(this.resize_method_accurate_rnd, 2, 0);
-      this.kResizeMethodTable.Controls.Add(this.resize_method_lsharpen, 1, 2);
-      this.kResizeMethodTable.Controls.Add(this.resize_method_chshift, 1, 3);
-      this.kResizeMethodTable.Controls.Add(this.resize_method_cgblur, 3, 1);
-      this.kResizeMethodTable.Controls.Add(this.resize_method_csharpen, 3, 2);
-      this.kResizeMethodTable.Controls.Add(this.resize_method_cvshift, 3, 3);
-      this.kResizeMethodTable.Controls.Add(this.kCGBlur, 2, 1);
-      this.kResizeMethodTable.Controls.Add(this.option_thread_num, 2, 4);
-      this.kResizeMethodTable.Controls.Add(this.kThreadNum, 0, 4);
-      this.kResizeMethodTable.Dock = System.Windows.Forms.DockStyle.Top;
-      this.kResizeMethodTable.Location = new System.Drawing.Point(6, 14);
-      this.kResizeMethodTable.Name = "kResizeMethodTable";
-      this.kResizeMethodTable.RowCount = 5;
-      this.kResizeMethodTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
-      this.kResizeMethodTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
-      this.kResizeMethodTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
-      this.kResizeMethodTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
-      this.kResizeMethodTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
-      this.kResizeMethodTable.Size = new System.Drawing.Size(263, 109);
-      this.kResizeMethodTable.TabIndex = 25;
+      this.kResizeMethodFilter.AutoSize = true;
+      this.kResizeMethodFilter.Controls.Add(this.kResizeMethodFilterTable);
+      this.kResizeMethodFilter.Dock = System.Windows.Forms.DockStyle.Top;
+      this.kResizeMethodFilter.Font = new System.Drawing.Font("MS UI Gothic", 8F);
+      this.kResizeMethodFilter.Location = new System.Drawing.Point(6, 42);
+      this.kResizeMethodFilter.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+      this.kResizeMethodFilter.Name = "kResizeMethodFilter";
+      this.kResizeMethodFilter.Size = new System.Drawing.Size(263, 110);
+      this.kResizeMethodFilter.TabIndex = 30;
+      this.kResizeMethodFilter.TabStop = false;
+      this.kResizeMethodFilter.Text = "Filter";
       // 
-      // kCVShift
+      // kResizeMethodFilterTable
       // 
-      this.kCVShift.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-      this.kCVShift.AutoSize = true;
-      this.kCVShift.Location = new System.Drawing.Point(148, 65);
-      this.kCVShift.Name = "kCVShift";
-      this.kCVShift.Size = new System.Drawing.Size(44, 20);
-      this.kCVShift.TabIndex = 31;
-      this.kCVShift.Text = "C VShift";
-      this.kCVShift.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+      this.kResizeMethodFilterTable.AutoScroll = true;
+      this.kResizeMethodFilterTable.AutoSize = true;
+      this.kResizeMethodFilterTable.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+      this.kResizeMethodFilterTable.ColumnCount = 4;
+      this.kResizeMethodFilterTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+      this.kResizeMethodFilterTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+      this.kResizeMethodFilterTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+      this.kResizeMethodFilterTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+      this.kResizeMethodFilterTable.Controls.Add(this.resize_method_is_filter_enabled, 0, 0);
+      this.kResizeMethodFilterTable.Controls.Add(this.kCHShift, 0, 3);
+      this.kResizeMethodFilterTable.Controls.Add(this.resize_method_chshift, 1, 3);
+      this.kResizeMethodFilterTable.Controls.Add(this.kCVShift, 2, 3);
+      this.kResizeMethodFilterTable.Controls.Add(this.resize_method_cvshift, 3, 3);
+      this.kResizeMethodFilterTable.Controls.Add(this.kLSharpen, 0, 2);
+      this.kResizeMethodFilterTable.Controls.Add(this.resize_method_lsharpen, 1, 2);
+      this.kResizeMethodFilterTable.Controls.Add(this.kCSharpen, 2, 2);
+      this.kResizeMethodFilterTable.Controls.Add(this.resize_method_csharpen, 3, 2);
+      this.kResizeMethodFilterTable.Controls.Add(this.kCGBlur, 2, 1);
+      this.kResizeMethodFilterTable.Controls.Add(this.kLGBlur, 0, 1);
+      this.kResizeMethodFilterTable.Controls.Add(this.resize_method_lgblur, 1, 1);
+      this.kResizeMethodFilterTable.Controls.Add(this.resize_method_cgblur, 3, 1);
+      this.kResizeMethodFilterTable.Dock = System.Windows.Forms.DockStyle.Top;
+      this.kResizeMethodFilterTable.Location = new System.Drawing.Point(3, 14);
+      this.kResizeMethodFilterTable.Name = "kResizeMethodFilterTable";
+      this.kResizeMethodFilterTable.RowCount = 4;
+      this.kResizeMethodFilterTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
+      this.kResizeMethodFilterTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
+      this.kResizeMethodFilterTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
+      this.kResizeMethodFilterTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
+      this.kResizeMethodFilterTable.Size = new System.Drawing.Size(257, 93);
+      this.kResizeMethodFilterTable.TabIndex = 25;
+      // 
+      // resize_method_is_filter_enabled
+      // 
+      this.resize_method_is_filter_enabled.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+      this.resize_method_is_filter_enabled.AutoSize = true;
+      this.resize_method_is_filter_enabled.DataBindings.Add(new System.Windows.Forms.Binding("CheckState", this.layoutParameterBindingSource, "SWScaleConfig.IsFilterEnabled", true));
+      this.resize_method_is_filter_enabled.Location = new System.Drawing.Point(3, 3);
+      this.resize_method_is_filter_enabled.Name = "resize_method_is_filter_enabled";
+      this.resize_method_is_filter_enabled.Size = new System.Drawing.Size(58, 15);
+      this.resize_method_is_filter_enabled.TabIndex = 30;
+      this.resize_method_is_filter_enabled.Text = "Enabled";
+      this.resize_method_is_filter_enabled.UseVisualStyleBackColor = true;
+      this.resize_method_is_filter_enabled.CheckedChanged += new System.EventHandler(this.resize_method_is_filter_enabled_CheckedChanged);
       // 
       // kCHShift
       // 
       this.kCHShift.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
       this.kCHShift.AutoSize = true;
-      this.kCHShift.Location = new System.Drawing.Point(18, 65);
+      this.kCHShift.Location = new System.Drawing.Point(17, 69);
       this.kCHShift.Name = "kCHShift";
-      this.kCHShift.Size = new System.Drawing.Size(44, 20);
+      this.kCHShift.Size = new System.Drawing.Size(44, 24);
       this.kCHShift.TabIndex = 30;
       this.kCHShift.Text = "C HShift";
       this.kCHShift.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
       // 
-      // kCSharpen
+      // resize_method_chshift
       // 
-      this.kCSharpen.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+      this.resize_method_chshift.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameterBindingSource, "SWScaleConfig.ChromaHShift", true));
+      this.resize_method_chshift.DecimalPlaces = 1;
+      this.resize_method_chshift.Enabled = false;
+      this.resize_method_chshift.Increment = new decimal(new int[] {
+            2,
+            0,
+            0,
+            65536});
+      this.resize_method_chshift.Location = new System.Drawing.Point(67, 72);
+      this.resize_method_chshift.Maximum = new decimal(new int[] {
+            14,
+            0,
+            0,
+            65536});
+      this.resize_method_chshift.Minimum = new decimal(new int[] {
+            8,
+            0,
+            0,
+            65536});
+      this.resize_method_chshift.Name = "resize_method_chshift";
+      this.resize_method_chshift.Size = new System.Drawing.Size(58, 18);
+      this.resize_method_chshift.TabIndex = 30;
+      this.resize_method_chshift.Value = new decimal(new int[] {
+            8,
+            0,
+            0,
+            65536});
+      // 
+      // kCVShift
+      // 
+      this.kCVShift.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
-      this.kCSharpen.AutoSize = true;
-      this.kCSharpen.Location = new System.Drawing.Point(138, 45);
-      this.kCSharpen.Name = "kCSharpen";
-      this.kCSharpen.Size = new System.Drawing.Size(54, 20);
-      this.kCSharpen.TabIndex = 29;
-      this.kCSharpen.Text = "C Sharpen";
-      this.kCSharpen.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+      this.kCVShift.AutoSize = true;
+      this.kCVShift.Location = new System.Drawing.Point(145, 69);
+      this.kCVShift.Name = "kCVShift";
+      this.kCVShift.Size = new System.Drawing.Size(44, 24);
+      this.kCVShift.TabIndex = 31;
+      this.kCVShift.Text = "C VShift";
+      this.kCVShift.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+      // 
+      // resize_method_cvshift
+      // 
+      this.resize_method_cvshift.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameterBindingSource, "SWScaleConfig.ChromaVShift", true));
+      this.resize_method_cvshift.DecimalPlaces = 1;
+      this.resize_method_cvshift.Enabled = false;
+      this.resize_method_cvshift.Increment = new decimal(new int[] {
+            2,
+            0,
+            0,
+            65536});
+      this.resize_method_cvshift.Location = new System.Drawing.Point(195, 72);
+      this.resize_method_cvshift.Maximum = new decimal(new int[] {
+            14,
+            0,
+            0,
+            65536});
+      this.resize_method_cvshift.Minimum = new decimal(new int[] {
+            8,
+            0,
+            0,
+            65536});
+      this.resize_method_cvshift.Name = "resize_method_cvshift";
+      this.resize_method_cvshift.Size = new System.Drawing.Size(59, 18);
+      this.resize_method_cvshift.TabIndex = 30;
+      this.resize_method_cvshift.Value = new decimal(new int[] {
+            8,
+            0,
+            0,
+            65536});
       // 
       // kLSharpen
       // 
       this.kLSharpen.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
       this.kLSharpen.AutoSize = true;
-      this.kLSharpen.Location = new System.Drawing.Point(9, 45);
+      this.kLSharpen.Location = new System.Drawing.Point(8, 45);
       this.kLSharpen.Name = "kLSharpen";
-      this.kLSharpen.Size = new System.Drawing.Size(53, 20);
+      this.kLSharpen.Size = new System.Drawing.Size(53, 24);
       this.kLSharpen.TabIndex = 28;
       this.kLSharpen.Text = "L Sharpen";
       this.kLSharpen.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
       // 
-      // kLGBlur
-      // 
-      this.kLGBlur.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-      this.kLGBlur.AutoSize = true;
-      this.kLGBlur.Location = new System.Drawing.Point(22, 25);
-      this.kLGBlur.Name = "kLGBlur";
-      this.kLGBlur.Size = new System.Drawing.Size(40, 20);
-      this.kLGBlur.TabIndex = 26;
-      this.kLGBlur.Text = "L GBlur";
-      this.kLGBlur.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-      // 
       // resize_method_lsharpen
       // 
-      this.resize_method_lsharpen.AutoSize = false;
-      this.resize_method_lsharpen.Location = new System.Drawing.Point(68, 48);
+      this.resize_method_lsharpen.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameterBindingSource, "SWScaleConfig.LumaSharpen", true));
+      this.resize_method_lsharpen.DecimalPlaces = 1;
+      this.resize_method_lsharpen.Enabled = false;
+      this.resize_method_lsharpen.Increment = new decimal(new int[] {
+            2,
+            0,
+            0,
+            65536});
+      this.resize_method_lsharpen.Location = new System.Drawing.Point(67, 48);
+      this.resize_method_lsharpen.Maximum = new decimal(new int[] {
+            20,
+            0,
+            0,
+            65536});
       this.resize_method_lsharpen.Name = "resize_method_lsharpen";
-      this.resize_method_lsharpen.Size = new System.Drawing.Size(59, 14);
-      this.resize_method_lsharpen.TabIndex = 21;
+      this.resize_method_lsharpen.Size = new System.Drawing.Size(58, 18);
+      this.resize_method_lsharpen.TabIndex = 30;
       // 
-      // resize_method_chshift
+      // kCSharpen
       // 
-      this.resize_method_chshift.AutoSize = false;
-      this.resize_method_chshift.Location = new System.Drawing.Point(68, 68);
-      this.resize_method_chshift.Name = "resize_method_chshift";
-      this.resize_method_chshift.Size = new System.Drawing.Size(59, 14);
-      this.resize_method_chshift.TabIndex = 22;
-      // 
-      // resize_method_cgblur
-      // 
-      this.resize_method_cgblur.AutoSize = false;
-      this.resize_method_cgblur.Location = new System.Drawing.Point(198, 28);
-      this.resize_method_cgblur.Name = "resize_method_cgblur";
-      this.resize_method_cgblur.Size = new System.Drawing.Size(62, 14);
-      this.resize_method_cgblur.TabIndex = 23;
+      this.kCSharpen.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+      this.kCSharpen.AutoSize = true;
+      this.kCSharpen.Location = new System.Drawing.Point(135, 45);
+      this.kCSharpen.Name = "kCSharpen";
+      this.kCSharpen.Size = new System.Drawing.Size(54, 24);
+      this.kCSharpen.TabIndex = 29;
+      this.kCSharpen.Text = "C Sharpen";
+      this.kCSharpen.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
       // 
       // resize_method_csharpen
       // 
-      this.resize_method_csharpen.AutoSize = false;
-      this.resize_method_csharpen.Location = new System.Drawing.Point(198, 48);
+      this.resize_method_csharpen.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameterBindingSource, "SWScaleConfig.ChromaSharpen", true));
+      this.resize_method_csharpen.DecimalPlaces = 1;
+      this.resize_method_csharpen.Enabled = false;
+      this.resize_method_csharpen.Increment = new decimal(new int[] {
+            2,
+            0,
+            0,
+            65536});
+      this.resize_method_csharpen.Location = new System.Drawing.Point(195, 48);
+      this.resize_method_csharpen.Maximum = new decimal(new int[] {
+            20,
+            0,
+            0,
+            65536});
       this.resize_method_csharpen.Name = "resize_method_csharpen";
-      this.resize_method_csharpen.Size = new System.Drawing.Size(62, 14);
-      this.resize_method_csharpen.TabIndex = 24;
-      // 
-      // resize_method_cvshift
-      // 
-      this.resize_method_cvshift.AutoSize = false;
-      this.resize_method_cvshift.Location = new System.Drawing.Point(198, 68);
-      this.resize_method_cvshift.Name = "resize_method_cvshift";
-      this.resize_method_cvshift.Size = new System.Drawing.Size(62, 14);
-      this.resize_method_cvshift.TabIndex = 25;
+      this.resize_method_csharpen.Size = new System.Drawing.Size(59, 18);
+      this.resize_method_csharpen.TabIndex = 30;
       // 
       // kCGBlur
       // 
       this.kCGBlur.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
       this.kCGBlur.AutoSize = true;
-      this.kCGBlur.Location = new System.Drawing.Point(151, 25);
+      this.kCGBlur.Location = new System.Drawing.Point(148, 21);
       this.kCGBlur.Name = "kCGBlur";
-      this.kCGBlur.Size = new System.Drawing.Size(41, 20);
+      this.kCGBlur.Size = new System.Drawing.Size(41, 24);
       this.kCGBlur.TabIndex = 27;
       this.kCGBlur.Text = "C GBlur";
       this.kCGBlur.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
       // 
-      // option_thread_num
+      // kLGBlur
       // 
-      this.option_thread_num.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+      this.kLGBlur.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
-      this.kResizeMethodTable.SetColumnSpan(this.option_thread_num, 2);
-      this.option_thread_num.Enabled = false;
-      this.option_thread_num.Location = new System.Drawing.Point(132, 88);
-      this.option_thread_num.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-      this.option_thread_num.Maximum = new decimal(new int[] {
-            8,
+      this.kLGBlur.AutoSize = true;
+      this.kLGBlur.Location = new System.Drawing.Point(21, 21);
+      this.kLGBlur.Name = "kLGBlur";
+      this.kLGBlur.Size = new System.Drawing.Size(40, 24);
+      this.kLGBlur.TabIndex = 26;
+      this.kLGBlur.Text = "L GBlur";
+      this.kLGBlur.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+      // 
+      // resize_method_lgblur
+      // 
+      this.resize_method_lgblur.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameterBindingSource, "SWScaleConfig.LumaGBlur", true));
+      this.resize_method_lgblur.DecimalPlaces = 1;
+      this.resize_method_lgblur.Enabled = false;
+      this.resize_method_lgblur.Increment = new decimal(new int[] {
+            2,
             0,
             0,
-            0});
-      this.option_thread_num.Minimum = new decimal(new int[] {
-            1,
+            65536});
+      this.resize_method_lgblur.Location = new System.Drawing.Point(67, 24);
+      this.resize_method_lgblur.Maximum = new decimal(new int[] {
+            20,
             0,
             0,
-            0});
-      this.option_thread_num.Name = "option_thread_num";
-      this.option_thread_num.Size = new System.Drawing.Size(129, 18);
-      this.option_thread_num.TabIndex = 6;
-      this.option_thread_num.Value = new decimal(new int[] {
-            1,
+            65536});
+      this.resize_method_lgblur.Name = "resize_method_lgblur";
+      this.resize_method_lgblur.Size = new System.Drawing.Size(58, 18);
+      this.resize_method_lgblur.TabIndex = 30;
+      // 
+      // resize_method_cgblur
+      // 
+      this.resize_method_cgblur.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameterBindingSource, "SWScaleConfig.ChromaGBlur", true));
+      this.resize_method_cgblur.DecimalPlaces = 1;
+      this.resize_method_cgblur.Enabled = false;
+      this.resize_method_cgblur.Increment = new decimal(new int[] {
+            2,
             0,
             0,
-            0});
+            65536});
+      this.resize_method_cgblur.Location = new System.Drawing.Point(195, 24);
+      this.resize_method_cgblur.Maximum = new decimal(new int[] {
+            20,
+            0,
+            0,
+            65536});
+      this.resize_method_cgblur.Name = "resize_method_cgblur";
+      this.resize_method_cgblur.Size = new System.Drawing.Size(59, 18);
+      this.resize_method_cgblur.TabIndex = 30;
+      // 
+      // kResizeMethodTable
+      // 
+      this.kResizeMethodTable.ColumnCount = 2;
+      this.kResizeMethodTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+      this.kResizeMethodTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+      this.kResizeMethodTable.Controls.Add(this.resize_method_accurate_rnd, 1, 0);
+      this.kResizeMethodTable.Controls.Add(this.resize_method_combo, 0, 0);
+      this.kResizeMethodTable.Dock = System.Windows.Forms.DockStyle.Top;
+      this.kResizeMethodTable.Location = new System.Drawing.Point(6, 14);
+      this.kResizeMethodTable.Name = "kResizeMethodTable";
+      this.kResizeMethodTable.RowCount = 1;
+      this.kResizeMethodTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
+      this.kResizeMethodTable.Size = new System.Drawing.Size(263, 28);
+      this.kResizeMethodTable.TabIndex = 31;
       // 
       // kMainButtonPanel
       // 
@@ -1307,9 +1438,9 @@
       this.kMainButtonPanel.Controls.Add(this.auto_apply);
       this.kMainButtonPanel.Controls.Add(this.splash);
       this.kMainButtonPanel.Font = new System.Drawing.Font("MS UI Gothic", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-      this.kMainButtonPanel.Location = new System.Drawing.Point(5, 526);
+      this.kMainButtonPanel.Location = new System.Drawing.Point(5, 576);
       this.kMainButtonPanel.Name = "kMainButtonPanel";
-      this.kMainButtonPanel.Size = new System.Drawing.Size(276, 28);
+      this.kMainButtonPanel.Size = new System.Drawing.Size(275, 28);
       this.kMainButtonPanel.TabIndex = 26;
       // 
       // kLayout
@@ -1351,15 +1482,15 @@
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.AutoSize = true;
       this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-      this.ClientSize = new System.Drawing.Size(530, 585);
+      this.ClientSize = new System.Drawing.Size(942, 616);
       this.Controls.Add(this.kProcessPanel);
       this.Controls.Add(this.kHeaderTable);
       this.Controls.Add(this.kProfilePanel);
       this.Controls.Add(this.main_menu);
-      this.Controls.Add(this.kMainButtonPanel);
-      this.Controls.Add(this.groupBox1);
       this.Controls.Add(this.kTarget);
+      this.Controls.Add(this.kResizeMethod);
       this.Controls.Add(this.kLayout);
+      this.Controls.Add(this.kMainButtonPanel);
       this.Controls.Add(this.kOption);
       this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
       this.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
@@ -1394,22 +1525,26 @@
       this.kOption.PerformLayout();
       this.kOptionTable.ResumeLayout(false);
       this.kOptionTable.PerformLayout();
+      ((System.ComponentModel.ISupportInitialize)(this.option_thread_num)).EndInit();
       this.layout_bound_table.ResumeLayout(false);
       this.layout_bound_table.PerformLayout();
       this.kLayoutButtonTable.ResumeLayout(false);
-      ((System.ComponentModel.ISupportInitialize)(this.resize_method_lgblur)).EndInit();
       this.kHeaderTable.ResumeLayout(false);
       this.kHeaderTable.PerformLayout();
-      this.groupBox1.ResumeLayout(false);
-      this.groupBox1.PerformLayout();
+      this.kResizeMethod.ResumeLayout(false);
+      this.kResizeMethod.PerformLayout();
+      this.kResizeMethodFilter.ResumeLayout(false);
+      this.kResizeMethodFilter.PerformLayout();
+      this.kResizeMethodFilterTable.ResumeLayout(false);
+      this.kResizeMethodFilterTable.PerformLayout();
+      ((System.ComponentModel.ISupportInitialize)(this.resize_method_chshift)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.resize_method_cvshift)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.resize_method_lsharpen)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.resize_method_csharpen)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.resize_method_lgblur)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.resize_method_cgblur)).EndInit();
       this.kResizeMethodTable.ResumeLayout(false);
       this.kResizeMethodTable.PerformLayout();
-      ((System.ComponentModel.ISupportInitialize)(this.resize_method_lsharpen)).EndInit();
-      ((System.ComponentModel.ISupportInitialize)(this.resize_method_chshift)).EndInit();
-      ((System.ComponentModel.ISupportInitialize)(this.resize_method_cgblur)).EndInit();
-      ((System.ComponentModel.ISupportInitialize)(this.resize_method_csharpen)).EndInit();
-      ((System.ComponentModel.ISupportInitialize)(this.resize_method_cvshift)).EndInit();
-      ((System.ComponentModel.ISupportInitialize)(this.option_thread_num)).EndInit();
       this.kMainButtonPanel.ResumeLayout(false);
       this.kLayout.ResumeLayout(false);
       this.kLayout.PerformLayout();
@@ -1486,27 +1621,29 @@
     private System.Windows.Forms.BindingSource layoutParameterBindingSource;
     private System.Windows.Forms.BindingSource entryBindingSource;
     private System.Windows.Forms.CheckBox resize_method_accurate_rnd;
-    private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
-    private System.Windows.Forms.TrackBar resize_method_lgblur;
     private System.Windows.Forms.TableLayoutPanel kHeaderTable;
-    private System.Windows.Forms.GroupBox groupBox1;
-    private System.Windows.Forms.TableLayoutPanel kResizeMethodTable;
+    private System.Windows.Forms.GroupBox kResizeMethod;
+    private System.Windows.Forms.TableLayoutPanel kResizeMethodFilterTable;
     private System.Windows.Forms.Label kCVShift;
     private System.Windows.Forms.Label kCHShift;
     private System.Windows.Forms.Label kCSharpen;
     private System.Windows.Forms.Label kLSharpen;
     private System.Windows.Forms.Label kLGBlur;
-    private System.Windows.Forms.TrackBar resize_method_lsharpen;
-    private System.Windows.Forms.TrackBar resize_method_chshift;
-    private System.Windows.Forms.TrackBar resize_method_cgblur;
-    private System.Windows.Forms.TrackBar resize_method_csharpen;
-    private System.Windows.Forms.TrackBar resize_method_cvshift;
     private System.Windows.Forms.NumericUpDown option_thread_num;
     private System.Windows.Forms.Label kCGBlur;
     private System.Windows.Forms.Panel kMainButtonPanel;
     private System.Windows.Forms.GroupBox kLayout;
     private System.Windows.Forms.Panel kProcessPanel;
     private System.Windows.Forms.Panel kProfilePanel;
+    private System.Windows.Forms.NumericUpDown resize_method_cvshift;
+    private System.Windows.Forms.NumericUpDown resize_method_chshift;
+    private System.Windows.Forms.NumericUpDown resize_method_lsharpen;
+    private System.Windows.Forms.NumericUpDown resize_method_csharpen;
+    private System.Windows.Forms.NumericUpDown resize_method_cgblur;
+    private System.Windows.Forms.NumericUpDown resize_method_lgblur;
+    private System.Windows.Forms.CheckBox resize_method_is_filter_enabled;
+    private System.Windows.Forms.GroupBox kResizeMethodFilter;
+    private System.Windows.Forms.TableLayoutPanel kResizeMethodTable;
 
 
 

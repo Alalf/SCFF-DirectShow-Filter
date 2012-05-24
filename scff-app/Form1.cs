@@ -333,6 +333,16 @@ public partial class Form1 : Form {
       }
     }
   }
+
+  private void resize_method_is_filter_enabled_CheckedChanged(object sender, EventArgs e) {
+    bool state = resize_method_is_filter_enabled.Checked;
+    resize_method_lgblur.Enabled = state;
+    resize_method_cgblur.Enabled = state;
+    resize_method_lsharpen.Enabled = state;
+    resize_method_csharpen.Enabled = state;
+    resize_method_chshift.Enabled = state;
+    resize_method_cvshift.Enabled = state;
+  }
 }
 }   // namespace scff_app
 

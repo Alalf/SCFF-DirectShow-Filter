@@ -178,7 +178,7 @@ struct SWScaleConfig {
   /// @brief 正確な丸め処理
   int8_t accurate_rnd;
   /// @brief 変換前にフィルタをかけるか
-  int8_t is_src_filter;
+  int8_t is_filter_enabled;
   /// @brief 輝度のガウスぼかし
   float luma_gblur;
   /// @brief 色差のガウスぼかし

@@ -127,7 +127,7 @@ static void ConvertSWScaleConfig(
   }
 
   output->accurate_rnd = input.accurate_rnd != 0;
-  output->is_src_filter = input.is_src_filter != 0;
+  output->is_filter_enabled = input.is_filter_enabled != 0;
   output->luma_gblur = input.luma_gblur;
   output->chroma_gblur = input.chroma_gblur;
   output->luma_sharpen = input.luma_sharpen;

@@ -182,7 +182,7 @@ public struct SWScaleConfig {
   /// @brief 正確な丸め処理
   public Byte accurate_rnd;
   /// @brief 変換前にフィルタをかけるか
-  public Byte is_src_filter;
+  public Byte is_filter_enabled;
   /// @brief 輝度のガウスぼかし
   public Single luma_gblur;
   /// @brief 色差のガウスぼかし

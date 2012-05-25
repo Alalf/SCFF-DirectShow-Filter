@@ -593,7 +593,7 @@
       // 
       this.area_clipping_x.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-      this.area_clipping_x.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameterBindingSource, "ClippingX", true));
+      this.area_clipping_x.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameterBindingSource, "ClippingX", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
       this.area_clipping_x.Location = new System.Drawing.Point(92, 3);
       this.area_clipping_x.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
       this.area_clipping_x.Maximum = new decimal(new int[] {
@@ -1218,7 +1218,7 @@
       // 
       // resize_method_chshift
       // 
-      this.resize_method_chshift.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameterBindingSource, "SWScaleConfig.ChromaHShift", true));
+      this.resize_method_chshift.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameterBindingSource, "SWScaleConfig.ChromaHShift", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
       this.resize_method_chshift.DecimalPlaces = 2;
       this.resize_method_chshift.Enabled = false;
       this.resize_method_chshift.Increment = new decimal(new int[] {
@@ -1260,7 +1260,7 @@
       // 
       // resize_method_cvshift
       // 
-      this.resize_method_cvshift.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameterBindingSource, "SWScaleConfig.ChromaVShift", true));
+      this.resize_method_cvshift.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameterBindingSource, "SWScaleConfig.ChromaVShift", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
       this.resize_method_cvshift.DecimalPlaces = 2;
       this.resize_method_cvshift.Enabled = false;
       this.resize_method_cvshift.Increment = new decimal(new int[] {
@@ -1302,7 +1302,7 @@
       // 
       // resize_method_lsharpen
       // 
-      this.resize_method_lsharpen.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameterBindingSource, "SWScaleConfig.LumaSharpen", true));
+      this.resize_method_lsharpen.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameterBindingSource, "SWScaleConfig.LumaSharpen", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
       this.resize_method_lsharpen.DecimalPlaces = 2;
       this.resize_method_lsharpen.Enabled = false;
       this.resize_method_lsharpen.Increment = new decimal(new int[] {
@@ -1334,7 +1334,7 @@
       // 
       // resize_method_csharpen
       // 
-      this.resize_method_csharpen.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameterBindingSource, "SWScaleConfig.ChromaSharpen", true));
+      this.resize_method_csharpen.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameterBindingSource, "SWScaleConfig.ChromaSharpen", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
       this.resize_method_csharpen.DecimalPlaces = 2;
       this.resize_method_csharpen.Enabled = false;
       this.resize_method_csharpen.Increment = new decimal(new int[] {
@@ -1378,7 +1378,7 @@
       // 
       // resize_method_lgblur
       // 
-      this.resize_method_lgblur.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameterBindingSource, "SWScaleConfig.LumaGBlur", true));
+      this.resize_method_lgblur.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameterBindingSource, "SWScaleConfig.LumaGBlur", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
       this.resize_method_lgblur.DecimalPlaces = 2;
       this.resize_method_lgblur.Enabled = false;
       this.resize_method_lgblur.Increment = new decimal(new int[] {
@@ -1398,7 +1398,7 @@
       // 
       // resize_method_cgblur
       // 
-      this.resize_method_cgblur.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameterBindingSource, "SWScaleConfig.ChromaGBlur", true));
+      this.resize_method_cgblur.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameterBindingSource, "SWScaleConfig.ChromaGBlur", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
       this.resize_method_cgblur.DecimalPlaces = 2;
       this.resize_method_cgblur.Enabled = false;
       this.resize_method_cgblur.Increment = new decimal(new int[] {

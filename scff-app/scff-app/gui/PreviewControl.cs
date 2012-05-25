@@ -186,7 +186,7 @@ public partial class PreviewControl : UserControl {
 
     // BitBlt
     BitBlt(captured_bitmap_dc, 0, 0, captured_bitmap_.Width, captured_bitmap_.Height,
-           window_dc, 0, 0, SRCCOPY);
+           window_dc, layout_parameter_.ClippingX, layout_parameter_.ClippingY, SRCCOPY);
     graphics.ReleaseHdc(captured_bitmap_dc);
     graphics.Dispose();
     

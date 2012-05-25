@@ -92,12 +92,30 @@ public enum LayoutType {
 public enum ImagePixelFormat {
   /// @brief 不正なピクセルフォーマット
   kInvalidPixelFormat = -1,
+  /// @brief IYUV(12bit)
+  kIYUV = 0,
   /// @brief I420(12bit)
-  kI420 = 0,
+  kI420,
+  /// @brief YV12(12bit)
+  kYV12,
+  /// @brief YUY2(16bit)
+  kYUY2,
   /// @brief UYVY(16bit)
   kUYVY,
+  /// @brief YVYU(16bit)
+  kYVYU,
+  /// @brief YVU9(9bit)
+  kYVU9,
+  /// @brief RGB24(24bit)
+  kRGB24,
   /// @brief RGB0(32bit)
   kRGB0,
+  /// @brief RGB555(16bit)
+  kRGB555,
+  /// @brief RGB565(16bit)
+  kRGB565,
+  /// @brief RGB8(8bit)
+  kRGB8,
   /// @brief 対応ピクセルフォーマット数
   kSupportedPixelFormatsCount
 }

@@ -82,15 +82,24 @@ ErrorCode Scale::Init() {
   // ピクセルフォーマットの調整
   PixelFormat input_pixel_format = PIX_FMT_NONE;
   switch (GetOutputImage()->pixel_format()) {
+  case kIYUV:
   case kI420:
+  case kYUY2:
   case kUYVY:
-    // I420/UYVY: 入力:BGR0(32bit) 出力:I420(12bit)/UYVY(16bit)
+  case kRGB555:
+    // IYUV/I420/YUY2/UYVY/RGB555: 入力:BGR0(32bit) 出力:IYUV(12bit)/I420(12bit)/YUY2(16bit)/UYVY(16bit)/RGB555(16bit)
     /// @attention RGB->YUV変換時にUVが逆になるのを修正
     ///- RGBデータをBGRデータとしてSwsContextに渡してあります
     input_pixel_format = PIX_FMT_BGR0;
     break;
+  case kYV12:
+  case kYVYU:
+  case kYVU9:
+  case kRGB24:
   case kRGB0:
-    // RGB0: 入力:RGB0(32bit) 出力:RGB0(32bit)
+  case kRGB565:
+  case kRGB8:
+    // YV12/YVYU/YVU9/RGB24/RGB0/RGB565/RGB8: 入力:RGB0(32bit) 出力:YV12(12bit)/YVYU(16bit)/YVU9(9bit)/RGB24(24bit)/RGB0(32bit)/RGB565(16bit)/RGB8(8bit)
     input_pixel_format = PIX_FMT_RGB0;
     break;
   }
@@ -135,8 +144,13 @@ ErrorCode Scale::Run() {
   // SWScaleを使って拡大・縮小を行う
   int scale_height = -1;    // ありえない値
   switch (GetOutputImage()->pixel_format()) {
+  case kIYUV:
   case kI420:
+  case kYV12:
+  case kYUY2:
   case kUYVY:
+  case kYVYU:
+  case kYVU9:
     /// @attention RGB->YUV変換時に上下が逆になるのを修正
     AVPicture flip_horizontal_image_for_swscale;
     Utilities::FlipHorizontal(
@@ -155,7 +169,11 @@ ErrorCode Scale::Run() {
     ASSERT(scale_height == GetOutputImage()->height());
     break;
 
+  case kRGB24:
   case kRGB0:
+  case kRGB555:
+  case kRGB565:
+  case kRGB8:
     // 拡大縮小
     scale_height =
         sws_scale(scaler_,

@@ -29,14 +29,41 @@ public partial class Entry {
     get {
       string pixel_format_string;
       switch (SamplePixelFormat) {
+      case scff_interprocess.ImagePixelFormat.kIYUV:
+        pixel_format_string = "IYUV";
+        break;
       case scff_interprocess.ImagePixelFormat.kI420:
         pixel_format_string = "I420";
+        break;
+      case scff_interprocess.ImagePixelFormat.kYV12:
+        pixel_format_string = "YV12";
+        break;
+      case scff_interprocess.ImagePixelFormat.kYUY2:
+        pixel_format_string = "YUY2";
         break;
       case scff_interprocess.ImagePixelFormat.kUYVY:
         pixel_format_string = "UYVY";
         break;
+      case scff_interprocess.ImagePixelFormat.kYVYU:
+        pixel_format_string = "YVYU";
+        break;
+      case scff_interprocess.ImagePixelFormat.kYVU9:
+        pixel_format_string = "YVU9";
+        break;
+      case scff_interprocess.ImagePixelFormat.kRGB24:
+        pixel_format_string = "RGB24";
+        break;
       case scff_interprocess.ImagePixelFormat.kRGB0:
         pixel_format_string = "RGB0";
+        break;
+      case scff_interprocess.ImagePixelFormat.kRGB555:
+        pixel_format_string = "RGB555";
+        break;
+      case scff_interprocess.ImagePixelFormat.kRGB565:
+        pixel_format_string = "RGB565";
+        break;
+      case scff_interprocess.ImagePixelFormat.kRGB8:
+        pixel_format_string = "RGB8";
         break;
       default:
         pixel_format_string = "(invalid)";

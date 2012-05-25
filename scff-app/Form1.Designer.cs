@@ -175,7 +175,7 @@
       this.main_menu.Name = "main_menu";
       this.main_menu.Padding = new System.Windows.Forms.Padding(6, 3, 0, 3);
       this.main_menu.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-      this.main_menu.Size = new System.Drawing.Size(942, 22);
+      this.main_menu.Size = new System.Drawing.Size(515, 22);
       this.main_menu.TabIndex = 1;
       this.main_menu.Text = "main_menu";
       // 
@@ -1039,7 +1039,7 @@
       this.kVersion.AutoSize = true;
       this.kVersion.Font = new System.Drawing.Font("Verdana", 7F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.kVersion.ForeColor = System.Drawing.Color.White;
-      this.kVersion.Location = new System.Drawing.Point(876, 0);
+      this.kVersion.Location = new System.Drawing.Point(449, 0);
       this.kVersion.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
       this.kVersion.Name = "kVersion";
       this.kVersion.Size = new System.Drawing.Size(64, 35);
@@ -1124,7 +1124,7 @@
       this.kHeaderTable.Name = "kHeaderTable";
       this.kHeaderTable.RowCount = 1;
       this.kHeaderTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
-      this.kHeaderTable.Size = new System.Drawing.Size(942, 35);
+      this.kHeaderTable.Size = new System.Drawing.Size(515, 35);
       this.kHeaderTable.TabIndex = 22;
       // 
       // kResizeMethod
@@ -1219,7 +1219,7 @@
       // resize_method_chshift
       // 
       this.resize_method_chshift.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameterBindingSource, "SWScaleConfig.ChromaHShift", true));
-      this.resize_method_chshift.DecimalPlaces = 1;
+      this.resize_method_chshift.DecimalPlaces = 2;
       this.resize_method_chshift.Enabled = false;
       this.resize_method_chshift.Increment = new decimal(new int[] {
             2,
@@ -1261,7 +1261,7 @@
       // resize_method_cvshift
       // 
       this.resize_method_cvshift.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameterBindingSource, "SWScaleConfig.ChromaVShift", true));
-      this.resize_method_cvshift.DecimalPlaces = 1;
+      this.resize_method_cvshift.DecimalPlaces = 2;
       this.resize_method_cvshift.Enabled = false;
       this.resize_method_cvshift.Increment = new decimal(new int[] {
             2,
@@ -1303,19 +1303,19 @@
       // resize_method_lsharpen
       // 
       this.resize_method_lsharpen.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameterBindingSource, "SWScaleConfig.LumaSharpen", true));
-      this.resize_method_lsharpen.DecimalPlaces = 1;
+      this.resize_method_lsharpen.DecimalPlaces = 2;
       this.resize_method_lsharpen.Enabled = false;
       this.resize_method_lsharpen.Increment = new decimal(new int[] {
-            2,
+            16,
             0,
             0,
-            65536});
+            131072});
       this.resize_method_lsharpen.Location = new System.Drawing.Point(67, 48);
       this.resize_method_lsharpen.Maximum = new decimal(new int[] {
-            20,
+            400,
             0,
             0,
-            65536});
+            131072});
       this.resize_method_lsharpen.Name = "resize_method_lsharpen";
       this.resize_method_lsharpen.Size = new System.Drawing.Size(58, 18);
       this.resize_method_lsharpen.TabIndex = 30;
@@ -1335,19 +1335,19 @@
       // resize_method_csharpen
       // 
       this.resize_method_csharpen.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameterBindingSource, "SWScaleConfig.ChromaSharpen", true));
-      this.resize_method_csharpen.DecimalPlaces = 1;
+      this.resize_method_csharpen.DecimalPlaces = 2;
       this.resize_method_csharpen.Enabled = false;
       this.resize_method_csharpen.Increment = new decimal(new int[] {
-            2,
+            16,
             0,
             0,
-            65536});
+            131072});
       this.resize_method_csharpen.Location = new System.Drawing.Point(195, 48);
       this.resize_method_csharpen.Maximum = new decimal(new int[] {
-            20,
+            400,
             0,
             0,
-            65536});
+            131072});
       this.resize_method_csharpen.Name = "resize_method_csharpen";
       this.resize_method_csharpen.Size = new System.Drawing.Size(59, 18);
       this.resize_method_csharpen.TabIndex = 30;
@@ -1379,7 +1379,7 @@
       // resize_method_lgblur
       // 
       this.resize_method_lgblur.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameterBindingSource, "SWScaleConfig.LumaGBlur", true));
-      this.resize_method_lgblur.DecimalPlaces = 1;
+      this.resize_method_lgblur.DecimalPlaces = 2;
       this.resize_method_lgblur.Enabled = false;
       this.resize_method_lgblur.Increment = new decimal(new int[] {
             2,
@@ -1399,7 +1399,7 @@
       // resize_method_cgblur
       // 
       this.resize_method_cgblur.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameterBindingSource, "SWScaleConfig.ChromaGBlur", true));
-      this.resize_method_cgblur.DecimalPlaces = 1;
+      this.resize_method_cgblur.DecimalPlaces = 2;
       this.resize_method_cgblur.Enabled = false;
       this.resize_method_cgblur.Increment = new decimal(new int[] {
             2,
@@ -1482,7 +1482,7 @@
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.AutoSize = true;
       this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-      this.ClientSize = new System.Drawing.Size(942, 616);
+      this.ClientSize = new System.Drawing.Size(515, 635);
       this.Controls.Add(this.kProcessPanel);
       this.Controls.Add(this.kHeaderTable);
       this.Controls.Add(this.kProfilePanel);

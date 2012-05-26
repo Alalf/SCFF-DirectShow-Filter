@@ -70,6 +70,7 @@ public partial class AppImplementation {
     //------------------
     bool is_correctly_installed_x86 = false;
     bool is_dll_found_x86 = false;
+    string dll_path_x86 = "";
     try {
       RegistryKey scff_dsf_key =
           RegistryKey.OpenBaseKey(
@@ -80,8 +81,8 @@ public partial class AppImplementation {
       }
 
       RegistryKey scff_dsf_path_key = scff_dsf_key.OpenSubKey("InprocServer32");
-      string scff_dsf_path = scff_dsf_path_key.GetValue("").ToString();
-      if (File.Exists(scff_dsf_path)) {
+      dll_path_x86 = scff_dsf_path_key.GetValue("").ToString();
+      if (File.Exists(dll_path_x86)) {
         is_dll_found_x86 = true;
       }
     } catch {
@@ -93,6 +94,7 @@ public partial class AppImplementation {
     //------------------
     bool is_correctly_installed_amd64 = false;
     bool is_dll_found_amd64 = false;
+    string dll_path_amd64 = "";
     try {
       RegistryKey scff_dsf_key =
           RegistryKey.OpenBaseKey(
@@ -103,8 +105,8 @@ public partial class AppImplementation {
       }
 
       RegistryKey scff_dsf_path_key = scff_dsf_key.OpenSubKey("InprocServer32");
-      string scff_dsf_path = scff_dsf_path_key.GetValue("").ToString();
-      if (File.Exists(scff_dsf_path)) {
+      dll_path_amd64 = scff_dsf_path_key.GetValue("").ToString();
+      if (File.Exists(dll_path_amd64)) {
         is_dll_found_amd64 = true;
       }
     } catch {
@@ -117,7 +119,7 @@ public partial class AppImplementation {
     //----------------------
     if (!is_correctly_installed_x86 && !is_correctly_installed_amd64) {
       // 32bit版も64bit版もインストールされていない場合
-      MessageBox.Show("scff-*.ax is not correctly installed. Please re-install SCFF DirectShow Filter.",
+      MessageBox.Show("scff-*.ax is not correctly installed.\nPlease re-install SCFF DirectShow Filter.",
                       "Not correctly installed",
                       MessageBoxButtons.OK,
                       MessageBoxIcon.Error);
@@ -126,7 +128,13 @@ public partial class AppImplementation {
 
     if (!is_dll_found_x86 && !is_dll_found_amd64) {
       // 32bit版のDLLも64bit版のDLLも指定された場所に存在していない場合
-      MessageBox.Show("scff-*.ax is not found. Check your SCFF directory.",
+      string message = "scff-*.ax is not found:\n";
+      message += "\n";
+      message += "  32bit: " + dll_path_x86 + "\n";
+      message += "  64bit: " + dll_path_amd64 + "\n"; 
+      message += "\n";
+      message += "Check your SCFF directory.";
+      MessageBox.Show(message,
                       "DLL is not found",
                       MessageBoxButtons.OK,
                       MessageBoxIcon.Error);

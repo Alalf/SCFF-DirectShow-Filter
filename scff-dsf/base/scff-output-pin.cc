@@ -69,7 +69,7 @@ SCFFOutputPin::~SCFFOutputPin() {
 //
 ///- 以後ピンに渡されるmedia_typeは必ず以下になることが保障される:
 ///  - biCompression:  IYUV/I420/YV12/YUY2/UYVY/YVYU/YVU9/RGB24/RGB0/RGB555/RGB565/RGB8
-///  - biBitCount:     32/24/16/15/12/9
+///  - biBitCount:     32/24/16/12/9/8
 ///  - biWidth:        width_
 ///  - biHeight:       height_
 ///  - biSizeImage:    (...)
@@ -421,7 +421,7 @@ HRESULT SCFFOutputPin::SetMediaType(const CMediaType *media_type) {
     return E_INVALIDARG;
   }
 
-  /// @warning BI_RGB、BI_BITFIELDSは同時にbiBitCountもチェックしておいた方が正確かもしれません
+  // 対応形式であるか確認
   if (specified_video_info->bmiHeader.biCompression != MAKEFOURCC('I', 'Y', 'U', 'V') &&
       specified_video_info->bmiHeader.biCompression != MAKEFOURCC('I', '4', '2', '0') &&
       specified_video_info->bmiHeader.biCompression != MAKEFOURCC('Y', 'V', '1', '2') &&
@@ -429,8 +429,11 @@ HRESULT SCFFOutputPin::SetMediaType(const CMediaType *media_type) {
       specified_video_info->bmiHeader.biCompression != MAKEFOURCC('U', 'Y', 'V', 'Y') &&
       specified_video_info->bmiHeader.biCompression != MAKEFOURCC('Y', 'V', 'Y', 'U') &&
       specified_video_info->bmiHeader.biCompression != MAKEFOURCC('Y', 'V', 'U', '9') &&
-      specified_video_info->bmiHeader.biCompression != BI_RGB &&
-      specified_video_info->bmiHeader.biCompression != BI_BITFIELDS ) {
+      !(specified_video_info->bmiHeader.biCompression == BI_RGB && specified_video_info->bmiHeader.biBitCount == 32) &&
+      !(specified_video_info->bmiHeader.biCompression == BI_RGB && specified_video_info->bmiHeader.biBitCount == 24) &&
+      !(specified_video_info->bmiHeader.biCompression == BI_RGB && specified_video_info->bmiHeader.biBitCount == 16) &&
+      !(specified_video_info->bmiHeader.biCompression == BI_RGB && specified_video_info->bmiHeader.biBitCount == 8) &&
+      !(specified_video_info->bmiHeader.biCompression == BI_BITFIELDS && specified_video_info->bmiHeader.biBitCount == 16) ) {
     return E_INVALIDARG;
   }
 
@@ -593,8 +596,11 @@ HRESULT SCFFOutputPin::DoBufferProcessingLoop(void) {
     }
     break;
   case BI_BITFIELDS:
-    pixel_format = scff_imaging::kRGB565;
-    break;
+    switch (video_info->bmiHeader.biBitCount) {
+    case 16:
+      pixel_format = scff_imaging::kRGB565;
+    }
+	break;
   }
   ASSERT(pixel_format != scff_imaging::kInvalidPixelFormat);
 

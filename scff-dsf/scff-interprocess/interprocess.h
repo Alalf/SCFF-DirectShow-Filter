@@ -109,7 +109,7 @@ enum ImagePixelFormat {
   kRGB24,
   /// @brief RGB0(32bit)
   kRGB0,
-  /// @brief RGB555(15bit)
+  /// @brief RGB555(16bit)
   kRGB555,
   /// @brief RGB565(16bit)
   kRGB565,

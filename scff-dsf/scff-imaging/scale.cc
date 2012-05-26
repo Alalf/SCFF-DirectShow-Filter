@@ -87,9 +87,11 @@ ErrorCode Scale::Init() {
   case kYUY2:
   case kUYVY:
   case kRGB555:
-    // IYUV/I420/YUY2/UYVY/RGB555: 入力:BGR0(32bit) 出力:IYUV(12bit)/I420(12bit)/YUY2(16bit)/UYVY(16bit)/RGB555(16bit)
+  case kRGB565:
+    // IYUV/I420/YUY2/UYVY/RGB555: 入力:BGR0(32bit) 出力:IYUV(12bit)/I420(12bit)/YUY2(16bit)/UYVY(16bit)/RGB555(16bit)/RGB565(16bit)
     /// @attention RGB->YUV変換時にUVが逆になるのを修正
     ///- RGBデータをBGRデータとしてSwsContextに渡してあります
+    /// @attention RGB555/RGB565 のRとBが逆になるのを修正、そもそもの発生原因が不明
     input_pixel_format = PIX_FMT_BGR0;
     break;
   case kYV12:
@@ -97,9 +99,8 @@ ErrorCode Scale::Init() {
   case kYVU9:
   case kRGB24:
   case kRGB0:
-  case kRGB565:
   case kRGB8:
-    // YV12/YVYU/YVU9/RGB24/RGB0/RGB565/RGB8: 入力:RGB0(32bit) 出力:YV12(12bit)/YVYU(16bit)/YVU9(9bit)/RGB24(24bit)/RGB0(32bit)/RGB565(16bit)/RGB8(8bit)
+    // YV12/YVYU/YVU9/RGB24/RGB0/RGB565/RGB8: 入力:RGB0(32bit) 出力:YV12(12bit)/YVYU(16bit)/YVU9(9bit)/RGB24(24bit)/RGB0(32bit)/RGB8(8bit)
     input_pixel_format = PIX_FMT_RGB0;
     break;
   }

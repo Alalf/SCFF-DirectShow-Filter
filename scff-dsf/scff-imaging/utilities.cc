@@ -226,7 +226,8 @@ ImagePixelFormat Utilities::WindowsBitmapInfoHeaderToPixelFormat(
 
 // BITMAPINFOHEADERから対応ピクセルフォーマットかどうかを求める
 bool Utilities::IsSupportedPixelFormat(const BITMAPINFOHEADER &info_header) {
-  return WindowsBitmapInfoHeaderToPixelFormat(info_header) != kInvalidPixelFormat;
+  return
+      WindowsBitmapInfoHeaderToPixelFormat(info_header) != kInvalidPixelFormat;
 }
 
 //-------------------------------------------------------------------

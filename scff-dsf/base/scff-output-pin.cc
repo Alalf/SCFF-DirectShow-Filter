@@ -135,13 +135,13 @@ HRESULT SCFFOutputPin::GetMediaType(int position, CMediaType *media_type) {
                                                current_width,
                                                current_height,
                                                &current_info);
- 
+
   // 現在すべての形式でカラーテーブルは必要ないのでbmiHeaderのみコピー
   memcpy(&(video_info->bmiHeader),
          &(current_info.bmiHeader),
          sizeof(BITMAPINFOHEADER));
-  
-  /// @todo(me) GetBitmapSize(&video_info->bmiHeader)のほうが小さいことがある？要調査
+
+  /// @todo(me) GetBitmapSize(&video_info->bmiHeader)と異なるかも。要調査
 
   //-------------------------------------------------------------------
   // FPSなどのVIDEOINFOの設定

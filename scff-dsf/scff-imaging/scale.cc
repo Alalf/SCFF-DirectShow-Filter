@@ -86,14 +86,18 @@ ErrorCode Scale::Init() {
   case kIYUV:
   case kUYVY:
   case kYUY2:
-    // IYUV/I420/YUY2/UYVY: 入力:BGR0(32bit) 出力:I420(12bit)/IYUV(12bit)/UYVY(16bit)/YUY2(16bit)
+    // IYUV/I420/YUY2/UYVY:
+    //    入力:BGR0(32bit)
+    //    出力:I420(12bit)/IYUV(12bit)/UYVY(16bit)/YUY2(16bit)
     /// @attention RGB->YUV変換時にUVが逆になるのを修正
     ///- RGBデータをBGRデータとしてSwsContextに渡してあります
     input_pixel_format = PIX_FMT_BGR0;
     break;
   case kYV12:
   case kRGB0:
-    // YV12/RGB0: 入力:RGB0(32bit) 出力:YV12(12bit)/RGB0(32bit)
+    // YV12/RGB0:
+    //    入力:RGB0(32bit)
+    //    出力:YV12(12bit)/RGB0(32bit)
     input_pixel_format = PIX_FMT_RGB0;
     break;
   }

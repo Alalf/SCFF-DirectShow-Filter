@@ -599,8 +599,9 @@ HRESULT SCFFOutputPin::DoBufferProcessingLoop(void) {
     switch (video_info->bmiHeader.biBitCount) {
     case 16:
       pixel_format = scff_imaging::kRGB565;
+      break;
     }
-	break;
+    break;
   }
   ASSERT(pixel_format != scff_imaging::kInvalidPixelFormat);
 

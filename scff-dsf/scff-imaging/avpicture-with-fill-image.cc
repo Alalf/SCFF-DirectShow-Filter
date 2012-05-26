@@ -67,7 +67,7 @@ ErrorCode AVPictureWithFillImage::Create(ImagePixelFormat pixel_format,
 
   // RawBitmapを作成
   int size = Utilities::CalculateDataSize(pixel_format, width, height);
-  uint8_t *raw_bitmap = static_cast<uint8_t*>(av_mallocz(size));
+  uint8_t *raw_bitmap = static_cast<uint8_t*>(av_malloc(size));
   if (raw_bitmap == NULL) {
     return kAVPictureWithFillImageOutOfMemoryError;
   }

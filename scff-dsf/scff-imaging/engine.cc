@@ -82,11 +82,47 @@ void Engine::ReleaseLayout() {
   layout_error_code_ = kProcessorUninitializedError;
 }
 
+// 指定されたAVPictureImageを黒で塗りつぶす
+static void Clear(AVPictureImage *image) {
+  if (!Utilities::CanUseDrawUtils(image->pixel_format())) {
+    // 塗りつぶせなければなにもしない
+    return;
+  }
+
+  FFDrawContext draw_context;
+  FFDrawColor padding_color;
+
+  // パディング用のコンテキストの初期化
+  const int error_init =
+      ff_draw_init(&draw_context,
+                   image->avpicture_pixel_format(),
+                   0);
+  ASSERT(error_init == 0);
+
+  // パディング用のカラーを真っ黒に設定
+  uint8_t rgba_padding_color[4] = {0};
+  ff_draw_color(&draw_context,
+                &padding_color,
+                rgba_padding_color);
+
+  ff_fill_rectangle(&draw_context, &padding_color,
+                    image->avpicture()->data,
+                    image->avpicture()->linesize,
+                    0,
+                    0,
+                    image->width(),
+                    image->height());
+}
+
 // 唯一レイアウトエラーコードをkNoErrorにできるメソッド
 ErrorCode Engine::LayoutInitDone() {
   ASSERT(layout_error_code_ == kProcessorUninitializedError);
   if (layout_error_code_ == kProcessorUninitializedError) {
     layout_error_code_ = kNoError;
+
+    // ここで一回FrontImage/BackImageを黒で塗りつぶす
+    Clear(&front_image_);
+    //Clear(&back_image_);
   }
   return layout_error_code_;
 }

@@ -23,6 +23,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using Microsoft.Win32;
+using System.IO;
 
 namespace scff_app {
 
@@ -54,6 +56,95 @@ public partial class AppImplementation {
 
     // リサイズ方法のリストを作成
     BuildResizeMethodList();
+  }
+
+  /// @brief 起動時のチェックを行うメソッド
+  public bool CheckEnvironment() {
+    // GUID
+    const string kGUID = "D64DB8AA-9055-418F-AFE9-A080A4FAE47A";
+    // Registry Key
+    const string kRegistryKey = "CLSID\\{" + kGUID + "}";
+
+    //------------------
+    // 32bit版のチェック
+    //------------------
+    bool is_correctly_installed_x86 = false;
+    bool is_dll_found_x86 = false;
+    try {
+      RegistryKey scff_dsf_key =
+          RegistryKey.OpenBaseKey(
+              RegistryHive.ClassesRoot,
+              RegistryView.Registry32).OpenSubKey(kRegistryKey);
+      if (scff_dsf_key != null) {
+        is_correctly_installed_x86 = true;
+      }
+
+      RegistryKey scff_dsf_path_key = scff_dsf_key.OpenSubKey("InprocServer32");
+      string scff_dsf_path = scff_dsf_path_key.GetValue("").ToString();
+      if (File.Exists(scff_dsf_path)) {
+        is_dll_found_x86 = true;
+      }
+    } catch {
+      // 念のためエラーが出た場合も考慮
+    }
+
+    //------------------
+    // 64bit版のチェック
+    //------------------
+    bool is_correctly_installed_amd64 = false;
+    bool is_dll_found_amd64 = false;
+    try {
+      RegistryKey scff_dsf_key =
+          RegistryKey.OpenBaseKey(
+              RegistryHive.ClassesRoot,
+              RegistryView.Registry64).OpenSubKey(kRegistryKey);
+      if (scff_dsf_key != null) {
+        is_correctly_installed_amd64 = true;
+      }
+
+      RegistryKey scff_dsf_path_key = scff_dsf_key.OpenSubKey("InprocServer32");
+      string scff_dsf_path = scff_dsf_path_key.GetValue("").ToString();
+      if (File.Exists(scff_dsf_path)) {
+        is_dll_found_amd64 = true;
+      }
+    } catch {
+      // 念のためエラーが出た場合も考慮
+    }
+
+    //----------------------
+    // エラーダイアログの表示
+    // （若干不正確だがないよりましだろう）
+    //----------------------
+    if (!is_correctly_installed_x86 && !is_correctly_installed_amd64) {
+      // 32bit版も64bit版もインストールされていない場合
+      MessageBox.Show("scff-*.ax is not correctly installed. Please re-install SCFF DirectShow Filter.",
+                      "Not correctly installed",
+                      MessageBoxButtons.OK,
+                      MessageBoxIcon.Error);
+      return false;
+    }
+
+    if (!is_dll_found_x86 && !is_dll_found_amd64) {
+      // 32bit版のDLLも64bit版のDLLも指定された場所に存在していない場合
+      MessageBox.Show("scff-*.ax is not found. Check your SCFF directory.",
+                      "DLL is not found",
+                      MessageBoxButtons.OK,
+                      MessageBoxIcon.Error);
+      return false;
+    }
+
+    //------------------
+    // カラーチェック
+    //------------------
+    if (Screen.PrimaryScreen.BitsPerPixel != 32) {
+      MessageBox.Show("SCFF requires primary screen is configured 32bit color mode.",
+                      "Not 32bit color mode",
+                      MessageBoxButtons.OK, MessageBoxIcon.Error);
+      return false;
+    }
+
+    // 起動OK
+    return true;
   }
 
   /// @brief コンボボックス用のResizeMethodアイテムクラス

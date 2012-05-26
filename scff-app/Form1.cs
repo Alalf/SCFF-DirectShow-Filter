@@ -107,6 +107,12 @@ public partial class Form1 : Form {
   // フォーム
   //-------------------------------------------------------------------
   private void Form1_Shown(object sender, EventArgs e) {
+    // 起動時のチェック
+    if (!impl_.CheckEnvironment()) {
+      Close();
+      return;
+    }
+
     // AeroをOffにしようと試みる
     impl_.DWMAPIOff();
   }

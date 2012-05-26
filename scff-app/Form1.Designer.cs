@@ -1000,9 +1000,9 @@
       this.resize_method_accurate_rnd.Location = new System.Drawing.Point(133, 3);
       this.resize_method_accurate_rnd.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
       this.resize_method_accurate_rnd.Name = "resize_method_accurate_rnd";
-      this.resize_method_accurate_rnd.Size = new System.Drawing.Size(89, 22);
+      this.resize_method_accurate_rnd.Size = new System.Drawing.Size(114, 22);
       this.resize_method_accurate_rnd.TabIndex = 20;
-      this.resize_method_accurate_rnd.Text = "Accurate Rnd";
+      this.resize_method_accurate_rnd.Text = "Accurate Rounding";
       this.resize_method_accurate_rnd.UseVisualStyleBackColor = true;
       // 
       // resize_method_combo

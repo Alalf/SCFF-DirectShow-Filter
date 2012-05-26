@@ -79,7 +79,7 @@ public partial class AppImplementation {
     ResizeMethodList.Add(Tuple.Create("Bicublin (luma bicubic, chroma bilinear)", scff_interprocess.SWScaleFlags.kBicublin));
     ResizeMethodList.Add(Tuple.Create("Gauss (gaussian)", scff_interprocess.SWScaleFlags.kGauss));
     ResizeMethodList.Add(Tuple.Create("Sinc (sinc)", scff_interprocess.SWScaleFlags.kSinc));
-    ResizeMethodList.Add(Tuple.Create("Lanczos (natural)", scff_interprocess.SWScaleFlags.kLanczos));
+    ResizeMethodList.Add(Tuple.Create("Lanczos (lanczos)", scff_interprocess.SWScaleFlags.kLanczos));
     ResizeMethodList.Add(Tuple.Create("Spline (natural bicubic spline)", scff_interprocess.SWScaleFlags.kSpline));
   }
 

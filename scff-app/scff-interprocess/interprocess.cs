@@ -132,7 +132,7 @@ public enum SWScaleFlags {
   kGauss = 0x80,
   /// @brief sinc
   kSinc = 0x100,
-  /// @brief natural
+  /// @brief lanczos
   kLanczos = 0x200,
   /// @brief natural bicubic spline
   kSpline = 0x400

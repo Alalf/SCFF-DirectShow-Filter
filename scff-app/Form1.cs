@@ -1,5 +1,4 @@
-﻿
-// Copyright 2012 Progre <djyayutto_at_gmail.com>
+﻿// Copyright 2012 Progre <djyayutto_at_gmail.com>
 //
 // This file is part of SCFF DSF.
 //

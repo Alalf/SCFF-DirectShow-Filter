@@ -1,5 +1,4 @@
-﻿
-// Copyright 2012 Alalf <alalf.iQLc_at_gmail.com>
+﻿// Copyright 2012 Alalf <alalf.iQLc_at_gmail.com>
 //
 // This file is part of SCFF DSF.
 //
@@ -16,15 +15,15 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file imaging/splash-screen.cc
-/// @brief imaging::SplashScreenの定義
+/// @file scff-imaging/splash-screen.cc
+/// @brief scff_imaging::SplashScreenの定義
 
 #include "imaging/splash-screen.h"
 
-namespace imaging {
+namespace scff_imaging {
 
 //=====================================================================
-// imaging::SplashScreen
+// scff_imaging::SplashScreen
 //=====================================================================
 
-}   // namespace imaging
+}   // namespace scff_imaging

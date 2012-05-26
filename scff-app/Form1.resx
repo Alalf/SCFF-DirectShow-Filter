@@ -118,29 +118,23 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <metadata name="main_menu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>91, 8</value>
+    <value>119, 17</value>
   </metadata>
   <metadata name="layoutParameterBindingSource.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>284, 10</value>
-  </metadata>
-  <metadata name="layoutParameterBindingSource.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>284, 10</value>
+    <value>226, 17</value>
   </metadata>
   <metadata name="entryBindingSource.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>495, 10</value>
-  </metadata>
-  <metadata name="entryBindingSource.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>495, 10</value>
+    <value>437, 17</value>
   </metadata>
   <metadata name="scff_icons.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>7, 7</value>
+    <value>17, 17</value>
   </metadata>
   <data name="scff_icons.ImageStream" mimetype="application/x-microsoft.net.object.binary.base64">
     <value>
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAACC
-        KAAAAk1TRnQBSQFMAgEBCgEAAaABBgGgAQYBEAEAARABAAT/ASEBAAj/AUIBTQE2BwABNgMAASgDAAFA
+        KAAAAk1TRnQBSQFMAgEBCgEAAbABBgGwAQYBEAEAARABAAT/ASEBAAj/AUIBTQE2BwABNgMAASgDAAFA
         AwABMAMAAQEBAAEgBgABMP8A/wAoAAHoAZwBAAH/AZICAAH/AZICAAH/AZICAAH/AZICAAH/MAADGgEk
         Aa4CAAH/AyMBM7AAAegBnAEAAf8B+wHDAaYB/wHRAgAB/wHRAgAB/wGSAgAB/ywAAxoBJAGuAgAB/wHG
         AgAB/wGiAgAB/wMjATOsAAHoAZwBAAH/AfsBwwGmAf8B/QGlAQAB/wHeAgAB/wGaAgAB/ygAAxwBJwGu
@@ -316,7 +310,7 @@
 </value>
   </data>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>30</value>
+    <value>52</value>
   </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">

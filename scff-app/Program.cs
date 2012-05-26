@@ -20,16 +20,11 @@
 /// @brief アプリケーションのエントリポイント
 
 using System;
-using System.Windows.Forms;
-using System.Runtime.InteropServices;
 using System.IO;
+using System.Windows.Forms;
+using Microsoft.Win32;
 
 namespace scff_app {
-
-/// @brief SCFF DirectShow Filter COMクラス
-[ComImport, Guid("D64DB8AA-9055-418F-AFE9-A080A4FAE47A")] 
-class SCFFSource {
-}
 
 /// @brief アプリケーションのエントリポイントを格納するクラス
 static class Program {
@@ -43,16 +38,24 @@ static class Program {
     // 起動時のチェック
     //-----------------------------------------------------------------
 
+    // 現在のOSが32bitが64bitかを判定する
+    /// @attention XP SP3以降でないと使えない
+    RegistryView registry_view;
+    if (Environment.Is64BitOperatingSystem) {
+      registry_view = RegistryView.Registry64;
+    } else {
+      registry_view = RegistryView.Registry32;
+    }
+
+    // GUID
+    const string kGUID = "D64DB8AA-9055-418F-AFE9-A080A4FAE47A";
+    // Registry Key
+    const string kRegistryKey = "CLSID\\{" + kGUID + "}";
+
     // SCFF DirectShow Filterがインストールされているかチェック
-    try {
-      SCFFSource scff_source = new SCFFSource();
-    } catch (FileNotFoundException) {
-      MessageBox.Show("scff-*.ax is not found. Check your SCFF directory.",
-                      "DLL is not found",
-                      MessageBoxButtons.OK,
-                      MessageBoxIcon.Error);
-      return;
-    } catch (COMException) {
+    RegistryKey scff_dsf_key =
+        RegistryKey.OpenBaseKey(RegistryHive.ClassesRoot, registry_view).OpenSubKey(kRegistryKey);
+    if (scff_dsf_key == null) {
       MessageBox.Show("scff-*.ax is not correctly installed. Please re-install SCFF DirectShow Filter.",
                       "Not correctly installed",
                       MessageBoxButtons.OK,
@@ -60,7 +63,18 @@ static class Program {
       return;
     }
 
-    // 32bit以外では起動しない
+    // インストールパスが正しいかもチェック
+    RegistryKey scff_dsf_path_key = scff_dsf_key.OpenSubKey("InprocServer32");
+    string scff_dsf_path = scff_dsf_path_key.GetValue("").ToString();
+    if (!File.Exists(scff_dsf_path)) {
+      MessageBox.Show("scff-*.ax is not found. Check your SCFF directory.",
+                      "DLL is not found",
+                      MessageBoxButtons.OK,
+                      MessageBoxIcon.Error);
+      return;
+    }
+
+    // 32bitカラー以外では起動しない
     if (Screen.PrimaryScreen.BitsPerPixel != 32) {
       MessageBox.Show("SCFF requires primary screen is configured 32bit color mode.",
                       "Not 32bit color mode",

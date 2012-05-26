@@ -38,9 +38,6 @@ class Padding : public Processor<AVPictureImage, AVPictureImage> {
   /// @brief デストラクタ
   ~Padding();
 
-  /// @brief Padding機能が利用できるかどうか
-  bool CanUsePadding() const;
-
   //-------------------------------------------------------------------
   /// @copydoc Processor::Init
   ErrorCode Init();

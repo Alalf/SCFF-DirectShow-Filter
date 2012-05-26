@@ -29,72 +29,37 @@
 // フィルタ/ピン設定
 //=====================================================================
 
-/// @brief メディアサブタイプGUID: IYUV
-static const GUID kMediaSubtypeIYUV =
-    MEDIASUBTYPE_IYUV;
-
 /// @brief メディアサブタイプGUID: I420
 static const GUID kMediaSubtypeI420 =
     static_cast<GUID>(FOURCCMap(MAKEFOURCC('I', '4', '2', '0')));
 
-/// @brief メディアサブタイプGUID: YV12
-static const GUID kMediaSubtypeYV12 =
-    MEDIASUBTYPE_YV12;
+/// @brief メディアサブタイプGUID: IYUV
+static const GUID kMediaSubtypeIYUV = MEDIASUBTYPE_IYUV;
 
-/// @brief メディアサブタイプGUID: YUY2
-static const GUID kMediaSubtypeYUY2 =
-    MEDIASUBTYPE_YUY2;
+/// @brief メディアサブタイプGUID: YV12
+static const GUID kMediaSubtypeYV12 = MEDIASUBTYPE_YV12;
 
 /// @brief メディアサブタイプGUID: UYVY
-static const GUID kMediaSubtypeUYVY =
-    MEDIASUBTYPE_UYVY;
+static const GUID kMediaSubtypeUYVY = MEDIASUBTYPE_UYVY;
 
-/// @brief メディアサブタイプGUID: YVYU
-static const GUID kMediaSubtypeYVYU =
-    MEDIASUBTYPE_YVYU;
-
-/// @brief メディアサブタイプGUID: YVU9
-static const GUID kMediaSubtypeYVU9 =
-    MEDIASUBTYPE_YVU9;
-
-/// @brief メディアサブタイプGUID: RGB24
-static const GUID kMediaSubtypeRGB24 =
-	MEDIASUBTYPE_RGB24;
+/// @brief メディアサブタイプGUID: YUY2
+static const GUID kMediaSubtypeYUY2 = MEDIASUBTYPE_YUY2;
 
 /// @brief メディアサブタイプGUID: RGB0
-static const GUID kMediaSubtypeRGB0 =
-    MEDIASUBTYPE_RGB32;   // リトルエンディアンであることに注意
-
-/// @brief メディアサブタイプGUID: RGB555
-static const GUID kMediaSubtypeRGB555 =
-	MEDIASUBTYPE_RGB555;
-
-/// @brief メディアサブタイプGUID: RGB565
-static const GUID kMediaSubtypeRGB565 =
-	MEDIASUBTYPE_RGB565;
-
-/// @brief メディアサブタイプGUID: RGB8
-static const GUID kMediaSubtypeRGB8 =
-	MEDIASUBTYPE_RGB8;
-
+/// @warning リトルエンディアンであることに注意
+static const GUID kMediaSubtypeRGB0 = MEDIASUBTYPE_RGB32;
 
 /// @brief メディアタイプ: Video
 static const AMOVIESETUP_MEDIATYPE kMediaTypes[] = {
 #if defined(FOR_KOTOENCODER)
   {&MEDIATYPE_Video, &kMediaSubtypeI420},
 #else
-  {&MEDIATYPE_Video, &kMediaSubtypeIYUV},
   {&MEDIATYPE_Video, &kMediaSubtypeI420},
+  {&MEDIATYPE_Video, &kMediaSubtypeIYUV},
   {&MEDIATYPE_Video, &kMediaSubtypeYV12},
-  {&MEDIATYPE_Video, &kMediaSubtypeYUY2},
   {&MEDIATYPE_Video, &kMediaSubtypeUYVY},
-  {&MEDIATYPE_Video, &kMediaSubtypeYVYU},
-  {&MEDIATYPE_Video, &kMediaSubtypeYVU9},
-  {&MEDIATYPE_Video, &kMediaSubtypeRGB24},
+  {&MEDIATYPE_Video, &kMediaSubtypeYUY2},
   {&MEDIATYPE_Video, &kMediaSubtypeRGB0},
-  {&MEDIATYPE_Video, &kMediaSubtypeRGB555},
-  {&MEDIATYPE_Video, &kMediaSubtypeRGB565},
-  {&MEDIATYPE_Video, &kMediaSubtypeRGB8},
 #endif
 };
 

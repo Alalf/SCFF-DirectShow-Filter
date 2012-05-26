@@ -66,6 +66,22 @@ void Utilities::FlipHorizontal(const AVPicture *input, int input_height,
   }
 }
 
+/// @brief drawutilsが使用可能なピクセルフォーマットか
+bool Utilities::CanUseDrawUtils(ImagePixelFormat pixel_format) {
+  /// @warning 2012/05/08現在drawutilsはPlaner Formatにしか対応していない
+  switch (pixel_format) {
+  case kI420:
+  case kIYUV:
+  case kYV12:
+  case kRGB0:
+    return true;
+  case kUYVY:
+  case kYUY2:
+  default:
+    return false;
+  }
+}
+
 //-------------------------------------------------------------------
 // イメージのタイプ
 //-------------------------------------------------------------------
@@ -88,35 +104,19 @@ int Utilities::CalculateImageSize(const Image &image) {
 /// @attention ピクセルフォーマットを追加するときはここを修正すること
 PixelFormat Utilities::ToAVPicturePixelFormat(ImagePixelFormat pixel_format) {
   switch (pixel_format) {
-  case kIYUV:
   case kI420:
+  case kIYUV:
   case kYV12:
     return PIX_FMT_YUV420P;
-    break;
-  case kYUY2:
-  case kYVYU:
-    return PIX_FMT_YUYV422;
     break;
   case kUYVY:
     return PIX_FMT_UYVY422;
     break;
-  case kYVU9:
-    return PIX_FMT_YUV410P;
-    break;
-  case kRGB24:
-    return PIX_FMT_RGB24;
+  case kYUY2:
+    return PIX_FMT_YUYV422;
     break;
   case kRGB0:
     return PIX_FMT_RGB0;
-    break;
-  case kRGB555:
-    return PIX_FMT_RGB555LE;
-    break;
-  case kRGB565:
-    return PIX_FMT_RGB565LE;
-    break;
-  case kRGB8:
-    return PIX_FMT_RGB8;
     break;
   }
 
@@ -126,80 +126,107 @@ PixelFormat Utilities::ToAVPicturePixelFormat(ImagePixelFormat pixel_format) {
 
 // BITMAPINFOHEADERを取得
 /// @attention ピクセルフォーマットを追加するときはここを修正すること
-BITMAPINFO Utilities::ToWindowsBitmapInfo(ImagePixelFormat pixel_format,
-                                          int width,
-                                          int height) {
-  BITMAPINFO info;
-  ZeroMemory(&info, sizeof(BITMAPINFO));
+void Utilities::ToWindowsBitmapInfo(ImagePixelFormat pixel_format,
+                                    int width,
+                                    int height,
+                                    BITMAPINFO *info) {
+  ZeroMemory(info, sizeof(BITMAPINFO));
   // どの形式でもカラーテーブルはない
-  info.bmiHeader.biSize          = sizeof(BITMAPINFOHEADER);
-  info.bmiHeader.biWidth         = width;
-  info.bmiHeader.biHeight        = height;
-  info.bmiHeader.biPlanes        = 1;
-  info.bmiHeader.biSizeImage     = static_cast<DWORD>(
-      CalculateDataSize(pixel_format, width, height));
-  info.bmiHeader.biXPelsPerMeter = 0;
-  info.bmiHeader.biYPelsPerMeter = 0;
-  info.bmiHeader.biClrUsed       = 0;
-  info.bmiHeader.biClrImportant  = 0;
+  info->bmiHeader.biSize          = sizeof(BITMAPINFOHEADER);
+  info->bmiHeader.biWidth         = width;
+  info->bmiHeader.biHeight        = height;
+  info->bmiHeader.biPlanes        = 1;
+  info->bmiHeader.biSizeImage     =
+      static_cast<DWORD>(CalculateDataSize(pixel_format, width, height));
+  info->bmiHeader.biXPelsPerMeter = 0;
+  info->bmiHeader.biYPelsPerMeter = 0;
+  info->bmiHeader.biClrUsed       = 0;
+  info->bmiHeader.biClrImportant  = 0;
   switch (pixel_format) {
-  case kIYUV:
-    info.bmiHeader.biBitCount      = 12;
-    info.bmiHeader.biCompression   = MAKEFOURCC('I', 'Y', 'U', 'V');
-    break;
   case kI420:
-    info.bmiHeader.biBitCount      = 12;
-    info.bmiHeader.biCompression   = MAKEFOURCC('I', '4', '2', '0');
+    info->bmiHeader.biBitCount    = 12;
+    info->bmiHeader.biCompression = MAKEFOURCC('I', '4', '2', '0');
+    break;
+  case kIYUV:
+    info->bmiHeader.biBitCount    = 12;
+    info->bmiHeader.biCompression = MAKEFOURCC('I', 'Y', 'U', 'V');
     break;
   case kYV12:
-    info.bmiHeader.biBitCount      = 12;
-    info.bmiHeader.biCompression   = MAKEFOURCC('Y', 'V', '1', '2');
-    break;
-  case kYUY2:
-    info.bmiHeader.biBitCount      = 16;
-    info.bmiHeader.biCompression   = MAKEFOURCC('Y', 'U', 'Y', '2');
+    info->bmiHeader.biBitCount    = 12;
+    info->bmiHeader.biCompression = MAKEFOURCC('Y', 'V', '1', '2');
     break;
   case kUYVY:
-    info.bmiHeader.biBitCount      = 16;
-    info.bmiHeader.biCompression   = MAKEFOURCC('U', 'Y', 'V', 'Y');
+    info->bmiHeader.biBitCount    = 16;
+    info->bmiHeader.biCompression = MAKEFOURCC('U', 'Y', 'V', 'Y');
     break;
-  case kYVYU:
-    info.bmiHeader.biBitCount      = 16;
-    info.bmiHeader.biCompression   = MAKEFOURCC('Y', 'V', 'Y', 'U');
-    break;
-  case kYVU9:
-    info.bmiHeader.biBitCount      = 9;
-    info.bmiHeader.biCompression   = MAKEFOURCC('Y', 'V', 'U', '9');
-    break;
-  case kRGB24:
-    info.bmiHeader.biBitCount      = 24;
-    info.bmiHeader.biCompression   = BI_RGB;
+  case kYUY2:
+    info->bmiHeader.biBitCount    = 16;
+    info->bmiHeader.biCompression = MAKEFOURCC('Y', 'U', 'Y', '2');
     break;
   case kRGB0:
-    info.bmiHeader.biBitCount      = 32;
-    info.bmiHeader.biCompression   = BI_RGB;
-    break;
-  case kRGB555:
-    info.bmiHeader.biBitCount      = 16;
-    info.bmiHeader.biCompression   = BI_RGB;
-    break;
-  case kRGB565:
-    info.bmiHeader.biBitCount      = 16;
-    info.bmiHeader.biCompression   = BI_BITFIELDS;
-    break;
-  case kRGB8:
-    info.bmiHeader.biBitCount      = 8;
-    info.bmiHeader.biCompression   = BI_RGB;
+    info->bmiHeader.biBitCount    = 32;
+    info->bmiHeader.biCompression = BI_RGB;
     break;
   }
-  return info;
 }
 
 // イメージからBITMAPINFOHEADERを取得
-BITMAPINFO Utilities::ImageToWindowsBitmapInfo(const Image &image) {
-  return Utilities::ToWindowsBitmapInfo(image.pixel_format(),
-                                        image.width(),
-                                        image.height());
+void Utilities::ImageToWindowsBitmapInfo(const Image &image,
+                                         BITMAPINFO *info) {
+  Utilities::ToWindowsBitmapInfo(image.pixel_format(),
+                                 image.width(),
+                                 image.height(),
+                                 info);
+}
+
+// int(index)->enum(ImagePixelFormat)変換
+ImagePixelFormat Utilities::IndexToPixelFormat(int index) {
+  ASSERT(0 <= index && index < kSupportedPixelFormatsCount);
+
+  switch (index) {
+  case kI420:
+    return kI420;
+  case kIYUV:
+    return kIYUV;
+  case kYV12:
+    return kYV12;
+  case kUYVY:
+    return kUYVY;
+  case kYUY2:
+    return kYUY2;
+  case kRGB0:
+    return kRGB0;
+  }
+
+  return kInvalidPixelFormat;
+}
+
+// BITMAPINFOHEADERからImagePixelFormatを取得
+ImagePixelFormat Utilities::WindowsBitmapInfoHeaderToPixelFormat(
+    const BITMAPINFOHEADER &info_header) {
+  switch (info_header.biCompression) {
+  case MAKEFOURCC('I', '4', '2', '0'):
+    return kI420;
+  case MAKEFOURCC('I', 'Y', 'U', 'V'):
+    return kIYUV;
+  case MAKEFOURCC('Y', 'V', '1', '2'):
+    return kYV12;
+  case MAKEFOURCC('U', 'Y', 'V', 'Y'):
+    return kUYVY;
+  case MAKEFOURCC('Y', 'U', 'Y', '2'):
+    return kYUY2;
+  case BI_RGB:
+    if (info_header.biBitCount == 32) {
+      return kRGB0;
+    }
+  }
+
+  return kInvalidPixelFormat;
+}
+
+// BITMAPINFOHEADERから対応ピクセルフォーマットかどうかを求める
+bool Utilities::IsSupportedPixelFormat(const BITMAPINFOHEADER &info_header) {
+  return WindowsBitmapInfoHeaderToPixelFormat(info_header) != kInvalidPixelFormat;
 }
 
 //-------------------------------------------------------------------

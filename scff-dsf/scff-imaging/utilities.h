@@ -54,12 +54,16 @@ class Utilities {
   static void FlipHorizontal(const AVPicture *input, int input_height,
                              AVPicture *output);
 
+  /// @brief drawutilsが使用可能なピクセルフォーマットか
+  static bool CanUseDrawUtils(ImagePixelFormat pixel_format);
+
   //-------------------------------------------------------------------
   // イメージのタイプ（サイズ、形式など）
   //-------------------------------------------------------------------
+
   /// @brief イメージのサイズを求める
   static int CalculateDataSize(ImagePixelFormat pixel_format,
-                          int width, int height);
+                               int width, int height);
   /// @brief イメージのサイズを直接求める
   static int CalculateImageSize(const Image &image);
 
@@ -67,11 +71,24 @@ class Utilities {
   static PixelFormat ToAVPicturePixelFormat(ImagePixelFormat pixel_format);
 
   /// @brief BITMAPINFOHEADERを取得
-  static BITMAPINFO ToWindowsBitmapInfo(ImagePixelFormat pixel_format,
-                                        int width,
-                                        int height);
+  static void ToWindowsBitmapInfo(ImagePixelFormat pixel_format,
+                                  int width,
+                                  int height,
+                                  BITMAPINFO *info);
   /// @brief イメージからBITMAPINFOHEADERを取得
-  static BITMAPINFO ImageToWindowsBitmapInfo(const Image &image);
+  static void ImageToWindowsBitmapInfo(const Image &image,
+                                       BITMAPINFO *info);
+
+  /// @brief int(index)->enum(ImagePixelFormat)変換
+  /// @warning バグの元なので注意して使うこと
+  static ImagePixelFormat IndexToPixelFormat(int index);
+
+  /// @brief BITMAPINFOHEADERからImagePixelFormatを取得
+  static ImagePixelFormat WindowsBitmapInfoHeaderToPixelFormat(
+      const BITMAPINFOHEADER &info_header);
+
+  /// @brief BITMAPINFOHEADERから対応ピクセルフォーマットかどうかを求める
+  static bool IsSupportedPixelFormat(const BITMAPINFOHEADER &info_header);
 
   //-------------------------------------------------------------------
   // レイアウト

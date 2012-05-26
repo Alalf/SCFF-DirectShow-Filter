@@ -68,11 +68,11 @@ SCFFOutputPin::~SCFFOutputPin() {
 // インデックス値で優先メディア タイプを取得
 //
 ///- 以後ピンに渡されるmedia_typeは必ず以下になることが保障される:
-///  - biCompression:  IYUV/I420/YV12/YUY2/UYVY/YVYU/YVU9/RGB24/RGB0/RGB555/RGB565/RGB8
-///  - biBitCount:     32/24/16/12/9/8
+///  - biCompression:  I420/IYUV/YV12/UYVY/YUY2/RGB0
+///  - biBitCount:     12/16/32
 ///  - biWidth:        width_
 ///  - biHeight:       height_
-///  - biSizeImage:    (...)
+///  - biSizeImage:    CalculateDataSize(*)
 ///  - biPlanes:       1
 ///  - FPS(AvgTimePerFrame): 1/fps_
 ///  - Type:           MEDIATYPE_Video
@@ -106,166 +106,42 @@ HRESULT SCFFOutputPin::GetMediaType(int position, CMediaType *media_type) {
   //-------------------------------------------------------------------
   // １フレームの設定を表すBITMAPINFOHEADERの設定
 
-  // カラーテーブルは必要ない
-  video_info->bmiHeader.biSize          = sizeof(BITMAPINFOHEADER);
+  // positionからピクセルフォーマットを計算
+  const scff_imaging::ImagePixelFormat current_pixel_format =
+#if defined(FOR_KOTOENCODER)
+      scff_imaging::kI420;
+#else
+      scff_imaging::Utilities::IndexToPixelFormat(position_in_pixel_formats);
+#endif
 
   // サイズ設定の優先度は以下のとおり:
   //  0.  SetMediaTypeでピン接続先から指定されたサイズ
   //  1-. 優先サイズの配列順
-  switch (position_in_preferred_sizes) {
-  case 0:
-    video_info->bmiHeader.biWidth   = width_;
-    video_info->bmiHeader.biHeight  = height_;
-    break;
-  default:
-    video_info->bmiHeader.biWidth   =
-        kPreferredSizes[position_in_preferred_sizes].cx;
-    video_info->bmiHeader.biHeight  =
-        kPreferredSizes[position_in_preferred_sizes].cy;
-    break;
+  int current_width = -1;
+  int current_height = -1;
+  if (position_in_preferred_sizes == 0) {
+    // 0. SetMediaTypeでピン接続先から指定されたサイズ
+    current_width = width_;
+    current_height = height_;
+  } else {
+    // 1-. 優先サイズの配列順
+    current_width = kPreferredSizes[position_in_preferred_sizes].cx;
+    current_height = kPreferredSizes[position_in_preferred_sizes].cy;
   }
 
-  video_info->bmiHeader.biPlanes        = 1;
-  video_info->bmiHeader.biClrImportant  = 0;
-
-  int data_size = -1;
-#if defined(FOR_KOTOENCODER)
-  // I420(12bit)
-  video_info->bmiHeader.biCompression   = MAKEFOURCC('I', '4', '2', '0');
-  video_info->bmiHeader.biBitCount      = 12;
-  data_size =
-      scff_imaging::Utilities::CalculateDataSize(
-          scff_imaging::kI420,
-          video_info->bmiHeader.biWidth,
-          video_info->bmiHeader.biHeight);
-#else
-  switch (position_in_pixel_formats) {
-  case scff_imaging::kIYUV:
-    // IYUV(12bit)
-    video_info->bmiHeader.biCompression   = MAKEFOURCC('I', 'Y', 'U', 'V');
-    video_info->bmiHeader.biBitCount      = 12;
-    data_size =
-        scff_imaging::Utilities::CalculateDataSize(
-            scff_imaging::kIYUV,
-            video_info->bmiHeader.biWidth,
-            video_info->bmiHeader.biHeight);
-    break;
-  case scff_imaging::kI420:
-    // I420(12bit)
-    video_info->bmiHeader.biCompression   = MAKEFOURCC('I', '4', '2', '0');
-    video_info->bmiHeader.biBitCount      = 12;
-    data_size =
-        scff_imaging::Utilities::CalculateDataSize(
-            scff_imaging::kI420,
-            video_info->bmiHeader.biWidth,
-            video_info->bmiHeader.biHeight);
-    break;
-  case scff_imaging::kYV12:
-    // kYV12(12bit)
-    video_info->bmiHeader.biCompression   = MAKEFOURCC('Y', 'V', '1', '2');
-    video_info->bmiHeader.biBitCount      = 12;
-    data_size =
-        scff_imaging::Utilities::CalculateDataSize(
-            scff_imaging::kYV12,
-            video_info->bmiHeader.biWidth,
-            video_info->bmiHeader.biHeight);
-    break;
-  case scff_imaging::kYUY2:
-    // YUY2(16bit)
-    video_info->bmiHeader.biCompression   = MAKEFOURCC('Y', 'U', 'Y', '2');
-    video_info->bmiHeader.biBitCount      = 16;
-    data_size =
-        scff_imaging::Utilities::CalculateDataSize(
-            scff_imaging::kYUY2,
-            video_info->bmiHeader.biWidth,
-            video_info->bmiHeader.biHeight);
-    break;
-  case scff_imaging::kUYVY:
-    // UYVY(16bit)
-    video_info->bmiHeader.biCompression   = MAKEFOURCC('U', 'Y', 'V', 'Y');
-    video_info->bmiHeader.biBitCount      = 16;
-    data_size =
-        scff_imaging::Utilities::CalculateDataSize(
-            scff_imaging::kUYVY,
-            video_info->bmiHeader.biWidth,
-            video_info->bmiHeader.biHeight);
-    break;
-  case scff_imaging::kYVYU:
-    // YVYU(16bit)
-    video_info->bmiHeader.biCompression   = MAKEFOURCC('Y', 'V', 'Y', 'U');
-    video_info->bmiHeader.biBitCount      = 16;
-    data_size =
-        scff_imaging::Utilities::CalculateDataSize(
-            scff_imaging::kYVYU,
-            video_info->bmiHeader.biWidth,
-            video_info->bmiHeader.biHeight);
-    break;
-  case scff_imaging::kYVU9:
-    // YVU9(9bit)
-    video_info->bmiHeader.biCompression   = MAKEFOURCC('Y', 'V', 'U', '9');
-    video_info->bmiHeader.biBitCount      = 9;
-    data_size =
-        scff_imaging::Utilities::CalculateDataSize(
-            scff_imaging::kYVU9,
-            video_info->bmiHeader.biWidth,
-            video_info->bmiHeader.biHeight);
-    break;
-  case scff_imaging::kRGB24:
-    // RGB24(24bit)
-    video_info->bmiHeader.biCompression   = BI_RGB;
-    video_info->bmiHeader.biBitCount      = 24;
-    data_size =
-        scff_imaging::Utilities::CalculateDataSize(
-            scff_imaging::kRGB24,
-            video_info->bmiHeader.biWidth,
-            video_info->bmiHeader.biHeight);
-    break;
-  case scff_imaging::kRGB0:
-    // RGB0(32bit)
-    video_info->bmiHeader.biCompression   = BI_RGB;
-    video_info->bmiHeader.biBitCount      = 32;
-    data_size =
-        scff_imaging::Utilities::CalculateDataSize(
-            scff_imaging::kRGB0,
-            video_info->bmiHeader.biWidth,
-            video_info->bmiHeader.biHeight);
-    break;
-  case scff_imaging::kRGB555:
-    // RGB555(16bit)
-    video_info->bmiHeader.biCompression   = BI_RGB;
-    video_info->bmiHeader.biBitCount      = 16;
-    data_size =
-        scff_imaging::Utilities::CalculateDataSize(
-            scff_imaging::kRGB555,
-            video_info->bmiHeader.biWidth,
-            video_info->bmiHeader.biHeight);
-    break;
-  case scff_imaging::kRGB565:
-    // RGB565(16bit)
-    video_info->bmiHeader.biCompression   = BI_BITFIELDS;
-    video_info->bmiHeader.biBitCount      = 16;
-    data_size =
-        scff_imaging::Utilities::CalculateDataSize(
-            scff_imaging::kRGB565,
-            video_info->bmiHeader.biWidth,
-            video_info->bmiHeader.biHeight);
-    break;
-  case scff_imaging::kRGB8:
-    // RGB8(8bit)
-    video_info->bmiHeader.biCompression   = BI_RGB;
-    video_info->bmiHeader.biBitCount      = 8;
-    data_size =
-        scff_imaging::Utilities::CalculateDataSize(
-            scff_imaging::kRGB8,
-            video_info->bmiHeader.biWidth,
-            video_info->bmiHeader.biHeight);
-    break;
-  }
-#endif
-
-  ASSERT(data_size != -1);
-  video_info->bmiHeader.biSizeImage     = data_size;
-  // @attention GetBitmapSize(&video_info->bmiHeader)のほうが小さい？
+  // ピクセルフォーマットからBITMAPINFOを取得
+  BITMAPINFO current_info;
+  scff_imaging::Utilities::ToWindowsBitmapInfo(current_pixel_format,
+                                               current_width,
+                                               current_height,
+                                               &current_info);
+ 
+  // 現在すべての形式でカラーテーブルは必要ないのでbmiHeaderのみコピー
+  memcpy(&(video_info->bmiHeader),
+         &(current_info.bmiHeader),
+         sizeof(BITMAPINFOHEADER));
+  
+  /// @todo(me) GetBitmapSize(&video_info->bmiHeader)のほうが小さいことがある？要調査
 
   //-------------------------------------------------------------------
   // FPSなどのVIDEOINFOの設定
@@ -325,31 +201,19 @@ HRESULT SCFFOutputPin::CheckMediaType(const CMediaType *media_type) {
   // ピクセルフォーマットが適切か？
   CheckPointer(media_type->Subtype(), E_INVALIDARG);
   const GUID subtype = *(media_type->Subtype());
-  const GUID IYUV_guid = MEDIASUBTYPE_IYUV;
   const GUID I420_guid = FOURCCMap(MAKEFOURCC('I', '4', '2', '0'));
+  const GUID IYUV_guid = MEDIASUBTYPE_IYUV;
   const GUID YV12_guid = MEDIASUBTYPE_YV12;
-  const GUID YUY2_guid = MEDIASUBTYPE_YUY2;
   const GUID UYVY_guid = MEDIASUBTYPE_UYVY;
-  const GUID YVYU_guid = MEDIASUBTYPE_YVYU;
-  const GUID YVU9_guid = MEDIASUBTYPE_YVU9;
-  const GUID RGB24_guid = MEDIASUBTYPE_RGB24;
+  const GUID YUY2_guid = MEDIASUBTYPE_YUY2;
   const GUID RGB0_guid = MEDIASUBTYPE_RGB32;
-  const GUID RGB555_guid = MEDIASUBTYPE_RGB555;
-  const GUID RGB565_guid = MEDIASUBTYPE_RGB565;
-  const GUID RGB8_guid = MEDIASUBTYPE_RGB8;
 
-  if (subtype != IYUV_guid &&
-      subtype != I420_guid &&
+  if (subtype != I420_guid &&
+      subtype != IYUV_guid &&
       subtype != YV12_guid &&
-      subtype != YUY2_guid &&
       subtype != UYVY_guid &&
-      subtype != YVYU_guid &&
-      subtype != YVU9_guid &&
-      subtype != RGB24_guid &&
-      subtype != RGB0_guid &&
-      subtype != RGB555_guid &&
-      subtype != RGB565_guid &&
-      subtype != RGB8_guid) {
+      subtype != YUY2_guid &&
+      subtype != RGB0_guid) {
     return E_INVALIDARG;
   }
 
@@ -422,18 +286,8 @@ HRESULT SCFFOutputPin::SetMediaType(const CMediaType *media_type) {
   }
 
   // 対応形式であるか確認
-  if (specified_video_info->bmiHeader.biCompression != MAKEFOURCC('I', 'Y', 'U', 'V') &&
-      specified_video_info->bmiHeader.biCompression != MAKEFOURCC('I', '4', '2', '0') &&
-      specified_video_info->bmiHeader.biCompression != MAKEFOURCC('Y', 'V', '1', '2') &&
-      specified_video_info->bmiHeader.biCompression != MAKEFOURCC('Y', 'U', 'Y', '2') &&
-      specified_video_info->bmiHeader.biCompression != MAKEFOURCC('U', 'Y', 'V', 'Y') &&
-      specified_video_info->bmiHeader.biCompression != MAKEFOURCC('Y', 'V', 'Y', 'U') &&
-      specified_video_info->bmiHeader.biCompression != MAKEFOURCC('Y', 'V', 'U', '9') &&
-      !(specified_video_info->bmiHeader.biCompression == BI_RGB && specified_video_info->bmiHeader.biBitCount == 32) &&
-      !(specified_video_info->bmiHeader.biCompression == BI_RGB && specified_video_info->bmiHeader.biBitCount == 24) &&
-      !(specified_video_info->bmiHeader.biCompression == BI_RGB && specified_video_info->bmiHeader.biBitCount == 16) &&
-      !(specified_video_info->bmiHeader.biCompression == BI_RGB && specified_video_info->bmiHeader.biBitCount == 8) &&
-      !(specified_video_info->bmiHeader.biCompression == BI_BITFIELDS && specified_video_info->bmiHeader.biBitCount == 16) ) {
+  if (!scff_imaging::Utilities::IsSupportedPixelFormat(
+          specified_video_info->bmiHeader)) {
     return E_INVALIDARG;
   }
 
@@ -551,63 +405,26 @@ HRESULT SCFFOutputPin::DoBufferProcessingLoop(void) {
 
   OnThreadStartPlay();
 
+  //-------------------------------------------------------------------
   // scff_imaging::Engineを作成
+  //-------------------------------------------------------------------
+
+  // m_mtからVIDEOINFOHEADERを取得
   ASSERT(m_mt.formattype == FORMAT_VideoInfo);
   VIDEOINFOHEADER *video_info =
     reinterpret_cast<VIDEOINFOHEADER*>(m_mt.pbFormat);
-  scff_imaging::ImagePixelFormat pixel_format =
-      scff_imaging::kInvalidPixelFormat;
-  switch (video_info->bmiHeader.biCompression) {
-  case MAKEFOURCC('I', 'Y', 'U', 'V'):
-    pixel_format = scff_imaging::kIYUV;
-    break;
-  case MAKEFOURCC('I', '4', '2', '0'):
-    pixel_format = scff_imaging::kI420;
-    break;
-  case MAKEFOURCC('Y', 'V', '1', '2'):
-    pixel_format = scff_imaging::kYV12;
-    break;
-  case MAKEFOURCC('Y', 'U', 'Y', '2'):
-    pixel_format = scff_imaging::kYUY2;
-    break;
-  case MAKEFOURCC('U', 'Y', 'V', 'Y'):
-    pixel_format = scff_imaging::kUYVY;
-    break;
-  case MAKEFOURCC('Y', 'V', 'Y', 'U'):
-    pixel_format = scff_imaging::kYVYU;
-    break;
-  case MAKEFOURCC('Y', 'V', 'U', '9'):
-    pixel_format = scff_imaging::kYVU9;
-    break;
-  case BI_RGB:
-    switch (video_info->bmiHeader.biBitCount) {
-    case 24:
-      pixel_format = scff_imaging::kRGB24;
-      break;
-    case 32:
-      pixel_format = scff_imaging::kRGB0;
-      break;
-    case 16:
-      pixel_format = scff_imaging::kRGB555;
-      break;
-    case 8:
-      pixel_format = scff_imaging::kRGB8;
-      break;
-    }
-    break;
-  case BI_BITFIELDS:
-    switch (video_info->bmiHeader.biBitCount) {
-    case 16:
-      pixel_format = scff_imaging::kRGB565;
-      break;
-    }
-    break;
-  }
-  ASSERT(pixel_format != scff_imaging::kInvalidPixelFormat);
 
+  // BITMAPINFOHEADERからピクセルフォーマットを取得
+  scff_imaging::ImagePixelFormat pixel_format =
+      scff_imaging::Utilities::WindowsBitmapInfoHeaderToPixelFormat(
+          video_info->bmiHeader);
+
+  // Engineを作成
   scff_imaging::Engine engine(pixel_format, width_, height_, fps_);
   const scff_imaging::ErrorCode error = engine.Init();
   ASSERT(error == scff_imaging::kNoError);
+
+  //-------------------------------------------------------------------
 
   // SCFFMonitorとリクエスト格納用変数を作成
   SCFFMonitor monitor;

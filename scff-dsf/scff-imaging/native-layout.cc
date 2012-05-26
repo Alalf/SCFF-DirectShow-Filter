@@ -67,28 +67,6 @@ NativeLayout::~NativeLayout() {
   }
 }
 
-// 設定されたOutputImageはPadding可能か？
-bool NativeLayout::CanUsePadding() const {
-  /// @warning 2012/05/08現在drawutilsはPlaner Formatにしか対応していない
-  switch (GetOutputImage()->pixel_format()) {
-  case kIYUV:
-  case kI420:
-  case kYV12:
-  case kYVU9:
-  case kRGB24:
-  case kRGB0:
-    return true;
-  case kYUY2:
-  case kUYVY:
-  case kYVYU:
-  case kRGB555:
-  case kRGB565:
-  case kRGB8:
-  default:
-    return false;
-  }
-}
-
 //-------------------------------------------------------------------
 
 // Processor::Init
@@ -106,7 +84,7 @@ ErrorCode NativeLayout::Init() {
   int padding_left = 0;
   int padding_right = 0;
 
-  if (CanUsePadding()) {
+  if (Utilities::CanUseDrawUtils(GetOutputImage()->pixel_format())) {
     // パディングサイズの計算
     const bool no_error = Utilities::CalculatePaddingSize(
         GetOutputImage()->width(),
@@ -139,7 +117,7 @@ ErrorCode NativeLayout::Init() {
   }
 
   // 変換後パディング用
-  if (CanUsePadding()) {
+  if (Utilities::CanUseDrawUtils(GetOutputImage()->pixel_format())) {
     const ErrorCode error_converted_image =
         converted_image_.Create(GetOutputImage()->pixel_format(),
                                 converted_width,
@@ -167,7 +145,7 @@ ErrorCode NativeLayout::Init() {
   // 拡大縮小ピクセルフォーマット変換
   Scale *scale = new Scale(parameter_.swscale_config);
   scale->SetInputImage(&captured_image_);
-  if (CanUsePadding()) {
+  if (Utilities::CanUseDrawUtils(GetOutputImage()->pixel_format())) {
     // パディング可能ならバッファをはさむ
     scale->SetOutputImage(&converted_image_);
   } else {
@@ -181,7 +159,7 @@ ErrorCode NativeLayout::Init() {
   scale_ = scale;
 
   // パディング
-  if (CanUsePadding()) {
+  if (Utilities::CanUseDrawUtils(GetOutputImage()->pixel_format())) {
     Padding *padding =
         new Padding(padding_left, padding_right, padding_top, padding_bottom);
     padding->SetInputImage(&converted_image_);
@@ -218,7 +196,7 @@ ErrorCode NativeLayout::Run() {
   }
 
   // Paddingを利用してパディングを行う
-  if (CanUsePadding()) {
+  if (Utilities::CanUseDrawUtils(GetOutputImage()->pixel_format())) {
     const ErrorCode error_padding = padding_->Run();
     if (error_padding != kNoError) {
       return ErrorOccured(error_padding);

@@ -167,8 +167,9 @@ ErrorCode ScreenCapture::InitByIndex(int index) {
   //-------------------------------------------------------------------
 
   // 取り込み用BITMAPINFOを作成
-  info_for_getdibits_[index] =
-      Utilities::ImageToWindowsBitmapInfo(image_for_bitblt_[index]);
+  Utilities::ImageToWindowsBitmapInfo(
+      image_for_bitblt_[index],
+      &(info_for_getdibits_[index]));
 
   // 取り込み用DCを作成 (SelectObjectで過去の値は放棄)
   HDC window_dc = GetDC(parameter_[index].window);

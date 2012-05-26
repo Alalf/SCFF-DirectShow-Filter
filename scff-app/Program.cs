@@ -21,8 +21,15 @@
 
 using System;
 using System.Windows.Forms;
+using System.Runtime.InteropServices;
+using System.IO;
 
 namespace scff_app {
+
+/// @brief SCFF DirectShow Filter COMクラス
+[ComImport, Guid("D64DB8AA-9055-418F-AFE9-A080A4FAE47A")] 
+class SCFFSource {
+}
 
 /// @brief アプリケーションのエントリポイントを格納するクラス
 static class Program {
@@ -31,6 +38,27 @@ static class Program {
   static void Main() {
     Application.EnableVisualStyles();
     Application.SetCompatibleTextRenderingDefault(false);
+
+    //-----------------------------------------------------------------
+    // 起動時のチェック
+    //-----------------------------------------------------------------
+
+    // SCFF DirectShow Filterがインストールされているかチェック
+    try {
+      SCFFSource scff_source = new SCFFSource();
+    } catch (FileNotFoundException) {
+      MessageBox.Show("scff-*.ax is not found. Check your SCFF directory.",
+                      "DLL is not found",
+                      MessageBoxButtons.OK,
+                      MessageBoxIcon.Error);
+      return;
+    } catch (COMException) {
+      MessageBox.Show("scff-*.ax is not correctly installed. Please re-install SCFF DirectShow Filter.",
+                      "Not correctly installed",
+                      MessageBoxButtons.OK,
+                      MessageBoxIcon.Error);
+      return;
+    }
 
     // 32bit以外では起動しない
     if (Screen.PrimaryScreen.BitsPerPixel != 32) {

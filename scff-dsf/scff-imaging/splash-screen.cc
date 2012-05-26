@@ -65,10 +65,19 @@ SplashScreen::~SplashScreen() {
 bool SplashScreen::CanUsePadding() const {
   /// @warning 2012/05/08現在drawutilsはPlaner Formatにしか対応していない
   switch (GetOutputImage()->pixel_format()) {
+  case kIYUV:
   case kI420:
+  case kYV12:
+  case kYVU9:
+  case kRGB24:
   case kRGB0:
     return true;
+  case kYUY2:
   case kUYVY:
+  case kYVYU:
+  case kRGB555:
+  case kRGB565:
+  case kRGB8:
   default:
     return false;
   }

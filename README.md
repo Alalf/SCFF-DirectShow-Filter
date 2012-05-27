@@ -30,9 +30,9 @@
     - 64bit OS: [Microsoft Visual C++ 2010 SP1 再頒布可能パッケージ (x64)]
       (http://www.microsoft.com/downloads/ja-jp/details.aspx?FamilyID=C68CCBB6-75EF-4C9D-A326-879EAB4FCDF8)
 
-2. install-*.batを実行してください
+2. install-x86/amd64.batを実行してください
     - ***重要！***
-      インストール後にscff-*.axを移動させた場合は再度install-*.batを実行してください。
+      インストール後にscff-dsf-x86/amd64.axを移動させた場合は再度install-x86/amd64.batを実行してください。
 
 
 使用方法
@@ -70,7 +70,7 @@
 
 1. エンコーダおよびGUIクライアント(scff-app.exe)が実行されていないことを確認して下さい。
 
-2. uninstall-*.batを実行してください。
+2. uninstall-x86.bat/uninstall-amd64.batを実行してください。
 
 3. フォルダ・ファイルを削除してください。
     - レジストリは使用していませんので、これだけで完全にアンインストールが可能です。

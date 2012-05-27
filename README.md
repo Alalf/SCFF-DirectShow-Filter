@@ -23,9 +23,12 @@ SCFF DirectShow Filter Ver 0.1.0 (2012/5/14)
 -----------------------------------------------------------------------
 
 1. 以下のランタイムをインストールしてください:
-    - 共通: [Microsoft .NET Framework 4 Client Profile](http://www.microsoft.com/downloads/ja-jp/details.aspx?FamilyID=e5ad0459-cbcc-4b4f-97b6-fb17111cf544)
-    - 32bit OS: [Microsoft Visual C++ 2010 SP1 再頒布可能パッケージ (x86)](http://www.microsoft.com/downloads/ja-jp/details.aspx?familyid=c32f406a-f8fc-4164-b6eb-5328b8578f03)
-    - 64bit OS: [Microsoft Visual C++ 2010 SP1 再頒布可能パッケージ (x64)](http://www.microsoft.com/downloads/ja-jp/details.aspx?FamilyID=C68CCBB6-75EF-4C9D-A326-879EAB4FCDF8)
+    - 共通: [Microsoft .NET Framework 4 Client Profile]
+      (http://www.microsoft.com/downloads/ja-jp/details.aspx?FamilyID=e5ad0459-cbcc-4b4f-97b6-fb17111cf544)
+    - 32bit OS: [Microsoft Visual C++ 2010 SP1 再頒布可能パッケージ (x86)]
+      (http://www.microsoft.com/downloads/ja-jp/details.aspx?familyid=c32f406a-f8fc-4164-b6eb-5328b8578f03)
+    - 64bit OS: [Microsoft Visual C++ 2010 SP1 再頒布可能パッケージ (x64)]
+      (http://www.microsoft.com/downloads/ja-jp/details.aspx?FamilyID=C68CCBB6-75EF-4C9D-A326-879EAB4FCDF8)
 
 2. install-*.batを実行してください
     - ***重要！***
@@ -137,11 +140,13 @@ SCFF DirectShow Filter Ver 0.1.0 (2012/5/14)
     - https://github.com/Alalf/SCFF-DirectShow-Filter
 
 - パッチを作成したい場合やコードを追加したい場合、まずGoogle C++スタイルガイドを一読してください。
-    - [Google C++スタイルガイド 日本語訳](http://www.textdrop.net/google-styleguide-ja/cppguide.xml)
+    - [Google C++スタイルガイド 日本語訳]
+      (http://www.textdrop.net/google-styleguide-ja/cppguide.xml)
     - このガイドは単純に決め事ではなく、バグを減らすために役に立つテクニックもいくらか含まれているようです。
 
 - scff-dsfにはdoxygenコメントをつけてあります
-    - [Doxygen](http://www.stack.nl/~dimitri/doxygen/index.html)
+    - [Doxygen]
+      (http://www.stack.nl/~dimitri/doxygen/index.html)
     - プログラムの全体的な構造を把握したい場合はぜひ利用してみてください。
 
 

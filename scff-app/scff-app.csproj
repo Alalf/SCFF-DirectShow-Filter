@@ -124,6 +124,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <EmbeddedResource Include="scff-app\gui\LayoutForm.resx">
       <DependentUpon>LayoutForm.cs</DependentUpon>
@@ -167,6 +168,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app.ico" />
+    <None Include="ext\Go.png" />
+    <None Include="ext\Remove.png" />
+    <None Include="ext\Add.png" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

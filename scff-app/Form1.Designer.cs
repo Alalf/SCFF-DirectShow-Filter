@@ -67,7 +67,6 @@
       this.kTarget = new System.Windows.Forms.GroupBox();
       this.auto_apply = new System.Windows.Forms.CheckBox();
       this.kLayoutBoundRelativeLeft = new System.Windows.Forms.Label();
-      this.scff_icons = new System.Windows.Forms.ImageList(this.components);
       this.layout_remove = new System.Windows.Forms.Button();
       this.layout_add = new System.Windows.Forms.Button();
       this.option_show_mouse_cursor = new System.Windows.Forms.CheckBox();
@@ -758,25 +757,9 @@
       this.kLayoutBoundRelativeLeft.Text = "Left";
       this.kLayoutBoundRelativeLeft.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
       // 
-      // scff_icons
-      // 
-      this.scff_icons.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("scff_icons.ImageStream")));
-      this.scff_icons.TransparentColor = System.Drawing.Color.Transparent;
-      this.scff_icons.Images.SetKeyName(0, "Add.png");
-      this.scff_icons.Images.SetKeyName(1, "Remove.png");
-      this.scff_icons.Images.SetKeyName(2, "Image.png");
-      this.scff_icons.Images.SetKeyName(3, "Go.png");
-      this.scff_icons.Images.SetKeyName(4, "Splash.png");
-      this.scff_icons.Images.SetKeyName(5, "Refresh.png");
-      this.scff_icons.Images.SetKeyName(6, "Monitor.png");
-      this.scff_icons.Images.SetKeyName(7, "Favorites.png");
-      this.scff_icons.Images.SetKeyName(8, "Up.png");
-      this.scff_icons.Images.SetKeyName(9, "Down.png");
-      // 
       // layout_remove
       // 
-      this.layout_remove.ImageKey = "Remove.png";
-      this.layout_remove.ImageList = this.scff_icons;
+      this.layout_remove.Image = global::scff_app.Properties.Resources.Remove;
       this.layout_remove.Location = new System.Drawing.Point(32, 3);
       this.layout_remove.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
       this.layout_remove.Name = "layout_remove";
@@ -787,8 +770,7 @@
       // 
       // layout_add
       // 
-      this.layout_add.ImageKey = "Add.png";
-      this.layout_add.ImageList = this.scff_icons;
+      this.layout_add.Image = global::scff_app.Properties.Resources.Add;
       this.layout_add.Location = new System.Drawing.Point(2, 3);
       this.layout_add.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
       this.layout_add.Name = "layout_add";
@@ -1594,7 +1576,6 @@
     private System.Windows.Forms.Label kLayoutBoundRelativeTop;
     private System.Windows.Forms.GroupBox kTarget;
     private System.Windows.Forms.Label kLayoutBoundRelativeLeft;
-    private System.Windows.Forms.ImageList scff_icons;
     private System.Windows.Forms.Button layout_remove;
     private System.Windows.Forms.Button layout_add;
     private System.Windows.Forms.CheckBox option_show_mouse_cursor;

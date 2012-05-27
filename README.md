@@ -1,181 +1,181 @@
-SCFF DirectShow Filter Ver 0.1.0 (2012/5/14)
+﻿SCFF DirectShow Filter Ver 0.1.0 (2012/5/14)
 =======================================================================
 
-- SCFF directShow Filter��Windows�p�X�N���[���L���v�`���v���O����(DirectShow�t�B���^)�ł��B
-- ffmpeg��Windows Media Encoder�̉f�����͂Ƃ��Ďg���邱�Ƃ�z�肵�Ă��܂��B
+- SCFF directShow FilterはWindows用スクリーンキャプチャプログラム(DirectShowフィルタ)です。
+- ffmpegやWindows Media Encoderの映像入力として使われることを想定しています。
 
 
-�K�v�����
+必要動作環境
 -----------------------------------------------------------------------
 
-- (�J�����̂��ߒ������ł�)
+- (開発中のため調査中です)
 - Windows XP SP3
-- ��ʂ̐F��: 32bit True Color
+- 画面の色数: 32bit True Color
 
-�œK�����
+最適動作環境
 -----------------------------------------------------------------------
 - Windows 7
 - CPU: Intel Sandy Bridge/Ivy Bridge
-    - Lucid Virtu (MVP) I-Mode��ON�ɂ����ꍇ�A�ō��̃p�t�H�[�}���X�����҂ł��܂��B
+    - Lucid Virtu (MVP) I-ModeをONにした場合、最高のパフォーマンスを期待できます。
 
 
-�C���X�g�[�����@
+インストール方法
 -----------------------------------------------------------------------
 
-1. �ȉ��̃����^�C�����C���X�g�[�����Ă�������:
-    - ����: [Microsoft .NET Framework 4 Client Profile]
+1. 以下のランタイムをインストールしてください:
+    - 共通: [Microsoft .NET Framework 4 Client Profile]
       (http://www.microsoft.com/downloads/ja-jp/details.aspx?FamilyID=e5ad0459-cbcc-4b4f-97b6-fb17111cf544)
-    - 32bit OS: [Microsoft Visual C++ 2010 SP1 �ĔЕz�\�p�b�P�[�W (x86)]
+    - 32bit OS: [Microsoft Visual C++ 2010 SP1 再頒布可能パッケージ (x86)]
       (http://www.microsoft.com/downloads/ja-jp/details.aspx?familyid=c32f406a-f8fc-4164-b6eb-5328b8578f03)
-    - 64bit OS: [Microsoft Visual C++ 2010 SP1 �ĔЕz�\�p�b�P�[�W (x64)]
+    - 64bit OS: [Microsoft Visual C++ 2010 SP1 再頒布可能パッケージ (x64)]
       (http://www.microsoft.com/downloads/ja-jp/details.aspx?FamilyID=C68CCBB6-75EF-4C9D-A326-879EAB4FCDF8)
 
-2. install-*.bat�����s���Ă�������
-    - ***�d�v�I***
-      �C���X�g�[�����scff-*.ax���ړ��������ꍇ�͍ēxinstall-*.bat�����s���Ă��������B
+2. install-*.batを実行してください
+    - ***重要！***
+      インストール後にscff-*.axを移動させた場合は再度install-*.batを実行してください。
 
 
-�g�p���@
+使用方法
 -----------------------------------------------------------------------
 
-1. �L���v�`���\�t�g�ŁuSCFF DirectShow Filter�v��I�����܂��B
+1. キャプチャソフトで「SCFF DirectShow Filter」を選択します。
 
-2. ***�d�v�I***
-   SCFF DirectShow Filter�͎�荞�݃T�C�Y�ƃt���[�����[�g��
-   �o�̓T�C�Y�Ɏ����I�ɍ��킹���܂��B
-   �e��G���R�[�_�ŁA�܂��͏o�̓T�C�Y�A�t���[�����[�g��ݒ肵�Ă��������B
+2. ***重要！***
+   SCFF DirectShow Filterは取り込みサイズとフレームレートは
+   出力サイズに自動的に合わせられます。
+   各種エンコーダで、まずは出力サイズ、フレームレートを設定してください。
 
-3. �v���r���[��ʂ��m�F���A���S�������ɕ\������邱�Ƃ��m�F���Ă��������B
+3. プレビュー画面を確認し、ロゴが中央に表示されることを確認してください。
 
-4. scff-app.exe�����s���Ă��������B
+4. scff-app.exeを実行してください。
 
-5. ����̃v���Z�X���j���[����ړI�̃v���Z�X��I�����A
-   ��荞�ݐݒ��AApply�{�^���������Ă��������B
-   (Apply�{�^������Auto�`�F�b�N�{�b�N�X�������ƁA
-    �ꕔ�ݒ肪�ύX�㎩����Apply����܂�)
+5. 左上のプロセスメニューから目的のプロセスを選択し、
+   取り込み設定後、Applyボタンを押してください。
+   (Applyボタン横のAutoチェックボックスを押すと、
+    一部設定が変更後自動でApplyされます)
 
-6. ��͂��낢��G���Ċo���Ă��������B
+6. 後はいろいろ触って覚えてください。
 
 
-�o�[�W�����A�b�v���@
+バージョンアップ方法
 -----------------------------------------------------------------------
 
-1. �G���R�[�_�����GUI�N���C�A���g(scff-app.exe)�����s����Ă��Ȃ����Ƃ��m�F���ĉ������B
+1. エンコーダおよびGUIクライアント(scff-app.exe)が実行されていないことを確認して下さい。
 
-2. �m�F��A�t�@�C�����㏑�����Ă��������B
+2. 確認後、ファイルを上書きしてください。
 
 
-�A���C���X�g�[�����@
+アンインストール方法
 -----------------------------------------------------------------------
 
-1. �G���R�[�_�����GUI�N���C�A���g(scff-app.exe)�����s����Ă��Ȃ����Ƃ��m�F���ĉ������B
+1. エンコーダおよびGUIクライアント(scff-app.exe)が実行されていないことを確認して下さい。
 
-2. uninstall-*.bat�����s���Ă��������B
+2. uninstall-*.batを実行してください。
 
-3. �t�H���_�E�t�@�C�����폜���Ă��������B
-    - ���W�X�g���͎g�p���Ă��܂���̂ŁA���ꂾ���Ŋ��S�ɃA���C���X�g�[�����\�ł��B
+3. フォルダ・ファイルを削除してください。
+    - レジストリは使用していませんので、これだけで完全にアンインストールが可能です。
 
 
-����
+注意
 -----------------------------------------------------------------------
 
-- ***�d�v�I***
-  ��荞�ݎ��ɖ�肪��������ƁA�����I�Ƀ��S���\������܂��B
-  �����Ă��̏ꍇ��GUI�N���C�A���g�Őݒ��ς���Apply���Ȃ����ƒ���܂��B
+- ***重要！***
+  取り込み時に問題が発生すると、強制的にロゴが表示されます。
+  たいていの場合はGUIクライアントで設定を変えてApplyしなおすと直ります。
 
-- ���ݔ������Ă�����Ƃ��āA�傫�Ȏ�荞�ݗ̈�(1920x1050)��
-  32x32���x�܂ŏ������k�����悤�Ƃ���Ǝ�荞�݂Ɏ��s���܂��B
+- 現在判明している問題として、大きな取り込み領域(1920x1050)を
+  32x32程度まで小さく縮小しようとすると取り込みに失敗します。
 
-- ���xApply���Ă�����Ȃ��ꍇ�́A�v���Z�X���j���[��Refresh����
-  �G���R�[�_���N�����Ă��邩�ǂ����m�F���Ă��������B
+- 何度Applyしても直らない場合は、プロセスメニューをRefreshして
+  エンコーダが起動しているかどうか確認してください。
 
-- ����ł�����Ȃ��ꍇ��SCFF DirectShow Filter�ɑΉ����Ă��Ȃ����̉\��������܂��B
-    - �ȉ���Web�y�[�W��"Issue"�Ɋ��̏ڍׂ���������ł���������Ώ�����܂��B
+- それでも直らない場合はSCFF DirectShow Filterに対応していない環境の可能性があります。
+    - 以下のWebページの"Issue"に環境の詳細を書き込んでいただければ助かります。
     - https://github.com/Alalf/SCFF-DirectShow-Filter
 
 
-�J���Ҍ���: �r���h+���p���@
+開発者向け: ビルド+利用方法
 -----------------------------------------------------------------------
 
-1. http://ffmpeg.zeranoe.com/builds/ ����Shared�r���h�y��Dev�r���h���擾����
-    - ext/ffmpeg/amd64��64bit�ł��Aext/ffmpeg/x86��32bit�ł�W�J����
-    - Shared��Dev�������f�B���N�g���ɓW�J���邱�Ɓi���̃t�@�C�����㏑������邪���Ȃ��j
-    - ext/ffmpeg/amd64/README.txt, ext/ffmpeg/x86/README.txt�����݂���悤�Ɋm�F���邱��
+1. http://ffmpeg.zeranoe.com/builds/ からSharedビルド及びDevビルドを取得する
+    - ext/ffmpeg/amd64に64bit版を、ext/ffmpeg/x86に32bit版を展開する
+    - SharedもDevも同じディレクトリに展開すること（数個のファイルが上書きされるが問題ない）
+    - ext/ffmpeg/amd64/README.txt, ext/ffmpeg/x86/README.txtが存在するように確認すること
 
-2. ***�d�v�I*** ext/ffmpeg/amd64/include/libavutil/pixdesc.h�����
-    - ext/ffmpeg/x86/include/libavutil/pixdesc.h�̈ȉ��̕���:
+2. ***重要！*** ext/ffmpeg/amd64/include/libavutil/pixdesc.hおよび
+    - ext/ffmpeg/x86/include/libavutil/pixdesc.hの以下の部分:
 
             extern const AVPixFmtDescriptor av_pix_fmt_descriptors[];
       
-      ��
+      を
 
             extern __declspec(dllimport) const AVPixFmtDescriptor av_pix_fmt_descriptors[];
 
-      �̂悤�ɏ��������Ă��������B�ꉞtools/pixdesc.patch���Y�t���Ă���܂��B
+      のように書き換えてください。一応tools/pixdesc.patchも添付してあります。
 
-3. scff-dsf.sln�\�����[�V�������J���A�S�Ẵr���h���ʂ邱�Ƃ��m�F
-   - Microsoft Visual C++ 2010 Express Edition + Windows SDK 7.1�Ŋm�F�ς�
-   - �K�v�Ȃ�΂������̃v���W�F�N�g�ݒ�����������邱��
+3. scff-dsf.slnソリューションを開き、全てのビルドが通ることを確認
+   - Microsoft Visual C++ 2010 Express Edition + Windows SDK 7.1で確認済み
+   - 必要ならばいくつかのプロジェクト設定を書き換えること
 
-4. tools/copy-binaries.bat�����s����dist�f�B���N�g����dll�Ȃǂ��R�s�[
+4. tools/copy-binaries.batを実行してdistディレクトリにdllなどをコピー
 
-5. tools/install-debug.bat��tools/install-release.bat�����s
+5. tools/install-debug.batかtools/install-release.batを実行
 
-6. �e��G���R�[�_���N�����t�B���^���F������Ă��邩�`�F�b�N
+6. 各種エンコーダを起動しフィルタが認識されているかチェック
 
-7. scff-app.sln�\�����[�V�������J���A�S�Ẵr���h���ʂ邱�Ƃ��m�F
-    - Microsoft Visual C# 2010 Express Edition�Ŋm�F�ς�
+7. scff-app.slnソリューションを開き、全てのビルドが通ることを確認
+    - Microsoft Visual C# 2010 Express Editionで確認済み
 
-8. dist/Debug��dist/Release�ɂ���w���p�[�A�v���P�[�V�������N������荞�ݐݒ���s��
+8. dist/Debugかdist/Releaseにあるヘルパーアプリケーションを起動し取り込み設定を行う
 
-9. �iscff-dsf�̃f�o�b�O�o�[�W�����𗘗p����ꍇ:�j
-    - �v���W�F�N�g�ݒ肩�烍�[�J��Windows�f�o�b�K�[��I��
-    - �R�}���h��WME/KTE/FME�Ȃǂ�I������΃f�o�b�O������Ȃǂ����邱�Ƃ��o����B
+9. （scff-dsfのデバッグバージョンを利用する場合:）
+    - プロジェクト設定からローカルWindowsデバッガーを選ぶ
+    - コマンドにWME/KTE/FMEなどを選択すればデバッグ文字列などを見ることが出来る。
 
 
-�J���Ҍ���: �u�J���ɎQ���������I�v
+開発者向け: 「開発に参加したい！」
 -----------------------------------------------------------------------
 
-- ���݁ASCFF DirectShow Filter��GitHub��ŊJ�����i�߂��Ă��܂��B
+- 現在、SCFF DirectShow FilterはGitHub上で開発が進められています。
     - https://github.com/Alalf/SCFF-DirectShow-Filter
 
-- �p�b�`���쐬�������ꍇ��R�[�h��ǉ��������ꍇ�A�܂�Google C++�X�^�C���K�C�h����ǂ��Ă��������B
-    - [Google C++�X�^�C���K�C�h ���{���]
+- パッチを作成したい場合やコードを追加したい場合、まずGoogle C++スタイルガイドを一読してください。
+    - [Google C++スタイルガイド 日本語訳]
       (http://www.textdrop.net/google-styleguide-ja/cppguide.xml)
-    - ���̃K�C�h�͒P���Ɍ��ߎ��ł͂Ȃ��A�o�O�����炷���߂ɖ��ɗ��e�N�j�b�N�������炩�܂܂�Ă���悤�ł��B
+    - このガイドは単純に決め事ではなく、バグを減らすために役に立つテクニックもいくらか含まれているようです。
 
-- scff-dsf�ɂ�doxygen�R�����g�����Ă���܂�
+- scff-dsfにはdoxygenコメントをつけてあります
     - [Doxygen]
       (http://www.stack.nl/~dimitri/doxygen/index.html)
-    - �v���O�����̑S�̓I�ȍ\����c���������ꍇ�͂��З��p���Ă݂Ă��������B
+    - プログラムの全体的な構造を把握したい場合はぜひ利用してみてください。
 
 
-�e��G���R�[�_�[�Ή����
+各種エンコーダー対応情報
 -----------------------------------------------------------------------
 
 ### Windows Media Encoder etc.
-- YUV420P(I420)�ɉ�����RGB 32(RGB0),YUV422(UYVY)�t�H�[�}�b�g�o�͂����p�\�ł��B
-    - �i�b��Ή��Ȃ̂�YUV422(UYVY)�͂��Ȃ�@�\����������܂��j
-    - WME�̃v���p�e�B > ���� > �r�f�I > �s�N�Z���̌`������uRGB 32�v�uUYVY�v��I�����邱�Ƃŗ��p�ł��܂��B
+- YUV420P(I420)に加えてRGB 32(RGB0),YUV422(UYVY)フォーマット出力が利用可能です。
+    - （暫定対応なのでYUV422(UYVY)はかなり機能が制限されます）
+    - WMEのプロパティ > 処理 > ビデオ > ピクセルの形式から「RGB 32」「UYVY」を選択することで利用できます。
 
 ### KoToEncoder(KTE)
-- KTE��YUV420P�o�͂𗘗p����ꍇ�Ascff-dsf/base/constants.h�̈ȉ��̕����F
+- KTEでYUV420P出力を利用する場合、scff-dsf/base/constants.hの以下の部分：
 
         // #define FOR_KOTOENCODER
 
-  ��
+  を
 
         #define FOR_KOTOENCODER
 
-  �̂悤�ɏ��������Ă��������B
-- KTE��RGB32�o�͂��T�|�[�g�����t�B���^�𗘗p����ꍇ�A�t�B���^�̏o�͂�RGB32�ɌŒ肷��悤�ł��B
-    - ���������ʂ͑����܂����AYUV422�����p�\�ł��B
-    - �ڂ����̓\�����[�V������������"FOR_KOTOENCODER"�Ō������Ă݂Ă��������B
-- KoToEncoder�̃v���r���[�@�\��I420�o�͗��p���ɂ��܂������Ȃ��悤�ł��B
-    - �o�̓T�C�Y��ݒ肵������KTE���ċN������΃v���r���[���\�������悤�ɂȂ�܂��B
+  のように書き換えてください。
+- KTEはRGB32出力をサポートしたフィルタを利用する場合、フィルタの出力をRGB32に固定するようです。
+    - 書き換え量は増えますが、YUV422も利用可能です。
+    - 詳しくはソリューション内検索で"FOR_KOTOENCODER"で検索してみてください。
+- KoToEncoderのプレビュー機能はI420出力利用時にうまく動かないようです。
+    - 出力サイズを設定したあとKTEを再起動すればプレビューが表示されるようになります。
 
 
-�֘A����\�t�g�E�F�A�A�\�[�X�R�[�h�ɂ���
+関連するソフトウェア、ソースコードについて
 -----------------------------------------------------------------------
 
 - DirectShow base classes - efines class hierarchy for streams architecture.
@@ -183,8 +183,8 @@ SCFF DirectShow Filter Ver 0.1.0 (2012/5/14)
 - ISO C9x  compliant inttypes.h for Microsoft Visual Studio
     - Copyright (c) 2006 Alexander Chemeris
 
-- ffmpeg�v���W�F�N�g(http://ffmpeg.org)
-    - ���p���Ă���LGPL���C�u����:
+- ffmpegプロジェクト(http://ffmpeg.org)
+    - 利用しているLGPLライブラリ:
         - libavutil:
           a library containing functions for simplifying programming, 
           including random number generators, data structures, mathematics routines,
@@ -199,18 +199,18 @@ SCFF DirectShow Filter Ver 0.1.0 (2012/5/14)
           for multimedia container formats.
         - libswresample: a library performing highly optimized audio resampling, 
           rematrixing and sample format conversion operations.
-    - ���p���Ă���LGPL���C�Z���X�̃\�[�X�R�[�h
+    - 利用しているLGPLライセンスのソースコード
         - libavutil/colorspace.h
         - libavfilter/drawutils.c
         - libavfilter/drawutils.h
 
 
-����
+注意
 -----------------------------------------------------------------------
-- SCFF DirectShow Filter��"�t���[�\�t�g�E�F�A"�ł��B
-    - ��҂͖{�\�t�g�E�F�A�Ɋւ����؂̋`���i�T�|�[�g�A�P�v�I�A�b�v�f�[�g�j�������܂���B
-    - �܂��A�{�\�t�g�E�F�A�̎g�p�ɂ�萶�������ړI�A�ԐړI���Q�Ɉ�؂̐ӔC�������܂���B
-    - �{�\�t�g�E�F�A�̗��p�ɂ��Ă�LICENSE(LGPLv.3�̏ڍ�)���Q�Ƃ��Ă��������B
+- SCFF DirectShow Filterは"フリーソフトウェア"です。
+    - 作者は本ソフトウェアに関する一切の義務（サポート、恒久的アップデート）を持ちません。
+    - また、本ソフトウェアの使用により生じた直接的、間接的損害に一切の責任を持ちません。
+    - 本ソフトウェアの利用についてはLICENSE(LGPLv.3の詳細)も参照してください。
 
 
 -----------------------------------------------------------------------

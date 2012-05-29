@@ -94,4 +94,16 @@ int MyDebugLog(DWORD types, DWORD level, LPCTSTR format, ...) {
   DbgOutString(buffer);
   return iret;
 }
+
+void MyDebugMessageBox(LPCTSTR format, ...) {
+  TCHAR buffer[512];
+  ZeroMemory(buffer, sizeof(buffer));
+
+  va_list ap;
+  va_start(ap, format);
+  _vstprintf_s(buffer, 512, format, ap);
+  va_end(ap);
+
+  MessageBox(NULL, buffer, TEXT("debug info"), MB_OK);
+}
 #endif  // _DEBUG

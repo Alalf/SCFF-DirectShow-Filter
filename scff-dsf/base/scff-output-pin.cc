@@ -229,6 +229,17 @@ HRESULT SCFFOutputPin::CheckMediaType(const CMediaType *media_type) {
     return E_INVALIDARG;
   }
 
+  // // for Skype
+  // if (video_info->bmiHeader.biWidth == 0 &&
+  //     video_info->bmiHeader.biHeight == 0) {
+  //   // nop
+  // } else if (video_info->bmiHeader.biWidth == 0 ||
+  //            video_info->bmiHeader.biHeight <= 0 ||
+  //            video_info->AvgTimePerFrame == 0) {
+  //   // Skypeでなければきっちりエラー処理する
+  //   return E_INVALIDARG;
+  // }
+
   MyDbgLog((LOG_TRACE, kDbgTrace,
     TEXT("[pin] <- check: mediatype(%dbpp, %d, %d, %.1ffps)"),
     video_info->bmiHeader.biBitCount,
@@ -274,6 +285,35 @@ HRESULT SCFFOutputPin::SetMediaType(const CMediaType *media_type) {
   // m_mtに設定
   HRESULT result = CSourceStream::SetMediaType(media_type);
   if (result != S_OK) return result;
+
+  // // for Skype
+  // if (video_info->bmiHeader.biWidth == 0 &&
+  //     video_info->bmiHeader.biHeight == 0) {
+  //   // 書き換えるのはまずい気がするのでコピーを行う
+  //   CMediaType media_type_from_pin(*media_type);
+  //   VIDEOINFO *video_info_from_pin =
+  //     reinterpret_cast<VIDEOINFO*>(media_type_from_pin.Format());
+  //   CheckPointer(video_info, E_UNEXPECTED);
+  //
+  //   video_info_from_pin->bmiHeader.biWidth = 256;
+  //   video_info_from_pin->bmiHeader.biHeight = 256;
+  //   video_info_from_pin->AvgTimePerFrame = ToFrameInterval(30.0);
+  //
+  //   // m_mtに設定
+  //   HRESULT result = CSourceStream::SetMediaType(&media_type_from_pin);
+  //   if (result != S_OK) return result;
+  //
+  // } else if (video_info->bmiHeader.biWidth == 0 ||
+  //            video_info->bmiHeader.biHeight == 0 ||
+  //            video_info->AvgTimePerFrame == 0) {
+  //   // Skypeでなければきっちりエラー処理する
+  //   return E_INVALIDARG;
+  //
+  // } else {
+  //   // m_mtに設定
+  //   HRESULT result = CSourceStream::SetMediaType(media_type);
+  //   if (result != S_OK) return result;
+  // }
 
   // 新しい設定をチェック
   VIDEOINFO *specified_video_info =

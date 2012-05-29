@@ -37,6 +37,7 @@ const GUID CLSID_SCFFSource = { 0xd64db8aa, 0x9055, 0x418f,
 const SIZE kPreferredSizes[] = {
   {-1, -1},                 // 起動時の最初のSetMediaTypeによって決定
                             // プログラムからはkPreferredSizes[0]は使わない！
+  // {256, 256},               // Skype
   {640, 360},               // デフォルト＆ニコ生(β)＆Youtube
   {640, 480}, {720, 480},   // 480p
   {512, 288}, {512, 384},   // 2012/04時点のニコ生

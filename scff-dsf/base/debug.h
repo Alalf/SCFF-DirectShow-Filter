@@ -55,12 +55,17 @@ extern const int kDbgCurrentLevel;
 /// @brief DbgLogの代わり。改行をはさみ、少しフォーマットを変える
 int MyDebugLog(DWORD types, DWORD level, LPCTSTR format, ...);
 
+/// @brief MessageBoxの代わり。フォーマット対応。
+void MyDebugMessageBox(LPCTSTR format, ...);
+
 #define MyDbgLog(_x_) MyDebugLog _x_
+#define MyDbgMsgBox MyDebugMessageBox
 #define MyDbgOutString DbgOutString
 
 #else  // _DEBUG
 
 #define MyDbgLog DbgLog
+#define MyDbgMsgBox 0
 #define MyDbgOutString DbgOutString
 
 #endif  // _DEBUG

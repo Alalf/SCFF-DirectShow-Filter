@@ -18,33 +18,17 @@
 /// @file scff-app/form1-scff.cs
 /// @brief Form1(メインウィンドウ)のイベントハンドラ以外の定義
 
+namespace scff_app {
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Microsoft.Win32;
 using System.IO;
 
-namespace scff_app {
-
 /// @brief Form1(メインウィンドウ)から利用する実装クラス
-public partial class AppImplementation {
-  //-------------------------------------------------------------------
-  // Wrappers
-  //-------------------------------------------------------------------
-  [StructLayout(LayoutKind.Sequential)]
-  struct RECT { public int left, top, right, bottom; }
-  [DllImport("user32.dll")]
-  [return: MarshalAs(UnmanagedType.Bool)]
-  static extern bool IsWindow(UIntPtr hWnd);
-  [DllImport("user32.dll")]
-  static extern bool GetClientRect(UIntPtr hWnd, out RECT lpRect);
-  [DllImport("user32.dll", SetLastError = false)]
-  static extern UIntPtr GetDesktopWindow();
-  [DllImport("user32.dll")]
-  static extern UIntPtr WindowFromPoint(int xPoint, int yPoint);
-  //-------------------------------------------------------------------
+partial class AppImplementation {
 
   /// @brief コンストラクタ
   public AppImplementation() {
@@ -53,9 +37,6 @@ public partial class AppImplementation {
 
     // プロセス間通信に必要なオブジェクトの生成
     interprocess_ = new scff_interprocess.Interprocess();
-
-    // リサイズ方法のリストを作成
-    BuildResizeMethodList();
   }
 
   /// @brief 起動時のチェックを行うメソッド
@@ -155,32 +136,6 @@ public partial class AppImplementation {
     return true;
   }
 
-  /// @brief コンボボックス用のResizeMethodアイテムクラス
-  public class ResizeMethodItem {
-    public scff_interprocess.SWScaleFlags Value { get; set; }
-    public string Text { get; set; }
-    public override string ToString() {
-      return Text;
-    }
-  }
-
-  /// @brief ResizeMethodコンボボックス用にリストを生成する
-  private void BuildResizeMethodList() {
-    // リストを新しく作成する
-    ResizeMethodList = new List<Tuple<string, scff_interprocess.SWScaleFlags>>();
-    ResizeMethodList.Add(Tuple.Create("FastBilinear (fast bilinear)", scff_interprocess.SWScaleFlags.kFastBilinear));
-    ResizeMethodList.Add(Tuple.Create("Bilinear (bilinear)", scff_interprocess.SWScaleFlags.kBilinear));
-    ResizeMethodList.Add(Tuple.Create("Bicubic (bicubic)", scff_interprocess.SWScaleFlags.kBicubic));
-    ResizeMethodList.Add(Tuple.Create("X (experimental)", scff_interprocess.SWScaleFlags.kX));
-    ResizeMethodList.Add(Tuple.Create("Point (nearest neighbor)", scff_interprocess.SWScaleFlags.kPoint));
-    ResizeMethodList.Add(Tuple.Create("Area (averaging area)", scff_interprocess.SWScaleFlags.kArea));
-    ResizeMethodList.Add(Tuple.Create("Bicublin (luma bicubic, chroma bilinear)", scff_interprocess.SWScaleFlags.kBicublin));
-    ResizeMethodList.Add(Tuple.Create("Gauss (gaussian)", scff_interprocess.SWScaleFlags.kGauss));
-    ResizeMethodList.Add(Tuple.Create("Sinc (sinc)", scff_interprocess.SWScaleFlags.kSinc));
-    ResizeMethodList.Add(Tuple.Create("Lanczos (lanczos)", scff_interprocess.SWScaleFlags.kLanczos));
-    ResizeMethodList.Add(Tuple.Create("Spline (natural bicubic spline)", scff_interprocess.SWScaleFlags.kSpline));
-  }
-
   /// @brief 共有メモリからディレクトリを取得し、CurrentDirectoryを更新
   public data.Directory GetCurrentDirectory() {
     // 共有メモリからデータを取得
@@ -189,7 +144,7 @@ public partial class AppImplementation {
     interprocess_.GetDirectory(out interprocess_directory);
 
     // リストを新しく作成する
-    return data.DirectoryFactory.FromInterprocess(interprocess_directory);
+    return new data.Directory(interprocess_directory);
   }
 
   //-------------------------------------------------------------------
@@ -199,7 +154,7 @@ public partial class AppImplementation {
   /// @brief スクリーン座標からウィンドウハンドルを設定する
   public UIntPtr GetWindowFromPoint(int screen_x, int screen_y) {
     Trace.WriteLine("Cursor: " + screen_x + "," + screen_y);
-    UIntPtr window = WindowFromPoint(screen_x, screen_y);
+    UIntPtr window = ExternalAPI.WindowFromPoint(screen_x, screen_y);
     if (window != UIntPtr.Zero) {
       // 見つかった場合
       return window;
@@ -210,20 +165,20 @@ public partial class AppImplementation {
 
   /// @brief デスクトップを全画面で取り込む
   public UIntPtr GetWindowFromDesktop() {
-    return GetDesktopWindow();
+    return ExternalAPI.GetDesktopWindow();
   }
 
   /// @brief ウィンドウのサイズを得る
   public void GetWindowSize(UIntPtr window,
       out int window_width, out int window_height) {
-    if (window == UIntPtr.Zero || !IsWindow(window)) {
+    if (window == UIntPtr.Zero || !ExternalAPI.IsWindow(window)) {
       window_width = 0;
       window_height = 0;
       return;
     }
 
-    RECT window_rect;
-    GetClientRect(window, out window_rect);
+    ExternalAPI.RECT window_rect;
+    ExternalAPI.GetClientRect(window, out window_rect);
     window_width = window_rect.right;
     window_height = window_rect.bottom;
   }
@@ -233,7 +188,7 @@ public partial class AppImplementation {
       int src_x, int src_y, int src_width, int src_height,
       out int clipping_x, out int clipping_y,
       out int clipping_width, out int clipping_height) {
-    if (window == UIntPtr.Zero || !IsWindow(window)) {
+    if (window == UIntPtr.Zero || !ExternalAPI.IsWindow(window)) {
       clipping_x = 0;
       clipping_y = 0;
       clipping_width = 0;
@@ -241,8 +196,8 @@ public partial class AppImplementation {
       return;
     }
 
-    RECT window_rect;
-    GetClientRect(window, out window_rect);
+    ExternalAPI.RECT window_rect;
+    ExternalAPI.GetClientRect(window, out window_rect);
 
     int dst_x = src_x;
     int dst_y = src_y;
@@ -295,7 +250,7 @@ public partial class AppImplementation {
       }
       return false;
     }
-    if (!IsWindow(parameter.Window)) {
+    if (!ExternalAPI.IsWindow(parameter.Window)) {
       if (show_message) {
         MessageBox.Show("Specified window is invalid", "Invalid Window",
             MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -330,8 +285,8 @@ public partial class AppImplementation {
     // }
 
     // クリッピングリージョンの判定
-    RECT window_rect;
-    GetClientRect(parameter.Window, out window_rect);
+    ExternalAPI.RECT window_rect;
+    ExternalAPI.GetClientRect(parameter.Window, out window_rect);
     if (parameter.ClippingX + parameter.ClippingWidth <= window_rect.right &&
         parameter.ClippingY + parameter.ClippingHeight <= window_rect.bottom &&
         parameter.ClippingWidth > 0 &&
@@ -353,13 +308,13 @@ public partial class AppImplementation {
   /// @brief 共有メモリにNullLayoutリクエストを設定
   public void SendNullLayoutRequest(UInt32 process_id) {
     // メッセージを書いて送る
-    data.Message message = data.MessageFactory.Default();
+    data.Message message = new data.Message();
     message.LayoutType = scff_interprocess.LayoutType.kNullLayout;
 
     // 共有メモリを開いて送る
     interprocess_.InitMessage(process_id);
     // Bound関連の値は無視されるのでダミーの100をいれておく
-    interprocess_.SendMessage(data.MessageFactory.ToInterprocess(message, 100, 100));
+    interprocess_.SendMessage(message.ToInterprocess(100, 100));
   }
 
   /// @brief 共有メモリにLayoutリクエストを設定
@@ -380,7 +335,7 @@ public partial class AppImplementation {
   /// @brief 共有メモリにNativeLayoutリクエストを設定
   private void SendNativeLayoutRequest(UInt32 process_id, data.LayoutParameter parameter) {
     // メッセージを書いて送る
-    data.Message message = data.MessageFactory.Default();
+    data.Message message = new data.Message();
     message.LayoutType = scff_interprocess.LayoutType.kNativeLayout;
     message.LayoutElementCount = 1;
     message.LayoutParameters.Add(parameter);
@@ -388,13 +343,13 @@ public partial class AppImplementation {
     // 共有メモリを開いて送る
     interprocess_.InitMessage(process_id);
     // Bound関連の値は無視されるのでダミーの100を入れておく
-    interprocess_.SendMessage(data.MessageFactory.ToInterprocess(message, 100, 100));
+    interprocess_.SendMessage(message.ToInterprocess(100, 100));
   }
 
   /// @brief 共有メモリにComplexLayoutリクエストを設定
   private void SendComplexLayoutRequest(UInt32 process_id, List<data.LayoutParameter> parameters, int bound_width, int bound_height) {
     // メッセージを書いて送る
-    data.Message message = data.MessageFactory.Default();
+    data.Message message = new data.Message();
     message.LayoutType = scff_interprocess.LayoutType.kComplexLayout;
     message.LayoutElementCount = parameters.Count;
 
@@ -404,13 +359,10 @@ public partial class AppImplementation {
 
     // 共有メモリを開いて送る
     interprocess_.InitMessage(process_id);
-    interprocess_.SendMessage(data.MessageFactory.ToInterprocess(message, bound_width, bound_height));
+    interprocess_.SendMessage(message.ToInterprocess(bound_width, bound_height));
   }
 
   //-------------------------------------------------------------------
-
-  /// @brief ResizeMethodコンボボックス用リスト
-  public List<Tuple<string, scff_interprocess.SWScaleFlags>> ResizeMethodList { get; private set; }
 
   /// @brief プロセス間通信用オブジェクト
   private scff_interprocess.Interprocess interprocess_;

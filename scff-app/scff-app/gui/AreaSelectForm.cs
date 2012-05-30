@@ -18,11 +18,11 @@
 /// @file AreaSelectForm.cs
 /// @brief エリア選択ウィンドウの定義
 
+namespace scff_app.gui {
+
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-
-namespace scff_app.gui {
 
 /// @brief エリア選択ウィンドウ
 public partial class AreaSelectForm : Form {

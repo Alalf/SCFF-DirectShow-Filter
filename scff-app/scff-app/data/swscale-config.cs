@@ -18,12 +18,12 @@
 /// @file scff-app/data/swscale-config.cs
 /// @brief scff_interprocess.SWScaleConfigをマネージドクラス化したクラスの定義
 
-using System;
-
 namespace scff_app.data {
 
+using System;
+
 /// @brief scff_interprocess.SWScaleConfigをマネージドクラス化したクラス
-public class SWScaleConfig {
+partial class SWScaleConfig {
   public scff_interprocess.SWScaleFlags Flags { get; set; }
   public Boolean AccurateRnd { get; set; }
   public Boolean IsFilterEnabled { get; set; }

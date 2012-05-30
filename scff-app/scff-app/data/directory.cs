@@ -18,18 +18,16 @@
 /// @file scff-app/data/directory.cs
 /// @brief scff_interprocess.Directoryをマネージドクラス化したクラスの定義
 
-using System.Collections.Generic;
-
 namespace scff_app.data {
 
-/// @brief scff_interprocess.Directoryをマネージドクラス化したクラス
-public class Directory {
-  /// @brief デフォルトコンストラクタ。
-  public Directory() {
-    // リスト・クラスはデフォルトコンストラクタで初期化を行う
-    Entries = new List<Entry>();
-  }
+using System.Collections.Generic;
 
-  public List<Entry> Entries {get; set;}
+/// @brief scff_interprocess.Directoryをマネージドクラス化したクラス
+partial class Directory {
+  List<Entry> entries_ = new List<Entry>();
+  public List<Entry> Entries {
+    get { return entries_; }
+    set { entries_ = value; }
+  }
 }
 }

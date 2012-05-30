@@ -20,14 +20,14 @@
 /// @warning To me: このファイルの中から別のファイルへのusingは禁止！
 ///- 別の言語に移植する場合も最大2ファイルでお願いします
 
+namespace scff_interprocess {
+
 using System;
 using System.Runtime.InteropServices;
 using System.IO;
 using System.IO.MemoryMappedFiles;
 using System.Threading;
 using System.Diagnostics;
-
-namespace scff_interprocess {
 
 // プロセス間通信を担当するクラス
 partial class Interprocess {

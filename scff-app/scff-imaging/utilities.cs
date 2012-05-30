@@ -18,9 +18,9 @@
 /// @file scff_imaging/utilities.cs
 /// @brief scff_imaging/utilities.cc/hの移植版
 
-using System.Diagnostics;
-
 namespace scff_imaging {
+
+using System.Diagnostics;
 
 /// @brief 画像の操作に便利な関数をまとめたクラス
 class Utilities {

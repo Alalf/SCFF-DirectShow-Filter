@@ -18,23 +18,21 @@
 /// @file scff-app/data/message.cs
 /// @brief scff_interprocess.Messageをマネージドクラス化したクラスの定義
 
+namespace scff_app.data {
+
 using System;
 using System.Collections.Generic;
 
-namespace scff_app.data {
-
-/// @brief scff_inteprocess.Directoryをマネージドクラス化したクラス
-public class Message {
-
-  /// @brief デフォルトコンストラクタ
-  public Message() {
-    // リスト・クラスはデフォルトコンストラクタで初期化を行う
-    LayoutParameters = new List<LayoutParameter>();
-  }
-
+/// @brief scff_inteprocess.Messageをマネージドクラス化したクラス
+partial class Message {
   public Int64 Timestamp { get; set; }
   public scff_interprocess.LayoutType LayoutType { get; set; }
   public Int32 LayoutElementCount { get; set; }
-  public List<LayoutParameter> LayoutParameters { get; set; }
+
+  List<LayoutParameter> layout_parameters_ = new List<LayoutParameter>();
+  public List<LayoutParameter> LayoutParameters {
+    get { return layout_parameters_; }
+    set { layout_parameters_ = value; }
+  }
 }
 }

@@ -18,12 +18,12 @@
 /// @file scff-app/gui/movable_and_resizable.cs
 /// @brief コントロールに対し、ドラッグでの移動/リサイズ機能を付加するためのクラスの定義
 
+namespace scff_app.gui {
+
 using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-
-namespace scff_app.gui {
 
 /// @brief コントロールに対し、ドラッグでの移動/リサイズ機能を付加するためのクラス
 // メモ:
@@ -31,29 +31,7 @@ namespace scff_app.gui {
 //  ControlLocation:      これはTarget内の座標系を意味する
 //  ContainerLocation:    これはTargetを内包するContainer内の座標系を意味する
 //  なお、サイズ(幅、高さ)は無次元数なので特に区別をする必要はない。
-public class MovableAndResizable : IDisposable {
-
-  //-------------------------------------------------------------------
-  // Wrapper
-  //-------------------------------------------------------------------
-  [DllImport("user32.dll")]
-  public static extern bool ReleaseCapture();
-  [DllImport("user32.dll", CharSet = CharSet.Auto)]
-  public static extern IntPtr SendMessage(IntPtr hWnd, UInt32 Msg, IntPtr wParam, IntPtr lParam);
-  private const uint WM_NCLBUTTONDOWN = 0x00A1;
-  private enum Message {
-    NULL          = 0,
-    HTTRANSPARENT = -1,
-    HTLEFT        = 10,
-    HTRIGHT       = 11,
-    HTTOP         = 12,
-    HTTOPLEFT     = 13,
-    HTTOPRIGHT    = 14,
-    HTBOTTOM      = 15,
-    HTBOTTOMLEFT  = 16,
-    HTBOTTOMRIGHT = 17,
-  }
-  //-------------------------------------------------------------------
+class MovableAndResizable : IDisposable {
 
   /// @brief リサイズとする領域のサイズ
   private const int kBorder = 16;
@@ -112,9 +90,9 @@ public class MovableAndResizable : IDisposable {
     current_size_ = target_.Size;
 
     if (mode_ != Mode.kNop && mode_ != Mode.kMove) {
-      ReleaseCapture();
-      Message message = GetMessageFromMode(mode_);
-      SendMessage(target_.Handle, WM_NCLBUTTONDOWN, new IntPtr((int)message), IntPtr.Zero);
+      ExternalAPI.ReleaseCapture();
+      ExternalAPI.SystemDefinedMessage message = GetMessageFromMode(mode_);
+      ExternalAPI.SendMessage(target_.Handle, ExternalAPI.WM_NCLBUTTONDOWN, new IntPtr((int)message), IntPtr.Zero);
     }
   }
 
@@ -207,28 +185,28 @@ public class MovableAndResizable : IDisposable {
   //-------------------------------------------------------------------
 
   /// @brief ModeからSendMessage用のメッセージに変換する
-  private Message GetMessageFromMode(Mode mode) {
+  private ExternalAPI.SystemDefinedMessage GetMessageFromMode(Mode mode) {
     switch (mode) {
     case Mode.kResizeTopLeft:
-      return Message.HTTOPLEFT;
+      return ExternalAPI.SystemDefinedMessage.HTTOPLEFT;
     case Mode.kResizeBottomRight:
-      return Message.HTBOTTOMRIGHT;
+      return ExternalAPI.SystemDefinedMessage.HTBOTTOMRIGHT;
     case Mode.kResizeBottomLeft:
-      return Message.HTBOTTOMLEFT;
+      return ExternalAPI.SystemDefinedMessage.HTBOTTOMLEFT;
     case Mode.kResizeTopRight:
-      return Message.HTTOPRIGHT;
+      return ExternalAPI.SystemDefinedMessage.HTTOPRIGHT;
     case Mode.kResizeTop:
-      return Message.HTTOP;
+      return ExternalAPI.SystemDefinedMessage.HTTOP;
     case Mode.kResizeBottom:
-      return Message.HTBOTTOM;
+      return ExternalAPI.SystemDefinedMessage.HTBOTTOM;
     case Mode.kResizeLeft:
-      return Message.HTLEFT;
+      return ExternalAPI.SystemDefinedMessage.HTLEFT;
     case Mode.kResizeRight:
-      return Message.HTRIGHT;
+      return ExternalAPI.SystemDefinedMessage.HTRIGHT;
     case Mode.kMove:
-      return Message.HTTRANSPARENT;
+      return ExternalAPI.SystemDefinedMessage.HTTRANSPARENT;
     default:
-      return Message.NULL;
+      return ExternalAPI.SystemDefinedMessage.NULL;
     }
   }
 

@@ -18,39 +18,28 @@
 /// @file scff-app/data/layout-parameter-app.cs
 /// @brief LayoutParameterのscff_app用拡張
 
+namespace scff_app.data {
+
 using System;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace scff_app.data {
-
 // scff_inteprocess.LayoutParameterをマネージドクラス化したクラス
-public partial class LayoutParameter {
-  //-------------------------------------------------------------------
-  // Wrappers
-  //-------------------------------------------------------------------
-  [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-  static extern int GetClassName(UIntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
-  [DllImport("user32.dll", SetLastError = false)]
-  static extern UIntPtr GetDesktopWindow();
-  [DllImport("user32.dll")]
-  [return: MarshalAs(UnmanagedType.Bool)]
-  static extern bool IsWindow(UIntPtr hWnd);
-  //-------------------------------------------------------------------
+partial class LayoutParameter {
 
   /// @brief レイアウトの名前代わりに使用するWindowのクラス名
   public string WindowText {
     get {
       if (Window == UIntPtr.Zero) {
         return "(Splash)";
-      } else if (Window == GetDesktopWindow()) {
+      } else if (Window == ExternalAPI.GetDesktopWindow()) {
         return "(Desktop)";
       } else {
-        if (!IsWindow(Window)) {
+        if (!ExternalAPI.IsWindow(Window)) {
           return "*** INVALID WINDOW ***";
         } else {
           StringBuilder class_name = new StringBuilder(256);
-          GetClassName(Window, class_name, 256);
+          ExternalAPI.GetClassName(Window, class_name, 256);
           return class_name.ToString();
         }
       }

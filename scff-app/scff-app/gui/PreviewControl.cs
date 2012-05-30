@@ -18,46 +18,15 @@
 /// @file scff-app/gui/PreviewControl.cs
 /// @brief LayoutForm内で使用するプレビューコントロールの定義
 
+namespace scff_app.gui {
+
 using System.Windows.Forms;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System;
 
-namespace scff_app.gui {
-
 /// @brief LayoutForm内で使用するプレビューコントロール
-public partial class PreviewControl : UserControl {
-
-  //-------------------------------------------------------------------
-  // Wrapper
-  //-------------------------------------------------------------------
-  const int SRCCOPY = 13369376;
-  const int CAPTUREBLT = 1073741824;
-  [StructLayout(LayoutKind.Sequential)]
-  struct RECT {
-    public int left;
-    public int top;
-    public int right;
-    public int bottom;
-  }
-  [DllImport("user32.dll")]
-  static extern IntPtr GetDC(UIntPtr hwnd);
-  [DllImport("gdi32.dll")]
-  static extern int BitBlt(IntPtr hDestDC,
-      int x,
-      int y,
-      int nWidth,
-      int nHeight,
-      IntPtr hSrcDC,
-      int xSrc,
-      int ySrc,
-      int dwRop);
-  [DllImport("user32.dll")]
-  static extern int ReleaseDC(UIntPtr hwnd, IntPtr hdc);
-  [DllImport("user32.dll")]
-  [return: MarshalAs(UnmanagedType.Bool)]
-  static extern bool IsWindow(UIntPtr hWnd);
-  //-------------------------------------------------------------------
+partial class PreviewControl : UserControl {
 
   //-------------------------------------------------------------------
   // メソッド
@@ -171,10 +140,10 @@ public partial class PreviewControl : UserControl {
 
   private void ScreenCapture() {
     UIntPtr window = layout_parameter_.Window;
-    if (!IsWindow(window)) {
+    if (!ExternalAPI.IsWindow(window)) {
       return;
     }
-    IntPtr window_dc = GetDC(window);
+    IntPtr window_dc = ExternalAPI.GetDC(window);
     if (window_dc == IntPtr.Zero) {
       // 不正なウィンドウなので何もしない
       return;
@@ -184,12 +153,12 @@ public partial class PreviewControl : UserControl {
     IntPtr captured_bitmap_dc = graphics.GetHdc();
 
     // BitBlt
-    BitBlt(captured_bitmap_dc, 0, 0, captured_bitmap_.Width, captured_bitmap_.Height,
-           window_dc, layout_parameter_.ClippingX, layout_parameter_.ClippingY, SRCCOPY);
+    ExternalAPI.BitBlt(captured_bitmap_dc, 0, 0, captured_bitmap_.Width, captured_bitmap_.Height,
+           window_dc, layout_parameter_.ClippingX, layout_parameter_.ClippingY, ExternalAPI.SRCCOPY);
     graphics.ReleaseHdc(captured_bitmap_dc);
     graphics.Dispose();
     
-    ReleaseDC(window, window_dc);
+    ExternalAPI.ReleaseDC(window, window_dc);
   }
 
   //-------------------------------------------------------------------

@@ -76,6 +76,9 @@
     <Compile Include="scff-app\data\entry-view.cs" />
     <Compile Include="scff-app\data\directory-factory.cs" />
     <Compile Include="scff-app\data\swscale-config-factory.cs" />
+    <Compile Include="scff-app\data\swscale-config-view.cs" />
+    <Compile Include="scff-app\external-dwmapi.cs" />
+    <Compile Include="scff-app\external-api.cs" />
     <Compile Include="scff-app\gui\AreaSelectForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -112,9 +115,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="scff-app\gui\AreaSelectForm.resx">
       <DependentUpon>AreaSelectForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -132,8 +137,8 @@
     <EmbeddedResource Include="scff-app\gui\PreviewControl.resx">
       <DependentUpon>PreviewControl.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="Properties\DataSources\scff_app.data.Entry.datasource" />
-    <None Include="Properties\DataSources\scff_app.data.LayoutParameter.datasource" />
+    <None Include="Properties\DataSources\scff_app.data.Directory.datasource" />
+    <None Include="Properties\DataSources\scff_app.data.Message.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -168,11 +173,14 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app.ico" />
+    <None Include="ext\Monitor.png" />
     <None Include="ext\Go.png" />
     <None Include="ext\Remove.png" />
     <None Include="ext\Add.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -19,12 +19,12 @@
 /// @brief Form1のUIに関連するメソッドの定義
 /// @todo(progre) 移植未達部分が完了次第名称含め全体をリファクタリング
 
+namespace scff_app {
+
 using System;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Generic;
-
-namespace scff_app {
 
 /// @brief メインウィンドウ
 public partial class Form1 : Form {
@@ -43,21 +43,21 @@ public partial class Form1 : Form {
     impl_ = new AppImplementation();
 
     // リサイズメソッドのコンボボックスのデータソースを設定
-    resize_method_combo.DisplayMember = "Item1";
-    resize_method_combo.ValueMember = "Item2";
-    resize_method_combo.DataSource = impl_.ResizeMethodList;
+    resize_method_combo.DisplayMember = "Value";
+    resize_method_combo.ValueMember = "Key";
+    resize_method_combo.DataSource = data.SWScaleConfig.ResizeMethodList;
     
     // 初期設定
     this.UpdateCurrentDirectory();
 
     // デフォルトの設定を書き込む
-    layoutParameterBindingSource.Add(data.LayoutParameterFactory.Default());
+    layoutParametersBindingSource.AddNew();
   }
 
   /// @brief Processコンボボックスのデータソースを再設定
   private void UpdateCurrentDirectory() {
     data.Directory current_directory = impl_.GetCurrentDirectory();
-    entryBindingSource.Clear();
+    entriesBindingSource.Clear();
 
     if (current_directory.Entries.Count == 0) {
       process_combo.Enabled = false;
@@ -67,7 +67,7 @@ public partial class Form1 : Form {
       auto_apply.Enabled = false;
     } else {
       foreach (data.Entry i in current_directory.Entries) {
-        entryBindingSource.Add(i);
+        entriesBindingSource.Add(i);
       }
 
       process_combo.Enabled = true;
@@ -79,23 +79,23 @@ public partial class Form1 : Form {
 
   /// @brief 現在の設定をメッセージにして送信する
   private void SendRequest(bool show_message) {
-    if (entryBindingSource.Current == null) {
+    if (entriesBindingSource.Current == null) {
       return;
     }
 
 
     List<data.LayoutParameter> list = new List<data.LayoutParameter>();
-    foreach (data.LayoutParameter i in layoutParameterBindingSource.List) {
+    foreach (data.LayoutParameter i in layoutParametersBindingSource.List) {
       list.Add(i);
     }
 
-    int bound_width = ((data.Entry)entryBindingSource.Current).SampleWidth;
-    int bound_height = ((data.Entry)entryBindingSource.Current).SampleHeight;
+    int bound_width = ((data.Entry)entriesBindingSource.Current).SampleWidth;
+    int bound_height = ((data.Entry)entriesBindingSource.Current).SampleHeight;
     if (!impl_.ValidateParameters(list, bound_width, bound_height, show_message)) {
       return;
     }
 
-    UInt32 process_id = ((data.Entry)entryBindingSource.Current).ProcessID;
+    UInt32 process_id = ((data.Entry)entriesBindingSource.Current).ProcessID;
     impl_.SendLayoutRequest(process_id, list, bound_width, bound_height);
   }
 
@@ -145,10 +145,10 @@ public partial class Form1 : Form {
   // OK/CANCEL
   //-------------------------------------------------------------------
   private void splash_Click(object sender, EventArgs e) {
-    if (entryBindingSource.Current == null) {
+    if (entriesBindingSource.Current == null) {
       return;
     }
-    UInt32 process_id = ((data.Entry)entryBindingSource.Current).ProcessID;
+    UInt32 process_id = ((data.Entry)entriesBindingSource.Current).ProcessID;
     impl_.SendNullLayoutRequest(process_id);
   }
   private void apply_Click(object sender, EventArgs e) {
@@ -174,15 +174,15 @@ public partial class Form1 : Form {
   //-------------------------------------------------------------------
 
   private void SetWindow(UIntPtr window) {
-    ((data.LayoutParameter)layoutParameterBindingSource.Current).Window = window;
+    ((data.LayoutParameter)layoutParametersBindingSource.Current).Window = window;
     int window_width, window_height;
     impl_.GetWindowSize(window, out window_width, out window_height);
-    ((data.LayoutParameter)layoutParameterBindingSource.Current).ClippingX = 0;
-    ((data.LayoutParameter)layoutParameterBindingSource.Current).ClippingY = 0;
-    ((data.LayoutParameter)layoutParameterBindingSource.Current).ClippingWidth = window_width;
-    ((data.LayoutParameter)layoutParameterBindingSource.Current).ClippingHeight = window_height;
-    ((data.LayoutParameter)layoutParameterBindingSource.Current).Fit = true;
-    layoutParameterBindingSource.ResetCurrentItem();
+    ((data.LayoutParameter)layoutParametersBindingSource.Current).ClippingX = 0;
+    ((data.LayoutParameter)layoutParametersBindingSource.Current).ClippingY = 0;
+    ((data.LayoutParameter)layoutParametersBindingSource.Current).ClippingWidth = window_width;
+    ((data.LayoutParameter)layoutParametersBindingSource.Current).ClippingHeight = window_height;
+    ((data.LayoutParameter)layoutParametersBindingSource.Current).Fit = true;
+    layoutParametersBindingSource.ResetCurrentItem();
   }
 
   private void window_draghere_MouseDown(object sender, MouseEventArgs e) {
@@ -220,15 +220,15 @@ public partial class Form1 : Form {
       area_clipping_width.Enabled = false;
       area_clipping_height.Enabled = false;
 
-      UIntPtr window = ((data.LayoutParameter)layoutParameterBindingSource.Current).Window;
+      UIntPtr window = ((data.LayoutParameter)layoutParametersBindingSource.Current).Window;
       int window_width, window_height;
       impl_.GetWindowSize(window, out window_width, out window_height);
-      ((data.LayoutParameter)layoutParameterBindingSource.Current).ClippingX = 0;
-      ((data.LayoutParameter)layoutParameterBindingSource.Current).ClippingY = 0;
-      ((data.LayoutParameter)layoutParameterBindingSource.Current).ClippingWidth = window_width;
-      ((data.LayoutParameter)layoutParameterBindingSource.Current).ClippingHeight = window_height;
-      ((data.LayoutParameter)layoutParameterBindingSource.Current).Fit = true;
-      layoutParameterBindingSource.ResetCurrentItem();
+      ((data.LayoutParameter)layoutParametersBindingSource.Current).ClippingX = 0;
+      ((data.LayoutParameter)layoutParametersBindingSource.Current).ClippingY = 0;
+      ((data.LayoutParameter)layoutParametersBindingSource.Current).ClippingWidth = window_width;
+      ((data.LayoutParameter)layoutParametersBindingSource.Current).ClippingHeight = window_height;
+      ((data.LayoutParameter)layoutParametersBindingSource.Current).Fit = true;
+      layoutParametersBindingSource.ResetCurrentItem();
 
       if (auto_apply.Checked) {
         SendRequest(false);
@@ -251,16 +251,16 @@ public partial class Form1 : Form {
     int raw_x, raw_y, raw_width, raw_height;
     using (gui.AreaSelectForm form =
         new gui.AreaSelectForm(window_width, window_height,
-                           ((data.LayoutParameter)layoutParameterBindingSource.Current).ClippingX,
-                           ((data.LayoutParameter)layoutParameterBindingSource.Current).ClippingY,
-                           ((data.LayoutParameter)layoutParameterBindingSource.Current).ClippingWidth,
-                           ((data.LayoutParameter)layoutParameterBindingSource.Current).ClippingHeight)) {
+                           ((data.LayoutParameter)layoutParametersBindingSource.Current).ClippingX,
+                           ((data.LayoutParameter)layoutParametersBindingSource.Current).ClippingY,
+                           ((data.LayoutParameter)layoutParametersBindingSource.Current).ClippingWidth,
+                           ((data.LayoutParameter)layoutParametersBindingSource.Current).ClippingHeight)) {
       form.ShowDialog();
       form.GetResult(out raw_x, out raw_y, out raw_width, out raw_height);
     }
 
     // デスクトップキャプチャに変更
-    ((data.LayoutParameter)layoutParameterBindingSource.Current).Window = window;
+    ((data.LayoutParameter)layoutParametersBindingSource.Current).Window = window;
 
     // FitをはずしてClippingを更新
     int clipping_x, clipping_y, clipping_width, clipping_height;
@@ -268,13 +268,13 @@ public partial class Form1 : Form {
         window,
         raw_x, raw_y, raw_width, raw_height,
         out clipping_x, out clipping_y, out clipping_width, out clipping_height);
-    ((data.LayoutParameter)layoutParameterBindingSource.Current).Fit = false;
-    ((data.LayoutParameter)layoutParameterBindingSource.Current).ClippingX = clipping_x;
-    ((data.LayoutParameter)layoutParameterBindingSource.Current).ClippingY = clipping_y;
-    ((data.LayoutParameter)layoutParameterBindingSource.Current).ClippingWidth = clipping_width;
-    ((data.LayoutParameter)layoutParameterBindingSource.Current).ClippingHeight = clipping_height;
+    ((data.LayoutParameter)layoutParametersBindingSource.Current).Fit = false;
+    ((data.LayoutParameter)layoutParametersBindingSource.Current).ClippingX = clipping_x;
+    ((data.LayoutParameter)layoutParametersBindingSource.Current).ClippingY = clipping_y;
+    ((data.LayoutParameter)layoutParametersBindingSource.Current).ClippingWidth = clipping_width;
+    ((data.LayoutParameter)layoutParametersBindingSource.Current).ClippingHeight = clipping_height;
 
-    layoutParameterBindingSource.ResetCurrentItem();
+    layoutParametersBindingSource.ResetCurrentItem();
 
     if (auto_apply.Checked) {
       SendRequest(false);
@@ -285,50 +285,23 @@ public partial class Form1 : Form {
   // Layout
   //-------------------------------------------------------------------
   private void layout_add_Click(object sender, EventArgs e) {
-    if (layoutParameterBindingSource.Count <
-        scff_interprocess.Interprocess.kMaxComplexLayoutElements) {
-      layoutParameterBindingSource.Add(data.LayoutParameterFactory.Default());
-      layout_bound_relative_top.Enabled = true;
-      layout_bound_relative_bottom.Enabled = true;
-      layout_bound_relative_left.Enabled = true;
-      layout_bound_relative_right.Enabled = true;
-      layout_layout.Enabled = true;
-    }
   }
 
   private void layout_remove_Click(object sender, EventArgs e) {
-    if (layoutParameterBindingSource.Count > 1) {
-      layoutParameterBindingSource.RemoveCurrent();
-    }
-    if (layoutParameterBindingSource.Count == 1) {
-      layout_bound_relative_top.Enabled = false;
-      layout_bound_relative_bottom.Enabled = false;
-      layout_bound_relative_left.Enabled = false;
-      layout_bound_relative_right.Enabled = false;
-      layout_layout.Enabled = false;
-    }
-  }
-
-  private void layout_up_Click(object sender, EventArgs e) {
-    layoutParameterBindingSource.MovePrevious();
-  }
-
-  private void layout_down_Click(object sender, EventArgs e) {
-    layoutParameterBindingSource.MoveNext();
   }
 
   private void layout_layout_Click(object sender, EventArgs e) {
     int bound_width, bound_height;
-    if (entryBindingSource.Current == null) {
+    if (entriesBindingSource.Current == null) {
       // 一応ダミーで調整できるように
       bound_width = 640;
       bound_height = 360;
     } else {
-      bound_width = ((data.Entry)entryBindingSource.Current).SampleWidth;
-      bound_height = ((data.Entry)entryBindingSource.Current).SampleHeight;
+      bound_width = ((data.Entry)entriesBindingSource.Current).SampleWidth;
+      bound_height = ((data.Entry)entriesBindingSource.Current).SampleHeight;
     }
 
-    using (gui.LayoutForm layout_form = new gui.LayoutForm(layoutParameterBindingSource, bound_width, bound_height)) {
+    using (gui.LayoutForm layout_form = new gui.LayoutForm(layoutParametersBindingSource, bound_width, bound_height)) {
       layout_form.ShowDialog();
     
       if (layout_form.GetResult()) {
@@ -347,6 +320,30 @@ public partial class Form1 : Form {
     resize_method_csharpen.Enabled = state;
     resize_method_chshift.Enabled = state;
     resize_method_cvshift.Enabled = state;
+  }
+
+  private void layoutParametersBindingNavigator_RefreshItems(object sender, EventArgs e) {
+    if (layoutParametersBindingSource.Count <= 1) {
+      // １個以下にはできない
+      layout_bound_relative_top.Enabled = false;
+      layout_bound_relative_bottom.Enabled = false;
+      layout_bound_relative_left.Enabled = false;
+      layout_bound_relative_right.Enabled = false;
+      layout_layout.Enabled = false;
+      layout_remove.Enabled = false;
+    } else if (layoutParametersBindingSource.Count <
+        scff_interprocess.Interprocess.kMaxComplexLayoutElements) {
+      // 最大値になるまでは要素を追加できるし削除もできる
+      layout_bound_relative_top.Enabled = true;
+      layout_bound_relative_bottom.Enabled = true;
+      layout_bound_relative_left.Enabled = true;
+      layout_bound_relative_right.Enabled = true;
+      layout_layout.Enabled = true;
+      layout_remove.Enabled = true;
+    } else {
+      // サイズオーバー
+      layout_add.Enabled = false;
+    }
   }
 }
 }   // namespace scff_app

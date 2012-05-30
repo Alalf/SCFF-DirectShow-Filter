@@ -18,23 +18,12 @@
 /// @file scff-app/data/layout-parameter.cs
 /// @brief scff_interprocess.LayoutParameterをマネージドクラス化したクラスの定義
 
-using System;
-
 namespace scff_app.data {
 
+using System;
+
 /// @brief scff_inteprocess.LayoutParameterをマネージドクラス化したクラス
-public partial class LayoutParameter {
-
-  /// @brief デフォルトコンストラクタ
-  public LayoutParameter() {
-    // リスト・クラスはデフォルトコンストラクタで初期化を行う
-    SWScaleConfig = new SWScaleConfig();
-  }
-
-  public Int32 BoundX { get; set; }
-  public Int32 BoundY { get; set; }
-  public Int32 BoundWidth { get; set; }
-  public Int32 BoundHeight { get; set; }
+partial class LayoutParameter {
   public UIntPtr Window { get; set; }
   public Int32 ClippingX { get; set; }
   public Int32 ClippingY { get; set; }

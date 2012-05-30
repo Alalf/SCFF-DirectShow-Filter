@@ -18,23 +18,13 @@
 /// @file scff-app/app-implementation-dwmapi.cs
 /// @brief DWMAPI関連のメソッドの定義
 
+namespace scff_app {
+
 using System;
 using System.Runtime.InteropServices;
 
-namespace scff_app {
-
 // メインウィンドウ
-public partial class AppImplementation {
-  //-------------------------------------------------------------------
-  // Wrappers
-  //-------------------------------------------------------------------
-  [DllImport("dwmapi.dll")]
-  static extern int DwmIsCompositionEnabled(out bool enabled);
-  [DllImport("dwmapi.dll")]
-  static extern int DwmEnableComposition(uint uCompositionAction);
-  const int DWM_EC_DISABLECOMPOSITION = 0;
-  const int DWM_EC_ENABLECOMPOSITION = 1;
-  //-------------------------------------------------------------------
+partial class AppImplementation {
 
   /// @brief Dwmapi.dllを利用してAeroをOffに
   public void DWMAPIOff() {
@@ -45,9 +35,9 @@ public partial class AppImplementation {
     }
 
     bool was_dwm_enabled_on_start;
-    DwmIsCompositionEnabled(out was_dwm_enabled_on_start);
+    ExternalDWMAPI.DwmIsCompositionEnabled(out was_dwm_enabled_on_start);
     if (was_dwm_enabled_on_start) {
-      DwmEnableComposition(DWM_EC_DISABLECOMPOSITION);
+      ExternalDWMAPI.DwmEnableComposition(ExternalDWMAPI.DWM_EC_DISABLECOMPOSITION);
     }
     was_dwm_enabled_on_start_ = was_dwm_enabled_on_start;
   }
@@ -60,9 +50,9 @@ public partial class AppImplementation {
     }
 
     if (current) {
-      DwmEnableComposition(DWM_EC_DISABLECOMPOSITION);
+      ExternalDWMAPI.DwmEnableComposition(ExternalDWMAPI.DWM_EC_DISABLECOMPOSITION);
     } else {
-      DwmEnableComposition(DWM_EC_ENABLECOMPOSITION);
+      ExternalDWMAPI.DwmEnableComposition(ExternalDWMAPI.DWM_EC_ENABLECOMPOSITION);
     }
   }
 
@@ -74,7 +64,7 @@ public partial class AppImplementation {
     }
 
     if (was_dwm_enabled_on_start_) {
-      DwmEnableComposition(DWM_EC_ENABLECOMPOSITION);
+      ExternalDWMAPI.DwmEnableComposition(ExternalDWMAPI.DWM_EC_ENABLECOMPOSITION);
     }
   }
 

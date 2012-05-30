@@ -18,17 +18,17 @@
 /// @file scff-app/data/entry.cs
 /// @brief scff_interprocess.Entryをマネージドクラス化したクラスの定義
 
-using System;
-
 namespace scff_app.data {
 
+using System;
+
 /// @brief scff_interprocess.Entryをマネージドクラス化したクラス
-public partial class Entry {
-  public UInt32 ProcessID {get; set;}
-  public string ProcessName {get; set;}
-  public Int32 SampleWidth {get; set;}
-  public Int32 SampleHeight {get; set;}
+partial class Entry {
+  public UInt32 ProcessID { get; set; }
+  public string ProcessName { get; set; }
+  public Int32 SampleWidth { get; set; }
+  public Int32 SampleHeight { get; set; }
   public scff_interprocess.ImagePixelFormat SamplePixelFormat { get; set; }
-  public Double FPS {get; set;}
+  public Double FPS { get; set; }
 }
 }

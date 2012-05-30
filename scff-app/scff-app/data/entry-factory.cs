@@ -16,42 +16,50 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scff-app/data/entry-factory.cs
-/// @brief scff_*.Entryを生成・変換するためのクラスの定義
-
-using System;
+/// @brief scff_*.Entry生成・変換用メソッドの定義
 
 namespace scff_app.data {
 
-/// @brief scff_*.Entryを生成・変換するためのクラス
-public class EntryFactory {
+using System;
 
-  /// @brief scff_interprocessモジュールのパラメータから生成
-  public static Entry FromInterprocess(scff_interprocess.Entry input) {
-    Entry output = new Entry();
+// scff_interprocess.Entryをマネージドクラス化したクラス
+partial class Entry {
 
-    output.ProcessID = input.process_id;
-    output.ProcessName = input.process_name;
-    output.SamplePixelFormat = (scff_interprocess.ImagePixelFormat)
-        Enum.ToObject(typeof(scff_interprocess.ImagePixelFormat), input.sample_pixel_format);
-    output.SampleWidth = input.sample_width;
-    output.SampleHeight = input.sample_height;
-    output.FPS = input.fps;
+  /// @brief デフォルトコンストラクタ
+  public Entry() {
+    // nop
+  }
+
+  /// @brief 変換コンストラクタ
+  public Entry(scff_interprocess.Entry input) {
+    InitByInterprocess(input);
+  }
+
+  /// @brief scff_interprocessモジュールのパラメータを生成
+  public scff_interprocess.Entry ToInterprocessEntry() {
+    scff_interprocess.Entry output = new scff_interprocess.Entry();
+
+    output.process_id = this.ProcessID;
+    output.process_name = this.ProcessName;
+    output.sample_pixel_format = (Int32)this.SamplePixelFormat;
+    output.sample_width = this.SampleWidth;
+    output.sample_height = this.SampleHeight;
+    output.fps = this.FPS;
 
     return output;
   }
 
-  /// @brief scff_interprocessモジュールのパラメータを生成
-  public static scff_interprocess.Entry ToInterprocessEntry(Entry input) {
-    scff_interprocess.Entry output = new scff_interprocess.Entry();
+  //-------------------------------------------------------------------
 
-    output.process_id = input.ProcessID;
-    output.process_name = input.ProcessName;
-    output.sample_pixel_format = (Int32)input.SamplePixelFormat;
-    output.sample_width = input.SampleWidth;
-    output.sample_height = input.SampleHeight;
-    output.fps = input.FPS;
-
-    return output;
+  /// @brief scff_interprocessモジュールのパラメータから生成
+  void InitByInterprocess(scff_interprocess.Entry input) {
+    this.ProcessID = input.process_id;
+    this.ProcessName = input.process_name;
+    this.SamplePixelFormat = (scff_interprocess.ImagePixelFormat)
+        Enum.ToObject(typeof(scff_interprocess.ImagePixelFormat), input.sample_pixel_format);
+    this.SampleWidth = input.sample_width;
+    this.SampleHeight = input.sample_height;
+    this.FPS = input.fps;
   }
 }
 }

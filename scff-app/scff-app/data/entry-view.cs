@@ -20,41 +20,35 @@
 
 namespace scff_app.data {
 
+using System.Collections.Generic;
+
 // scff_interprocess.Entryをマネージドクラス化したクラス
-public partial class Entry {
+partial class Entry {
 
-  /// @brief 表示用
-  public string EntryInfo {
-    get {
-      string pixel_format_string;
-      switch (SamplePixelFormat) {
-      case scff_interprocess.ImagePixelFormat.kI420:
-        pixel_format_string = "I420";
-        break;
-      case scff_interprocess.ImagePixelFormat.kIYUV:
-        pixel_format_string = "IYUV";
-        break;
-      case scff_interprocess.ImagePixelFormat.kYV12:
-        pixel_format_string = "YV12";
-        break;
-      case scff_interprocess.ImagePixelFormat.kUYVY:
-        pixel_format_string = "UYVY";
-        break;
-      case scff_interprocess.ImagePixelFormat.kYUY2:
-        pixel_format_string = "YUY2";
-        break;
-      case scff_interprocess.ImagePixelFormat.kRGB0:
-        pixel_format_string = "RGB0";
-        break;
-      default:
-        pixel_format_string = "(invalid)";
-        break;
-      }
+  /// @brief Enum->String用辞書
+  Dictionary<scff_interprocess.ImagePixelFormat, string> pixel_format_dictionary_ =
+      new Dictionary<scff_interprocess.ImagePixelFormat, string>() {
+    {scff_interprocess.ImagePixelFormat.kI420, "I420"},
+    {scff_interprocess.ImagePixelFormat.kIYUV, "IYUV"},
+    {scff_interprocess.ImagePixelFormat.kYV12, "YV12"},
+    {scff_interprocess.ImagePixelFormat.kUYVY, "UYVY"},
+    {scff_interprocess.ImagePixelFormat.kYUY2, "YUY2"},
+    {scff_interprocess.ImagePixelFormat.kRGB0, "RGB0"}
+  };
 
-      return "[" + ProcessID + "] " + ProcessName +
-              " (" + pixel_format_string + " " + SampleWidth + "x" + SampleHeight +
-              " " + FPS.ToString("F0") + "fps)";
-    }
+  /// @brief 人間が読みやすい文字列に変換
+  public override string ToString() {
+    return
+        "[" + ProcessID + "] " +
+        ProcessName + " " +
+        "(" + pixel_format_dictionary_[SamplePixelFormat] + " " +
+        SampleWidth + "x" + SampleHeight + " " +
+        FPS.ToString("F0") + "fps)";
+  }
+
+  /// @brief コンボボックス表示用
+  public string ProcessInformation {
+    get { return ToString(); }
   }
 };
 }

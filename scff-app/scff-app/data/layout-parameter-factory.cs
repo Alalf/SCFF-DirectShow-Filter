@@ -16,124 +16,109 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scff-app/data/layout-parameter-factory.cs
-/// @brief scff_*.LayoutParameterを生成・変換するためのクラスの定義
+/// @brief scff_*.LayoutParameter生成・変換用メソッドの定義
+
+namespace scff_app.data {
 
 using System;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace scff_app.data {
+// scff_inteprocess.LayoutParameterをマネージドクラス化したクラス
+partial class LayoutParameter {
 
-/// @brief scff_*.LayoutParameterを生成・変換するためのクラス
-class LayoutParameterFactory {
-  //-------------------------------------------------------------------
-  // Wrappers
-  //-------------------------------------------------------------------
-  [DllImport("user32.dll", SetLastError = false)]
-  static extern UIntPtr GetDesktopWindow();
-  [StructLayout(LayoutKind.Sequential)]
-  struct RECT { public int left, top, right, bottom; }
-  [DllImport("user32.dll")]
-  static extern bool GetClientRect(UIntPtr hWnd, out RECT lpRect);
-  //-------------------------------------------------------------------
-
-  /// @brief デフォルトパラメータを持ったLayoutParameterを生成
-  public static LayoutParameter Default() {
-    LayoutParameter output = new LayoutParameter();
-
-    // デフォルト値を設定
-    output.KeepAspectRatio = true;
-    output.Stretch = true;
-
-    // 拡大縮小設定
-    output.SWScaleConfig.Flags = scff_interprocess.SWScaleFlags.kArea;
-    output.SWScaleConfig.IsFilterEnabled = false;
-    output.SWScaleConfig.ChromaHShift = 1.0F;
-    output.SWScaleConfig.ChromaVShift = 1.0F;
-
-    // Windowまわり
-    output.Window = GetDesktopWindow();
-    RECT window_rect;
-    GetClientRect(output.Window, out window_rect);
-    output.ClippingX = window_rect.left;
-    output.ClippingY = window_rect.top;
-    output.ClippingWidth = window_rect.right;
-    output.ClippingHeight = window_rect.bottom;
-    
-    output.Fit = true;
-
-    // GUIクライアントからは使わないが一応
-    output.BoundX = 0;
-    output.BoundY = 0;
-    output.BoundWidth = 1;
-    output.BoundHeight = 1;
-    //----
-
-    output.BoundRelativeLeft = 0.0;
-    output.BoundRelativeRight = 100.0;
-    output.BoundRelativeTop = 0.0;
-    output.BoundRelativeBottom = 100.0;
-
-    return output;
+  /// @brief デフォルトコンストラクタ
+  public LayoutParameter() {
+    this.Init();
   }
 
-  /// @brief scff_interprocessモジュールのパラメータから生成
-  public static LayoutParameter FromInterprocess(scff_interprocess.LayoutParameter input) {
-    LayoutParameter output = new LayoutParameter();
-
-    output.BoundX = input.bound_x;
-    output.BoundY = input.bound_y;
-    output.BoundWidth = input.bound_width;
-    output.BoundHeight = input.bound_height;
-    output.Window = unchecked((UIntPtr)input.window);
-    output.ClippingX = input.clipping_x;
-    output.ClippingY = input.clipping_y;
-    output.ClippingWidth = input.clipping_width;
-    output.ClippingHeight = input.clipping_height;
-    output.ShowCursor = Convert.ToBoolean(input.show_cursor);
-    output.ShowLayeredWindow = Convert.ToBoolean(input.show_layered_window);
- 
-    // 拡大縮小設定
-    output.SWScaleConfig = SWScaleConfigFactory.FromInterprocess(input.swscale_config);
-
-    output.Stretch = Convert.ToBoolean(input.stretch);
-    output.KeepAspectRatio = Convert.ToBoolean(input.keep_aspect_ratio);
-
-    output.RotateDirection = (scff_interprocess.RotateDirection)
-        Enum.ToObject(typeof(scff_interprocess.RotateDirection), input.rotate_direction);
-
-    return output;
+  /// @brief 変換コンストラクタ
+  public LayoutParameter(scff_interprocess.LayoutParameter input, int bound_width, int bound_height) {
+    this.InitByInterprocess(input, bound_width, bound_height);
   }
 
-  /// @brief scff_interprocessモジュールのパラメータを生成
-  public static scff_interprocess.LayoutParameter ToInterprocess(LayoutParameter input, int bound_width, int bound_height) {
+  /// @brief scff_interprocess用に変換
+  public scff_interprocess.LayoutParameter ToInterprocess(int bound_width, int bound_height) {
     scff_interprocess.LayoutParameter output = new scff_interprocess.LayoutParameter();
 
-    //-- GUIクライアント限定の処理！
-    output.bound_x = (Int32)(bound_width * input.BoundRelativeLeft) / 100;
-    output.bound_y = (Int32)(bound_height * input.BoundRelativeTop) / 100;
+    // 相対比率→ピクセル値変換
+    output.bound_x = (Int32)(bound_width * this.BoundRelativeLeft) / 100;
+    output.bound_y = (Int32)(bound_height * this.BoundRelativeTop) / 100;
     output.bound_width =
-        (Int32)(bound_width * input.BoundRelativeRight) / 100 - output.bound_x;
+        (Int32)(bound_width * this.BoundRelativeRight) / 100 - output.bound_x;
     output.bound_height =
-        (Int32)(bound_height * input.BoundRelativeBottom) / 100 - output.bound_y;
-    //--
+        (Int32)(bound_height * this.BoundRelativeBottom) / 100 - output.bound_y;
 
-    output.window = (UInt64)input.Window;
-    output.clipping_x = input.ClippingX;
-    output.clipping_y = input.ClippingY;
-    output.clipping_width = input.ClippingWidth;
-    output.clipping_height = input.ClippingHeight;
-    output.show_cursor = Convert.ToByte(input.ShowCursor);
-    output.show_layered_window = Convert.ToByte(input.ShowLayeredWindow);
+    output.window = (UInt64)this.Window;
+    output.clipping_x = this.ClippingX;
+    output.clipping_y = this.ClippingY;
+    output.clipping_width = this.ClippingWidth;
+    output.clipping_height = this.ClippingHeight;
+    output.show_cursor = Convert.ToByte(this.ShowCursor);
+    output.show_layered_window = Convert.ToByte(this.ShowLayeredWindow);
 
     // 拡大縮小設定
-    output.swscale_config = SWScaleConfigFactory.ToInterprocess(input.SWScaleConfig);
+    output.swscale_config = this.SWScaleConfig.ToInterprocess();
    
-    output.stretch = Convert.ToByte(input.Stretch);
-    output.keep_aspect_ratio = Convert.ToByte(input.KeepAspectRatio);
-    output.rotate_direction = (Int32)input.RotateDirection;
+    output.stretch = Convert.ToByte(this.Stretch);
+    output.keep_aspect_ratio = Convert.ToByte(this.KeepAspectRatio);
+    output.rotate_direction = (Int32)this.RotateDirection;
 
     return output;
+  }
+
+  //-------------------------------------------------------------------
+
+  /// @brief デフォルトパラメータを設定
+  void Init() {
+    this.Window = ExternalAPI.GetDesktopWindow();
+    ExternalAPI.RECT window_rect;
+    ExternalAPI.GetClientRect(this.Window, out window_rect);
+    this.ClippingX = window_rect.left;
+    this.ClippingY = window_rect.top;
+    this.ClippingWidth = window_rect.right;
+    this.ClippingHeight = window_rect.bottom;
+
+    // 拡大縮小設定
+    this.SWScaleConfig = new SWScaleConfig();
+
+    this.Stretch = true;
+    this.KeepAspectRatio = true;
+
+    this.RotateDirection = scff_interprocess.RotateDirection.kNoRotate;
+    
+    // GUIクライアント固有の設定
+    this.BoundRelativeLeft = 0.0;
+    this.BoundRelativeRight = 100.0;
+    this.BoundRelativeTop = 0.0;
+    this.BoundRelativeBottom = 100.0;
+    this.Fit = true;
+  }
+
+  /// @brief scff_interprocessから変換
+  void InitByInterprocess(scff_interprocess.LayoutParameter input, int bound_width, int bound_height) {
+    this.Window = unchecked((UIntPtr)input.window);
+    this.ClippingX = input.clipping_x;
+    this.ClippingY = input.clipping_y;
+    this.ClippingWidth = input.clipping_width;
+    this.ClippingHeight = input.clipping_height;
+    this.ShowCursor = Convert.ToBoolean(input.show_cursor);
+    this.ShowLayeredWindow = Convert.ToBoolean(input.show_layered_window);
+ 
+    // 拡大縮小設定
+    this.SWScaleConfig = new SWScaleConfig(input.swscale_config);
+
+    this.Stretch = Convert.ToBoolean(input.stretch);
+    this.KeepAspectRatio = Convert.ToBoolean(input.keep_aspect_ratio);
+
+    this.RotateDirection = (scff_interprocess.RotateDirection)
+        Enum.ToObject(typeof(scff_interprocess.RotateDirection), input.rotate_direction);
+
+    // GUIクライアント固有の設定
+    this.BoundRelativeLeft = (double)input.bound_x * 100 / bound_width;
+    this.BoundRelativeTop = (double)input.bound_y * 100 / bound_height;
+    this.BoundRelativeRight = (double)(input.bound_width - input.bound_x) * 100 / bound_width;
+    this.BoundRelativeBottom = (double)(input.bound_height - input.bound_y) * 100 / bound_height;
   }
 }
 }

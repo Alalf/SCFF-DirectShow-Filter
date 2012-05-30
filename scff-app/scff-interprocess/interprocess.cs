@@ -20,11 +20,11 @@
 /// @warning To me: このファイルの中から別のファイルへのusingは禁止！
 ///- 別の言語に移植する場合も最大2ファイルでお願いします
 
-using System;
-using System.Runtime.InteropServices;
-
 /// @brief scff_interprocessモジュールのC#版(オリジナルはC++)
 namespace scff_interprocess {
+
+using System;
+using System.Runtime.InteropServices;
 
 //=====================================================================
 // SCFF Messaging Protocol v1 (by 2012/05/22 Alalf)

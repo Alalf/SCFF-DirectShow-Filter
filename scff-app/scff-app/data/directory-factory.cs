@@ -16,39 +16,35 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scff-app/data/directory-factory.cs
-/// @brief scff_*.Directoryを生成・変換するためのクラスの定義
-
-using System.Collections.Generic;
+/// @brief scff_*.Directory生成・変換用メソッドの定義
 
 namespace scff_app.data {
 
-/// @brief scff_*.Directoryを生成・変換するためのクラス
-public class DirectoryFactory {
+using System.Collections.Generic;
 
-  /// @brief scff_interprocessモジュールのパラメータから生成
-  public static Directory FromInterprocess(scff_interprocess.Directory input) {
-    Directory output = new Directory();
+// scff_interprocess.Directoryをマネージドクラス化したクラス
+partial class Directory {
 
-    const int kMaxEntry = scff_interprocess.Interprocess.kMaxEntry;
-    for (int i = 0; i < kMaxEntry; i++) {
-      if (input.entries[i].process_id == 0)
-        continue;
-      output.Entries.Add(EntryFactory.FromInterprocess(input.entries[i]));
-    }
+  /// @brief デフォルトコンストラクタ
+  public Directory() {
+    // nop
+  }
 
-    return output;
+  /// @brief 変換コンストラクタ
+  public Directory(scff_interprocess.Directory input) {
+    InitByInterprocess(input);
   }
 
   /// @brief scff_interprocessモジュールのパラメータを生成
-  public static scff_interprocess.Directory ToInterprocessDirectory(Directory input) {
+  public scff_interprocess.Directory ToInterprocessDirectory() {
     scff_interprocess.Directory output = new scff_interprocess.Directory();
 
     // Listの前から順番に書き込む
     const int kMaxEntry = scff_interprocess.Interprocess.kMaxEntry;
     output.entries = new scff_interprocess.Entry[kMaxEntry];
     for (int i = 0; i < kMaxEntry; i++) {
-      if (i < input.Entries.Count) {
-        output.entries[i] = EntryFactory.ToInterprocessEntry(input.Entries[i]);
+      if (i < this.Entries.Count) {
+        output.entries[i] = this.Entries[i].ToInterprocessEntry();
       } else {
         // C#はインスタンスは勝手にゼロクリアされる
         output.entries[i] = new scff_interprocess.Entry();
@@ -56,6 +52,20 @@ public class DirectoryFactory {
     }
 
     return output;
+  }
+
+  //-------------------------------------------------------------------
+
+  /// @brief scff_interprocessモジュールのパラメータから生成
+  void InitByInterprocess(scff_interprocess.Directory input) {
+    const int kMaxEntry = scff_interprocess.Interprocess.kMaxEntry;
+    for (int i = 0; i < kMaxEntry; i++) {
+      if (input.entries[i].process_id == 0) {
+        continue;
+      }
+      Entry entry = new Entry(input.entries[i]);
+      this.Entries.Add(entry);
+    }
   }
 }
 }

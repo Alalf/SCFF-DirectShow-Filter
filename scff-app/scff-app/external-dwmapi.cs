@@ -15,24 +15,29 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file Program.cs
-/// @brief アプリケーションのエントリポイント
+/// @file scff-app/external-dwmapi.cs
+/// @brief scff_appモジュールで利用するDWMAPIをまとめたクラス
 
 namespace scff_app {
 
 using System;
-using System.Windows.Forms;
+using System.Runtime.InteropServices;
+using System.Text;
 
-/// @brief アプリケーションのエントリポイントを格納するクラス
-static class Program {
+class ExternalDWMAPI {
+  /// @brief 生成禁止用コンストラクタ
+  private ExternalDWMAPI() {}
 
-  /// @brief アプリケーションのエントリポイント
-  [STAThread]
-  static void Main() {
-    Application.EnableVisualStyles();
-    Application.SetCompatibleTextRenderingDefault(false);
-
-    Application.Run(new Form1());
-  }
+  //-------------------------------------------------------------------
+  // dwmapi.dll
+  //-------------------------------------------------------------------
+  [DllImport("dwmapi.dll")]
+  internal static extern int DwmIsCompositionEnabled(out bool enabled);
+  [DllImport("dwmapi.dll")]
+  internal static extern int DwmEnableComposition(uint uCompositionAction);
+  
+  internal const int DWM_EC_DISABLECOMPOSITION = 0;
+  internal const int DWM_EC_ENABLECOMPOSITION = 1;
 }
+
 }

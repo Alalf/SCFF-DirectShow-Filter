@@ -21,22 +21,22 @@
 /// @todo(me) 全体的にBindingSourceをカスタムコントロールで利用する方法さえわかれば、
 ///           いろいろとエレガントに対応できそうではある
 
+namespace scff_app.gui {
+
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace scff_app.gui {
-
 /// @brief レイアウトをGUIで編集するためのフォーム
-public partial class LayoutForm : Form {
-  private BindingSource layoutParameterBindingSource_;
+partial class LayoutForm : Form {
+  BindingSource layoutParameterBindingSource_;
 
-  private List<PreviewControl> previews_;
+  List<PreviewControl> previews_;
 
-  private bool result_;
-  private int bound_width_;
-  private int bound_height_;
+  bool result_;
+  int bound_width_;
+  int bound_height_;
 
   /// @brief コンストラクタ
   public LayoutForm(BindingSource layoutParameterBindingSource, int bound_width, int bound_height) {

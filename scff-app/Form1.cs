@@ -45,7 +45,10 @@ public partial class Form1 : Form {
     // リサイズメソッドのコンボボックスのデータソースを設定
     resize_method_combo.DisplayMember = "Value";
     resize_method_combo.ValueMember = "Key";
-    resize_method_combo.DataSource = data.SWScaleConfig.ResizeMethodList;
+    List<KeyValuePair<scff_interprocess.SWScaleFlags,string>> resize_method_list =
+        new List<KeyValuePair<scff_interprocess.SWScaleFlags,string>>
+            (data.SWScaleConfig.ResizeMethodList);
+    resize_method_combo.DataSource = resize_method_list;
     
     // 初期設定
     this.UpdateCurrentDirectory();
@@ -284,11 +287,6 @@ public partial class Form1 : Form {
   //-------------------------------------------------------------------
   // Layout
   //-------------------------------------------------------------------
-  private void layout_add_Click(object sender, EventArgs e) {
-  }
-
-  private void layout_remove_Click(object sender, EventArgs e) {
-  }
 
   private void layout_layout_Click(object sender, EventArgs e) {
     int bound_width, bound_height;
@@ -329,8 +327,10 @@ public partial class Form1 : Form {
       layout_bound_relative_bottom.Enabled = false;
       layout_bound_relative_left.Enabled = false;
       layout_bound_relative_right.Enabled = false;
-      layout_layout.Enabled = false;
+
+      layout_add.Enabled = true;
       layout_remove.Enabled = false;
+      layout_layout.Enabled = false;
     } else if (layoutParametersBindingSource.Count <
         scff_interprocess.Interprocess.kMaxComplexLayoutElements) {
       // 最大値になるまでは要素を追加できるし削除もできる
@@ -338,11 +338,15 @@ public partial class Form1 : Form {
       layout_bound_relative_bottom.Enabled = true;
       layout_bound_relative_left.Enabled = true;
       layout_bound_relative_right.Enabled = true;
+
       layout_layout.Enabled = true;
+      layout_add.Enabled = true;
       layout_remove.Enabled = true;
     } else {
-      // サイズオーバー
+      // 最大値になったので追加はできない
       layout_add.Enabled = false;
+      layout_remove.Enabled = true;
+      layout_layout.Enabled = true;
     }
   }
 }

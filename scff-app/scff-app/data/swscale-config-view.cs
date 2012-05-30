@@ -26,7 +26,7 @@ using System.Collections.Generic;
 // scff_interprocess.SWScaleConfigをマネージドクラス化したクラス
 partial class SWScaleConfig {
 
-  /// @brief ResizeMethodコンボボックス用辞書
+  /// @brief ResizeMethodコンボボックス用リスト
   static SortedList<scff_interprocess.SWScaleFlags, string> resize_method_list_ =
       new SortedList<scff_interprocess.SWScaleFlags, string> {
     {scff_interprocess.SWScaleFlags.kFastBilinear, "FastBilinear (fast bilinear)"},
@@ -41,9 +41,10 @@ partial class SWScaleConfig {
     {scff_interprocess.SWScaleFlags.kLanczos, "Lanczos (lanczos)"},
     {scff_interprocess.SWScaleFlags.kSpline, "Spline (natural bicubic spline)"}
   };
-  /// @brief ResizeMethodコンボボックス用辞書へのアクセッサ
-  public static List<KeyValuePair<scff_interprocess.SWScaleFlags, string>> ResizeMethodList {
-    get { return new List<KeyValuePair<scff_interprocess.SWScaleFlags,string>>(resize_method_list_); }
+
+  /// @brief ResizeMethodコンボボックス用リストへのアクセッサ
+  public static SortedList<scff_interprocess.SWScaleFlags, string> ResizeMethodList {
+    get { return resize_method_list_; }
   }
 }
 }

@@ -108,6 +108,7 @@
       this.layoutParametersBindingNavigator = new System.Windows.Forms.BindingNavigator(this.components);
       this.layout_add = new System.Windows.Forms.ToolStripButton();
       this.layout_remove = new System.Windows.Forms.ToolStripButton();
+      this.kLayoutSeparator = new System.Windows.Forms.ToolStripSeparator();
       this.layout_layout = new System.Windows.Forms.ToolStripButton();
       this.kProcessPanel = new System.Windows.Forms.Panel();
       this.kProfilePanel = new System.Windows.Forms.Panel();
@@ -968,11 +969,11 @@
       // 
       this.layout_list.DataSource = this.layoutParametersBindingSource;
       this.layout_list.DisplayMember = "WindowText";
-      this.layout_list.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.layout_list.Dock = System.Windows.Forms.DockStyle.Top;
       this.layout_list.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
       this.layout_list.FormattingEnabled = true;
       this.layout_list.ItemHeight = 16;
-      this.layout_list.Location = new System.Drawing.Point(6, 37);
+      this.layout_list.Location = new System.Drawing.Point(6, 14);
       this.layout_list.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
       this.layout_list.Name = "layout_list";
       this.layout_list.Size = new System.Drawing.Size(183, 308);
@@ -1374,8 +1375,8 @@
       // kLayout
       // 
       this.kLayout.Controls.Add(this.layout_list);
-      this.kLayout.Controls.Add(this.layout_bound_table);
       this.kLayout.Controls.Add(this.layoutParametersBindingNavigator);
+      this.kLayout.Controls.Add(this.layout_bound_table);
       this.kLayout.Font = new System.Drawing.Font("MS UI Gothic", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
       this.kLayout.Location = new System.Drawing.Point(284, 93);
       this.kLayout.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
@@ -1389,16 +1390,18 @@
       // layoutParametersBindingNavigator
       // 
       this.layoutParametersBindingNavigator.AddNewItem = this.layout_add;
+      this.layoutParametersBindingNavigator.AutoSize = false;
       this.layoutParametersBindingNavigator.BindingSource = this.layoutParametersBindingSource;
       this.layoutParametersBindingNavigator.CountItem = null;
       this.layoutParametersBindingNavigator.DeleteItem = this.layout_remove;
+      this.layoutParametersBindingNavigator.Dock = System.Windows.Forms.DockStyle.Bottom;
       this.layoutParametersBindingNavigator.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
       this.layoutParametersBindingNavigator.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.layout_add,
             this.layout_remove,
+            this.kLayoutSeparator,
             this.layout_layout});
-      this.layoutParametersBindingNavigator.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow;
-      this.layoutParametersBindingNavigator.Location = new System.Drawing.Point(6, 14);
+      this.layoutParametersBindingNavigator.Location = new System.Drawing.Point(6, 320);
       this.layoutParametersBindingNavigator.MoveFirstItem = null;
       this.layoutParametersBindingNavigator.MoveLastItem = null;
       this.layoutParametersBindingNavigator.MoveNextItem = null;
@@ -1406,33 +1409,41 @@
       this.layoutParametersBindingNavigator.Name = "layoutParametersBindingNavigator";
       this.layoutParametersBindingNavigator.PositionItem = null;
       this.layoutParametersBindingNavigator.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-      this.layoutParametersBindingNavigator.Size = new System.Drawing.Size(183, 23);
+      this.layoutParametersBindingNavigator.Size = new System.Drawing.Size(183, 25);
       this.layoutParametersBindingNavigator.TabIndex = 30;
       this.layoutParametersBindingNavigator.Text = "layout_navigator";
       this.layoutParametersBindingNavigator.RefreshItems += new System.EventHandler(this.layoutParametersBindingNavigator_RefreshItems);
       // 
       // layout_add
       // 
-      this.layout_add.Image = ((System.Drawing.Image)(resources.GetObject("layout_add.Image")));
+      this.layout_add.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+      this.layout_add.Image = global::scff_app.Properties.Resources.Add;
       this.layout_add.Name = "layout_add";
       this.layout_add.RightToLeftAutoMirrorImage = true;
-      this.layout_add.Size = new System.Drawing.Size(45, 20);
+      this.layout_add.Size = new System.Drawing.Size(23, 22);
       this.layout_add.Text = "Add";
       // 
       // layout_remove
       // 
-      this.layout_remove.Image = ((System.Drawing.Image)(resources.GetObject("layout_remove.Image")));
+      this.layout_remove.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+      this.layout_remove.Image = global::scff_app.Properties.Resources.Remove;
       this.layout_remove.Name = "layout_remove";
       this.layout_remove.RightToLeftAutoMirrorImage = true;
-      this.layout_remove.Size = new System.Drawing.Size(66, 20);
+      this.layout_remove.Size = new System.Drawing.Size(23, 22);
       this.layout_remove.Text = "Remove";
+      // 
+      // kLayoutSeparator
+      // 
+      this.kLayoutSeparator.Name = "kLayoutSeparator";
+      this.kLayoutSeparator.Size = new System.Drawing.Size(6, 25);
       // 
       // layout_layout
       // 
+      this.layout_layout.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
       this.layout_layout.Image = global::scff_app.Properties.Resources.Monitor;
       this.layout_layout.ImageTransparentColor = System.Drawing.Color.Magenta;
       this.layout_layout.Name = "layout_layout";
-      this.layout_layout.Size = new System.Drawing.Size(59, 20);
+      this.layout_layout.Size = new System.Drawing.Size(59, 22);
       this.layout_layout.Text = "Layout";
       this.layout_layout.Click += new System.EventHandler(this.layout_layout_Click);
       // 
@@ -1623,6 +1634,7 @@
     private System.Windows.Forms.ToolStripButton layout_remove;
     private System.Windows.Forms.BindingSource entriesBindingSource;
     private System.Windows.Forms.ToolStripButton layout_layout;
+    private System.Windows.Forms.ToolStripSeparator kLayoutSeparator;
 
 
 

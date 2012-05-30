@@ -241,7 +241,7 @@ partial class AppImplementation {
   }
 
   /// @brief パラメータのValidate
-  private bool ValidateParameter(data.LayoutParameter parameter, int bound_width, int bound_height, bool show_message) {
+  bool ValidateParameter(data.LayoutParameter parameter, int bound_width, int bound_height, bool show_message) {
     // もっとも危険な状態になりやすいウィンドウからチェック
     if (parameter.Window == UIntPtr.Zero) { // NULL
       if (show_message) {
@@ -333,7 +333,7 @@ partial class AppImplementation {
   }
 
   /// @brief 共有メモリにNativeLayoutリクエストを設定
-  private void SendNativeLayoutRequest(UInt32 process_id, data.LayoutParameter parameter) {
+  void SendNativeLayoutRequest(UInt32 process_id, data.LayoutParameter parameter) {
     // メッセージを書いて送る
     data.Message message = new data.Message();
     message.LayoutType = scff_interprocess.LayoutType.kNativeLayout;
@@ -347,7 +347,7 @@ partial class AppImplementation {
   }
 
   /// @brief 共有メモリにComplexLayoutリクエストを設定
-  private void SendComplexLayoutRequest(UInt32 process_id, List<data.LayoutParameter> parameters, int bound_width, int bound_height) {
+  void SendComplexLayoutRequest(UInt32 process_id, List<data.LayoutParameter> parameters, int bound_width, int bound_height) {
     // メッセージを書いて送る
     data.Message message = new data.Message();
     message.LayoutType = scff_interprocess.LayoutType.kComplexLayout;
@@ -365,6 +365,6 @@ partial class AppImplementation {
   //-------------------------------------------------------------------
 
   /// @brief プロセス間通信用オブジェクト
-  private scff_interprocess.Interprocess interprocess_;
+  scff_interprocess.Interprocess interprocess_;
 }
 }   // namespace scff_app

@@ -34,13 +34,13 @@ using System.Windows.Forms;
 class MovableAndResizable : IDisposable {
 
   /// @brief リサイズとする領域のサイズ
-  private const int kBorder = 16;
+  const int kBorder = 16;
 
   /// @brief 最小サイズ
-  private const int kMinimumSize = kBorder * 3;
+  const int kMinimumSize = kBorder * 3;
 
   /// @brief 現在の状態を表す定数
-  private enum Mode {
+  enum Mode {
     kNop,
     kMove,
     kResizeTopLeft,
@@ -185,7 +185,7 @@ class MovableAndResizable : IDisposable {
   //-------------------------------------------------------------------
 
   /// @brief ModeからSendMessage用のメッセージに変換する
-  private ExternalAPI.SystemDefinedMessage GetMessageFromMode(Mode mode) {
+  ExternalAPI.SystemDefinedMessage GetMessageFromMode(Mode mode) {
     switch (mode) {
     case Mode.kResizeTopLeft:
       return ExternalAPI.SystemDefinedMessage.HTTOPLEFT;
@@ -211,7 +211,7 @@ class MovableAndResizable : IDisposable {
   }
 
   /// @brief マウスが押された時のコントロール座標が上下左右斜めのどの領域にあるか
-  private Mode GetModeFromMouseControlLocation(Point control_location) {
+  Mode GetModeFromMouseControlLocation(Point control_location) {
     var on_top_border = control_location.Y < kBorder;
     var on_bottom_border = control_location.Y > target_.Height - kBorder;
     var on_left_border = control_location.X < kBorder;
@@ -243,7 +243,7 @@ class MovableAndResizable : IDisposable {
   }
 
   /// @brief モードからカーソルを取得
-  private Cursor GetCursorFromMode(Mode mode) {
+  Cursor GetCursorFromMode(Mode mode) {
     switch (mode) {
     case Mode.kResizeTopLeft:
     case Mode.kResizeBottomRight:
@@ -265,7 +265,7 @@ class MovableAndResizable : IDisposable {
   }
 
   // 座標系をControlからBoundへ変換する
-  private Point ControlToContainer(Point control_location) {
+  Point ControlToContainer(Point control_location) {
     return new Point(target_.Left + control_location.X, target_.Top + control_location.Y);
   }
 
@@ -273,16 +273,16 @@ class MovableAndResizable : IDisposable {
   // メンバ変数
   //-------------------------------------------------------------------
 
-  private int bound_width_;
-  private int bound_height_;
+  int bound_width_;
+  int bound_height_;
 
-  private Mode mode_;
-  private Point last_mouse_container_location_;
+  Mode mode_;
+  Point last_mouse_container_location_;
 
-  private Point current_container_location_;
-  private Size current_size_;
+  Point current_container_location_;
+  Size current_size_;
 
   /// @brief 操作の対象となるコントロール
-  private Control target_;
+  Control target_;
 }
 }

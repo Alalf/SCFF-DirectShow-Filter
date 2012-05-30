@@ -324,7 +324,7 @@ partial class Interprocess {
   //-------------------------------------------------------------------
 
   /// @brief Directory解放
-  private void ReleaseDirectory() {
+  void ReleaseDirectory() {
     if (mutex_directory_ != null) {
       mutex_directory_.Dispose();
       mutex_directory_ = null;
@@ -340,7 +340,7 @@ partial class Interprocess {
   }
 
   /// @brief Message解放
-  private void ReleaseMessage() {
+  void ReleaseMessage() {
     if (mutex_message_ != null) {
       mutex_message_.Dispose();
       mutex_message_ = null;
@@ -356,7 +356,7 @@ partial class Interprocess {
   }
 
   /// @brief Messageを読み込む
-  private Message ReadMessage() {
+  Message ReadMessage() {
     byte[] buffer = new byte[size_of_message_];
     view_of_message_.Read(buffer, 0, size_of_message_);
     GCHandle gch = GCHandle.Alloc(buffer, GCHandleType.Pinned);
@@ -364,7 +364,7 @@ partial class Interprocess {
   }
 
   /// @brief Messageを書き込む
-  private void WriteMessage(Message message) {
+  void WriteMessage(Message message) {
     byte[] buffer = new byte[size_of_message_];
     IntPtr ptr = Marshal.AllocHGlobal(size_of_message_);
     Marshal.StructureToPtr(message, ptr, false);
@@ -374,7 +374,7 @@ partial class Interprocess {
   }
 
   /// @brief Directoryを読み込む
-  private Directory ReadDirectory() {
+  Directory ReadDirectory() {
     byte[] buffer = new byte[size_of_directory_];
     view_of_directory_.Read(buffer, 0, size_of_directory_);
     GCHandle gch = GCHandle.Alloc(buffer, GCHandleType.Pinned);
@@ -382,7 +382,7 @@ partial class Interprocess {
   }
 
   /// @brief Directoryを書き込む
-  private void WriteDirectory(Directory directory) {
+  void WriteDirectory(Directory directory) {
     byte[] buffer = new byte[size_of_directory_];
     IntPtr ptr = Marshal.AllocHGlobal(size_of_directory_);
     Marshal.StructureToPtr(directory, ptr, false);

@@ -94,14 +94,14 @@ public partial class AreaSelectForm : Form {
   //===================================================================
   // メンバ変数
   //===================================================================
-  private int clipping_x_;
-  private int clipping_y_;
-  private int clipping_width_;
-  private int clipping_height_;
+  int clipping_x_;
+  int clipping_y_;
+  int clipping_width_;
+  int clipping_height_;
 
-  private int original_x_;
-  private int original_y_;
-  private int original_width_;
-  private int original_height_;
+  int original_x_;
+  int original_y_;
+  int original_width_;
+  int original_height_;
 }
 }

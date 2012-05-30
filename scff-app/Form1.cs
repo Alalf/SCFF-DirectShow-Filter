@@ -30,7 +30,7 @@ using System.Collections.Generic;
 public partial class Form1 : Form {
 
   /// @brief アプリケーションの実装(MVCパターンにおけるModel/Controller)
-  private AppImplementation impl_;
+  AppImplementation impl_;
 
   /// @brief コンストラクタ
   public Form1() {
@@ -58,7 +58,7 @@ public partial class Form1 : Form {
   }
 
   /// @brief Processコンボボックスのデータソースを再設定
-  private void UpdateCurrentDirectory() {
+  void UpdateCurrentDirectory() {
     data.Directory current_directory = impl_.GetCurrentDirectory();
     entriesBindingSource.Clear();
 
@@ -81,7 +81,7 @@ public partial class Form1 : Form {
   }
 
   /// @brief 現在の設定をメッセージにして送信する
-  private void SendRequest(bool show_message) {
+  void SendRequest(bool show_message) {
     if (entriesBindingSource.Current == null) {
       return;
     }
@@ -176,7 +176,7 @@ public partial class Form1 : Form {
   // Target/Window
   //-------------------------------------------------------------------
 
-  private void SetWindow(UIntPtr window) {
+  void SetWindow(UIntPtr window) {
     ((data.LayoutParameter)layoutParametersBindingSource.Current).Window = window;
     int window_width, window_height;
     impl_.GetWindowSize(window, out window_width, out window_height);

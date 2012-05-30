@@ -162,7 +162,7 @@
       this.main_menu.Name = "main_menu";
       this.main_menu.Padding = new System.Windows.Forms.Padding(6, 3, 0, 3);
       this.main_menu.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-      this.main_menu.Size = new System.Drawing.Size(566, 22);
+      this.main_menu.Size = new System.Drawing.Size(517, 22);
       this.main_menu.TabIndex = 1;
       this.main_menu.Text = "main_menu";
       // 
@@ -969,14 +969,14 @@
       // 
       this.layout_list.DataSource = this.layoutParametersBindingSource;
       this.layout_list.DisplayMember = "WindowText";
-      this.layout_list.Dock = System.Windows.Forms.DockStyle.Top;
+      this.layout_list.Dock = System.Windows.Forms.DockStyle.Fill;
       this.layout_list.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
       this.layout_list.FormattingEnabled = true;
       this.layout_list.ItemHeight = 16;
       this.layout_list.Location = new System.Drawing.Point(6, 14);
       this.layout_list.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
       this.layout_list.Name = "layout_list";
-      this.layout_list.Size = new System.Drawing.Size(183, 308);
+      this.layout_list.Size = new System.Drawing.Size(183, 306);
       this.layout_list.TabIndex = 0;
       // 
       // kVersion
@@ -986,7 +986,7 @@
       this.kVersion.AutoSize = true;
       this.kVersion.Font = new System.Drawing.Font("Verdana", 7F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.kVersion.ForeColor = System.Drawing.Color.White;
-      this.kVersion.Location = new System.Drawing.Point(500, 0);
+      this.kVersion.Location = new System.Drawing.Point(451, 0);
       this.kVersion.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
       this.kVersion.Name = "kVersion";
       this.kVersion.Size = new System.Drawing.Size(64, 35);
@@ -1053,7 +1053,7 @@
       this.kHeaderTable.Name = "kHeaderTable";
       this.kHeaderTable.RowCount = 1;
       this.kHeaderTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
-      this.kHeaderTable.Size = new System.Drawing.Size(566, 35);
+      this.kHeaderTable.Size = new System.Drawing.Size(517, 35);
       this.kHeaderTable.TabIndex = 22;
       // 
       // kResizeMethod
@@ -1471,7 +1471,7 @@
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.AutoSize = true;
       this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-      this.ClientSize = new System.Drawing.Size(566, 637);
+      this.ClientSize = new System.Drawing.Size(517, 620);
       this.Controls.Add(this.kProcessPanel);
       this.Controls.Add(this.kHeaderTable);
       this.Controls.Add(this.kProfilePanel);

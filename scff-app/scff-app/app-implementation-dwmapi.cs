@@ -69,7 +69,7 @@ partial class AppImplementation {
   }
 
   /// @brief DWMAPI.DLLが利用可能かどうか
-  private bool CanUseDWMAPIDLL() {
+  bool CanUseDWMAPIDLL() {
     if (Environment.OSVersion.Platform == PlatformID.Win32NT &&
         Environment.OSVersion.Version.Major >= 6) {
       return true;
@@ -79,6 +79,6 @@ partial class AppImplementation {
   }
 
   /// @brief Aeroが起動時にONになっていたかどうか
-  private bool was_dwm_enabled_on_start_ = false;
+  bool was_dwm_enabled_on_start_ = false;
 }
 }   // namespace scff_app

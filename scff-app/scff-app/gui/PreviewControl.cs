@@ -138,7 +138,7 @@ partial class PreviewControl : UserControl {
     Invalidate();
   }
 
-  private void ScreenCapture() {
+  void ScreenCapture() {
     UIntPtr window = layout_parameter_.Window;
     if (!ExternalAPI.IsWindow(window)) {
       return;
@@ -167,16 +167,16 @@ partial class PreviewControl : UserControl {
 
   public int IndexInLayoutParameterBindingSource { get; set; }
 
-  private MovableAndResizable movable_and_resizable_;
+  MovableAndResizable movable_and_resizable_;
 
   // レイアウトパラメータ
-  private data.LayoutParameter layout_parameter_;
+  data.LayoutParameter layout_parameter_;
 
   // 3秒に一回更新するスクリーンキャプチャビットマップ
   Bitmap captured_bitmap_;
 
   // 情報表示用
-  private Font info_font_;
-  private PointF info_point_f_;
+  Font info_font_;
+  PointF info_point_f_;
 }
 }

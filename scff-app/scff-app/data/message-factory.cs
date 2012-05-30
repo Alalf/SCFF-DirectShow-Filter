@@ -31,11 +31,6 @@ partial class Message {
     this.Init();
   }
 
-  /// @brief 変換コンストラクタ
-  public Message(scff_interprocess.Message input, int bound_width, int bound_height) {
-    this.InitByInterprocess(input, bound_width, bound_height);
-  }
-
   /// @brief scff_Interprocess用に変換
   public scff_interprocess.Message ToInterprocess(int bound_width, int bound_height) {
     scff_interprocess.Message output = new scff_interprocess.Message();
@@ -66,20 +61,6 @@ partial class Message {
     this.Timestamp = DateTime.Now.Ticks;
     this.LayoutType = scff_interprocess.LayoutType.kNullLayout;
     this.LayoutElementCount = 0;
-  }
-
-  /// @brief scff_interprocessから変換
-  void InitByInterprocess(scff_interprocess.Message input, int bound_width, int bound_height) {
-    this.Timestamp = input.timestamp;
-    this.LayoutType = (scff_interprocess.LayoutType)
-        Enum.ToObject(typeof(scff_interprocess.LayoutType), input.layout_type);
-
-    this.LayoutElementCount = input.layout_element_count;
-    const int kMaxComplexLayoutElements = scff_interprocess.Interprocess.kMaxComplexLayoutElements;
-    for (int i = 0; i < kMaxComplexLayoutElements; i++) {
-      LayoutParameter layout_parameter = new LayoutParameter(input.layout_parameters[i], bound_width, bound_height);
-      this.LayoutParameters.Add(layout_parameter);
-    }
   }
 }
 }

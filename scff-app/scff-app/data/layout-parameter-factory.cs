@@ -32,11 +32,6 @@ partial class LayoutParameter {
     this.Init();
   }
 
-  /// @brief 変換コンストラクタ
-  public LayoutParameter(scff_interprocess.LayoutParameter input, int bound_width, int bound_height) {
-    this.InitByInterprocess(input, bound_width, bound_height);
-  }
-
   /// @brief scff_interprocess用に変換
   public scff_interprocess.LayoutParameter ToInterprocess(int bound_width, int bound_height) {
     scff_interprocess.LayoutParameter output = new scff_interprocess.LayoutParameter();
@@ -93,32 +88,6 @@ partial class LayoutParameter {
     this.BoundRelativeTop = 0.0;
     this.BoundRelativeBottom = 100.0;
     this.Fit = true;
-  }
-
-  /// @brief scff_interprocessから変換
-  void InitByInterprocess(scff_interprocess.LayoutParameter input, int bound_width, int bound_height) {
-    this.Window = unchecked((UIntPtr)input.window);
-    this.ClippingX = input.clipping_x;
-    this.ClippingY = input.clipping_y;
-    this.ClippingWidth = input.clipping_width;
-    this.ClippingHeight = input.clipping_height;
-    this.ShowCursor = Convert.ToBoolean(input.show_cursor);
-    this.ShowLayeredWindow = Convert.ToBoolean(input.show_layered_window);
- 
-    // 拡大縮小設定
-    this.SWScaleConfig = new SWScaleConfig(input.swscale_config);
-
-    this.Stretch = Convert.ToBoolean(input.stretch);
-    this.KeepAspectRatio = Convert.ToBoolean(input.keep_aspect_ratio);
-
-    this.RotateDirection = (scff_interprocess.RotateDirection)
-        Enum.ToObject(typeof(scff_interprocess.RotateDirection), input.rotate_direction);
-
-    // GUIクライアント固有の設定
-    this.BoundRelativeLeft = (double)input.bound_x * 100 / bound_width;
-    this.BoundRelativeTop = (double)input.bound_y * 100 / bound_height;
-    this.BoundRelativeRight = (double)(input.bound_width - input.bound_x) * 100 / bound_width;
-    this.BoundRelativeBottom = (double)(input.bound_height - input.bound_y) * 100 / bound_height;
   }
 }
 }

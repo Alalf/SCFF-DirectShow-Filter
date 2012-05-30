@@ -35,20 +35,6 @@ partial class Entry {
     InitByInterprocess(input);
   }
 
-  /// @brief scff_interprocessモジュールのパラメータを生成
-  public scff_interprocess.Entry ToInterprocessEntry() {
-    scff_interprocess.Entry output = new scff_interprocess.Entry();
-
-    output.process_id = this.ProcessID;
-    output.process_name = this.ProcessName;
-    output.sample_pixel_format = (Int32)this.SamplePixelFormat;
-    output.sample_width = this.SampleWidth;
-    output.sample_height = this.SampleHeight;
-    output.fps = this.FPS;
-
-    return output;
-  }
-
   //-------------------------------------------------------------------
 
   /// @brief scff_interprocessモジュールのパラメータから生成

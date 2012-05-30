@@ -30,11 +30,6 @@ partial class SWScaleConfig {
     this.Init();
   }
 
-  /// @brief 変換コンストラクタ
-  public SWScaleConfig(scff_interprocess.SWScaleConfig input) {
-    this.InitByInterprocess(input);
-  }
-
   /// @brief scff_interprocess用に変換
   public scff_interprocess.SWScaleConfig ToInterprocess() {
     scff_interprocess.SWScaleConfig output = new scff_interprocess.SWScaleConfig();
@@ -60,20 +55,6 @@ partial class SWScaleConfig {
     this.IsFilterEnabled = false;
     this.ChromaHShift = 1.0F;
     this.ChromaVShift = 1.0F;
-  }
-
-  /// @brief scff_interprocessから変換
-  void InitByInterprocess(scff_interprocess.SWScaleConfig input) {
-    this.Flags = (scff_interprocess.SWScaleFlags)
-        Enum.ToObject(typeof(scff_interprocess.SWScaleFlags), input.flags);
-    this.AccurateRnd = Convert.ToBoolean(input.accurate_rnd);
-    this.IsFilterEnabled = Convert.ToBoolean(input.is_filter_enabled);
-    this.LumaGBlur = input.luma_gblur;
-    this.ChromaGBlur = input.chroma_gblur;
-    this.LumaSharpen = input.luma_sharpen;
-    this.ChromaSharpen = input.chroma_sharpen;
-    this.ChromaHShift = input.chroma_hshift;
-    this.ChromaVShift = input.chroma_vshift;
   }
 }
 }

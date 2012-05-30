@@ -35,25 +35,6 @@ partial class Directory {
     InitByInterprocess(input);
   }
 
-  /// @brief scff_interprocessモジュールのパラメータを生成
-  public scff_interprocess.Directory ToInterprocessDirectory() {
-    scff_interprocess.Directory output = new scff_interprocess.Directory();
-
-    // Listの前から順番に書き込む
-    const int kMaxEntry = scff_interprocess.Interprocess.kMaxEntry;
-    output.entries = new scff_interprocess.Entry[kMaxEntry];
-    for (int i = 0; i < kMaxEntry; i++) {
-      if (i < this.Entries.Count) {
-        output.entries[i] = this.Entries[i].ToInterprocessEntry();
-      } else {
-        // C#はインスタンスは勝手にゼロクリアされる
-        output.entries[i] = new scff_interprocess.Entry();
-      }
-    }
-
-    return output;
-  }
-
   //-------------------------------------------------------------------
 
   /// @brief scff_interprocessモジュールのパラメータから生成

@@ -31,8 +31,18 @@ partial class Message {
     this.Init();
   }
 
+  //-------------------------------------------------------------------
+
+  /// @brief デフォルトパラメータを設定
+  void Init() {
+    this.Timestamp = DateTime.Now.Ticks;
+    this.LayoutType = scff_interprocess.LayoutType.kNullLayout;
+    this.LayoutElementCount = 0;
+    this.LayoutParameters = new List<LayoutParameter>();
+  }
+
   /// @brief scff_Interprocess用に変換
-  public scff_interprocess.Message ToInterprocess(int bound_width, int bound_height) {
+  scff_interprocess.Message ToInterprocess(int bound_width, int bound_height) {
     scff_interprocess.Message output = new scff_interprocess.Message();
 
     output.timestamp = this.Timestamp;
@@ -52,15 +62,6 @@ partial class Message {
     }
 
     return output;
-  }
-
-  //-------------------------------------------------------------------
-
-  /// @brief デフォルトパラメータを設定
-  void Init() {
-    this.Timestamp = DateTime.Now.Ticks;
-    this.LayoutType = scff_interprocess.LayoutType.kNullLayout;
-    this.LayoutElementCount = 0;
   }
 }
 }

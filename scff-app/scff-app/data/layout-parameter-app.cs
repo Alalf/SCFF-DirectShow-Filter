@@ -23,6 +23,8 @@ namespace scff_app.data {
 using System;
 using System.Runtime.InteropServices;
 using System.Text;
+  using System.Windows.Forms;
+  using System.Drawing;
 
 // scff_inteprocess.LayoutParameterをマネージドクラス化したクラス
 partial class LayoutParameter {
@@ -31,7 +33,7 @@ partial class LayoutParameter {
   public string WindowText {
     get {
       if (Window == UIntPtr.Zero) {
-        return "(Splash)";
+        return "(splash)";
       } else if (Window == ExternalAPI.GetDesktopWindow()) {
         return "(Desktop)";
       } else {
@@ -46,20 +48,67 @@ partial class LayoutParameter {
     }
   }
 
-  //-------------------------------------------------------------------
-  // scff_app独自の値 (Messageには書き込まれない)
+  /// @brief Windowの大きさ
+  public Size WindowSize {
+    get {
+      ExternalAPI.RECT window_rect;
+      ExternalAPI.GetClientRect(this.Window, out window_rect);
+      return new Size(window_rect.right, window_rect.bottom);
+    }
+  }
+
   //-------------------------------------------------------------------
 
-  /// @brief 0.0-1.0を境界の幅としたときの境界内の左端の座標
-  public Double BoundRelativeLeft { get; set; }
-  /// @brief 0.0-1.0を境界の幅としたときの境界内の右端の座標
-  public Double BoundRelativeRight { get; set; }
-  /// @brief 0.0-1.0を境界の高さとしたときの境界内の上端の座標
-  public Double BoundRelativeTop { get; set; }
-  /// @brief 0.0-1.0を境界の高さとしたときの境界内の下端の座標
-  public Double BoundRelativeBottom { get; set; }
+  /// @brief 修正
 
-  /// @brief Clipping領域のFitオプション
-  public Boolean Fit { get; set; }
+
+  /// @brief 検証
+  public bool Validate(bool show_message) {
+    // もっとも危険な状態になりやすいウィンドウからチェック
+    if (this.Window == UIntPtr.Zero) { // NULL
+      if (show_message) {
+        MessageBox.Show("Specified window is invalid", "Invalid Window",
+            MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+      return false;
+    }
+    if (!ExternalAPI.IsWindow(this.Window)) {
+      if (show_message) {
+        MessageBox.Show("Specified window is invalid", "Invalid Window",
+            MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+      return false;
+    }
+
+    // 境界設定のチェック
+    if (this.BoundRelativeTop < this.BoundRelativeBottom &&
+        this.BoundRelativeLeft < this.BoundRelativeRight) {
+      // ok
+    } else {
+      if (show_message) {
+        MessageBox.Show("Specified bound-rect is invalid", "Invalid Bound-rect",
+            MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+      return false;
+    }
+
+    // クリッピングリージョンの判定
+    ExternalAPI.RECT window_rect;
+    ExternalAPI.GetClientRect(this.Window, out window_rect);
+    if (this.ClippingX + this.ClippingWidth <= window_rect.right &&
+        this.ClippingY + this.ClippingHeight <= window_rect.bottom &&
+        this.ClippingWidth > 0 &&
+        this.ClippingHeight > 0) {
+      // nop 問題なし
+    } else {
+      if (show_message) {
+        MessageBox.Show("Clipping region is invalid", "Invalid Clipping Region",
+            MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+      return false;
+    }
+
+    return true;
+  }
 }
 }

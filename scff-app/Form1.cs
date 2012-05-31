@@ -39,67 +39,22 @@ public partial class Form1 : Form {
     InitializeComponent();
     //---------------------------------------------------------------
 
-    // AppImplementationインスタンスを生成
-    impl_ = new AppImplementation();
-
     // リサイズメソッドのコンボボックスのデータソースを設定
-    resize_method_combo.DisplayMember = "Value";
-    resize_method_combo.ValueMember = "Key";
+    resizeMethodList.DisplayMember = "Value";
+    resizeMethodList.ValueMember = "Key";
     List<KeyValuePair<scff_interprocess.SWScaleFlags,string>> resize_method_list =
         new List<KeyValuePair<scff_interprocess.SWScaleFlags,string>>
             (data.SWScaleConfig.ResizeMethodList);
-    resize_method_combo.DataSource = resize_method_list;
+    resizeMethodList.DataSource = resize_method_list;
+
+    // AppImplementationインスタンスを生成
+    impl_ = new AppImplementation();
     
     // 初期設定
-    this.UpdateCurrentDirectory();
+    impl_.UpdateDirectory(ref this.entries);
 
     // デフォルトの設定を書き込む
-    layoutParametersBindingSource.AddNew();
-  }
-
-  /// @brief Processコンボボックスのデータソースを再設定
-  void UpdateCurrentDirectory() {
-    data.Directory current_directory = impl_.GetCurrentDirectory();
-    entriesBindingSource.Clear();
-
-    if (current_directory.Entries.Count == 0) {
-      process_combo.Enabled = false;
-      splash.Enabled = false;
-      apply.Enabled = false;
-      auto_apply.Checked = false;
-      auto_apply.Enabled = false;
-    } else {
-      foreach (data.Entry i in current_directory.Entries) {
-        entriesBindingSource.Add(i);
-      }
-
-      process_combo.Enabled = true;
-      splash.Enabled = true;
-      apply.Enabled = true;
-      auto_apply.Enabled = true;
-    }
-  }
-
-  /// @brief 現在の設定をメッセージにして送信する
-  void SendRequest(bool show_message) {
-    if (entriesBindingSource.Current == null) {
-      return;
-    }
-
-
-    List<data.LayoutParameter> list = new List<data.LayoutParameter>();
-    foreach (data.LayoutParameter i in layoutParametersBindingSource.List) {
-      list.Add(i);
-    }
-
-    int bound_width = ((data.Entry)entriesBindingSource.Current).SampleWidth;
-    int bound_height = ((data.Entry)entriesBindingSource.Current).SampleHeight;
-    if (!impl_.ValidateParameters(list, bound_width, bound_height, show_message)) {
-      return;
-    }
-
-    UInt32 process_id = ((data.Entry)entriesBindingSource.Current).ProcessID;
-    impl_.SendLayoutRequest(process_id, list, bound_width, bound_height);
+    this.layoutParameters.AddNew();
   }
 
   //===================================================================
@@ -127,160 +82,136 @@ public partial class Form1 : Form {
   //-------------------------------------------------------------------
   // メニュー
   //-------------------------------------------------------------------
-  private void aero_on_item_Click(object sender, EventArgs e) {
-    // Aeroの状態を切り替える
-    impl_.DWMAPIFlip(aero_on_item.Checked);
-    aero_on_item.Checked = !aero_on_item.Checked;
-  }
 
-  //-------------------------------------------------------------------
-  // Stripメニュー
-  //-------------------------------------------------------------------
-  private void layout_strip_ButtonClick(object sender, EventArgs e) {
-    if (Width > 310) {
-      Width = 310;
-    } else {
-      Width = 500;
-    }
+  private void aeroOn_Click(object sender, EventArgs e) {
+    // Aeroの状態を切り替える
+    impl_.DWMAPIFlip(aeroOn.Checked);
+
+    aeroOn.Checked = !aeroOn.Checked;
   }
 
   //-------------------------------------------------------------------
   // OK/CANCEL
   //-------------------------------------------------------------------
   private void splash_Click(object sender, EventArgs e) {
-    if (entriesBindingSource.Current == null) {
-      return;
-    }
-    UInt32 process_id = ((data.Entry)entriesBindingSource.Current).ProcessID;
-    impl_.SendNullLayoutRequest(process_id);
+    impl_.SendNull(ref entries, true);
   }
+
   private void apply_Click(object sender, EventArgs e) {
-    this.SendRequest(true);
+    impl_.SendMessage(ref entries,
+                      ref layoutParameters, true);
   }
 
   //-------------------------------------------------------------------
   // Process
   //-------------------------------------------------------------------
-  private void process_refresh_Click(object sender, EventArgs e) {
-    // ディレクトリから更新
-    this.UpdateCurrentDirectory();
+  private void processRefresh_Click(object sender, EventArgs e) {
+    // entiresを更新
+    impl_.UpdateDirectory(ref this.entries);
   }
 
   //-------------------------------------------------------------------
   // Layout Profile
   //-------------------------------------------------------------------
-  private void layout_profile_add_Click(object sender, EventArgs e) {
+  private void profileAdd_Click(object sender, EventArgs e) {
   }
 
   //-------------------------------------------------------------------
   // Target/Window
   //-------------------------------------------------------------------
 
-  void SetWindow(UIntPtr window) {
-    ((data.LayoutParameter)layoutParametersBindingSource.Current).Window = window;
-    int window_width, window_height;
-    impl_.GetWindowSize(window, out window_width, out window_height);
-    ((data.LayoutParameter)layoutParametersBindingSource.Current).ClippingX = 0;
-    ((data.LayoutParameter)layoutParametersBindingSource.Current).ClippingY = 0;
-    ((data.LayoutParameter)layoutParametersBindingSource.Current).ClippingWidth = window_width;
-    ((data.LayoutParameter)layoutParametersBindingSource.Current).ClippingHeight = window_height;
-    ((data.LayoutParameter)layoutParametersBindingSource.Current).Fit = true;
-    layoutParametersBindingSource.ResetCurrentItem();
+  private void windowDragHere_MouseDown(object sender, MouseEventArgs e) {
+    windowDragHere.BackColor = Color.Orange;
   }
 
-  private void window_draghere_MouseDown(object sender, MouseEventArgs e) {
-    window_draghere.BackColor = Color.Orange;
-  }
+  private void windowDragHere_MouseUp(object sender, MouseEventArgs e) {
+    windowDragHere.BackColor = SystemColors.Control;
 
-  private void window_draghere_MouseUp(object sender, MouseEventArgs e) {
-    window_draghere.BackColor = SystemColors.Control;
+    Point screen_location = windowDragHere.PointToScreen(e.Location);
+    impl_.SetWindowFromPoint(ref layoutParameters, screen_location.X, screen_location.Y);
 
-    Point screen_location = window_draghere.PointToScreen(e.Location);
-    UIntPtr window = impl_.GetWindowFromPoint(screen_location.X, screen_location.Y);
-    this.SetWindow(window);
-
-    if (auto_apply.Checked) {
-      SendRequest(false);
+    if (autoApply.Checked) {
+      impl_.SendMessage(ref entries,
+                        ref layoutParameters, false);
     }
   }
 
-  private void window_desktop_Click(object sender, EventArgs e) {
-    UIntPtr window = impl_.GetWindowFromDesktop();
-    this.SetWindow(window);
+  private void windowDesktop_Click(object sender, EventArgs e) {
+    impl_.SetDesktopWindow(ref layoutParameters);
 
-    if (auto_apply.Checked) {
-      SendRequest(false);
+    if (autoApply.Checked) {
+      impl_.SendMessage(ref entries,
+                        ref layoutParameters, false);
     }
   }
 
   //-------------------------------------------------------------------
   // Target/Area
   //-------------------------------------------------------------------
-  private void area_fit_CheckedChanged(object sender, EventArgs e) {
-    if (area_fit.Checked) {
-      area_clipping_x.Enabled = false;
-      area_clipping_y.Enabled = false;
-      area_clipping_width.Enabled = false;
-      area_clipping_height.Enabled = false;
+  private void areaFit_CheckedChanged(object sender, EventArgs e) {
+    if (areaFit.Checked) {
+      areaClippingX.Enabled = false;
+      areaClippingY.Enabled = false;
+      areaClippingWidth.Enabled = false;
+      areaClippingHeight.Enabled = false;
 
-      UIntPtr window = ((data.LayoutParameter)layoutParametersBindingSource.Current).Window;
       int window_width, window_height;
-      impl_.GetWindowSize(window, out window_width, out window_height);
-      ((data.LayoutParameter)layoutParametersBindingSource.Current).ClippingX = 0;
-      ((data.LayoutParameter)layoutParametersBindingSource.Current).ClippingY = 0;
-      ((data.LayoutParameter)layoutParametersBindingSource.Current).ClippingWidth = window_width;
-      ((data.LayoutParameter)layoutParametersBindingSource.Current).ClippingHeight = window_height;
-      ((data.LayoutParameter)layoutParametersBindingSource.Current).Fit = true;
-      layoutParametersBindingSource.ResetCurrentItem();
+      impl_.GetWindowSize(((data.LayoutParameter)layoutParameters.Current).Window, out window_width, out window_height);
 
-      if (auto_apply.Checked) {
-        SendRequest(false);
+      ((data.LayoutParameter)layoutParameters.Current).ClippingX = 0;
+      ((data.LayoutParameter)layoutParameters.Current).ClippingY = 0;
+      ((data.LayoutParameter)layoutParameters.Current).ClippingWidth = window_width;
+      ((data.LayoutParameter)layoutParameters.Current).ClippingHeight = window_height;
+      ((data.LayoutParameter)layoutParameters.Current).Fit = true;
+      layoutParameters.ResetCurrentItem();
+
+      if (autoApply.Checked) {
+        impl_.SendMessage(ref entries,
+                          ref layoutParameters, false);
       }
     } else {
-      area_clipping_x.Enabled = true;
-      area_clipping_y.Enabled = true;
-      area_clipping_width.Enabled = true;
-      area_clipping_height.Enabled = true;
+      areaClippingX.Enabled = true;
+      areaClippingY.Enabled = true;
+      areaClippingWidth.Enabled = true;
+      areaClippingHeight.Enabled = true;
     }
   }
 
-  private void target_area_select_Click(object sender, EventArgs e) {
-    // デスクトップの情報を得る
-    UIntPtr window = impl_.GetWindowFromDesktop();
-    int window_width, window_height;
-    impl_.GetWindowSize(window, out window_width, out window_height);
-
+  private void targetAreaSelect_Click(object sender, EventArgs e) {
     // AreaSelectFormを利用してクリッピング領域を取得
     int raw_x, raw_y, raw_width, raw_height;
-    using (gui.AreaSelectForm form =
-        new gui.AreaSelectForm(window_width, window_height,
-                           ((data.LayoutParameter)layoutParametersBindingSource.Current).ClippingX,
-                           ((data.LayoutParameter)layoutParametersBindingSource.Current).ClippingY,
-                           ((data.LayoutParameter)layoutParametersBindingSource.Current).ClippingWidth,
-                           ((data.LayoutParameter)layoutParametersBindingSource.Current).ClippingHeight)) {
+    Size bound_size = ((data.LayoutParameter)layoutParameters.Current).WindowSize;
+
+    using (gui.AreaSelectForm form = new gui.AreaSelectForm(
+        bound_size.Width, bound_size.Height,
+        ((data.LayoutParameter)layoutParameters.Current).ClippingX,
+        ((data.LayoutParameter)layoutParameters.Current).ClippingY,
+        ((data.LayoutParameter)layoutParameters.Current).ClippingWidth,
+        ((data.LayoutParameter)layoutParameters.Current).ClippingHeight)) {
       form.ShowDialog();
       form.GetResult(out raw_x, out raw_y, out raw_width, out raw_height);
     }
 
-    // デスクトップキャプチャに変更
-    ((data.LayoutParameter)layoutParametersBindingSource.Current).Window = window;
-
-    // FitをはずしてClippingを更新
+    // FitをはずしてからDesktopWindowに設定
+    ((data.LayoutParameter)layoutParameters.Current).Fit = false;
+    ((data.LayoutParameter)layoutParameters.Current).SetWindowFromPtr(ExternalAPI.GetDesktopWindow());
+    
     int clipping_x, clipping_y, clipping_width, clipping_height;
     impl_.JustifyClippingRegion(
-        window,
+        bound_size.Width, bound_size.Height,
         raw_x, raw_y, raw_width, raw_height,
         out clipping_x, out clipping_y, out clipping_width, out clipping_height);
-    ((data.LayoutParameter)layoutParametersBindingSource.Current).Fit = false;
-    ((data.LayoutParameter)layoutParametersBindingSource.Current).ClippingX = clipping_x;
-    ((data.LayoutParameter)layoutParametersBindingSource.Current).ClippingY = clipping_y;
-    ((data.LayoutParameter)layoutParametersBindingSource.Current).ClippingWidth = clipping_width;
-    ((data.LayoutParameter)layoutParametersBindingSource.Current).ClippingHeight = clipping_height;
 
-    layoutParametersBindingSource.ResetCurrentItem();
+    ((data.LayoutParameter)layoutParameters.Current).ClippingX = clipping_x;
+    ((data.LayoutParameter)layoutParameters.Current).ClippingY = clipping_y;
+    ((data.LayoutParameter)layoutParameters.Current).ClippingWidth = clipping_width;
+    ((data.LayoutParameter)layoutParameters.Current).ClippingHeight = clipping_height;
 
-    if (auto_apply.Checked) {
-      SendRequest(false);
+    layoutParameters.ResetCurrentItem();
+
+    if (autoApply.Checked) {
+      impl_.SendMessage(ref entries,
+                        ref layoutParameters, false);
     }
   }
 
@@ -288,66 +219,92 @@ public partial class Form1 : Form {
   // Layout
   //-------------------------------------------------------------------
 
-  private void layout_layout_Click(object sender, EventArgs e) {
+  private void layoutEdit_Click(object sender, EventArgs e) {
     int bound_width, bound_height;
-    if (entriesBindingSource.Current == null) {
+    if (entries.Count == 0) {
       // 一応ダミーで調整できるように
       bound_width = 640;
       bound_height = 360;
     } else {
-      bound_width = ((data.Entry)entriesBindingSource.Current).SampleWidth;
-      bound_height = ((data.Entry)entriesBindingSource.Current).SampleHeight;
+      bound_width = ((data.Entry)entries.Current).SampleWidth;
+      bound_height = ((data.Entry)entries.Current).SampleHeight;
     }
 
-    using (gui.LayoutForm layout_form = new gui.LayoutForm(layoutParametersBindingSource, bound_width, bound_height)) {
+    using (gui.LayoutForm layout_form = new gui.LayoutForm(layoutParameters, bound_width, bound_height)) {
       layout_form.ShowDialog();
     
       if (layout_form.GetResult()) {
-        if (auto_apply.Checked) {
-          SendRequest(false);
+        if (autoApply.Checked) {
+          impl_.SendMessage(ref entries,
+                            ref layoutParameters, false);
         }
       }
     }
   }
 
-  private void resize_method_is_filter_enabled_CheckedChanged(object sender, EventArgs e) {
-    bool state = resize_method_is_filter_enabled.Checked;
-    resize_method_lgblur.Enabled = state;
-    resize_method_cgblur.Enabled = state;
-    resize_method_lsharpen.Enabled = state;
-    resize_method_csharpen.Enabled = state;
-    resize_method_chshift.Enabled = state;
-    resize_method_cvshift.Enabled = state;
+  private void resizeMethodIsFilterEnabled_CheckedChanged(object sender, EventArgs e) {
+    bool state = resizeMethodIsFilterEnabled.Checked;
+    resizeMethodLGBlur.Enabled = state;
+    resizeMethodCGBlur.Enabled = state;
+    resizeMethodLSharpen.Enabled = state;
+    resizeMethodCSharpen.Enabled = state;
+    resizeMethodCHShift.Enabled = state;
+    resizeMethodCVShift.Enabled = state;
   }
 
-  private void layoutParametersBindingNavigator_RefreshItems(object sender, EventArgs e) {
-    if (layoutParametersBindingSource.Count <= 1) {
+  private void kLayoutParametersNavigator_RefreshItems(object sender, EventArgs e) {
+    if (layoutParameters.Count <= 1) {
       // １個以下にはできない
-      layout_bound_relative_top.Enabled = false;
-      layout_bound_relative_bottom.Enabled = false;
-      layout_bound_relative_left.Enabled = false;
-      layout_bound_relative_right.Enabled = false;
+      layoutBoundRelativeTop.Enabled = false;
+      layoutBoundRelativeBottom.Enabled = false;
+      layoutBoundRelativeLeft.Enabled = false;
+      layoutBoundRelativeRight.Enabled = false;
 
-      layout_add.Enabled = true;
-      layout_remove.Enabled = false;
-      layout_layout.Enabled = false;
-    } else if (layoutParametersBindingSource.Count <
+      layoutAdd.Enabled = true;
+      layoutRemove.Enabled = false;
+      layoutEdit.Enabled = false;
+    } else if (layoutParameters.Count <
         scff_interprocess.Interprocess.kMaxComplexLayoutElements) {
       // 最大値になるまでは要素を追加できるし削除もできる
-      layout_bound_relative_top.Enabled = true;
-      layout_bound_relative_bottom.Enabled = true;
-      layout_bound_relative_left.Enabled = true;
-      layout_bound_relative_right.Enabled = true;
+      layoutBoundRelativeTop.Enabled = true;
+      layoutBoundRelativeBottom.Enabled = true;
+      layoutBoundRelativeLeft.Enabled = true;
+      layoutBoundRelativeRight.Enabled = true;
 
-      layout_layout.Enabled = true;
-      layout_add.Enabled = true;
-      layout_remove.Enabled = true;
+      layoutEdit.Enabled = true;
+      layoutAdd.Enabled = true;
+      layoutRemove.Enabled = true;
     } else {
       // 最大値になったので追加はできない
-      layout_add.Enabled = false;
-      layout_remove.Enabled = true;
-      layout_layout.Enabled = true;
+      layoutAdd.Enabled = false;
+      layoutRemove.Enabled = true;
+      layoutEdit.Enabled = true;
     }
+  }
+
+  private void entries_ListChanged(object sender, System.ComponentModel.ListChangedEventArgs e) {
+    bool entry_exists = this.entries.Count != 0;
+
+    processList.Enabled = entry_exists;
+    splash.Enabled = entry_exists;
+    apply.Enabled = entry_exists;
+    autoApply.Enabled = entry_exists;
+  }
+
+  private void layoutParameters_CurrentItemChanged(object sender, EventArgs e) {
+    MessageBox.Show("layoutParameters_CurrentItemChanged");
+  }
+
+  private void layoutParameters_DataMemberChanged(object sender, EventArgs e) {
+    MessageBox.Show("layoutParameters_DataMemberChanged");
+  }
+
+  private void layoutParameters_ListChanged(object sender, System.ComponentModel.ListChangedEventArgs e) {
+    MessageBox.Show("layoutParameters_ListChanged");
+  }
+
+  private void layoutParameters_DataSourceChanged(object sender, EventArgs e) {
+    MessageBox.Show("layoutParameters_DataSourceChanged");
   }
 }
 }   // namespace scff_app

@@ -40,7 +40,7 @@
       this.kDoubleClick.Name = "kDoubleClick";
       this.kDoubleClick.Size = new System.Drawing.Size(172, 16);
       this.kDoubleClick.TabIndex = 0;
-      this.kDoubleClick.Text = "Double-click to Apply";
+      this.kDoubleClick.Text = "Double-click to apply";
       this.kDoubleClick.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
       // 
       // AreaSelectForm

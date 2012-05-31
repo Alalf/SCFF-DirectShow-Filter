@@ -28,11 +28,6 @@ partial class Message {
   public Int64 Timestamp { get; set; }
   public scff_interprocess.LayoutType LayoutType { get; set; }
   public Int32 LayoutElementCount { get; set; }
-
-  List<LayoutParameter> layout_parameters_ = new List<LayoutParameter>();
-  public List<LayoutParameter> LayoutParameters {
-    get { return layout_parameters_; }
-    set { layout_parameters_ = value; }
-  }
+  public List<LayoutParameter> LayoutParameters { get; set; }
 }
 }

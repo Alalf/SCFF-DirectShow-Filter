@@ -32,13 +32,13 @@ partial class Entry {
 
   /// @brief 変換コンストラクタ
   public Entry(scff_interprocess.Entry input) {
-    InitByInterprocess(input);
+    InitFromInterprocess(input);
   }
 
   //-------------------------------------------------------------------
 
   /// @brief scff_interprocessモジュールのパラメータから生成
-  void InitByInterprocess(scff_interprocess.Entry input) {
+  void InitFromInterprocess(scff_interprocess.Entry input) {
     this.ProcessID = input.process_id;
     this.ProcessName = input.process_name;
     this.SamplePixelFormat = (scff_interprocess.ImagePixelFormat)

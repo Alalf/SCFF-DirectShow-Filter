@@ -15,8 +15,8 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file scff-app/data/entry-view.cs
-/// @brief Entryの表示用メソッドの定義
+/// @file scff-app/data/entry-app.cs
+/// @brief Entryのscff_app用拡張
 
 namespace scff_app.data {
 

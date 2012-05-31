@@ -85,7 +85,7 @@
       this.apply_item.ImageTransparentColor = System.Drawing.Color.Magenta;
       this.apply_item.Name = "apply_item";
       this.apply_item.Size = new System.Drawing.Size(54, 22);
-      this.apply_item.Text = "Apply";
+      this.apply_item.Text = "apply";
       this.apply_item.Click += new System.EventHandler(this.apply_item_Click);
       // 
       // layout_panel

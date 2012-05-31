@@ -15,38 +15,36 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file scff-app/data/directory-factory.cs
-/// @brief scff_*.Directory生成・変換用メソッドの定義
+/// @file scff-app/data/directory-interprocess.cs
+/// @brief 共有メモリから現在のDirectoryを取得するメソッドの定義
 
 namespace scff_app.data {
 
 using System.Collections.Generic;
+using System.Windows.Forms;
+using System.Diagnostics;
 
 // scff_interprocess.Directoryをマネージドクラス化したクラス
 partial class Directory {
 
-  /// @brief デフォルトコンストラクタ
-  public Directory() {
-    this.Init();
+  /// @brief 共有メモリから現在のDirectoryを取得する
+  public void Update(ref scff_interprocess.Interprocess interprocess) {
+    // 共有メモリへのアクセス準備
+    interprocess.InitDirectory();
+
+    // 共有メモリからデータを取得
+    scff_interprocess.Directory interprocess_directory;
+    interprocess.GetDirectory(out interprocess_directory);
+
+    // 取得したデータから値を設定
+    InitFromInterprocess(interprocess_directory);
   }
 
-  //-------------------------------------------------------------------
-
-  /// @brief デフォルトパラメータを設定
-  void Init() {
-    this.Entries = new List<Entry>();
-  }
-
-  /// @brief scff_interprocessモジュールのパラメータから生成
-  void InitFromInterprocess(scff_interprocess.Directory input) {
-    this.Entries = new List<Entry>();
-
-    const int kMaxEntry = scff_interprocess.Interprocess.kMaxEntry;
-    for (int i = 0; i < kMaxEntry; i++) {
-      if (input.entries[i].process_id == 0) {
-        continue;
-      }
-      this.Entries.Add(new Entry(input.entries[i]));
+  /// @brief BindingSourceに対応する値を設定する
+  public void UpdateBindingSource(ref BindingSource entries) {
+    entries.Clear();
+    foreach (Entry i in this.Entries) {
+      entries.Add(i);
     }
   }
 }

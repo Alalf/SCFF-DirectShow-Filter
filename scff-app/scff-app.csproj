@@ -73,10 +73,12 @@
     <Compile Include="scff-app\data\swscale-config.cs" />
     <Compile Include="scff-app\data\message-factory.cs" />
     <Compile Include="scff-app\data\entry-factory.cs" />
-    <Compile Include="scff-app\data\entry-view.cs" />
+    <Compile Include="scff-app\data\entry-app.cs" />
     <Compile Include="scff-app\data\directory-factory.cs" />
     <Compile Include="scff-app\data\swscale-config-factory.cs" />
-    <Compile Include="scff-app\data\swscale-config-view.cs" />
+    <Compile Include="scff-app\data\swscale-config-app.cs" />
+    <Compile Include="scff-app\data\directory-interprocess.cs" />
+    <Compile Include="scff-app\data\message-interprocess.cs" />
     <Compile Include="scff-app\external-dwmapi.cs" />
     <Compile Include="scff-app\external-api.cs" />
     <Compile Include="scff-app\gui\AreaSelectForm.cs">

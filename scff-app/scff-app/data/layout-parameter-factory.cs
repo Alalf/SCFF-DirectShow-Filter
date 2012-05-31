@@ -64,15 +64,29 @@ partial class LayoutParameter {
 
   //-------------------------------------------------------------------
 
+  public void SetWindowFromPtr(UIntPtr window) {
+    this.Window = window;
+    if (this.Fit) {
+      ExternalAPI.RECT window_rect;
+      ExternalAPI.GetClientRect(this.Window, out window_rect);
+      this.ClippingX = window_rect.left;
+      this.ClippingY = window_rect.top;
+      this.ClippingWidth = window_rect.right;
+      this.ClippingHeight = window_rect.bottom;
+    }
+  }
+
+  //-------------------------------------------------------------------
+
   /// @brief デフォルトパラメータを設定
   void Init() {
-    this.Window = ExternalAPI.GetDesktopWindow();
-    ExternalAPI.RECT window_rect;
-    ExternalAPI.GetClientRect(this.Window, out window_rect);
-    this.ClippingX = window_rect.left;
-    this.ClippingY = window_rect.top;
-    this.ClippingWidth = window_rect.right;
-    this.ClippingHeight = window_rect.bottom;
+    this.Fit = true;
+    this.SetWindowFromPtr(ExternalAPI.GetDesktopWindow());
+
+    this.BoundRelativeLeft = 0.0;
+    this.BoundRelativeRight = 100.0;
+    this.BoundRelativeTop = 0.0;
+    this.BoundRelativeBottom = 100.0;
 
     // 拡大縮小設定
     this.SWScaleConfig = new SWScaleConfig();
@@ -81,13 +95,6 @@ partial class LayoutParameter {
     this.KeepAspectRatio = true;
 
     this.RotateDirection = scff_interprocess.RotateDirection.kNoRotate;
-    
-    // GUIクライアント固有の設定
-    this.BoundRelativeLeft = 0.0;
-    this.BoundRelativeRight = 100.0;
-    this.BoundRelativeTop = 0.0;
-    this.BoundRelativeBottom = 100.0;
-    this.Fit = true;
   }
 }
 }

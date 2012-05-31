@@ -15,8 +15,8 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file scff-app/data/swscale-config-view.cs
-/// @brief SWScaleConfigの表示用メソッドの定義
+/// @file scff-app/data/swscale-config-app.cs
+/// @brief SWScaleConfigのscff_app用拡張
 
 namespace scff_app.data {
 

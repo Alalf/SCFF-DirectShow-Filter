@@ -24,10 +24,6 @@ using System.Collections.Generic;
 
 /// @brief scff_interprocess.Directoryをマネージドクラス化したクラス
 partial class Directory {
-  List<Entry> entries_ = new List<Entry>();
-  public List<Entry> Entries {
-    get { return entries_; }
-    set { entries_ = value; }
-  }
+  public List<Entry> Entries { get; set; }
 }
 }

@@ -23,6 +23,7 @@ namespace scff_app.data {
 using System;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Drawing;
 
 // scff_inteprocess.LayoutParameterをマネージドクラス化したクラス
 partial class LayoutParameter {
@@ -64,15 +65,27 @@ partial class LayoutParameter {
 
   //-------------------------------------------------------------------
 
-  public void SetWindowFromPtr(UIntPtr window) {
+  public void SetWindowFromPtr(UIntPtr window, bool fit, int clipping_x = 0, int clipping_y = 0, int clipping_width = 0, int clipping_height = 0) {
     this.Window = window;
-    if (this.Fit) {
+    if (this.Window == UIntPtr.Zero || !ExternalAPI.IsWindow(this.Window)) {
+      this.WindowSize = new Size(0, 0);
+    } else {
       ExternalAPI.RECT window_rect;
       ExternalAPI.GetClientRect(this.Window, out window_rect);
-      this.ClippingX = window_rect.left;
-      this.ClippingY = window_rect.top;
-      this.ClippingWidth = window_rect.right;
-      this.ClippingHeight = window_rect.bottom;
+      this.WindowSize = new Size(window_rect.right, window_rect.bottom);
+    }
+    if (fit) {
+      this.Fit = true;
+      this.ClippingX = 0;
+      this.ClippingY = 0;
+      this.ClippingWidth = this.WindowSize.Width;
+      this.ClippingHeight = this.WindowSize.Height;
+    } else {
+      this.Fit = false;
+      this.ClippingX = clipping_x;
+      this.ClippingY = clipping_y;
+      this.ClippingWidth = clipping_width;
+      this.ClippingHeight = clipping_height;
     }
   }
 
@@ -80,8 +93,7 @@ partial class LayoutParameter {
 
   /// @brief デフォルトパラメータを設定
   void Init() {
-    this.Fit = true;
-    this.SetWindowFromPtr(ExternalAPI.GetDesktopWindow());
+    this.SetWindowFromPtr(ExternalAPI.GetDesktopWindow(), true);
 
     this.BoundRelativeLeft = 0.0;
     this.BoundRelativeRight = 100.0;

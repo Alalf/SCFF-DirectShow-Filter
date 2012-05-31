@@ -85,11 +85,11 @@ partial class AppImplementation {
   //-------------------------------------------------------------------
 
   public void SetDesktopWindow(ref BindingSource layout_parameters) {
-    ((data.LayoutParameter)layout_parameters.Current).SetWindowFromPtr(ExternalAPI.GetDesktopWindow());
+    ((data.LayoutParameter)layout_parameters.Current).SetWindowFromPtr(ExternalAPI.GetDesktopWindow(), true);
   }
   public void SetWindowFromPoint(ref BindingSource layout_parameters, int screen_x, int screen_y) {
     UIntPtr window = ExternalAPI.WindowFromPoint(screen_x, screen_y);
-    ((data.LayoutParameter)layout_parameters.Current).SetWindowFromPtr(window);
+    ((data.LayoutParameter)layout_parameters.Current).SetWindowFromPtr(window, true);
   }
 
   //-------------------------------------------------------------------
@@ -199,21 +199,6 @@ partial class AppImplementation {
   //-------------------------------------------------------------------
   // ウィンドウ指定
   //-------------------------------------------------------------------
-
-  /// @brief ウィンドウのサイズを得る
-  public void GetWindowSize(UIntPtr window,
-      out int window_width, out int window_height) {
-    if (window == UIntPtr.Zero || !ExternalAPI.IsWindow(window)) {
-      window_width = 0;
-      window_height = 0;
-      return;
-    }
-
-    ExternalAPI.RECT window_rect;
-    ExternalAPI.GetClientRect(window, out window_rect);
-    window_width = window_rect.right;
-    window_height = window_rect.bottom;
-  }
 
   /// @brief クリッピング領域を適切な値に調整してから設定
   public void JustifyClippingRegion(

@@ -31,7 +31,7 @@ public partial class AreaSelectForm : Form {
   MovableAndResizable movable_and_resizable_;
 
   /// @brief コンストラクタ
-  public AreaSelectForm(int bound_width, int bound_height, int screen_x, int screen_y, int width, int height) {
+  public AreaSelectForm(int bound_width, int bound_height, ref BindingSource layoutParameters) {
     //---------------------------------------------------------------
     // DO NOT DELETE THIS!!!
     InitializeComponent();
@@ -40,20 +40,30 @@ public partial class AreaSelectForm : Form {
     movable_and_resizable_ = new MovableAndResizable(this, bound_width, bound_height);
 
     // オリジナルの値を保持しておく
-    original_x_ = screen_x;
-    original_y_ = screen_y;
-    original_width_ = width;
-    original_height_ = height;
+    data.LayoutParameter current = (data.LayoutParameter)layoutParameters.Current;
+    if (current.Window != ExternalAPI.GetDesktopWindow()) {
+      ExternalAPI.RECT window_screen_rect;
+      ExternalAPI.GetWindowRect(current.Window, out window_screen_rect);
+      original_x_ = window_screen_rect.left;
+      original_y_ = window_screen_rect.top;
+      original_width_ = window_screen_rect.right - window_screen_rect.left;
+      original_height_ = window_screen_rect.bottom - window_screen_rect.top;
+    } else {
+      original_x_ = current.ClippingX;
+      original_y_ = current.ClippingY;
+      original_width_ = current.ClippingWidth;
+      original_height_ = current.ClippingHeight;
+    }
 
     // HACK!: 一応ここでも更新するが信頼できない
     Location = new Point(original_x_, original_y_);
     Size = new Size(original_width_, original_height_);
 
     // 初期化
-    clipping_x_ = screen_x;
-    clipping_y_ = screen_y;
-    clipping_width_ = width;
-    clipping_height_ = height;
+    clipping_x_ = original_x_;
+    clipping_y_ = original_y_;
+    clipping_width_ = original_width_;
+    clipping_height_ = original_height_;
   }
 
   /// @brief 結果を取得

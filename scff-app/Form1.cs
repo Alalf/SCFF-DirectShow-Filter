@@ -129,90 +129,52 @@ public partial class Form1 : Form {
 
     Point screen_location = windowDragHere.PointToScreen(e.Location);
     impl_.SetWindowFromPoint(ref layoutParameters, screen_location.X, screen_location.Y);
-
-    if (autoApply.Checked) {
-      impl_.SendMessage(ref entries,
-                        ref layoutParameters, false);
-    }
   }
 
   private void windowDesktop_Click(object sender, EventArgs e) {
     impl_.SetDesktopWindow(ref layoutParameters);
-
-    if (autoApply.Checked) {
-      impl_.SendMessage(ref entries,
-                        ref layoutParameters, false);
-    }
   }
 
   //-------------------------------------------------------------------
   // Target/Area
   //-------------------------------------------------------------------
   private void areaFit_CheckedChanged(object sender, EventArgs e) {
-    if (areaFit.Checked) {
-      areaClippingX.Enabled = false;
-      areaClippingY.Enabled = false;
-      areaClippingWidth.Enabled = false;
-      areaClippingHeight.Enabled = false;
-
-      int window_width, window_height;
-      impl_.GetWindowSize(((data.LayoutParameter)layoutParameters.Current).Window, out window_width, out window_height);
-
-      ((data.LayoutParameter)layoutParameters.Current).ClippingX = 0;
-      ((data.LayoutParameter)layoutParameters.Current).ClippingY = 0;
-      ((data.LayoutParameter)layoutParameters.Current).ClippingWidth = window_width;
-      ((data.LayoutParameter)layoutParameters.Current).ClippingHeight = window_height;
-      ((data.LayoutParameter)layoutParameters.Current).Fit = true;
-      layoutParameters.ResetCurrentItem();
-
-      if (autoApply.Checked) {
-        impl_.SendMessage(ref entries,
-                          ref layoutParameters, false);
-      }
-    } else {
-      areaClippingX.Enabled = true;
-      areaClippingY.Enabled = true;
-      areaClippingWidth.Enabled = true;
-      areaClippingHeight.Enabled = true;
-    }
+    bool flag = !this.areaFit.Checked;
+    this.areaClippingX.Enabled = flag;
+    this.areaClippingY.Enabled = flag;
+    this.areaClippingWidth.Enabled = flag;
+    this.areaClippingHeight.Enabled = flag;
   }
 
   private void targetAreaSelect_Click(object sender, EventArgs e) {
     // AreaSelectFormを利用してクリッピング領域を取得
     int raw_x, raw_y, raw_width, raw_height;
-    Size bound_size = ((data.LayoutParameter)layoutParameters.Current).WindowSize;
 
-    using (gui.AreaSelectForm form = new gui.AreaSelectForm(
-        bound_size.Width, bound_size.Height,
-        ((data.LayoutParameter)layoutParameters.Current).ClippingX,
-        ((data.LayoutParameter)layoutParameters.Current).ClippingY,
-        ((data.LayoutParameter)layoutParameters.Current).ClippingWidth,
-        ((data.LayoutParameter)layoutParameters.Current).ClippingHeight)) {
+    /// @todo(me) マルチモニタ対応
+    ExternalAPI.RECT window_rect;
+    ExternalAPI.GetClientRect(ExternalAPI.GetDesktopWindow(), out window_rect);
+    int bound_width = window_rect.right;
+    int bound_height = window_rect.bottom;
+
+    // ダイアログの表示
+    using (gui.AreaSelectForm form =
+        new gui.AreaSelectForm(bound_width, bound_height, ref layoutParameters)) {
       form.ShowDialog();
       form.GetResult(out raw_x, out raw_y, out raw_width, out raw_height);
     }
 
-    // FitをはずしてからDesktopWindowに設定
-    ((data.LayoutParameter)layoutParameters.Current).Fit = false;
-    ((data.LayoutParameter)layoutParameters.Current).SetWindowFromPtr(ExternalAPI.GetDesktopWindow());
-    
+    // 修正
     int clipping_x, clipping_y, clipping_width, clipping_height;
     impl_.JustifyClippingRegion(
-        bound_size.Width, bound_size.Height,
+        bound_width, bound_height,
         raw_x, raw_y, raw_width, raw_height,
         out clipping_x, out clipping_y, out clipping_width, out clipping_height);
 
-    ((data.LayoutParameter)layoutParameters.Current).ClippingX = clipping_x;
-    ((data.LayoutParameter)layoutParameters.Current).ClippingY = clipping_y;
-    ((data.LayoutParameter)layoutParameters.Current).ClippingWidth = clipping_width;
-    ((data.LayoutParameter)layoutParameters.Current).ClippingHeight = clipping_height;
-
-    layoutParameters.ResetCurrentItem();
-
-    if (autoApply.Checked) {
-      impl_.SendMessage(ref entries,
-                        ref layoutParameters, false);
-    }
+    // プロパティに設定
+    ((data.LayoutParameter)layoutParameters.Current).SetWindowFromPtr(
+      ExternalAPI.GetDesktopWindow(),
+      false,
+      clipping_x, clipping_y, clipping_width, clipping_height);
   }
 
   //-------------------------------------------------------------------
@@ -230,15 +192,9 @@ public partial class Form1 : Form {
       bound_height = ((data.Entry)entries.Current).SampleHeight;
     }
 
-    using (gui.LayoutForm layout_form = new gui.LayoutForm(layoutParameters, bound_width, bound_height)) {
+    using (gui.LayoutForm layout_form = new gui.LayoutForm(ref layoutParameters, bound_width, bound_height)) {
       layout_form.ShowDialog();
-    
-      if (layout_form.GetResult()) {
-        if (autoApply.Checked) {
-          impl_.SendMessage(ref entries,
-                            ref layoutParameters, false);
-        }
-      }
+      layout_form.GetResult();
     }
   }
 
@@ -291,20 +247,10 @@ public partial class Form1 : Form {
     autoApply.Enabled = entry_exists;
   }
 
-  private void layoutParameters_CurrentItemChanged(object sender, EventArgs e) {
-    MessageBox.Show("layoutParameters_CurrentItemChanged");
-  }
-
-  private void layoutParameters_DataMemberChanged(object sender, EventArgs e) {
-    MessageBox.Show("layoutParameters_DataMemberChanged");
-  }
-
   private void layoutParameters_ListChanged(object sender, System.ComponentModel.ListChangedEventArgs e) {
-    MessageBox.Show("layoutParameters_ListChanged");
-  }
-
-  private void layoutParameters_DataSourceChanged(object sender, EventArgs e) {
-    MessageBox.Show("layoutParameters_DataSourceChanged");
+    if (this.autoApply.Checked) {
+      MessageBox.Show("layoutParameters_CurrentItemChanged");
+    }
   }
 }
 }   // namespace scff_app

@@ -49,18 +49,9 @@ partial class LayoutParameter {
   }
 
   /// @brief Windowの大きさ
-  public Size WindowSize {
-    get {
-      ExternalAPI.RECT window_rect;
-      ExternalAPI.GetClientRect(this.Window, out window_rect);
-      return new Size(window_rect.right, window_rect.bottom);
-    }
-  }
+  public Size WindowSize { get; private set; }
 
   //-------------------------------------------------------------------
-
-  /// @brief 修正
-
 
   /// @brief 検証
   public bool Validate(bool show_message) {

@@ -72,6 +72,9 @@ class ExternalAPI {
   [DllImport("user32.dll")]
   internal static extern bool GetClientRect(UIntPtr hWnd, out RECT lpRect);
 
+  [DllImport("user32.dll")]
+  internal static extern bool GetWindowRect(UIntPtr hWnd, out RECT lpRect);
+
   [DllImport("user32.dll", CharSet = CharSet.Auto)]
   internal static extern IntPtr SendMessage(IntPtr hWnd, UInt32 Msg, IntPtr wParam, IntPtr lParam);
 

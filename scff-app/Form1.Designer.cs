@@ -238,7 +238,7 @@
       this.layoutBoundRelativeBottom.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
       this.kLayoutBoundTable.SetColumnSpan(this.layoutBoundRelativeBottom, 2);
-      this.layoutBoundRelativeBottom.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameters, "BoundRelativeBottom", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+      this.layoutBoundRelativeBottom.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameters, "BoundRelativeBottom", true));
       this.layoutBoundRelativeBottom.DecimalPlaces = 1;
       this.layoutBoundRelativeBottom.Enabled = false;
       this.layoutBoundRelativeBottom.Location = new System.Drawing.Point(62, 51);
@@ -260,9 +260,6 @@
       // layoutParameters
       // 
       this.layoutParameters.DataSource = typeof(scff_app.data.LayoutParameter);
-      this.layoutParameters.DataSourceChanged += new System.EventHandler(this.layoutParameters_DataSourceChanged);
-      this.layoutParameters.DataMemberChanged += new System.EventHandler(this.layoutParameters_DataMemberChanged);
-      this.layoutParameters.CurrentItemChanged += new System.EventHandler(this.layoutParameters_CurrentItemChanged);
       this.layoutParameters.ListChanged += new System.ComponentModel.ListChangedEventHandler(this.layoutParameters_ListChanged);
       // 
       // windowDesktop
@@ -283,7 +280,7 @@
       this.layoutBoundRelativeRight.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
       this.kLayoutBoundTable.SetColumnSpan(this.layoutBoundRelativeRight, 2);
-      this.layoutBoundRelativeRight.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameters, "BoundRelativeRight", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+      this.layoutBoundRelativeRight.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameters, "BoundRelativeRight", true));
       this.layoutBoundRelativeRight.DecimalPlaces = 1;
       this.layoutBoundRelativeRight.Enabled = false;
       this.layoutBoundRelativeRight.Location = new System.Drawing.Point(92, 27);
@@ -472,7 +469,7 @@
       // 
       this.areaClippingHeight.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-      this.areaClippingHeight.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameters, "ClippingHeight", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+      this.areaClippingHeight.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameters, "ClippingHeight", true));
       this.areaClippingHeight.Location = new System.Drawing.Point(187, 27);
       this.areaClippingHeight.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
       this.areaClippingHeight.Maximum = new decimal(new int[] {
@@ -524,7 +521,7 @@
       // 
       this.areaClippingWidth.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-      this.areaClippingWidth.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameters, "ClippingWidth", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+      this.areaClippingWidth.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameters, "ClippingWidth", true));
       this.areaClippingWidth.Location = new System.Drawing.Point(92, 27);
       this.areaClippingWidth.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
       this.areaClippingWidth.Maximum = new decimal(new int[] {
@@ -550,7 +547,7 @@
       // 
       this.areaClippingY.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-      this.areaClippingY.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameters, "ClippingY", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+      this.areaClippingY.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameters, "ClippingY", true));
       this.areaClippingY.Location = new System.Drawing.Point(187, 3);
       this.areaClippingY.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
       this.areaClippingY.Maximum = new decimal(new int[] {
@@ -584,7 +581,7 @@
       // 
       this.areaClippingX.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-      this.areaClippingX.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameters, "ClippingX", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+      this.areaClippingX.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameters, "ClippingX", true));
       this.areaClippingX.Location = new System.Drawing.Point(92, 3);
       this.areaClippingX.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
       this.areaClippingX.Maximum = new decimal(new int[] {
@@ -606,7 +603,7 @@
       this.layoutBoundRelativeTop.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
       this.kLayoutBoundTable.SetColumnSpan(this.layoutBoundRelativeTop, 2);
-      this.layoutBoundRelativeTop.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameters, "BoundRelativeTop", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+      this.layoutBoundRelativeTop.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameters, "BoundRelativeTop", true));
       this.layoutBoundRelativeTop.DecimalPlaces = 1;
       this.layoutBoundRelativeTop.Enabled = false;
       this.layoutBoundRelativeTop.Location = new System.Drawing.Point(62, 3);
@@ -625,7 +622,7 @@
       this.layoutBoundRelativeLeft.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
       this.kLayoutBoundTable.SetColumnSpan(this.layoutBoundRelativeLeft, 2);
-      this.layoutBoundRelativeLeft.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameters, "BoundRelativeLeft", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+      this.layoutBoundRelativeLeft.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameters, "BoundRelativeLeft", true));
       this.layoutBoundRelativeLeft.DecimalPlaces = 1;
       this.layoutBoundRelativeLeft.Enabled = false;
       this.layoutBoundRelativeLeft.Location = new System.Drawing.Point(32, 27);
@@ -948,7 +945,7 @@
       this.resizeMethodAccurateRnd.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
       this.resizeMethodAccurateRnd.AutoSize = true;
-      this.resizeMethodAccurateRnd.DataBindings.Add(new System.Windows.Forms.Binding("CheckState", this.layoutParameters, "SWScaleConfig.AccurateRnd", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+      this.resizeMethodAccurateRnd.DataBindings.Add(new System.Windows.Forms.Binding("CheckState", this.layoutParameters, "SWScaleConfigAccurateRnd", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
       this.resizeMethodAccurateRnd.Location = new System.Drawing.Point(133, 3);
       this.resizeMethodAccurateRnd.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
       this.resizeMethodAccurateRnd.Name = "resizeMethodAccurateRnd";
@@ -961,7 +958,7 @@
       // 
       this.resizeMethodList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-      this.resizeMethodList.DataBindings.Add(new System.Windows.Forms.Binding("SelectedValue", this.layoutParameters, "SWScaleConfig.Flags", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+      this.resizeMethodList.DataBindings.Add(new System.Windows.Forms.Binding("SelectedValue", this.layoutParameters, "SWScaleConfigFlags", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
       this.resizeMethodList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
       this.resizeMethodList.FormattingEnabled = true;
       this.resizeMethodList.Location = new System.Drawing.Point(2, 3);
@@ -1129,7 +1126,7 @@
       this.resizeMethodIsFilterEnabled.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
       this.resizeMethodIsFilterEnabled.AutoSize = true;
-      this.resizeMethodIsFilterEnabled.DataBindings.Add(new System.Windows.Forms.Binding("CheckState", this.layoutParameters, "SWScaleConfig.IsFilterEnabled", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+      this.resizeMethodIsFilterEnabled.DataBindings.Add(new System.Windows.Forms.Binding("CheckState", this.layoutParameters, "SWScaleConfigIsFilterEnabled", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
       this.resizeMethodIsFilterEnabled.Location = new System.Drawing.Point(3, 3);
       this.resizeMethodIsFilterEnabled.Name = "resizeMethodIsFilterEnabled";
       this.resizeMethodIsFilterEnabled.Size = new System.Drawing.Size(58, 15);
@@ -1152,7 +1149,7 @@
       // 
       // resizeMethodCHShift
       // 
-      this.resizeMethodCHShift.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameters, "SWScaleConfig.ChromaHShift", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+      this.resizeMethodCHShift.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameters, "SWScaleConfigChromaHShift", true));
       this.resizeMethodCHShift.DecimalPlaces = 2;
       this.resizeMethodCHShift.Enabled = false;
       this.resizeMethodCHShift.Increment = new decimal(new int[] {
@@ -1194,7 +1191,7 @@
       // 
       // resizeMethodCVShift
       // 
-      this.resizeMethodCVShift.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameters, "SWScaleConfig.ChromaVShift", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+      this.resizeMethodCVShift.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameters, "SWScaleConfigChromaVShift", true));
       this.resizeMethodCVShift.DecimalPlaces = 2;
       this.resizeMethodCVShift.Enabled = false;
       this.resizeMethodCVShift.Increment = new decimal(new int[] {
@@ -1236,7 +1233,7 @@
       // 
       // resizeMethodLSharpen
       // 
-      this.resizeMethodLSharpen.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameters, "SWScaleConfig.LumaSharpen", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+      this.resizeMethodLSharpen.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameters, "SWScaleConfigLumaSharpen", true));
       this.resizeMethodLSharpen.DecimalPlaces = 2;
       this.resizeMethodLSharpen.Enabled = false;
       this.resizeMethodLSharpen.Increment = new decimal(new int[] {
@@ -1268,7 +1265,7 @@
       // 
       // resizeMethodCSharpen
       // 
-      this.resizeMethodCSharpen.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameters, "SWScaleConfig.ChromaSharpen", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+      this.resizeMethodCSharpen.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameters, "SWScaleConfigChromaSharpen", true));
       this.resizeMethodCSharpen.DecimalPlaces = 2;
       this.resizeMethodCSharpen.Enabled = false;
       this.resizeMethodCSharpen.Increment = new decimal(new int[] {
@@ -1312,7 +1309,7 @@
       // 
       // resizeMethodLGBlur
       // 
-      this.resizeMethodLGBlur.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameters, "SWScaleConfig.LumaGblur", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+      this.resizeMethodLGBlur.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameters, "SWScaleConfigLumaGblur", true));
       this.resizeMethodLGBlur.DecimalPlaces = 2;
       this.resizeMethodLGBlur.Enabled = false;
       this.resizeMethodLGBlur.Increment = new decimal(new int[] {
@@ -1332,7 +1329,7 @@
       // 
       // resizeMethodCGBlur
       // 
-      this.resizeMethodCGBlur.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameters, "SWScaleConfig.ChromaGBlur", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+      this.resizeMethodCGBlur.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameters, "SWScaleConfigChromaGBlur", true));
       this.resizeMethodCGBlur.DecimalPlaces = 2;
       this.resizeMethodCGBlur.Enabled = false;
       this.resizeMethodCGBlur.Increment = new decimal(new int[] {

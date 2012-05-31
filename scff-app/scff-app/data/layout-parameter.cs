@@ -117,7 +117,7 @@ partial class LayoutParameter : INotifyPropertyChanged {
       }
     }
   }
-  public SWScaleConfig SWScaleConfig {
+  SWScaleConfig SWScaleConfig {
     get {
       return swscale_config_;
     }
@@ -230,6 +230,13 @@ partial class LayoutParameter : INotifyPropertyChanged {
       if (fit_ != value) {
         fit_ = value;
         OnPropertyChanged("Fit");
+      }
+
+      if (fit_) {
+        this.ClippingX = 0;
+        this.ClippingY = 0;
+        this.ClippingWidth = this.WindowSize.Width;
+        this.ClippingHeight = this.WindowSize.Height;
       }
     }
   }

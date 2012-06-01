@@ -42,7 +42,7 @@
             this.apply});
       this.mainToolBar.Location = new System.Drawing.Point(0, 0);
       this.mainToolBar.Name = "mainToolBar";
-      this.mainToolBar.Size = new System.Drawing.Size(240, 25);
+      this.mainToolBar.Size = new System.Drawing.Size(74, 25);
       this.mainToolBar.TabIndex = 0;
       this.mainToolBar.Text = "toolStrip1";
       // 
@@ -103,10 +103,12 @@
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.AutoSize = true;
       this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-      this.ClientSize = new System.Drawing.Size(240, 210);
+      this.ClientSize = new System.Drawing.Size(74, 101);
       this.Controls.Add(this.layoutPanel);
       this.Controls.Add(this.mainToolBar);
+      this.DataBindings.Add(new System.Windows.Forms.Binding("Location", global::scff_app.Properties.Settings.Default, "LayoutFormLocation", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
       this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+      this.Location = global::scff_app.Properties.Settings.Default.LayoutFormLocation;
       this.MaximizeBox = false;
       this.MinimizeBox = false;
       this.Name = "LayoutForm";

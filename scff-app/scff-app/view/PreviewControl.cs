@@ -42,6 +42,10 @@ partial class PreviewControl : UserControl {
     movable_and_resizable_ = new MovableAndResizable(this, bound_width, bound_height);
   }
 
+  //===================================================================
+  // プロパティ
+  //===================================================================
+
   public int Index {
     get { return index_; }
   }

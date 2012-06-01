@@ -50,6 +50,9 @@ public partial class SCFFAppForm : Form {
   //-------------------------------------------------------------------
 
   private void SCFFAppForm_Load(object sender, EventArgs e) {
+    //アプリケーションの設定を読み込む
+    Properties.Settings.Default.Reload();
+
     // リサイズメソッドのコンボボックスのデータソースを設定
     this.resizeMethodList.DisplayMember = "Value";
     this.resizeMethodList.ValueMember = "Key";
@@ -72,6 +75,9 @@ public partial class SCFFAppForm : Form {
   private void SCFFAppForm_FormClosed(object sender, FormClosedEventArgs e) {
     // Aeroの状態を元に戻す
     app_.DWMAPIRestore();
+
+    //アプリケーションの設定を保存する
+    Properties.Settings.Default.Save();
   }
 
   //-------------------------------------------------------------------
@@ -90,10 +96,12 @@ public partial class SCFFAppForm : Form {
   //-------------------------------------------------------------------
   private void splash_Click(object sender, EventArgs e) {
     app_.SendNull(true);
+    this.apply.BackColor = Color.Orange;
   }
 
   private void apply_Click(object sender, EventArgs e) {
     app_.SendMessage(true);
+    this.apply.BackColor = SystemColors.Control;
   }
 
   //-------------------------------------------------------------------
@@ -206,6 +214,9 @@ public partial class SCFFAppForm : Form {
     if (this.autoApply.Checked) {
       /// @todo(me) 更新しすぎなので何とかする
       app_.SendMessage(false);
+      this.apply.BackColor = SystemColors.Control;
+    } else {
+      this.apply.BackColor = Color.Orange;
     }
   }
 

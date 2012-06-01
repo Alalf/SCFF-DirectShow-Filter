@@ -135,6 +135,7 @@
     <EmbeddedResource Include="scff-app\view\PreviewControl.resx">
       <DependentUpon>PreviewControl.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="app.config" />
     <None Include="Properties\DataSources\scff_app.data.Directory.datasource" />
     <None Include="Properties\DataSources\scff_app.data.Message.datasource" />
     <None Include="Properties\Settings.settings">

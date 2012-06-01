@@ -120,10 +120,12 @@ partial class LayoutForm : Form {
           bound_relative_bottom;
     }
 
+    this.DialogResult = System.Windows.Forms.DialogResult.OK;
     Close();
   }
 
   private void cancel_Click(object sender, System.EventArgs e) {
+    this.DialogResult = System.Windows.Forms.DialogResult.Cancel;
     Close();
   }
 

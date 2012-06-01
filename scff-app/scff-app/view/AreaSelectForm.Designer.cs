@@ -30,7 +30,6 @@
         {
       this.cancel = new System.Windows.Forms.Button();
       this.kCaption = new System.Windows.Forms.Label();
-      this.accept = new System.Windows.Forms.Button();
       this.SuspendLayout();
       // 
       // cancel
@@ -43,7 +42,6 @@
       this.cancel.Size = new System.Drawing.Size(24, 24);
       this.cancel.TabIndex = 2;
       this.cancel.UseVisualStyleBackColor = true;
-      this.cancel.Click += new System.EventHandler(this.cancel_Click);
       // 
       // kCaption
       // 
@@ -56,27 +54,13 @@
       this.kCaption.TabIndex = 3;
       this.kCaption.Text = "Double-click to Apply";
       // 
-      // accept
-      // 
-      this.accept.DialogResult = System.Windows.Forms.DialogResult.OK;
-      this.accept.Image = global::scff_app.Properties.Resources.Go;
-      this.accept.Location = new System.Drawing.Point(138, 63);
-      this.accept.Name = "accept";
-      this.accept.Size = new System.Drawing.Size(24, 24);
-      this.accept.TabIndex = 4;
-      this.accept.UseVisualStyleBackColor = true;
-      this.accept.Visible = false;
-      this.accept.Click += new System.EventHandler(this.accept_Click);
-      // 
       // AreaSelectForm
       // 
-      this.AcceptButton = this.accept;
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
       this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
       this.CancelButton = this.cancel;
       this.ClientSize = new System.Drawing.Size(300, 150);
       this.ControlBox = false;
-      this.Controls.Add(this.accept);
       this.Controls.Add(this.kCaption);
       this.Controls.Add(this.cancel);
       this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
@@ -86,7 +70,7 @@
       this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
       this.Text = "AreaSelectForm";
       this.Load += new System.EventHandler(this.AreaSelectForm_Load);
-      this.DoubleClick += new System.EventHandler(this.accept_Click);
+      this.DoubleClick += new System.EventHandler(this.AreaSelectForm_DoubleClick);
       this.ResumeLayout(false);
       this.PerformLayout();
 
@@ -96,7 +80,6 @@
 
         private System.Windows.Forms.Button cancel;
         private System.Windows.Forms.Label kCaption;
-        private System.Windows.Forms.Button accept;
 
 
     }

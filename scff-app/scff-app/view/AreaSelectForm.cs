@@ -73,7 +73,7 @@ public partial class AreaSelectForm : Form {
     this.Size = new Size(original_width_, original_height_);
   }
 
-  private void accept_Click(object sender, EventArgs e) {
+  private void AreaSelectForm_DoubleClick(object sender, EventArgs e) {
     // HACK!: フォームの左上をスクリーン座標に変換
     int window_screen_x, window_screen_y, window_width, window_height;
     Point origin = new Point(0, 0);
@@ -90,11 +90,7 @@ public partial class AreaSelectForm : Form {
     // 念のためウィンドウ幅を超えないように修正
     ((viewmodel.LayoutParameter)layout_parameters_.Current).ModifyClippingRegion();
 
-    this.Close();
-  }
-
-  private void cancel_Click(object sender, EventArgs e) {
-    // nop
+    this.DialogResult = System.Windows.Forms.DialogResult.OK;
     this.Close();
   }
 

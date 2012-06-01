@@ -131,10 +131,16 @@ public partial class SCFFAppForm : Form {
 
     Point screen_location = windowDragHere.PointToScreen(e.Location);
     app_.SetWindowFromPoint(screen_location.X, screen_location.Y);
+
+    // メッセージ送信
+    QuietApply();
   }
 
   private void windowDesktop_Click(object sender, EventArgs e) {
     app_.SetDesktopWindow();
+
+    // メッセージ送信
+    QuietApply();
   }
 
   //-------------------------------------------------------------------
@@ -147,13 +153,19 @@ public partial class SCFFAppForm : Form {
     this.areaClippingY.Enabled = flag;
     this.areaClippingWidth.Enabled = flag;
     this.areaClippingHeight.Enabled = flag;
+
+    // メッセージ送信
+    QuietApply();
   }
 
   private void targetAreaSelect_Click(object sender, EventArgs e) {
     // AreaSelectFormの表示
     using (AreaSelectForm form = new AreaSelectForm(this.layoutParameters)) {
       form.ShowDialog();
-      // DialogResult result = form.DialogResult;
+      if (form.DialogResult == System.Windows.Forms.DialogResult.OK) {
+        // メッセージ送信
+        QuietApply();
+      }
     }
   }
 
@@ -164,7 +176,10 @@ public partial class SCFFAppForm : Form {
   private void layoutEdit_Click(object sender, EventArgs e) {
     using (LayoutForm form = new LayoutForm(this.entries, this.layoutParameters)) {
       form.ShowDialog();
-      // DialogResult result = form.DialogResult;
+      if (form.DialogResult == System.Windows.Forms.DialogResult.OK) {
+        // メッセージ送信
+        QuietApply();
+      }
     }
   }
 
@@ -212,9 +227,6 @@ public partial class SCFFAppForm : Form {
 
   private void layoutParameters_ListChanged(object sender, System.ComponentModel.ListChangedEventArgs e) {
     this.apply.BackColor = Color.Orange;
-
-    // メッセージ送信
-    QuietApply();
   }
 
   //-------------------------------------------------------------------

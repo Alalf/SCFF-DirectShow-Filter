@@ -31,17 +31,26 @@ public partial class AreaSelectForm : Form {
   MovableAndResizable movable_and_resizable_;
 
   /// @brief コンストラクタ
-  public AreaSelectForm(int bound_width, int bound_height, ref BindingSource layoutParameters) {
+  public AreaSelectForm(BindingSource layoutParameters) {
     //---------------------------------------------------------------
     // DO NOT DELETE THIS!!!
     InitializeComponent();
     //---------------------------------------------------------------
+
+    layout_parameters_ = layoutParameters;
+
+    /// @todo(me) マルチモニタ対応
+    ExternalAPI.RECT window_rect;
+    ExternalAPI.GetClientRect(ExternalAPI.GetDesktopWindow(), out window_rect);
+    int bound_width = window_rect.right;
+    int bound_height = window_rect.bottom;
 
     movable_and_resizable_ = new MovableAndResizable(this, bound_width, bound_height);
 
     // オリジナルの値を保持しておく
     data.LayoutParameter current = (data.LayoutParameter)layoutParameters.Current;
     if (current.Window != ExternalAPI.GetDesktopWindow()) {
+      // ウィンドウ取り込み時はスクリーン座標に変換する
       ExternalAPI.RECT window_screen_rect;
       ExternalAPI.GetWindowRect(current.Window, out window_screen_rect);
       original_x_ = window_screen_rect.left;
@@ -49,6 +58,7 @@ public partial class AreaSelectForm : Form {
       original_width_ = window_screen_rect.right - window_screen_rect.left;
       original_height_ = window_screen_rect.bottom - window_screen_rect.top;
     } else {
+      // デスクトップ取り込み時はそのまま
       original_x_ = current.ClippingX;
       original_y_ = current.ClippingY;
       original_width_ = current.ClippingWidth;
@@ -56,22 +66,8 @@ public partial class AreaSelectForm : Form {
     }
 
     // HACK!: 一応ここでも更新するが信頼できない
-    Location = new Point(original_x_, original_y_);
-    Size = new Size(original_width_, original_height_);
-
-    // 初期化
-    clipping_x_ = original_x_;
-    clipping_y_ = original_y_;
-    clipping_width_ = original_width_;
-    clipping_height_ = original_height_;
-  }
-
-  /// @brief 結果を取得
-  public void GetResult(out int clipping_x, out int clipping_y, out int clipping_width, out int clipping_height) {
-    clipping_x = clipping_x_;
-    clipping_y = clipping_y_;
-    clipping_width = clipping_width_;
-    clipping_height = clipping_height_;
+    this.Location = new Point(original_x_, original_y_);
+    this.Size = new Size(original_width_, original_height_);
   }
 
   //===================================================================
@@ -84,34 +80,44 @@ public partial class AreaSelectForm : Form {
 
   private void AreaSelectForm_Shown(object sender, EventArgs e) {
     // HACK!: コンストラクタで設定したLocation/Sizeは信頼できないのでここで変更
-    Location = new Point(original_x_, original_y_);
-    Size = new Size(original_width_, original_height_);
+    this.Location = new Point(original_x_, original_y_);
+    this.Size = new Size(original_width_, original_height_);
   }
 
-  private void AreaSelectForm_DoubleClick(object sender, EventArgs e) {
-    Close();
-  }
-
-  private void AreaSelectForm_FormClosed(object sender, FormClosedEventArgs e) {
+  private void accept_Click(object sender, EventArgs e) {
     // HACK!: フォームの左上をスクリーン座標に変換
+    int clipping_x, clipping_y, clipping_width, clipping_height;
     Point origin = new Point(0, 0);
-    clipping_x_ = PointToScreen(origin).X;
-    clipping_y_ = PointToScreen(origin).Y;
-    clipping_width_ = Width;
-    clipping_height_ = Height;
+    clipping_x = PointToScreen(origin).X;
+    clipping_y = PointToScreen(origin).Y;
+    clipping_width = this.Width;
+    clipping_height = this.Height;
+
+    // デスクトップ取り込みに変更
+    ((data.LayoutParameter)layout_parameters_.Current).SetWindowWithClippingRegion(
+        ExternalAPI.GetDesktopWindow(),
+        clipping_x, clipping_y, clipping_width, clipping_height);
+
+    // 念のためウィンドウ幅を超えないように修正
+    ((data.LayoutParameter)layout_parameters_.Current).ModifyClippingRegion();
+
+    this.Close();
+  }
+
+  private void cancel_Click(object sender, EventArgs e) {
+    // nop
+    this.Close();
   }
 
   //===================================================================
   // メンバ変数
   //===================================================================
-  int clipping_x_;
-  int clipping_y_;
-  int clipping_width_;
-  int clipping_height_;
 
-  int original_x_;
-  int original_y_;
-  int original_width_;
-  int original_height_;
+  BindingSource layout_parameters_;
+
+  readonly int original_x_;
+  readonly int original_y_;
+  readonly int original_width_;
+  readonly int original_height_;
 }
 }

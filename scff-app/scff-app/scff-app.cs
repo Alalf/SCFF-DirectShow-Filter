@@ -28,7 +28,11 @@ using Microsoft.Win32;
 using System.IO;
 
 /// @brief Form1(メインウィンドウ)から利用する実装クラス
-partial class AppImplementation {
+partial class SCFFApp {
+
+  // 定数
+  public const int kDefaultBoundWidth = 640;
+  public const int kDefaultBoundHeight = 360;
 
   //-------------------------------------------------------------------
   // Directory
@@ -39,9 +43,9 @@ partial class AppImplementation {
   public data.Directory Directory {
     get { return directory_; }
   }
-  public void UpdateDirectory(ref BindingSource entries) {
-    directory_.Update(ref interprocess_);
-    directory_.UpdateBindingSource(ref entries);
+  public void UpdateDirectory(BindingSource entries) {
+    directory_.Update(this.interprocess_);
+    directory_.UpdateBindingSource(entries);
   }
 
   //-------------------------------------------------------------------
@@ -54,20 +58,20 @@ partial class AppImplementation {
     get { return message_; }
   }
 
-  public void SendNull(ref BindingSource entries, bool show_message) {
+  public void SendNull(BindingSource entries, bool show_message) {
     message_.Reset();
-    message_.Send(ref interprocess_, ref entries, show_message);
+    message_.Send(interprocess_, entries, show_message);
   }
 
-  public void SendMessage(ref BindingSource entries,
-                          ref BindingSource layout_parameters,
+  public void SendMessage(BindingSource entries,
+                          BindingSource layout_parameters,
                           bool show_message) {
-    message_.Uppate(ref layout_parameters);
+    message_.Uppate(layout_parameters);
     if (!message_.Validate(show_message)) {
       return;
     }
 
-    message_.Send(ref interprocess_, ref entries, show_message);
+    message_.Send(interprocess_, entries, show_message);
   }
   
   //-------------------------------------------------------------------
@@ -84,18 +88,18 @@ partial class AppImplementation {
   // ウィンドウ指定
   //-------------------------------------------------------------------
 
-  public void SetDesktopWindow(ref BindingSource layout_parameters) {
-    ((data.LayoutParameter)layout_parameters.Current).SetWindowFromPtr(ExternalAPI.GetDesktopWindow(), true);
+  public void SetDesktopWindow(BindingSource layout_parameters) {
+    ((data.LayoutParameter)layout_parameters.Current).SetWindow(ExternalAPI.GetDesktopWindow());
   }
-  public void SetWindowFromPoint(ref BindingSource layout_parameters, int screen_x, int screen_y) {
+  public void SetWindowFromPoint(BindingSource layout_parameters, int screen_x, int screen_y) {
     UIntPtr window = ExternalAPI.WindowFromPoint(screen_x, screen_y);
-    ((data.LayoutParameter)layout_parameters.Current).SetWindowFromPtr(window, true);
+    ((data.LayoutParameter)layout_parameters.Current).SetWindow(window);
   }
 
   //-------------------------------------------------------------------
 
   /// @brief コンストラクタ
-  public AppImplementation() {
+  public SCFFApp() {
     // nop
   }
 
@@ -194,49 +198,6 @@ partial class AppImplementation {
 
     // 起動OK
     return true;
-  }
-
-  //-------------------------------------------------------------------
-  // ウィンドウ指定
-  //-------------------------------------------------------------------
-
-  /// @brief クリッピング領域を適切な値に調整してから設定
-  public void JustifyClippingRegion(
-      int bound_width, int bound_height,
-      int src_x, int src_y, int src_width, int src_height,
-      out int clipping_x, out int clipping_y,
-      out int clipping_width, out int clipping_height) {
-    int dst_x = src_x;
-    int dst_y = src_y;
-    int dst_width = src_width;
-    int dst_height = src_height;
-
-    if (src_x < 0) {
-      dst_width += src_x;
-      dst_x = 0;
-    }
-    if (src_y < 0) {
-      dst_height += src_y;
-      dst_y = 0;
-    }
-    if (src_x > bound_width) {
-      dst_x = bound_width - src_width;
-    }
-    if (src_y > bound_height) {
-      dst_y = bound_height - src_height;
-    }
-
-    if (dst_x + dst_width > bound_width) {
-      dst_width = bound_width - dst_x;
-    }
-    if (dst_y + dst_height > bound_height) {
-      dst_height = bound_height - dst_y;
-    }
-
-    clipping_x = dst_x;
-    clipping_y = dst_y;
-    clipping_width = dst_width;
-    clipping_height = dst_height;
   }
 }
 }   // namespace scff_app

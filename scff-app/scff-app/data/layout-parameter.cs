@@ -25,17 +25,6 @@ using System.ComponentModel;
 
 /// @brief scff_inteprocess.LayoutParameterをマネージドクラス化したクラス
 partial class LayoutParameter : INotifyPropertyChanged {
-  UIntPtr window_;
-  Int32 clipping_x_;
-  Int32 clipping_y_;
-  Int32 clipping_width_;
-  Int32 clipping_height_;
-  Boolean show_cursor_;
-  Boolean show_layered_window_;
-  SWScaleConfig swscale_config_;
-  Boolean stretch_;
-  Boolean keep_aspect_ratio_;
-  scff_interprocess.RotateDirection rotate_direction_;
 
   public UIntPtr Window {
     get {
@@ -51,6 +40,8 @@ partial class LayoutParameter : INotifyPropertyChanged {
       }
     }
   }
+  UIntPtr window_;
+
   public Int32 ClippingX {
     get {
       return clipping_x_;
@@ -62,6 +53,8 @@ partial class LayoutParameter : INotifyPropertyChanged {
       }
     }
   }
+  Int32 clipping_x_;
+
   public Int32 ClippingY {
     get {
       return clipping_y_;
@@ -73,6 +66,8 @@ partial class LayoutParameter : INotifyPropertyChanged {
       }
     }
   }
+  Int32 clipping_y_;
+
   public Int32 ClippingWidth {
     get {
       return clipping_width_;
@@ -84,6 +79,8 @@ partial class LayoutParameter : INotifyPropertyChanged {
       }
     }
   }
+  Int32 clipping_width_;
+
   public Int32 ClippingHeight {
     get {
       return clipping_height_;
@@ -95,6 +92,8 @@ partial class LayoutParameter : INotifyPropertyChanged {
       }
     }
   }
+  Int32 clipping_height_;
+
   public Boolean ShowCursor {
     get {
       return show_cursor_;
@@ -106,6 +105,8 @@ partial class LayoutParameter : INotifyPropertyChanged {
       }
     }
   }
+  Boolean show_cursor_;
+
   public Boolean ShowLayeredWindow {
     get {
       return show_layered_window_;
@@ -117,6 +118,8 @@ partial class LayoutParameter : INotifyPropertyChanged {
       }
     }
   }
+  Boolean show_layered_window_;
+
   SWScaleConfig SWScaleConfig {
     get {
       return swscale_config_;
@@ -128,6 +131,8 @@ partial class LayoutParameter : INotifyPropertyChanged {
       }
     }
   }
+  SWScaleConfig swscale_config_;
+
   public Boolean Stretch {
     get {
       return stretch_;
@@ -139,6 +144,8 @@ partial class LayoutParameter : INotifyPropertyChanged {
       }
     }
   }
+  Boolean stretch_;
+
   public Boolean KeepAspectRatio {
     get {
       return keep_aspect_ratio_;
@@ -150,6 +157,8 @@ partial class LayoutParameter : INotifyPropertyChanged {
       }
     }
   }
+  Boolean keep_aspect_ratio_;
+
   public scff_interprocess.RotateDirection RotateDirection {
     get {
       return rotate_direction_;
@@ -161,16 +170,11 @@ partial class LayoutParameter : INotifyPropertyChanged {
       }
     }
   }
+  scff_interprocess.RotateDirection rotate_direction_;
 
   //-------------------------------------------------------------------
   // scff_app独自の値 (Messageには書き込まれない)
   //-------------------------------------------------------------------
-
-  Double bound_relative_left_;
-  Double bound_relative_right_;
-  Double bound_relative_top_;
-  Double bound_relative_bottom_;
-  Boolean fit_;
 
   /// @brief 0.0-1.0を境界の幅としたときの境界内の左端の座標
   public Double BoundRelativeLeft {
@@ -184,6 +188,8 @@ partial class LayoutParameter : INotifyPropertyChanged {
       }
     }
   }
+  Double bound_relative_left_;
+
   /// @brief 0.0-1.0を境界の幅としたときの境界内の右端の座標
   public Double BoundRelativeRight {
     get {
@@ -196,6 +202,8 @@ partial class LayoutParameter : INotifyPropertyChanged {
       }
     }
   }
+  Double bound_relative_right_;
+
   /// @brief 0.0-1.0を境界の高さとしたときの境界内の上端の座標
   public Double BoundRelativeTop {
     get {
@@ -208,6 +216,8 @@ partial class LayoutParameter : INotifyPropertyChanged {
       }
     }
   }
+  Double bound_relative_top_;
+
   /// @brief 0.0-1.0を境界の高さとしたときの境界内の下端の座標
   public Double BoundRelativeBottom {
     get {
@@ -220,6 +230,7 @@ partial class LayoutParameter : INotifyPropertyChanged {
       }
     }
   }
+  Double bound_relative_bottom_;
 
   /// @brief Clipping領域のFitオプション
   public Boolean Fit {
@@ -240,6 +251,7 @@ partial class LayoutParameter : INotifyPropertyChanged {
       }
     }
   }
+  Boolean fit_;
 
   //-------------------------------------------------------------------
 

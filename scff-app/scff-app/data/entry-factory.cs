@@ -25,11 +25,6 @@ using System;
 // scff_interprocess.Entryをマネージドクラス化したクラス
 partial class Entry {
 
-  /// @brief デフォルトコンストラクタ
-  public Entry() {
-    // nop
-  }
-
   /// @brief 変換コンストラクタ
   public Entry(scff_interprocess.Entry input) {
     InitFromInterprocess(input);
@@ -37,7 +32,7 @@ partial class Entry {
 
   //-------------------------------------------------------------------
 
-  /// @brief scff_interprocessモジュールのパラメータから生成
+  /// @brief scff_interprocessから変換
   void InitFromInterprocess(scff_interprocess.Entry input) {
     this.ProcessID = input.process_id;
     this.ProcessName = input.process_name;

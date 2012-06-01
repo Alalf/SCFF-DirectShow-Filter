@@ -30,7 +30,7 @@ using System.Windows.Forms;
 
 /// @brief レイアウトをGUIで編集するためのフォーム
 partial class LayoutForm : Form {
-  BindingSource layoutParameters_;
+  BindingSource layout_parameters_;
 
   List<PreviewControl> previews_;
 
@@ -39,11 +39,14 @@ partial class LayoutForm : Form {
   int bound_height_;
 
   /// @brief コンストラクタ
-  public LayoutForm(ref BindingSource layoutParameters, int bound_width, int bound_height) {
+  public LayoutForm(BindingSource layoutParameters, int bound_width, int bound_height) {
+    //---------------------------------------------------------------
+    // DO NOT DELETE THIS!!!
     InitializeComponent();
+    //---------------------------------------------------------------
 
     result_ = false;
-    layoutParameters_ = layoutParameters;
+    layout_parameters_ = layoutParameters;
     bound_width_ = bound_width;
     bound_height_ = bound_height;
 
@@ -53,7 +56,7 @@ partial class LayoutForm : Form {
     // BindingSourceを見て必要な分だけ
     int index = 0;
     previews_ = new List<PreviewControl>();
-    foreach (data.LayoutParameter i in layoutParameters_.List) {
+    foreach (data.LayoutParameter i in layout_parameters_.List) {
       PreviewControl preview = new PreviewControl(bound_width, bound_height, index, i);
       int x = (int)((i.BoundRelativeLeft * bound_width) / 100);
       int y = (int)((i.BoundRelativeTop * bound_height) / 100);
@@ -89,17 +92,17 @@ partial class LayoutForm : Form {
       double bound_relative_right = ((double)i.Right * 100.0) / bound_width_;
       double bound_relative_top = ((double)i.Top * 100.0) / bound_height_;
       double bound_relative_bottom = ((double)i.Bottom * 100.0) / bound_height_;
-      ((data.LayoutParameter)layoutParameters_[index]).BoundRelativeLeft =
+      ((data.LayoutParameter)layout_parameters_[index]).BoundRelativeLeft =
           bound_relative_left;
-      ((data.LayoutParameter)layoutParameters_[index]).BoundRelativeRight =
+      ((data.LayoutParameter)layout_parameters_[index]).BoundRelativeRight =
           bound_relative_right;
-      ((data.LayoutParameter)layoutParameters_[index]).BoundRelativeTop =
+      ((data.LayoutParameter)layout_parameters_[index]).BoundRelativeTop =
           bound_relative_top;
-      ((data.LayoutParameter)layoutParameters_[index]).BoundRelativeBottom =
+      ((data.LayoutParameter)layout_parameters_[index]).BoundRelativeBottom =
           bound_relative_bottom;
     }
     // 更新を他のコントロールに伝える
-    layoutParameters_.ResetBindings(false);
+    layout_parameters_.ResetBindings(false);
     result_ = true;
     Close();
   }

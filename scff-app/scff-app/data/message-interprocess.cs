@@ -37,7 +37,7 @@ partial class Message {
   }
 
   /// @brief BindingSourceから値を読み込んで設定
-  public void Uppate(ref BindingSource layoutParameters) {
+  public void Uppate(BindingSource layoutParameters) {
     Debug.Assert(layoutParameters.Count >= 1);
 
     this.Timestamp = DateTime.Now.Ticks;
@@ -67,8 +67,8 @@ partial class Message {
   }
 
   /// @brief 共有メモリに現在編集中のMessageを書き込む
-  public void Send(ref scff_interprocess.Interprocess interprocess,
-                   ref BindingSource entries,
+  public void Send(scff_interprocess.Interprocess interprocess,
+                   BindingSource entries,
                    bool show_message) {
     if (entries.Count == 0) {
       // 書き込み先が存在しない

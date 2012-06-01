@@ -28,7 +28,7 @@ using System.Diagnostics;
 partial class Directory {
 
   /// @brief 共有メモリから現在のDirectoryを取得する
-  public void Update(ref scff_interprocess.Interprocess interprocess) {
+  public void Update(scff_interprocess.Interprocess interprocess) {
     // 共有メモリへのアクセス準備
     interprocess.InitDirectory();
 
@@ -41,7 +41,7 @@ partial class Directory {
   }
 
   /// @brief BindingSourceに対応する値を設定する
-  public void UpdateBindingSource(ref BindingSource entries) {
+  public void UpdateBindingSource(BindingSource entries) {
     entries.Clear();
     foreach (Entry i in this.Entries) {
       entries.Add(i);

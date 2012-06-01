@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file scff-app/app-implementation-dwmapi.cs
+/// @file scff-app/scff-app-dwmapi.cs
 /// @brief DWMAPI関連のメソッドの定義
 
 namespace scff_app {
@@ -24,7 +24,7 @@ using System;
 using System.Runtime.InteropServices;
 
 // メインウィンドウ
-partial class AppImplementation {
+partial class SCFFApp {
 
   /// @brief Dwmapi.dllを利用してAeroをOffに
   public void DWMAPIOff() {
@@ -67,6 +67,8 @@ partial class AppImplementation {
       ExternalDWMAPI.DwmEnableComposition(ExternalDWMAPI.DWM_EC_ENABLECOMPOSITION);
     }
   }
+
+  //-------------------------------------------------------------------
 
   /// @brief DWMAPI.DLLが利用可能かどうか
   bool CanUseDWMAPIDLL() {

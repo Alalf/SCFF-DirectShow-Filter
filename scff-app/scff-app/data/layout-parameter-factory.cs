@@ -65,7 +65,7 @@ partial class LayoutParameter {
 
   //-------------------------------------------------------------------
 
-  public void SetWindowFromPtr(UIntPtr window, bool fit, int clipping_x = 0, int clipping_y = 0, int clipping_width = 0, int clipping_height = 0) {
+  void SetWindowFromPtr(UIntPtr window) {
     this.Window = window;
     if (this.Window == UIntPtr.Zero || !ExternalAPI.IsWindow(this.Window)) {
       this.WindowSize = new Size(0, 0);
@@ -74,26 +74,31 @@ partial class LayoutParameter {
       ExternalAPI.GetClientRect(this.Window, out window_rect);
       this.WindowSize = new Size(window_rect.right, window_rect.bottom);
     }
-    if (fit) {
-      this.Fit = true;
-      this.ClippingX = 0;
-      this.ClippingY = 0;
-      this.ClippingWidth = this.WindowSize.Width;
-      this.ClippingHeight = this.WindowSize.Height;
-    } else {
-      this.Fit = false;
-      this.ClippingX = clipping_x;
-      this.ClippingY = clipping_y;
-      this.ClippingWidth = clipping_width;
-      this.ClippingHeight = clipping_height;
-    }
+  }
+
+  public void SetWindow(UIntPtr window) {
+    this.SetWindowFromPtr(window);
+    this.Fit = true;
+    this.ClippingX = 0;
+    this.ClippingY = 0;
+    this.ClippingWidth = this.WindowSize.Width;
+    this.ClippingHeight = this.WindowSize.Height;
+  }
+
+  public void SetWindowWithClippingRegion(UIntPtr window, int clipping_x, int clipping_y, int clipping_width, int clipping_height) {
+    this.SetWindowFromPtr(window);
+    this.Fit = false;
+    this.ClippingX = clipping_x;
+    this.ClippingY = clipping_y;
+    this.ClippingWidth = clipping_width;
+    this.ClippingHeight = clipping_height;
   }
 
   //-------------------------------------------------------------------
 
   /// @brief デフォルトパラメータを設定
   void Init() {
-    this.SetWindowFromPtr(ExternalAPI.GetDesktopWindow(), true);
+    this.SetWindow(ExternalAPI.GetDesktopWindow());
 
     this.BoundRelativeLeft = 0.0;
     this.BoundRelativeRight = 100.0;

@@ -53,6 +53,41 @@ partial class LayoutParameter {
 
   //-------------------------------------------------------------------
 
+  /// @brief 修正
+  public void ModifyClippingRegion() {
+    int modified_x = this.ClippingX;
+    int modified_y = this.ClippingY;
+    int modified_width = this.ClippingWidth;
+    int modified_height = this.ClippingHeight;
+
+    if (this.ClippingX < 0) {
+      modified_width += this.ClippingX;
+      modified_x = 0;
+    }
+    if (this.ClippingY < 0) {
+      modified_height += this.ClippingY;
+      modified_y = 0;
+    }
+    if (this.ClippingX > this.WindowSize.Width) {
+      modified_x = this.WindowSize.Width - this.ClippingWidth;
+    }
+    if (this.ClippingY > this.WindowSize.Height) {
+      modified_y = this.WindowSize.Height - this.ClippingHeight;
+    }
+
+    if (modified_x + modified_width > this.WindowSize.Width) {
+      modified_width = this.WindowSize.Width - modified_x;
+    }
+    if (modified_y + modified_height > this.WindowSize.Height) {
+      modified_height = this.WindowSize.Height - modified_y;
+    }
+
+    this.ClippingX = modified_x;
+    this.ClippingY = modified_y;
+    this.ClippingWidth = modified_width;
+    this.ClippingHeight = modified_height;
+  }
+
   /// @brief 検証
   public bool Validate(bool show_message) {
     // もっとも危険な状態になりやすいウィンドウからチェック

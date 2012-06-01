@@ -107,8 +107,9 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="scff-app\app-implementation-dwmapi.cs" />
-    <Compile Include="scff-app\app-implementation.cs" />
+    <Compile Include="scff-app\scff-app-dwmapi.cs" />
+    <Compile Include="scff-app\scff-app.cs" />
+    <Compile Include="scff-app\utilities.cs" />
     <Compile Include="scff-imaging\utilities.cs" />
     <Compile Include="scff-interprocess\interprocess-class.cs" />
     <Compile Include="scff-interprocess\interprocess.cs">

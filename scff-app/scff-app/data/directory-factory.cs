@@ -37,7 +37,7 @@ partial class Directory {
     this.Entries = new List<Entry>();
   }
 
-  /// @brief scff_interprocessモジュールのパラメータから生成
+  /// @brief scff_interprocessから変換
   void InitFromInterprocess(scff_interprocess.Directory input) {
     this.Entries = new List<Entry>();
 

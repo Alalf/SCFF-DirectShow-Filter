@@ -224,6 +224,8 @@ public partial class SCFFAppForm : Form {
 
     // メッセージ送信
     /// @todo(me) 汚すぎる！dirtyフラグは別に管理するべき
+    /// @warning タイマーでちょうど具合の悪いタイミング（ClippingXとY設定後、WidthHeight設定前）
+    ///          でMessageをSendしてしまう恐れがある。ちゃんとやるならLockを使うしかない。
     bool dirty = this.apply.BackColor == Color.Orange;
     if (app_ != null && this.autoApply.Checked && dirty) {
       app_.SendMessage(false);

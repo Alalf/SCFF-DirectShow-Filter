@@ -34,7 +34,7 @@ partial class LayoutParameter {
   }
 
   public void SetWindow(UIntPtr window) {
-    this.SetWindowFromPtr(window);
+    this.Window = window;
     this.Fit = true;
     this.ClippingX = 0;
     this.ClippingY = 0;
@@ -43,7 +43,7 @@ partial class LayoutParameter {
   }
 
   public void SetWindowWithClippingRegion(UIntPtr window, int clipping_x, int clipping_y, int clipping_width, int clipping_height) {
-    this.SetWindowFromPtr(window);
+    this.Window = window;
     this.Fit = false;
     this.ClippingX = clipping_x;
     this.ClippingY = clipping_y;
@@ -183,42 +183,6 @@ partial class LayoutParameter {
     this.KeepAspectRatio = true;
 
     this.RotateDirection = scff_interprocess.RotateDirection.kNoRotate;
-  }
-
-  void SetWindowFromPtr(UIntPtr window) {
-    this.Window = window;
-    if (this.Window == UIntPtr.Zero || !ExternalAPI.IsWindow(this.Window)) {
-      
-    } else {
-      ExternalAPI.RECT window_rect;
-      ExternalAPI.GetClientRect(this.Window, out window_rect);
-      this.WindowSize = new Size(window_rect.right, window_rect.bottom);
-    }
-
-    if (this.Window == UIntPtr.Zero) {
-      this.WindowText = "(splash)";
-      this.WindowSize = new Size(0, 0);
-
-    } else if (!ExternalAPI.IsWindow(Window)) {
-      this.WindowText = "*** INVALID WINDOW ***";
-      this.WindowSize = new Size(0, 0);
-
-    } else if (Window == ExternalAPI.GetDesktopWindow()) {
-      this.WindowText = "(Desktop)";
-
-      ExternalAPI.RECT window_rect;
-      ExternalAPI.GetClientRect(this.Window, out window_rect);
-      this.WindowSize = new Size(window_rect.right, window_rect.bottom);
-
-    } else {
-      StringBuilder class_name = new StringBuilder(256);
-      ExternalAPI.GetClassName(Window, class_name, 256);
-      this.WindowText = class_name.ToString();
-
-      ExternalAPI.RECT window_rect;
-      ExternalAPI.GetClientRect(this.Window, out window_rect);
-      this.WindowSize = new Size(window_rect.right, window_rect.bottom);
-    }
   }
 }
 }

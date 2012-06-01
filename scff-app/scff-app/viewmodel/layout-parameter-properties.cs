@@ -23,6 +23,7 @@ namespace scff_app.viewmodel {
 using System;
 using System.ComponentModel;
 using System.Drawing;
+  using System.Text;
 
 /// @brief scff_inteprocess.LayoutParameterのビューモデル
 partial class LayoutParameter : INotifyPropertyChanged {
@@ -31,13 +32,31 @@ partial class LayoutParameter : INotifyPropertyChanged {
     get {
       return window_;
     }
-    set {
+    private set {
       if (window_ != value) {
         window_ = value;
         OnPropertyChanged("Window");
-        // Windowに依存するReadOnlyProperty
-        OnPropertyChanged("WindowText");
-        OnPropertyChanged("WindowSize");
+
+        if (window_ == UIntPtr.Zero) {
+          this.WindowText = "(splash)";
+          this.WindowSize = new Size(0, 0);
+          return;
+        } else if (!ExternalAPI.IsWindow(window_)) {
+          this.WindowText = "*** INVALID WINDOW ***";
+          this.WindowSize = new Size(0, 0);
+          return;
+        }
+                
+        if (window_ == ExternalAPI.GetDesktopWindow()) {
+          this.WindowText = "(Desktop)";
+        } else {
+          StringBuilder class_name = new StringBuilder(256);
+          ExternalAPI.GetClassName(window_, class_name, 256);
+          this.WindowText = class_name.ToString();
+        }
+        ExternalAPI.RECT window_rect;
+        ExternalAPI.GetClientRect(window_, out window_rect);
+        this.WindowSize = new Size(window_rect.right, window_rect.bottom);
       }
     }
   }
@@ -363,10 +382,32 @@ partial class LayoutParameter : INotifyPropertyChanged {
   //-------------------------------------------------------------------
 
   /// @brief レイアウトの名前代わりに使用するWindowのクラス名
-  public string WindowText { get; private set; }
+  public string WindowText {
+    get {
+      return window_text_;
+    }
+    private set {
+      if (window_text_ != value) {
+        window_text_ = value;
+        OnPropertyChanged("WindowText");
+      }
+    }  
+  }
+  string window_text_;
 
   /// @brief Windowの大きさ
-  public Size WindowSize { get; private set; }
+  public Size WindowSize {
+    get {
+      return window_size_;  
+    }
+    private set {
+      if (window_size_ != value) {
+        window_size_ = value;
+        OnPropertyChanged("WindowSize");
+      }
+    }  
+  }
+  Size window_size_;
 
   //-------------------------------------------------------------------
 

@@ -212,6 +212,9 @@ public partial class SCFFAppForm : Form {
 
   private void layoutParameters_ListChanged(object sender, System.ComponentModel.ListChangedEventArgs e) {
     this.apply.BackColor = Color.Orange;
+
+    // メッセージ送信
+    QuietApply();
   }
 
   //-------------------------------------------------------------------
@@ -221,11 +224,14 @@ public partial class SCFFAppForm : Form {
     // @todo(me) プロセスの生死をチェック
     // @todo(me) ウィンドウをチェック
     // @todo(me) ウィンドウサイズをチェック
+  }
 
-    // メッセージ送信
+  //-------------------------------------------------------------------
+
+  void QuietApply() {
     /// @todo(me) 汚すぎる！dirtyフラグは別に管理するべき
-    /// @warning タイマーでちょうど具合の悪いタイミング（ClippingXとY設定後、WidthHeight設定前）
-    ///          でMessageをSendしてしまう恐れがある。ちゃんとやるならLockを使うしかない。
+    /// @warning メッセージは上書きされるだけならば
+    ///          処理時間以外の問題は発生しない
     bool dirty = this.apply.BackColor == Color.Orange;
     if (app_ != null && this.autoApply.Checked && dirty) {
       app_.SendMessage(false);

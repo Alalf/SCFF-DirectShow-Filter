@@ -39,11 +39,11 @@ partial class Entry {
   /// @brief 人間が読みやすい文字列に変換
   public override string ToString() {
     return
-        "[" + ProcessID + "] " +
-        ProcessName + " " +
-        "(" + pixel_format_dictionary_[SamplePixelFormat] + " " +
-        SampleWidth + "x" + SampleHeight + " " +
-        FPS.ToString("F0") + "fps)";
+        "[" + this.ProcessID + "] " +
+        this.ProcessName + " " +
+        "(" + pixel_format_dictionary_[this.SamplePixelFormat] + " " +
+        this.SampleWidth + "x" + this.SampleHeight + " " +
+        this.FPS.ToString("F0") + "fps)";
   }
 
   /// @brief コンボボックス表示用

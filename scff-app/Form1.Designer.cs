@@ -809,7 +809,7 @@
       this.apply.Name = "apply";
       this.apply.Size = new System.Drawing.Size(86, 25);
       this.apply.TabIndex = 4;
-      this.apply.Text = "apply";
+      this.apply.Text = "Apply";
       this.apply.UseVisualStyleBackColor = true;
       this.apply.Click += new System.EventHandler(this.apply_Click);
       // 
@@ -822,7 +822,7 @@
       this.splash.Name = "splash";
       this.splash.Size = new System.Drawing.Size(68, 25);
       this.splash.TabIndex = 2;
-      this.splash.Text = "splash";
+      this.splash.Text = "Splash";
       this.splash.UseVisualStyleBackColor = true;
       this.splash.Click += new System.EventHandler(this.splash_Click);
       // 
@@ -1489,6 +1489,7 @@
       this.Name = "Form1";
       this.Text = "SCFF DirectShow Filter Ver.0.1.0";
       this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
+      this.Load += new System.EventHandler(this.Form1_Load);
       this.Shown += new System.EventHandler(this.Form1_Shown);
       this.mainMenuStrip.ResumeLayout(false);
       this.mainMenuStrip.PerformLayout();

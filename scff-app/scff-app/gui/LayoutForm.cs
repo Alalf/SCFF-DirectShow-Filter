@@ -24,70 +24,88 @@
 namespace scff_app.gui {
 
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 
 /// @brief レイアウトをGUIで編集するためのフォーム
 partial class LayoutForm : Form {
-  BindingSource layout_parameters_;
-
-  List<PreviewControl> previews_;
-
-  bool result_;
-  int bound_width_;
-  int bound_height_;
 
   /// @brief コンストラクタ
-  public LayoutForm(BindingSource layoutParameters, int bound_width, int bound_height) {
+  public LayoutForm(BindingSource entries, BindingSource layoutParameters) {
     //---------------------------------------------------------------
     // DO NOT DELETE THIS!!!
     InitializeComponent();
     //---------------------------------------------------------------
 
-    result_ = false;
+    entries_ = entries;
     layout_parameters_ = layoutParameters;
-    bound_width_ = bound_width;
-    bound_height_ = bound_height;
 
-    layout_panel.Width = bound_width;
-    layout_panel.Height = bound_height;
-
-    // BindingSourceを見て必要な分だけ
-    int index = 0;
-    previews_ = new List<PreviewControl>();
-    foreach (data.LayoutParameter i in layout_parameters_.List) {
-      PreviewControl preview = new PreviewControl(bound_width, bound_height, index, i);
-      int x = (int)((i.BoundRelativeLeft * bound_width) / 100);
-      int y = (int)((i.BoundRelativeTop * bound_height) / 100);
-      int width = (int)(((i.BoundRelativeRight - i.BoundRelativeLeft) * bound_width) / 100);
-      int height = (int)(((i.BoundRelativeBottom - i.BoundRelativeTop) * bound_height) / 100);
-      preview.Location = new Point(x, y);
-      preview.Size = new Size(width, height);
-      previews_.Add(preview);
-      layout_panel.Controls.Add(preview);
-      preview.BringToFront();
-      ++index;
+    // Directoryから現在選択中のEntryを取得し、出力幅、高さを得る
+    data.Entry current_entry = (data.Entry)entries_.Current;
+    if (entries_.Count != 0) {
+      // 現在選択中のプロセスの幅、高さで調整
+      bound_width_ = current_entry.SampleWidth;
+      bound_height_ = current_entry.SampleHeight;
+    } else {
+      // プロセスがなくても一応ダミーの長さで調整可能
+      bound_width_ = SCFFApp.kDefaultBoundWidth;
+      bound_height_ = SCFFApp.kDefaultBoundHeight;
     }
+
+    previews_ = new List<PreviewControl>();
   }
+
+  //===================================================================
+  // オーバーライド
+  //===================================================================
 
   protected override void OnPaintBackground(PaintEventArgs pevent) {
     // 何もしない
     // base.OnPaintBackground(pevent);
   }
 
-  private void add_item_Click(object sender, System.EventArgs e) {
+  //===================================================================
+  // イベントハンドラ
+  //===================================================================
+
+  private void LayoutForm_Load(object sender, System.EventArgs e) {
+    /// @todo(me) 100%以外でも調整できるように
+    this.layoutPanel.Size = new Size(bound_width_, bound_height_);
+
+    int index = 0;
+    foreach (data.LayoutParameter i in layout_parameters_.List) {
+      // PreviewControlの生成
+      PreviewControl preview = new PreviewControl(bound_width_, bound_height_, index, i);
+      int x = (int)((i.BoundRelativeLeft * bound_width_) / 100);
+      int y = (int)((i.BoundRelativeTop * bound_height_) / 100);
+      int width = (int)(((i.BoundRelativeRight - i.BoundRelativeLeft) * bound_width_) / 100);
+      int height = (int)(((i.BoundRelativeBottom - i.BoundRelativeTop) * bound_height_) / 100);
+      preview.Location = new Point(x, y);
+      preview.Size = new Size(width, height);
+
+      // リストに追加しておく
+      previews_.Add(preview);
+
+      // パネルに配置(後から追加したものは前面へ)
+      this.layoutPanel.Controls.Add(preview);
+      preview.BringToFront();
+
+      ++index;
+    }
+  }
+
+  private void add_Click(object sender, System.EventArgs e) {
     /// @todo(me) 実装
   }
 
-  private void remove_item_Click(object sender, System.EventArgs e) {
+  private void remove_Click(object sender, System.EventArgs e) {
     /// @todo(me) 実装
   }
 
-  private void apply_item_Click(object sender, System.EventArgs e) {
+  private void apply_Click(object sender, System.EventArgs e) {
     // 値をPreviewControlから集めてBindingSourceに書き戻す
     foreach(PreviewControl i in previews_) {
-      int index = i.IndexInLayoutParameterBindingSource;
+      int index = i.Index;
       double bound_relative_left = ((double)i.Left * 100.0) / bound_width_;
       double bound_relative_right = ((double)i.Right * 100.0) / bound_width_;
       double bound_relative_top = ((double)i.Top * 100.0) / bound_height_;
@@ -101,18 +119,24 @@ partial class LayoutForm : Form {
       ((data.LayoutParameter)layout_parameters_[index]).BoundRelativeBottom =
           bound_relative_bottom;
     }
-    // 更新を他のコントロールに伝える
-    layout_parameters_.ResetBindings(false);
-    result_ = true;
+
     Close();
   }
 
-  private void cancel_item_Click(object sender, System.EventArgs e) {
+  private void cancel_Click(object sender, System.EventArgs e) {
     Close();
   }
 
-  public bool GetResult() {
-    return result_;
-  }
+  //===================================================================
+  // メンバ変数
+  //===================================================================
+
+  BindingSource entries_;
+  BindingSource layout_parameters_;
+
+  readonly int bound_width_;
+  readonly int bound_height_;
+
+  List<PreviewControl> previews_;
 }
 }

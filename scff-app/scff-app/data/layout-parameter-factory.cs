@@ -68,8 +68,33 @@ partial class LayoutParameter {
   void SetWindowFromPtr(UIntPtr window) {
     this.Window = window;
     if (this.Window == UIntPtr.Zero || !ExternalAPI.IsWindow(this.Window)) {
-      this.WindowSize = new Size(0, 0);
+      
     } else {
+      ExternalAPI.RECT window_rect;
+      ExternalAPI.GetClientRect(this.Window, out window_rect);
+      this.WindowSize = new Size(window_rect.right, window_rect.bottom);
+    }
+
+    if (this.Window == UIntPtr.Zero) {
+      this.WindowText = "(splash)";
+      this.WindowSize = new Size(0, 0);
+
+    } else if (!ExternalAPI.IsWindow(Window)) {
+      this.WindowText = "*** INVALID WINDOW ***";
+      this.WindowSize = new Size(0, 0);
+
+    } else if (Window == ExternalAPI.GetDesktopWindow()) {
+      this.WindowText = "(Desktop)";
+
+      ExternalAPI.RECT window_rect;
+      ExternalAPI.GetClientRect(this.Window, out window_rect);
+      this.WindowSize = new Size(window_rect.right, window_rect.bottom);
+
+    } else {
+      StringBuilder class_name = new StringBuilder(256);
+      ExternalAPI.GetClassName(Window, class_name, 256);
+      this.WindowText = class_name.ToString();
+
       ExternalAPI.RECT window_rect;
       ExternalAPI.GetClientRect(this.Window, out window_rect);
       this.WindowSize = new Size(window_rect.right, window_rect.bottom);

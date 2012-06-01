@@ -36,18 +36,5 @@ partial class Directory {
   void Init() {
     this.Entries = new List<Entry>();
   }
-
-  /// @brief scff_interprocessから変換
-  void InitFromInterprocess(scff_interprocess.Directory input) {
-    this.Entries = new List<Entry>();
-
-    const int kMaxEntry = scff_interprocess.Interprocess.kMaxEntry;
-    for (int i = 0; i < kMaxEntry; i++) {
-      if (input.entries[i].process_id == 0) {
-        continue;
-      }
-      this.Entries.Add(new Entry(input.entries[i]));
-    }
-  }
 }
 }

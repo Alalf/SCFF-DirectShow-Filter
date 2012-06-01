@@ -24,9 +24,33 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Diagnostics;
+using System.Collections;
 
 // scff_inteprocess.Messageをマネージドクラス化したクラス
 partial class Message {
+
+  /// @brief scff_Interprocess用に変換
+  public scff_interprocess.Message ToInterprocess(int bound_width, int bound_height) {
+    scff_interprocess.Message output = new scff_interprocess.Message();
+
+    output.timestamp = this.Timestamp;
+    output.layout_type = (Int32)this.LayoutType;
+    output.layout_element_count = this.LayoutElementCount;
+    
+    // Listの前から順番に書き込む
+    const int kMaxComplexLayoutElements = scff_interprocess.Interprocess.kMaxComplexLayoutElements;
+    output.layout_parameters = new scff_interprocess.LayoutParameter[kMaxComplexLayoutElements];
+    for (int i = 0; i < kMaxComplexLayoutElements; i++) {
+      if (i < this.LayoutParameters.Count) {
+        output.layout_parameters[i] = this.LayoutParameters[i].ToInterprocess(bound_width, bound_height);
+      } else {
+        // C#はインスタンスは勝手にゼロクリアされる
+        output.layout_parameters[i] = new scff_interprocess.LayoutParameter();
+      }
+    }
+
+    return output;
+  }
 
   /// @brief NullLayoutのMessageに設定する
   public void Reset() {
@@ -36,22 +60,22 @@ partial class Message {
     this.LayoutParameters.Clear();
   }
 
-  /// @brief BindingSourceから値を読み込んで設定
-  public void Uppate(BindingSource layoutParameters) {
-    Debug.Assert(layoutParameters.Count >= 1);
+  /// @brief IListから値を読み込んで設定
+  public void Load(IList layout_parameters) {
+    Debug.Assert(layout_parameters.Count >= 1);
 
     this.Timestamp = DateTime.Now.Ticks;
 
-    if (layoutParameters.Count == 1) {
+    if (layout_parameters.Count == 1) {
       this.LayoutType = scff_interprocess.LayoutType.kNativeLayout;
     } else {
       this.LayoutType = scff_interprocess.LayoutType.kComplexLayout;
     }
 
-    this.LayoutElementCount = layoutParameters.Count;
+    this.LayoutElementCount = layout_parameters.Count;
 
     this.LayoutParameters.Clear();
-    foreach (LayoutParameter i in layoutParameters) {
+    foreach (LayoutParameter i in layout_parameters) {
       this.LayoutParameters.Add(i);
     }
   }
@@ -64,38 +88,6 @@ partial class Message {
       }
     }
     return true;
-  }
-
-  /// @brief 共有メモリに現在編集中のMessageを書き込む
-  public void Send(scff_interprocess.Interprocess interprocess,
-                   BindingSource entries,
-                   bool show_message) {
-    if (entries.Count == 0) {
-      // 書き込み先が存在しない
-      if (show_message) {
-        MessageBox.Show("No process to send message.");
-      }
-      return;
-    }
-
-    try {
-      /// @warning DWORD->int変換！オーバーフローの可能性あり
-      Process.GetProcessById((int)((Entry)entries.Current).ProcessID);
-    } catch {
-      // プロセスが存在しない場合
-      if (show_message) {
-        MessageBox.Show("Cannot find process(" + ((Entry)entries.Current).ProcessID + ").");
-      }
-      return;
-    }
-    
-    // 共有メモリへのアクセス準備
-    interprocess.InitMessage(((Entry)entries.Current).ProcessID);
-
-    // 共有メモリへデータを書き込む
-    interprocess.SendMessage(
-        this.ToInterprocess(((Entry)entries.Current).SampleWidth,
-                            ((Entry)entries.Current).SampleHeight));
   }
 }
 }

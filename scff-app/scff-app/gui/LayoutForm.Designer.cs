@@ -23,95 +23,97 @@
     /// the contents of this method with the code editor.
     /// </summary>
     private void InitializeComponent() {
-      this.main_strip = new System.Windows.Forms.ToolStrip();
-      this.add_item = new System.Windows.Forms.ToolStripButton();
-      this.remove_item = new System.Windows.Forms.ToolStripButton();
-      this.cancel_item = new System.Windows.Forms.ToolStripButton();
-      this.apply_item = new System.Windows.Forms.ToolStripButton();
-      this.layout_panel = new System.Windows.Forms.Panel();
-      this.main_strip.SuspendLayout();
+      this.mainToolBar = new System.Windows.Forms.ToolStrip();
+      this.add = new System.Windows.Forms.ToolStripButton();
+      this.remove = new System.Windows.Forms.ToolStripButton();
+      this.cancel = new System.Windows.Forms.ToolStripButton();
+      this.apply = new System.Windows.Forms.ToolStripButton();
+      this.layoutPanel = new System.Windows.Forms.Panel();
+      this.mainToolBar.SuspendLayout();
       this.SuspendLayout();
       // 
-      // main_strip
+      // mainToolBar
       // 
-      this.main_strip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-      this.main_strip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.add_item,
-            this.remove_item,
-            this.cancel_item,
-            this.apply_item});
-      this.main_strip.Location = new System.Drawing.Point(0, 0);
-      this.main_strip.Name = "main_strip";
-      this.main_strip.Size = new System.Drawing.Size(28, 25);
-      this.main_strip.TabIndex = 0;
-      this.main_strip.Text = "toolStrip1";
+      this.mainToolBar.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+      this.mainToolBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.add,
+            this.remove,
+            this.cancel,
+            this.apply});
+      this.mainToolBar.Location = new System.Drawing.Point(0, 0);
+      this.mainToolBar.Name = "mainToolBar";
+      this.mainToolBar.Size = new System.Drawing.Size(240, 25);
+      this.mainToolBar.TabIndex = 0;
+      this.mainToolBar.Text = "toolStrip1";
       // 
-      // add_item
+      // add
       // 
-      this.add_item.Enabled = false;
-      this.add_item.Image = global::scff_app.Properties.Resources.Add;
-      this.add_item.ImageTransparentColor = System.Drawing.Color.Magenta;
-      this.add_item.Name = "add_item";
-      this.add_item.Size = new System.Drawing.Size(45, 22);
-      this.add_item.Text = "Add";
-      this.add_item.Visible = false;
-      this.add_item.Click += new System.EventHandler(this.add_item_Click);
+      this.add.Enabled = false;
+      this.add.Image = global::scff_app.Properties.Resources.Add;
+      this.add.ImageTransparentColor = System.Drawing.Color.Magenta;
+      this.add.Name = "add";
+      this.add.Size = new System.Drawing.Size(45, 22);
+      this.add.Text = "Add";
+      this.add.Visible = false;
+      this.add.Click += new System.EventHandler(this.add_Click);
       // 
-      // remove_item
+      // remove
       // 
-      this.remove_item.Enabled = false;
-      this.remove_item.Image = global::scff_app.Properties.Resources.Remove;
-      this.remove_item.ImageTransparentColor = System.Drawing.Color.Magenta;
-      this.remove_item.Name = "remove_item";
-      this.remove_item.Size = new System.Drawing.Size(66, 22);
-      this.remove_item.Text = "Remove";
-      this.remove_item.Visible = false;
-      this.remove_item.Click += new System.EventHandler(this.remove_item_Click);
+      this.remove.Enabled = false;
+      this.remove.Image = global::scff_app.Properties.Resources.Remove;
+      this.remove.ImageTransparentColor = System.Drawing.Color.Magenta;
+      this.remove.Name = "remove";
+      this.remove.Size = new System.Drawing.Size(66, 22);
+      this.remove.Text = "Remove";
+      this.remove.Visible = false;
+      this.remove.Click += new System.EventHandler(this.remove_Click);
       // 
-      // cancel_item
+      // cancel
       // 
-      this.cancel_item.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-      this.cancel_item.Image = global::scff_app.Properties.Resources.Remove;
-      this.cancel_item.ImageTransparentColor = System.Drawing.Color.Magenta;
-      this.cancel_item.Name = "cancel_item";
-      this.cancel_item.Size = new System.Drawing.Size(60, 22);
-      this.cancel_item.Text = "Cancel";
-      this.cancel_item.Click += new System.EventHandler(this.cancel_item_Click);
+      this.cancel.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+      this.cancel.Image = global::scff_app.Properties.Resources.Remove;
+      this.cancel.ImageTransparentColor = System.Drawing.Color.Magenta;
+      this.cancel.Name = "cancel";
+      this.cancel.Size = new System.Drawing.Size(60, 22);
+      this.cancel.Text = "Cancel";
+      this.cancel.Click += new System.EventHandler(this.cancel_Click);
       // 
-      // apply_item
+      // apply
       // 
-      this.apply_item.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-      this.apply_item.Image = global::scff_app.Properties.Resources.Go;
-      this.apply_item.ImageTransparentColor = System.Drawing.Color.Magenta;
-      this.apply_item.Name = "apply_item";
-      this.apply_item.Size = new System.Drawing.Size(54, 22);
-      this.apply_item.Text = "apply";
-      this.apply_item.Click += new System.EventHandler(this.apply_item_Click);
+      this.apply.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+      this.apply.Image = global::scff_app.Properties.Resources.Go;
+      this.apply.ImageTransparentColor = System.Drawing.Color.Magenta;
+      this.apply.Name = "apply";
+      this.apply.Size = new System.Drawing.Size(52, 22);
+      this.apply.Text = "apply";
+      this.apply.Click += new System.EventHandler(this.apply_Click);
       // 
-      // layout_panel
+      // layoutPanel
       // 
-      this.layout_panel.BackColor = System.Drawing.Color.Black;
-      this.layout_panel.Location = new System.Drawing.Point(0, 25);
-      this.layout_panel.Margin = new System.Windows.Forms.Padding(0);
-      this.layout_panel.Name = "layout_panel";
-      this.layout_panel.Size = new System.Drawing.Size(38, 39);
-      this.layout_panel.TabIndex = 1;
+      this.layoutPanel.BackColor = System.Drawing.Color.Black;
+      this.layoutPanel.Location = new System.Drawing.Point(0, 25);
+      this.layoutPanel.Margin = new System.Windows.Forms.Padding(0);
+      this.layoutPanel.Name = "layoutPanel";
+      this.layoutPanel.Size = new System.Drawing.Size(38, 39);
+      this.layoutPanel.TabIndex = 1;
       // 
       // LayoutForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.AutoSize = true;
-      this.ClientSize = new System.Drawing.Size(28, 51);
-      this.Controls.Add(this.layout_panel);
-      this.Controls.Add(this.main_strip);
+      this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+      this.ClientSize = new System.Drawing.Size(240, 210);
+      this.Controls.Add(this.layoutPanel);
+      this.Controls.Add(this.mainToolBar);
       this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
       this.MaximizeBox = false;
       this.MinimizeBox = false;
       this.Name = "LayoutForm";
       this.Text = "LayoutForm";
-      this.main_strip.ResumeLayout(false);
-      this.main_strip.PerformLayout();
+      this.Load += new System.EventHandler(this.LayoutForm_Load);
+      this.mainToolBar.ResumeLayout(false);
+      this.mainToolBar.PerformLayout();
       this.ResumeLayout(false);
       this.PerformLayout();
 
@@ -119,12 +121,12 @@
 
     #endregion
 
-    private System.Windows.Forms.ToolStrip main_strip;
-    private System.Windows.Forms.Panel layout_panel;
-    private System.Windows.Forms.ToolStripButton add_item;
-    private System.Windows.Forms.ToolStripButton remove_item;
-    private System.Windows.Forms.ToolStripButton apply_item;
-    private System.Windows.Forms.ToolStripButton cancel_item;
+    private System.Windows.Forms.ToolStrip mainToolBar;
+    private System.Windows.Forms.Panel layoutPanel;
+    private System.Windows.Forms.ToolStripButton add;
+    private System.Windows.Forms.ToolStripButton remove;
+    private System.Windows.Forms.ToolStripButton apply;
+    private System.Windows.Forms.ToolStripButton cancel;
 
 
 

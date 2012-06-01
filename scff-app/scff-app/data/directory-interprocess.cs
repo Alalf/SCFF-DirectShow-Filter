@@ -21,27 +21,26 @@
 namespace scff_app.data {
 
 using System.Collections.Generic;
-using System.Windows.Forms;
-using System.Diagnostics;
+using System.Collections;
 
 // scff_interprocess.Directoryをマネージドクラス化したクラス
 partial class Directory {
 
-  /// @brief 共有メモリから現在のDirectoryを取得する
-  public void Update(scff_interprocess.Interprocess interprocess) {
-    // 共有メモリへのアクセス準備
-    interprocess.InitDirectory();
+  /// @brief scff_interprocessから変換
+  public void LoadFromInterprocess(scff_interprocess.Directory input) {
+    this.Entries = new List<Entry>();
 
-    // 共有メモリからデータを取得
-    scff_interprocess.Directory interprocess_directory;
-    interprocess.GetDirectory(out interprocess_directory);
-
-    // 取得したデータから値を設定
-    InitFromInterprocess(interprocess_directory);
+    const int kMaxEntry = scff_interprocess.Interprocess.kMaxEntry;
+    for (int i = 0; i < kMaxEntry; i++) {
+      if (input.entries[i].process_id == 0) {
+        continue;
+      }
+      this.Entries.Add(new Entry(input.entries[i]));
+    }
   }
-
-  /// @brief BindingSourceに対応する値を設定する
-  public void UpdateBindingSource(BindingSource entries) {
+  
+  /// @brief 指定されたIListにEntriesの内容を設定
+  public void Update(IList entries) {
     entries.Clear();
     foreach (Entry i in this.Entries) {
       entries.Add(i);

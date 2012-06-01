@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file AreaSelectForm.cs
+/// @file scff-app/gui/AreaSelectForm.cs
 /// @brief エリア選択ウィンドウの定義
 
 namespace scff_app.gui {
@@ -26,9 +26,6 @@ using System.Windows.Forms;
 
 /// @brief エリア選択ウィンドウ
 public partial class AreaSelectForm : Form {
-
-  /// @brief ウィンドウにドラッグによる移動・リサイズ機能を付加
-  MovableAndResizable movable_and_resizable_;
 
   /// @brief コンストラクタ
   public AreaSelectForm(BindingSource layoutParameters) {
@@ -64,39 +61,31 @@ public partial class AreaSelectForm : Form {
       original_width_ = current.ClippingWidth;
       original_height_ = current.ClippingHeight;
     }
-
-    // HACK!: 一応ここでも更新するが信頼できない
-    this.Location = new Point(original_x_, original_y_);
-    this.Size = new Size(original_width_, original_height_);
   }
 
   //===================================================================
   // イベントハンドラ
   //===================================================================
 
-  //-------------------------------------------------------------------
-  // フォーム
-  //-------------------------------------------------------------------
-
-  private void AreaSelectForm_Shown(object sender, EventArgs e) {
-    // HACK!: コンストラクタで設定したLocation/Sizeは信頼できないのでここで変更
+  private void AreaSelectForm_Load(object sender, EventArgs e) {
+    // Formのプロパティを編集する際はLoadの中でやるのが好ましい
     this.Location = new Point(original_x_, original_y_);
     this.Size = new Size(original_width_, original_height_);
   }
 
   private void accept_Click(object sender, EventArgs e) {
     // HACK!: フォームの左上をスクリーン座標に変換
-    int clipping_x, clipping_y, clipping_width, clipping_height;
+    int window_screen_x, window_screen_y, window_width, window_height;
     Point origin = new Point(0, 0);
-    clipping_x = PointToScreen(origin).X;
-    clipping_y = PointToScreen(origin).Y;
-    clipping_width = this.Width;
-    clipping_height = this.Height;
+    window_screen_x = PointToScreen(origin).X;
+    window_screen_y = PointToScreen(origin).Y;
+    window_width = this.Width;
+    window_height = this.Height;
 
     // デスクトップ取り込みに変更
     ((data.LayoutParameter)layout_parameters_.Current).SetWindowWithClippingRegion(
         ExternalAPI.GetDesktopWindow(),
-        clipping_x, clipping_y, clipping_width, clipping_height);
+        window_screen_x, window_screen_y, window_width, window_height);
 
     // 念のためウィンドウ幅を超えないように修正
     ((data.LayoutParameter)layout_parameters_.Current).ModifyClippingRegion();
@@ -114,6 +103,9 @@ public partial class AreaSelectForm : Form {
   //===================================================================
 
   BindingSource layout_parameters_;
+
+  // ウィンドウにドラッグによる移動・リサイズ機能を付加
+  MovableAndResizable movable_and_resizable_;
 
   readonly int original_x_;
   readonly int original_y_;

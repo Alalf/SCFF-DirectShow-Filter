@@ -40,28 +40,5 @@ partial class Message {
     this.LayoutElementCount = 0;
     this.LayoutParameters = new List<LayoutParameter>();
   }
-
-  /// @brief scff_Interprocess用に変換
-  scff_interprocess.Message ToInterprocess(int bound_width, int bound_height) {
-    scff_interprocess.Message output = new scff_interprocess.Message();
-
-    output.timestamp = this.Timestamp;
-    output.layout_type = (Int32)this.LayoutType;
-    output.layout_element_count = this.LayoutElementCount;
-    
-    // Listの前から順番に書き込む
-    const int kMaxComplexLayoutElements = scff_interprocess.Interprocess.kMaxComplexLayoutElements;
-    output.layout_parameters = new scff_interprocess.LayoutParameter[kMaxComplexLayoutElements];
-    for (int i = 0; i < kMaxComplexLayoutElements; i++) {
-      if (i < this.LayoutParameters.Count) {
-        output.layout_parameters[i] = this.LayoutParameters[i].ToInterprocess(bound_width, bound_height);
-      } else {
-        // C#はインスタンスは勝手にゼロクリアされる
-        output.layout_parameters[i] = new scff_interprocess.LayoutParameter();
-      }
-    }
-
-    return output;
-  }
 }
 }

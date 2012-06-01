@@ -48,8 +48,8 @@
       // kCaption
       // 
       this.kCaption.AutoSize = true;
+      this.kCaption.Enabled = false;
       this.kCaption.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-      this.kCaption.ForeColor = System.Drawing.SystemColors.GrayText;
       this.kCaption.Location = new System.Drawing.Point(12, 9);
       this.kCaption.Name = "kCaption";
       this.kCaption.Size = new System.Drawing.Size(138, 12);
@@ -85,7 +85,7 @@
       this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
       this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
       this.Text = "AreaSelectForm";
-      this.Shown += new System.EventHandler(this.AreaSelectForm_Shown);
+      this.Load += new System.EventHandler(this.AreaSelectForm_Load);
       this.DoubleClick += new System.EventHandler(this.accept_Click);
       this.ResumeLayout(false);
       this.PerformLayout();

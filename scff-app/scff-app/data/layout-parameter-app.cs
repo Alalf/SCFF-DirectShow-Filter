@@ -30,23 +30,7 @@ using System.Text;
 partial class LayoutParameter {
 
   /// @brief レイアウトの名前代わりに使用するWindowのクラス名
-  public string WindowText {
-    get {
-      if (Window == UIntPtr.Zero) {
-        return "(splash)";
-      } else if (Window == ExternalAPI.GetDesktopWindow()) {
-        return "(Desktop)";
-      } else {
-        if (!ExternalAPI.IsWindow(Window)) {
-          return "*** INVALID WINDOW ***";
-        } else {
-          StringBuilder class_name = new StringBuilder(256);
-          ExternalAPI.GetClassName(Window, class_name, 256);
-          return class_name.ToString();
-        }
-      }
-    }
-  }
+  public string WindowText { get; private set; }
 
   /// @brief Windowの大きさ
   public Size WindowSize { get; private set; }

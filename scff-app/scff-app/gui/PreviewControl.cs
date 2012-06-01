@@ -20,29 +20,44 @@
 
 namespace scff_app.gui {
 
-using System.Windows.Forms;
-using System.Drawing;
-using System.Runtime.InteropServices;
 using System;
+using System.Drawing;
+using System.Windows.Forms;
+using scff_app.data;
 
 /// @brief LayoutForm内で使用するプレビューコントロール
 partial class PreviewControl : UserControl {
 
-  //-------------------------------------------------------------------
-  // メソッド
-  //-------------------------------------------------------------------
-
   /// @brief コンストラクタ
   public PreviewControl(int bound_width, int bound_height,
-                        int index_in_layout_parameter_binding_source,
-                        data.LayoutParameter layout_parameter) {
+                        int index, LayoutParameter layout_parameter) {
+    //---------------------------------------------------------------
+    // DO NOT DELETE THIS!!!
     InitializeComponent();
+    //---------------------------------------------------------------
 
-    // メンバの設定
+    index_ = index;
     layout_parameter_ = layout_parameter;
-    IndexInLayoutParameterBindingSource = index_in_layout_parameter_binding_source;
+
     movable_and_resizable_ = new MovableAndResizable(this, bound_width, bound_height);
   }
+
+  public int Index {
+    get { return index_; }
+  }
+
+  //===================================================================
+  // オーバーライド
+  //===================================================================
+
+  protected override void OnPaintBackground(PaintEventArgs pevent) {
+    // 何もしない
+    // base.OnPaintBackground(pevent);
+  }
+
+  //===================================================================
+  // イベントハンドラ
+  //===================================================================
 
   private void PreviewControl_Load(object sender, EventArgs e) {
     info_font_ = new Font("Verdana", 10, FontStyle.Bold);
@@ -52,7 +67,7 @@ partial class PreviewControl : UserControl {
     captured_bitmap_ = new Bitmap(layout_parameter_.ClippingWidth,
                                   layout_parameter_.ClippingHeight);
     ScreenCapture();
-    capture_timer.Enabled = true;
+    captureTimer.Enabled = true;
 
     // Unloadでビットマップを解放
     this.Disposed += PreviewControl_UnLoad;
@@ -64,12 +79,12 @@ partial class PreviewControl : UserControl {
   }
 
   public void PreviewControl_UnLoad(object sender, EventArgs e) {
-    capture_timer.Enabled = false;
+    captureTimer.Enabled = false;
     info_font_.Dispose();
     captured_bitmap_.Dispose();
   }
 
-  private void fit_item_Click(object sender, EventArgs e) {
+  private void fit_Click(object sender, EventArgs e) {
     int padding_top, padding_bottom, padding_left, padding_right;
     scff_imaging.Utilities.CalculatePaddingSize(Width, Height,
         captured_bitmap_.Width, captured_bitmap_.Height,
@@ -78,15 +93,6 @@ partial class PreviewControl : UserControl {
         out padding_top, out padding_bottom, out padding_left, out padding_right);
 
     Size = new Size(Width - padding_left - padding_right, Height - padding_top - padding_bottom);
-  }
-
-  public override string ToString() {
-    string output = "[";
-    output += (IndexInLayoutParameterBindingSource+1).ToString();
-    output += "] ";
-    output += Width.ToString() + "x" + Height.ToString();
-    output += " " + layout_parameter_.WindowText;
-    return output;
   }
 
   private void PreviewControl_Paint(object sender, PaintEventArgs e) {
@@ -115,7 +121,7 @@ partial class PreviewControl : UserControl {
 
     e.Graphics.DrawImage(captured_bitmap_, new Rectangle(new_x, new_y, new_width, new_height));
 
-    e.Graphics.DrawString(ToString(), info_font_, Brushes.DarkOrange, info_point_f_);
+    e.Graphics.DrawString(PreviewInfo(), info_font_, Brushes.DarkOrange, info_point_f_);
     e.Graphics.DrawRectangle(Pens.DarkOrange, 0, 0, Width - 1, Height - 1);
   }
 
@@ -123,21 +129,25 @@ partial class PreviewControl : UserControl {
     Invalidate();
   }
 
-  protected override void OnPaintBackground(PaintEventArgs pevent) {
-    // 何もしない
-    // base.OnPaintBackground(pevent);
-  }
-
-  //-------------------------------------------------------------------
-  // スクリーンキャプチャ
-  //-------------------------------------------------------------------
-
-  private void capture_timer_Tick(object sender, EventArgs e) {
+  private void captureTimer_Tick(object sender, EventArgs e) {
     // キャプチャする
     ScreenCapture();
     Invalidate();
   }
 
+  //-------------------------------------------------------------------
+
+  // プレビュー情報
+  string PreviewInfo() {
+    string output = "[";
+    output += (index_ + 1).ToString();
+    output += "] ";
+    output += Width.ToString() + "x" + Height.ToString();
+    output += " " + layout_parameter_.WindowText;
+    return output;
+  }
+
+  // スクリーンキャプチャ
   void ScreenCapture() {
     UIntPtr window = layout_parameter_.Window;
     if (!ExternalAPI.IsWindow(window)) {
@@ -161,16 +171,16 @@ partial class PreviewControl : UserControl {
     ExternalAPI.ReleaseDC(window, window_dc);
   }
 
-  //-------------------------------------------------------------------
+  //===================================================================
   // メンバ変数
-  //-------------------------------------------------------------------
-
-  public int IndexInLayoutParameterBindingSource { get; set; }
-
-  MovableAndResizable movable_and_resizable_;
+  //===================================================================
 
   // レイアウトパラメータ
-  data.LayoutParameter layout_parameter_;
+  int index_;
+  LayoutParameter layout_parameter_;
+
+  // ウィンドウにドラッグによる移動・リサイズ機能を付加
+  MovableAndResizable movable_and_resizable_;
 
   // 3秒に一回更新するスクリーンキャプチャビットマップ
   Bitmap captured_bitmap_;

@@ -24,13 +24,11 @@ namespace scff_app {
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-using System.Collections.Generic;
+
+using scff_app.gui;
 
 /// @brief メインウィンドウ
 public partial class Form1 : Form {
-
-  /// @brief アプリケーションの実装(MVCパターンにおけるModel/Controller)
-  SCFFApp app_;
 
   /// @brief コンストラクタ
   public Form1() {
@@ -39,22 +37,8 @@ public partial class Form1 : Form {
     InitializeComponent();
     //---------------------------------------------------------------
 
-    // リサイズメソッドのコンボボックスのデータソースを設定
-    resizeMethodList.DisplayMember = "Value";
-    resizeMethodList.ValueMember = "Key";
-    List<KeyValuePair<scff_interprocess.SWScaleFlags,string>> resize_method_list =
-        new List<KeyValuePair<scff_interprocess.SWScaleFlags,string>>
-            (data.SWScaleConfig.ResizeMethodList);
-    resizeMethodList.DataSource = resize_method_list;
-
     // SCFFAppインスタンスを生成
-    app_ = new SCFFApp();
-    
-    // 初期設定
-    app_.UpdateDirectory(this.entries);
-
-    // デフォルトの設定を書き込む
-    this.layoutParameters.AddNew();
+    app_ = new SCFFApp(this.entries, this.layoutParameters);
   }
 
   //===================================================================
@@ -64,16 +48,27 @@ public partial class Form1 : Form {
   //-------------------------------------------------------------------
   // フォーム
   //-------------------------------------------------------------------
+
+  private void Form1_Load(object sender, EventArgs e) {
+    // リサイズメソッドのコンボボックスのデータソースを設定
+    this.resizeMethodList.DisplayMember = "Value";
+    this.resizeMethodList.ValueMember = "Key";
+    this.resizeMethodList.DataSource = app_.ResizeMethodList;
+
+    app_.OnLoad();
+  }
+
   private void Form1_Shown(object sender, EventArgs e) {
     // 起動時のチェック
     if (!app_.CheckEnvironment()) {
-      Close();
+      this.Close();
       return;
     }
 
     // AeroをOffにしようと試みる
     app_.DWMAPIOff();
   }
+
   private void Form1_FormClosed(object sender, FormClosedEventArgs e) {
     // Aeroの状態を元に戻す
     app_.DWMAPIRestore();
@@ -87,18 +82,18 @@ public partial class Form1 : Form {
     // Aeroの状態を切り替える
     app_.DWMAPIFlip(aeroOn.Checked);
 
-    aeroOn.Checked = !aeroOn.Checked;
+    this.aeroOn.Checked = !this.aeroOn.Checked;
   }
 
   //-------------------------------------------------------------------
   // OK/CANCEL
   //-------------------------------------------------------------------
   private void splash_Click(object sender, EventArgs e) {
-    app_.SendNull(this.entries, true);
+    app_.SendNull(true);
   }
 
   private void apply_Click(object sender, EventArgs e) {
-    app_.SendMessage(this.entries, this.layoutParameters, true);
+    app_.SendMessage(true);
   }
 
   //-------------------------------------------------------------------
@@ -106,7 +101,7 @@ public partial class Form1 : Form {
   //-------------------------------------------------------------------
   private void processRefresh_Click(object sender, EventArgs e) {
     // entiresを更新
-    app_.UpdateDirectory(this.entries);
+    app_.UpdateDirectory();
   }
 
   //-------------------------------------------------------------------
@@ -120,23 +115,24 @@ public partial class Form1 : Form {
   //-------------------------------------------------------------------
 
   private void windowDragHere_MouseDown(object sender, MouseEventArgs e) {
-    windowDragHere.BackColor = Color.Orange;
+    this.windowDragHere.BackColor = Color.Orange;
   }
 
   private void windowDragHere_MouseUp(object sender, MouseEventArgs e) {
-    windowDragHere.BackColor = SystemColors.Control;
+    this.windowDragHere.BackColor = SystemColors.Control;
 
     Point screen_location = windowDragHere.PointToScreen(e.Location);
-    app_.SetWindowFromPoint(this.layoutParameters, screen_location.X, screen_location.Y);
+    app_.SetWindowFromPoint(screen_location.X, screen_location.Y);
   }
 
   private void windowDesktop_Click(object sender, EventArgs e) {
-    app_.SetDesktopWindow(this.layoutParameters);
+    app_.SetDesktopWindow();
   }
 
   //-------------------------------------------------------------------
   // Target/Area
   //-------------------------------------------------------------------
+
   private void areaFit_CheckedChanged(object sender, EventArgs e) {
     bool flag = !this.areaFit.Checked;
     this.areaClippingX.Enabled = flag;
@@ -147,7 +143,7 @@ public partial class Form1 : Form {
 
   private void targetAreaSelect_Click(object sender, EventArgs e) {
     // AreaSelectFormの表示
-    using (gui.AreaSelectForm form = new gui.AreaSelectForm(layoutParameters)) {
+    using (AreaSelectForm form = new AreaSelectForm(this.layoutParameters)) {
       form.ShowDialog();
       // DialogResult result = form.DialogResult;
     }
@@ -158,24 +154,14 @@ public partial class Form1 : Form {
   //-------------------------------------------------------------------
 
   private void layoutEdit_Click(object sender, EventArgs e) {
-    // 一応ダミーで調整できるように
-    /// @todo(me) ダミーではなくもっとよい方法がないか考え中
-    int bound_width = SCFFApp.kDefaultBoundWidth;
-    int bound_height = SCFFApp.kDefaultBoundHeight;
-    if (entries.Count != 0) {
-      bound_width = ((data.Entry)entries.Current).SampleWidth;
-      bound_height = ((data.Entry)entries.Current).SampleHeight;
-    }
-
-
-    using (gui.LayoutForm layout_form = new gui.LayoutForm(this.layoutParameters, bound_width, bound_height)) {
-      layout_form.ShowDialog();
-      layout_form.GetResult();
+    using (LayoutForm form = new LayoutForm(this.entries, this.layoutParameters)) {
+      form.ShowDialog();
+      // DialogResult result = form.DialogResult;
     }
   }
 
   private void resizeMethodIsFilterEnabled_CheckedChanged(object sender, EventArgs e) {
-    bool is_filter_enabled = resizeMethodIsFilterEnabled.Checked;
+    bool is_filter_enabled = this.resizeMethodIsFilterEnabled.Checked;
 
     this.resizeMethodLGBlur.Enabled = is_filter_enabled;
     this.resizeMethodCGBlur.Enabled = is_filter_enabled;
@@ -190,8 +176,7 @@ public partial class Form1 : Form {
     // 最大値になるまでは追加できるし削除もできる
     // 最大値になったら追加はできない
     bool can_edit = this.layoutParameters.Count > 1;
-    bool can_add = this.layoutParameters.Count <
-        scff_interprocess.Interprocess.kMaxComplexLayoutElements;
+    bool can_add = this.layoutParameters.Count < SCFFApp.kMaxLayoutElements;
     bool can_remove = this.layoutParameters.Count > 1;
 
     this.layoutEdit.Enabled = can_edit;
@@ -204,6 +189,10 @@ public partial class Form1 : Form {
     this.layoutRemove.Enabled = can_remove;
   }
 
+  //-------------------------------------------------------------------
+  // BindingSource
+  //-------------------------------------------------------------------
+
   private void entries_ListChanged(object sender, System.ComponentModel.ListChangedEventArgs e) {
     bool entry_exists = this.entries.Count != 0;
 
@@ -215,9 +204,17 @@ public partial class Form1 : Form {
 
   private void layoutParameters_ListChanged(object sender, System.ComponentModel.ListChangedEventArgs e) {
     if (this.autoApply.Checked) {
-      MessageBox.Show("layoutParameters_CurrentItemChanged");
+      /// @todo(me) 更新しすぎなので何とかする
+      app_.SendMessage(false);
     }
   }
+
+  //===================================================================
+  // メンバ変数
+  //===================================================================
+
+  /// @brief MVCパターンにおけるController
+  SCFFApp app_;
 }
 }   // namespace scff_app
 

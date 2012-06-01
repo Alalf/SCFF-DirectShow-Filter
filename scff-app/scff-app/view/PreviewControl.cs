@@ -40,6 +40,14 @@ partial class PreviewControl : UserControl {
     layout_parameter_ = layout_parameter;
 
     movable_and_resizable_ = new MovableAndResizable(this, bound_width, bound_height);
+
+    // Bitmap作成＋１回スクリーンキャプチャ
+    captured_bitmap_ = new Bitmap(layout_parameter_.ClippingWidth,
+                                  layout_parameter_.ClippingHeight);
+    ScreenCapture();
+
+    info_font_ = new Font("Verdana", 10, FontStyle.Bold);
+    info_point_f_ = new PointF(0, 0);
   }
 
   //===================================================================
@@ -64,14 +72,8 @@ partial class PreviewControl : UserControl {
   //===================================================================
 
   private void PreviewControl_Load(object sender, EventArgs e) {
-    info_font_ = new Font("Verdana", 10, FontStyle.Bold);
-    info_point_f_ = new PointF(0, 0);
-
-    // ビットマップ作成/キャプチャ/タイマーOn
-    captured_bitmap_ = new Bitmap(layout_parameter_.ClippingWidth,
-                                  layout_parameter_.ClippingHeight);
-    ScreenCapture();
-    captureTimer.Enabled = true;
+    // タイマーOn
+    this.captureTimer.Enabled = true;
 
     // Unloadでビットマップを解放
     this.Disposed += PreviewControl_UnLoad;
@@ -83,20 +85,11 @@ partial class PreviewControl : UserControl {
   }
 
   public void PreviewControl_UnLoad(object sender, EventArgs e) {
-    captureTimer.Enabled = false;
+    this.captureTimer.Enabled = false;
+
+    // BitmapとFontはメモリ食いなので明示的にDisposeする
     info_font_.Dispose();
     captured_bitmap_.Dispose();
-  }
-
-  private void fit_Click(object sender, EventArgs e) {
-    int padding_top, padding_bottom, padding_left, padding_right;
-    scff_imaging.Utilities.CalculatePaddingSize(Width, Height,
-        captured_bitmap_.Width, captured_bitmap_.Height,
-        layout_parameter_.Stretch,
-        layout_parameter_.KeepAspectRatio,
-        out padding_top, out padding_bottom, out padding_left, out padding_right);
-
-    Size = new Size(Width - padding_left - padding_right, Height - padding_top - padding_bottom);
   }
 
   private void PreviewControl_Paint(object sender, PaintEventArgs e) {
@@ -131,6 +124,17 @@ partial class PreviewControl : UserControl {
 
   private void PreviewControl_SizeChanged(object sender, EventArgs e) {
     Invalidate();
+  }
+
+  private void fit_Click(object sender, EventArgs e) {
+    int padding_top, padding_bottom, padding_left, padding_right;
+    scff_imaging.Utilities.CalculatePaddingSize(Width, Height,
+        captured_bitmap_.Width, captured_bitmap_.Height,
+        layout_parameter_.Stretch,
+        layout_parameter_.KeepAspectRatio,
+        out padding_top, out padding_bottom, out padding_left, out padding_right);
+
+    Size = new Size(Width - padding_left - padding_right, Height - padding_top - padding_bottom);
   }
 
   private void captureTimer_Tick(object sender, EventArgs e) {

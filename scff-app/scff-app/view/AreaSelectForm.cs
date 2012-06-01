@@ -23,6 +23,7 @@ namespace scff_app.view {
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using scff_app.viewmodel;
 
 /// @brief エリア選択ウィンドウ
 public partial class AreaSelectForm : Form {
@@ -45,7 +46,7 @@ public partial class AreaSelectForm : Form {
     movable_and_resizable_ = new MovableAndResizable(this, bound_width, bound_height);
 
     // オリジナルの値を保持しておく
-    viewmodel.LayoutParameter current = (viewmodel.LayoutParameter)layoutParameters.Current;
+    LayoutParameter current = (LayoutParameter)layoutParameters.Current;
     if (current.Window != ExternalAPI.GetDesktopWindow()) {
       // ウィンドウ取り込み時はスクリーン座標に変換する
       ExternalAPI.RECT window_screen_rect;
@@ -83,12 +84,12 @@ public partial class AreaSelectForm : Form {
     window_height = this.Height;
 
     // デスクトップ取り込みに変更
-    ((viewmodel.LayoutParameter)layout_parameters_.Current).SetWindowWithClippingRegion(
+    ((LayoutParameter)layout_parameters_.Current).SetWindowWithClippingRegion(
         ExternalAPI.GetDesktopWindow(),
         window_screen_x, window_screen_y, window_width, window_height);
 
     // 念のためウィンドウ幅を超えないように修正
-    ((viewmodel.LayoutParameter)layout_parameters_.Current).ModifyClippingRegion();
+    ((LayoutParameter)layout_parameters_.Current).ModifyClippingRegion();
 
     this.DialogResult = System.Windows.Forms.DialogResult.OK;
     this.Close();

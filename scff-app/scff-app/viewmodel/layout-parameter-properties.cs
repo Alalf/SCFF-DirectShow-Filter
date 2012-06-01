@@ -23,7 +23,7 @@ namespace scff_app.viewmodel {
 using System;
 using System.ComponentModel;
 using System.Drawing;
-  using System.Text;
+using System.Text;
 
 /// @brief scff_inteprocess.LayoutParameterのビューモデル
 partial class LayoutParameter : INotifyPropertyChanged {

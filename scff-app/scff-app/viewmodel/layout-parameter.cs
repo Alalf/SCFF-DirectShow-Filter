@@ -21,8 +21,6 @@
 namespace scff_app.viewmodel {
 
 using System;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 
 // scff_inteprocess.LayoutParameterのビューモデル

@@ -77,9 +77,9 @@ class MovableAndResizable : IDisposable {
     target_.SizeChanged -= target_SizeChanged;
   }
 
-  //-------------------------------------------------------------------
+  //===================================================================
   // イベントハンドラ
-  //-------------------------------------------------------------------
+  //===================================================================
 
   private void target_MouseDown(object sender, MouseEventArgs e) {
     var mouse_down_control_location = e.Location;
@@ -181,8 +181,8 @@ class MovableAndResizable : IDisposable {
   }
 
   //-------------------------------------------------------------------
+
   // 座標変換、型変換
-  //-------------------------------------------------------------------
 
   /// @brief ModeからSendMessage用のメッセージに変換する
   ExternalAPI.SystemDefinedMessage GetMessageFromMode(Mode mode) {
@@ -269,9 +269,9 @@ class MovableAndResizable : IDisposable {
     return new Point(target_.Left + control_location.X, target_.Top + control_location.Y);
   }
 
-  //-------------------------------------------------------------------
+  //===================================================================
   // メンバ変数
-  //-------------------------------------------------------------------
+  //===================================================================
 
   int bound_width_;
   int bound_height_;

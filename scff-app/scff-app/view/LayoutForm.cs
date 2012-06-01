@@ -26,6 +26,7 @@ namespace scff_app.view {
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using scff_app.viewmodel;
 
 /// @brief レイアウトをGUIで編集するためのフォーム
 partial class LayoutForm : Form {
@@ -41,7 +42,7 @@ partial class LayoutForm : Form {
     layout_parameters_ = layoutParameters;
 
     // Directoryから現在選択中のEntryを取得し、出力幅、高さを得る
-    viewmodel.Entry current_entry = (viewmodel.Entry)entries_.Current;
+    Entry current_entry = (Entry)entries_.Current;
     if (entries_.Count != 0) {
       // 現在選択中のプロセスの幅、高さで調整
       bound_width_ = current_entry.SampleWidth;
@@ -73,7 +74,7 @@ partial class LayoutForm : Form {
     this.layoutPanel.Size = new Size(bound_width_, bound_height_);
 
     int index = 0;
-    foreach (viewmodel.LayoutParameter i in layout_parameters_.List) {
+    foreach (LayoutParameter i in layout_parameters_.List) {
       // PreviewControlの生成
       PreviewControl preview = new PreviewControl(bound_width_, bound_height_, index, i);
       int x = (int)((i.BoundRelativeLeft * bound_width_) / 100);
@@ -110,13 +111,13 @@ partial class LayoutForm : Form {
       double bound_relative_right = ((double)i.Right * 100.0) / bound_width_;
       double bound_relative_top = ((double)i.Top * 100.0) / bound_height_;
       double bound_relative_bottom = ((double)i.Bottom * 100.0) / bound_height_;
-      ((viewmodel.LayoutParameter)layout_parameters_[index]).BoundRelativeLeft =
+      ((LayoutParameter)layout_parameters_[index]).BoundRelativeLeft =
           bound_relative_left;
-      ((viewmodel.LayoutParameter)layout_parameters_[index]).BoundRelativeRight =
+      ((LayoutParameter)layout_parameters_[index]).BoundRelativeRight =
           bound_relative_right;
-      ((viewmodel.LayoutParameter)layout_parameters_[index]).BoundRelativeTop =
+      ((LayoutParameter)layout_parameters_[index]).BoundRelativeTop =
           bound_relative_top;
-      ((viewmodel.LayoutParameter)layout_parameters_[index]).BoundRelativeBottom =
+      ((LayoutParameter)layout_parameters_[index]).BoundRelativeBottom =
           bound_relative_bottom;
     }
 

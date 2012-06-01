@@ -112,6 +112,7 @@
       this.layoutEdit = new System.Windows.Forms.ToolStripButton();
       this.kProcessPanel = new System.Windows.Forms.Panel();
       this.kProfilePanel = new System.Windows.Forms.Panel();
+      this.mainTimer = new System.Windows.Forms.Timer(this.components);
       this.mainMenuStrip.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.layoutBoundRelativeBottom)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.layoutParameters)).BeginInit();
@@ -726,6 +727,8 @@
       // 
       // autoApply
       // 
+      this.autoApply.Checked = global::scff_app.Properties.Settings.Default.AutoApply;
+      this.autoApply.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::scff_app.Properties.Settings.Default, "AutoApply", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
       this.autoApply.Location = new System.Drawing.Point(134, 4);
       this.autoApply.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
       this.autoApply.Name = "autoApply";
@@ -803,6 +806,7 @@
       // 
       // apply
       // 
+      this.apply.BackColor = System.Drawing.Color.Orange;
       this.apply.Enabled = false;
       this.apply.Location = new System.Drawing.Point(187, 0);
       this.apply.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
@@ -810,7 +814,7 @@
       this.apply.Size = new System.Drawing.Size(86, 25);
       this.apply.TabIndex = 4;
       this.apply.Text = "Apply";
-      this.apply.UseVisualStyleBackColor = true;
+      this.apply.UseVisualStyleBackColor = false;
       this.apply.Click += new System.EventHandler(this.apply_Click);
       // 
       // splash
@@ -1467,6 +1471,12 @@
       this.kProfilePanel.Size = new System.Drawing.Size(195, 31);
       this.kProfilePanel.TabIndex = 29;
       // 
+      // mainTimer
+      // 
+      this.mainTimer.Enabled = true;
+      this.mainTimer.Interval = 1000;
+      this.mainTimer.Tick += new System.EventHandler(this.mainTimer_Tick);
+      // 
       // SCFFAppForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -1640,6 +1650,7 @@
     private System.Windows.Forms.BindingSource entries;
     private System.Windows.Forms.ToolStripButton layoutEdit;
     private System.Windows.Forms.ToolStripSeparator kLayoutSeparator;
+    private System.Windows.Forms.Timer mainTimer;
 
 
 

@@ -211,12 +211,23 @@ public partial class SCFFAppForm : Form {
   }
 
   private void layoutParameters_ListChanged(object sender, System.ComponentModel.ListChangedEventArgs e) {
-    if (this.autoApply.Checked) {
-      /// @todo(me) 更新しすぎなので何とかする
+    this.apply.BackColor = Color.Orange;
+  }
+
+  //-------------------------------------------------------------------
+  // Timer
+  //-------------------------------------------------------------------
+  private void mainTimer_Tick(object sender, EventArgs e) {
+    // @todo(me) プロセスの生死をチェック
+    // @todo(me) ウィンドウをチェック
+    // @todo(me) ウィンドウサイズをチェック
+
+    // メッセージ送信
+    /// @todo(me) 汚すぎる！dirtyフラグは別に管理するべき
+    bool dirty = this.apply.BackColor == Color.Orange;
+    if (app_ != null && this.autoApply.Checked && dirty) {
       app_.SendMessage(false);
       this.apply.BackColor = SystemColors.Control;
-    } else {
-      this.apply.BackColor = Color.Orange;
     }
   }
 

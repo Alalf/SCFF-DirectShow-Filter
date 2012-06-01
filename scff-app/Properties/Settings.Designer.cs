@@ -46,5 +46,17 @@ namespace scff_app.Properties {
                 this["LayoutFormLocation"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool AutoApply {
+            get {
+                return ((bool)(this["AutoApply"]));
+            }
+            set {
+                this["AutoApply"] = value;
+            }
+        }
     }
 }

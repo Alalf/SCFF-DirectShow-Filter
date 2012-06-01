@@ -350,6 +350,7 @@
       this.windowDragHere.Text = "Drag here.";
       this.windowDragHere.UseVisualStyleBackColor = true;
       this.windowDragHere.MouseDown += new System.Windows.Forms.MouseEventHandler(this.windowDragHere_MouseDown);
+      this.windowDragHere.MouseMove += new System.Windows.Forms.MouseEventHandler(this.windowDragHere_MouseMove);
       this.windowDragHere.MouseUp += new System.Windows.Forms.MouseEventHandler(this.windowDragHere_MouseUp);
       // 
       // windowText

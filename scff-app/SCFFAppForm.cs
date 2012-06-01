@@ -122,14 +122,91 @@ public partial class SCFFAppForm : Form {
   // Target/Window
   //-------------------------------------------------------------------
 
+  bool drag_here_mode_;
+  UIntPtr current_window_;
+  IntPtr current_dc_;
+  Graphics current_graphics_;
+
+  static Pen orange_pen_ = new Pen(Brushes.DarkOrange, 16);
+
+  void ClearCurrentWindow() {
+    // 描画内容を消しておく
+    if (current_window_ != UIntPtr.Zero) {
+      ExternalAPI.RECT current_rect;
+      ExternalAPI.GetClientRect(current_window_, out current_rect);
+      ExternalAPI.InvalidateRect(current_window_, ref current_rect, true);
+    }
+    // Graphicsを破棄
+    if (current_graphics_ != null) {
+      current_graphics_.Dispose();
+      current_graphics_ = null;
+    }
+    // DCを破棄
+    if (current_dc_ != IntPtr.Zero) {
+      ExternalAPI.ReleaseDC(current_window_, current_dc_);
+      current_dc_ = IntPtr.Zero;
+    }
+  }
+
   private void windowDragHere_MouseDown(object sender, MouseEventArgs e) {
     this.windowDragHere.BackColor = Color.Orange;
+
+    drag_here_mode_ = true;
+    current_window_ = UIntPtr.Zero;
+    current_dc_ = IntPtr.Zero;
+    current_graphics_ = null;
+  }
+
+  private void windowDragHere_MouseMove(object sender, MouseEventArgs e) {
+    if (!drag_here_mode_) {
+      // drag_hereモードでなければ何もしない
+      return;
+    }
+
+    Point screen_location = this.windowDragHere.PointToScreen(e.Location);
+    UIntPtr next_window = ExternalAPI.WindowFromPoint(screen_location.X, screen_location.Y);
+    if (next_window == UIntPtr.Zero) {
+      // nop
+      return;
+    }
+
+    if (current_window_ == UIntPtr.Zero) {
+      // 初回実行: どうせDragHereボタンが取得されているはずなので、一回は無視
+      current_window_ = next_window;
+    }
+
+    if (next_window == current_window_) {
+      // 対象ウィンドウが変わっていなければ何も描画する必要はない
+      return;
+    }
+
+    // ウィンドウが異なる場合、描画していたウィンドウをアップデートして描画内容を消しておく
+    ClearCurrentWindow();
+
+    // 現在処理中のウィンドウを更新
+    current_window_ = next_window;
+    current_dc_ = ExternalAPI.GetDC(current_window_);
+    current_graphics_ = System.Drawing.Graphics.FromHdc(current_dc_);
+   
+    // 描画
+    ExternalAPI.RECT current_rect;
+    ExternalAPI.GetClientRect(current_window_, out current_rect);
+    current_graphics_.DrawRectangle(orange_pen_,
+                                   current_rect.left, 
+                                   current_rect.top,
+                                   current_rect.right - current_rect.left,
+                                   current_rect.bottom - current_rect.top);    
   }
 
   private void windowDragHere_MouseUp(object sender, MouseEventArgs e) {
     this.windowDragHere.BackColor = SystemColors.Control;
 
-    Point screen_location = windowDragHere.PointToScreen(e.Location);
+    // 後処理
+    drag_here_mode_ = false;
+    ClearCurrentWindow();
+
+    // マウスカーソルからウィンドウを取得
+    Point screen_location = this.windowDragHere.PointToScreen(e.Location);
     app_.SetWindowFromPoint(screen_location.X, screen_location.Y);
 
     // メッセージ送信

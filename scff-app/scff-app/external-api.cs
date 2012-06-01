@@ -82,10 +82,13 @@ class ExternalAPI {
   internal static extern bool ReleaseCapture();
 
   [DllImport("user32.dll")]
-  internal static extern IntPtr GetDC(UIntPtr hwnd);
+  internal static extern IntPtr GetDC(UIntPtr hWnd);
 
   [DllImport("user32.dll")]
-  internal static extern int ReleaseDC(UIntPtr hwnd, IntPtr hdc);
+  internal static extern int ReleaseDC(UIntPtr hWnd, IntPtr hDC);
+
+  [DllImport("user32.dll")]
+  internal static extern bool InvalidateRect(UIntPtr hWnd, ref RECT lpRect, bool bErase);
 
   //-------------------------------------------------------------------
   // gdi32.dll

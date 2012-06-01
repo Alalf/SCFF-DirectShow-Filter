@@ -15,10 +15,10 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file scff-app/gui/AreaSelectForm.cs
+/// @file scff-app/view/AreaSelectForm.cs
 /// @brief エリア選択ウィンドウの定義
 
-namespace scff_app.gui {
+namespace scff_app.view {
 
 using System;
 using System.Drawing;
@@ -45,7 +45,7 @@ public partial class AreaSelectForm : Form {
     movable_and_resizable_ = new MovableAndResizable(this, bound_width, bound_height);
 
     // オリジナルの値を保持しておく
-    data.LayoutParameter current = (data.LayoutParameter)layoutParameters.Current;
+    viewmodel.LayoutParameter current = (viewmodel.LayoutParameter)layoutParameters.Current;
     if (current.Window != ExternalAPI.GetDesktopWindow()) {
       // ウィンドウ取り込み時はスクリーン座標に変換する
       ExternalAPI.RECT window_screen_rect;
@@ -83,12 +83,12 @@ public partial class AreaSelectForm : Form {
     window_height = this.Height;
 
     // デスクトップ取り込みに変更
-    ((data.LayoutParameter)layout_parameters_.Current).SetWindowWithClippingRegion(
+    ((viewmodel.LayoutParameter)layout_parameters_.Current).SetWindowWithClippingRegion(
         ExternalAPI.GetDesktopWindow(),
         window_screen_x, window_screen_y, window_width, window_height);
 
     // 念のためウィンドウ幅を超えないように修正
-    ((data.LayoutParameter)layout_parameters_.Current).ModifyClippingRegion();
+    ((viewmodel.LayoutParameter)layout_parameters_.Current).ModifyClippingRegion();
 
     this.Close();
   }

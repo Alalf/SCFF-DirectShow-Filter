@@ -1,4 +1,4 @@
-﻿namespace scff_app.gui
+﻿namespace scff_app.view
 {
     partial class PreviewControl
     {

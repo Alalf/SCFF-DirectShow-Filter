@@ -15,13 +15,13 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file scff-app/gui/LayoutForm.cs
+/// @file scff-app/view/LayoutForm.cs
 /// @brief レイアウトをGUIで編集するためのフォームの定義
 /// @todo(progre) 移植未達部分が完了次第名称含め全体をリファクタリング
 /// @todo(me) 全体的にBindingSourceをカスタムコントロールで利用する方法さえわかれば、
 ///           いろいろとエレガントに対応できそうではある
 
-namespace scff_app.gui {
+namespace scff_app.view {
 
 using System.Collections.Generic;
 using System.Drawing;
@@ -41,7 +41,7 @@ partial class LayoutForm : Form {
     layout_parameters_ = layoutParameters;
 
     // Directoryから現在選択中のEntryを取得し、出力幅、高さを得る
-    data.Entry current_entry = (data.Entry)entries_.Current;
+    viewmodel.Entry current_entry = (viewmodel.Entry)entries_.Current;
     if (entries_.Count != 0) {
       // 現在選択中のプロセスの幅、高さで調整
       bound_width_ = current_entry.SampleWidth;
@@ -73,7 +73,7 @@ partial class LayoutForm : Form {
     this.layoutPanel.Size = new Size(bound_width_, bound_height_);
 
     int index = 0;
-    foreach (data.LayoutParameter i in layout_parameters_.List) {
+    foreach (viewmodel.LayoutParameter i in layout_parameters_.List) {
       // PreviewControlの生成
       PreviewControl preview = new PreviewControl(bound_width_, bound_height_, index, i);
       int x = (int)((i.BoundRelativeLeft * bound_width_) / 100);
@@ -110,13 +110,13 @@ partial class LayoutForm : Form {
       double bound_relative_right = ((double)i.Right * 100.0) / bound_width_;
       double bound_relative_top = ((double)i.Top * 100.0) / bound_height_;
       double bound_relative_bottom = ((double)i.Bottom * 100.0) / bound_height_;
-      ((data.LayoutParameter)layout_parameters_[index]).BoundRelativeLeft =
+      ((viewmodel.LayoutParameter)layout_parameters_[index]).BoundRelativeLeft =
           bound_relative_left;
-      ((data.LayoutParameter)layout_parameters_[index]).BoundRelativeRight =
+      ((viewmodel.LayoutParameter)layout_parameters_[index]).BoundRelativeRight =
           bound_relative_right;
-      ((data.LayoutParameter)layout_parameters_[index]).BoundRelativeTop =
+      ((viewmodel.LayoutParameter)layout_parameters_[index]).BoundRelativeTop =
           bound_relative_top;
-      ((data.LayoutParameter)layout_parameters_[index]).BoundRelativeBottom =
+      ((viewmodel.LayoutParameter)layout_parameters_[index]).BoundRelativeBottom =
           bound_relative_bottom;
     }
 

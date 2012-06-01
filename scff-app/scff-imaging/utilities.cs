@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scff_imaging/utilities.cs
-/// @brief scff_imaging/utilities.cc/hの移植版
+/// @brief scff_imaging/utilities.ccとhの移植版
 
 namespace scff_imaging {
 

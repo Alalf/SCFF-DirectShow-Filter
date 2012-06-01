@@ -15,15 +15,16 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file scff-app/data/layout-parameter.cs
-/// @brief scff_interprocess.LayoutParameterをマネージドクラス化したクラスの定義
+/// @file scff-app/viewmodel/layout-parameter-properties.cs
+/// @brief scff_app.viewmodel.LayoutParameterのプロパティの定義
 
-namespace scff_app.data {
+namespace scff_app.viewmodel {
 
 using System;
 using System.ComponentModel;
+using System.Drawing;
 
-/// @brief scff_inteprocess.LayoutParameterをマネージドクラス化したクラス
+/// @brief scff_inteprocess.LayoutParameterのビューモデル
 partial class LayoutParameter : INotifyPropertyChanged {
 
   public UIntPtr Window {
@@ -120,6 +121,8 @@ partial class LayoutParameter : INotifyPropertyChanged {
   }
   Boolean show_layered_window_;
 
+  //-------------------------------------------------------------------
+
   SWScaleConfig SWScaleConfig {
     get {
       return swscale_config_;
@@ -132,6 +135,108 @@ partial class LayoutParameter : INotifyPropertyChanged {
     }
   }
   SWScaleConfig swscale_config_;
+
+  public scff_interprocess.SWScaleFlags SWScaleConfigFlags {
+    get {
+      return swscale_config_.Flags;
+    }
+    set {
+      if (swscale_config_.Flags != value) {
+        swscale_config_.Flags = value;
+        OnPropertyChanged("SWScaleConfigFlags");
+      }
+    }
+  }
+  public Boolean SWScaleConfigAccurateRnd {
+    get {
+      return swscale_config_.AccurateRnd;
+    }
+    set {
+      if (swscale_config_.AccurateRnd != value) {
+        swscale_config_.AccurateRnd = value;
+        OnPropertyChanged("SWScaleConfigAccurateRnd");
+      }
+    }
+  }
+  public Boolean SWScaleConfigIsFilterEnabled {
+    get {
+      return swscale_config_.IsFilterEnabled;
+    }
+    set {
+      if (swscale_config_.IsFilterEnabled != value) {
+        swscale_config_.IsFilterEnabled = value;
+        OnPropertyChanged("SWScaleConfigIsFilterEnabled");
+      }
+    }
+  }
+  public Single SWScaleConfigLumaGBlur {
+    get {
+      return swscale_config_.LumaGBlur;
+    }
+    set {
+      if (swscale_config_.LumaGBlur != value) {
+        swscale_config_.LumaGBlur = value;
+        OnPropertyChanged("SWScaleConfigLumaGBlur");
+      }
+    }
+  }
+  public Single SWScaleConfigChromaGBlur {
+    get {
+      return swscale_config_.ChromaGBlur;
+    }
+    set {
+      if (swscale_config_.ChromaGBlur != value) {
+        swscale_config_.ChromaGBlur = value;
+        OnPropertyChanged("SWScaleConfigChromaGBlur");
+      }
+    }
+  }
+  public Single SWScaleConfigLumaSharpen {
+    get {
+      return swscale_config_.LumaSharpen;
+    }
+    set {
+      if (swscale_config_.LumaSharpen != value) {
+        swscale_config_.LumaSharpen = value;
+        OnPropertyChanged("SWScaleConfigLumaSharpen");
+      }
+    }
+  }
+  public Single SWScaleConfigChromaSharpen {
+    get {
+      return swscale_config_.ChromaSharpen;
+    }
+    set {
+      if (swscale_config_.ChromaSharpen != value) {
+        swscale_config_.ChromaSharpen = value;
+        OnPropertyChanged("SWScaleConfigChromaSharpen");
+      }
+    }
+  }
+  public Single SWScaleConfigChromaHShift {
+    get {
+      return swscale_config_.ChromaHShift;
+    }
+    set {
+      if (swscale_config_.ChromaHShift != value) {
+        swscale_config_.ChromaHShift = value;
+        OnPropertyChanged("SWScaleConfigChromaHShift");
+      }
+    }
+  }
+  public Single SWScaleConfigChromaVShift {
+    get {
+      return swscale_config_.ChromaVShift;
+    }
+    set {
+      if (swscale_config_.ChromaVShift != value) {
+        swscale_config_.ChromaVShift = value;
+        OnPropertyChanged("SWScaleConfigChromaVShift");
+      }
+    }
+  }
+
+  //-------------------------------------------------------------------
 
   public Boolean Stretch {
     get {
@@ -252,6 +357,16 @@ partial class LayoutParameter : INotifyPropertyChanged {
     }
   }
   Boolean fit_;
+
+  //-------------------------------------------------------------------
+  // 表示用
+  //-------------------------------------------------------------------
+
+  /// @brief レイアウトの名前代わりに使用するWindowのクラス名
+  public string WindowText { get; private set; }
+
+  /// @brief Windowの大きさ
+  public Size WindowSize { get; private set; }
 
   //-------------------------------------------------------------------
 

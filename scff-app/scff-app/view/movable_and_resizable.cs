@@ -15,10 +15,10 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file scff-app/gui/movable_and_resizable.cs
+/// @file scff-app/view/movable_and_resizable.cs
 /// @brief コントロールに対し、ドラッグでの移動/リサイズ機能を付加するためのクラスの定義
 
-namespace scff_app.gui {
+namespace scff_app.view {
 
 using System;
 using System.Drawing;

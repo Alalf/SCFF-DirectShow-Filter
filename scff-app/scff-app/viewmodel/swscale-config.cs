@@ -15,14 +15,15 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file scff-app/data/swscale-config-factory.cs
-/// @brief scff_*.SWScaleConfig生成・変換用メソッドの定義
+/// @file scff-app/viewmodel/swscale-config.cs
+/// @brief scff_app.viewmodel.SWScaleConfigのメソッドの定義
 
-namespace scff_app.data {
+namespace scff_app.viewmodel {
 
 using System;
+using System.Collections.Generic;
 
-// scff_interprocess.SWScaleConfigをマネージドクラス化したクラス
+// scff_interprocess.SWScaleConfigのビューモデル
 partial class SWScaleConfig {
 
   /// @brief デフォルトコンストラクタ

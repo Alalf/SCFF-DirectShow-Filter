@@ -15,8 +15,8 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file Form1.cs
-/// @brief Form1のUIに関連するメソッドの定義
+/// @file SCFFAppForm.cs
+/// @brief SCFFAppFormのUIに関連するメソッドの定義
 /// @todo(progre) 移植未達部分が完了次第名称含め全体をリファクタリング
 
 namespace scff_app {
@@ -25,13 +25,13 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 
-using scff_app.gui;
+using scff_app.view;
 
 /// @brief メインウィンドウ
-public partial class Form1 : Form {
+public partial class SCFFAppForm : Form {
 
   /// @brief コンストラクタ
-  public Form1() {
+  public SCFFAppForm() {
     //---------------------------------------------------------------
     // DO NOT DELETE THIS!!!
     InitializeComponent();
@@ -49,7 +49,7 @@ public partial class Form1 : Form {
   // フォーム
   //-------------------------------------------------------------------
 
-  private void Form1_Load(object sender, EventArgs e) {
+  private void SCFFAppForm_Load(object sender, EventArgs e) {
     // リサイズメソッドのコンボボックスのデータソースを設定
     this.resizeMethodList.DisplayMember = "Value";
     this.resizeMethodList.ValueMember = "Key";
@@ -58,7 +58,7 @@ public partial class Form1 : Form {
     app_.OnLoad();
   }
 
-  private void Form1_Shown(object sender, EventArgs e) {
+  private void SCFFAppForm_Shown(object sender, EventArgs e) {
     // 起動時のチェック
     if (!app_.CheckEnvironment()) {
       this.Close();
@@ -69,7 +69,7 @@ public partial class Form1 : Form {
     app_.DWMAPIOff();
   }
 
-  private void Form1_FormClosed(object sender, FormClosedEventArgs e) {
+  private void SCFFAppForm_FormClosed(object sender, FormClosedEventArgs e) {
     // Aeroの状態を元に戻す
     app_.DWMAPIRestore();
   }

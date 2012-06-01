@@ -22,12 +22,12 @@ namespace scff_app {
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
 using Microsoft.Win32;
-  using System.Diagnostics;
 
-/// @brief Form1(メインウィンドウ)から利用する実装クラス
+/// @brief SCFFAppForm(メインウィンドウ)から利用する実装クラス
 partial class SCFFApp {
 
   // 定数
@@ -37,6 +37,22 @@ partial class SCFFApp {
   const string kSCFFSourceGUID = "D64DB8AA-9055-418F-AFE9-A080A4FAE47A";
   const string kRegistryKey = "CLSID\\{" + kSCFFSourceGUID + "}";
 
+  /// @brief ResizeMethodコンボボックス用リスト
+  static SortedList<scff_interprocess.SWScaleFlags, string> kResizeMethodSortedList =
+      new SortedList<scff_interprocess.SWScaleFlags, string> {
+    {scff_interprocess.SWScaleFlags.kFastBilinear, "FastBilinear (fast bilinear)"},
+    {scff_interprocess.SWScaleFlags.kBilinear, "Bilinear (bilinear)"},
+    {scff_interprocess.SWScaleFlags.kBicubic, "Bicubic (bicubic)"},
+    {scff_interprocess.SWScaleFlags.kX, "X (experimental)"},
+    {scff_interprocess.SWScaleFlags.kPoint, "Point (nearest neighbor)"},
+    {scff_interprocess.SWScaleFlags.kArea, "Area (averaging area)"},
+    {scff_interprocess.SWScaleFlags.kBicublin, "Bicublin (luma bicubic, chroma bilinear)"},
+    {scff_interprocess.SWScaleFlags.kGauss, "Gauss (gaussian)"},
+    {scff_interprocess.SWScaleFlags.kSinc, "Sinc (sinc)"},
+    {scff_interprocess.SWScaleFlags.kLanczos, "Lanczos (lanczos)"},
+    {scff_interprocess.SWScaleFlags.kSpline, "Spline (natural bicubic spline)"}
+  };
+
   //-------------------------------------------------------------------
 
   /// @brief コンストラクタ
@@ -45,8 +61,11 @@ partial class SCFFApp {
     layout_parameters_ = layout_parameters;
 
     interprocess_ = new scff_interprocess.Interprocess();
-    directory_ = new data.Directory();
-    message_ = new data.Message();
+    directory_ = new viewmodel.Directory();
+    message_ = new viewmodel.Message();
+
+    resize_method_list_ =
+        new List<KeyValuePair<scff_interprocess.SWScaleFlags,string>>(kResizeMethodSortedList);
   }
 
   /// @brief メインフォームのLoad時に呼ばれることを想定
@@ -155,9 +174,7 @@ partial class SCFFApp {
   //-------------------------------------------------------------------
 
   public List<KeyValuePair<scff_interprocess.SWScaleFlags,string>> ResizeMethodList {
-    get {
-      return new List<KeyValuePair<scff_interprocess.SWScaleFlags,string>>(data.SWScaleConfig.ResizeMethodList);
-    }
+    get { return resize_method_list_; }
   }
 
   //-------------------------------------------------------------------
@@ -190,7 +207,7 @@ partial class SCFFApp {
       return;
     }
 
-    data.Entry current_entry = (data.Entry)entries_.Current;
+    viewmodel.Entry current_entry = (viewmodel.Entry)entries_.Current;
 
     try {
       /// @warning DWORD->int変換！オーバーフローの可能性あり
@@ -230,12 +247,12 @@ partial class SCFFApp {
   //-------------------------------------------------------------------
 
   public void SetDesktopWindow() {
-    ((data.LayoutParameter)layout_parameters_.Current).SetWindow(ExternalAPI.GetDesktopWindow());
+    ((viewmodel.LayoutParameter)layout_parameters_.Current).SetWindow(ExternalAPI.GetDesktopWindow());
   }
 
   public void SetWindowFromPoint(int screen_x, int screen_y) {
     UIntPtr window = ExternalAPI.WindowFromPoint(screen_x, screen_y);
-    ((data.LayoutParameter)layout_parameters_.Current).SetWindow(window);
+    ((viewmodel.LayoutParameter)layout_parameters_.Current).SetWindow(window);
   }
 
   //===================================================================
@@ -246,7 +263,9 @@ partial class SCFFApp {
   BindingSource layout_parameters_;
 
   scff_interprocess.Interprocess interprocess_;
-  data.Directory directory_;
-  data.Message message_;
+  viewmodel.Directory directory_;
+  viewmodel.Message message_;
+
+  List<KeyValuePair<scff_interprocess.SWScaleFlags,string>> resize_method_list_;
 }
 }   // namespace scff_app

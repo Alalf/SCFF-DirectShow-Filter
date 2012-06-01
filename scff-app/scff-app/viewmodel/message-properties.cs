@@ -15,30 +15,19 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file scff-app/data/message-factory.cs
-/// @brief scff_*.Message生成・変換用メソッドの定義
+/// @file scff-app/viewmodel/message-properties.cs
+/// @brief scff_app.viewmodel.Messageのプロパティの定義
 
-namespace scff_app.data {
+namespace scff_app.viewmodel {
 
 using System;
 using System.Collections.Generic;
 
-// scff_inteprocess.Messageをマネージドクラス化したクラス
+/// @brief scff_inteprocess.Messageのビューモデル
 partial class Message {
-
-  /// @brief デフォルトコンストラクタ
-  public Message() {
-    this.Init();
-  }
-
-  //-------------------------------------------------------------------
-
-  /// @brief デフォルトパラメータを設定
-  void Init() {
-    this.Timestamp = DateTime.Now.Ticks;
-    this.LayoutType = scff_interprocess.LayoutType.kNullLayout;
-    this.LayoutElementCount = 0;
-    this.LayoutParameters = new List<LayoutParameter>();
-  }
+  public Int64 Timestamp { get; set; }
+  public scff_interprocess.LayoutType LayoutType { get; set; }
+  public Int32 LayoutElementCount { get; set; }
+  public List<LayoutParameter> LayoutParameters { get; set; }
 }
 }

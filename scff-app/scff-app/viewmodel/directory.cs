@@ -15,16 +15,21 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file scff-app/data/directory-interprocess.cs
-/// @brief 共有メモリから現在のDirectoryを取得するメソッドの定義
+/// @file scff-app/viewmodel/directory.cs
+/// @brief scff_app.viewmodel.Directoryのメソッドの定義
 
-namespace scff_app.data {
+namespace scff_app.viewmodel {
 
 using System.Collections.Generic;
 using System.Collections;
 
-// scff_interprocess.Directoryをマネージドクラス化したクラス
+// scff_interprocess.Directoryのビューモデル
 partial class Directory {
+
+  /// @brief デフォルトコンストラクタ
+  public Directory() {
+    this.Init();
+  }
 
   /// @brief scff_interprocessから変換
   public void LoadFromInterprocess(scff_interprocess.Directory input) {
@@ -45,6 +50,13 @@ partial class Directory {
     foreach (Entry i in this.Entries) {
       entries.Add(i);
     }
+  }
+
+  //-------------------------------------------------------------------
+
+  /// @brief デフォルトパラメータを設定
+  void Init() {
+    this.Entries = new List<Entry>();
   }
 }
 }

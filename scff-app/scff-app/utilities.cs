@@ -20,8 +20,6 @@
 
 namespace scff_app {
 
-using System.Windows.Forms;
-
 // BindingSource用Extensionを使おうと試みたが、無駄なので消した
 
 }

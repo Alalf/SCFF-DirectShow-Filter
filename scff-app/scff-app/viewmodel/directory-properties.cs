@@ -15,14 +15,14 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file scff-app/data/directory.cs
-/// @brief scff_interprocess.Directoryをマネージドクラス化したクラスの定義
+/// @file scff-app/viewmodel/directory-properties.cs
+/// @brief scff_app.viewmodel.Directoryのプロパティの定義
 
-namespace scff_app.data {
+namespace scff_app.viewmodel {
 
 using System.Collections.Generic;
 
-/// @brief scff_interprocess.Directoryをマネージドクラス化したクラス
+/// @brief scff_interprocess.Directoryのビューモデル
 partial class Directory {
   public List<Entry> Entries { get; set; }
 }

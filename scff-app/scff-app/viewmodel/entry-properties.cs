@@ -15,19 +15,27 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file scff-app/data/message.cs
-/// @brief scff_interprocess.Messageをマネージドクラス化したクラスの定義
+/// @file scff-app/viewmodel/entry-properties.cs
+/// @brief scff_app.viewmodel.Entryのプロパティの定義
 
-namespace scff_app.data {
+namespace scff_app.viewmodel {
 
 using System;
-using System.Collections.Generic;
 
-/// @brief scff_inteprocess.Messageをマネージドクラス化したクラス
-partial class Message {
-  public Int64 Timestamp { get; set; }
-  public scff_interprocess.LayoutType LayoutType { get; set; }
-  public Int32 LayoutElementCount { get; set; }
-  public List<LayoutParameter> LayoutParameters { get; set; }
+/// @brief scff_interprocess.Entryのビューモデル
+partial class Entry {
+  public UInt32 ProcessID { get; set; }
+  public string ProcessName { get; set; }
+  public Int32 SampleWidth { get; set; }
+  public Int32 SampleHeight { get; set; }
+  public scff_interprocess.ImagePixelFormat SamplePixelFormat { get; set; }
+  public Double FPS { get; set; }
+
+  //-------------------------------------------------------------------
+
+  /// @brief コンボボックス表示用
+  public string ProcessInformation {
+    get { return ToString(); }
+  }
 }
 }

@@ -1,5 +1,5 @@
 ﻿namespace scff_app {
-  partial class Form1 {
+  partial class SCFFAppForm {
     /// <summary>
     /// 必要なデザイナー変数です。
     /// </summary>
@@ -24,7 +24,7 @@
     /// </summary>
     private void InitializeComponent() {
       this.components = new System.ComponentModel.Container();
-      System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+      System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SCFFAppForm));
       this.mainMenuStrip = new System.Windows.Forms.MenuStrip();
       this.toolsMenu = new System.Windows.Forms.ToolStripMenuItem();
       this.convertToScreen = new System.Windows.Forms.ToolStripMenuItem();
@@ -259,7 +259,7 @@
       // 
       // layoutParameters
       // 
-      this.layoutParameters.DataSource = typeof(scff_app.data.LayoutParameter);
+      this.layoutParameters.DataSource = typeof(scff_app.viewmodel.LayoutParameter);
       this.layoutParameters.ListChanged += new System.ComponentModel.ListChangedEventHandler(this.layoutParameters_ListChanged);
       // 
       // windowDesktop
@@ -679,7 +679,7 @@
       // 
       // entries
       // 
-      this.entries.DataSource = typeof(scff_app.data.Entry);
+      this.entries.DataSource = typeof(scff_app.viewmodel.Entry);
       this.entries.ListChanged += new System.ComponentModel.ListChangedEventHandler(this.entries_ListChanged);
       // 
       // kLayoutBoundRelativeRight
@@ -1467,7 +1467,7 @@
       this.kProfilePanel.Size = new System.Drawing.Size(195, 31);
       this.kProfilePanel.TabIndex = 29;
       // 
-      // Form1
+      // SCFFAppForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -1486,11 +1486,11 @@
       this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
       this.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
       this.MaximizeBox = false;
-      this.Name = "Form1";
+      this.Name = "SCFFAppForm";
       this.Text = "SCFF DirectShow Filter Ver.0.1.0";
-      this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
-      this.Load += new System.EventHandler(this.Form1_Load);
-      this.Shown += new System.EventHandler(this.Form1_Shown);
+      this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.SCFFAppForm_FormClosed);
+      this.Load += new System.EventHandler(this.SCFFAppForm_Load);
+      this.Shown += new System.EventHandler(this.SCFFAppForm_Shown);
       this.mainMenuStrip.ResumeLayout(false);
       this.mainMenuStrip.PerformLayout();
       ((System.ComponentModel.ISupportInitialize)(this.layoutBoundRelativeBottom)).EndInit();

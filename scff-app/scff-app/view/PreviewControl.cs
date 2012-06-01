@@ -15,15 +15,15 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file scff-app/gui/PreviewControl.cs
+/// @file scff-app/view/PreviewControl.cs
 /// @brief LayoutForm内で使用するプレビューコントロールの定義
 
-namespace scff_app.gui {
+namespace scff_app.view {
 
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-using scff_app.data;
+using scff_app.viewmodel;
 
 /// @brief LayoutForm内で使用するプレビューコントロール
 partial class PreviewControl : UserControl {

@@ -21,11 +21,16 @@
 namespace scff_app {
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.Serialization;
 using System.Windows.Forms;
+using System.Xml;
 using Microsoft.Win32;
+  using System.Text;
+  using System.ComponentModel;
 
 /// @brief SCFFAppForm(メインウィンドウ)から利用する実装クラス
 partial class SCFFApp {
@@ -36,6 +41,9 @@ partial class SCFFApp {
   public const int kMaxLayoutElements = scff_interprocess.Interprocess.kMaxComplexLayoutElements;
   const string kSCFFSourceGUID = "D64DB8AA-9055-418F-AFE9-A080A4FAE47A";
   const string kRegistryKey = "CLSID\\{" + kSCFFSourceGUID + "}";
+
+  const string kDefaultProfileName = "DEFAULT";
+  const string kSeparator = "----------------------";
 
   /// @brief ResizeMethodコンボボックス用リスト
   static SortedList<scff_interprocess.SWScaleFlags, string> kResizeMethodSortedList =
@@ -66,6 +74,12 @@ partial class SCFFApp {
 
     resize_method_list_ =
         new List<KeyValuePair<scff_interprocess.SWScaleFlags,string>>(kResizeMethodSortedList);
+
+    profiles_path_ = Application.UserAppDataPath + "\\profiles\\";
+    profile_list_ = new BindingList<string>();
+    known_types_ = new List<Type> {
+      typeof(viewmodel.LayoutParameter)
+    };
   }
 
   /// @brief メインフォームのLoad時に呼ばれることを想定
@@ -73,8 +87,9 @@ partial class SCFFApp {
     // ディレクトリとBindingSourceを共有メモリから更新
     UpdateDirectory();
 
-    // BindingSourceにレイアウトをひとつだけ追加しておく
-    layout_parameters_.AddNew();
+    // プロファイルリストを読み込む
+    UpdateProfileList();
+    LoadDefaultProfile();
   }
 
   /// @brief 起動時のチェックを行うメソッド
@@ -255,6 +270,147 @@ partial class SCFFApp {
     ((viewmodel.LayoutParameter)layout_parameters_.Current).SetWindow(window);
   }
 
+  //-------------------------------------------------------------------
+  // Profile
+  //-------------------------------------------------------------------
+
+  void UpdateProfileList() {
+    profile_list_.Clear();
+
+    // DEFAULTと罫線を追加する
+    profile_list_.Add(kDefaultProfileName);
+    profile_list_.Add(kSeparator);
+
+    // プロファイルディレクトリが存在するかを確認する
+    if (!Directory.Exists(profiles_path_)) {
+      return;
+    }
+
+    // ディレクトリからプロファイル一覧を取得する
+    string[] profile_filename_list = Directory.GetFiles(profiles_path_);
+    foreach (string filename in profile_filename_list) {
+      profile_list_.Add(Path.GetFileNameWithoutExtension(filename));
+    }
+  }
+
+  void LoadDefaultProfile() {
+    // DataSourceの更新
+    layout_parameters_.Clear();
+    layout_parameters_.AddNew();
+  }
+
+  void LoadCustomProfile(string profile_name) {
+    // XMLファイルから読み込み
+    string profile_file_path = profiles_path_ + profile_name + ".xml";
+    object[] loaded_array;
+    using (XmlTextReader reader = new XmlTextReader(profile_file_path)) {
+      DataContractSerializer serializer = new DataContractSerializer(typeof(IList), known_types_);
+      loaded_array = (object[])serializer.ReadObject(reader);
+    }
+
+    // DataSourceの更新
+    layout_parameters_.Clear();
+    foreach (viewmodel.LayoutParameter i in loaded_array) {
+      layout_parameters_.Add(i);
+    }
+  }
+
+  public bool ValidProfileName(string profile_name) {
+    if (profile_name == "" || profile_name == kSeparator) {
+      // プロファイル名が不正
+      return false;
+    }
+
+    if (profile_name == kDefaultProfileName) {
+      // デフォルトなのでカスタムではない
+      return false;
+    }
+
+    return true;
+  }
+
+  public bool LoadProfile(string profile_name) {
+    if (profile_name == "" || profile_name == kSeparator) {
+      // プロファイル名が不正
+      return false;
+    }
+
+    if (profile_name == kDefaultProfileName) {
+      // デフォルトを読み込む
+      LoadDefaultProfile();
+      return true;
+    }
+
+    if (!profile_list_.Contains(profile_name)) {
+      // カスタムプロファイルが存在しない
+      return false;
+    }
+
+    LoadCustomProfile(profile_name);
+    return true;
+  }
+
+  public bool AddProfile(string profile_name) {
+    if (profile_name == "" || profile_name == kSeparator) {
+      // プロファイル名が不正
+      return false;
+    }
+
+    if (profile_name == kDefaultProfileName) {
+      // デフォルトは置き換えられない
+      return false;
+    }
+
+    // ディレクトリ生成
+    Directory.CreateDirectory(profiles_path_);
+
+    // XMLファイルを書き込み
+    string profile_file_path = profiles_path_ + profile_name + ".xml";
+    using (XmlTextWriter writer = new XmlTextWriter(profile_file_path, System.Text.Encoding.Unicode)) {
+      writer.Formatting = System.Xml.Formatting.Indented;
+
+      DataContractSerializer serializer = new DataContractSerializer(typeof(IList), known_types_);
+      serializer.WriteObject(writer, layout_parameters_);
+    }
+
+    if (!profile_list_.Contains(profile_name)) {
+      // リストにない場合だけ追加する
+      profile_list_.Add(profile_name);
+    }
+
+    return true;
+  }
+
+  public bool RemoveProfile(string profile_name) {
+    if (profile_name == "" || profile_name == kSeparator) {
+      // プロファイル名が不正
+      return false;
+    }
+
+    if (profile_name == kDefaultProfileName) {
+      // デフォルトは消せない
+      return false;
+    }
+
+    if (!profile_list_.Contains(profile_name)) {
+      // リストにない場合はなにもしない
+      return false;
+    }
+
+    // ファイルを消す
+    string profile_file_path = profiles_path_ + profile_name + ".xml";
+    File.Delete(profile_file_path);
+
+    // リストからも消す
+    profile_list_.Remove(profile_name);
+
+    return true;
+  }
+
+  public BindingList<string> ProfileList {
+    get { return profile_list_; }
+  }
+
   //===================================================================
   // メンバ変数
   //===================================================================
@@ -267,5 +423,9 @@ partial class SCFFApp {
   viewmodel.Message message_;
 
   List<KeyValuePair<scff_interprocess.SWScaleFlags,string>> resize_method_list_;
+
+  readonly string profiles_path_;
+  BindingList<string> profile_list_;
+  List<Type> known_types_;
 }
 }   // namespace scff_app

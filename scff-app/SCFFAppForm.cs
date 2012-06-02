@@ -59,6 +59,9 @@ public partial class SCFFAppForm : Form {
     this.resizeMethodList.DataSource = app_.ResizeMethodList;
 
     app_.OnLoad();
+
+    // プロファイルリストのコンボボックスのデータソースを設定
+    this.profileList.DataSource = app_.ProfileList;
   }
 
   private void SCFFAppForm_Shown(object sender, EventArgs e) {
@@ -115,7 +118,33 @@ public partial class SCFFAppForm : Form {
   //-------------------------------------------------------------------
   // Layout Profile
   //-------------------------------------------------------------------
+
+  private void profileLoad_Click(object sender, EventArgs e) {
+    string profile_name = this.profileList.Text; 
+    bool no_error = app_.LoadProfile(profile_name);
+    if (!no_error) {
+      MessageBox.Show("Cannot load profile: " + profile_name);
+    }
+  }
+
   private void profileAdd_Click(object sender, EventArgs e) {
+    string profile_name = (string)this.profileList.Text;
+    if (!app_.ValidProfileName(profile_name)) {
+      MessageBox.Show("Invalid profile name: " + profile_name);
+      return;
+    }
+
+    bool no_error = app_.AddProfile(profile_name);
+    if (no_error) {
+      this.profileList.SelectedItem = profile_name;
+    }
+  }
+
+  private void profileRemove_Click(object sender, EventArgs e) {
+    string profile_name = (string)this.profileList.Text;
+    bool no_error = app_.RemoveProfile(profile_name);
+    if (no_error) {
+    }
   }
 
   //-------------------------------------------------------------------

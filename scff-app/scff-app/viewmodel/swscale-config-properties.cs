@@ -23,6 +23,7 @@ namespace scff_app.viewmodel {
 using System;
 
 /// @brief scff_interprocess.SWScaleConfigのビューモデル
+[Serializable]
 partial class SWScaleConfig {
   public scff_interprocess.SWScaleFlags Flags { get; set; }
   public Boolean AccurateRnd { get; set; }

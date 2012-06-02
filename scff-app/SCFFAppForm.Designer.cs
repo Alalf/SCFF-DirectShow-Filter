@@ -112,6 +112,9 @@
       this.layoutEdit = new System.Windows.Forms.ToolStripButton();
       this.kProcessPanel = new System.Windows.Forms.Panel();
       this.kProfilePanel = new System.Windows.Forms.Panel();
+      this.profileLoad = new System.Windows.Forms.Button();
+      this.profileRemove = new System.Windows.Forms.Button();
+      this.profileAdd = new System.Windows.Forms.Button();
       this.mainTimer = new System.Windows.Forms.Timer(this.components);
       this.mainMenuStrip.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.layoutBoundRelativeBottom)).BeginInit();
@@ -717,7 +720,7 @@
       this.kTarget.Controls.Add(this.kArea);
       this.kTarget.Controls.Add(this.kWindow);
       this.kTarget.Font = new System.Drawing.Font("MS UI Gothic", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-      this.kTarget.Location = new System.Drawing.Point(5, 93);
+      this.kTarget.Location = new System.Drawing.Point(4, 97);
       this.kTarget.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
       this.kTarget.Name = "kTarget";
       this.kTarget.Padding = new System.Windows.Forms.Padding(6, 3, 6, 8);
@@ -836,7 +839,7 @@
       this.kOption.AutoSize = true;
       this.kOption.Controls.Add(this.kOptionTable);
       this.kOption.Font = new System.Drawing.Font("MS UI Gothic", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-      this.kOption.Location = new System.Drawing.Point(5, 294);
+      this.kOption.Location = new System.Drawing.Point(4, 298);
       this.kOption.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
       this.kOption.Name = "kOption";
       this.kOption.Padding = new System.Windows.Forms.Padding(6, 3, 6, 8);
@@ -1003,16 +1006,17 @@
       // 
       // profileList
       // 
-      this.profileList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-      this.profileList.Enabled = false;
       this.profileList.Font = new System.Drawing.Font("MS UI Gothic", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
       this.profileList.FormattingEnabled = true;
-      this.profileList.Location = new System.Drawing.Point(6, 5);
+      this.profileList.Items.AddRange(new object[] {
+            "testProfile1",
+            "testProfile2",
+            "testProfile3"});
+      this.profileList.Location = new System.Drawing.Point(0, 5);
       this.profileList.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
       this.profileList.Name = "profileList";
-      this.profileList.Size = new System.Drawing.Size(183, 19);
+      this.profileList.Size = new System.Drawing.Size(120, 19);
       this.profileList.TabIndex = 5;
-      this.profileList.Visible = false;
       // 
       // kLayoutBoundTable
       // 
@@ -1069,7 +1073,7 @@
       this.kResizeMethod.Controls.Add(this.kResizeMethodFilter);
       this.kResizeMethod.Controls.Add(this.kResizeMethodTable);
       this.kResizeMethod.Font = new System.Drawing.Font("MS UI Gothic", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-      this.kResizeMethod.Location = new System.Drawing.Point(5, 405);
+      this.kResizeMethod.Location = new System.Drawing.Point(4, 409);
       this.kResizeMethod.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
       this.kResizeMethod.Name = "kResizeMethod";
       this.kResizeMethod.Padding = new System.Windows.Forms.Padding(6, 3, 6, 8);
@@ -1374,7 +1378,7 @@
       this.kMainButtonPanel.Controls.Add(this.autoApply);
       this.kMainButtonPanel.Controls.Add(this.splash);
       this.kMainButtonPanel.Font = new System.Drawing.Font("MS UI Gothic", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-      this.kMainButtonPanel.Location = new System.Drawing.Point(5, 570);
+      this.kMainButtonPanel.Location = new System.Drawing.Point(4, 574);
       this.kMainButtonPanel.Name = "kMainButtonPanel";
       this.kMainButtonPanel.Size = new System.Drawing.Size(275, 28);
       this.kMainButtonPanel.TabIndex = 26;
@@ -1385,7 +1389,7 @@
       this.kLayout.Controls.Add(this.kLayoutParametersNavigator);
       this.kLayout.Controls.Add(this.kLayoutBoundTable);
       this.kLayout.Font = new System.Drawing.Font("MS UI Gothic", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-      this.kLayout.Location = new System.Drawing.Point(284, 93);
+      this.kLayout.Location = new System.Drawing.Point(283, 97);
       this.kLayout.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
       this.kLayout.Name = "kLayout";
       this.kLayout.Padding = new System.Windows.Forms.Padding(6, 3, 6, 8);
@@ -1459,18 +1463,51 @@
       this.kProcessPanel.AutoSize = true;
       this.kProcessPanel.Controls.Add(this.processList);
       this.kProcessPanel.Controls.Add(this.processRefresh);
-      this.kProcessPanel.Location = new System.Drawing.Point(5, 60);
+      this.kProcessPanel.Location = new System.Drawing.Point(4, 64);
       this.kProcessPanel.Name = "kProcessPanel";
       this.kProcessPanel.Size = new System.Drawing.Size(275, 31);
       this.kProcessPanel.TabIndex = 28;
       // 
       // kProfilePanel
       // 
+      this.kProfilePanel.Controls.Add(this.profileLoad);
+      this.kProfilePanel.Controls.Add(this.profileRemove);
+      this.kProfilePanel.Controls.Add(this.profileAdd);
       this.kProfilePanel.Controls.Add(this.profileList);
-      this.kProfilePanel.Location = new System.Drawing.Point(284, 60);
+      this.kProfilePanel.Location = new System.Drawing.Point(283, 64);
       this.kProfilePanel.Name = "kProfilePanel";
       this.kProfilePanel.Size = new System.Drawing.Size(195, 31);
       this.kProfilePanel.TabIndex = 29;
+      // 
+      // profileLoad
+      // 
+      this.profileLoad.Image = global::scff_app.Properties.Resources.Go;
+      this.profileLoad.Location = new System.Drawing.Point(120, 4);
+      this.profileLoad.Name = "profileLoad";
+      this.profileLoad.Size = new System.Drawing.Size(23, 23);
+      this.profileLoad.TabIndex = 8;
+      this.profileLoad.UseVisualStyleBackColor = true;
+      this.profileLoad.Click += new System.EventHandler(this.profileLoad_Click);
+      // 
+      // profileRemove
+      // 
+      this.profileRemove.Image = global::scff_app.Properties.Resources.Remove;
+      this.profileRemove.Location = new System.Drawing.Point(168, 4);
+      this.profileRemove.Name = "profileRemove";
+      this.profileRemove.Size = new System.Drawing.Size(23, 23);
+      this.profileRemove.TabIndex = 7;
+      this.profileRemove.UseVisualStyleBackColor = true;
+      this.profileRemove.Click += new System.EventHandler(this.profileRemove_Click);
+      // 
+      // profileAdd
+      // 
+      this.profileAdd.Image = global::scff_app.Properties.Resources.Add;
+      this.profileAdd.Location = new System.Drawing.Point(144, 4);
+      this.profileAdd.Name = "profileAdd";
+      this.profileAdd.Size = new System.Drawing.Size(23, 23);
+      this.profileAdd.TabIndex = 6;
+      this.profileAdd.UseVisualStyleBackColor = true;
+      this.profileAdd.Click += new System.EventHandler(this.profileAdd_Click);
       // 
       // mainTimer
       // 
@@ -1652,6 +1689,9 @@
     private System.Windows.Forms.ToolStripButton layoutEdit;
     private System.Windows.Forms.ToolStripSeparator kLayoutSeparator;
     private System.Windows.Forms.Timer mainTimer;
+    private System.Windows.Forms.Button profileRemove;
+    private System.Windows.Forms.Button profileAdd;
+    private System.Windows.Forms.Button profileLoad;
 
 
 

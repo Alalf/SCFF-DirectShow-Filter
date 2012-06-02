@@ -26,6 +26,7 @@ using System.Drawing;
 using System.Text;
 
 /// @brief scff_inteprocess.LayoutParameterのビューモデル
+[Serializable]
 partial class LayoutParameter : INotifyPropertyChanged {
 
   public UIntPtr Window {
@@ -413,6 +414,7 @@ partial class LayoutParameter : INotifyPropertyChanged {
 
   #region INotifyPropertyChanged メンバー
 
+  [field:NonSerialized]
   public event PropertyChangedEventHandler PropertyChanged;
   void OnPropertyChanged(string name) {
     if (PropertyChanged != null) {

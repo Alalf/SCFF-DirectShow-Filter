@@ -43,11 +43,11 @@ partial class Message {
 
   /// @brief IListから値を読み込んで設定
   public void Load(IList layout_parameters) {
-    Debug.Assert(layout_parameters.Count >= 1);
-
     this.Timestamp = DateTime.Now.Ticks;
 
-    if (layout_parameters.Count == 1) {
+    if (layout_parameters.Count == 0) {
+      this.LayoutType = scff_interprocess.LayoutType.kNullLayout;
+    } else if (layout_parameters.Count == 1) {
       this.LayoutType = scff_interprocess.LayoutType.kNativeLayout;
     } else {
       this.LayoutType = scff_interprocess.LayoutType.kComplexLayout;

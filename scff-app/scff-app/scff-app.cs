@@ -23,14 +23,13 @@ namespace scff_app {
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Windows.Forms;
 using System.Xml;
 using Microsoft.Win32;
-using System.Text;
-using System.ComponentModel;
 
 /// @brief SCFFAppForm(メインウィンドウ)から利用する実装クラス
 partial class SCFFApp {
@@ -303,7 +302,9 @@ partial class SCFFApp {
     // XMLファイルから読み込み
     string profile_file_path = profiles_path_ + profile_name + ".xml";
     object[] loaded_array;
-    using (XmlTextReader reader = new XmlTextReader(profile_file_path)) {
+
+    using (FileStream file = new FileStream(profile_file_path, FileMode.Open))
+    using (XmlDictionaryReader reader = XmlDictionaryReader.CreateTextReader(file, XmlDictionaryReaderQuotas.Max)) {
       DataContractSerializer serializer = new DataContractSerializer(typeof(IList), known_types_);
       loaded_array = (object[])serializer.ReadObject(reader);
     }
@@ -366,9 +367,8 @@ partial class SCFFApp {
 
     // XMLファイルを書き込み
     string profile_file_path = profiles_path_ + profile_name + ".xml";
-    using (XmlTextWriter writer = new XmlTextWriter(profile_file_path, System.Text.Encoding.Unicode)) {
-      writer.Formatting = System.Xml.Formatting.Indented;
-
+    using (FileStream file = new FileStream(profile_file_path, FileMode.Create))
+    using (XmlDictionaryWriter writer = XmlDictionaryWriter.CreateTextWriter(file)) {
       DataContractSerializer serializer = new DataContractSerializer(typeof(IList), known_types_);
       serializer.WriteObject(writer, layout_parameters_);
     }

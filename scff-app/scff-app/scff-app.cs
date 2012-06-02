@@ -29,8 +29,8 @@ using System.Runtime.Serialization;
 using System.Windows.Forms;
 using System.Xml;
 using Microsoft.Win32;
-  using System.Text;
-  using System.ComponentModel;
+using System.Text;
+using System.ComponentModel;
 
 /// @brief SCFFAppForm(メインウィンドウ)から利用する実装クラス
 partial class SCFFApp {

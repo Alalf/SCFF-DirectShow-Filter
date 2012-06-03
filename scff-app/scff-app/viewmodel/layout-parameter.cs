@@ -56,26 +56,38 @@ partial class LayoutParameter {
     int modified_width = this.ClippingWidth;
     int modified_height = this.ClippingHeight;
 
-    if (this.ClippingX < 0) {
-      modified_width += this.ClippingX;
-      modified_x = 0;
-    }
-    if (this.ClippingY < 0) {
-      modified_height += this.ClippingY;
-      modified_y = 0;
-    }
-    if (this.ClippingX > this.WindowSize.Width) {
-      modified_x = this.WindowSize.Width - this.ClippingWidth;
-    }
-    if (this.ClippingY > this.WindowSize.Height) {
-      modified_y = this.WindowSize.Height - this.ClippingHeight;
+    // デスクトップウィンドウと普通のウィンドウで処理をわける
+    int bound_x = 0;
+    int bound_y = 0;
+    int bound_width = this.WindowSize.Width;
+    int bound_height = this.WindowSize.Height;
+    if (this.Window == ExternalAPI.GetDesktopWindow()) {
+      bound_x = ExternalAPI.GetSystemMetrics(ExternalAPI.SM_XVIRTUALSCREEN);
+      bound_y = ExternalAPI.GetSystemMetrics(ExternalAPI.SM_YVIRTUALSCREEN);
+      bound_width = ExternalAPI.GetSystemMetrics(ExternalAPI.SM_CXVIRTUALSCREEN);
+      bound_height = ExternalAPI.GetSystemMetrics(ExternalAPI.SM_CYVIRTUALSCREEN);
     }
 
-    if (modified_x + modified_width > this.WindowSize.Width) {
-      modified_width = this.WindowSize.Width - modified_x;
+    if (this.ClippingX < bound_x) {
+      modified_width += this.ClippingX;
+      modified_x = bound_x;
     }
-    if (modified_y + modified_height > this.WindowSize.Height) {
-      modified_height = this.WindowSize.Height - modified_y;
+    if (this.ClippingY < bound_y) {
+      modified_height += this.ClippingY;
+      modified_y = bound_y;
+    }
+    if (this.ClippingX > bound_width) {
+      modified_x = bound_width - this.ClippingWidth;
+    }
+    if (this.ClippingY > bound_height) {
+      modified_y = bound_height - this.ClippingHeight;
+    }
+
+    if (modified_x + modified_width > bound_width) {
+      modified_width = bound_width - modified_x;
+    }
+    if (modified_y + modified_height > bound_height) {
+      modified_height = bound_height - modified_y;
     }
 
     this.ClippingX = modified_x;

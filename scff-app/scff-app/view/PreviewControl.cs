@@ -29,33 +29,32 @@ using scff_app.viewmodel;
 partial class PreviewControl : UserControl {
 
   /// @brief コンストラクタ
-  public PreviewControl(int bound_width, int bound_height,
-                        int index, LayoutParameter layout_parameter) {
+  public PreviewControl(BindingSource layout_parameters, int index) {
     //---------------------------------------------------------------
     // DO NOT DELETE THIS!!!
     InitializeComponent();
     //---------------------------------------------------------------
 
     index_ = index;
-    layout_parameter_ = layout_parameter;
+    layout_parameters_ = layout_parameters;
 
-    movable_and_resizable_ = new MovableAndResizable(this, bound_width, bound_height);
+    movable_and_resizable_ = new MovableAndResizable(this);
 
     // Bitmap作成＋１回スクリーンキャプチャ
-    captured_bitmap_ = new Bitmap(layout_parameter_.ClippingWidth,
-                                  layout_parameter_.ClippingHeight);
+    LayoutParameter target_parameter = GetTargetParameter();
+    captured_bitmap_ = new Bitmap(target_parameter.ClippingWidth, target_parameter.ClippingHeight);
     ScreenCapture();
 
     info_font_ = new Font("Verdana", 10, FontStyle.Bold);
     info_point_f_ = new PointF(0, 0);
   }
 
-  //===================================================================
-  // プロパティ
-  //===================================================================
-
-  public int Index {
-    get { return index_; }
+  public void Apply() {
+    // 結果をBindingSourceに書き戻し
+    ((LayoutParameter)layout_parameters_[index_]).BoundRelativeLeft = this.RelativeLeft;
+    ((LayoutParameter)layout_parameters_[index_]).BoundRelativeTop = this.RelativeTop;
+    ((LayoutParameter)layout_parameters_[index_]).BoundRelativeRight =  this.RelativeRight;
+    ((LayoutParameter)layout_parameters_[index_]).BoundRelativeBottom = this.RelativeBottom;
   }
 
   //===================================================================
@@ -72,6 +71,13 @@ partial class PreviewControl : UserControl {
   //===================================================================
 
   private void PreviewControl_Load(object sender, EventArgs e) {
+    // 初期値を取得
+    LayoutParameter target_parameter = GetTargetParameter();
+    this.RelativeLeft = target_parameter.BoundRelativeLeft;
+    this.RelativeTop = target_parameter.BoundRelativeTop;
+    this.RelativeRight = target_parameter.BoundRelativeRight;
+    this.RelativeBottom = target_parameter.BoundRelativeBottom;
+
     // タイマーOn
     this.captureTimer.Enabled = true;
 
@@ -94,11 +100,12 @@ partial class PreviewControl : UserControl {
 
   private void PreviewControl_Paint(object sender, PaintEventArgs e) {
     // 描画位置を計算
+    LayoutParameter target_parameter = GetTargetParameter();
     int new_x, new_y, new_width, new_height;
     scff_imaging.Utilities.CalculateLayout(0,0,Width,Height,
         captured_bitmap_.Width, captured_bitmap_.Height,
-        layout_parameter_.Stretch,
-        layout_parameter_.KeepAspectRatio,
+        target_parameter.Stretch,
+        target_parameter.KeepAspectRatio,
         out new_x, out new_y, out new_width, out new_height);
     
     // しょうがないので枠は黒で塗りつぶす
@@ -127,11 +134,12 @@ partial class PreviewControl : UserControl {
   }
 
   private void fit_Click(object sender, EventArgs e) {
+    LayoutParameter target_parameter = GetTargetParameter();
     int padding_top, padding_bottom, padding_left, padding_right;
     scff_imaging.Utilities.CalculatePaddingSize(Width, Height,
         captured_bitmap_.Width, captured_bitmap_.Height,
-        layout_parameter_.Stretch,
-        layout_parameter_.KeepAspectRatio,
+        target_parameter.Stretch,
+        target_parameter.KeepAspectRatio,
         out padding_top, out padding_bottom, out padding_left, out padding_right);
 
     Size = new Size(Width - padding_left - padding_right, Height - padding_top - padding_bottom);
@@ -145,19 +153,25 @@ partial class PreviewControl : UserControl {
 
   //-------------------------------------------------------------------
 
+  LayoutParameter GetTargetParameter() {
+    return (LayoutParameter)layout_parameters_[index_];
+  }
+
   // プレビュー情報
   string PreviewInfo() {
+    LayoutParameter target_parameter = GetTargetParameter();
     string output = "[";
     output += (index_ + 1).ToString();
     output += "] ";
     output += Width.ToString() + "x" + Height.ToString();
-    output += " " + layout_parameter_.WindowText;
+    output += " " + target_parameter.WindowText;
     return output;
   }
 
   // スクリーンキャプチャ
   void ScreenCapture() {
-    UIntPtr window = layout_parameter_.Window;
+    LayoutParameter target_parameter = GetTargetParameter();
+    UIntPtr window = target_parameter.Window;
     if (!ExternalAPI.IsWindow(window)) {
       return;
     }
@@ -172,11 +186,77 @@ partial class PreviewControl : UserControl {
 
     // BitBlt
     ExternalAPI.BitBlt(captured_bitmap_dc, 0, 0, captured_bitmap_.Width, captured_bitmap_.Height,
-           window_dc, layout_parameter_.ClippingX, layout_parameter_.ClippingY, ExternalAPI.SRCCOPY);
+           window_dc, target_parameter.ClippingX, target_parameter.ClippingY, ExternalAPI.SRCCOPY);
     graphics.ReleaseHdc(captured_bitmap_dc);
     graphics.Dispose();
     
     ExternalAPI.ReleaseDC(window, window_dc);
+  }
+
+  //===================================================================
+  // プロパティ
+  //===================================================================
+
+  public int Index {
+    get { return index_; }
+  }
+
+  public Double RelativeLeft {
+    get {
+      if (this.Parent != null) {
+        return (this.Left * 100.0) / this.Parent.Width;
+      }
+      return 0.0;
+    }
+    set {
+      if (this.Parent != null) {
+        this.Left = (int)((value * this.Parent.Width) / 100.0);
+      }
+    }
+  }
+
+  public Double RelativeTop {
+    get {
+      if (this.Parent != null) {
+        return (this.Top * 100.0) / this.Parent.Height;
+      }
+      return 0.0;
+    }
+    set {
+      if (this.Parent != null) {
+        this.Top = (int)((value * this.Parent.Height) / 100.0);
+      }
+    }
+  }
+
+  public Double RelativeRight {
+    get {
+      if (this.Parent != null) {
+        return (this.Right * 100.0) / this.Parent.Width;
+      }
+      return 100.0;
+    }
+    set {
+      if (this.Parent != null) {
+        int right = (int)((value * this.Parent.Width) / 100.0);
+        this.Width = right - this.Left;
+      }
+    }
+  }
+
+  public Double RelativeBottom {
+    get {
+      if (this.Parent != null) {
+        return (this.Bottom * 100.0) / this.Parent.Height;
+      }
+      return 100.0;
+    }
+    set {
+      if (this.Parent != null) {
+        int bottom = (int)((value * this.Parent.Height) / 100.0);
+        this.Height = bottom - this.Top;
+      }
+    }
   }
 
   //===================================================================
@@ -185,7 +265,7 @@ partial class PreviewControl : UserControl {
 
   // レイアウトパラメータ
   int index_;
-  LayoutParameter layout_parameter_;
+  BindingSource layout_parameters_;
 
   // ウィンドウにドラッグによる移動・リサイズ機能を付加
   MovableAndResizable movable_and_resizable_;

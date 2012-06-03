@@ -37,13 +37,7 @@ public partial class AreaSelectForm : Form {
 
     layout_parameters_ = layoutParameters;
 
-    /// @todo(me) マルチモニタ対応
-    ExternalAPI.RECT window_rect;
-    ExternalAPI.GetClientRect(ExternalAPI.GetDesktopWindow(), out window_rect);
-    int bound_width = window_rect.right;
-    int bound_height = window_rect.bottom;
-
-    movable_and_resizable_ = new MovableAndResizable(this, bound_width, bound_height);
+    movable_and_resizable_ = new MovableAndResizable(this, Utilities.GetVirtualDesktopRectangle());
 
     // オリジナルの値を保持しておく
     LayoutParameter current = (LayoutParameter)layoutParameters.Current;

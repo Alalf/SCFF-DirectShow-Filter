@@ -20,6 +20,16 @@
 
 namespace scff_app {
 
-// BindingSource用Extensionを使おうと試みたが、無駄なので消した
+using System.Drawing;
 
+// BindingSource用Extensionを使おうと試みたが、無駄なので消した
+class Utilities {
+  internal static Rectangle GetVirtualDesktopRectangle() {
+    int x = ExternalAPI.GetSystemMetrics(ExternalAPI.SM_XVIRTUALSCREEN);
+    int y = ExternalAPI.GetSystemMetrics(ExternalAPI.SM_XVIRTUALSCREEN);
+    int width = ExternalAPI.GetSystemMetrics(ExternalAPI.SM_CXVIRTUALSCREEN);
+    int height = ExternalAPI.GetSystemMetrics(ExternalAPI.SM_CYVIRTUALSCREEN);
+    return new Rectangle(x, y, width, height);
+  }
+}
 }

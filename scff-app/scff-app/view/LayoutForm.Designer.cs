@@ -28,7 +28,7 @@
       this.remove = new System.Windows.Forms.ToolStripButton();
       this.cancel = new System.Windows.Forms.ToolStripButton();
       this.apply = new System.Windows.Forms.ToolStripButton();
-      this.layoutPanel = new System.Windows.Forms.Panel();
+      this.layoutPanel = new scff_app.view.LayoutPanel();
       this.mainToolBar.SuspendLayout();
       this.SuspendLayout();
       // 
@@ -42,7 +42,7 @@
             this.apply});
       this.mainToolBar.Location = new System.Drawing.Point(0, 0);
       this.mainToolBar.Name = "mainToolBar";
-      this.mainToolBar.Size = new System.Drawing.Size(34, 25);
+      this.mainToolBar.Size = new System.Drawing.Size(518, 25);
       this.mainToolBar.TabIndex = 0;
       this.mainToolBar.Text = "toolStrip1";
       // 
@@ -91,25 +91,23 @@
       // layoutPanel
       // 
       this.layoutPanel.BackColor = System.Drawing.Color.Black;
+      this.layoutPanel.DataMember = null;
+      this.layoutPanel.DataSource = null;
+      this.layoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
       this.layoutPanel.Location = new System.Drawing.Point(0, 25);
-      this.layoutPanel.Margin = new System.Windows.Forms.Padding(0);
       this.layoutPanel.Name = "layoutPanel";
-      this.layoutPanel.Size = new System.Drawing.Size(38, 39);
+      this.layoutPanel.Size = new System.Drawing.Size(518, 318);
       this.layoutPanel.TabIndex = 1;
       // 
       // LayoutForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.AutoSize = true;
-      this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-      this.ClientSize = new System.Drawing.Size(34, 61);
+      this.ClientSize = new System.Drawing.Size(518, 343);
       this.Controls.Add(this.layoutPanel);
       this.Controls.Add(this.mainToolBar);
       this.DataBindings.Add(new System.Windows.Forms.Binding("Location", global::scff_app.Properties.Settings.Default, "LayoutFormLocation", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-      this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
       this.Location = global::scff_app.Properties.Settings.Default.LayoutFormLocation;
-      this.MaximizeBox = false;
       this.MinimizeBox = false;
       this.Name = "LayoutForm";
       this.Text = "LayoutForm";
@@ -124,11 +122,11 @@
     #endregion
 
     private System.Windows.Forms.ToolStrip mainToolBar;
-    private System.Windows.Forms.Panel layoutPanel;
     private System.Windows.Forms.ToolStripButton add;
     private System.Windows.Forms.ToolStripButton remove;
     private System.Windows.Forms.ToolStripButton apply;
     private System.Windows.Forms.ToolStripButton cancel;
+    private LayoutPanel layoutPanel;
 
 
 

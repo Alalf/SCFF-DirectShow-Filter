@@ -482,11 +482,6 @@
             0,
             0,
             0});
-      this.areaClippingHeight.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
       this.areaClippingHeight.Name = "areaClippingHeight";
       this.areaClippingHeight.Size = new System.Drawing.Size(62, 18);
       this.areaClippingHeight.TabIndex = 8;
@@ -534,11 +529,6 @@
             0,
             0,
             0});
-      this.areaClippingWidth.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
       this.areaClippingWidth.Name = "areaClippingWidth";
       this.areaClippingWidth.Size = new System.Drawing.Size(61, 18);
       this.areaClippingWidth.TabIndex = 6;
@@ -560,6 +550,11 @@
             0,
             0,
             0});
+      this.areaClippingY.Minimum = new decimal(new int[] {
+            4095,
+            0,
+            0,
+            -2147483648});
       this.areaClippingY.Name = "areaClippingY";
       this.areaClippingY.Size = new System.Drawing.Size(62, 18);
       this.areaClippingY.TabIndex = 4;
@@ -594,11 +589,16 @@
             0,
             0,
             0});
+      this.areaClippingX.Minimum = new decimal(new int[] {
+            4095,
+            0,
+            0,
+            -2147483648});
       this.areaClippingX.Name = "areaClippingX";
       this.areaClippingX.Size = new System.Drawing.Size(61, 18);
       this.areaClippingX.TabIndex = 2;
       this.areaClippingX.Value = new decimal(new int[] {
-            1000,
+            100,
             0,
             0,
             0});

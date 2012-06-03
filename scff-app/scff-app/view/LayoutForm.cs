@@ -40,29 +40,6 @@ partial class LayoutForm : Form {
 
     entries_ = entries;
     layout_parameters_ = layoutParameters;
-
-    // Directoryから現在選択中のEntryを取得し、出力幅、高さを得る
-    Entry current_entry = (Entry)entries_.Current;
-    if (entries_.Count != 0) {
-      // 現在選択中のプロセスの幅、高さで調整
-      bound_width_ = current_entry.SampleWidth;
-      bound_height_ = current_entry.SampleHeight;
-    } else {
-      // プロセスがなくても一応ダミーの長さで調整可能
-      bound_width_ = SCFFApp.kDefaultBoundWidth;
-      bound_height_ = SCFFApp.kDefaultBoundHeight;
-    }
-
-    previews_ = new List<PreviewControl>();
-  }
-
-  //===================================================================
-  // オーバーライド
-  //===================================================================
-
-  protected override void OnPaintBackground(PaintEventArgs pevent) {
-    // 何もしない
-    // base.OnPaintBackground(pevent);
   }
 
   //===================================================================
@@ -70,29 +47,19 @@ partial class LayoutForm : Form {
   //===================================================================
 
   private void LayoutForm_Load(object sender, System.EventArgs e) {
-    /// @todo(me) 100%以外でも調整できるように
-    this.layoutPanel.Size = new Size(bound_width_, bound_height_);
-
-    int index = 0;
-    foreach (LayoutParameter i in layout_parameters_.List) {
-      // PreviewControlの生成
-      PreviewControl preview = new PreviewControl(bound_width_, bound_height_, index, i);
-      int x = (int)((i.BoundRelativeLeft * bound_width_) / 100);
-      int y = (int)((i.BoundRelativeTop * bound_height_) / 100);
-      int width = (int)(((i.BoundRelativeRight - i.BoundRelativeLeft) * bound_width_) / 100);
-      int height = (int)(((i.BoundRelativeBottom - i.BoundRelativeTop) * bound_height_) / 100);
-      preview.Location = new Point(x, y);
-      preview.Size = new Size(width, height);
-
-      // リストに追加しておく
-      previews_.Add(preview);
-
-      // パネルに配置(後から追加したものは前面へ)
-      this.layoutPanel.Controls.Add(preview);
-      preview.BringToFront();
-
-      ++index;
+    // Directoryから現在選択中のEntryを取得し、出力幅、高さを得る
+    Entry current_entry = (Entry)entries_.Current;
+    int bound_width = SCFFApp.kDefaultBoundWidth;
+    int bound_height = SCFFApp.kDefaultBoundHeight;
+    if (entries_.Count != 0) {
+      // 現在選択中のプロセスの幅、高さで調整
+      bound_width = current_entry.SampleWidth;
+      bound_height = current_entry.SampleHeight;
     }
+
+    // レイアウトパネルのサイズを調整
+    this.layoutPanel.Size = new Size(bound_width, bound_width);
+    this.layoutPanel.DataSource = layout_parameters_;
   }
 
   private void add_Click(object sender, System.EventArgs e) {
@@ -104,22 +71,7 @@ partial class LayoutForm : Form {
   }
 
   private void apply_Click(object sender, System.EventArgs e) {
-    // 値をPreviewControlから集めてBindingSourceに書き戻す
-    foreach(PreviewControl i in previews_) {
-      int index = i.Index;
-      double bound_relative_left = ((double)i.Left * 100.0) / bound_width_;
-      double bound_relative_right = ((double)i.Right * 100.0) / bound_width_;
-      double bound_relative_top = ((double)i.Top * 100.0) / bound_height_;
-      double bound_relative_bottom = ((double)i.Bottom * 100.0) / bound_height_;
-      ((LayoutParameter)layout_parameters_[index]).BoundRelativeLeft =
-          bound_relative_left;
-      ((LayoutParameter)layout_parameters_[index]).BoundRelativeRight =
-          bound_relative_right;
-      ((LayoutParameter)layout_parameters_[index]).BoundRelativeTop =
-          bound_relative_top;
-      ((LayoutParameter)layout_parameters_[index]).BoundRelativeBottom =
-          bound_relative_bottom;
-    }
+    this.layoutPanel.Apply();
 
     this.DialogResult = System.Windows.Forms.DialogResult.OK;
     Close();
@@ -136,10 +88,5 @@ partial class LayoutForm : Form {
 
   BindingSource entries_;
   BindingSource layout_parameters_;
-
-  readonly int bound_width_;
-  readonly int bound_height_;
-
-  List<PreviewControl> previews_;
 }
 }

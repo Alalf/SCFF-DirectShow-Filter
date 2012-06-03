@@ -55,17 +55,28 @@ class MovableAndResizable : IDisposable {
 
   //-------------------------------------------------------------------
 
-  /// @brief コンストラクタ
-  public MovableAndResizable(Control target, int bound_width, int bound_height) {
+  void Init(Control target) {
     target_ = target;
-    bound_width_ = bound_width;
-    bound_height_ = bound_height;
 
     // イベントハンドラの登録
     target_.MouseDown += target_MouseDown;
     target_.MouseMove += target_MouseMove;
     target_.MouseUp += target_MouseUp;
     target_.SizeChanged += target_SizeChanged;
+  }
+
+  /// @brief コンストラクタ
+  public MovableAndResizable(Control target) {
+    is_parent_exists_ = true;
+    bounds_ = new Rectangle();
+    Init(target);
+  }
+
+  /// @brief コンストラクタ
+  public MovableAndResizable(Control target, Rectangle bounds) {
+    is_parent_exists_ = false;
+    bounds_ = bounds;
+    Init(target);
   }
 
   /// @brief Dispose（GCを考慮したデストラクタ）
@@ -125,10 +136,17 @@ class MovableAndResizable : IDisposable {
       // 必ず境界内に収まるように
       int justified_container_x = current_container_location_.X;
       int justified_container_y = current_container_location_.Y;
-      justified_container_x = Math.Max(0, justified_container_x);
-      justified_container_x = Math.Min(bound_width_ - current_size_.Width, justified_container_x);
-      justified_container_y = Math.Max(0, justified_container_y);
-      justified_container_y = Math.Min(bound_height_ - current_size_.Height, justified_container_y);
+      if (is_parent_exists_) {
+        justified_container_x = Math.Max(0, justified_container_x);
+        justified_container_x = Math.Min(target_.Parent.Width - current_size_.Width, justified_container_x);
+        justified_container_y = Math.Max(0, justified_container_y);
+        justified_container_y = Math.Min(target_.Parent.Height - current_size_.Height, justified_container_y);
+      } else {
+        justified_container_x = Math.Max(bounds_.Left, justified_container_x);
+        justified_container_x = Math.Min(bounds_.Right - current_size_.Width, justified_container_x);
+        justified_container_y = Math.Max(bounds_.Top, justified_container_y);
+        justified_container_y = Math.Min(bounds_.Bottom - current_size_.Height, justified_container_y);
+      }
 
       // 実際にコントロールを移動
       target_.Location = new Point(justified_container_x, justified_container_y);
@@ -273,8 +291,9 @@ class MovableAndResizable : IDisposable {
   // メンバ変数
   //===================================================================
 
-  int bound_width_;
-  int bound_height_;
+  readonly bool is_parent_exists_;
+
+  Rectangle bounds_;
 
   Mode mode_;
   Point last_mouse_container_location_;

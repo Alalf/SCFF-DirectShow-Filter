@@ -89,6 +89,12 @@
     <Compile Include="scff-app\view\LayoutForm.designer.cs">
       <DependentUpon>LayoutForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="scff-app\view\LayoutPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="scff-app\view\LayoutPanel.Designer.cs">
+      <DependentUpon>LayoutPanel.cs</DependentUpon>
+    </Compile>
     <Compile Include="scff-app\view\PreviewControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -112,6 +118,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="scff-app\view\LayoutPanel.resx">
+      <DependentUpon>LayoutPanel.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SCFFAppForm.resx">
       <DependentUpon>SCFFAppForm.cs</DependentUpon>
       <SubType>Designer</SubType>

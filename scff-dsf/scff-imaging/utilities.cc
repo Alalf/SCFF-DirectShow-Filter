@@ -366,4 +366,12 @@ bool Utilities::CalculatePaddingSize(int bound_width, int bound_height,
   return true;
 }
 
+/// @brief 仮想デスクトップウィンドウの領域を求める
+void Utilities::GetVirtualDesktopWindowRegion(int *x, int *y,
+                                              int *width, int *height) {
+  *x = GetSystemMetrics(SM_XVIRTUALSCREEN);
+  *y = GetSystemMetrics(SM_YVIRTUALSCREEN);
+  *width = GetSystemMetrics(SM_CXVIRTUALSCREEN);
+  *height = GetSystemMetrics(SM_CYVIRTUALSCREEN);
+}
 }   // namespace scff_imaging

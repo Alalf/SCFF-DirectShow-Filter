@@ -117,6 +117,10 @@ class Utilities {
                                    bool stretch, bool keep_aspect_ratio,
                                    int *padding_top, int *padding_bottom,
                                    int *padding_left, int *padding_right);
+
+  /// @brief 仮想デスクトップウィンドウの領域を求める
+  static void GetVirtualDesktopWindowRegion(int *x, int *y,
+                                            int *width, int *height);
 };
 }   // namespace scff_imaging
 

@@ -49,6 +49,11 @@ class ExternalAPI {
     HTBOTTOMRIGHT = 17,
   }
 
+  internal const int SM_XVIRTUALSCREEN   = 76;
+  internal const int SM_YVIRTUALSCREEN   = 77;
+  internal const int SM_CXVIRTUALSCREEN  = 78;
+  internal const int SM_CYVIRTUALSCREEN  = 79;
+
   // Type
 
   [StructLayout(LayoutKind.Sequential)]
@@ -89,6 +94,9 @@ class ExternalAPI {
 
   [DllImport("user32.dll")]
   internal static extern bool InvalidateRect(UIntPtr hWnd, ref RECT lpRect, bool bErase);
+
+  [DllImport("user32.dll")]
+  internal static extern int GetSystemMetrics(int nIndex);
 
   //-------------------------------------------------------------------
   // gdi32.dll

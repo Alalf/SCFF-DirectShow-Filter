@@ -58,7 +58,7 @@ partial class LayoutForm : Form {
     }
 
     // レイアウトパネルのサイズを調整
-    this.layoutPanel.Size = new Size(bound_width, bound_width);
+    this.layoutPanel.Size = new Size(bound_width, bound_height);
     this.layoutPanel.DataSource = layout_parameters_;
   }
 

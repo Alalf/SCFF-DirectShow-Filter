@@ -357,10 +357,6 @@ bool Utilities::CalculatePaddingSize(int bound_width, int bound_height,
   return true;
 }
 
-  /// @brief マルチモニタを考慮してウィンドウの領域を求める
-  static void GetWindowRectangle(HWND window, int *x, int *y,
-                                 int *width, int *height);
-
 // マルチモニタを考慮してウィンドウ領域を求める
 void Utilities::GetWindowRectangle(HWND window, int *x, int *y,
                                    int *width, int *height) {

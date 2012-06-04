@@ -362,8 +362,7 @@
       this.windowText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
       this.kWindowTable.SetColumnSpan(this.windowText, 2);
-      this.windowText.DataBindings.Add(new System.Windows.Forms.Binding("Tag", this.layoutParameters, "Window", true));
-      this.windowText.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.layoutParameters, "windowText", true));
+      this.windowText.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.layoutParameters, "WindowText", true));
       this.layoutParametersError.SetIconAlignment(this.windowText, System.Windows.Forms.ErrorIconAlignment.MiddleLeft);
       this.windowText.Location = new System.Drawing.Point(57, 3);
       this.windowText.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);

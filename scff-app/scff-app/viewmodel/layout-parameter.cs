@@ -52,53 +52,6 @@ partial class LayoutParameter : IDataErrorInfo {
     this.ClippingHeight = clipping_height;
   }
 
-  /// @brief 修正
-  public void ModifyClippingRegion() {
-    int modified_x = this.ClippingX;
-    int modified_y = this.ClippingY;
-    int modified_width = this.ClippingWidth;
-    int modified_height = this.ClippingHeight;
-
-    // デスクトップウィンドウと普通のウィンドウで処理をわける
-    int bound_x = 0;
-    int bound_y = 0;
-    int bound_width = this.WindowSize.Width;
-    int bound_height = this.WindowSize.Height;
-    if (this.Window == ExternalAPI.GetDesktopWindow()) {
-      bound_x = ExternalAPI.GetSystemMetrics(ExternalAPI.SM_XVIRTUALSCREEN);
-      bound_y = ExternalAPI.GetSystemMetrics(ExternalAPI.SM_YVIRTUALSCREEN);
-      bound_width = ExternalAPI.GetSystemMetrics(ExternalAPI.SM_CXVIRTUALSCREEN);
-      bound_height = ExternalAPI.GetSystemMetrics(ExternalAPI.SM_CYVIRTUALSCREEN);
-    }
-
-    if (this.ClippingX < bound_x) {
-      modified_width += this.ClippingX;
-      modified_x = bound_x;
-    }
-    if (this.ClippingY < bound_y) {
-      modified_height += this.ClippingY;
-      modified_y = bound_y;
-    }
-    if (this.ClippingX > bound_width) {
-      modified_x = bound_width - this.ClippingWidth;
-    }
-    if (this.ClippingY > bound_height) {
-      modified_y = bound_height - this.ClippingHeight;
-    }
-
-    if (modified_x + modified_width > bound_width) {
-      modified_width = bound_width - modified_x;
-    }
-    if (modified_y + modified_height > bound_height) {
-      modified_height = bound_height - modified_y;
-    }
-
-    this.ClippingX = modified_x;
-    this.ClippingY = modified_y;
-    this.ClippingWidth = modified_width;
-    this.ClippingHeight = modified_height;
-  }
-
   /// @brief scff_interprocess用に変換
   public scff_interprocess.LayoutParameter ToInterprocess(int bound_width, int bound_height) {
     scff_interprocess.LayoutParameter output = new scff_interprocess.LayoutParameter();
@@ -172,17 +125,8 @@ partial class LayoutParameter : IDataErrorInfo {
     }
 
     // クリッピングリージョンの判定
-    Rectangle bound_rectangle = new Rectangle(0,0,0,0);
+    Rectangle bound_rectangle = Utilities.GetWindowRectangle(this.Window);
     Rectangle clipping_rectangle = new Rectangle(this.ClippingX, this.ClippingY, this.ClippingWidth, this.ClippingHeight);
-    if (this.Window == ExternalAPI.GetDesktopWindow()) {
-      // デスクトップの場合
-      bound_rectangle = Utilities.GetVirtualDesktopRectangle();
-    } else if (ExternalAPI.IsWindow(this.Window)) {
-      // 通常のウィンドウの場合
-      ExternalAPI.RECT window_rect;
-      ExternalAPI.GetClientRect(this.Window, out window_rect);
-      bound_rectangle = new Rectangle(window_rect.left, window_rect.top, window_rect.right, window_rect.bottom);
-    }
     if (!bound_rectangle.Contains(clipping_rectangle)) {
       // bound_rectangleが(0,0,0,0)なら必ず実行される
       errors_["ClippingX"] = "Clipping-x is invalid";

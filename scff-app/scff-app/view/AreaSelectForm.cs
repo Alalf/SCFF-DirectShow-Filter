@@ -37,28 +37,19 @@ public partial class AreaSelectForm : Form {
 
     layout_parameters_ = layoutParameters;
 
-    movable_and_resizable_ = new MovableAndResizable(this, Utilities.GetVirtualDesktopRectangle());
+    movable_and_resizable_ = new MovableAndResizable(this, Utilities.GetWindowRectangle(ExternalAPI.GetDesktopWindow()));
 
     // オリジナルの値を保持しておく
     LayoutParameter current = (LayoutParameter)layoutParameters.Current;
-    if (current.Window != ExternalAPI.GetDesktopWindow()) {
-      // ウィンドウ取り込み時はスクリーン座標に変換する
-      ExternalAPI.RECT window_rect;
-      ExternalAPI.GetClientRect(current.Window, out window_rect);
-      ExternalAPI.POINT window_origin;
-      window_origin.x = 0;
-      window_origin.y = 0;
-      ExternalAPI.ClientToScreen(current.Window, ref window_origin);
-      original_x_ = window_origin.x;
-      original_y_ = window_origin.y;
-      original_width_ = window_rect.right - window_rect.left;
-      original_height_ = window_rect.bottom - window_rect.top;
-    } else {
-      // デスクトップ取り込み時はそのまま
-      original_x_ = current.ClippingX;
-      original_y_ = current.ClippingY;
-      original_width_ = current.ClippingWidth;
-      original_height_ = current.ClippingHeight;
+    original_x_ = current.ClippingX;
+    original_y_ = current.ClippingY;
+    original_width_ = current.ClippingWidth;
+    original_height_ = current.ClippingHeight;
+
+    // ウィンドウ取り込み時はスクリーン座標に変換する
+    if (current.Window != ExternalAPI.GetDesktopWindow() && ExternalAPI.IsWindow(current.Window)) {
+      Utilities.GetScreenClientRect(current.Window,
+          out original_x_, out original_y_, out original_width_, out original_height_);
     }
   }
 
@@ -73,24 +64,26 @@ public partial class AreaSelectForm : Form {
   }
 
   private void AreaSelectForm_DoubleClick(object sender, EventArgs e) {
+    Apply();
+
+    this.DialogResult = System.Windows.Forms.DialogResult.OK;
+    this.Close();
+  }
+
+  //-------------------------------------------------------------------
+
+  void Apply() {
     // HACK!: フォームの左上をスクリーン座標に変換
-    int window_screen_x, window_screen_y, window_width, window_height;
     Point origin = new Point(0, 0);
-    window_screen_x = PointToScreen(origin).X;
-    window_screen_y = PointToScreen(origin).Y;
-    window_width = this.Width;
-    window_height = this.Height;
+    int window_screen_x = PointToScreen(origin).X;
+    int window_screen_y = PointToScreen(origin).Y;
+    int window_width = this.Width;
+    int window_height = this.Height;
 
     // デスクトップ取り込みに変更
     ((LayoutParameter)layout_parameters_.Current).SetWindowWithClippingRegion(
         ExternalAPI.GetDesktopWindow(),
         window_screen_x, window_screen_y, window_width, window_height);
-
-    // 念のためウィンドウ幅を超えないように修正
-    ((LayoutParameter)layout_parameters_.Current).ModifyClippingRegion();
-
-    this.DialogResult = System.Windows.Forms.DialogResult.OK;
-    this.Close();
   }
 
   //===================================================================

@@ -20,16 +20,44 @@
 
 namespace scff_app {
 
+using System;
 using System.Drawing;
 
 // BindingSource用Extensionを使おうと試みたが、無駄なので消した
 class Utilities {
-  internal static Rectangle GetVirtualDesktopRectangle() {
-    int x = ExternalAPI.GetSystemMetrics(ExternalAPI.SM_XVIRTUALSCREEN);
-    int y = ExternalAPI.GetSystemMetrics(ExternalAPI.SM_XVIRTUALSCREEN);
-    int width = ExternalAPI.GetSystemMetrics(ExternalAPI.SM_CXVIRTUALSCREEN);
-    int height = ExternalAPI.GetSystemMetrics(ExternalAPI.SM_CYVIRTUALSCREEN);
-    return new Rectangle(x, y, width, height);
+  /// @brief マルチモニタを考慮してウィンドウ領域を求める
+  public static Rectangle GetWindowRectangle(UIntPtr window) {
+    Rectangle window_rectangle = new Rectangle(0, 0, 0, 0);
+    if (window == ExternalAPI.GetDesktopWindow()) {
+      window_rectangle.X = ExternalAPI.GetSystemMetrics(ExternalAPI.SM_XVIRTUALSCREEN);
+      window_rectangle.Y = ExternalAPI.GetSystemMetrics(ExternalAPI.SM_YVIRTUALSCREEN);
+      window_rectangle.Width = ExternalAPI.GetSystemMetrics(ExternalAPI.SM_CXVIRTUALSCREEN);
+      window_rectangle.Height = ExternalAPI.GetSystemMetrics(ExternalAPI.SM_CYVIRTUALSCREEN);
+    } else if (ExternalAPI.IsWindow(window)) {
+      ExternalAPI.RECT window_rect;
+      ExternalAPI.GetClientRect(window, out window_rect);
+      window_rectangle.X = window_rect.left;
+      window_rectangle.Y = window_rect.top;
+      window_rectangle.Width = window_rect.right - window_rect.left;
+      window_rectangle.Height = window_rect.bottom - window_rect.top;
+    }
+    return window_rectangle;
+  }
+
+  /// @brief クライアント領域のスクリーン座標を得る
+  public static void GetScreenClientRect(UIntPtr window,
+      out int screen_x, out int screen_y, out int width, out int height) {
+    ExternalAPI.RECT window_rect;
+    ExternalAPI.GetClientRect(window, out window_rect);
+    ExternalAPI.POINT window_screen_origin;
+    window_screen_origin.x = 0;
+    window_screen_origin.y = 0;
+    ExternalAPI.ClientToScreen(window, ref window_screen_origin);
+
+    screen_x = window_screen_origin.x;
+    screen_y = window_screen_origin.y;
+    width = window_rect.right - window_rect.left;
+    height = window_rect.bottom - window_rect.top;
   }
 }
 }

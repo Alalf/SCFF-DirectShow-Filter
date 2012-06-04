@@ -375,9 +375,9 @@ void Utilities::GetWindowRectangle(HWND window, int *x, int *y,
     *height = GetSystemMetrics(SM_CYVIRTUALSCREEN);
   } else if (IsWindow(window)) {
     RECT window_rect;
-    GetWindowRect(window, &window_rect);
-    *x = 0;
-    *y = 0;
+    GetClientRect(window, &window_rect);
+    *x = window_rect.left;
+    *y = window_rect.top;
     *width = window_rect.right - window_rect.left;
     *height = window_rect.bottom - window_rect.top;
   } 

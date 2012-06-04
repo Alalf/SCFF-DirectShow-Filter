@@ -43,12 +43,16 @@ public partial class AreaSelectForm : Form {
     LayoutParameter current = (LayoutParameter)layoutParameters.Current;
     if (current.Window != ExternalAPI.GetDesktopWindow()) {
       // ウィンドウ取り込み時はスクリーン座標に変換する
-      ExternalAPI.RECT window_screen_rect;
-      ExternalAPI.GetWindowRect(current.Window, out window_screen_rect);
-      original_x_ = window_screen_rect.left;
-      original_y_ = window_screen_rect.top;
-      original_width_ = window_screen_rect.right - window_screen_rect.left;
-      original_height_ = window_screen_rect.bottom - window_screen_rect.top;
+      ExternalAPI.RECT window_rect;
+      ExternalAPI.GetClientRect(current.Window, out window_rect);
+      ExternalAPI.POINT window_origin;
+      window_origin.x = 0;
+      window_origin.y = 0;
+      ExternalAPI.ClientToScreen(current.Window, ref window_origin);
+      original_x_ = window_origin.x;
+      original_y_ = window_origin.y;
+      original_width_ = window_rect.right - window_rect.left;
+      original_height_ = window_rect.bottom - window_rect.top;
     } else {
       // デスクトップ取り込み時はそのまま
       original_x_ = current.ClippingX;

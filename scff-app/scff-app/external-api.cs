@@ -59,6 +59,9 @@ class ExternalAPI {
   [StructLayout(LayoutKind.Sequential)]
   internal struct RECT { public int left, top, right, bottom; }
 
+  [StructLayout(LayoutKind.Sequential)]
+  internal struct POINT { public int x, y; }
+
   // API
 
   [DllImport("user32.dll")]
@@ -78,7 +81,7 @@ class ExternalAPI {
   internal static extern bool GetClientRect(UIntPtr hWnd, out RECT lpRect);
 
   [DllImport("user32.dll")]
-  internal static extern bool GetWindowRect(UIntPtr hWnd, out RECT lpRect);
+  internal static extern bool ClientToScreen(UIntPtr hWnd, ref POINT lpPoint);
 
   [DllImport("user32.dll", CharSet = CharSet.Auto)]
   internal static extern IntPtr SendMessage(IntPtr hWnd, UInt32 Msg, IntPtr wParam, IntPtr lParam);

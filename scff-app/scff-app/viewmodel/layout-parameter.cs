@@ -42,10 +42,10 @@ partial class LayoutParameter : IDataErrorInfo {
   public void SetWindowWithClippingRegion(UIntPtr window, int clipping_x, int clipping_y, int clipping_width, int clipping_height) {
     this.Window = window;
     this.Fit = false;
-    this.ClippingX = clipping_x;
-    this.ClippingY = clipping_y;
-    this.ClippingWidth = clipping_width;
-    this.ClippingHeight = clipping_height;
+    this.ActualClippingX = clipping_x;
+    this.ActualClippingY = clipping_y;
+    this.ActualClippingWidth = clipping_width;
+    this.ActualClippingHeight = clipping_height;
   }
 
   /// @brief scff_interprocess用に変換
@@ -149,6 +149,18 @@ partial class LayoutParameter : IDataErrorInfo {
   }
 
   #endregion
+
+  // Windowの大きさを返す
+  Size GetWindowSize() {
+    if (this.Window == UIntPtr.Zero) {
+      return Size.Empty;
+    } else if (!ExternalAPI.IsWindow(window_)) {
+      return Size.Empty;
+    } else {
+      Rectangle window_rectangle = Utilities.GetWindowRectangle(this.Window);
+      return new Size(window_rectangle.Width, window_rectangle.Height);
+    }
+  }
 
   //-------------------------------------------------------------------
 

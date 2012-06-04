@@ -47,76 +47,64 @@ partial class LayoutParameter : INotifyPropertyChanged {
   UIntPtr window_;
 
   [DataMember]
-  public Int32 ClippingX {
+  public Int32 ActualClippingX {
     get {
-      if (this.Fit) {
-        return 0;
-      } else {
-        return clipping_x_;
-      }
+      return actual_clipping_x_;
     }
     set {
-      if (clipping_x_ != value) {
-        clipping_x_ = value;
+      if (actual_clipping_x_ != value) {
+        actual_clipping_x_ = value;
         OnPropertyChanged("ClippingX");
+        OnPropertyChanged("ActualClippingX");
       }
     }
   }
-  Int32 clipping_x_;
+  Int32 actual_clipping_x_;
 
   [DataMember]
-  public Int32 ClippingY {
+  public Int32 ActualClippingY {
     get {
-      if (this.Fit) {
-        return 0;
-      } else {
-        return clipping_y_;
-      }
+      return actual_clipping_y_;
     }
     set {
-      if (clipping_y_ != value) {
-        clipping_y_ = value;
+      if (actual_clipping_y_ != value) {
+        actual_clipping_y_ = value;
         OnPropertyChanged("ClippingY");
+        OnPropertyChanged("ActualClippingY");
       }
     }
   }
-  Int32 clipping_y_;
+  Int32 actual_clipping_y_;
 
   [DataMember]
-  public Int32 ClippingWidth {
+  public Int32 ActualClippingWidth {
     get {
-      if (this.Fit) {
-        return this.WindowSize.Width;
-      } else {
-        return clipping_width_;
-      }
+      return actual_clipping_width_;
     }
     set {
-      if (clipping_width_ != value) {
-        clipping_width_ = value;
+      if (actual_clipping_width_ != value) {
+        actual_clipping_width_ = value;
         OnPropertyChanged("ClippingWidth");
+        OnPropertyChanged("ActualClippingWidth");
       }
     }
   }
-  Int32 clipping_width_;
+  Int32 actual_clipping_width_;
 
   [DataMember]
-  public Int32 ClippingHeight {
+  public Int32 ActualClippingHeight {
     get {
-      if (this.Fit) {
-        return this.WindowSize.Height;
-      } else {
-        return clipping_height_;
-      }
+      return actual_clipping_height_;
     }
     set {
-      if (clipping_height_ != value) {
-        clipping_height_ = value;
+      if (actual_clipping_height_ != value) {
+        actual_clipping_height_ = value;
         OnPropertyChanged("ClippingHeight");
+        OnPropertyChanged("ActualClippingHeight");
       }
     }
   }
-  Int32 clipping_height_;
+  Int32 actual_clipping_height_;
 
   [DataMember]
   public Boolean ShowCursor {
@@ -390,6 +378,50 @@ partial class LayoutParameter : INotifyPropertyChanged {
   Boolean fit_;
 
   //-------------------------------------------------------------------
+  // プロキシ
+  //-------------------------------------------------------------------
+
+  public Int32 ClippingX {
+    get {
+      if (this.Fit) {
+        return 0;
+      } else {
+        return this.ActualClippingX;
+      }
+    }
+  }
+
+  public Int32 ClippingY {
+    get {
+      if (this.Fit) {
+        return 0;
+      } else {
+        return this.ActualClippingY;
+      }
+    }
+  }
+
+  public Int32 ClippingWidth {
+    get {
+      if (this.Fit) {
+        return GetWindowSize().Width;
+      } else {
+        return this.ActualClippingWidth;
+      }
+    }
+  }
+
+  public Int32 ClippingHeight {
+    get {
+      if (this.Fit) {
+        return GetWindowSize().Height;
+      } else {
+        return this.ActualClippingHeight;
+      }
+    }
+  }
+
+  //-------------------------------------------------------------------
   // 表示用
   //-------------------------------------------------------------------
 
@@ -406,20 +438,6 @@ partial class LayoutParameter : INotifyPropertyChanged {
         StringBuilder class_name = new StringBuilder(256);
         ExternalAPI.GetClassName(window_, class_name, 256);
         return class_name.ToString();
-      }
-    }
-  }
-
-  /// @brief Windowの大きさ
-  public Size WindowSize {
-    get {
-      if (this.Window == UIntPtr.Zero) {
-        return Size.Empty;
-      } else if (!ExternalAPI.IsWindow(window_)) {
-        return Size.Empty;
-      } else {
-        Rectangle window_rectangle = Utilities.GetWindowRectangle(this.Window);
-        return new Size(window_rectangle.Width, window_rectangle.Height);
       }
     }
   }

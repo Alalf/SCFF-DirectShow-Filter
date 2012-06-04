@@ -146,8 +146,6 @@
       <DependentUpon>PreviewControl.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
-    <None Include="Properties\DataSources\scff_app.data.Directory.datasource" />
-    <None Include="Properties\DataSources\scff_app.data.Message.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -186,6 +184,9 @@
     <None Include="ext\Go.png" />
     <None Include="ext\Remove.png" />
     <None Include="ext\Add.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\DataSources\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

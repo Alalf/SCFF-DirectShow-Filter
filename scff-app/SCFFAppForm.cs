@@ -128,6 +128,7 @@ public partial class SCFFAppForm : Form {
       return;
     }
 
+    // メッセージ送信
     QuietApply();
   }
 
@@ -160,7 +161,7 @@ public partial class SCFFAppForm : Form {
   IntPtr current_dc_;
   Graphics current_graphics_;
 
-  static Pen orange_pen_ = new Pen(Brushes.DarkOrange, 16);
+  static Pen orange_pen_ = new Pen(Brushes.DarkOrange, 8);
 
   void ClearCurrentWindow() {
     // 描画内容を消しておく

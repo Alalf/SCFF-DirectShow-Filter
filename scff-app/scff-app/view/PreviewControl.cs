@@ -102,7 +102,8 @@ partial class PreviewControl : UserControl {
     // 描画位置を計算
     LayoutParameter target_parameter = GetTargetParameter();
     int new_x, new_y, new_width, new_height;
-    scff_imaging.Utilities.CalculateLayout(0,0,Width,Height,
+    scff_imaging.Utilities.CalculateLayout(
+        0, 0, this.Width, this.Height,
         captured_bitmap_.Width, captured_bitmap_.Height,
         target_parameter.Stretch,
         target_parameter.KeepAspectRatio,
@@ -111,13 +112,13 @@ partial class PreviewControl : UserControl {
     // しょうがないので枠は黒で塗りつぶす
     int padding_left = new_x;
     int padding_top = new_y;
-    int padding_right = Width - (new_x + new_width);
-    int padding_bottom = Height - (new_y + new_height);
+    int padding_right = this.Width - (new_x + new_width);
+    int padding_bottom = this.Height - (new_y + new_height);
 
     // 上
-    e.Graphics.FillRectangle(Brushes.Black, 0, 0, Width, padding_top);
+    e.Graphics.FillRectangle(Brushes.Black, 0, 0, this.Width, padding_top);
     // 下
-    e.Graphics.FillRectangle(Brushes.Black, 0, padding_top + new_height, Width, padding_bottom);
+    e.Graphics.FillRectangle(Brushes.Black, 0, padding_top + new_height, this.Width, padding_bottom);
     // 左
     e.Graphics.FillRectangle(Brushes.Black, 0, padding_top, padding_left, new_height);
     // 右
@@ -126,7 +127,7 @@ partial class PreviewControl : UserControl {
     e.Graphics.DrawImage(captured_bitmap_, new Rectangle(new_x, new_y, new_width, new_height));
 
     e.Graphics.DrawString(PreviewInfo(), info_font_, Brushes.DarkOrange, info_point_f_);
-    e.Graphics.DrawRectangle(Pens.DarkOrange, 0, 0, Width - 1, Height - 1);
+    e.Graphics.DrawRectangle(Pens.DarkOrange, 0, 0, this.Width - 1, this.Height - 1);
   }
 
   private void PreviewControl_SizeChanged(object sender, EventArgs e) {
@@ -136,13 +137,14 @@ partial class PreviewControl : UserControl {
   private void fit_Click(object sender, EventArgs e) {
     LayoutParameter target_parameter = GetTargetParameter();
     int padding_top, padding_bottom, padding_left, padding_right;
-    scff_imaging.Utilities.CalculatePaddingSize(Width, Height,
+    scff_imaging.Utilities.CalculatePaddingSize(
+        this.Width, this.Height,
         captured_bitmap_.Width, captured_bitmap_.Height,
         target_parameter.Stretch,
         target_parameter.KeepAspectRatio,
         out padding_top, out padding_bottom, out padding_left, out padding_right);
 
-    Size = new Size(Width - padding_left - padding_right, Height - padding_top - padding_bottom);
+    this.Size = new Size(this.Width - padding_left - padding_right, this.Height - padding_top - padding_bottom);
   }
 
   private void captureTimer_Tick(object sender, EventArgs e) {
@@ -163,7 +165,7 @@ partial class PreviewControl : UserControl {
     string output = "[";
     output += (index_ + 1).ToString();
     output += "] ";
-    output += Width.ToString() + "x" + Height.ToString();
+    output += this.Width.ToString() + "x" + this.Height.ToString();
     output += " " + target_parameter.WindowText;
     return output;
   }

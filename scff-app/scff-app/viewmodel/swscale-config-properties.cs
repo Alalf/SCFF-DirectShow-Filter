@@ -21,18 +21,28 @@
 namespace scff_app.viewmodel {
 
 using System;
+using System.Runtime.Serialization;
 
 /// @brief scff_interprocess.SWScaleConfigのビューモデル
-[Serializable]
+[DataContract]
 partial class SWScaleConfig {
+  [DataMember]
   public scff_interprocess.SWScaleFlags Flags { get; set; }
+  [DataMember]
   public Boolean AccurateRnd { get; set; }
+  [DataMember]
   public Boolean IsFilterEnabled { get; set; }
+  [DataMember]
   public Single LumaGBlur { get; set; }
+  [DataMember]
   public Single ChromaGBlur { get; set; }
+  [DataMember]
   public Single LumaSharpen { get; set; }
+  [DataMember]
   public Single ChromaSharpen { get; set; }
+  [DataMember]
   public Single ChromaHShift { get; set; }
+  [DataMember]
   public Single ChromaVShift { get; set; }
 }
 }

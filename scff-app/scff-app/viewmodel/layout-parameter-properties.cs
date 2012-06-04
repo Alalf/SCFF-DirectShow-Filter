@@ -24,11 +24,14 @@ using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.Text;
+using System.Runtime.Serialization;
+using System.Collections.Generic;
 
 /// @brief scff_inteprocess.LayoutParameterのビューモデル
-[Serializable]
+[DataContract]
 partial class LayoutParameter : INotifyPropertyChanged {
 
+  [DataMember]
   public UIntPtr Window {
     get {
       return window_;
@@ -38,34 +41,19 @@ partial class LayoutParameter : INotifyPropertyChanged {
         window_ = value;
         OnPropertyChanged("Window");
 
-        if (window_ == UIntPtr.Zero) {
-          this.WindowText = "(splash)";
-          this.WindowSize = new Size(0, 0);
-          return;
-        } else if (!ExternalAPI.IsWindow(window_)) {
-          this.WindowText = "*** INVALID WINDOW ***";
-          this.WindowSize = new Size(0, 0);
-          return;
-        }
-                
-        if (window_ == ExternalAPI.GetDesktopWindow()) {
-          this.WindowText = "(Desktop)";
-        } else {
-          StringBuilder class_name = new StringBuilder(256);
-          ExternalAPI.GetClassName(window_, class_name, 256);
-          this.WindowText = class_name.ToString();
-        }
-        ExternalAPI.RECT window_rect;
-        ExternalAPI.GetClientRect(window_, out window_rect);
-        this.WindowSize = new Size(window_rect.right, window_rect.bottom);
       }
     }
   }
   UIntPtr window_;
 
+  [DataMember]
   public Int32 ClippingX {
     get {
-      return clipping_x_;
+      if (this.Fit) {
+        return 0;
+      } else {
+        return clipping_x_;
+      }
     }
     set {
       if (clipping_x_ != value) {
@@ -76,9 +64,14 @@ partial class LayoutParameter : INotifyPropertyChanged {
   }
   Int32 clipping_x_;
 
+  [DataMember]
   public Int32 ClippingY {
     get {
-      return clipping_y_;
+      if (this.Fit) {
+        return 0;
+      } else {
+        return clipping_y_;
+      }
     }
     set {
       if (clipping_y_ != value) {
@@ -89,9 +82,14 @@ partial class LayoutParameter : INotifyPropertyChanged {
   }
   Int32 clipping_y_;
 
+  [DataMember]
   public Int32 ClippingWidth {
     get {
-      return clipping_width_;
+      if (this.Fit) {
+        return this.WindowSize.Width;
+      } else {
+        return clipping_width_;
+      }
     }
     set {
       if (clipping_width_ != value) {
@@ -102,9 +100,14 @@ partial class LayoutParameter : INotifyPropertyChanged {
   }
   Int32 clipping_width_;
 
+  [DataMember]
   public Int32 ClippingHeight {
     get {
-      return clipping_height_;
+      if (this.Fit) {
+        return this.WindowSize.Height;
+      } else {
+        return clipping_height_;
+      }
     }
     set {
       if (clipping_height_ != value) {
@@ -115,6 +118,7 @@ partial class LayoutParameter : INotifyPropertyChanged {
   }
   Int32 clipping_height_;
 
+  [DataMember]
   public Boolean ShowCursor {
     get {
       return show_cursor_;
@@ -128,6 +132,7 @@ partial class LayoutParameter : INotifyPropertyChanged {
   }
   Boolean show_cursor_;
 
+  [DataMember]
   public Boolean ShowLayeredWindow {
     get {
       return show_layered_window_;
@@ -143,6 +148,7 @@ partial class LayoutParameter : INotifyPropertyChanged {
 
   //-------------------------------------------------------------------
 
+  [DataMember]
   SWScaleConfig SWScaleConfig {
     get {
       return swscale_config_;
@@ -258,6 +264,7 @@ partial class LayoutParameter : INotifyPropertyChanged {
 
   //-------------------------------------------------------------------
 
+  [DataMember]
   public Boolean Stretch {
     get {
       return stretch_;
@@ -271,6 +278,7 @@ partial class LayoutParameter : INotifyPropertyChanged {
   }
   Boolean stretch_;
 
+  [DataMember]
   public Boolean KeepAspectRatio {
     get {
       return keep_aspect_ratio_;
@@ -284,6 +292,7 @@ partial class LayoutParameter : INotifyPropertyChanged {
   }
   Boolean keep_aspect_ratio_;
 
+  [DataMember]
   public scff_interprocess.RotateDirection RotateDirection {
     get {
       return rotate_direction_;
@@ -302,6 +311,7 @@ partial class LayoutParameter : INotifyPropertyChanged {
   //-------------------------------------------------------------------
 
   /// @brief 0.0-1.0を境界の幅としたときの境界内の左端の座標
+  [DataMember]
   public Double BoundRelativeLeft {
     get {
       return bound_relative_left_;
@@ -316,6 +326,7 @@ partial class LayoutParameter : INotifyPropertyChanged {
   Double bound_relative_left_;
 
   /// @brief 0.0-1.0を境界の幅としたときの境界内の右端の座標
+  [DataMember]
   public Double BoundRelativeRight {
     get {
       return bound_relative_right_;
@@ -330,6 +341,7 @@ partial class LayoutParameter : INotifyPropertyChanged {
   Double bound_relative_right_;
 
   /// @brief 0.0-1.0を境界の高さとしたときの境界内の上端の座標
+  [DataMember]
   public Double BoundRelativeTop {
     get {
       return bound_relative_top_;
@@ -344,6 +356,7 @@ partial class LayoutParameter : INotifyPropertyChanged {
   Double bound_relative_top_;
 
   /// @brief 0.0-1.0を境界の高さとしたときの境界内の下端の座標
+  [DataMember]
   public Double BoundRelativeBottom {
     get {
       return bound_relative_bottom_;
@@ -358,6 +371,7 @@ partial class LayoutParameter : INotifyPropertyChanged {
   Double bound_relative_bottom_;
 
   /// @brief Clipping領域のFitオプション
+  [DataMember]
   public Boolean Fit {
     get {
       return fit_;
@@ -366,13 +380,10 @@ partial class LayoutParameter : INotifyPropertyChanged {
       if (fit_ != value) {
         fit_ = value;
         OnPropertyChanged("Fit");
-      }
-
-      if (fit_) {
-        this.ClippingX = 0;
-        this.ClippingY = 0;
-        this.ClippingWidth = this.WindowSize.Width;
-        this.ClippingHeight = this.WindowSize.Height;
+        OnPropertyChanged("ClippingX");
+        OnPropertyChanged("ClippingY");
+        OnPropertyChanged("ClippingWidth");
+        OnPropertyChanged("ClippingHeight");
       }
     }
   }
@@ -385,36 +396,43 @@ partial class LayoutParameter : INotifyPropertyChanged {
   /// @brief レイアウトの名前代わりに使用するWindowのクラス名
   public string WindowText {
     get {
-      return window_text_;
-    }
-    private set {
-      if (window_text_ != value) {
-        window_text_ = value;
-        OnPropertyChanged("WindowText");
+      if (this.Window == UIntPtr.Zero) {
+        return "(splash)";
+      } else if (!ExternalAPI.IsWindow(window_)) {
+        return "*** INVALID WINDOW ***";
+      } else if (this.Window == ExternalAPI.GetDesktopWindow()) {
+        return "(Desktop)";
+      } else {
+        StringBuilder class_name = new StringBuilder(256);
+        ExternalAPI.GetClassName(window_, class_name, 256);
+        return class_name.ToString();
       }
-    }  
+    }
   }
-  string window_text_;
 
   /// @brief Windowの大きさ
   public Size WindowSize {
     get {
-      return window_size_;  
-    }
-    private set {
-      if (window_size_ != value) {
-        window_size_ = value;
-        OnPropertyChanged("WindowSize");
+      if (this.Window == UIntPtr.Zero) {
+        return Size.Empty;
+      } else if (!ExternalAPI.IsWindow(window_)) {
+        return Size.Empty;
+      } else {
+        Rectangle window_rectangle = Utilities.GetWindowRectangle(this.Window);
+        return new Size(window_rectangle.Width, window_rectangle.Height);
       }
-    }  
+    }
   }
-  Size window_size_;
 
   //-------------------------------------------------------------------
 
+  [OnDeserializing]
+  internal void OnDeserializingCallBack(StreamingContext streamingContext) {
+    errors_ = new Dictionary<string, string>();
+  }
+
   #region INotifyPropertyChanged メンバー
 
-  [field:NonSerialized]
   public event PropertyChangedEventHandler PropertyChanged;
   void OnPropertyChanged(string name) {
     if (PropertyChanged != null) {

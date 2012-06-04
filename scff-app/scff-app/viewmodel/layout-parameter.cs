@@ -37,10 +37,6 @@ partial class LayoutParameter : IDataErrorInfo {
   public void SetWindow(UIntPtr window) {
     this.Window = window;
     this.Fit = true;
-    this.ClippingX = 0;
-    this.ClippingY = 0;
-    this.ClippingWidth = this.WindowSize.Width;
-    this.ClippingHeight = this.WindowSize.Height;
   }
 
   public void SetWindowWithClippingRegion(UIntPtr window, int clipping_x, int clipping_y, int clipping_width, int clipping_height) {
@@ -98,7 +94,7 @@ partial class LayoutParameter : IDataErrorInfo {
 
   public string this[string columnName] {
     get {
-      if (errors_.ContainsKey(columnName)) {
+      if (errors_ != null && errors_.ContainsKey(columnName)) {
         return errors_[columnName];
       }
       return string.Empty;
@@ -127,6 +123,12 @@ partial class LayoutParameter : IDataErrorInfo {
     // クリッピングリージョンの判定
     Rectangle bound_rectangle = Utilities.GetWindowRectangle(this.Window);
     Rectangle clipping_rectangle = new Rectangle(this.ClippingX, this.ClippingY, this.ClippingWidth, this.ClippingHeight);
+    if (this.ClippingWidth == 0) {
+      errors_["ClippingWidth"] = "Clipping-width is invalid";
+    }
+    if (this.ClippingHeight == 0) {
+      errors_["ClippingHeight"] = "Clipping-height is invalid";
+    }
     if (!bound_rectangle.Contains(clipping_rectangle)) {
       // bound_rectangleが(0,0,0,0)なら必ず実行される
       errors_["ClippingX"] = "Clipping-x is invalid";
@@ -152,7 +154,12 @@ partial class LayoutParameter : IDataErrorInfo {
 
   /// @brief デフォルトパラメータを設定
   void Init() {
-    this.SetWindow(ExternalAPI.GetDesktopWindow());
+    // プライマリディスプレイを初期値にする
+    ExternalAPI.RECT primary_desktop_rect;
+    ExternalAPI.GetClientRect(ExternalAPI.GetDesktopWindow(), out primary_desktop_rect);
+    this.SetWindowWithClippingRegion(ExternalAPI.GetDesktopWindow(),
+        primary_desktop_rect.left, primary_desktop_rect.top,
+        primary_desktop_rect.right, primary_desktop_rect.bottom);
 
     this.BoundRelativeLeft = 0.0;
     this.BoundRelativeRight = 1.0;

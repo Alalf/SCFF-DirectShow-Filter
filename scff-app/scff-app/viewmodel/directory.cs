@@ -20,8 +20,7 @@
 
 namespace scff_app.viewmodel {
 
-using System.Collections.Generic;
-using System.Collections;
+using System.ComponentModel;
 
 // scff_interprocess.Directoryのビューモデル
 partial class Directory {
@@ -33,8 +32,7 @@ partial class Directory {
 
   /// @brief scff_interprocessから変換
   public void LoadFromInterprocess(scff_interprocess.Directory input) {
-    this.Entries = new List<Entry>();
-
+    this.Entries.Clear();
     const int kMaxEntry = scff_interprocess.Interprocess.kMaxEntry;
     for (int i = 0; i < kMaxEntry; i++) {
       if (input.entries[i].process_id == 0) {
@@ -43,20 +41,12 @@ partial class Directory {
       this.Entries.Add(new Entry(input.entries[i]));
     }
   }
-  
-  /// @brief 指定されたIListにEntriesの内容を設定
-  public void Update(IList entries) {
-    entries.Clear();
-    foreach (Entry i in this.Entries) {
-      entries.Add(i);
-    }
-  }
 
   //-------------------------------------------------------------------
 
   /// @brief デフォルトパラメータを設定
   void Init() {
-    this.Entries = new List<Entry>();
+    this.Entries = new BindingList<Entry>();
   }
 }
 }

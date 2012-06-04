@@ -64,12 +64,15 @@ partial class SCFFApp {
 
   /// @brief コンストラクタ
   public SCFFApp(BindingSource entries, BindingSource layout_parameters) {
-    entries_ = entries;
-    layout_parameters_ = layout_parameters;
-
     interprocess_ = new scff_interprocess.Interprocess();
     directory_ = new viewmodel.Directory();
     message_ = new viewmodel.Message();
+
+    // データソースを設定
+    entries_ = entries;
+    layout_parameters_ = layout_parameters;
+    entries.DataSource = directory_.Entries;
+    layout_parameters.DataSource = message_.LayoutParameters;
 
     resize_method_list_ =
         new List<KeyValuePair<scff_interprocess.SWScaleFlags,string>>(kResizeMethodSortedList);
@@ -203,16 +206,13 @@ partial class SCFFApp {
 
     // Directoryに設定
     directory_.LoadFromInterprocess(interprocess_directory);
-
-    // BindingSourceを更新
-    directory_.Update(entries_);
   }
 
   //-------------------------------------------------------------------
   // Message
   //-------------------------------------------------------------------
 
-  void Send(bool show_message) {
+  void Send(bool show_message, bool force_null_layout) {
     if (entries_.Count == 0) {
       // 書き込み先が存在しない
       if (show_message) {
@@ -236,7 +236,7 @@ partial class SCFFApp {
 
     // Messageを変換
     scff_interprocess.Message interprocess_message =
-        message_.ToInterprocess(current_entry.SampleWidth, current_entry.SampleHeight);
+        message_.ToInterprocess(current_entry.SampleWidth, current_entry.SampleHeight, force_null_layout);
     
     // 共有メモリにアクセス
     interprocess_.InitMessage(current_entry.ProcessID);
@@ -244,16 +244,17 @@ partial class SCFFApp {
   }
 
   public void SendNull(bool show_message) {
-    message_.Reset();
-    Send(show_message);
+    Send(show_message, true);
   }
 
   public void SendMessage(bool show_message) {
-    message_.Load(layout_parameters_);
-    if (!message_.Validate(show_message)) {
+    if (!message_.IsValid()) {
+      if (show_message) {
+        MessageBox.Show(message_.Error, "Layout Parameters Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
       return;
     }
-    Send(show_message);
+    Send(show_message, false);
   }
 
   //-------------------------------------------------------------------
@@ -415,12 +416,12 @@ partial class SCFFApp {
   // メンバ変数
   //===================================================================
 
-  BindingSource entries_;
-  BindingSource layout_parameters_;
-
   scff_interprocess.Interprocess interprocess_;
   viewmodel.Directory directory_;
   viewmodel.Message message_;
+
+  BindingSource layout_parameters_;
+  BindingSource entries_;
 
   List<KeyValuePair<scff_interprocess.SWScaleFlags,string>> resize_method_list_;
 

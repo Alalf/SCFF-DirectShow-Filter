@@ -104,6 +104,7 @@ public partial class SCFFAppForm : Form {
 
   private void apply_Click(object sender, EventArgs e) {
     app_.SendMessage(true);
+    this.layoutParametersError.UpdateBinding();
     this.apply.BackColor = SystemColors.Control;
   }
 
@@ -124,7 +125,10 @@ public partial class SCFFAppForm : Form {
     bool no_error = app_.LoadProfile(profile_name);
     if (!no_error) {
       MessageBox.Show("Cannot load profile: " + profile_name);
+      return;
     }
+
+    QuietApply();
   }
 
   private void profileAdd_Click(object sender, EventArgs e) {
@@ -259,9 +263,6 @@ public partial class SCFFAppForm : Form {
     this.areaClippingY.Enabled = flag;
     this.areaClippingWidth.Enabled = flag;
     this.areaClippingHeight.Enabled = flag;
-
-    // メッセージ送信
-    QuietApply();
   }
 
   private void targetAreaSelect_Click(object sender, EventArgs e) {
@@ -353,6 +354,7 @@ public partial class SCFFAppForm : Form {
     bool dirty = this.apply.BackColor == Color.Orange;
     if (app_ != null && this.autoApply.Checked && dirty) {
       app_.SendMessage(false);
+      this.layoutParametersError.UpdateBinding();
       this.apply.BackColor = SystemColors.Control;
     }
   }

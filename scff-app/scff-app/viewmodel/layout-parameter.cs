@@ -21,10 +21,13 @@
 namespace scff_app.viewmodel {
 
 using System;
-using System.Windows.Forms;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Text;
 
 // scff_inteprocess.LayoutParameterのビューモデル
-partial class LayoutParameter {
+partial class LayoutParameter : IDataErrorInfo {
 
   /// @brief デフォルトコンストラクタ
   public LayoutParameter() {
@@ -96,55 +99,6 @@ partial class LayoutParameter {
     this.ClippingHeight = modified_height;
   }
 
-  /// @brief 検証
-  public bool Validate(bool show_message) {
-    // もっとも危険な状態になりやすいウィンドウからチェック
-    if (this.Window == UIntPtr.Zero) { // NULL
-      if (show_message) {
-        MessageBox.Show("Specified window is invalid", "Invalid Window",
-            MessageBoxButtons.OK, MessageBoxIcon.Error);
-      }
-      return false;
-    }
-    if (!ExternalAPI.IsWindow(this.Window)) {
-      if (show_message) {
-        MessageBox.Show("Specified window is invalid", "Invalid Window",
-            MessageBoxButtons.OK, MessageBoxIcon.Error);
-      }
-      return false;
-    }
-
-    // 境界設定のチェック
-    if (this.BoundRelativeTop < this.BoundRelativeBottom &&
-        this.BoundRelativeLeft < this.BoundRelativeRight) {
-      // ok
-    } else {
-      if (show_message) {
-        MessageBox.Show("Specified bound-rect is invalid", "Invalid Bound-rect",
-            MessageBoxButtons.OK, MessageBoxIcon.Error);
-      }
-      return false;
-    }
-
-    // クリッピングリージョンの判定
-    ExternalAPI.RECT window_rect;
-    ExternalAPI.GetClientRect(this.Window, out window_rect);
-    if (this.ClippingX + this.ClippingWidth <= window_rect.right &&
-        this.ClippingY + this.ClippingHeight <= window_rect.bottom &&
-        this.ClippingWidth > 0 &&
-        this.ClippingHeight > 0) {
-      // nop 問題なし
-    } else {
-      if (show_message) {
-        MessageBox.Show("Clipping region is invalid", "Invalid Clipping Region",
-            MessageBoxButtons.OK, MessageBoxIcon.Error);
-      }
-      return false;
-    }
-
-    return true;
-  }
-
   /// @brief scff_interprocess用に変換
   public scff_interprocess.LayoutParameter ToInterprocess(int bound_width, int bound_height) {
     scff_interprocess.LayoutParameter output = new scff_interprocess.LayoutParameter();
@@ -174,6 +128,81 @@ partial class LayoutParameter {
 
     return output;
   }
+
+  #region IDataErrorInfo メンバー
+
+  Dictionary<string, string> errors_ = new Dictionary<string,string>();
+
+  public string Error {
+    get {
+      StringBuilder error_string = new StringBuilder();
+      foreach (var i in errors_.Keys) {
+        error_string.AppendLine(this[i]);
+      }
+      return error_string.ToString();
+    }
+  }
+
+  public string this[string columnName] {
+    get {
+      if (errors_.ContainsKey(columnName)) {
+        return errors_[columnName];
+      }
+      return string.Empty;
+    }
+  }
+
+  /// @brief 検証
+  void Validate() {
+    errors_.Clear();
+
+    // もっとも危険な状態になりやすいウィンドウからチェック
+    if (this.Window == UIntPtr.Zero) { // NULL
+      errors_["Window"] = "Specified window is invalid";
+    } else if (!ExternalAPI.IsWindow(this.Window)) {
+      errors_["Window"] = "Specified window is invalid";
+    }
+
+    // 境界設定のチェック
+    if (this.BoundRelativeTop >= this.BoundRelativeBottom) {
+      errors_["BoundRelativeTop"] = "Specified bound-top is invalid";
+      errors_["BoundRelativeBottom"] = "Specified bound-bottom is invalid";
+    }
+    if (this.BoundRelativeLeft >= this.BoundRelativeRight) {
+      errors_["BoundRelativeLeft"] = "Specified bound-left is invalid";
+      errors_["BoundRelativeRight"] = "Specified bound-right is invalid";
+    }
+
+    // クリッピングリージョンの判定
+    Rectangle bound_rectangle;
+    Rectangle clipping_rectangle = new Rectangle(this.ClippingX, this.ClippingY, this.ClippingWidth, this.ClippingHeight);
+    if (this.Window == ExternalAPI.GetDesktopWindow()) {
+      // デスクトップの場合
+      bound_rectangle = Utilities.GetVirtualDesktopRectangle();
+    } else {
+      ExternalAPI.RECT window_rect;
+      ExternalAPI.GetClientRect(this.Window, out window_rect);
+      bound_rectangle = new Rectangle(window_rect.left, window_rect.top, window_rect.right, window_rect.bottom);
+    }
+    if (!bound_rectangle.Contains(clipping_rectangle)) {
+      errors_["ClippingX"] = "Clipping-x is invalid";
+      errors_["ClippingY"] = "Clipping-y is invalid";
+      errors_["ClippingWidth"] = "Clipping-width is invalid";
+      errors_["ClippingHeight"] = "Clipping-height is invalid";
+    }
+  }
+
+  public bool IsValid() {
+    Validate();
+
+    if (this.Error == string.Empty) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  #endregion
 
   //-------------------------------------------------------------------
 

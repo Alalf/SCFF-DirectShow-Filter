@@ -20,10 +20,10 @@
 
 namespace scff_app.viewmodel {
 
-using System.Collections.Generic;
+using System.ComponentModel;
 
 /// @brief scff_interprocess.Directoryのビューモデル
 partial class Directory {
-  public List<Entry> Entries { get; set; }
+  public BindingList<Entry> Entries { get; set; }
 }
 }

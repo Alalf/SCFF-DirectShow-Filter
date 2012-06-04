@@ -116,6 +116,7 @@
       this.profileRemove = new System.Windows.Forms.Button();
       this.profileAdd = new System.Windows.Forms.Button();
       this.mainTimer = new System.Windows.Forms.Timer(this.components);
+      this.layoutParametersError = new System.Windows.Forms.ErrorProvider(this.components);
       this.mainMenuStrip.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.layoutBoundRelativeBottom)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.layoutParameters)).BeginInit();
@@ -153,6 +154,7 @@
       this.kLayoutParametersNavigator.SuspendLayout();
       this.kProcessPanel.SuspendLayout();
       this.kProfilePanel.SuspendLayout();
+      ((System.ComponentModel.ISupportInitialize)(this.layoutParametersError)).BeginInit();
       this.SuspendLayout();
       // 
       // mainMenuStrip
@@ -263,7 +265,6 @@
       // 
       // layoutParameters
       // 
-      this.layoutParameters.DataSource = typeof(scff_app.viewmodel.LayoutParameter);
       this.layoutParameters.ListChanged += new System.ComponentModel.ListChangedEventHandler(this.layoutParameters_ListChanged);
       // 
       // windowDesktop
@@ -363,6 +364,7 @@
       this.kWindowTable.SetColumnSpan(this.windowText, 2);
       this.windowText.DataBindings.Add(new System.Windows.Forms.Binding("Tag", this.layoutParameters, "Window", true));
       this.windowText.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.layoutParameters, "windowText", true));
+      this.layoutParametersError.SetIconAlignment(this.windowText, System.Windows.Forms.ErrorIconAlignment.MiddleLeft);
       this.windowText.Location = new System.Drawing.Point(57, 3);
       this.windowText.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
       this.windowText.Name = "windowText";
@@ -475,6 +477,7 @@
       this.areaClippingHeight.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
       this.areaClippingHeight.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameters, "ClippingHeight", true));
+      this.layoutParametersError.SetIconAlignment(this.areaClippingHeight, System.Windows.Forms.ErrorIconAlignment.MiddleLeft);
       this.areaClippingHeight.Location = new System.Drawing.Point(187, 27);
       this.areaClippingHeight.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
       this.areaClippingHeight.Maximum = new decimal(new int[] {
@@ -522,6 +525,7 @@
       this.areaClippingWidth.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
       this.areaClippingWidth.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameters, "ClippingWidth", true));
+      this.layoutParametersError.SetIconAlignment(this.areaClippingWidth, System.Windows.Forms.ErrorIconAlignment.MiddleLeft);
       this.areaClippingWidth.Location = new System.Drawing.Point(92, 27);
       this.areaClippingWidth.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
       this.areaClippingWidth.Maximum = new decimal(new int[] {
@@ -543,6 +547,7 @@
       this.areaClippingY.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
       this.areaClippingY.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameters, "ClippingY", true));
+      this.layoutParametersError.SetIconAlignment(this.areaClippingY, System.Windows.Forms.ErrorIconAlignment.MiddleLeft);
       this.areaClippingY.Location = new System.Drawing.Point(187, 3);
       this.areaClippingY.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
       this.areaClippingY.Maximum = new decimal(new int[] {
@@ -582,6 +587,7 @@
       this.areaClippingX.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
       this.areaClippingX.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameters, "ClippingX", true));
+      this.layoutParametersError.SetIconAlignment(this.areaClippingX, System.Windows.Forms.ErrorIconAlignment.MiddleLeft);
       this.areaClippingX.Location = new System.Drawing.Point(92, 3);
       this.areaClippingX.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
       this.areaClippingX.Maximum = new decimal(new int[] {
@@ -611,6 +617,7 @@
       this.layoutBoundRelativeTop.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameters, "BoundRelativeTop", true));
       this.layoutBoundRelativeTop.DecimalPlaces = 1;
       this.layoutBoundRelativeTop.Enabled = false;
+      this.layoutParametersError.SetIconAlignment(this.layoutBoundRelativeTop, System.Windows.Forms.ErrorIconAlignment.MiddleLeft);
       this.layoutBoundRelativeTop.Location = new System.Drawing.Point(62, 3);
       this.layoutBoundRelativeTop.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
       this.layoutBoundRelativeTop.Maximum = new decimal(new int[] {
@@ -630,6 +637,7 @@
       this.layoutBoundRelativeLeft.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameters, "BoundRelativeLeft", true));
       this.layoutBoundRelativeLeft.DecimalPlaces = 1;
       this.layoutBoundRelativeLeft.Enabled = false;
+      this.layoutParametersError.SetIconAlignment(this.layoutBoundRelativeLeft, System.Windows.Forms.ErrorIconAlignment.MiddleLeft);
       this.layoutBoundRelativeLeft.Location = new System.Drawing.Point(32, 27);
       this.layoutBoundRelativeLeft.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
       this.layoutBoundRelativeLeft.Maximum = new decimal(new int[] {
@@ -684,7 +692,6 @@
       // 
       // entries
       // 
-      this.entries.DataSource = typeof(scff_app.viewmodel.Entry);
       this.entries.ListChanged += new System.ComponentModel.ListChangedEventHandler(this.entries_ListChanged);
       // 
       // kLayoutBoundRelativeRight
@@ -1161,6 +1168,7 @@
       this.resizeMethodCHShift.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameters, "SWScaleConfigChromaHShift", true));
       this.resizeMethodCHShift.DecimalPlaces = 2;
       this.resizeMethodCHShift.Enabled = false;
+      this.layoutParametersError.SetIconAlignment(this.resizeMethodCHShift, System.Windows.Forms.ErrorIconAlignment.MiddleLeft);
       this.resizeMethodCHShift.Increment = new decimal(new int[] {
             2,
             0,
@@ -1203,6 +1211,7 @@
       this.resizeMethodCVShift.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameters, "SWScaleConfigChromaVShift", true));
       this.resizeMethodCVShift.DecimalPlaces = 2;
       this.resizeMethodCVShift.Enabled = false;
+      this.layoutParametersError.SetIconAlignment(this.resizeMethodCVShift, System.Windows.Forms.ErrorIconAlignment.MiddleLeft);
       this.resizeMethodCVShift.Increment = new decimal(new int[] {
             2,
             0,
@@ -1245,6 +1254,7 @@
       this.resizeMethodLSharpen.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameters, "SWScaleConfigLumaSharpen", true));
       this.resizeMethodLSharpen.DecimalPlaces = 2;
       this.resizeMethodLSharpen.Enabled = false;
+      this.layoutParametersError.SetIconAlignment(this.resizeMethodLSharpen, System.Windows.Forms.ErrorIconAlignment.MiddleLeft);
       this.resizeMethodLSharpen.Increment = new decimal(new int[] {
             16,
             0,
@@ -1277,6 +1287,7 @@
       this.resizeMethodCSharpen.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameters, "SWScaleConfigChromaSharpen", true));
       this.resizeMethodCSharpen.DecimalPlaces = 2;
       this.resizeMethodCSharpen.Enabled = false;
+      this.layoutParametersError.SetIconAlignment(this.resizeMethodCSharpen, System.Windows.Forms.ErrorIconAlignment.MiddleLeft);
       this.resizeMethodCSharpen.Increment = new decimal(new int[] {
             16,
             0,
@@ -1321,6 +1332,7 @@
       this.resizeMethodLGBlur.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameters, "SWScaleConfigLumaGblur", true));
       this.resizeMethodLGBlur.DecimalPlaces = 2;
       this.resizeMethodLGBlur.Enabled = false;
+      this.layoutParametersError.SetIconAlignment(this.resizeMethodLGBlur, System.Windows.Forms.ErrorIconAlignment.MiddleLeft);
       this.resizeMethodLGBlur.Increment = new decimal(new int[] {
             2,
             0,
@@ -1341,6 +1353,7 @@
       this.resizeMethodCGBlur.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameters, "SWScaleConfigChromaGBlur", true));
       this.resizeMethodCGBlur.DecimalPlaces = 2;
       this.resizeMethodCGBlur.Enabled = false;
+      this.layoutParametersError.SetIconAlignment(this.resizeMethodCGBlur, System.Windows.Forms.ErrorIconAlignment.MiddleLeft);
       this.resizeMethodCGBlur.Increment = new decimal(new int[] {
             2,
             0,
@@ -1515,6 +1528,12 @@
       this.mainTimer.Interval = 1000;
       this.mainTimer.Tick += new System.EventHandler(this.mainTimer_Tick);
       // 
+      // layoutParametersError
+      // 
+      this.layoutParametersError.BlinkStyle = System.Windows.Forms.ErrorBlinkStyle.NeverBlink;
+      this.layoutParametersError.ContainerControl = this;
+      this.layoutParametersError.DataSource = this.layoutParameters;
+      // 
       // SCFFAppForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -1594,6 +1613,7 @@
       this.kLayoutParametersNavigator.PerformLayout();
       this.kProcessPanel.ResumeLayout(false);
       this.kProfilePanel.ResumeLayout(false);
+      ((System.ComponentModel.ISupportInitialize)(this.layoutParametersError)).EndInit();
       this.ResumeLayout(false);
       this.PerformLayout();
 
@@ -1692,6 +1712,7 @@
     private System.Windows.Forms.Button profileRemove;
     private System.Windows.Forms.Button profileAdd;
     private System.Windows.Forms.Button profileLoad;
+    private System.Windows.Forms.ErrorProvider layoutParametersError;
 
 
 

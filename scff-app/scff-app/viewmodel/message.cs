@@ -21,9 +21,8 @@
 namespace scff_app.viewmodel {
 
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
+using System.ComponentModel;
+using System.Text;
 
 // scff_inteprocess.Messageのビューモデル
 partial class Message {
@@ -33,50 +32,41 @@ partial class Message {
     this.Init();
   }
 
-  /// @brief NullLayoutのMessageに設定する
-  public void Reset() {
-    this.Timestamp = DateTime.Now.Ticks;
-    this.LayoutType = scff_interprocess.LayoutType.kNullLayout;
-    this.LayoutElementCount = 0;
-    this.LayoutParameters.Clear();
-  }
-
-  /// @brief IListから値を読み込んで設定
-  public void Load(IList layout_parameters) {
-    this.Timestamp = DateTime.Now.Ticks;
-
-    if (layout_parameters.Count == 0) {
-      this.LayoutType = scff_interprocess.LayoutType.kNullLayout;
-    } else if (layout_parameters.Count == 1) {
-      this.LayoutType = scff_interprocess.LayoutType.kNativeLayout;
-    } else {
-      this.LayoutType = scff_interprocess.LayoutType.kComplexLayout;
-    }
-
-    this.LayoutElementCount = layout_parameters.Count;
-
-    this.LayoutParameters.Clear();
-    foreach (LayoutParameter i in layout_parameters) {
-      this.LayoutParameters.Add(i);
-    }
-  }
-
   /// @brief 検証
-  public bool Validate(bool show_message) {
+  public bool IsValid() {
+    bool result = true;
     foreach (LayoutParameter i in this.LayoutParameters) {
-      if (!i.Validate(show_message)) {
-        return false;
-      }
+      result &= i.IsValid();
     }
-    return true;
+    return result;
+  }
+
+  /// @brief エラー
+  public string Error {
+    get {
+      StringBuilder error_string = new StringBuilder();
+      int index = 1;
+      foreach (LayoutParameter i in this.LayoutParameters) {
+        if (i.Error != string.Empty) {
+          error_string.AppendLine("["+index+"] "+i.WindowText);
+          error_string.AppendLine(i.Error);
+        }
+        ++index;
+      }
+      return error_string.ToString();
+    }
   }
 
   /// @brief scff_Interprocess用に変換
-  public scff_interprocess.Message ToInterprocess(int bound_width, int bound_height) {
+  public scff_interprocess.Message ToInterprocess(int bound_width, int bound_height, bool force_null_layout) {
     scff_interprocess.Message output = new scff_interprocess.Message();
 
     output.timestamp = this.Timestamp;
-    output.layout_type = (Int32)this.LayoutType;
+    if (force_null_layout) {
+      output.layout_type = (Int32)scff_interprocess.LayoutType.kNullLayout;
+    } else {
+      output.layout_type = (Int32)this.LayoutType;
+    }
     output.layout_element_count = this.LayoutElementCount;
     
     // Listの前から順番に書き込む
@@ -98,10 +88,7 @@ partial class Message {
 
   /// @brief デフォルトパラメータを設定
   void Init() {
-    this.Timestamp = DateTime.Now.Ticks;
-    this.LayoutType = scff_interprocess.LayoutType.kNullLayout;
-    this.LayoutElementCount = 0;
-    this.LayoutParameters = new List<LayoutParameter>();
+    this.LayoutParameters = new BindingList<LayoutParameter>();
   }
 }
 }

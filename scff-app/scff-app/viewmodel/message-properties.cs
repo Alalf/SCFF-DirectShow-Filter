@@ -21,13 +21,32 @@
 namespace scff_app.viewmodel {
 
 using System;
-using System.Collections.Generic;
+using System.ComponentModel;
 
 /// @brief scff_inteprocess.Messageのビューモデル
 partial class Message {
-  public Int64 Timestamp { get; set; }
-  public scff_interprocess.LayoutType LayoutType { get; set; }
-  public Int32 LayoutElementCount { get; set; }
-  public List<LayoutParameter> LayoutParameters { get; set; }
+  public Int64 Timestamp {
+    get {
+      return DateTime.Now.Ticks;
+    }
+  }
+  public scff_interprocess.LayoutType LayoutType {
+    get {
+      if (this.LayoutParameters.Count == 0) {
+        return scff_interprocess.LayoutType.kNullLayout;
+      } else if (this.LayoutParameters.Count == 1) {
+        return scff_interprocess.LayoutType.kNativeLayout;
+      } else {
+        return scff_interprocess.LayoutType.kComplexLayout;
+      }
+    }
+  }
+
+  public Int32 LayoutElementCount {
+    get {
+      return this.LayoutParameters.Count;
+    }
+  }
+  public BindingList<LayoutParameter> LayoutParameters { get; set; }
 }
 }

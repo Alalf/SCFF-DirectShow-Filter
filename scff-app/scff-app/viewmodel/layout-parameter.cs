@@ -157,9 +157,7 @@ partial class LayoutParameter : IDataErrorInfo {
     errors_.Clear();
 
     // もっとも危険な状態になりやすいウィンドウからチェック
-    if (this.Window == UIntPtr.Zero) { // NULL
-      errors_["Window"] = "Specified window is invalid";
-    } else if (!ExternalAPI.IsWindow(this.Window)) {
+    if (this.Window == UIntPtr.Zero || !ExternalAPI.IsWindow(this.Window)) {
       errors_["Window"] = "Specified window is invalid";
     }
 

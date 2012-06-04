@@ -22,7 +22,6 @@ namespace scff_app.view {
 
 using System;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 /// @brief コントロールに対し、ドラッグでの移動/リサイズ機能を付加するためのクラス

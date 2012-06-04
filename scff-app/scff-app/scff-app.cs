@@ -31,7 +31,7 @@ using System.Windows.Forms;
 using System.Xml;
 using Microsoft.Win32;
 
-/// @brief SCFFAppForm(メインウィンドウ)から利用する実装クラス
+/// @brief MVCパターンにおけるController
 partial class SCFFApp {
 
   // 定数

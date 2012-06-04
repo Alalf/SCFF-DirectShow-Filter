@@ -20,10 +20,8 @@
 
 namespace scff_app.view {
 
-using System.Windows.Forms;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
+using System.Windows.Forms;
 using scff_app.viewmodel;
 
 [ComplexBindingProperties("DataSource", "DataMember")]

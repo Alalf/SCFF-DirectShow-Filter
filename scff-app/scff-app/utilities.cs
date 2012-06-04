@@ -16,14 +16,14 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scff-app/utilities.cs
-/// @brief scff_app用ユーティリティ
+/// @brief scff_app用ユーティリティクラスの定義
 
 namespace scff_app {
 
 using System;
 using System.Drawing;
 
-// BindingSource用Extensionを使おうと試みたが、無駄なので消した
+/// @brief scff_app用ユーティリティクラス
 class Utilities {
   /// @brief マルチモニタを考慮してウィンドウ領域を求める
   public static Rectangle GetWindowRectangle(UIntPtr window) {

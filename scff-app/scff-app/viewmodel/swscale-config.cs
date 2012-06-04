@@ -21,7 +21,6 @@
 namespace scff_app.viewmodel {
 
 using System;
-using System.Collections.Generic;
 
 // scff_interprocess.SWScaleConfigのビューモデル
 partial class SWScaleConfig {

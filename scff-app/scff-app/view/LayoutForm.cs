@@ -23,7 +23,6 @@
 
 namespace scff_app.view {
 
-using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using scff_app.viewmodel;

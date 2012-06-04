@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scff-app/external-api.cs
-/// @brief scff_appモジュールで利用する外部APIをまとめたクラス
+/// @brief scff_appモジュールで利用する外部APIをまとめたクラスの定義
 
 namespace scff_app {
 
@@ -24,6 +24,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.Text;
 
+/// @brief scff_appモジュールで利用する外部APIをまとめたクラス
 class ExternalAPI {
   /// @brief 生成禁止用コンストラクタ
   private ExternalAPI() {}

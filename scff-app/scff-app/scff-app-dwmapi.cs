@@ -16,14 +16,13 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scff-app/scff-app-dwmapi.cs
-/// @brief DWMAPI関連のメソッドの定義
+/// @brief SCFFAppのDWMAPI関連のメソッドの定義
 
 namespace scff_app {
 
 using System;
-using System.Runtime.InteropServices;
 
-// メインウィンドウ
+// MVCパターンにおけるController
 partial class SCFFApp {
 
   /// @brief Dwmapi.dllを利用してAeroをOffに

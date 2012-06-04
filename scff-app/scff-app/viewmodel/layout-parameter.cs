@@ -174,17 +174,19 @@ partial class LayoutParameter : IDataErrorInfo {
     }
 
     // クリッピングリージョンの判定
-    Rectangle bound_rectangle;
+    Rectangle bound_rectangle = new Rectangle(0,0,0,0);
     Rectangle clipping_rectangle = new Rectangle(this.ClippingX, this.ClippingY, this.ClippingWidth, this.ClippingHeight);
     if (this.Window == ExternalAPI.GetDesktopWindow()) {
       // デスクトップの場合
       bound_rectangle = Utilities.GetVirtualDesktopRectangle();
-    } else {
+    } else if (ExternalAPI.IsWindow(this.Window)) {
+      // 通常のウィンドウの場合
       ExternalAPI.RECT window_rect;
       ExternalAPI.GetClientRect(this.Window, out window_rect);
       bound_rectangle = new Rectangle(window_rect.left, window_rect.top, window_rect.right, window_rect.bottom);
     }
     if (!bound_rectangle.Contains(clipping_rectangle)) {
+      // bound_rectangleが(0,0,0,0)なら必ず実行される
       errors_["ClippingX"] = "Clipping-x is invalid";
       errors_["ClippingY"] = "Clipping-y is invalid";
       errors_["ClippingWidth"] = "Clipping-width is invalid";

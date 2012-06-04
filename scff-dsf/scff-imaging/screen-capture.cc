@@ -41,8 +41,6 @@ ScreenCapture::ScreenCapture(
   for (int i = 0; i < kMaxProcessorSize; i++) {
     parameter_[i] = parameter[i];
     dc_for_bitblt_[i] = NULL;
-    window_width_[i] = -1;    // ありえない値
-    window_height_[i] = -1;   // ありえない値
     raster_operation_[i] = SRCCOPY;
   }
   // 以下のメンバは明示的に初期化していない
@@ -66,58 +64,34 @@ ScreenCapture::~ScreenCapture() {
 }
 
 // Windowがキャプチャに適切な状態になっているか判定する
-bool ScreenCapture::ValidateWindow(int index) {
-  ASSERT(0 <= index && index < size());
-
-  // ウィンドウハンドル
+ErrorCode ScreenCapture::ValidateParameter(int index) {
+  // パラメータ
   HWND window = parameter_[index].window;
+  const int clipping_x = parameter_[index].clipping_x;
+  const int clipping_y = parameter_[index].clipping_y;
+  const int clipping_width = parameter_[index].clipping_width;
+  const int clipping_height = parameter_[index].clipping_height;
 
-  // windowハンドルがそもそもNULL
-  if (window == NULL) {
-    return false;
+  // 不正なWindow
+  if (window == NULL || !IsWindow(window)) {
+    return kScreenCaptureInvalidWindowError;
   }
 
-  // windowが存在していない
-  if (!IsWindow(window)) {
-    return false;
+  // ウィンドウ領域を取得
+  int window_x = -1;
+  int window_y = -1;
+  int window_width = -1;
+  int window_height = -1;
+  Utilities::GetWindowRectangle(window, 
+      &window_x, &window_y, &window_width, &window_height);
+
+  // クリッピング開始座標がウィンドウ領域に含まれているか
+  if (!Utilities::Contains(window_x, window_y, window_width, window_height,
+                           clipping_x, clipping_y, clipping_width, clipping_height)) {
+    return kScreenCaptureInvalidClippingRegionError;
   }
 
-  // ウィンドウのサイズを取得
-  RECT current_window_screen_rect;
-  GetWindowRect(window, &current_window_screen_rect);
-  const int current_window_width   =
-      (current_window_screen_rect.right - current_window_screen_rect.left);
-  const int current_window_height  =
-      (current_window_screen_rect.bottom - current_window_screen_rect.top);
-
-  // 初回のチェックの値を保存しておく
-  if (window_width_[index] == -1) {
-    window_width_[index] = current_window_width;
-  }
-  if (window_height_[index] == -1) {
-    window_height_[index] = current_window_height;
-  }
-
-  // ウィンドウサイズは変更禁止(かなり厳しい条件)
-  if (window_width_[index] != current_window_width ||
-      window_height_[index] != current_window_height) {
-    MyDbgLog((LOG_TRACE, kDbgImportant,
-            TEXT("ScreenCapture: Window Size Changed (%d,%d) -> (%d,%d)"),
-            window_width_[index], window_height_[index],
-            current_window_width, current_window_height));
-    return false;
-  }
-
-  /// @todo(me) カラーチェック。オンスクリーンDCが必要なことに注意
-  /// @code
-  /// if (GetDeviceCaps(window_dc, BITSPIXEL) != 32) {
-  ///   return ErrorOccured(kScreenCaptureNot32bitColorError);
-  /// }
-  /// @endcode
-
-  /// @todo(me) 可視領域についても考慮するべきかも
-
-  return true;
+  return kNoError;
 }
 
 // インデックスを指定して初期化
@@ -127,20 +101,10 @@ ErrorCode ScreenCapture::InitByIndex(int index) {
   // RGB0以外の出力はできない
   ASSERT(GetOutputImage(index)->pixel_format() == kRGB0);
 
-  if (!ValidateWindow(index)) {
-    return kScreenCaptureInvalidWindowError;
-  }
-
-  // クリッピング領域がウィンドウ内におさまっているか？
-  if (Utilities::IsClippingRegionValid(window_width_[index],
-                                       window_height_[index],
-                                       parameter_[index].clipping_x,
-                                       parameter_[index].clipping_y,
-                                       parameter_[index].clipping_width,
-                                       parameter_[index].clipping_height)) {
-    // ok
-  } else {
-    return kScreenCaptureInvalidClippingRegionError;
+  // パラメータのチェック
+  const ErrorCode error_parameter = ValidateParameter(index);
+  if (error_parameter != kNoError) {
+    return error_parameter;
   }
 
   const int capture_width = parameter_[index].clipping_width;
@@ -242,8 +206,9 @@ ErrorCode ScreenCapture::Run() {
 
   // 全てのウインドウのチェック
   for (int i = 0; i < size(); i++) {
-    if (!ValidateWindow(i)) {
-      return ErrorOccured(kScreenCaptureInvalidWindowError);
+    const ErrorCode error_parameter = ValidateParameter(i);
+    if (error_parameter != kNoError) {
+      return ErrorOccured(error_parameter);
     }
   }
 

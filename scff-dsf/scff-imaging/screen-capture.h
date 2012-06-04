@@ -50,8 +50,8 @@ class ScreenCapture : public Processor<void, AVPictureWithFillImage> {
   /// @brief 渡されたDCにカーソルを描画する
   void DrawCursor(HDC dc, HWND window, int clipping_x, int clipping_y);
 
-  /// @brief Windowがキャプチャに適切な状態になっているか判定する
-  bool ValidateWindow(int index);
+  /// @brief キャプチャ設定を検証する
+  ErrorCode ValidateParameter(int index);
 
   /// @brief インデックスを指定して初期化
   ErrorCode InitByIndex(int index);
@@ -72,10 +72,6 @@ class ScreenCapture : public Processor<void, AVPictureWithFillImage> {
   /// @brief GetDIBits用BITMAPINFO
   BITMAPINFO info_for_getdibits_[kMaxProcessorSize];
 
-  /// @brief Init呼び出し時のウィンドウの幅
-  int window_width_[kMaxProcessorSize];
-  /// @brief Init呼び出し時のウィンドウの高さ
-  int window_height_[kMaxProcessorSize];
   /// @brief BitBltに渡すラスターオペレーションコード
   DWORD raster_operation_[kMaxProcessorSize];
 

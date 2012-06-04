@@ -85,11 +85,11 @@ enum ErrorCode {
   kScaleCannotGetDefaultFilterError = 2002,
 
   /// @brief ScreenCapture時、取り込み対象のWindowが適切な状態ではなかった
-  kScreenCaptureInvalidWindowError = 2002,
+  kScreenCaptureInvalidWindowError = 2003,
   /// @brief ScreenCapture時、クリッピング領域の設定が適切ではなかった
-  kScreenCaptureInvalidClippingRegionError = 2003,
+  kScreenCaptureInvalidClippingRegionError = 2004,
   /// @brief ScreenCapture時、画面の色深度が32bitではなかった
-  kScreenCaptureNot32bitColorError= 2004,
+  kScreenCaptureNot32bitColorError= 2005,
 
   //-------------------------------------------------------------------
   // Layout

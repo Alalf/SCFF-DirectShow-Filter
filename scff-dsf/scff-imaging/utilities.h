@@ -98,11 +98,6 @@ class Utilities {
                        int bound_width, int bound_height,
                        int x, int y, int width, int height);
 
-  /// @brief クリッピング範囲（ローカル座標系）が正しいかどうか
-  static bool IsClippingRegionValid(int bound_width, int bound_height,
-                                    int clipping_x, int clipping_y,
-                                    int clipping_width, int clipping_height);
-
   /// @brief 境界の座標系と同じ座標系の新しい配置を計算する
   static bool CalculateLayout(int bound_x, int bound_y,
                               int bound_width, int bound_height,
@@ -118,9 +113,9 @@ class Utilities {
                                    int *padding_top, int *padding_bottom,
                                    int *padding_left, int *padding_right);
 
-  /// @brief 仮想デスクトップウィンドウの領域を求める
-  static void GetVirtualDesktopWindowRegion(int *x, int *y,
-                                            int *width, int *height);
+  /// @brief マルチモニタを考慮してウィンドウ領域を求める
+  static void GetWindowRectangle(HWND window, int *x, int *y,
+                                 int *width, int *height);
 };
 }   // namespace scff_imaging
 

@@ -252,17 +252,8 @@ bool Utilities::Contains(int bound_x, int bound_y,
 
   return bound_x <= x && x <= bound_right &&
          bound_y <= y && y <= bound_bottom &&
-         right <= bound_right && bottom <= bound_bottom;
-}
-
-/// @brief クリッピング範囲（ローカル座標系）が正しいかどうか
-bool Utilities::IsClippingRegionValid(int bound_width, int bound_height,
-                                      int clipping_x, int clipping_y,
-                                      int clipping_width,
-                                      int clipping_height) {
-  ASSERT(bound_width >= 0 && bound_height >= 0);
-  return clipping_x >= 0 && clipping_y >= 0 &&
-         clipping_width <= bound_width && clipping_height <= bound_height;
+         right <= bound_right &&
+         bottom <= bound_bottom;
 }
 
 /// @brief 境界の座標系と同じ座標系の新しい配置を計算する
@@ -366,12 +357,29 @@ bool Utilities::CalculatePaddingSize(int bound_width, int bound_height,
   return true;
 }
 
-/// @brief 仮想デスクトップウィンドウの領域を求める
-void Utilities::GetVirtualDesktopWindowRegion(int *x, int *y,
-                                              int *width, int *height) {
-  *x = GetSystemMetrics(SM_XVIRTUALSCREEN);
-  *y = GetSystemMetrics(SM_YVIRTUALSCREEN);
-  *width = GetSystemMetrics(SM_CXVIRTUALSCREEN);
-  *height = GetSystemMetrics(SM_CYVIRTUALSCREEN);
+  /// @brief マルチモニタを考慮してウィンドウの領域を求める
+  static void GetWindowRectangle(HWND window, int *x, int *y,
+                                 int *width, int *height);
+
+// マルチモニタを考慮してウィンドウ領域を求める
+void Utilities::GetWindowRectangle(HWND window, int *x, int *y,
+                                   int *width, int *height) {
+  *x = 0;
+  *y = 0;
+  *width = 0;
+  *height = 0;
+  if (window == GetDesktopWindow()) {
+    *x = GetSystemMetrics(SM_XVIRTUALSCREEN);
+    *y = GetSystemMetrics(SM_YVIRTUALSCREEN);
+    *width = GetSystemMetrics(SM_CXVIRTUALSCREEN);
+    *height = GetSystemMetrics(SM_CYVIRTUALSCREEN);
+  } else if (IsWindow(window)) {
+    RECT window_rect;
+    GetWindowRect(window, &window_rect);
+    *x = 0;
+    *y = 0;
+    *width = window_rect.right - window_rect.left;
+    *height = window_rect.bottom - window_rect.top;
+  } 
 }
 }   // namespace scff_imaging

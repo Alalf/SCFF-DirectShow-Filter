@@ -245,23 +245,33 @@
             | System.Windows.Forms.AnchorStyles.Right)));
       this.kLayoutBoundTable.SetColumnSpan(this.layoutBoundRelativeBottom, 2);
       this.layoutBoundRelativeBottom.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameters, "BoundRelativeBottom", true));
-      this.layoutBoundRelativeBottom.DecimalPlaces = 1;
+      this.layoutBoundRelativeBottom.DecimalPlaces = 2;
       this.layoutBoundRelativeBottom.Enabled = false;
+      this.layoutBoundRelativeBottom.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
       this.layoutBoundRelativeBottom.Location = new System.Drawing.Point(62, 51);
       this.layoutBoundRelativeBottom.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+      this.layoutBoundRelativeBottom.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            65536});
       this.layoutBoundRelativeBottom.Minimum = new decimal(new int[] {
             1,
             0,
             0,
-            0});
+            131072});
       this.layoutBoundRelativeBottom.Name = "layoutBoundRelativeBottom";
       this.layoutBoundRelativeBottom.Size = new System.Drawing.Size(56, 18);
       this.layoutBoundRelativeBottom.TabIndex = 7;
       this.layoutBoundRelativeBottom.Value = new decimal(new int[] {
-            100,
+            10,
             0,
             0,
-            0});
+            65536});
       // 
       // layoutParameters
       // 
@@ -286,15 +296,25 @@
             | System.Windows.Forms.AnchorStyles.Right)));
       this.kLayoutBoundTable.SetColumnSpan(this.layoutBoundRelativeRight, 2);
       this.layoutBoundRelativeRight.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameters, "BoundRelativeRight", true));
-      this.layoutBoundRelativeRight.DecimalPlaces = 1;
+      this.layoutBoundRelativeRight.DecimalPlaces = 2;
       this.layoutBoundRelativeRight.Enabled = false;
+      this.layoutBoundRelativeRight.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
       this.layoutBoundRelativeRight.Location = new System.Drawing.Point(92, 27);
       this.layoutBoundRelativeRight.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+      this.layoutBoundRelativeRight.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            65536});
       this.layoutBoundRelativeRight.Minimum = new decimal(new int[] {
             1,
             0,
             0,
-            0});
+            131072});
       this.layoutBoundRelativeRight.Name = "layoutBoundRelativeRight";
       this.layoutBoundRelativeRight.Size = new System.Drawing.Size(56, 18);
       this.layoutBoundRelativeRight.TabIndex = 5;
@@ -302,7 +322,7 @@
             100,
             0,
             0,
-            0});
+            131072});
       // 
       // kWindow
       // 
@@ -603,7 +623,7 @@
       this.areaClippingX.Size = new System.Drawing.Size(61, 18);
       this.areaClippingX.TabIndex = 2;
       this.areaClippingX.Value = new decimal(new int[] {
-            100,
+            1000,
             0,
             0,
             0});
@@ -614,16 +634,21 @@
             | System.Windows.Forms.AnchorStyles.Right)));
       this.kLayoutBoundTable.SetColumnSpan(this.layoutBoundRelativeTop, 2);
       this.layoutBoundRelativeTop.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameters, "BoundRelativeTop", true));
-      this.layoutBoundRelativeTop.DecimalPlaces = 1;
+      this.layoutBoundRelativeTop.DecimalPlaces = 2;
       this.layoutBoundRelativeTop.Enabled = false;
       this.layoutParametersError.SetIconAlignment(this.layoutBoundRelativeTop, System.Windows.Forms.ErrorIconAlignment.MiddleLeft);
+      this.layoutBoundRelativeTop.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
       this.layoutBoundRelativeTop.Location = new System.Drawing.Point(62, 3);
       this.layoutBoundRelativeTop.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
       this.layoutBoundRelativeTop.Maximum = new decimal(new int[] {
             99,
             0,
             0,
-            0});
+            131072});
       this.layoutBoundRelativeTop.Name = "layoutBoundRelativeTop";
       this.layoutBoundRelativeTop.Size = new System.Drawing.Size(56, 18);
       this.layoutBoundRelativeTop.TabIndex = 2;
@@ -634,16 +659,21 @@
             | System.Windows.Forms.AnchorStyles.Right)));
       this.kLayoutBoundTable.SetColumnSpan(this.layoutBoundRelativeLeft, 2);
       this.layoutBoundRelativeLeft.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.layoutParameters, "BoundRelativeLeft", true));
-      this.layoutBoundRelativeLeft.DecimalPlaces = 1;
+      this.layoutBoundRelativeLeft.DecimalPlaces = 2;
       this.layoutBoundRelativeLeft.Enabled = false;
       this.layoutParametersError.SetIconAlignment(this.layoutBoundRelativeLeft, System.Windows.Forms.ErrorIconAlignment.MiddleLeft);
+      this.layoutBoundRelativeLeft.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
       this.layoutBoundRelativeLeft.Location = new System.Drawing.Point(32, 27);
       this.layoutBoundRelativeLeft.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
       this.layoutBoundRelativeLeft.Maximum = new decimal(new int[] {
             99,
             0,
             0,
-            0});
+            131072});
       this.layoutBoundRelativeLeft.Name = "layoutBoundRelativeLeft";
       this.layoutBoundRelativeLeft.Size = new System.Drawing.Size(56, 18);
       this.layoutBoundRelativeLeft.TabIndex = 4;

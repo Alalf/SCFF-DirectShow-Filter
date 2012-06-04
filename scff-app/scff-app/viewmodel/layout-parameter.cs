@@ -57,12 +57,12 @@ partial class LayoutParameter : IDataErrorInfo {
     scff_interprocess.LayoutParameter output = new scff_interprocess.LayoutParameter();
 
     // 相対比率→ピクセル値変換
-    output.bound_x = (Int32)(bound_width * this.BoundRelativeLeft) / 100;
-    output.bound_y = (Int32)(bound_height * this.BoundRelativeTop) / 100;
+    output.bound_x = (Int32)(this.BoundRelativeLeft * bound_width);
+    output.bound_y = (Int32)(this.BoundRelativeTop * bound_height);
     output.bound_width =
-        (Int32)(bound_width * this.BoundRelativeRight) / 100 - output.bound_x;
+        (Int32)(this.BoundRelativeRight * bound_width) - output.bound_x;
     output.bound_height =
-        (Int32)(bound_height * this.BoundRelativeBottom) / 100 - output.bound_y;
+        (Int32)(this.BoundRelativeBottom * bound_height) - output.bound_y;
 
     output.window = (UInt64)this.Window;
     output.clipping_x = this.ClippingX;
@@ -155,9 +155,9 @@ partial class LayoutParameter : IDataErrorInfo {
     this.SetWindow(ExternalAPI.GetDesktopWindow());
 
     this.BoundRelativeLeft = 0.0;
-    this.BoundRelativeRight = 100.0;
+    this.BoundRelativeRight = 1.0;
     this.BoundRelativeTop = 0.0;
-    this.BoundRelativeBottom = 100.0;
+    this.BoundRelativeBottom = 1.0;
 
     // 拡大縮小設定
     this.SWScaleConfig = new SWScaleConfig();

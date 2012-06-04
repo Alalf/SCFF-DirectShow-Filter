@@ -204,13 +204,13 @@ partial class PreviewControl : UserControl {
   public Double RelativeLeft {
     get {
       if (this.Parent != null) {
-        return (this.Left * 100.0) / this.Parent.Width;
+        return (Double)this.Left / this.Parent.Width;
       }
       return 0.0;
     }
     set {
       if (this.Parent != null) {
-        this.Left = (int)((value * this.Parent.Width) / 100.0);
+        this.Left = (int)(value * this.Parent.Width);
       }
     }
   }
@@ -218,13 +218,13 @@ partial class PreviewControl : UserControl {
   public Double RelativeTop {
     get {
       if (this.Parent != null) {
-        return (this.Top * 100.0) / this.Parent.Height;
+        return (Double)this.Top / this.Parent.Height;
       }
       return 0.0;
     }
     set {
       if (this.Parent != null) {
-        this.Top = (int)((value * this.Parent.Height) / 100.0);
+        this.Top = (int)(value * this.Parent.Height);
       }
     }
   }
@@ -232,13 +232,13 @@ partial class PreviewControl : UserControl {
   public Double RelativeRight {
     get {
       if (this.Parent != null) {
-        return (this.Right * 100.0) / this.Parent.Width;
+        return (Double)this.Right / this.Parent.Width;
       }
-      return 100.0;
+      return 1.0;
     }
     set {
       if (this.Parent != null) {
-        int right = (int)((value * this.Parent.Width) / 100.0);
+        int right = (int)(value * this.Parent.Width);
         this.Width = right - this.Left;
       }
     }
@@ -247,13 +247,13 @@ partial class PreviewControl : UserControl {
   public Double RelativeBottom {
     get {
       if (this.Parent != null) {
-        return (this.Bottom * 100.0) / this.Parent.Height;
+        return (Double)this.Bottom / this.Parent.Height;
       }
-      return 100.0;
+      return 1.0;
     }
     set {
       if (this.Parent != null) {
-        int bottom = (int)((value * this.Parent.Height) / 100.0);
+        int bottom = (int)(value * this.Parent.Height);
         this.Height = bottom - this.Top;
       }
     }

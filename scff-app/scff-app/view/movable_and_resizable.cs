@@ -60,7 +60,7 @@ class MovableAndResizable : IDisposable {
     if (is_parent_exists) {
       bounds_ = Rectangle.Empty;
     } else {
-      bounds_ = Utilities.GetWindowRectangle(ExternalAPI.GetDesktopWindow());
+      bounds_ = scff_app.Utilities.GetWindowRectangle(ExternalAPI.GetDesktopWindow());
     }
 
     target_ = target;
@@ -95,8 +95,8 @@ class MovableAndResizable : IDisposable {
 
     if (mode_ != Mode.kNop && mode_ != Mode.kMove) {
       ExternalAPI.ReleaseCapture();
-      ExternalAPI.SystemDefinedMessage message = GetMessageFromMode(mode_);
-      ExternalAPI.SendMessage(target_.Handle, ExternalAPI.WM_NCLBUTTONDOWN, new IntPtr((int)message), IntPtr.Zero);
+      int hittest_result = GetHitTestResult(mode_);
+      ExternalAPI.SendMessage(target_.Handle, ExternalAPI.WM_NCLBUTTONDOWN, new IntPtr(hittest_result), IntPtr.Zero);
     }
   }
 
@@ -196,28 +196,28 @@ class MovableAndResizable : IDisposable {
   // 座標変換、型変換
 
   /// @brief ModeからSendMessage用のメッセージに変換する
-  ExternalAPI.SystemDefinedMessage GetMessageFromMode(Mode mode) {
+  int GetHitTestResult(Mode mode) {
     switch (mode) {
     case Mode.kResizeTopLeft:
-      return ExternalAPI.SystemDefinedMessage.HTTOPLEFT;
+      return ExternalAPI.HTTOPLEFT;
     case Mode.kResizeBottomRight:
-      return ExternalAPI.SystemDefinedMessage.HTBOTTOMRIGHT;
+      return ExternalAPI.HTBOTTOMRIGHT;
     case Mode.kResizeBottomLeft:
-      return ExternalAPI.SystemDefinedMessage.HTBOTTOMLEFT;
+      return ExternalAPI.HTBOTTOMLEFT;
     case Mode.kResizeTopRight:
-      return ExternalAPI.SystemDefinedMessage.HTTOPRIGHT;
+      return ExternalAPI.HTTOPRIGHT;
     case Mode.kResizeTop:
-      return ExternalAPI.SystemDefinedMessage.HTTOP;
+      return ExternalAPI.HTTOP;
     case Mode.kResizeBottom:
-      return ExternalAPI.SystemDefinedMessage.HTBOTTOM;
+      return ExternalAPI.HTBOTTOM;
     case Mode.kResizeLeft:
-      return ExternalAPI.SystemDefinedMessage.HTLEFT;
+      return ExternalAPI.HTLEFT;
     case Mode.kResizeRight:
-      return ExternalAPI.SystemDefinedMessage.HTRIGHT;
+      return ExternalAPI.HTRIGHT;
     case Mode.kMove:
-      return ExternalAPI.SystemDefinedMessage.HTTRANSPARENT;
+      return ExternalAPI.HTTRANSPARENT;
     default:
-      return ExternalAPI.SystemDefinedMessage.NULL;
+      return ExternalAPI.HTNOWHERE;
     }
   }
 

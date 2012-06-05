@@ -35,21 +35,29 @@ class ExternalAPI {
 
   // Constants
 
-  internal const uint WM_NCLBUTTONDOWN = 0x00A1;
+  // Window Message
+  internal const int WM_NCHITTEST      = 0x0084;
+  internal const int WM_NCLBUTTONDOWN  = 0x00A1;
+  internal const int WM_LBUTTONDOWN    = 0x0201;
+  internal const int WM_SIZING         = 0x0214;
+  internal const int WM_MOVING         = 0x0216;
 
-  internal enum SystemDefinedMessage {
-    NULL          = 0,
-    HTTRANSPARENT = -1,
-    HTLEFT        = 10,
-    HTRIGHT       = 11,
-    HTTOP         = 12,
-    HTTOPLEFT     = 13,
-    HTTOPRIGHT    = 14,
-    HTBOTTOM      = 15,
-    HTBOTTOMLEFT  = 16,
-    HTBOTTOMRIGHT = 17,
-  }
+  // Hit Test
+  internal const int HTTRANSPARENT      = -1;
+  internal const int HTNOWHERE          = 0;
+  internal const int HTCLIENT           = 1;
+  internal const int HTCAPTION          = 2;
 
+  internal const int HTLEFT             = 10;
+  internal const int HTRIGHT            = 11;
+  internal const int HTTOP              = 12;
+  internal const int HTTOPLEFT          = 13;
+  internal const int HTTOPRIGHT         = 14;
+  internal const int HTBOTTOM           = 15;
+  internal const int HTBOTTOMLEFT       = 16;
+  internal const int HTBOTTOMRIGHT      = 17;
+
+  // System Metric
   internal const int SM_XVIRTUALSCREEN   = 76;
   internal const int SM_YVIRTUALSCREEN   = 77;
   internal const int SM_CXVIRTUALSCREEN  = 78;

@@ -136,7 +136,13 @@ partial class PreviewControl : UserControl {
 
   private void fit_Click(object sender, EventArgs e) {
     double aspect = (double)captured_bitmap_.Width / captured_bitmap_.Height;
-    this.Size = new Size((int)Math.Floor(this.Height * aspect), this.Height);
+    if (aspect < 1.0) {
+      // 縦長なので横方向に短くする
+      this.Width = (int)Math.Floor(this.Height * aspect);
+    } else {
+      // 横長なので縦方向に小さくする
+      this.Height = (int)Math.Floor(this.Width / aspect);
+    }
   }
 
   private void captureTimer_Tick(object sender, EventArgs e) {

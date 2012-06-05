@@ -38,7 +38,7 @@ partial class PreviewControl : UserControl {
     index_ = index;
     layout_parameters_ = layout_parameters;
 
-    movable_and_resizable_ = new MovableAndResizable(this);
+    movable_and_resizable_ = new MovableAndResizable(this, true);
 
     // Bitmap作成＋１回スクリーンキャプチャ
     LayoutParameter target_parameter = GetTargetParameter();

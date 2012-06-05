@@ -36,21 +36,7 @@ public partial class AreaSelectForm : Form {
     //---------------------------------------------------------------
 
     layout_parameters_ = layoutParameters;
-
-    movable_and_resizable_ = new MovableAndResizable(this, Utilities.GetWindowRectangle(ExternalAPI.GetDesktopWindow()));
-
-    // オリジナルの値を保持しておく
-    LayoutParameter current = (LayoutParameter)layoutParameters.Current;
-    original_x_ = current.ClippingX;
-    original_y_ = current.ClippingY;
-    original_width_ = current.ClippingWidth;
-    original_height_ = current.ClippingHeight;
-
-    // ウィンドウ取り込み時はスクリーン座標に変換する
-    if (current.Window != ExternalAPI.GetDesktopWindow() && ExternalAPI.IsWindow(current.Window)) {
-      Utilities.GetScreenClientRect(current.Window,
-          out original_x_, out original_y_, out original_width_, out original_height_);
-    }
+    movable_and_resizable_ = new MovableAndResizable(this, false);
   }
 
   //===================================================================
@@ -59,8 +45,11 @@ public partial class AreaSelectForm : Form {
 
   private void AreaSelectForm_Load(object sender, EventArgs e) {
     // Formのプロパティを編集する際はLoadの中でやるのが好ましい
-    this.Location = new Point(original_x_, original_y_);
-    this.Size = new Size(original_width_, original_height_);
+    LayoutParameter current = (LayoutParameter)layout_parameters_.Current;
+    Rectangle screen_rectangle = current.ClippingScreenRectangle;
+
+    this.Location = new Point(screen_rectangle.X, screen_rectangle.Y);
+    this.Size = new Size(screen_rectangle.Width, screen_rectangle.Height);
   }
 
   private void AreaSelectForm_DoubleClick(object sender, EventArgs e) {
@@ -90,10 +79,5 @@ public partial class AreaSelectForm : Form {
 
   // ウィンドウにドラッグによる移動・リサイズ機能を付加
   MovableAndResizable movable_and_resizable_;
-
-  readonly int original_x_;
-  readonly int original_y_;
-  readonly int original_width_;
-  readonly int original_height_;
 }
 }

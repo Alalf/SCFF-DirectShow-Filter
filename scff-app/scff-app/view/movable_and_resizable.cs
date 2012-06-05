@@ -54,7 +54,15 @@ class MovableAndResizable : IDisposable {
 
   //-------------------------------------------------------------------
 
-  void Init(Control target) {
+  /// @brief コンストラクタ
+  public MovableAndResizable(Control target, bool is_parent_exists) {
+    // デスクトップ領域外へは行かないように
+    if (is_parent_exists) {
+      bounds_ = Rectangle.Empty;
+    } else {
+      bounds_ = Utilities.GetWindowRectangle(ExternalAPI.GetDesktopWindow());
+    }
+
     target_ = target;
 
     // イベントハンドラの登録
@@ -62,20 +70,6 @@ class MovableAndResizable : IDisposable {
     target_.MouseMove += target_MouseMove;
     target_.MouseUp += target_MouseUp;
     target_.SizeChanged += target_SizeChanged;
-  }
-
-  /// @brief コンストラクタ
-  public MovableAndResizable(Control target) {
-    is_parent_exists_ = true;
-    bounds_ = new Rectangle();
-    Init(target);
-  }
-
-  /// @brief コンストラクタ
-  public MovableAndResizable(Control target, Rectangle bounds) {
-    is_parent_exists_ = false;
-    bounds_ = bounds;
-    Init(target);
   }
 
   /// @brief Dispose（GCを考慮したデストラクタ）
@@ -135,7 +129,7 @@ class MovableAndResizable : IDisposable {
       // 必ず境界内に収まるように
       int justified_container_x = current_container_location_.X;
       int justified_container_y = current_container_location_.Y;
-      if (is_parent_exists_) {
+      if (bounds_.IsEmpty) {
         justified_container_x = Math.Max(0, justified_container_x);
         justified_container_x = Math.Min(target_.Parent.Width - current_size_.Width, justified_container_x);
         justified_container_y = Math.Max(0, justified_container_y);
@@ -290,17 +284,14 @@ class MovableAndResizable : IDisposable {
   // メンバ変数
   //===================================================================
 
-  readonly bool is_parent_exists_;
-
-  Rectangle bounds_;
+  readonly Rectangle bounds_;
+  /// @brief 操作の対象となるコントロール
+  readonly Control target_;
 
   Mode mode_;
   Point last_mouse_container_location_;
 
   Point current_container_location_;
   Size current_size_;
-
-  /// @brief 操作の対象となるコントロール
-  Control target_;
 }
 }

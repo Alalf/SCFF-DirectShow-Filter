@@ -34,29 +34,6 @@ partial class LayoutParameter : IDataErrorInfo {
     this.Init();
   }
 
-  public void SetWindow(UIntPtr window) {
-    this.Window = window;
-    this.Fit = true;
-    ModifyActualClippingRectangle();
-  }
-
-  public void SetWindowWithClippingRegion(UIntPtr window, int clipping_x, int clipping_y, int clipping_width, int clipping_height) {
-    this.Window = window;
-    this.Fit = false;
-    this.ActualClippingX = clipping_x;
-    this.ActualClippingY = clipping_y;
-    this.ActualClippingWidth = clipping_width;
-    this.ActualClippingHeight = clipping_height;
-  }
-
-  public void SetPrimaryDesktopWindow() {
-    ExternalAPI.RECT primary_desktop_rect;
-    ExternalAPI.GetClientRect(ExternalAPI.GetDesktopWindow(), out primary_desktop_rect);
-    this.SetWindowWithClippingRegion(ExternalAPI.GetDesktopWindow(),
-        primary_desktop_rect.left, primary_desktop_rect.top,
-        primary_desktop_rect.right, primary_desktop_rect.bottom);
-  }
-
   /// @brief scff_interprocess用に変換
   public scff_interprocess.LayoutParameter ToInterprocess(int bound_width, int bound_height) {
     scff_interprocess.LayoutParameter output = new scff_interprocess.LayoutParameter();
@@ -88,6 +65,9 @@ partial class LayoutParameter : IDataErrorInfo {
   }
 
   #region IDataErrorInfo メンバー
+  //===================================================================
+  // IDataErrorInfo メンバー
+  //===================================================================
 
   Dictionary<string, string> errors_ = new Dictionary<string,string>();
 
@@ -130,8 +110,8 @@ partial class LayoutParameter : IDataErrorInfo {
     }
 
     // クリッピングリージョンの判定
-    Rectangle bound_rectangle = Utilities.GetWindowRectangle(this.Window);
-    Rectangle clipping_rectangle = new Rectangle(this.ClippingX, this.ClippingY, this.ClippingWidth, this.ClippingHeight);
+    Rectangle bound_rectangle = this.WindowRectangle;
+    Rectangle clipping_rectangle = this.ClippingRectangle;
     if (this.ClippingWidth == 0) {
       errors_["ClippingWidth"] = "Clipping-width is invalid";
     }
@@ -159,7 +139,55 @@ partial class LayoutParameter : IDataErrorInfo {
 
   #endregion
 
-  //-------------------------------------------------------------------
+  //===================================================================
+  // プロパティアクセッサ
+  //===================================================================
+
+  public void SetWindow(UIntPtr window) {
+    this.Window = window;
+    this.Fit = true;
+    ModifyActualClippingRectangle();
+  }
+
+  public void SetWindowWithClippingRegion(UIntPtr window, int clipping_x, int clipping_y, int clipping_width, int clipping_height) {
+    this.Window = window;
+    this.Fit = false;
+    this.ActualClippingX = clipping_x;
+    this.ActualClippingY = clipping_y;
+    this.ActualClippingWidth = clipping_width;
+    this.ActualClippingHeight = clipping_height;
+  }
+
+  public void SetPrimaryDesktopWindow() {
+    ExternalAPI.RECT primary_desktop_rect;
+    ExternalAPI.GetClientRect(ExternalAPI.GetDesktopWindow(), out primary_desktop_rect);
+    this.SetWindowWithClippingRegion(ExternalAPI.GetDesktopWindow(),
+        primary_desktop_rect.left, primary_desktop_rect.top,
+        primary_desktop_rect.right, primary_desktop_rect.bottom);
+  }
+
+  /// @brief クリッピング領域をスクリーン座標に変換したもの
+  public Rectangle ClippingScreenRectangle {
+    get {
+      ExternalAPI.POINT clipping_screen_origin;
+      clipping_screen_origin.x = this.ClippingX;
+      clipping_screen_origin.y = this.ClippingY;
+      ExternalAPI.ClientToScreen(this.Window, ref clipping_screen_origin);
+
+      return new Rectangle(
+        clipping_screen_origin.x,
+        clipping_screen_origin.y,
+        this.ClippingWidth,
+        this.ClippingHeight);
+    }
+  }
+
+  /// @brief クリッピング領域を得る
+  Rectangle ClippingRectangle {
+    get {
+      return new Rectangle(this.ClippingX, this.ClippingY, this.ClippingWidth, this.ClippingHeight);
+    }
+  }
 
   // Windowの大きさを返す
   Rectangle WindowRectangle {
@@ -174,6 +202,8 @@ partial class LayoutParameter : IDataErrorInfo {
       return new Rectangle(this.ActualClippingX, this.ActualClippingY, this.ActualClippingWidth, this.ActualClippingHeight);
     }
   }
+
+  //-------------------------------------------------------------------
 
   // ActualiClippingRegionの領域がWindowRectangleを超えていたらリセットする
   void ModifyActualClippingRectangle() {

@@ -48,6 +48,14 @@ partial class LayoutParameter : IDataErrorInfo {
     this.ActualClippingHeight = clipping_height;
   }
 
+  public void SetPrimaryDesktopWindow() {
+    ExternalAPI.RECT primary_desktop_rect;
+    ExternalAPI.GetClientRect(ExternalAPI.GetDesktopWindow(), out primary_desktop_rect);
+    this.SetWindowWithClippingRegion(ExternalAPI.GetDesktopWindow(),
+        primary_desktop_rect.left, primary_desktop_rect.top,
+        primary_desktop_rect.right, primary_desktop_rect.bottom);
+  }
+
   /// @brief scff_interprocess用に変換
   public scff_interprocess.LayoutParameter ToInterprocess(int bound_width, int bound_height) {
     scff_interprocess.LayoutParameter output = new scff_interprocess.LayoutParameter();
@@ -167,11 +175,7 @@ partial class LayoutParameter : IDataErrorInfo {
   /// @brief デフォルトパラメータを設定
   void Init() {
     // プライマリディスプレイを初期値にする
-    ExternalAPI.RECT primary_desktop_rect;
-    ExternalAPI.GetClientRect(ExternalAPI.GetDesktopWindow(), out primary_desktop_rect);
-    this.SetWindowWithClippingRegion(ExternalAPI.GetDesktopWindow(),
-        primary_desktop_rect.left, primary_desktop_rect.top,
-        primary_desktop_rect.right, primary_desktop_rect.bottom);
+    SetPrimaryDesktopWindow();
 
     this.BoundRelativeLeft = 0.0;
     this.BoundRelativeRight = 1.0;

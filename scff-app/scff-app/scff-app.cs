@@ -262,7 +262,7 @@ partial class SCFFApp {
   //-------------------------------------------------------------------
 
   public void SetDesktopWindow() {
-    ((viewmodel.LayoutParameter)layout_parameters_.Current).SetWindow(ExternalAPI.GetDesktopWindow());
+    ((viewmodel.LayoutParameter)layout_parameters_.Current).SetPrimaryDesktopWindow();
   }
 
   public void SetWindowFromPoint(int screen_x, int screen_y) {

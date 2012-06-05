@@ -73,17 +73,13 @@ public partial class AreaSelectForm : Form {
   //-------------------------------------------------------------------
 
   void Apply() {
-    // HACK!: フォームの左上をスクリーン座標に変換
-    Point origin = new Point(0, 0);
-    int window_screen_x = PointToScreen(origin).X;
-    int window_screen_y = PointToScreen(origin).Y;
-    int window_width = this.Width;
-    int window_height = this.Height;
+    // フォームのクライアント領域をスクリーン座標に変換
+    Rectangle window_rect = RectangleToScreen(this.ClientRectangle);
 
     // デスクトップ取り込みに変更
     ((LayoutParameter)layout_parameters_.Current).SetWindowWithClippingRegion(
         ExternalAPI.GetDesktopWindow(),
-        window_screen_x, window_screen_y, window_width, window_height);
+        window_rect.X, window_rect.Y, window_rect.Width, window_rect.Height);
   }
 
   //===================================================================

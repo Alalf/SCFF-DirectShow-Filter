@@ -394,6 +394,9 @@ partial class LayoutParameter : INotifyPropertyChanged {
         return this.ActualClippingX;
       }
     }
+    set {
+      this.ActualClippingX = value;
+    }
   }
 
   public Int32 ClippingY {
@@ -403,6 +406,9 @@ partial class LayoutParameter : INotifyPropertyChanged {
       } else {
         return this.ActualClippingY;
       }
+    }
+    set {
+      this.ActualClippingY = value;
     }
   }
 
@@ -414,6 +420,9 @@ partial class LayoutParameter : INotifyPropertyChanged {
         return this.ActualClippingWidth;
       }
     }
+    set {
+      this.ActualClippingWidth = value;
+    }
   }
 
   public Int32 ClippingHeight {
@@ -424,6 +433,9 @@ partial class LayoutParameter : INotifyPropertyChanged {
         return this.ActualClippingHeight;
       }
     }
+    set {
+      this.ActualClippingHeight = value;
+    }
   }
 
   //-------------------------------------------------------------------
@@ -433,9 +445,7 @@ partial class LayoutParameter : INotifyPropertyChanged {
   /// @brief レイアウトの名前代わりに使用するWindowのクラス名
   public string WindowText {
     get {
-      if (this.Window == UIntPtr.Zero) {
-        return "(splash)";
-      } else if (!ExternalAPI.IsWindow(window_)) {
+      if (this.Window == UIntPtr.Zero || !ExternalAPI.IsWindow(window_)) {
         return "*** INVALID WINDOW ***";
       } else if (this.Window == ExternalAPI.GetDesktopWindow()) {
         return "(Desktop)";

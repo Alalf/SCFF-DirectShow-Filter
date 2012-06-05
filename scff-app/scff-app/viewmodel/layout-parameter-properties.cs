@@ -40,7 +40,12 @@ partial class LayoutParameter : INotifyPropertyChanged {
       if (window_ != value) {
         window_ = value;
         OnPropertyChanged("Window");
-
+      }
+      if (this.Fit) {
+        OnPropertyChanged("ClippingX");
+        OnPropertyChanged("ClippingY");
+        OnPropertyChanged("ClippingWidth");
+        OnPropertyChanged("ClippingHeight");
       }
     }
   }

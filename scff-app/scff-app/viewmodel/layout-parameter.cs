@@ -37,6 +37,7 @@ partial class LayoutParameter : IDataErrorInfo {
   public void SetWindow(UIntPtr window) {
     this.Window = window;
     this.Fit = true;
+    ModifyActualClippingRectangle();
   }
 
   public void SetWindowWithClippingRegion(UIntPtr window, int clipping_x, int clipping_y, int clipping_width, int clipping_height) {
@@ -158,19 +159,32 @@ partial class LayoutParameter : IDataErrorInfo {
 
   #endregion
 
+  //-------------------------------------------------------------------
+
   // Windowの大きさを返す
-  Size GetWindowSize() {
-    if (this.Window == UIntPtr.Zero) {
-      return Size.Empty;
-    } else if (!ExternalAPI.IsWindow(window_)) {
-      return Size.Empty;
-    } else {
-      Rectangle window_rectangle = Utilities.GetWindowRectangle(this.Window);
-      return new Size(window_rectangle.Width, window_rectangle.Height);
+  Rectangle WindowRectangle {
+    get {
+      return Utilities.GetWindowRectangle(this.Window);
     }
   }
 
-  //-------------------------------------------------------------------
+  // ActualClipping領域を返す
+  Rectangle ActualClippingRectangle {
+    get {
+      return new Rectangle(this.ActualClippingX, this.ActualClippingY, this.ActualClippingWidth, this.ActualClippingHeight);
+    }
+  }
+
+  // ActualiClippingRegionの領域がWindowRectangleを超えていたらリセットする
+  void ModifyActualClippingRectangle() {
+    Rectangle window_rect = this.WindowRectangle;
+    if (!window_rect.Contains(this.ActualClippingRectangle)) {
+      this.ActualClippingX = window_rect.X;
+      this.ActualClippingY = window_rect.Y;
+      this.ActualClippingWidth = window_rect.Width;
+      this.ActualClippingHeight = window_rect.Height;
+    }
+  }
 
   /// @brief デフォルトパラメータを設定
   void Init() {

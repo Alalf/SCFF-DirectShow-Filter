@@ -389,7 +389,7 @@ partial class LayoutParameter : INotifyPropertyChanged {
   public Int32 ClippingX {
     get {
       if (this.Fit) {
-        return 0;
+        return this.WindowRectangle.X;
       } else {
         return this.ActualClippingX;
       }
@@ -402,7 +402,7 @@ partial class LayoutParameter : INotifyPropertyChanged {
   public Int32 ClippingY {
     get {
       if (this.Fit) {
-        return 0;
+        return this.WindowRectangle.Y;
       } else {
         return this.ActualClippingY;
       }
@@ -415,7 +415,7 @@ partial class LayoutParameter : INotifyPropertyChanged {
   public Int32 ClippingWidth {
     get {
       if (this.Fit) {
-        return GetWindowSize().Width;
+        return this.WindowRectangle.Width;
       } else {
         return this.ActualClippingWidth;
       }
@@ -428,7 +428,7 @@ partial class LayoutParameter : INotifyPropertyChanged {
   public Int32 ClippingHeight {
     get {
       if (this.Fit) {
-        return GetWindowSize().Height;
+        return this.WindowRectangle.Height;
       } else {
         return this.ActualClippingHeight;
       }

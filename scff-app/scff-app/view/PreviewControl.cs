@@ -135,16 +135,8 @@ partial class PreviewControl : UserControl {
   }
 
   private void fit_Click(object sender, EventArgs e) {
-    LayoutParameter target_parameter = GetTargetParameter();
-    int padding_top, padding_bottom, padding_left, padding_right;
-    scff_imaging.Utilities.CalculatePaddingSize(
-        this.Width, this.Height,
-        captured_bitmap_.Width, captured_bitmap_.Height,
-        target_parameter.Stretch,
-        target_parameter.KeepAspectRatio,
-        out padding_top, out padding_bottom, out padding_left, out padding_right);
-
-    this.Size = new Size(this.Width - padding_left - padding_right, this.Height - padding_top - padding_bottom);
+    double aspect = (double)captured_bitmap_.Width / captured_bitmap_.Height;
+    this.Size = new Size((int)Math.Floor(this.Height * aspect), this.Height);
   }
 
   private void captureTimer_Tick(object sender, EventArgs e) {
@@ -212,7 +204,7 @@ partial class PreviewControl : UserControl {
     }
     set {
       if (this.Parent != null) {
-        this.Left = (int)(value * this.Parent.Width);
+        this.Left = (int)Math.Ceiling(value * this.Parent.Width);
       }
     }
   }
@@ -226,7 +218,7 @@ partial class PreviewControl : UserControl {
     }
     set {
       if (this.Parent != null) {
-        this.Top = (int)(value * this.Parent.Height);
+        this.Top = (int)Math.Ceiling(value * this.Parent.Height);
       }
     }
   }
@@ -240,7 +232,7 @@ partial class PreviewControl : UserControl {
     }
     set {
       if (this.Parent != null) {
-        int right = (int)(value * this.Parent.Width);
+        int right = (int)Math.Floor(value * this.Parent.Width);
         this.Width = right - this.Left;
       }
     }
@@ -255,7 +247,7 @@ partial class PreviewControl : UserControl {
     }
     set {
       if (this.Parent != null) {
-        int bottom = (int)(value * this.Parent.Height);
+        int bottom = (int)Math.Floor(value * this.Parent.Height);
         this.Height = bottom - this.Top;
       }
     }

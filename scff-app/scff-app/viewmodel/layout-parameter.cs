@@ -39,12 +39,13 @@ partial class LayoutParameter : IDataErrorInfo {
     scff_interprocess.LayoutParameter output = new scff_interprocess.LayoutParameter();
 
     // 相対比率→ピクセル値変換
-    output.bound_x = (Int32)(this.BoundRelativeLeft * bound_width);
-    output.bound_y = (Int32)(this.BoundRelativeTop * bound_height);
+    // Left/Topは切り捨て、Right/Bottomは切り上げ
+    output.bound_x = (Int32)Math.Ceiling(this.BoundRelativeLeft * bound_width);
+    output.bound_y = (Int32)Math.Ceiling(this.BoundRelativeTop * bound_height);
     output.bound_width =
-        (Int32)(this.BoundRelativeRight * bound_width) - output.bound_x;
+        (Int32)Math.Floor(this.BoundRelativeRight * bound_width) - output.bound_x;
     output.bound_height =
-        (Int32)(this.BoundRelativeBottom * bound_height) - output.bound_y;
+        (Int32)Math.Floor(this.BoundRelativeBottom * bound_height) - output.bound_y;
 
     output.window = (UInt64)this.Window;
     output.clipping_x = this.ClippingX;

@@ -102,7 +102,7 @@
       <DependentUpon>PreviewControl.cs</DependentUpon>
     </Compile>
     <Compile Include="scff-app\view\movable_and_resizable.cs" />
-    <Compile Include="scff-app\view\flexible.cs" />
+    <Compile Include="scff-app\view\utilities.cs" />
     <Compile Include="SCFFAppForm.cs">
       <SubType>Form</SubType>
     </Compile>

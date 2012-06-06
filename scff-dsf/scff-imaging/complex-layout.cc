@@ -160,8 +160,8 @@ ErrorCode ComplexLayout::Init() {
   MyDbgLog((LOG_TRACE, kDbgImportant,
           TEXT("ComplexLayout: Init")));
 
-  /// @warning ComplexLayoutはUYVYには対応していない
-  if (GetOutputImage()->pixel_format() == kUYVY) {
+  // DrawUtilsが使えるフォーマットでなければComplexLayoutは使えない
+  if (!Utilities::CanUseDrawUtils(GetOutputImage()->pixel_format())) {
     return ErrorOccured(kComplexLayoutInvalidPixelFormatError);
   }
 

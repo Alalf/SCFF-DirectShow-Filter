@@ -41,8 +41,12 @@ partial class SWScaleConfig {
     output.chroma_gblur = this.ChromaGBlur;
     output.luma_sharpen = this.LumaSharpen;
     output.chroma_sharpen = this.ChromaSharpen;
-    output.chroma_hshift = this.ChromaHShift;
-    output.chroma_vshift = this.ChromaVShift;
+
+    /// @warning HShift/VShiftの設定はffdshowでも0.0固定になっていた
+    output.chroma_hshift = 0.0F;
+    output.chroma_vshift = 0.0F;
+    // output.chroma_hshift = this.ChromaHShift;
+    // output.chroma_vshift = this.ChromaVShift;
 
     return output;
   }

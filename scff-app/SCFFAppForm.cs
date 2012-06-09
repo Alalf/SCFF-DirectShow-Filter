@@ -298,8 +298,8 @@ public partial class SCFFAppForm : Form {
     this.resizeMethodCGBlur.Enabled = is_filter_enabled;
     this.resizeMethodLSharpen.Enabled = is_filter_enabled;
     this.resizeMethodCSharpen.Enabled = is_filter_enabled;
-    this.resizeMethodCHShift.Enabled = is_filter_enabled;
-    this.resizeMethodCVShift.Enabled = is_filter_enabled;
+    // this.resizeMethodCHShift.Enabled = is_filter_enabled;
+    // this.resizeMethodCVShift.Enabled = is_filter_enabled;
   }
 
   private void kLayoutParametersNavigator_RefreshItems(object sender, EventArgs e) {

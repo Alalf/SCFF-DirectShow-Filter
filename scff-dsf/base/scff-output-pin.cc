@@ -140,8 +140,6 @@ HRESULT SCFFOutputPin::GetMediaType(int position, CMediaType *media_type) {
          &(current_info.bmiHeader),
          sizeof(BITMAPINFOHEADER));
 
-  /// @todo(me) GetBitmapSize(&video_info->bmiHeader)と異なるかも。要調査
-
   //-------------------------------------------------------------------
   // FPSなどのVIDEOINFOの設定
   video_info->AvgTimePerFrame = ToFrameInterval(fps_);

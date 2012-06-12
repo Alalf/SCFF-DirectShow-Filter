@@ -135,6 +135,7 @@ void Utilities::ToWindowsBitmapInfo(ImagePixelFormat pixel_format,
   info->bmiHeader.biWidth         = width;
   info->bmiHeader.biHeight        = height;
   info->bmiHeader.biPlanes        = 1;
+  /// @todo(me) GetBitmapSize(&video_info->bmiHeader)と異なるかも。要調査
   info->bmiHeader.biSizeImage     =
       static_cast<DWORD>(CalculateDataSize(pixel_format, width, height));
   info->bmiHeader.biXPelsPerMeter = 0;

@@ -9,7 +9,7 @@ copy /y "packaging\Microsoft .NET Framework 4 Client Profile.url" "..\package\SC
 copy /y "packaging\VC2010SP1 Redistributable Package (x86).url" "..\package\SCFF-v010a-x86"
 copy /y "packaging\install-x86.bat" "..\package\SCFF-v010a-x86"
 copy /y "packaging\uninstall-x86.bat" "..\package\SCFF-v010a-x86"
-copy /y "..\README" "..\package\SCFF-v010a-x86"
+copy /y "..\README.md" "..\package\SCFF-v010a-x86"
 copy /y "..\LICENSE" "..\package\SCFF-v010a-x86"
 
 copy /y "..\dist\Release\scff-app.exe" "..\package\SCFF-v010a-amd64"
@@ -20,5 +20,5 @@ copy /y "packaging\Microsoft .NET Framework 4 Client Profile.url" "..\package\SC
 copy /y "packaging\VC2010SP1 Redistributable Package (x64).url" "..\package\SCFF-v010a-amd64"
 copy /y "packaging\install-amd64.bat" "..\package\SCFF-v010a-amd64"
 copy /y "packaging\uninstall-amd64.bat" "..\package\SCFF-v010a-amd64"
-copy /y "..\README" "..\package\SCFF-v010a-amd64"
+copy /y "..\README.md" "..\package\SCFF-v010a-amd64"
 copy /y "..\LICENSE" "..\package\SCFF-v010a-amd64"

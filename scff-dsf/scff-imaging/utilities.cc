@@ -377,6 +377,6 @@ void Utilities::GetWindowRectangle(HWND window, int *x, int *y,
     *y = window_rect.top;
     *width = window_rect.right - window_rect.left;
     *height = window_rect.bottom - window_rect.top;
-  } 
+  }
 }
 }   // namespace scff_imaging

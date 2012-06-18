@@ -82,12 +82,13 @@ ErrorCode ScreenCapture::ValidateParameter(int index) {
   int window_y = -1;
   int window_width = -1;
   int window_height = -1;
-  Utilities::GetWindowRectangle(window, 
+  Utilities::GetWindowRectangle(window,
       &window_x, &window_y, &window_width, &window_height);
 
   // クリッピング開始座標がウィンドウ領域に含まれているか
   if (!Utilities::Contains(window_x, window_y, window_width, window_height,
-                           clipping_x, clipping_y, clipping_width, clipping_height)) {
+                           clipping_x, clipping_y,
+                           clipping_width, clipping_height)) {
     return kScreenCaptureInvalidClippingRegionError;
   }
 

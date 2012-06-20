@@ -51,7 +51,8 @@ public partial class SCFFAppForm : Form {
 
   private void SCFFAppForm_Load(object sender, EventArgs e) {
     //アプリケーションの設定を読み込む
-    Properties.Settings.Default.Reload();
+    this.Location = Properties.Settings.Default.SCFFAppFormLocation;
+    this.WindowState = Properties.Settings.Default.SCFFAppFormWindowState;
 
     // リサイズメソッドのコンボボックスのデータソースを設定
     this.resizeMethodList.DisplayMember = "Value";
@@ -75,11 +76,17 @@ public partial class SCFFAppForm : Form {
     app_.DWMAPIOff();
   }
 
-  private void SCFFAppForm_FormClosed(object sender, FormClosedEventArgs e) {
+  private void SCFFAppForm_FormClosing(object sender, FormClosingEventArgs e) {
     // Aeroの状態を元に戻す
     app_.DWMAPIRestore();
 
     //アプリケーションの設定を保存する
+    Properties.Settings.Default.SCFFAppFormWindowState = this.WindowState;
+    if (this.WindowState == FormWindowState.Normal) {
+      Properties.Settings.Default.SCFFAppFormLocation = this.Location;
+    } else {
+      Properties.Settings.Default.SCFFAppFormLocation = this.RestoreBounds.Location;
+    }
     Properties.Settings.Default.Save();
   }
 

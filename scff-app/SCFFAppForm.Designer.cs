@@ -1579,14 +1579,13 @@
       this.Controls.Add(this.kLayout);
       this.Controls.Add(this.kMainButtonPanel);
       this.Controls.Add(this.kOption);
-      this.DataBindings.Add(new System.Windows.Forms.Binding("Location", global::scff_app.Properties.Settings.Default, "SCFFAppFormLocation", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
       this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-      this.Location = global::scff_app.Properties.Settings.Default.SCFFAppFormLocation;
+      this.Location = new System.Drawing.Point(32, 32);
       this.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
       this.MaximizeBox = false;
       this.Name = "SCFFAppForm";
       this.Text = "SCFF DirectShow Filter Ver.0.1.0";
-      this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.SCFFAppForm_FormClosed);
+      this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SCFFAppForm_FormClosing);
       this.Load += new System.EventHandler(this.SCFFAppForm_Load);
       this.Shown += new System.EventHandler(this.SCFFAppForm_Shown);
       this.mainMenuStrip.ResumeLayout(false);

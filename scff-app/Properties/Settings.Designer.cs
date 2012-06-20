@@ -58,5 +58,29 @@ namespace scff_app.Properties {
                 this["AutoApply"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Normal")]
+        public global::System.Windows.Forms.FormWindowState SCFFAppFormWindowState {
+            get {
+                return ((global::System.Windows.Forms.FormWindowState)(this["SCFFAppFormWindowState"]));
+            }
+            set {
+                this["SCFFAppFormWindowState"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Normal")]
+        public global::System.Windows.Forms.FormWindowState LayoutFormWindowState {
+            get {
+                return ((global::System.Windows.Forms.FormWindowState)(this["LayoutFormWindowState"]));
+            }
+            set {
+                this["LayoutFormWindowState"] = value;
+            }
+        }
     }
 }

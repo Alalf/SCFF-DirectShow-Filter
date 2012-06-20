@@ -46,6 +46,10 @@ partial class LayoutForm : Form {
   //===================================================================
 
   private void LayoutForm_Load(object sender, System.EventArgs e) {
+    //アプリケーションの設定を読み込む
+    this.Location = Properties.Settings.Default.LayoutFormLocation;
+    this.WindowState = Properties.Settings.Default.LayoutFormWindowState;
+
     // Directoryから現在選択中のEntryを取得し、出力幅、高さを得る
     Entry current_entry = (Entry)entries_.Current;
     int bound_width = SCFFApp.kDefaultBoundWidth;
@@ -60,6 +64,19 @@ partial class LayoutForm : Form {
     this.layoutPanel.Size = new Size(bound_width, bound_height);
     this.layoutPanel.DataSource = layout_parameters_;
   }
+
+  private void LayoutForm_FormClosing(object sender, FormClosingEventArgs e) {
+    //アプリケーションの設定を保存する
+    Properties.Settings.Default.LayoutFormWindowState = this.WindowState;
+    if (this.WindowState == FormWindowState.Normal) {
+      Properties.Settings.Default.LayoutFormLocation = this.Location;
+    } else {
+      Properties.Settings.Default.LayoutFormLocation = this.RestoreBounds.Location;
+    }
+    Properties.Settings.Default.Save();
+  }
+
+  //-------------------------------------------------------------------
 
   private void add_Click(object sender, System.EventArgs e) {
     /// @todo(me) 実装

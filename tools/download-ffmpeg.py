@@ -24,13 +24,13 @@ kPixdescHeaderPatchDst = 'extern __declspec(dllimport) const AVPixFmtDescriptor 
 #-----------------------------------------------------------------------
 
 def MakeTmp():
-    from os import mkdir
+    from os import makedirs
     from shutil import rmtree
 
     print >>stderr, 'make-tmp:'
     
     rmtree(kTmpDirectory, True)
-    mkdir(kTmpDirectory)
+    makedirs(kTmpDirectory)
 
 #-----------------------------------------------------------------------
 
@@ -60,7 +60,7 @@ def ExtractFFmpeg():
 
 def ArrangeFFmpeg():
     from os import listdir
-    from os import mkdir
+    from os import makedirs
     from shutil import rmtree
     from shutil import copyfile
     from subprocess import call
@@ -84,8 +84,8 @@ def ArrangeFFmpeg():
     # ディレクトリを生成する
     rmtree(k32bitTmpDirectory, True)
     rmtree(k64bitTmpDirectory, True)
-    mkdir(k32bitTmpDirectory)
-    mkdir(k64bitTmpDirectory)
+    makedirs(k32bitTmpDirectory)
+    makedirs(k64bitTmpDirectory)
 
     # Xcopyでファイルを上書きコピーする
     for k, v in ffmpeg_dirs.items():

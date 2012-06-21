@@ -8,9 +8,9 @@ k32bitDSFBuildScript = 'build-scff-dsf-x86.bat'
 k64bitDSFBuildScript = 'build-scff-dsf-amd64.bat'
 kAPPBuildScript = 'build-scff-app.bat'
 
-kTmpDirectory = 'tmp'
-k32bitDirectory = '%s/SCFF-DirectShow-Filter-x86' % kTmpDirectory
-k64bitDirectory = '%s/SCFF-DirectShow-Filter-amd64' % kTmpDirectory
+kTmpDirectory = 'tmp\\package'
+k32bitDirectory = kTmpDirectory + '\\SCFF-DirectShow-Filter-x86'
+k64bitDirectory = kTmpDirectory + '\\SCFF-DirectShow-Filter-amd64'
 
 #----------------------------------------------------------------------
 
@@ -92,17 +92,14 @@ def BuildSCFF():
 def MakePackage():
     from glob import iglob
     from shutil import rmtree
-    from os import mkdir
+    from os import makedirs
     
     print >>stderr, 'make-package:'
-    
-    # テンポラリディレクトリを作成
-    rmtree(kTmpDirectory, True)
-    mkdir(kTmpDirectory)
 
     # ディレクトリを作成
-    mkdir(k32bitDirectory)
-    mkdir(k64bitDirectory)
+    rmtree(kTmpDirectory, True)
+    makedirs(k32bitDirectory)
+    makedirs(k64bitDirectory)
 
 #----------------------------------------------------------------------
 

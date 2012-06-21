@@ -132,7 +132,7 @@
    - Microsoft Visual C++ 2010 Express Edition + Windows SDK 7.1で確認済み
    - 必要ならばいくつかのプロジェクト設定を書き換えること
 
-4. tools/copy-binaries.batを実行してdistディレクトリにdllなどをコピー
+4. tools/copy-ffmpeg-dll.batを実行してdistディレクトリにffmpeg付属のdllをコピー
 
 5. tools/install-debug.batかtools/install-release.batを実行
 

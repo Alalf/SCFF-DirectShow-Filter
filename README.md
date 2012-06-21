@@ -104,7 +104,15 @@
 開発者向け: ビルド+利用方法
 -----------------------------------------------------------------------
 
-1. http://ffmpeg.zeranoe.com/builds/ からSharedビルド及びDevビルドを取得する
+1. [Zeranoe FFmpeg builds](http://ffmpeg.zeranoe.com/builds/) からSharedビルド及びDevビルドを取得する
+    - [32bit Builds (Shared)]
+      (http://ffmpeg.zeranoe.com/builds/win32/shared/ffmpeg-latest-win32-shared.7z)
+    - [32bit Builds (Dev)]
+      (http://ffmpeg.zeranoe.com/builds/win32/dev/ffmpeg-latest-win32-dev.7z)
+    - [64bit Builds (Shared)]
+      (http://ffmpeg.zeranoe.com/builds/win64/shared/ffmpeg-latest-win64-shared.7z)
+    - [64bit Builds (Dev)]
+      (http://ffmpeg.zeranoe.com/builds/win64/dev/ffmpeg-latest-win64-dev.7z)
     - ext/ffmpeg/amd64に64bit版を、ext/ffmpeg/x86に32bit版を展開する
     - SharedもDevも同じディレクトリに展開すること（数個のファイルが上書きされるが問題ない）
     - ext/ffmpeg/amd64/README.txt, ext/ffmpeg/x86/README.txtが存在するように確認すること

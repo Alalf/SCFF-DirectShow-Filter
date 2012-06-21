@@ -1,22 +1,29 @@
-﻿SCFF DirectShow Filter Ver 0.1.0 (2012/5/14)
+﻿SCFF DirectShow Filter
 =======================================================================
 
 - SCFF directShow FilterはWindows用スクリーンキャプチャプログラム(DirectShowフィルタ)です。
 - ffmpegやWindows Media Encoderの映像入力として使われることを想定しています。
+- リンク:
+    - Web: http://alalf.github.com/SCFF-DirectShow-Filter/
+    - GitHub: https://github.com/Alalf/SCFF-DirectShow-Filter
+    - Nightly-Build:  https://github.com/Alalf/SCFF-DirectShow-Filter/downloads
 
 
 必要動作環境
 -----------------------------------------------------------------------
 
-- (開発中のため調査中です)
 - Windows XP SP3
 - 画面の色数: 32bit True Color
+- (調査中)
+
 
 最適動作環境
 -----------------------------------------------------------------------
+
 - Windows 7
 - CPU: Intel Sandy Bridge/Ivy Bridge
-    - Lucid Virtu (MVP) I-ModeをONにした場合、最高のパフォーマンスを期待できます。
+    - Lucid Virtu (MVP) I-Mode
+    - GPUに全く負荷を与えずにスクリーンキャプチャができます
 
 
 インストール方法
@@ -153,10 +160,21 @@
 各種エンコーダー対応情報
 -----------------------------------------------------------------------
 
-### Windows Media Encoder etc.
-- YUV420P(I420)に加えてRGB 32(RGB0),YUV422(UYVY)フォーマット出力が利用可能です。
-    - （暫定対応なのでYUV422(UYVY)はかなり機能が制限されます）
-    - WMEのプロパティ > 処理 > ビデオ > ピクセルの形式から「RGB 32」「UYVY」を選択することで利用できます。
+### ffmpeg
+- サンプル設定がtools/ffmpeg_test.batにあります。
+
+### xSplit
+- xSplitと併用する場合、ffmpegの一部ライブラリが干渉することがあります。
+    - SplitMediaLabs\XSplit\avutil-51.dllをSCFF付属のavutil-*.dllと置き換えるとよい、という報告がありました。
+
+### Windows Media Encoder
+- YUV420P(I420)に加えて各種ピクセルフォーマット出力が利用可能です。
+    - YUV420P: IYUV/YV12
+    - RGB32
+    - [暫定対応] YUV422: UYVY/YUY2 
+        - レイアウト機能、Keep Aspect Ratioなどの設定が使えません
+- WMEのノンインターレース化処理の利用は非推奨です。
+    - アマレコやpecatvのデインタレース機能を利用することをおすすめします。
 
 ### KoToEncoder(KTE)
 - KTEでYUV420P出力を利用する場合、scff-dsf/base/constants.hの以下の部分：

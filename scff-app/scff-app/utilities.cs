@@ -22,6 +22,7 @@ namespace scff_app {
 
 using System;
 using System.Drawing;
+using System.Windows.Forms;
 
 /// @brief scff_app用ユーティリティクラス
 class Utilities {
@@ -29,10 +30,7 @@ class Utilities {
   public static Rectangle GetWindowRectangle(UIntPtr window) {
     Rectangle window_rectangle = new Rectangle(0, 0, 0, 0);
     if (window == ExternalAPI.GetDesktopWindow()) {
-      window_rectangle.X = ExternalAPI.GetSystemMetrics(ExternalAPI.SM_XVIRTUALSCREEN);
-      window_rectangle.Y = ExternalAPI.GetSystemMetrics(ExternalAPI.SM_YVIRTUALSCREEN);
-      window_rectangle.Width = ExternalAPI.GetSystemMetrics(ExternalAPI.SM_CXVIRTUALSCREEN);
-      window_rectangle.Height = ExternalAPI.GetSystemMetrics(ExternalAPI.SM_CYVIRTUALSCREEN);
+      window_rectangle = SystemInformation.VirtualScreen;
     } else if (ExternalAPI.IsWindow(window)) {
       ExternalAPI.RECT window_rect;
       ExternalAPI.GetClientRect(window, out window_rect);

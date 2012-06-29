@@ -1,4 +1,7 @@
 /*
+ * Copyright 2011 Stefano Sabatini <stefano.sabatini-lala poste it>
+ * Copyright 2012 Nicolas George <nicolas.george normalesup org>
+ *
  * This file is part of FFmpeg.
  *
  * FFmpeg is free software; you can redistribute it and/or
@@ -16,15 +19,15 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-#include <libavfilter/drawutils.h>
-
 //---------------------------------------------------------------------
-// 2012/05/06 modified by Alalf
+// 2012/06/30 modified by Alalf
+#include <libavfilter/drawutils.h>
 extern "C" {
-#include <libavfilter/avfilter.h>
-#include <libavutil/pixdesc.h>
+#include <libavutil/avutil.h>
 #include <libavutil/colorspace.h>
+#include <libavutil/pixdesc.h>
 }
+#include <libavfilter/formats.h>
 //---------------------------------------------------------------------
 
 enum { RED = 0, GREEN, BLUE, ALPHA };
@@ -64,8 +67,8 @@ int ff_fill_line_with_color(uint8_t *line[4], int pixel_step[4], int w, uint8_t 
         for (i = 0; i < 4; i++)
             dst_color[rgba_map[i]] = rgba_color[i];
         //-------------------------------------------------------------
-        // 2012/05/07 modified by Alalf
-        line[0] = static_cast<uint8_t*>(av_malloc(w * pixel_step[0]));
+        // 2012/06/30 modified by Alalf
+        line[0] = reinterpret_cast<uint8_t*>(av_malloc(w * pixel_step[0]));
         //-------------------------------------------------------------
         for (i = 0; i < w; i++)
             memcpy(line[0] + i * pixel_step[0], dst_color, pixel_step[0]);
@@ -86,8 +89,8 @@ int ff_fill_line_with_color(uint8_t *line[4], int pixel_step[4], int w, uint8_t 
             pixel_step[plane] = 1;
             line_size = (w >> hsub1) * pixel_step[plane];
             //---------------------------------------------------------
-            // 2012/05/07 modified by Alalf
-            line[plane] = static_cast<uint8_t*>(av_malloc(line_size));
+            // 2012/06/30 modified by Alalf
+            line[plane] = reinterpret_cast<uint8_t*>(av_malloc(line_size));
             //---------------------------------------------------------
             memset(line[plane], dst_color[plane], line_size);
         }
@@ -506,7 +509,7 @@ int ff_draw_round_to_sub(FFDrawContext *draw, int sub_dir, int round_dir,
 AVFilterFormats *ff_draw_supported_pixel_formats(unsigned flags)
 {
     //-----------------------------------------------------------------
-    // 2012/05/07 modified by Alalf
+    // 2012/06/30 modified by Alalf
     // **WARNING** int->enum static_casting
     // Where's our enum iterator?
     int pix_fmts[PIX_FMT_NB + 1];
@@ -518,7 +521,7 @@ AVFilterFormats *ff_draw_supported_pixel_formats(unsigned flags)
             pix_fmts[n++] = i;
     //-----------------------------------------------------------------
     pix_fmts[n++] = PIX_FMT_NONE;
-    return avfilter_make_format_list(pix_fmts);
+    return ff_make_format_list(pix_fmts);
 }
 
 #ifdef TEST

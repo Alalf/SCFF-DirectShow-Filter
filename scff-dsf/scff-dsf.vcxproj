@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\ext\src\libavfilter\drawutils.cc" />
+    <ClCompile Include="..\ext\src\libavfilter\formats.cc" />
     <ClCompile Include="base\constants.cc" />
     <ClCompile Include="base\debug.cc" />
     <ClCompile Include="base\scff-clock-time.cc" />
@@ -46,6 +47,7 @@
     <ClCompile Include="scff-interprocess\interprocess.cc" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\ext\include\libavfilter\all_channel_layouts.inc" />
     <None Include="base\scff-dsf-amd64.def" />
     <None Include="base\scff-dsf-x86.def" />
     <None Include="base\scff-dsf.dox" />
@@ -53,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\ext\include\libavfilter\drawutils.h" />
+    <ClInclude Include="..\ext\include\libavfilter\formats.h" />
     <ClInclude Include="..\ext\include\libavutil\colorspace.h" />
     <ClInclude Include="base\constants.h" />
     <ClInclude Include="base\debug.h" />
@@ -173,7 +176,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;ARCH_X86_32;SCFFDSF_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SolutionDir)ext\directshow\baseclasses;$(SolutionDir)ext\ffmpeg\$(PlatformShortName)\include;$(SolutionDir)ext\include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile>StdAfx.h</PrecompiledHeaderFile>
-      <DisableSpecificWarnings>4005;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4005;4018;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -196,7 +199,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;ARCH_X86_64;SCFFDSF_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SolutionDir)ext\directshow\baseclasses;$(SolutionDir)ext\ffmpeg\$(PlatformShortName)\include;$(SolutionDir)ext\include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile>StdAfx.h</PrecompiledHeaderFile>
-      <DisableSpecificWarnings>4005;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4005;4018;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -220,7 +223,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;ARCH_X86_32;SCFFDSF_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SolutionDir)ext\directshow\baseclasses;$(SolutionDir)ext\ffmpeg\$(PlatformShortName)\include;$(SolutionDir)ext\include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile>StdAfx.h</PrecompiledHeaderFile>
-      <DisableSpecificWarnings>4005;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4005;4018;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -247,7 +250,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;ARCH_X86_64;SCFFDSF_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SolutionDir)ext\directshow\baseclasses;$(SolutionDir)ext\ffmpeg\$(PlatformShortName)\include;$(SolutionDir)ext\include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile>StdAfx.h</PrecompiledHeaderFile>
-      <DisableSpecificWarnings>4005;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4005;4018;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

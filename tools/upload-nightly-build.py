@@ -69,10 +69,10 @@ print json.dumps(data, indent=2)
 expires = calendar.timegm(time.strptime(data['expirationdate'],'%Y-%m-%dT%H:%M:%S.000Z'))
 
 # 実際にファイルをアップロード
-payload = [('key',data['path']), ('acl',data['acl']), ('success_action_status',201), ('Filename',data['name']), ('AWSAccessKeyId',data['accesskeyid']), ('Policy',data['policy']), ('Signature',data['signature']), ('Expires',expires), ('Content-Type',data['mime_type']), ('file',open(path_32bit, 'rb'))]
+payload = [('key',data['path']), ('acl',data['acl']), ('success_action_status',201), ('Filename',data['name']), ('AWSAccessKeyId',data['accesskeyid']), ('Policy',data['policy']), ('Signature',data['signature']), ('Expires',expires), ('Content-Type',data['mime_type'])]
 #print payload
-#files = {'file': (filename_32bit, open(path_32bit, 'rb'))}
-response = requests.post(data['s3_url'], data=payload)
+files = {'file': (filename_32bit, open(path_32bit, 'rb'))}
+response = requests.post(data['s3_url'], data=payload, files=files)
 print response.content
 
 if not response.ok:

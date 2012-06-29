@@ -95,6 +95,9 @@
     <ClCompile Include="scff-imaging\complex-layout.cc">
       <Filter>scff-imaging</Filter>
     </ClCompile>
+    <ClCompile Include="..\ext\src\libavfilter\formats.cc">
+      <Filter>ext</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="base\scff-dsf-amd64.def">
@@ -108,6 +111,9 @@
     </None>
     <None Include="scff-dsf.bmp">
       <Filter>リソース ファイル</Filter>
+    </None>
+    <None Include="..\ext\include\libavfilter\all_channel_layouts.inc">
+      <Filter>ext</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -203,6 +209,9 @@
     </ClInclude>
     <ClInclude Include="scff-imaging\layout.h">
       <Filter>scff-imaging</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ext\include\libavfilter\formats.h">
+      <Filter>ext</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

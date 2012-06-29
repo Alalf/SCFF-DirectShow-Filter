@@ -20,10 +20,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\ext\src\libavfilter\drawutils.cc" />
+    <ClCompile Include="..\ext\src\libavfilter\formats.cc" />
     <ClCompile Include="base\scff-tests.cc" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\ext\include\libavfilter\drawutils.h" />
+    <ClInclude Include="..\ext\include\libavfilter\formats.h" />
     <ClInclude Include="..\ext\include\libavutil\colorspace.h" />
     <ClInclude Include="base\scff-tests.h" />
   </ItemGroup>
@@ -104,6 +106,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SolutionDir)ext\ffmpeg\$(PlatformShortName)\include;$(SolutionDir)ext\include;$(ProjectDir)</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4018;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -123,6 +126,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SolutionDir)ext\ffmpeg\$(PlatformShortName)\include;$(SolutionDir)ext\include;$(ProjectDir)</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4018;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -144,6 +148,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SolutionDir)ext\ffmpeg\$(PlatformShortName)\include;$(SolutionDir)ext\include;$(ProjectDir)</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4018;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -167,6 +172,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SolutionDir)ext\ffmpeg\$(PlatformShortName)\include;$(SolutionDir)ext\include;$(ProjectDir)</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4018;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

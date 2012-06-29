@@ -25,9 +25,8 @@
  */
 
 #include <stdint.h>
-
 //---------------------------------------------------------------------
-// 2012/05/06 modified by Alalf
+// 2012/06/30 modified by Alalf
 struct AVFilterFormats;
 struct FFDrawContext;
 //---------------------------------------------------------------------

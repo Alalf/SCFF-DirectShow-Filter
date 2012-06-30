@@ -1,27 +1,5 @@
-﻿# FFmpeg Download Script
+﻿# download-ffmpeg.py
 #======================================================================
-
-from sys import stderr
-
-# 設定
-kTmpDirectory = 'tmp\\ffmpeg'
-k32bitTmpDirectory = kTmpDirectory + '\\x86'
-k64bitTmpDirectory = kTmpDirectory + '\\amd64'
-k32bitExtDirectory = '..\\ext\\ffmpeg\\x86'
-k64bitExtDirectory = '..\\ext\\ffmpeg\\amd64'
-
-kDownloads = {}
-kDownloads['ffmpeg-latest-win32-shared.7z'] = 'http://ffmpeg.zeranoe.com/builds/win32/shared/ffmpeg-latest-win32-shared.7z'
-kDownloads['ffmpeg-latest-win32-dev.7z'] = 'http://ffmpeg.zeranoe.com/builds/win32/dev/ffmpeg-latest-win32-dev.7z'
-kDownloads['ffmpeg-latest-win64-shared.7z'] = 'http://ffmpeg.zeranoe.com/builds/win64/shared/ffmpeg-latest-win64-shared.7z'
-kDownloads['ffmpeg-latest-win64-dev.7z'] = 'http://ffmpeg.zeranoe.com/builds/win64/dev/ffmpeg-latest-win64-dev.7z'
-
-k7zipCommand = '7zr.exe x -o%s %s\\' % (kTmpDirectory, kTmpDirectory)
-
-kPixdescHeaderPatchSrc = 'extern const AVPixFmtDescriptor av_pix_fmt_descriptors[];'
-kPixdescHeaderPatchDst = 'extern __declspec(dllimport) const AVPixFmtDescriptor av_pix_fmt_descriptors[];'
-
-#-----------------------------------------------------------------------
 
 def MakeTmp():
     from os import makedirs

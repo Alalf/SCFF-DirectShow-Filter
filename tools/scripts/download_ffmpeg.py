@@ -63,7 +63,6 @@ def relocate():
     from sys import stderr
     from os import listdir
     from os import makedirs
-    from shutil import rmtree
     from shutil import copyfile
     from subprocess import call
 
@@ -84,8 +83,6 @@ def relocate():
                 ffmpeg_dirs[k] = TMP_DIR + '\\' + i
 
     # ディレクトリを生成する
-    rmtree(FFMPEG_32BIT_DIR, True)
-    rmtree(FFMPEG_64BIT_DIR, True)
     makedirs(FFMPEG_32BIT_DIR)
     makedirs(FFMPEG_64BIT_DIR)
 

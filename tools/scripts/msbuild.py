@@ -31,7 +31,7 @@ def make_build_x86_bat():
     print >>stderr, 'make-build-x86-bat:'
     
     # ビルドスクリプト生成
-    build_script = '''
+    build_script = '''@echo off
 call "%s"
 msbuild /verbosity:m /t:build /p:Configuration=Debug /p:Platform=Win32 "%s"
 msbuild /verbosity:m /t:build /p:Configuration=Release /p:Platform=Win32 "%s"
@@ -53,7 +53,7 @@ def make_build_amd64_bat():
     print >>stderr, 'make-build-amd64-bat:'
     
     # ビルドスクリプト生成
-    build_script = '''
+    build_script = '''@echo off
 call "%s"
 msbuild /verbosity:m /t:build /p:Configuration=Debug /p:Platform=x64 "%s"
 msbuild /verbosity:m /t:build /p:Configuration=Release /p:Platform=x64 "%s"

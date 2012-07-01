@@ -4,6 +4,14 @@
 # config
 
 # TMP_DIR
+# BASENAME_32BIT_DIR
+# BASENAME_64BIT_DIR
+# DIST_32BIT_DIR
+# DIST_64BIT_DIR
+# FILES_32BIT
+# FILES_64BIT
+# ARCHIVE_COMMAND = BIN_DIR + '\\7zr.exe'
+# ARCHIVE_OPTIONS = 'a'
 
 #----------------------------------------------------------------------
 

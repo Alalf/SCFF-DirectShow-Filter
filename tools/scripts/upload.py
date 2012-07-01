@@ -1,82 +1,86 @@
-﻿#----------------------------------------------------------------------
-# アーカイブ作成
-#----------------------------------------------------------------------
-import shutil
-import datetime
-import os.path
+﻿# upload.py
+#======================================================================
 
-# 定数
-k32bitDir = 'SCFF-DirectShow-Filter-x86'
-k64bitDir = 'SCFF-DirectShow-Filter-amd64'
+# config
 
-kToday = datetime.datetime.today()
-kTimestamp = kToday.strftime("%Y%m%d-%H%M%S")
-
-# パッケージ作成
-path_32bit = shutil.make_archive('..\\package\\' + k32bitDir + "-" + kTimestamp, 'zip', '..\\package\\' + k32bitDir)
-path_64bit = shutil.make_archive('..\\package\\' + k64bitDir + "-" + kTimestamp, 'zip', '..\\package\\' + k64bitDir)
-
-# ファイル名とサイズを取得
-filename_32bit = os.path.split(path_32bit)[1]
-filesize_32bit = os.path.getsize(path_32bit)
-filename_64bit = os.path.split(path_64bit)[1]
-filesize_64bit = os.path.getsize(path_64bit)
-
-print filename_32bit
-print filesize_32bit
-print filename_64bit
-print filesize_64bit
+# TMP_DIR
+# FILES
+# UPLOAD_COMMAND
+# UPLOAD_OPTIONS
 
 #----------------------------------------------------------------------
-# GitHubにアップロード
+
+def init():
+    from sys import stderr
+    from os import makedirs
+    from shutil import rmtree
+
+    print >>stderr, 'init:'
+    
+    rmtree(TMP_DIR, True)
+    makedirs(TMP_DIR)
+    
 #----------------------------------------------------------------------
 
-import requests
-import json
-import time
-import calendar
+def upload():
+    from sys import stderr
+    from requests import get
+    from requests import post
+    from requests import delete
+    from subprocess import call
+    from glob import glob
+    from json import dumps
+    from os.path import split
+    from os.path import getsize
 
-# 定数
+    print >>stderr, 'upload:'
 
-kUserName = 'Alalf'
-kPassword = raw_input('GitHub Password: ')
-kAuth = (kUserName, kPassword)
+    # common
+    headers = {'content-type':'application/json', 'accept':'application/json'}
+    
+    # get-downloads
+    print >>stderr, '\t[get-downloads]'
+    response = get(DOWNLOADS_URL, headers=headers)
+    data = response.json
+    
+    # TODO(me): 古くなったファイルは削除する
+    for i in data:
+        for archive in glob(ARCHIVES):
+            filename = split(archive)[1]
+            if i['name'] == filename:
+                print >>stderr, '\t[delete] %s(%s)' % (filename, i['id'])
+                url = DOWNLOADS_URL + '/' + str(i['id'])
+                delete(url, auth=AUTH, headers=headers)
 
-kDownloads = 'https://api.github.com/repos/Alalf/SCFF-DirectShow-Filter/downloads'
+    for archive in glob(ARCHIVES):
+        # common
+        dist_dir = split(archive)[0]
+        filename = split(archive)[1]
+        filesize = getsize(archive)
+        
+        # create-downloads-resource
+        print >>stderr, '\t[create-downloads-resource] ' + filename
+        payload = {'name':filename, 'size':filesize}
+        response = post(DOWNLOADS_URL, auth=AUTH, headers=headers, data=dumps(payload))
+        data = response.json
 
-# ダウンロードリスト取得
-#response = requests.get(kDownloads, auth=kAuth)
-#if response.ok:
-#	data = response.json
-#	print json.dumps(data, indent=2)
-#	# あとはもうdataから直接値を取り出せる
-#	# data[0]["url"] etc.
+        # upload-file-to-s3
+        print >>stderr, '\t[upload-file-to-s3] ' + filename
 
-# 参考:
-# http://docs.python-requests.org/en/latest/user/quickstart/#more-complicated-post-requests
+        params = [
+            ('key', data['path']),
+            ('acl', data['acl']),
+            ('success_action_status', 201),
+            ('Filename', data['name']),
+            ('AWSAccessKeyId', data['accesskeyid']),
+            ('Policy', data['policy']),
+            ('Signature', data['signature']),
+            ('Content-Type', data['mime_type']),
+            ('file', '@' + archive)]
 
-# アップロード準備
-headers = {'content-type':'application/json', 'accept':'application/json'}
-payload = {'name':filename_32bit, 'size':filesize_32bit}
-response = requests.post(kDownloads, auth=kAuth, headers=headers, data=json.dumps(payload))
-if not response.ok:
-	print "Create download error!"
-	quit()
-data = response.json
-print json.dumps(data, indent=2)
-
-# Expiresを計算
-expires = calendar.timegm(time.strptime(data['expirationdate'],'%Y-%m-%dT%H:%M:%S.000Z'))
-
-# 実際にファイルをアップロード
-payload = [('key',data['path']), ('acl',data['acl']), ('success_action_status',201), ('Filename',data['name']), ('AWSAccessKeyId',data['accesskeyid']), ('Policy',data['policy']), ('Signature',data['signature']), ('Expires',expires), ('Content-Type',data['mime_type'])]
-#print payload
-files = {'file': (filename_32bit, open(path_32bit, 'rb'))}
-response = requests.post(data['s3_url'], data=payload, files=files)
-print response.content
-
-if not response.ok:
-	print "Create download error!"
-	quit()
-
-print 'ALL OK'
+        command = '"%s" %s' % (UPLOAD_COMMAND, UPLOAD_OPTIONS)
+        for k, v in params:
+            command += ' -F"' + k +'=' + str(v) + '"'
+        command += ' ' + data['s3_url']
+        
+        call(command)

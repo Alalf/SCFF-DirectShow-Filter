@@ -1,9 +1,8 @@
-# SCFF-DirectShow-Filter Build Script
+# build.py - SCFF-DirectShow-Filter Build Script
 #======================================================================
 
 # option
-OPTIONS = ['dist']
-#OPTIONS = ['dist', 'download_ffmpeg', 'msbuild']
+OPTIONS = ['download_ffmpeg', 'msbuild', 'dist', 'upload']
 
 #----------------------------------------------------------------------
 
@@ -119,6 +118,24 @@ def dist():
 
 #----------------------------------------------------------------------
 
+def upload():
+    from sys import stderr
+    print >>stderr, '--- upload ---\n'
+    
+    from scripts import upload
+    upload.TMP_DIR = TMP_DIR + '\\upload'
+    upload.ARCHIVES = TMP_DIR + '\\dist\\*.7z'
+    upload.UPLOAD_COMMAND = 'curl.exe'
+    upload.UPLOAD_OPTIONS = ''
+
+    upload.AUTH = ('Alalf', raw_input('GitHub Password: '))
+    upload.DOWNLOADS_URL = 'https://api.github.com/repos/Alalf/SCFF-DirectShow-Filter/downloads'
+
+    upload.init()
+    upload.upload()
+
+#----------------------------------------------------------------------
+
 # main()
 if __name__=='__main__':
     from sys import stderr
@@ -137,3 +154,7 @@ if __name__=='__main__':
     # dist.py
     if 'dist' in OPTIONS:
         dist()
+    
+    # upload.py
+    if 'upload' in OPTIONS:
+        upload()

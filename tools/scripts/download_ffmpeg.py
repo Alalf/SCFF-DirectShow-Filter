@@ -171,8 +171,8 @@ def copy_dll():
     print >>stderr, 'copy_dll:'
 
     bat_string = '''@echo off
-
-cd "%s"
+set ROOT_DIR=%s
+pushd "%%ROOT_DIR%%"
 
 mkdir "dist\\Debug-amd64\\"
 mkdir "dist\\Release-amd64\\"
@@ -194,6 +194,8 @@ copy /y "ext\\ffmpeg\\x86\\bin\\swscale*.dll" "dist\\Debug-x86\\"
 copy /y "ext\\ffmpeg\\x86\\bin\\avcodec*.dll" "dist\\Release-x86\\"
 copy /y "ext\\ffmpeg\\x86\\bin\\avutil*.dll" "dist\\Release-x86\\"
 copy /y "ext\\ffmpeg\\x86\\bin\\swscale*.dll" "dist\\Release-x86\\"
+
+popd
 ''' % ROOT_DIR
 
     # ファイル出力
@@ -216,7 +218,7 @@ def make_tools_bat():
     with open(src_bat, 'r') as src:
         with open(dst_bat, 'w') as dst:
             for line in src:
-                replaced = line.replace(ROOT_DIR, '..\\')
+                replaced = line.replace(ROOT_DIR, '%~dp0..\\')
                 dst.write(replaced)
 
 #-----------------------------------------------------------------------

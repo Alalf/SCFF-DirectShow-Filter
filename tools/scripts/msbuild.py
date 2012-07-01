@@ -18,7 +18,7 @@ def init():
     from os import makedirs
     from shutil import rmtree
 
-    print >>stderr, 'prepare:'
+    print >>stderr, 'init:'
     
     rmtree(TMP_DIR, True)
     makedirs(TMP_DIR)
@@ -33,11 +33,11 @@ def make_build_x86_bat():
     # ビルドスクリプト生成
     build_script = '''
 call "%s"
-msbuild /t:build /p:Configuration=Debug /p:Platform=Win32 "%s"
-msbuild /t:build /p:Configuration=Release /p:Platform=Win32 "%s"
+msbuild /verbosity:m /t:build /p:Configuration=Debug /p:Platform=Win32 "%s"
+msbuild /verbosity:m /t:build /p:Configuration=Release /p:Platform=Win32 "%s"
 
-msbuild /t:build /p:Configuration=Debug /p:Platform=x86 "%s"
-msbuild /t:build /p:Configuration=Release /p:Platform=x86 "%s"
+msbuild /verbosity:m /t:build /p:Configuration=Debug /p:Platform=x86 "%s"
+msbuild /verbosity:m /t:build /p:Configuration=Release /p:Platform=x86 "%s"
 ''' % (ENV_32BIT_BAT, DSF_SLN, DSF_SLN, APP_SLN, APP_SLN)
     
     # ファイルに書き込み
@@ -55,8 +55,8 @@ def make_build_amd64_bat():
     # ビルドスクリプト生成
     build_script = '''
 call "%s"
-msbuild /t:build /p:Configuration=Debug /p:Platform=x64 "%s"
-msbuild /t:build /p:Configuration=Release /p:Platform=x64 "%s"
+msbuild /verbosity:m /t:build /p:Configuration=Debug /p:Platform=x64 "%s"
+msbuild /verbosity:m /t:build /p:Configuration=Release /p:Platform=x64 "%s"
 ''' % (ENV_64BIT_BAT, DSF_SLN, DSF_SLN)
     
     # ファイルに書き込み

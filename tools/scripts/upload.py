@@ -4,9 +4,11 @@
 # config
 
 # TMP_DIR
-# FILES
+# ARCHIVES
 # UPLOAD_COMMAND
 # UPLOAD_OPTIONS
+# AUTH
+# DOWNLOADS_URL
 
 #----------------------------------------------------------------------
 

@@ -139,7 +139,6 @@ def upload():
 # main()
 if __name__=='__main__':
     from sys import stderr
-    from sys import exit
     
     print >>stderr, '=== SCFF-DirectShow-Filter Build Script ===\n'
     

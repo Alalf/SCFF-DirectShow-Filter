@@ -91,9 +91,9 @@ def relocate():
         try:
             print >>stderr, '\t[copy-%s] START' % k
             if k.startswith('win32'):
-                retcode = call('xcopy /Q /C /Y /R /E "%s" "%s"' % (v, FFMPEG_32BIT_DIR))
+                retcode = call('XCOPY /Q /C /Y /R /E "%s" "%s"' % (v, FFMPEG_32BIT_DIR))
             else:
-                retcode = call('xcopy /Q /C /Y /R /E "%s" "%s"' % (v, FFMPEG_64BIT_DIR))
+                retcode = call('XCOPY /Q /C /Y /R /E "%s" "%s"' % (v, FFMPEG_64BIT_DIR))
             if retcode < 0:
                 print >>stderr, '\t[copy-%s] FAILED!' % k, -retcode
                 sys.exit()
@@ -167,32 +167,32 @@ def copy_dll():
     
     print >>stderr, 'copy_dll:'
 
-    bat_string = '''@echo off
-set ROOT_DIR=%s
-pushd "%%ROOT_DIR%%"
+    bat_string = '''@ECHO OFF
+SET ROOT_DIR=%s
+PUSHD "%%ROOT_DIR%%"
 
-mkdir "dist\\Debug-amd64\\"
-mkdir "dist\\Release-amd64\\"
-mkdir "dist\\Debug-x86\\"
-mkdir "dist\\Release-x86\\"
+MKDIR "dist\\Debug-amd64\\"
+MKDIR "dist\\Release-amd64\\"
+MKDIR "dist\\Debug-x86\\"
+MKDIR "dist\\Release-x86\\"
 
-copy /y "ext\\ffmpeg\\amd64\\bin\\avcodec*.dll" "dist\\Debug-amd64\\"
-copy /y "ext\\ffmpeg\\amd64\\bin\\avutil*.dll" "dist\\Debug-amd64\\"
-copy /y "ext\\ffmpeg\\amd64\\bin\\swscale*.dll" "dist\\Debug-amd64\\"
+COPY /Y "ext\\ffmpeg\\amd64\\bin\\avcodec*.dll" "dist\\Debug-amd64\\"
+COPY /Y "ext\\ffmpeg\\amd64\\bin\\avutil*.dll" "dist\\Debug-amd64\\"
+COPY /Y "ext\\ffmpeg\\amd64\\bin\\swscale*.dll" "dist\\Debug-amd64\\"
 
-copy /y "ext\\ffmpeg\\amd64\\bin\\avcodec*.dll" "dist\\Release-amd64\\"
-copy /y "ext\\ffmpeg\\amd64\\bin\\avutil*.dll" "dist\\Release-amd64\\"
-copy /y "ext\\ffmpeg\\amd64\\bin\\swscale*.dll" "dist\\Release-amd64\\"
+COPY /Y "ext\\ffmpeg\\amd64\\bin\\avcodec*.dll" "dist\\Release-amd64\\"
+COPY /Y "ext\\ffmpeg\\amd64\\bin\\avutil*.dll" "dist\\Release-amd64\\"
+COPY /Y "ext\\ffmpeg\\amd64\\bin\\swscale*.dll" "dist\\Release-amd64\\"
 
-copy /y "ext\\ffmpeg\\x86\\bin\\avcodec*.dll" "dist\\Debug-x86\\"
-copy /y "ext\\ffmpeg\\x86\\bin\\avutil*.dll" "dist\\Debug-x86\\"
-copy /y "ext\\ffmpeg\\x86\\bin\\swscale*.dll" "dist\\Debug-x86\\"
+COPY /Y "ext\\ffmpeg\\x86\\bin\\avcodec*.dll" "dist\\Debug-x86\\"
+COPY /Y "ext\\ffmpeg\\x86\\bin\\avutil*.dll" "dist\\Debug-x86\\"
+COPY /Y "ext\\ffmpeg\\x86\\bin\\swscale*.dll" "dist\\Debug-x86\\"
 
-copy /y "ext\\ffmpeg\\x86\\bin\\avcodec*.dll" "dist\\Release-x86\\"
-copy /y "ext\\ffmpeg\\x86\\bin\\avutil*.dll" "dist\\Release-x86\\"
-copy /y "ext\\ffmpeg\\x86\\bin\\swscale*.dll" "dist\\Release-x86\\"
+COPY /Y "ext\\ffmpeg\\x86\\bin\\avcodec*.dll" "dist\\Release-x86\\"
+COPY /Y "ext\\ffmpeg\\x86\\bin\\avutil*.dll" "dist\\Release-x86\\"
+COPY /Y "ext\\ffmpeg\\x86\\bin\\swscale*.dll" "dist\\Release-x86\\"
 
-popd
+POPD
 ''' % ROOT_DIR
 
     # ファイル出力

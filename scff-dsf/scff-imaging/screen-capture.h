@@ -35,7 +35,7 @@ class ScreenCapture : public Processor<void, AVPictureWithFillImage> {
   /// @brief コンストラクタ
   ScreenCapture(
       int count,
-      const LayoutParameter (&parameter)[kMaxProcessorSize]);
+      const LayoutParameter (&parameters)[kMaxProcessorSize]);
   /// @brief デストラクタ
   ~ScreenCapture();
 
@@ -76,7 +76,7 @@ class ScreenCapture : public Processor<void, AVPictureWithFillImage> {
   DWORD raster_operation_[kMaxProcessorSize];
 
   /// @brief レイアウトパラメータ
-  LayoutParameter parameter_[kMaxProcessorSize];
+  LayoutParameter parameters_[kMaxProcessorSize];
 
   // コピー＆代入禁止
   DISALLOW_COPY_AND_ASSIGN(ScreenCapture);

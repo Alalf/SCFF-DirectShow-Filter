@@ -38,22 +38,25 @@ class SCFFClockTime {
   ~SCFFClockTime();
 
   /// @brief ストリームタイムをリセット
-  void Reset(double fps);
+  void Reset(double fps, IReferenceClock *graph_clock);
 
   /// @brief sample->SetTime用のストリームタイムを返す
   /// @attention フレームカウンタも更新しているのでconstではない
-  void GetTimestamp(REFERENCE_TIME *start, REFERENCE_TIME *end);
+  void GetTimestamp(REFERENCE_TIME filter_zero, REFERENCE_TIME *start, REFERENCE_TIME *end);
 
   /// @brief fpsが上限を超えないようにSleepをかける
   /// @attention 具体的には直前のGetTimestampのendまでSleep
-  void Sleep();
+  void Sleep(REFERENCE_TIME filter_zero);
 
  private:
   /// @brief 現在のストリームタイムを得る
-  REFERENCE_TIME GetNow();
+  REFERENCE_TIME GetNow(REFERENCE_TIME filter_zero);
 
-  /// @brief メディアサンプルに付加するタイムスタンプ計算用
-  IReferenceClock *reference_clock_;
+  /// @brief メディアサンプルに付加するタイムスタンプ計算用グラフクロック
+  IReferenceClock *graph_clock_;
+
+  /// @brief メディアサンプルに付加するタイムスタンプ計算用システムクロック
+  IReferenceClock *system_clock_;
 
   /// @brief 目標フレーム区間(REFERENCE_TIME)
   REFERENCE_TIME target_frame_interval_;
@@ -61,8 +64,17 @@ class SCFFClockTime {
   /// @brief ストリームタイム基準時
   REFERENCE_TIME zero_;
 
+  /// @brief 補正用カーソル(グラフクロック)
+  REFERENCE_TIME graph_cursor_;
+
+  /// @brief 補正用カーソル(システムクロック)
+  REFERENCE_TIME system_cursor_;
+
   /// @brief フレームカウンタ
   int64_t frame_counter_;
+
+  /// @brief 巻き戻り監視用ストリームタイム(100nSec)
+  REFERENCE_TIME last_;
 
   /// @brief 直前のGetTimestampのend
   REFERENCE_TIME last_end_;

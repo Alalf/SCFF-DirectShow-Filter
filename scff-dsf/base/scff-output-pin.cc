@@ -133,6 +133,7 @@ HRESULT SCFFOutputPin::GetMediaType(int position, CMediaType *media_type) {
   scff_imaging::Utilities::ToWindowsBitmapInfo(current_pixel_format,
                                                current_width,
                                                current_height,
+                                               false,
                                                &current_info);
 
   // 現在すべての形式でカラーテーブルは必要ないのでbmiHeaderのみコピー
@@ -397,13 +398,6 @@ HRESULT SCFFOutputPin::DecideBufferSize(IMemAllocator *allocator,
 HRESULT SCFFOutputPin::OnThreadCreate(void) {
   MyDbgLog((LOG_TRACE, kDbgImportant,
     TEXT("SCFFOutputPin: OnThreadCreate")));
-
-  CAutoLock lock(&filling_buffer_);
-  // タイムマネージャをリセット
-  can_use_quality = false;
-  quality_controlled_time_.Reset(fps_);
-  clock_time_.Reset(fps_);
-
   return S_OK;
 }
 
@@ -422,6 +416,14 @@ HRESULT SCFFOutputPin::OnThreadDestroy(void) {
 HRESULT SCFFOutputPin::OnThreadStartPlay(void) {
   MyDbgLog((LOG_TRACE, kDbgImportant,
     TEXT("SCFFOutputPin: OnThreadStartPlay")));
+  CAutoLock lock(&filling_buffer_);
+  // タイムマネージャをリセット
+  can_use_quality = false;
+  quality_controlled_time_.Reset(fps_);
+
+  IReferenceClock *graph_clock;
+  m_pFilter->GetSyncSource(&graph_clock);
+  clock_time_.Reset(fps_, graph_clock);
   return S_OK;
 }
 
@@ -474,6 +476,10 @@ HRESULT SCFFOutputPin::DoBufferProcessingLoop(void) {
   // ループ開始
   do {
     while (!CheckRequest(&command)) {
+      /// @warning ダウンキャスト以外に簡単に各方法が思いつかなかった
+      REFERENCE_TIME filter_zero_for_ct =
+          dynamic_cast<SCFFSource*>(m_pFilter)->GetStartTime();
+
       // 接続先のピンからバッファを受け取る
       IMediaSample *sample;
       HRESULT result = GetDeliveryBuffer(&sample, NULL, NULL, 0);
@@ -503,7 +509,7 @@ HRESULT SCFFOutputPin::DoBufferProcessingLoop(void) {
         // いつでも切り替えられるように更新しておく
         REFERENCE_TIME start_for_ct;
         REFERENCE_TIME end_for_ct;
-        clock_time_.GetTimestamp(&start_for_ct, &end_for_ct);
+        clock_time_.GetTimestamp(filter_zero_for_ct, &start_for_ct, &end_for_ct);
 
         // サンプルにデータを詰める (FillBuffer()は使わない)
         result_fill_buffer = FillBufferWithImagingEngine(engine, sample);
@@ -546,7 +552,7 @@ HRESULT SCFFOutputPin::DoBufferProcessingLoop(void) {
 
       // Clockタイムマネージャを使っている場合はSleepをはさむ
       if (!(is_first_loop || can_use_quality)) {
-        clock_time_.Sleep();
+        clock_time_.Sleep(filter_zero_for_ct);
       }
 
       is_first_loop = false;

@@ -39,7 +39,7 @@ class ComplexLayout : public Layout {
   /// @brief コンストラクタ
   ComplexLayout(
       int element_count,
-      const LayoutParameter (&parameter)[kMaxProcessorSize]);
+      const LayoutParameter (&parameters)[kMaxProcessorSize]);
   /// @brief デストラクタ
   ~ComplexLayout();
 
@@ -84,7 +84,7 @@ class ComplexLayout : public Layout {
   const int element_count_;
 
   /// @brief レイアウトパラメータ
-  LayoutParameter parameter_[kMaxProcessorSize];
+  LayoutParameter parameters_[kMaxProcessorSize];
 
   // コピー＆代入禁止
   DISALLOW_COPY_AND_ASSIGN(ComplexLayout);

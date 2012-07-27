@@ -182,6 +182,13 @@ ErrorCode NativeLayout::Run() {
     return GetCurrentError();
   }
 
+  // OutputImageを設定しなおす
+  if (Utilities::CanUseDrawUtils(GetOutputImage()->pixel_format())) {
+    padding_->SetOutputImage(GetOutputImage());
+  } else {
+    scale_->SetOutputImage(GetOutputImage());
+  }
+
   // スクリーンキャプチャ
   const ErrorCode error_screen_capture = screen_capture_->Run();
   if (error_screen_capture != kNoError) {

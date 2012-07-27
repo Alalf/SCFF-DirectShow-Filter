@@ -2,7 +2,7 @@
 #======================================================================
 
 # option
-OPTIONS = ['download_ffmpeg', 'msbuild', 'dist', 'upload']
+OPTIONS = ['download_ffmpeg', 'msbuild', 'dist']#, 'upload']
 
 #----------------------------------------------------------------------
 

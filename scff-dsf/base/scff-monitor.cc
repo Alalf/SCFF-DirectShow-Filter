@@ -224,51 +224,35 @@ scff_imaging::Request* SCFFMonitor::CreateRequest() {
   // タイムスタンプを進めておく
   last_message_timestamp_ = message.timestamp;
 
-  // メッセージの内容を処理する
-  scff_imaging::Request *tmp_request = 0;
-
-  switch (message.layout_type) {
-  case scff_interprocess::kNullLayout:
-    //-----------------------------------------------------------------
-    // ResetLayoutRequest
-    //-----------------------------------------------------------------
+  //-----------------------------------------------------------------
+  // ResetLayoutRequest
+  //-----------------------------------------------------------------
+  if (message.layout_type == scff_interprocess::kNullLayout) {
     MyDbgLog((LOG_TRACE, kDbgImportant,
               TEXT("SCFFMonitor: ResetLayoutRequest arrived(%lld)."),
               message.timestamp));
-    tmp_request = new scff_imaging::ResetLayoutRequest();
-    break;
-
-  case scff_interprocess::kNativeLayout:
-    //-----------------------------------------------------------------
-    // SetNativeLayoutRequest
-    //-----------------------------------------------------------------
-    MyDbgLog((LOG_TRACE, kDbgImportant,
-              TEXT("SCFFMonitor: SetNativeLayoutRequest arrived(%lld)."),
-              message.timestamp));
-    // パラメータをメッセージから抽出
-    scff_imaging::LayoutParameter parameter;
-    MessageToLayoutParameter(message, 0, &parameter);
-    tmp_request = new scff_imaging::SetNativeLayoutRequest(parameter);
-    break;
-
-  case scff_interprocess::kComplexLayout:
-    //-----------------------------------------------------------------
-    // SetComplexLayoutRequest
-    //-----------------------------------------------------------------
-    MyDbgLog((LOG_TRACE, kDbgImportant,
-          TEXT("SCFFMonitor: SetComplexLayoutRequest arrived(%lld)."),
-          message.timestamp));
-    // パラメータをメッセージから抽出
-    scff_imaging::LayoutParameter parameters[scff_imaging::kMaxProcessorSize];
-    for (int i = 0; i < message.layout_element_count; i++) {
-      MessageToLayoutParameter(message, i, &(parameters[i]));
-    }
-    tmp_request = new scff_imaging::SetComplexLayoutRequest(
-        message.layout_element_count,
-        parameters);
-    break;
+    return new scff_imaging::ResetLayoutRequest();
   }
-  return tmp_request;
+
+  //-----------------------------------------------------------------
+  // SetLayoutRequest
+  //-----------------------------------------------------------------
+  ASSERT(message.layout_type == scff_interprocess::kNativeLayout ||
+         message.layout_type == scff_interprocess::kComplexLayout);
+
+  MyDbgLog((LOG_TRACE, kDbgImportant,
+            TEXT("SCFFMonitor: SetLayoutRequest arrived(%d, %lld)."),
+            message.layout_type,
+            message.timestamp));
+
+  // パラメータをメッセージから抽出
+  scff_imaging::LayoutParameter parameters[scff_imaging::kMaxProcessorSize];
+  for (int i = 0; i < message.layout_element_count; i++) {
+    MessageToLayoutParameter(message, i, &(parameters[i]));
+  }
+  return new scff_imaging::SetLayoutRequest(
+      message.layout_element_count,
+      parameters);
 }
 
 // 使い終わったリクエストを解放する

@@ -35,7 +35,7 @@ namespace scff_imaging {
 // コンストラクタ
 ComplexLayout::ComplexLayout(
     int element_count,
-    const LayoutParameter (&parameter)[kMaxProcessorSize])
+    const LayoutParameter (&parameters)[kMaxProcessorSize])
     : Layout(),
       element_count_(element_count),
       screen_capture_(0) {    // NULL
@@ -44,7 +44,7 @@ ComplexLayout::ComplexLayout(
           element_count));
   // 配列の初期化
   for (int i = 0; i < kMaxProcessorSize; i++) {
-    parameter_[i] = parameter[i];
+    parameters_[i] = parameters[i];
     scale_[i] = 0;        // NULL
     element_x_[i] = -1;    // ありえない値
     element_y_[i] = -1;    // ありえない値
@@ -78,10 +78,10 @@ ErrorCode ComplexLayout::InitByIndex(int index) {
   if (!Utilities::Contains(0, 0,
                            GetOutputImage()->width(),
                            GetOutputImage()->height(),
-                           parameter_[index].bound_x,
-                           parameter_[index].bound_y,
-                           parameter_[index].bound_width,
-                           parameter_[index].bound_height)) {
+                           parameters_[index].bound_x,
+                           parameters_[index].bound_y,
+                           parameters_[index].bound_width,
+                           parameters_[index].bound_height)) {
     return kComplexLayoutBoundError;
   }
 
@@ -91,26 +91,26 @@ ErrorCode ComplexLayout::InitByIndex(int index) {
   int virtual_padding_left = 0;
   int virtual_padding_right = 0;
   const bool no_error = Utilities::CalculatePaddingSize(
-      parameter_[index].bound_width,
-      parameter_[index].bound_height,
-      parameter_[index].clipping_width,
-      parameter_[index].clipping_height,
-      parameter_[index].stretch,
-      parameter_[index].keep_aspect_ratio,
+      parameters_[index].bound_width,
+      parameters_[index].bound_height,
+      parameters_[index].clipping_width,
+      parameters_[index].clipping_height,
+      parameters_[index].stretch,
+      parameters_[index].keep_aspect_ratio,
       &virtual_padding_top, &virtual_padding_bottom,
       &virtual_padding_left, &virtual_padding_right);
   ASSERT(no_error);
 
   // 描画する原点の座標を計算
-  element_x_[index] = parameter_[index].bound_x + virtual_padding_left;
-  element_y_[index] = parameter_[index].bound_y + virtual_padding_top;
+  element_x_[index] = parameters_[index].bound_x + virtual_padding_left;
+  element_y_[index] = parameters_[index].bound_y + virtual_padding_top;
 
   // パディング分だけサイズを小さくする
   const int element_width =
-      parameter_[index].bound_width -
+      parameters_[index].bound_width -
           (virtual_padding_left + virtual_padding_right);
   const int element_height =
-      parameter_[index].bound_height -
+      parameters_[index].bound_height -
           (virtual_padding_top + virtual_padding_bottom);
 
   //-------------------------------------------------------------------
@@ -121,8 +121,8 @@ ErrorCode ComplexLayout::InitByIndex(int index) {
   // ScreenCaptureから取得した変換処理前のイメージ
   const ErrorCode error_captured_image =
       captured_image_[index].Create(kRGB0,
-                                    parameter_[index].clipping_width,
-                                    parameter_[index].clipping_height);
+                                    parameters_[index].clipping_width,
+                                    parameters_[index].clipping_height);
   if (error_captured_image != kNoError) {
     return error_captured_image;
   }
@@ -139,7 +139,7 @@ ErrorCode ComplexLayout::InitByIndex(int index) {
   // Processor
   //-------------------------------------------------------------------
   // 拡大縮小ピクセルフォーマット変換
-  Scale *scale = new Scale(parameter_[index].swscale_config);
+  Scale *scale = new Scale(parameters_[index].swscale_config);
   scale->SetInputImage(&(captured_image_[index]));
   scale->SetOutputImage(&(converted_image_[index]));
   const ErrorCode error_scale_init = scale->Init();
@@ -178,7 +178,7 @@ ErrorCode ComplexLayout::Init() {
   // Processor
   //-------------------------------------------------------------------
   // スクリーンキャプチャ
-  ScreenCapture *screen_capture = new ScreenCapture(element_count_, parameter_);
+  ScreenCapture *screen_capture = new ScreenCapture(element_count_, parameters_);
   for (int i = 0; i < element_count_; i++) {
     screen_capture->SetOutputImage(&(captured_image_[i]), i);
   }

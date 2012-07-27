@@ -73,9 +73,11 @@ class Utilities {
   static void ToWindowsBitmapInfo(ImagePixelFormat pixel_format,
                                   int width,
                                   int height,
+                                  bool vertical_invert,
                                   BITMAPINFO *info);
   /// @brief イメージからBITMAPINFOHEADERを取得
   static void ImageToWindowsBitmapInfo(const Image &image,
+                                       bool vertical_invert,
                                        BITMAPINFO *info);
 
   /// @brief int(index)->enum(ImagePixelFormat)変換

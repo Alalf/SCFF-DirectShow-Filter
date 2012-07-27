@@ -167,7 +167,7 @@ ErrorCode SplashScreen::Init() {
   //-------------------------------------------------------------------
 
   // 取り込み用BITMAPINFOを作成
-  Utilities::ImageToWindowsBitmapInfo(resource_ddb_, &resource_ddb_info_);
+  Utilities::ImageToWindowsBitmapInfo(resource_ddb_, false, &resource_ddb_info_);
 
   return InitDone();
 }
@@ -177,6 +177,14 @@ ErrorCode SplashScreen::Run() {
   if (GetCurrentError() != kNoError) {
     // 何かエラーが発生している場合は何もしない
     return GetCurrentError();
+  }
+
+  // OutputImageを設定しなおす
+  if (Utilities::CanUseDrawUtils(GetOutputImage()->pixel_format())) {
+    // パディング可能ならバッファをはさむ
+    padding_->SetOutputImage(GetOutputImage());
+  } else {
+    scale_->SetOutputImage(GetOutputImage());
   }
 
   // GetDIBitsを利用してビットマップデータを転送

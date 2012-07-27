@@ -128,12 +128,13 @@ PixelFormat Utilities::ToAVPicturePixelFormat(ImagePixelFormat pixel_format) {
 void Utilities::ToWindowsBitmapInfo(ImagePixelFormat pixel_format,
                                     int width,
                                     int height,
+                                    bool vertical_invert,
                                     BITMAPINFO *info) {
   ZeroMemory(info, sizeof(BITMAPINFO));
   // どの形式でもカラーテーブルはない
   info->bmiHeader.biSize          = sizeof(BITMAPINFOHEADER);
   info->bmiHeader.biWidth         = width;
-  info->bmiHeader.biHeight        = height;
+  info->bmiHeader.biHeight        = vertical_invert ? -height : height;
   info->bmiHeader.biPlanes        = 1;
   /// @todo(me) GetBitmapSize(&video_info->bmiHeader)と異なるかも。要調査
   info->bmiHeader.biSizeImage     =
@@ -172,10 +173,12 @@ void Utilities::ToWindowsBitmapInfo(ImagePixelFormat pixel_format,
 
 // イメージからBITMAPINFOHEADERを取得
 void Utilities::ImageToWindowsBitmapInfo(const Image &image,
+                                         bool vertical_invert,
                                          BITMAPINFO *info) {
   Utilities::ToWindowsBitmapInfo(image.pixel_format(),
                                  image.width(),
                                  image.height(),
+                                 vertical_invert,
                                  info);
 }
 

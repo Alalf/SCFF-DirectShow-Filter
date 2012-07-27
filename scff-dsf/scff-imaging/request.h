@@ -54,62 +54,44 @@ class ResetLayoutRequest : public Request {
   }
   /// @brief ダブルディスパッチ用
   void SendTo(Engine *engine) const {
-    engine->DoResetLayout();
+    engine->ResetLayout();
   }
 };
 
-/// @brief リクエスト: SetNativeLayout
-class SetNativeLayoutRequest : public Request {
+/// @brief リクエスト: SetLayout
+class SetLayoutRequest : public Request {
  public:
   /// @brief コンストラクタ
-  explicit SetNativeLayoutRequest(const LayoutParameter& parameter)
-      : Request(),
-        parameter_(parameter) {
-    // nop
-  }
-  /// @brief デストラクタ
-  ~SetNativeLayoutRequest() {
-    // nop
-  }
-  /// @brief ダブルディスパッチ用
-  void SendTo(Engine *engine) const {
-    engine->DoSetNativeLayout(parameter_);
-  }
-
- private:
-  /// @copydoc NativeLayout::parameter_
-  const LayoutParameter parameter_;
-};
-
-/// @brief リクエスト: SetComplexLayout
-class SetComplexLayoutRequest : public Request {
- public:
-  /// @brief コンストラクタ
-  SetComplexLayoutRequest(
+  SetLayoutRequest(
       int element_count,
-      const LayoutParameter (&parameter)[kMaxProcessorSize])
+      const LayoutParameter (&parameters)[kMaxProcessorSize])
       : Request(),
         element_count_(element_count) {
     // 配列の初期化
     for (int i = 0; i < kMaxProcessorSize; i++) {
-      parameter_[i] = parameter[i];
+      parameters_[i] = parameters[i];
     }
   }
   /// @brief デストラクタ
-  ~SetComplexLayoutRequest() {
+  ~SetLayoutRequest() {
     // nop
   }
   /// @brief ダブルディスパッチ用
   void SendTo(Engine *engine) const {
-    engine->DoSetComplexLayout(element_count_, parameter_);
+    engine->SetLayoutParameters(element_count_, parameters_);
+    if (element_count_ == 1) {
+      engine->SetNativeLayout();
+    } else {
+      engine->SetComplexLayout();
+    }
   }
 
  private:
-  /// @copydoc ComplexLayout::element_count_
+  /// @brief レイアウト要素数
   const int element_count_;
 
-  /// @copydoc ComplexLayout::parameter_
-  LayoutParameter parameter_[kMaxProcessorSize];
+  /// @brief レイアウトパラメータ
+  LayoutParameter parameters_[kMaxProcessorSize];
 };
 
 }   // namespace scff_imaging

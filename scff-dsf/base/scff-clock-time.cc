@@ -28,28 +28,35 @@
 
 // コンストラクタ
 SCFFClockTime::SCFFClockTime()
-    : reference_clock_(NULL),       // NULL
+    : graph_clock_(NULL),           // NULL
+      system_clock_(NULL),          // NULL
       target_frame_interval_(-1),   // ありえない値
       zero_(-1),                    // ありえない値
+      graph_cursor_(-1),            // ありえない値
+      system_cursor_(-1),           // ありえない値
       frame_counter_(-1),           // ありえない値
+      last_(-1),                    // ありえない値
       last_end_(-1) {               // ありえない値
   // nop
 }
 
 // デストラクタ
 SCFFClockTime::~SCFFClockTime() {
-  if (reference_clock_ != NULL) {
-    reference_clock_->Release();
-    reference_clock_ = NULL;
+  if (system_clock_ != NULL) {
+    system_clock_->Release();
+    system_clock_ = NULL;
   }
 }
 
 // ストリームタイムをリセット
-void SCFFClockTime::Reset(double fps) {
-  if (reference_clock_ != NULL) {
-    reference_clock_->Release();
-    reference_clock_ = NULL;
+void SCFFClockTime::Reset(double fps, IReferenceClock* graph_clock) {
+  if (system_clock_ != NULL) {
+    system_clock_->Release();
+    system_clock_ = NULL;
   }
+  
+  // グラフクロックを取得 
+  graph_clock_ = graph_clock;
 
   // システムクロックを取得
   HRESULT result_system_clock = CoCreateInstance(
@@ -57,11 +64,11 @@ void SCFFClockTime::Reset(double fps) {
     NULL,
     CLSCTX_INPROC_SERVER,
     IID_IReferenceClock,
-    reinterpret_cast<void**>(&reference_clock_));
+    reinterpret_cast<void**>(&system_clock_));
   ASSERT(result_system_clock == S_OK);
 
   target_frame_interval_ = static_cast<REFERENCE_TIME>(UNITS / fps);
-  reference_clock_->GetTime(&zero_);
+  graph_clock_->GetTime(&zero_);
   frame_counter_ = 0;
   last_end_ = 0;
 
@@ -70,19 +77,46 @@ void SCFFClockTime::Reset(double fps) {
 }
 
 /// @brief 現在のストリームタイムを得る
-REFERENCE_TIME SCFFClockTime::GetNow() {
-  REFERENCE_TIME now;
-  ASSERT(reference_clock_ != 0);
-  reference_clock_->GetTime(&now);
-  return now - zero_;
+REFERENCE_TIME SCFFClockTime::GetNow(REFERENCE_TIME filter_zero) {
+  ASSERT(graph_clock_ != 0);
+  ASSERT(system_clock_ != 0);
+
+  REFERENCE_TIME system_now;
+  system_clock_->GetTime(&system_now);
+  const double system_delta_sec = static_cast<double>(system_now - system_cursor_) / UNITS;
+  if (system_delta_sec > 60.0) {
+    // 1分ごとにzero_を計算しなおす
+    system_cursor_ = system_now;
+    graph_clock_->GetTime(&graph_cursor_);
+  }
+
+  REFERENCE_TIME now = graph_cursor_ + (system_now - system_cursor_);
+  if (now < last_) {
+    // 巻き戻らないように調整
+    now = last_;
+  }
+  last_ = now;
+
+  // zero_がparentから得られる場合がある
+  REFERENCE_TIME delta_zero = zero_ - filter_zero;
+  if (delta_zero < 0) {
+    delta_zero = -delta_zero;
+  }
+  if (delta_zero < UNITS) {
+    // ずれが1秒以下
+    return now - filter_zero;
+  } else {
+    return now - zero_;
+  }
 }
 
 // sample->SetTime用のストリームタイムを返す
 /// @attention フレームカウンタも更新している
-void SCFFClockTime::GetTimestamp(REFERENCE_TIME *start,
+void SCFFClockTime::GetTimestamp(REFERENCE_TIME filter_zero,
+                                 REFERENCE_TIME *start,
                                  REFERENCE_TIME *end) {
   // 現在のストリームタイムを取得
-  const REFERENCE_TIME now_in_stream = GetNow();
+  const REFERENCE_TIME now_in_stream = GetNow(filter_zero);
 
   // 想定フレームを計算＋フレームカウンタ更新
   REFERENCE_TIME tmp_start = frame_counter_ * target_frame_interval_;
@@ -107,17 +141,17 @@ void SCFFClockTime::GetTimestamp(REFERENCE_TIME *start,
   }
 
   /// @attention タイムスタンプは必ずしも１フレームに収める必要はない
-  //*start = tmp_start;
-  *start = last_end_+1;
+  *start = tmp_start;
+  //*start = last_end_+1;
   *end = tmp_end;
   last_end_ = tmp_end;
 }
 
 // fpsが上限を超えないようにSleepをかける
 // 具体的には直前のGetTimestampのendまでSleep
-void SCFFClockTime::Sleep() {
+void SCFFClockTime::Sleep(REFERENCE_TIME filter_zero) {
   // 現在のストリームタイムを取得
-  const REFERENCE_TIME now_in_stream = GetNow();
+  const REFERENCE_TIME now_in_stream = GetNow(filter_zero);
   const REFERENCE_TIME sleep_interval = last_end_ - now_in_stream;
   const DWORD sleep_interval_msec = static_cast<DWORD>(
       (sleep_interval * MILLISECONDS) / UNITS);

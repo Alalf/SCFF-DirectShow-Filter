@@ -29,7 +29,7 @@ namespace scff_imaging {
 
 /// @brief 画像処理スレッドを管理する
 /// @todo(me) まずはシングルバッファで実装してみる
-class Engine : public Layout {
+class Engine : public CAMThread, public Layout {
  public:
   /// @brief コンストラクタ
   Engine(ImagePixelFormat output_pixel_format,
@@ -48,29 +48,68 @@ class Engine : public Layout {
   ErrorCode CopyFrontImage(BYTE *sample, DWORD data_size);
 
   //-------------------------------------------------------------------
-  // リクエストハンドラ
+  // ダブルディスパッチ用
   //-------------------------------------------------------------------
   /// @brief 現在のレイアウトを解放してスプラッシュを表示する
-  void DoResetLayout();
+  void ResetLayout();
   /// @brief 現在のレイアウトを新しいNativeLayoutに設定する
-  void DoSetNativeLayout(const LayoutParameter &parameter);
+  void SetNativeLayout();
   /// @brief 現在のレイアウトを新しいComplexLayoutに設定する
-  void DoSetComplexLayout(
+  void SetComplexLayout();
+  //-------------------------------------------------------------------
+  /// @brief スレッド間で共有: レイアウトパラメータの設定
+  void SetLayoutParameters(
       int element_count,
-      const LayoutParameter (&parameter)[kMaxProcessorSize]);
+      const LayoutParameter (&parameters)[kMaxProcessorSize]);
+  //-------------------------------------------------------------------
 
  private:
-  //-------------------------------------------------------------------
+
+  //===================================================================
+  // キャプチャスレッド関連
+  //===================================================================
+  
+  enum {
+    kRequestInvalid,
+    kRequestResetLayout,
+    kRequestSetNativeLayout,
+    kRequestSetComplexLayout,
+    kRequestRun,
+    kRequestStop,
+    kRequestExit,
+  };
+
+  /// @brief 現在のレイアウトを解放する（スプラッシュを表示する）
+  /// @attention レイアウトエラーコードをkUninitializedErrorにする
+  void DoResetLayout();
+  /// @brief 現在のレイアウトを新しいNativeLayoutに設定する
+  void DoSetNativeLayout();
+  /// @brief 現在のレイアウトを新しいComplexLayoutに設定する
+  void DoSetComplexLayout();
+  /// @brief バッファにキャプチャ結果を格納する
+  void DoLoop();
+
+  /// @brief CAMThread::ThreadProc()の実装
+  DWORD ThreadProc();
+
   /// @copydoc Processor::Run
   ErrorCode Run();
-  //-------------------------------------------------------------------
+
+  /// @brief バッファを更新
+  void Update();
+
+  /// @brief 更新中のバッファを表すインデックス
+  /// @attention あえてLockしない
+  int which_image_;
+
+  /// @brief レイアウト
+  Layout *layout_;
 
   //-------------------------------------------------------------------
-  // レイアウト操作
+  // スレッド間で共有
+  // front/back_image_はあえてロックしない
   //-------------------------------------------------------------------
-  /// @brief レイアウトを削除する
-  /// @attention レイアウトエラーコードをkUninitializedErrorにする
-  void ReleaseLayout();
+
   /// @brief 唯一レイアウトエラーコードをkNoErrorにできる関数
   /// @attention Initが成功したらこちら
   ErrorCode LayoutInitDone();
@@ -79,16 +118,17 @@ class Engine : public Layout {
   /// @attention エラーがいったんおきたら解除は不可能
   ErrorCode LayoutErrorOccured(ErrorCode error_code);
   /// @brief レイアウトプロセッサに異常が発生している場合NoError以外を返す
-  ErrorCode GetCurrentLayoutError() const;
+  ErrorCode GetCurrentLayoutError();
+
+  /// @brief レイアウトパラメータの要素数
+  int element_count_;
+  /// @biref レイアウトパラメータ
+  LayoutParameter parameters_[kMaxProcessorSize];
   /// @brief レイアウトのエラーコード
   ErrorCode layout_error_code_;
-  //-------------------------------------------------------------------
 
-  //-------------------------------------------------------------------
-  // Processor
-  //-------------------------------------------------------------------
-  /// @brief レイアウト
-  Layout *layout_;
+  //===================================================================
+
   //-------------------------------------------------------------------
   // Image
   //-------------------------------------------------------------------

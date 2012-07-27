@@ -32,14 +32,14 @@ namespace scff_imaging {
 // コンストラクタ
 ScreenCapture::ScreenCapture(
     int count,
-    const LayoutParameter (&parameter)[kMaxProcessorSize])
+    const LayoutParameter (&parameters)[kMaxProcessorSize])
     : Processor<void, AVPictureWithFillImage>(count) {
   MyDbgLog((LOG_MEMORY, kDbgNewDelete,
             TEXT("ScreenCapture: NEW(%d)"),
             count));
   // 配列の初期化
   for (int i = 0; i < kMaxProcessorSize; i++) {
-    parameter_[i] = parameter[i];
+    parameters_[i] = parameters[i];
     dc_for_bitblt_[i] = NULL;
     raster_operation_[i] = SRCCOPY;
   }
@@ -66,11 +66,11 @@ ScreenCapture::~ScreenCapture() {
 // Windowがキャプチャに適切な状態になっているか判定する
 ErrorCode ScreenCapture::ValidateParameter(int index) {
   // パラメータ
-  HWND window = parameter_[index].window;
-  const int clipping_x = parameter_[index].clipping_x;
-  const int clipping_y = parameter_[index].clipping_y;
-  const int clipping_width = parameter_[index].clipping_width;
-  const int clipping_height = parameter_[index].clipping_height;
+  HWND window = parameters_[index].window;
+  const int clipping_x = parameters_[index].clipping_x;
+  const int clipping_y = parameters_[index].clipping_y;
+  const int clipping_width = parameters_[index].clipping_width;
+  const int clipping_height = parameters_[index].clipping_height;
 
   // 不正なWindow
   if (window == NULL || !IsWindow(window)) {
@@ -108,8 +108,8 @@ ErrorCode ScreenCapture::InitByIndex(int index) {
     return error_parameter;
   }
 
-  const int capture_width = parameter_[index].clipping_width;
-  const int capture_height = parameter_[index].clipping_height;
+  const int capture_width = parameters_[index].clipping_width;
+  const int capture_height = parameters_[index].clipping_height;
 
   //-------------------------------------------------------------------
   // 初期化の順番はイメージ→プロセッサの順
@@ -120,7 +120,7 @@ ErrorCode ScreenCapture::InitByIndex(int index) {
   const ErrorCode error_image_for_bitblt =
       image_for_bitblt_[index].CreateFromWindow(
           capture_width, capture_height,
-          parameter_[index].window);
+          parameters_[index].window);
   if (error_image_for_bitblt != kNoError) {
     return error_image_for_bitblt;
   }
@@ -133,16 +133,17 @@ ErrorCode ScreenCapture::InitByIndex(int index) {
   // 取り込み用BITMAPINFOを作成
   Utilities::ImageToWindowsBitmapInfo(
       image_for_bitblt_[index],
+      false,
       &(info_for_getdibits_[index]));
 
   // 取り込み用DCを作成 (SelectObjectで過去の値は放棄)
-  HDC window_dc = GetDC(parameter_[index].window);
+  HDC window_dc = GetDC(parameters_[index].window);
   dc_for_bitblt_[index] = CreateCompatibleDC(window_dc);
   SelectObject(dc_for_bitblt_[index], image_for_bitblt_[index].windows_ddb());
-  ReleaseDC(parameter_[index].window, window_dc);
+  ReleaseDC(parameters_[index].window, window_dc);
 
   // BitBltに渡すラスターオペレーションコードを作成
-  if (parameter_[index].show_layered_window) {
+  if (parameters_[index].show_layered_window) {
     raster_operation_[index] = SRCCOPY | CAPTUREBLT;
   } else {
     raster_operation_[index] = SRCCOPY;
@@ -218,27 +219,27 @@ ErrorCode ScreenCapture::Run() {
     // オンスクリーンDCの取得期間は最小限にすること！
     // なおVGAのキャッシュは取り込み画像に比べて小さすぎるので、
     // キャッシュミス関連で気をつけるべきことはない
-    HDC window_dc = GetDC(parameter_[i].window);
+    HDC window_dc = GetDC(parameters_[i].window);
     BitBlt(dc_for_bitblt_[i],
            0, 0,
-           parameter_[i].clipping_width, parameter_[i].clipping_height,
+           parameters_[i].clipping_width, parameters_[i].clipping_height,
            window_dc,
-           parameter_[i].clipping_x, parameter_[i].clipping_y,
+           parameters_[i].clipping_x, parameters_[i].clipping_y,
            raster_operation_[i]);
-    ReleaseDC(parameter_[i].window, window_dc);
+    ReleaseDC(parameters_[i].window, window_dc);
   }
 
   // 以下オフスクリーンビットマップに対する操作
   for (int i = 0; i < size(); i++) {
-    if (parameter_[i].show_cursor) {
-      DrawCursor(dc_for_bitblt_[i], parameter_[i].window,
-                 parameter_[i].clipping_x, parameter_[i].clipping_y);
+    if (parameters_[i].show_cursor) {
+      DrawCursor(dc_for_bitblt_[i], parameters_[i].window,
+                 parameters_[i].clipping_x, parameters_[i].clipping_y);
     }
 
     // OutputImageへの書き込み
     GetDIBits(dc_for_bitblt_[i],
               image_for_bitblt_[i].windows_ddb(),
-              0, parameter_[i].clipping_height,
+              0, parameters_[i].clipping_height,
               GetOutputImage(i)->raw_bitmap(),
               &(info_for_getdibits_[i]),
               DIB_RGB_COLORS);

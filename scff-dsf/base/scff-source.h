@@ -34,6 +34,11 @@ class SCFFSource : public CSource {
   /// @sa g_Templates(strmbase.lib)
   static void WINAPI Init(BOOL loading, const CLSID *clsid);
 
+  /// @brief m_tStart.m_timeへのアクセッサ
+  REFERENCE_TIME GetStartTime() {
+    return m_tStart.m_time;
+  }
+
  private:
   /// @brief コンストラクタ
   SCFFSource(IUnknown *unknown, HRESULT *result);

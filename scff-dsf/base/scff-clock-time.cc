@@ -54,8 +54,8 @@ void SCFFClockTime::Reset(double fps, IReferenceClock* graph_clock) {
     system_clock_->Release();
     system_clock_ = NULL;
   }
-  
-  // グラフクロックを取得 
+
+  // グラフクロックを取得
   graph_clock_ = graph_clock;
 
   // システムクロックを取得
@@ -83,7 +83,8 @@ REFERENCE_TIME SCFFClockTime::GetNow(REFERENCE_TIME filter_zero) {
 
   REFERENCE_TIME system_now;
   system_clock_->GetTime(&system_now);
-  const double system_delta_sec = static_cast<double>(system_now - system_cursor_) / UNITS;
+  const double system_delta_sec =
+      static_cast<double>(system_now - system_cursor_) / UNITS;
   if (system_delta_sec > 60.0) {
     // 1分ごとにzero_を計算しなおす
     system_cursor_ = system_now;

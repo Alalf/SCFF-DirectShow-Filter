@@ -476,7 +476,7 @@ HRESULT SCFFOutputPin::DoBufferProcessingLoop(void) {
   // ループ開始
   do {
     while (!CheckRequest(&command)) {
-      /// @warning ダウンキャスト以外に簡単に各方法が思いつかなかった
+      /// @warning ダウンキャスト以外に簡単に書く方法が思いつかなかった
       REFERENCE_TIME filter_zero_for_ct =
           dynamic_cast<SCFFSource*>(m_pFilter)->GetStartTime();
 
@@ -509,7 +509,8 @@ HRESULT SCFFOutputPin::DoBufferProcessingLoop(void) {
         // いつでも切り替えられるように更新しておく
         REFERENCE_TIME start_for_ct;
         REFERENCE_TIME end_for_ct;
-        clock_time_.GetTimestamp(filter_zero_for_ct, &start_for_ct, &end_for_ct);
+        clock_time_.GetTimestamp(filter_zero_for_ct,
+                                 &start_for_ct, &end_for_ct);
 
         // サンプルにデータを詰める (FillBuffer()は使わない)
         result_fill_buffer = FillBufferWithImagingEngine(engine, sample);

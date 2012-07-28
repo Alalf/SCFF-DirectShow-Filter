@@ -229,7 +229,7 @@ ErrorCode Engine::CopyFrontImage(BYTE *sample, DWORD data_size) {
                      back_image_.avpicture_pixel_format(),
                      back_image_.width(),
                      back_image_.height(),
-                     sample, data_size);    
+                     sample, data_size);
   }
 
   return GetCurrentError();
@@ -262,7 +262,9 @@ void Engine::SetComplexLayout() {
 }
 
 // スレッド間で共有: レイアウトパラメータの設定
-void Engine::SetLayoutParameters(int element_count, const LayoutParameter (&parameters)[kMaxProcessorSize]) {
+void Engine::SetLayoutParameters(
+    int element_count,
+    const LayoutParameter (&parameters)[kMaxProcessorSize]) {
   CAutoLock lock(&m_WorkerLock);
   element_count_ = element_count;
   for (int i = 0; i < kMaxProcessorSize; i++) {
@@ -271,7 +273,9 @@ void Engine::SetLayoutParameters(int element_count, const LayoutParameter (&para
       // * Topdownピクセルフォーマットの場合はbound_yの値を補正する
       // まずbound_yは左上のy座標になっているので、左下のy座標にする(y+height)
       // 左下のy座標は左上原点の座標系になっているので、左下原点の座標に直す
-      parameters_[i].bound_y = output_height_ - (parameters_[i].bound_y + parameters_[i].bound_height);
+      parameters_[i].bound_y =
+          output_height_ -
+              (parameters_[i].bound_y + parameters_[i].bound_height);
     }
   }
 }
@@ -322,7 +326,8 @@ void Engine::DoSetComplexLayout() {
   DoResetLayout();
 
   //-------------------------------------------------------------------
-  ComplexLayout *complex_layout = new ComplexLayout(element_count_, parameters_);
+  ComplexLayout *complex_layout =
+      new ComplexLayout(element_count_, parameters_);
   complex_layout->SetOutputImage(&front_image_);
   const ErrorCode error_layout = complex_layout->Init();
   if (error_layout != kNoError) {
@@ -345,7 +350,8 @@ void Engine::DoLoop() {
       const clock_t start_update = ::clock();
       Update();
       const clock_t end_update = ::clock();
-      const double update_interval = static_cast<double>(end_update - start_update) / CLOCKS_PER_SEC;
+      const double update_interval =
+          static_cast<double>(end_update - start_update) / CLOCKS_PER_SEC;
       const double delta = (1 / output_fps_) - update_interval;
       if (delta > 0.0) {
         ::Sleep(static_cast<DWORD>(delta * MILLISECONDS));
@@ -366,7 +372,7 @@ DWORD Engine::ThreadProc() {
   do {
     request = GetRequest();
 
-    switch(request) {
+    switch (request) {
     case kRequestResetLayout:
       DoResetLayout();
       Reply(NOERROR);

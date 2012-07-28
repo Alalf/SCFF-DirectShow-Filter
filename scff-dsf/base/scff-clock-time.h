@@ -42,7 +42,8 @@ class SCFFClockTime {
 
   /// @brief sample->SetTime用のストリームタイムを返す
   /// @attention フレームカウンタも更新しているのでconstではない
-  void GetTimestamp(REFERENCE_TIME filter_zero, REFERENCE_TIME *start, REFERENCE_TIME *end);
+  void GetTimestamp(REFERENCE_TIME filter_zero,
+                    REFERENCE_TIME *start, REFERENCE_TIME *end);
 
   /// @brief fpsが上限を超えないようにSleepをかける
   /// @attention 具体的には直前のGetTimestampのendまでSleep

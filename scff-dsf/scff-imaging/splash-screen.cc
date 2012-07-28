@@ -168,7 +168,7 @@ ErrorCode SplashScreen::Init() {
 
   // 取り込み用BITMAPINFOを作成
   Utilities::ImageToWindowsBitmapInfo(
-      resource_ddb_, 
+      resource_ddb_,
       !Utilities::IsTopdownPixelFormat(GetOutputImage()->pixel_format()),
       &resource_ddb_info_);
 

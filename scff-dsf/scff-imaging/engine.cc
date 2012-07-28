@@ -79,7 +79,7 @@ Engine::Engine(ImagePixelFormat output_pixel_format,
       output_fps_(output_fps),
       layout_(0),       // NULL
       layout_error_code_(kProcessorUninitializedError),
-      which_image_(0) {
+      last_update_image_(kFrontImage) {
   MyDbgLog((LOG_MEMORY, kDbgNewDelete,
           TEXT("Engine: NEW(%d, %d, %d, %.1f)"),
           output_pixel_format, output_width, output_height, output_fps));
@@ -216,14 +216,14 @@ ErrorCode Engine::CopyFrontImage(BYTE *sample, DWORD data_size) {
   }
 
   // sampleにコピー
-  if (which_image_ == 0) {
+  if (last_update_image_ == kFrontImage) {
     ASSERT(data_size == Utilities::CalculateImageSize(front_image_));
     avpicture_layout(front_image_.avpicture(),
                      front_image_.avpicture_pixel_format(),
                      front_image_.width(),
                      front_image_.height(),
                      sample, data_size);
-  } else {
+  } else if (last_update_image_ == kBackImage) {
     ASSERT(data_size == Utilities::CalculateImageSize(back_image_));
     avpicture_layout(back_image_.avpicture(),
                      back_image_.avpicture_pixel_format(),
@@ -416,15 +416,15 @@ void Engine::Update() {
     return;
   }
 
-  if (which_image_ == 0) {
-    layout_->SetOutputImage(&front_image_);
-    which_image_ = 1;
-  } else {
+  if (last_update_image_ == kFrontImage) {
     layout_->SetOutputImage(&back_image_);
-    which_image_ = 0;
+    Run();
+    last_update_image_ = kBackImage;
+  } else if (last_update_image_ == kBackImage) {
+    layout_->SetOutputImage(&front_image_);
+    Run();
+    last_update_image_ = kFrontImage;
   }
-
-  Run();
 }
 
 // 唯一レイアウトエラーコードをkNoErrorにできるメソッド

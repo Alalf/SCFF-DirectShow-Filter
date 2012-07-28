@@ -98,7 +98,10 @@ class Engine : public CAMThread, public Layout {
 
   /// @brief 更新中のバッファを表すインデックス
   /// @attention あえてLockしない
-  int which_image_;
+  enum ImageIndex {
+    kFrontImage,
+    kBackImage,
+  } last_update_image_;
 
   /// @brief レイアウト
   Layout *layout_;

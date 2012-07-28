@@ -39,6 +39,7 @@ static REFERENCE_TIME FPSToFrameInterval(double fps) {
 // コンストラクタ
 SCFFQualityControlledTime::SCFFQualityControlledTime()
     : now_(-1),                     // ありえない値
+      zero_(-1),                    // ありえない値
       target_fps_(-1),              // ありえない値
       target_frame_interval_(-1),   // ありえない値
       frame_interval_(-1) {         // ありえない値
@@ -51,11 +52,12 @@ SCFFQualityControlledTime::~SCFFQualityControlledTime() {
 }
 
 // ストリームタイムをリセット
-void SCFFQualityControlledTime::Reset(double fps) {
+void SCFFQualityControlledTime::Reset(double fps, IReferenceClock *graph_clock) {
   target_fps_ = fps;
   target_frame_interval_ = FPSToFrameInterval(fps);
   frame_interval_ = target_frame_interval_;
 
+  graph_clock->GetTime(&zero_);
   now_ = 0;
 
   MyDbgLog((LOG_TRACE, kDbgImportant,
@@ -79,7 +81,7 @@ REFERENCE_TIME SCFFQualityControlledTime::Adjust(const Quality &quality) {
   } else {
     // フレーム区間の長さをクオリティレート(100% = 1000)にあわせて伸張
     // Proptionは1000以上にはならないので、1000以外ではframe_interval_が長くなる
-    frame_interval_ *= 1000 / quality.Proportion;
+    frame_interval_ = (frame_interval_ * 1000) / quality.Proportion;
 
     // 長さがオーバーしないように
     if (max_frame_interval < frame_interval_) {
@@ -99,13 +101,24 @@ REFERENCE_TIME SCFFQualityControlledTime::Adjust(const Quality &quality) {
 }
 
 // sample->SetTime用のタイムスタンプを返す
-void SCFFQualityControlledTime::GetTimestamp(REFERENCE_TIME *start,
+void SCFFQualityControlledTime::GetTimestamp(REFERENCE_TIME filter_zero,
+                                             REFERENCE_TIME *start,
                                              REFERENCE_TIME *end) const {
-  *start = now_;
+  // zero_がparentから得られる場合がある
+  REFERENCE_TIME delta_zero = zero_ - filter_zero;
+  if (delta_zero < 0) {
+    delta_zero = -delta_zero;
+  }
+  if (delta_zero < UNITS) {
+    // ずれが1秒以下
+    *start = now_ + filter_zero;
+  } else {
+    *start = now_ + zero_;
+  }
   *end = *start + frame_interval_;
 }
 
 // Nowを更新する。値はGetTimestampで取得したendにすること。
 void SCFFQualityControlledTime::UpdateNow(REFERENCE_TIME end) {
-  now_ = end;
+  now_ += frame_interval_;
 }

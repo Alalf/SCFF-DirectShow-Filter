@@ -33,7 +33,7 @@ class SCFFQualityControlledTime {
   ~SCFFQualityControlledTime();
 
   /// @brief ストリームタイムをリセット
-  void Reset(double fps);
+  void Reset(double fps, IReferenceClock *graph_clock);
 
   /// @brief 現在のフレーム区間を取得
   REFERENCE_TIME frame_interval() const;
@@ -43,7 +43,9 @@ class SCFFQualityControlledTime {
   REFERENCE_TIME Adjust(const Quality &quality);
 
   /// @brief sample->SetTime用のタイムスタンプを返す
-  void GetTimestamp(REFERENCE_TIME *start, REFERENCE_TIME *end) const;
+  void GetTimestamp(
+      REFERENCE_TIME filter_zero,
+      REFERENCE_TIME *start, REFERENCE_TIME *end) const;
 
   /// @brief Nowを更新する。値はGetTimestampで取得したendにすること。
   void UpdateNow(REFERENCE_TIME end);
@@ -51,6 +53,9 @@ class SCFFQualityControlledTime {
  private:
   /// @brief 現在のストリームタイム(100nSec)
   REFERENCE_TIME now_;
+
+  /// @brief ストリームタイム基準時
+  REFERENCE_TIME zero_;
 
   /// @brief 目標FPS
   double target_fps_;

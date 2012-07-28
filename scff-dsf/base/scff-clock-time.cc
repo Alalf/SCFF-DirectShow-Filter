@@ -56,6 +56,7 @@ void SCFFClockTime::Reset(double fps, IReferenceClock* graph_clock) {
   }
 
   // グラフクロックを取得
+  ASSERT(graph_clock != NULL);
   graph_clock_ = graph_clock;
 
   // システムクロックを取得

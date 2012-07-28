@@ -419,10 +419,11 @@ HRESULT SCFFOutputPin::OnThreadStartPlay(void) {
   CAutoLock lock(&filling_buffer_);
   // タイムマネージャをリセット
   can_use_quality = false;
-  quality_controlled_time_.Reset(fps_);
-
   IReferenceClock *graph_clock;
-  m_pFilter->GetSyncSource(&graph_clock);
+  HRESULT result_graph_clock = m_pFilter->GetSyncSource(&graph_clock);
+  ASSERT(result_graph_clock == S_OK);
+
+  quality_controlled_time_.Reset(fps_, graph_clock);
   clock_time_.Reset(fps_, graph_clock);
   return S_OK;
 }
@@ -470,14 +471,11 @@ HRESULT SCFFOutputPin::DoBufferProcessingLoop(void) {
   monitor.Init(pixel_format, width_, height_, fps_);
   scff_imaging::Request *request = 0;
 
-  // タイムマネージャ用
-  bool is_first_loop = true;
-
   // ループ開始
   do {
     while (!CheckRequest(&command)) {
       /// @warning ダウンキャスト: dynamic_castではなくstatic_castで行っている
-      REFERENCE_TIME filter_zero_for_ct =
+      REFERENCE_TIME filter_zero =
           static_cast<SCFFSource*>(m_pFilter)->GetStartTime();
 
       // 接続先のピンからバッファを受け取る
@@ -502,20 +500,21 @@ HRESULT SCFFOutputPin::DoBufferProcessingLoop(void) {
         // いつでも切り替えられるように更新しておく
         REFERENCE_TIME start_for_qct;
         REFERENCE_TIME end_for_qct;
-        quality_controlled_time_.GetTimestamp(&start_for_qct, &end_for_qct);
+        quality_controlled_time_.GetTimestamp(filter_zero,
+                                              &start_for_qct, &end_for_qct);
         quality_controlled_time_.UpdateNow(end_for_qct);
 
         // ClockTime(以下ct)を
         // いつでも切り替えられるように更新しておく
         REFERENCE_TIME start_for_ct;
         REFERENCE_TIME end_for_ct;
-        clock_time_.GetTimestamp(filter_zero_for_ct,
+        clock_time_.GetTimestamp(filter_zero,
                                  &start_for_ct, &end_for_ct);
 
         // サンプルにデータを詰める (FillBuffer()は使わない)
         result_fill_buffer = FillBufferWithImagingEngine(engine, sample);
 
-        if (is_first_loop || can_use_quality) {
+        if (can_use_quality) {
           // 正確なタイムマネージャで時間あわせが可能
           sample->SetTime(&start_for_qct, &end_for_qct);
         } else {
@@ -552,11 +551,9 @@ HRESULT SCFFOutputPin::DoBufferProcessingLoop(void) {
       }
 
       // Clockタイムマネージャを使っている場合はSleepをはさむ
-      if (!(is_first_loop || can_use_quality)) {
-        clock_time_.Sleep(filter_zero_for_ct);
+      if (!can_use_quality) {
+        clock_time_.Sleep(filter_zero);
       }
-
-      is_first_loop = false;
 
       /// @attention sampleが絶対にリリースされてないと駄目！
     }

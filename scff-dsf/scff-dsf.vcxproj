@@ -28,7 +28,6 @@
     <ClCompile Include="base\scff-monitor.cc" />
     <ClCompile Include="base\scff-output-pin-implement.cc" />
     <ClCompile Include="base\scff-output-pin.cc" />
-    <ClCompile Include="base\scff-quality-controlled-time.cc" />
     <ClCompile Include="base\scff-source.cc" />
     <ClCompile Include="scff-imaging\avpicture-image.cc" />
     <ClCompile Include="scff-imaging\avpicture-with-fill-image.cc" />
@@ -62,7 +61,6 @@
     <ClInclude Include="base\scff-clock-time.h" />
     <ClInclude Include="base\scff-monitor.h" />
     <ClInclude Include="base\scff-output-pin.h" />
-    <ClInclude Include="base\scff-quality-controlled-time.h" />
     <ClInclude Include="base\scff-source.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="scff-imaging\avpicture-image.h" />

@@ -22,7 +22,6 @@
 #define SCFF_DSF_BASE_SCFF_OUTPUT_PIN_H_
 
 #include <streams.h>
-#include "base/scff-quality-controlled-time.h"
 #include "base/scff-clock-time.h"
 
 class SCFFSource;
@@ -197,10 +196,6 @@ class SCFFOutputPin : public CSourceStream,
   /// @brief fps(下流フィルタの要求から決まる)
   double fps_;
 
-  /// @brief どちらのタイムマネージャを利用しているか
-  bool can_use_quality;
-  /// @brief NotifyのQualityパラメータを利用した正確なタイムマネージャ
-  SCFFQualityControlledTime quality_controlled_time_;
   /// @brief 単純にSleepするだけの原始的なタイムマネージャ
   SCFFClockTime clock_time_;
 

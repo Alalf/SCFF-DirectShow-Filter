@@ -32,27 +32,10 @@
 //---------------------------------------------------------------------
 
 // 品質の変更が要求されたことをフィルタに通知
-/// @retval S_OK
+/// @retval E_NOTIMPL
 STDMETHODIMP SCFFOutputPin::Notify(IBaseFilter *self, Quality quality) {
-  /// @warning ロックするべきかもしれないが、内部データは全てアトミックなので
-  ///          現在の値を正確に反映することを優先した
-
   /// @attention Notifyは別スレッドから呼ばれることを確認
-
-  // デバッグ用 if (false) {
-  if (!can_use_quality) {
-    can_use_quality = true;
-    MyDbgLog((LOG_TRACE, kDbgImportant,
-              TEXT("[pin] <- Use QC Time Manager")));
-  }
-  const REFERENCE_TIME delay = quality_controlled_time_.Adjust(quality);
-  if (can_use_quality && delay != 0) {
-    MyDbgLog((LOG_TRACE, kDbgImportant,
-            TEXT("SCFFQualityControlledTime: Frame Skip Occured(%ld mSec)"),
-            delay / 10000));
-  }
-
-  return S_OK;
+  return E_NOTIMPL;
 }
 
 //---------------------------------------------------------------------
@@ -271,16 +254,13 @@ STDMETHODIMP SCFFOutputPin::GetLatency(REFERENCE_TIME *latency) {
   MyDbgLog((LOG_TRACE, kDbgImportant,
             TEXT("SCFFOutputPin: GetLatency")));
 
-  if (can_use_quality) {
-    *latency = quality_controlled_time_.frame_interval();
+  /// @todo(me) 値が不正確。固定値ではないはず。
+  if (fps_ > 0.0) {
+    *latency = ToFrameInterval(fps_);
   } else {
-    /// @todo(me) 値が不正確。固定値ではないはず。
-    if (fps_ > 0.0) {
-      *latency = ToFrameInterval(fps_);
-    } else {
-      *latency = 0;
-    }
+    *latency = 0;
   }
+
   return S_OK;
 }
 

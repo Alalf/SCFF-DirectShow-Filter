@@ -41,9 +41,6 @@
     <ClCompile Include="base\debug.cc">
       <Filter>base</Filter>
     </ClCompile>
-    <ClCompile Include="base\scff-quality-controlled-time.cc">
-      <Filter>base</Filter>
-    </ClCompile>
     <ClCompile Include="base\scff-clock-time.cc">
       <Filter>base</Filter>
     </ClCompile>
@@ -130,9 +127,6 @@
       <Filter>base</Filter>
     </ClInclude>
     <ClInclude Include="base\debug.h">
-      <Filter>base</Filter>
-    </ClInclude>
-    <ClInclude Include="base\scff-quality-controlled-time.h">
       <Filter>base</Filter>
     </ClInclude>
     <ClInclude Include="base\scff-clock-time.h">

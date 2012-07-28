@@ -27,7 +27,6 @@
 #include "base/constants.h"
 #include "base/debug.h"
 #include "base/scff-source.h"
-#include "base/scff-quality-controlled-time.h"
 #include "base/scff-monitor.h"
 
 #include "scff-imaging/imaging.h"
@@ -42,7 +41,6 @@ SCFFOutputPin::SCFFOutputPin(HRESULT *result, CSource *source)
     width_(kPreferredSizes[1].cx),    // 0はダミーなので1
     height_(kPreferredSizes[1].cy),   // 0はダミーなので1
     fps_(kDefaultFPS),
-    can_use_quality(false),
     offset_(0) {
   MyDbgLog((LOG_MEMORY, kDbgNewDelete,
     TEXT("SCFFOutputPin: NEW(%d, %d, %.1ffps)"),
@@ -418,12 +416,9 @@ HRESULT SCFFOutputPin::OnThreadStartPlay(void) {
     TEXT("SCFFOutputPin: OnThreadStartPlay")));
   CAutoLock lock(&filling_buffer_);
   // タイムマネージャをリセット
-  can_use_quality = false;
   IReferenceClock *graph_clock;
   HRESULT result_graph_clock = m_pFilter->GetSyncSource(&graph_clock);
   ASSERT(result_graph_clock == S_OK);
-
-  quality_controlled_time_.Reset(fps_, graph_clock);
   clock_time_.Reset(fps_, graph_clock);
   return S_OK;
 }
@@ -496,16 +491,7 @@ HRESULT SCFFOutputPin::DoBufferProcessingLoop(void) {
       {
         CAutoLock lock(&filling_buffer_);
 
-        // QualityControlledTime(以下qct)を
-        // いつでも切り替えられるように更新しておく
-        REFERENCE_TIME start_for_qct;
-        REFERENCE_TIME end_for_qct;
-        quality_controlled_time_.GetTimestamp(filter_zero,
-                                              &start_for_qct, &end_for_qct);
-        quality_controlled_time_.UpdateNow(end_for_qct);
-
-        // ClockTime(以下ct)を
-        // いつでも切り替えられるように更新しておく
+        // ClockTime(以下ct)を更新
         REFERENCE_TIME start_for_ct;
         REFERENCE_TIME end_for_ct;
         clock_time_.GetTimestamp(filter_zero,
@@ -514,13 +500,8 @@ HRESULT SCFFOutputPin::DoBufferProcessingLoop(void) {
         // サンプルにデータを詰める (FillBuffer()は使わない)
         result_fill_buffer = FillBufferWithImagingEngine(engine, sample);
 
-        if (can_use_quality) {
-          // 正確なタイムマネージャで時間あわせが可能
-          sample->SetTime(&start_for_qct, &end_for_qct);
-        } else {
-          // 原始的なのでタイムスタンプがまともに設定できない
-          sample->SetTime(&start_for_ct, &end_for_ct);
-        }
+        // タイムスタンプ設定
+        sample->SetTime(&start_for_ct, &end_for_ct);
       }
       sample->SetSyncPoint(TRUE);
 
@@ -551,9 +532,7 @@ HRESULT SCFFOutputPin::DoBufferProcessingLoop(void) {
       }
 
       // Clockタイムマネージャを使っている場合はSleepをはさむ
-      if (!can_use_quality) {
-        clock_time_.Sleep(filter_zero);
-      }
+      clock_time_.Sleep(filter_zero);
 
       /// @attention sampleが絶対にリリースされてないと駄目！
     }

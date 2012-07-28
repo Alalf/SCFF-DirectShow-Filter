@@ -132,7 +132,9 @@ ErrorCode NativeLayout::Init() {
   LayoutParameter parameter_array[kMaxProcessorSize];
   parameter_array[0] = parameter_;
   // NativeLayoutなのでsize=1
-  ScreenCapture *screen_capture = new ScreenCapture(1, parameter_array);
+  ScreenCapture *screen_capture = new ScreenCapture(
+      !Utilities::IsTopdownPixelFormat(GetOutputImage()->pixel_format()),
+      1, parameter_array);
   screen_capture->SetOutputImage(&captured_image_);
   const ErrorCode error_screen_capture = screen_capture->Init();
   if (error_screen_capture != kNoError) {

@@ -34,6 +34,7 @@ class ScreenCapture : public Processor<void, AVPictureWithFillImage> {
  public:
   /// @brief コンストラクタ
   ScreenCapture(
+      bool vertical_invert,
       int count,
       const LayoutParameter (&parameters)[kMaxProcessorSize]);
   /// @brief デストラクタ
@@ -77,6 +78,9 @@ class ScreenCapture : public Processor<void, AVPictureWithFillImage> {
 
   /// @brief レイアウトパラメータ
   LayoutParameter parameters_[kMaxProcessorSize];
+
+  /// @brief 取り込み時に上下反転を行うか
+  const bool vertical_invert_;
 
   // コピー＆代入禁止
   DISALLOW_COPY_AND_ASSIGN(ScreenCapture);

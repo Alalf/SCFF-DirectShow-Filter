@@ -49,9 +49,8 @@ class Utilities {
   // イメージの操作
   //-------------------------------------------------------------------
 
-  /// @brief 縦方向に回転したAVPictureを返す。実体は共通なので解放の必要はない。
-  static void FlipHorizontal(const AVPicture *input, int input_height,
-                             AVPicture *output);
+  /// @brief ピクセルフォーマットがTopdownか
+  static bool IsTopdownPixelFormat(ImagePixelFormat pixel_format);
 
   /// @brief drawutilsが使用可能なピクセルフォーマットか
   static bool CanUseDrawUtils(ImagePixelFormat pixel_format);

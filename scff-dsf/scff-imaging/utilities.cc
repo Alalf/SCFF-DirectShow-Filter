@@ -55,13 +55,18 @@ void Utilities::set_dll_instance(HINSTANCE dll_instance) {
 // イメージの操作
 //-------------------------------------------------------------------
 
-// 縦方向に回転したAVPictureを返す。実体は共通なので解放の必要はない。
-void Utilities::FlipHorizontal(const AVPicture *input, int input_height,
-                               AVPicture *output) {
-  // 取り込みデータの中身を操作せず、ポインタをいじるだけで対処
-  for (int i = 0; i < 8; i++) {
-    output->data[i] = input->data[i] + input->linesize[i] * (input_height - 1);
-    output->linesize[i] = -input->linesize[i];
+// ピクセルフォーマットがTopdownか
+bool Utilities::IsTopdownPixelFormat(ImagePixelFormat pixel_format) {
+  switch (pixel_format) {
+  case kRGB0:
+    return true;
+  case kI420:
+  case kIYUV:
+  case kYV12:
+  case kUYVY:
+  case kYUY2:
+  default:
+    return false;
   }
 }
 

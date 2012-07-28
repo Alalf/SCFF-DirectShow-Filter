@@ -178,7 +178,9 @@ ErrorCode ComplexLayout::Init() {
   // Processor
   //-------------------------------------------------------------------
   // スクリーンキャプチャ
-  ScreenCapture *screen_capture = new ScreenCapture(element_count_, parameters_);
+  ScreenCapture *screen_capture = new ScreenCapture(
+      !Utilities::IsTopdownPixelFormat(GetOutputImage()->pixel_format()),
+      element_count_, parameters_);
   for (int i = 0; i < element_count_; i++) {
     screen_capture->SetOutputImage(&(captured_image_[i]), i);
   }

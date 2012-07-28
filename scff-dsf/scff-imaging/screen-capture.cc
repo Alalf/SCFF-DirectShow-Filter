@@ -31,9 +31,11 @@ namespace scff_imaging {
 
 // コンストラクタ
 ScreenCapture::ScreenCapture(
+    bool vertical_invert,
     int count,
     const LayoutParameter (&parameters)[kMaxProcessorSize])
-    : Processor<void, AVPictureWithFillImage>(count) {
+    : Processor<void, AVPictureWithFillImage>(count),
+      vertical_invert_(vertical_invert) {
   MyDbgLog((LOG_MEMORY, kDbgNewDelete,
             TEXT("ScreenCapture: NEW(%d)"),
             count));
@@ -133,7 +135,7 @@ ErrorCode ScreenCapture::InitByIndex(int index) {
   // 取り込み用BITMAPINFOを作成
   Utilities::ImageToWindowsBitmapInfo(
       image_for_bitblt_[index],
-      false,
+      vertical_invert_,
       &(info_for_getdibits_[index]));
 
   // 取り込み用DCを作成 (SelectObjectで過去の値は放棄)

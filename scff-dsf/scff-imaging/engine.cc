@@ -267,6 +267,12 @@ void Engine::SetLayoutParameters(int element_count, const LayoutParameter (&para
   element_count_ = element_count;
   for (int i = 0; i < kMaxProcessorSize; i++) {
     parameters_[i] = parameters[i];
+    if (Utilities::IsTopdownPixelFormat(output_pixel_format_)) {
+      // * Topdownピクセルフォーマットの場合はbound_yの値を補正する
+      // まずbound_yは左上のy座標になっているので、左下のy座標にする(y+height)
+      // 左下のy座標は左上原点の座標系になっているので、左下原点の座標に直す
+      parameters_[i].bound_y = output_height_ - (parameters_[i].bound_y + parameters_[i].bound_height);
+    }
   }
 }
 

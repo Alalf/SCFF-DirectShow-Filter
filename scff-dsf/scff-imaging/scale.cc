@@ -135,43 +135,14 @@ ErrorCode Scale::Init() {
 // Processor::Run
 ErrorCode Scale::Run() {
   // SWScaleを使って拡大・縮小を行う
-  int scale_height = -1;    // ありえない値
-  switch (GetOutputImage()->pixel_format()) {
-  case kI420:
-  case kIYUV:
-  case kYV12:
-  case kUYVY:
-  case kYUY2:
-    /// @attention RGB->YUV変換時に上下が逆になるのを修正
-    AVPicture flip_horizontal_image_for_swscale;
-    Utilities::FlipHorizontal(
-        GetInputImage()->avpicture(),
-        GetInputImage()->height(),
-        &flip_horizontal_image_for_swscale);
-
-    // 拡大縮小
-    scale_height =
-        sws_scale(scaler_,
-                  flip_horizontal_image_for_swscale.data,
-                  flip_horizontal_image_for_swscale.linesize,
-                  0, GetInputImage()->height(),
-                  GetOutputImage()->avpicture()->data,
-                  GetOutputImage()->avpicture()->linesize);
-    ASSERT(scale_height == GetOutputImage()->height());
-    break;
-
-  case kRGB0:
-    // 拡大縮小
-    scale_height =
-        sws_scale(scaler_,
-                  GetInputImage()->avpicture()->data,
-                  GetInputImage()->avpicture()->linesize,
-                  0, GetInputImage()->height(),
-                  GetOutputImage()->avpicture()->data,
-                  GetOutputImage()->avpicture()->linesize);
-    ASSERT(scale_height == GetOutputImage()->height());
-    break;
-  }
+  int scale_height =
+      sws_scale(scaler_,
+                GetInputImage()->avpicture()->data,
+                GetInputImage()->avpicture()->linesize,
+                0, GetInputImage()->height(),
+                GetOutputImage()->avpicture()->data,
+                GetOutputImage()->avpicture()->linesize);
+  ASSERT(scale_height == GetOutputImage()->height());
 
   // エラー発生なし
   return GetCurrentError();

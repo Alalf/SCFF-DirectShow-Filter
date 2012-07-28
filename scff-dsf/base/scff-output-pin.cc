@@ -476,9 +476,9 @@ HRESULT SCFFOutputPin::DoBufferProcessingLoop(void) {
   // ループ開始
   do {
     while (!CheckRequest(&command)) {
-      /// @warning ダウンキャスト以外に簡単に書く方法が思いつかなかった
+      /// @warning ダウンキャスト: dynamic_castではなくstatic_castで行っている
       REFERENCE_TIME filter_zero_for_ct =
-          dynamic_cast<SCFFSource*>(m_pFilter)->GetStartTime();
+          static_cast<SCFFSource*>(m_pFilter)->GetStartTime();
 
       // 接続先のピンからバッファを受け取る
       IMediaSample *sample;

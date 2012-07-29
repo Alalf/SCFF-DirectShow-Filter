@@ -186,9 +186,9 @@ ErrorCode NativeLayout::Run() {
 
   // OutputImageを設定しなおす
   if (Utilities::CanUseDrawUtils(GetOutputImage()->pixel_format())) {
-    padding_->SetOutputImage(GetOutputImage());
+    padding_->SwapOutputImage(GetOutputImage());
   } else {
-    scale_->SetOutputImage(GetOutputImage());
+    scale_->SwapOutputImage(GetOutputImage());
   }
 
   // スクリーンキャプチャ

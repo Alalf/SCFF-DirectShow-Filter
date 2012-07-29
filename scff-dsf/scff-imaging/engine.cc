@@ -417,11 +417,11 @@ void Engine::Update() {
   }
 
   if (last_update_image_ == kFrontImage) {
-    layout_->SetOutputImage(&back_image_);
+    layout_->SwapOutputImage(&back_image_);
     Run();
     last_update_image_ = kBackImage;
   } else if (last_update_image_ == kBackImage) {
-    layout_->SetOutputImage(&front_image_);
+    layout_->SwapOutputImage(&front_image_);
     Run();
     last_update_image_ = kFrontImage;
   }

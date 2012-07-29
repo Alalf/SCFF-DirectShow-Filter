@@ -83,7 +83,17 @@ class Processor {
   /// @brief Setter: input_image_
   void SetInputImage(InputImageType *input_image, int index = 0) {
     ASSERT(0 <= index && index < size());
+    ASSERT(GetCurrentError() == kProcessorUninitializedError);
     input_image_[index] = input_image;
+  }
+  /// @brief Swap: input_image_
+  InputImageType* SwapInputImage(InputImageType *input_image, int index = 0) {
+    ASSERT(0 <= index && index < size());
+    ASSERT(GetCurrentError() == kNoError);
+    ASSERT(input_image_[index] != 0);
+    InputImageType *original_image = input_image_[index];
+    input_image_[index] = input_image;
+    return original_image;
   }
   /// @brief Getter: input_image_
   InputImageType* GetInputImage(int index = 0) const {
@@ -93,7 +103,17 @@ class Processor {
   /// @brief Setter: output_image_
   void SetOutputImage(OutputImageType *output_image, int index = 0) {
     ASSERT(0 <= index && index < size());
+    ASSERT(GetCurrentError() == kProcessorUninitializedError);
     output_image_[index] = output_image;
+  }
+  /// @brief Swap: output_image_
+  OutputImageType* SwapOutputImage(OutputImageType *output_image, int index = 0) {
+    ASSERT(0 <= index && index < size());
+    ASSERT(GetCurrentError() == kNoError);
+    ASSERT(output_image_[index] != 0);
+    OutputImageType *original_image = output_image_[index];
+    output_image_[index] = output_image;
+    return original_image;
   }
   /// @brief Getter: output_image_
   OutputImageType* GetOutputImage(int index = 0) const {

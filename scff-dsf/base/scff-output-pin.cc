@@ -84,8 +84,12 @@ SCFFOutputPin::~SCFFOutputPin() {
 HRESULT SCFFOutputPin::GetMediaType(int position, CMediaType *media_type) {
   // 引数チェック
   CheckPointer(media_type, E_POINTER);
-  if (position < 0) return E_INVALIDARG;
-  if (position >= kSupportedFormatsCount) return VFW_S_NO_MORE_ITEMS;
+  if (position < 0) {
+    return E_INVALIDARG;
+  }
+  if (position >= kSupportedFormatsCount) {
+    return VFW_S_NO_MORE_ITEMS;
+  }
 
   // サイズおよびピクセルフォーマット設定用
   const int position_in_preferred_sizes = position % kPreferredSizesCount;
@@ -266,7 +270,7 @@ HRESULT SCFFOutputPin::SetMediaType(const CMediaType *media_type) {
   CheckPointer(video_info, E_UNEXPECTED);
 
   MyDbgLog((LOG_TRACE, kDbgTrace,
-    TEXT("[pin] <- mediatype(%d, %d, %d, %.1ffps)"),
+    TEXT("[pin] <- mediatype(%dbpp, %d, %d, %.1ffps)"),
     video_info->bmiHeader.biBitCount,
     video_info->bmiHeader.biWidth,
     video_info->bmiHeader.biHeight,
@@ -281,7 +285,7 @@ HRESULT SCFFOutputPin::SetMediaType(const CMediaType *media_type) {
 
   // m_mtに設定
   HRESULT result = CSourceStream::SetMediaType(media_type);
-  if (result != S_OK) return result;
+  if (FAILED(result)) return result;
 
   // // for Skype
   // if (video_info->bmiHeader.biWidth == 0 &&
@@ -298,7 +302,7 @@ HRESULT SCFFOutputPin::SetMediaType(const CMediaType *media_type) {
   //
   //   // m_mtに設定
   //   HRESULT result = CSourceStream::SetMediaType(&media_type_from_pin);
-  //   if (result != S_OK) return result;
+  //   if (FAILED(result)) return result;
   //
   // } else if (video_info->bmiHeader.biWidth == 0 ||
   //            video_info->bmiHeader.biHeight == 0 ||
@@ -309,7 +313,7 @@ HRESULT SCFFOutputPin::SetMediaType(const CMediaType *media_type) {
   // } else {
   //   // m_mtに設定
   //   HRESULT result = CSourceStream::SetMediaType(media_type);
-  //   if (result != S_OK) return result;
+  //   if (FAILED(result)) return result;
   // }
 
   // 新しい設定をチェック
@@ -329,7 +333,7 @@ HRESULT SCFFOutputPin::SetMediaType(const CMediaType *media_type) {
 
   // ここで実際の値を取得
   width_  = specified_video_info->bmiHeader.biWidth;
-  height_ = specified_video_info->bmiHeader.biHeight;
+  height_ = abs(specified_video_info->bmiHeader.biHeight);
   fps_    = ToFPS(specified_video_info->AvgTimePerFrame);
 
   return S_OK;
@@ -369,7 +373,7 @@ HRESULT SCFFOutputPin::DecideBufferSize(IMemAllocator *allocator,
 
   ALLOCATOR_PROPERTIES actual_allocator;
   HRESULT result = allocator->SetProperties(request, &actual_allocator);
-  if (result != S_OK) return result;
+  if (FAILED(result)) return result;
 
   // 接続先の入力ピンから要求されたバッファの数よりも
   // 実際の割り当て数が小さかった場合
@@ -476,8 +480,8 @@ HRESULT SCFFOutputPin::DoBufferProcessingLoop(void) {
       // 接続先のピンからバッファを受け取る
       IMediaSample *sample;
       HRESULT result = GetDeliveryBuffer(&sample, NULL, NULL, 0);
-      if (result != S_OK) {
-        Sleep(1);   // 分解能1mSec
+      if (FAILED(result)) {
+        ::Sleep(1);   // 分解能1mSec
         continue;
       }
 

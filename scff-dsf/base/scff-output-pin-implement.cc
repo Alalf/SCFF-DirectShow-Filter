@@ -32,10 +32,10 @@
 //---------------------------------------------------------------------
 
 // 品質の変更が要求されたことをフィルタに通知
-/// @retval E_NOTIMPL
+/// @retval E_FAIL
 STDMETHODIMP SCFFOutputPin::Notify(IBaseFilter *self, Quality quality) {
   /// @attention Notifyは別スレッドから呼ばれることを確認
-  return E_NOTIMPL;
+  return E_FAIL;
 }
 
 //---------------------------------------------------------------------
@@ -56,7 +56,7 @@ STDMETHODIMP SCFFOutputPin::GetPreferredFormat(int position,
 
   CMediaType media_type_from_pin;
   HRESULT result = GetMediaType(position, &media_type_from_pin);
-  if (result != S_OK) return result;
+  if (FAILED(result)) return result;
 
   // ここで*media_typeに確保したメモリは呼び出し元が開放してくれる
   *media_type = static_cast<AM_MEDIA_TYPE*>(
@@ -90,7 +90,8 @@ STDMETHODIMP SCFFOutputPin::GetFormat(AM_MEDIA_TYPE **media_type) {
 /// @retval S_OK
 /// @retval E_POINTER
 STDMETHODIMP SCFFOutputPin::GetNumberOfCapabilities(
-                              int *count, int *size) {
+    int *count, int *size) {
+  CheckPointer(count, E_POINTER);
   CheckPointer(size, E_POINTER);
 
   *count = kSupportedFormatsCount;
@@ -119,7 +120,7 @@ STDMETHODIMP SCFFOutputPin::GetStreamCaps(
 
   HRESULT result = GetPreferredFormat(position, media_type);
   if (result == VFW_S_NO_MORE_ITEMS) return S_FALSE;
-  if (result != S_OK) return result;
+  if (FAILED(result)) return result;
 
   ASSERT((**media_type).formattype == FORMAT_VideoInfo);
 
@@ -173,7 +174,7 @@ STDMETHODIMP SCFFOutputPin::SetFormat(
   CMediaType media_type_instance = *media_type;
 
   HRESULT result = SetMediaType(&media_type_instance);
-  if (result != S_OK) return result;
+  if (FAILED(result)) return result;
 
   MyDbgLog((LOG_TRACE, kDbgImportant,
             TEXT("[pin]<IAMStreamConfig> <- format")));
@@ -204,21 +205,30 @@ STDMETHODIMP SCFFOutputPin::Get(REFGUID property_set_guid, DWORD property_id,
                               LPVOID instance_data, DWORD instance_data_size,
                               LPVOID property_data, DWORD property_data_size,
                               DWORD *returned_data_size) {
-  if (property_set_guid != AMPROPSETID_Pin) return E_PROP_SET_UNSUPPORTED;
-  if (property_id != AMPROPERTY_PIN_CATEGORY) return E_PROP_ID_UNSUPPORTED;
-  CheckPointer(property_data, E_POINTER);
-  CheckPointer(returned_data_size, E_POINTER);
-
-  if (returned_data_size) *returned_data_size = sizeof(GUID);
-
-  // 呼び出し元はサイズだけ知りたい。
-  CheckPointer(property_data, S_OK);
-
-  // バッファが小さすぎる。
-  if (property_data_size < sizeof(GUID)) return E_UNEXPECTED;
+  if (property_set_guid != AMPROPSETID_Pin) {
+    return E_PROP_SET_UNSUPPORTED;
+  }
+  if (property_id != AMPROPERTY_PIN_CATEGORY) {
+    return E_PROP_ID_UNSUPPORTED;
+  }
+  if (property_data == NULL && returned_data_size == NULL) {
+    return E_POINTER;
+  }
+  if (returned_data_size != NULL) {
+    *returned_data_size = sizeof(GUID);
+  }
+  if (property_data == NULL) {
+    // 呼び出し元はサイズだけ知りたい。
+    return S_OK;
+  }
+  if (property_data_size < sizeof(GUID)) {
+    // バッファが小さすぎる。
+    return E_UNEXPECTED;
+  }
 
   // このPinはPIN_CATEGORY_CAPTUREである
-  *(reinterpret_cast<GUID*>(property_data)) = PIN_CATEGORY_CAPTURE;
+  GUID *guid = reinterpret_cast<GUID*>(property_data);
+  *guid = PIN_CATEGORY_CAPTURE;
 
   MyDbgLog((LOG_TRACE, kDbgImportant,
             TEXT("SCFFOutputPin: Get")));
@@ -233,11 +243,17 @@ STDMETHODIMP SCFFOutputPin::Get(REFGUID property_set_guid, DWORD property_id,
 /// @retval S_OK
 STDMETHODIMP SCFFOutputPin::QuerySupported(REFGUID property_set_guid,
                               DWORD property_id, DWORD *support_type) {
-  if (property_set_guid != AMPROPSETID_Pin) return E_PROP_SET_UNSUPPORTED;
-  if (property_id != AMPROPERTY_PIN_CATEGORY) return E_PROP_ID_UNSUPPORTED;
+  if (property_set_guid != AMPROPSETID_Pin) {
+    return E_PROP_SET_UNSUPPORTED;
+  }
+  if (property_id != AMPROPERTY_PIN_CATEGORY) {
+    return E_PROP_ID_UNSUPPORTED;
+  }
+  if (support_type != NULL) {
+    // このプロパティの取得はサポートしているが、設定はサポートしていない
+    *support_type = KSPROPERTY_SUPPORT_GET;
+  }
 
-  // このプロパティの取得はサポートしているが、設定はサポートしていない
-  if (support_type) *support_type = KSPROPERTY_SUPPORT_GET;
   return S_OK;
 }
 
@@ -302,12 +318,9 @@ STDMETHODIMP SCFFOutputPin::GetMaxStreamOffset(REFERENCE_TIME *max_offset) {
 }
 
 // 最大ストリーム オフセットを指定する基準タイム
-/// @retval E_NOTIMPL
+/// @retval S_OK
 STDMETHODIMP SCFFOutputPin::SetMaxStreamOffset(REFERENCE_TIME max_offset) {
   // max_offsetは設定できない
-  /// @warning SCFH DSFではS_OKを返していた。
-  //return E_NOTIMPL;
-
   MyDbgLog((LOG_TRACE, kDbgImportant,
             TEXT("SCFFOutputPin: SetMaxStreamOffset")));
 

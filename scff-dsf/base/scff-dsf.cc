@@ -149,7 +149,7 @@ int g_cTemplates = sizeof(g_Templates) / sizeof(g_Templates[0]);
 /// @brief regsvr*.exeから呼ばれる登録関数
 STDAPI DllRegisterServer() {
   HRESULT result = AMovieDllRegisterServer2(TRUE);
-  if (result != S_OK) return result;
+  if (FAILED(result)) return result;
 
   // フィルタマッパーを取得
   IFilterMapper2 *mapper = NULL;
@@ -161,7 +161,7 @@ STDAPI DllRegisterServer() {
     IID_IFilterMapper2,     // 要求するインターフェイスの
                             // インターフェイス識別子 (IID) に設定
     reinterpret_cast<LPVOID*>(&mapper));
-  if (result != S_OK) return result;
+  if (FAILED(result)) return result;
 
   // マッパーを使ってフィルタを登録
   result = mapper->RegisterFilter(
@@ -182,7 +182,7 @@ STDAPI DllRegisterServer() {
 /// @brief regsvr*.exe /uから呼ばれる登録解除関数
 STDAPI DllUnregisterServer() {
   HRESULT result = AMovieDllRegisterServer2(FALSE);
-  if (result != S_OK) return result;
+  if (FAILED(result)) return result;
 
   // フィルタマッパーを取得
   IFilterMapper2 *mapper = NULL;
@@ -194,7 +194,7 @@ STDAPI DllUnregisterServer() {
     IID_IFilterMapper2,     // 要求するインターフェイスの
                             // インターフェイス識別子 (IID) に設定
     reinterpret_cast<LPVOID*>(&mapper));
-  if (result != S_OK) return result;
+  if (FAILED(result)) return result;
 
   // マッパーを使ってフィルタの登録を解除
   result = mapper->UnregisterFilter(

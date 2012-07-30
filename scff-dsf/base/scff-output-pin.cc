@@ -29,8 +29,6 @@
 #include "base/scff-source.h"
 #include "base/scff-monitor.h"
 
-#include "scff-imaging/imaging.h"
-
 //=====================================================================
 // SCFFOutputPin
 //=====================================================================
@@ -41,6 +39,7 @@ SCFFOutputPin::SCFFOutputPin(HRESULT *result, CSource *source)
     width_(kPreferredSizes[1].cx),    // 0はダミーなので1
     height_(kPreferredSizes[1].cy),   // 0はダミーなので1
     fps_(kDefaultFPS),
+    pixel_format_(scff_imaging::kI420),
     offset_(0) {
   MyDbgLog((LOG_MEMORY, kDbgNewDelete,
     TEXT("SCFFOutputPin: NEW(%d, %d, %.1ffps)"),
@@ -91,10 +90,6 @@ HRESULT SCFFOutputPin::GetMediaType(int position, CMediaType *media_type) {
     return VFW_S_NO_MORE_ITEMS;
   }
 
-  // サイズおよびピクセルフォーマット設定用
-  const int position_in_preferred_sizes = position % kPreferredSizesCount;
-  const int position_in_pixel_formats = position / kPreferredSizesCount;
-
   // ロック: m_pFilter->pStateLock()
   CAutoLock lock(m_pFilter->pStateLock());
 
@@ -107,27 +102,44 @@ HRESULT SCFFOutputPin::GetMediaType(int position, CMediaType *media_type) {
   //-------------------------------------------------------------------
   // １フレームの設定を表すBITMAPINFOHEADERの設定
 
-  // positionからピクセルフォーマットを計算
-  const scff_imaging::ImagePixelFormat current_pixel_format =
+  scff_imaging::ImagePixelFormat current_pixel_format;
+  int current_width;
+  int current_height;
+  if (position == 0) {
+    // ピクセルフォーマット指定付き
+    // positionからピクセルフォーマットを計算
 #if defined(FOR_KOTOENCODER)
-      scff_imaging::kI420;
+    current_pixel_format = scff_imaging::kI420;
 #else
-      scff_imaging::Utilities::IndexToPixelFormat(position_in_pixel_formats);
+    current_pixel_format = pixel_format_;
 #endif
-
-  // サイズ設定の優先度は以下のとおり:
-  //  0.  SetMediaTypeでピン接続先から指定されたサイズ
-  //  1-. 優先サイズの配列順
-  int current_width = -1;
-  int current_height = -1;
-  if (position_in_preferred_sizes == 0) {
-    // 0. SetMediaTypeでピン接続先から指定されたサイズ
     current_width = width_;
     current_height = height_;
   } else {
-    // 1-. 優先サイズの配列順
-    current_width = kPreferredSizes[position_in_preferred_sizes].cx;
-    current_height = kPreferredSizes[position_in_preferred_sizes].cy;
+    const int fixed_position = position - 1;
+
+    // サイズおよびピクセルフォーマット設定用
+    const int position_in_preferred_sizes = fixed_position % kPreferredSizesCount;
+    const int position_in_pixel_formats = fixed_position / kPreferredSizesCount;
+
+    // positionからピクセルフォーマットを計算
+#if defined(FOR_KOTOENCODER)
+    current_pixel_format = scff_imaging::kI420;
+#else
+    current_pixel_format = scff_imaging::Utilities::IndexToPixelFormat(position_in_pixel_formats);
+#endif
+    // サイズ設定の優先度は以下のとおり:
+    //  0.  SetMediaTypeでピン接続先から指定されたサイズ
+    //  1-. 優先サイズの配列順
+    if (position_in_preferred_sizes == 0) {
+      // 0. SetMediaTypeでピン接続先から指定されたサイズ
+      current_width = width_;
+      current_height = height_;
+    } else {
+      // 1-. 優先サイズの配列順
+      current_width = kPreferredSizes[position_in_preferred_sizes].cx;
+      current_height = kPreferredSizes[position_in_preferred_sizes].cy;
+    }
   }
 
   // ピクセルフォーマットからBITMAPINFOを取得
@@ -335,6 +347,30 @@ HRESULT SCFFOutputPin::SetMediaType(const CMediaType *media_type) {
   width_  = specified_video_info->bmiHeader.biWidth;
   height_ = abs(specified_video_info->bmiHeader.biHeight);
   fps_    = ToFPS(specified_video_info->AvgTimePerFrame);
+
+  const GUID subtype = *(m_mt.Subtype());
+  const GUID I420_guid = FOURCCMap(MAKEFOURCC('I', '4', '2', '0'));
+  const GUID IYUV_guid = MEDIASUBTYPE_IYUV;
+  const GUID YV12_guid = MEDIASUBTYPE_YV12;
+  const GUID UYVY_guid = MEDIASUBTYPE_UYVY;
+  const GUID YUY2_guid = MEDIASUBTYPE_YUY2;
+  const GUID RGB0_guid = MEDIASUBTYPE_RGB32;
+  if (subtype == I420_guid) {
+    pixel_format_ = scff_imaging::kI420;
+  } else if (subtype == IYUV_guid) {
+    pixel_format_ = scff_imaging::kIYUV;
+  } else if (subtype == YV12_guid) {
+    pixel_format_ = scff_imaging::kYV12;
+  } else if (subtype == UYVY_guid) {
+    pixel_format_ = scff_imaging::kUYVY;
+  } else if (subtype == YUY2_guid) {
+    pixel_format_ = scff_imaging::kYUY2;
+  } else if (subtype == RGB0_guid) {
+    pixel_format_ = scff_imaging::kRGB0;
+  } else {
+    ASSERT(false);
+    pixel_format_ = scff_imaging::kI420;
+  }
 
   return S_OK;
 }

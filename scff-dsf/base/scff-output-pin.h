@@ -23,12 +23,7 @@
 
 #include <streams.h>
 #include "base/scff-clock-time.h"
-
-class SCFFSource;
-
-namespace scff_imaging {
-class Engine;
-}   // namespace scff_imaging
+#include "scff-imaging/imaging.h"
 
 /// @brief DirectShowビデオキャプチャフィルタの出力ピン
 class SCFFOutputPin : public CSourceStream,
@@ -188,13 +183,15 @@ class SCFFOutputPin : public CSourceStream,
     return static_cast<REFERENCE_TIME>(UNITS / fps_);
   }
 
-  // 画面解像度とFPS
+  // 画面解像度,FPS,ピクセルフォーマット
   /// @brief width(下流フィルタの要求から決まる)
   int width_;
   /// @brief height(下流フィルタの要求から決まる)
   int height_;
   /// @brief fps(下流フィルタの要求から決まる)
   double fps_;
+  /// @brief pixel_format(下流フィルタの要求から決まる)
+  scff_imaging::ImagePixelFormat pixel_format_;
 
   /// @brief 単純にSleepするだけの原始的なタイムマネージャ
   SCFFClockTime clock_time_;

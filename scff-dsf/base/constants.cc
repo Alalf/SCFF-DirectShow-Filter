@@ -62,8 +62,9 @@ const int kSupportedPixelFormatsCount =
 #endif
 
 // 優先フォーマットの数
+/// @warning 最初の1個はSetFormat用
 const int kSupportedFormatsCount =
-    kPreferredSizesCount * kSupportedPixelFormatsCount;
+    kPreferredSizesCount * kSupportedPixelFormatsCount + 1;
 
 // デフォルトFPS
 const int kDefaultFPS = 30;

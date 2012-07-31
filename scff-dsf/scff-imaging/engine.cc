@@ -344,18 +344,22 @@ void Engine::DoSetComplexLayout() {
 // バッファにキャプチャ結果を格納する
 void Engine::DoLoop() {
   DWORD request;
+  const clock_t output_interval = static_cast<clock_t>((1 / output_fps_) * CLOCKS_PER_SEC);
+  clock_t last_update = ::clock();
 
   do {
     while (!CheckRequest(&request)) {
-      const clock_t start_update = ::clock();
       Update();
       const clock_t end_update = ::clock();
-      const double update_interval =
-          static_cast<double>(end_update - start_update) / CLOCKS_PER_SEC;
-      const double delta = (1 / output_fps_) - update_interval;
-      if (delta > 0.0) {
-        ::Sleep(static_cast<DWORD>(delta * MILLISECONDS));
+      const clock_t update_interval = end_update - last_update;
+      const clock_t delta = output_interval - update_interval;
+      if (delta > 0) {
+        ::Sleep(static_cast<DWORD>(delta * MILLISECONDS / CLOCKS_PER_SEC));
+      } else {
+        MyDbgLog((LOG_TRACE, kDbgRare,
+                TEXT("Engine: Drop Frame")));
       }
+      last_update = ::clock();
     }
 
     if (request == kRequestRun) {

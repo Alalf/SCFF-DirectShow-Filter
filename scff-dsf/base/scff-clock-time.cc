@@ -42,6 +42,8 @@ SCFFClockTime::SCFFClockTime()
 
 // デストラクタ
 SCFFClockTime::~SCFFClockTime() {
+  // 1. graph_clock_は別のインスタンスでReleaseされる
+  // 2. graph_clock_ == system_clock_ならsystem_clock_のみRelease
   if (system_clock_ != NULL) {
     system_clock_->Release();
     system_clock_ = NULL;
@@ -55,10 +57,6 @@ void SCFFClockTime::Reset(double fps, IReferenceClock* graph_clock) {
     system_clock_ = NULL;
   }
 
-  // グラフクロックを取得
-  ASSERT(graph_clock != NULL);
-  graph_clock_ = graph_clock;
-
   // システムクロックを取得
   HRESULT result_system_clock = CoCreateInstance(
     CLSID_SystemClock,
@@ -67,6 +65,13 @@ void SCFFClockTime::Reset(double fps, IReferenceClock* graph_clock) {
     IID_IReferenceClock,
     reinterpret_cast<void**>(&system_clock_));
   ASSERT(result_system_clock == S_OK);
+
+  // グラフクロックを取得
+  if (graph_clock != NULL) {
+    graph_clock_ = graph_clock;
+  } else {
+    graph_clock_ = system_clock_;
+  }
 
   target_frame_interval_ = static_cast<REFERENCE_TIME>(UNITS / fps);
   graph_clock_->GetTime(&zero_);

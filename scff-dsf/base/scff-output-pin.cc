@@ -456,10 +456,7 @@ HRESULT SCFFOutputPin::OnThreadStartPlay(void) {
     TEXT("SCFFOutputPin: OnThreadStartPlay")));
   CAutoLock lock(&filling_buffer_);
   // タイムマネージャをリセット
-  IReferenceClock *graph_clock;
-  HRESULT result_graph_clock = m_pFilter->GetSyncSource(&graph_clock);
-  ASSERT(result_graph_clock == S_OK);
-  clock_time_.Reset(fps_, graph_clock);
+  clock_time_.Reset(fps_, m_pFilter);
   return S_OK;
 }
 

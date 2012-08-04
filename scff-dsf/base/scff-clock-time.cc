@@ -42,19 +42,25 @@ SCFFClockTime::SCFFClockTime()
 
 // デストラクタ
 SCFFClockTime::~SCFFClockTime() {
-  // 1. graph_clock_は別のインスタンスでReleaseされる
-  // 2. graph_clock_ == system_clock_ならsystem_clock_のみRelease
   if (system_clock_ != NULL) {
     system_clock_->Release();
     system_clock_ = NULL;
   }
+  if (graph_clock_ != NULL) {
+    graph_clock_->Release();
+    graph_clock_ = NULL;
+  }
 }
 
 // ストリームタイムをリセット
-void SCFFClockTime::Reset(double fps, IReferenceClock* graph_clock) {
+void SCFFClockTime::Reset(double fps, CSource* parent) {
   if (system_clock_ != NULL) {
     system_clock_->Release();
     system_clock_ = NULL;
+  }
+  if (graph_clock_ != NULL) {
+    graph_clock_->Release();
+    graph_clock_ = NULL;
   }
 
   // システムクロックを取得
@@ -65,11 +71,18 @@ void SCFFClockTime::Reset(double fps, IReferenceClock* graph_clock) {
     IID_IReferenceClock,
     reinterpret_cast<void**>(&system_clock_));
   ASSERT(result_system_clock == S_OK);
+  ASSERT(system_clock_ != NULL);
 
   // グラフクロックを取得
+  ASSERT(parent != NULL);
+  IReferenceClock *graph_clock;
+  HRESULT result_graph_clock = parent->GetSyncSource(&graph_clock);
+  ASSERT(result_graph_clock == S_OK);
   if (graph_clock != NULL) {
     graph_clock_ = graph_clock;
   } else {
+    // 参照カウント追加
+    system_clock_->AddRef();
     graph_clock_ = system_clock_;
   }
 

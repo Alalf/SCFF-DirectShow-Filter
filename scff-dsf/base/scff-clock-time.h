@@ -38,7 +38,7 @@ class SCFFClockTime {
   ~SCFFClockTime();
 
   /// @brief ストリームタイムをリセット
-  void Reset(double fps, IReferenceClock *graph_clock);
+  void Reset(double fps, CSource *parent);
 
   /// @brief sample->SetTime用のストリームタイムを返す
   /// @attention フレームカウンタも更新しているのでconstではない

@@ -190,7 +190,8 @@ void Utilities::ImageToWindowsBitmapInfo(const Image &image,
 // int(index)->enum(ImagePixelFormat)変換
 ImagePixelFormat Utilities::IndexToPixelFormat(int index) {
   /// @attention enum->int
-  ASSERT(0 <= index && index < static_cast<int>(ImagePixelFormat::kSupportedPixelFormatsCount));
+  ASSERT(0 <= index &&
+      index < static_cast<int>(ImagePixelFormat::kSupportedPixelFormatsCount));
   /// @warning int->enum
   return static_cast<ImagePixelFormat>(index);
 }

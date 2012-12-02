@@ -57,7 +57,8 @@ ErrorCode WindowsDDBImage::CreateFromResource(int width, int height,
                                               WORD resource_id) {
   // pixel_format, width, height, fromを設定する
   /// @attention WindowsビットマップはRGB0(32bit)限定
-  ErrorCode error_create = Image::Create(ImagePixelFormat::kRGB0, width, height);
+  ErrorCode error_create =
+      Image::Create(ImagePixelFormat::kRGB0, width, height);
   if (error_create != ErrorCode::kNoError) {
     return error_create;
   }
@@ -85,7 +86,8 @@ ErrorCode WindowsDDBImage::CreateFromWindow(int width, int height,
                                             HWND window) {
   // pixel_format, width, height, fromを設定する
   /// @attention WindowsビットマップはRGB0(32bit)限定
-  ErrorCode error_create = Image::Create(ImagePixelFormat::kRGB0, width, height);
+  ErrorCode error_create =
+      Image::Create(ImagePixelFormat::kRGB0, width, height);
   if (error_create != ErrorCode::kNoError) {
     return error_create;
   }

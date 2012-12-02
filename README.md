@@ -13,8 +13,9 @@
 -----------------------------------------------------------------------
 
 - バージョン0.1.6-(2012/12版)からフィルタのファイル名が変わりました。
-- 旧バージョンをアンインストールするか、フォルダごと削除した上で再インストールをお願いします。
-- また開発環境がVisual Studio 2012になりましたので、XPでの動作が不安定になる可能性があります。
+- フォルダ・ファイルを全て削除した上で再インストールをお願いします。
+    - できれば旧バージョンのuninstall-*.batを実行したあとで削除してください。
+- 開発環境をVisual Studio 2012に移行したので、XPでの動作が不安定になる可能性があります。
 
 
 必要動作環境
@@ -134,18 +135,18 @@
    - Microsoft Visual Studio Express 2012で確認済み
    - 必要ならばいくつかのプロジェクト設定を書き換えること
 
-4. tools/copy-ffmpeg-dll.batを実行してdistディレクトリにffmpeg付属のdllをコピー
+3. tools/copy-ffmpeg-dll.batを実行してdistディレクトリにffmpeg付属のdllをコピー
 
-5. tools/install-debug.batかtools/install-release.batを実行
+4. tools/install-debug.batかtools/install-release.batを実行
 
-6. 各種エンコーダを起動しフィルタが認識されているかチェック
+5. 各種エンコーダを起動しフィルタが認識されているかチェック
 
-7. scff-app.slnソリューションを開き、全てのビルドが通ることを確認
+6. scff-app.slnソリューションを開き、全てのビルドが通ることを確認
     - Microsoft Visual Studio Express 2012で確認済み
 
-8. dist/Debugかdist/Releaseにあるヘルパーアプリケーションを起動し取り込み設定を行う
+7. dist/Debugかdist/Releaseにあるヘルパーアプリケーションを起動し取り込み設定を行う
 
-9. （scff-dsfのデバッグバージョンを利用する場合:）
+8. （scff-dsfのデバッグバージョンを利用する場合:）
     - プロジェクト設定からローカルWindowsデバッガーを選ぶ
     - コマンドにWME/KTE/FMEなどを選択すればデバッグ文字列などを見ることが出来る。
 

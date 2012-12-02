@@ -3,7 +3,7 @@
 # Project related configuration options
 DOXYFILE_ENCODING      = UTF-8
 PROJECT_NAME           = "SCFF DSF"
-PROJECT_NUMBER         = 0.0.1
+PROJECT_NUMBER         = 0.1.6
 PROJECT_BRIEF          = Screen Capture for FFMpeg - DirectShow Filter
 PROJECT_LOGO           =
 OUTPUT_DIRECTORY       = doc

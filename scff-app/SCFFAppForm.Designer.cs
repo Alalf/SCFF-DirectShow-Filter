@@ -1037,7 +1037,7 @@
       this.kVersion.Name = "kVersion";
       this.kVersion.Size = new System.Drawing.Size(64, 35);
       this.kVersion.TabIndex = 2;
-      this.kVersion.Text = "Ver.0.1.5  ";
+      this.kVersion.Text = "Ver.0.1.6  ";
       this.kVersion.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
       // 
       // profileList
@@ -1584,7 +1584,7 @@
       this.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
       this.MaximizeBox = false;
       this.Name = "SCFFAppForm";
-      this.Text = "SCFF DirectShow Filter Ver.0.1.5";
+      this.Text = "SCFF DirectShow Filter Ver.0.1.6";
       this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SCFFAppForm_FormClosing);
       this.Load += new System.EventHandler(this.SCFFAppForm_Load);
       this.Shown += new System.EventHandler(this.SCFFAppForm_Shown);

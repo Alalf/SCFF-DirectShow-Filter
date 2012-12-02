@@ -77,9 +77,9 @@ Engine::Engine(ImagePixelFormat output_pixel_format,
       output_width_(output_width),
       output_height_(output_height),
       output_fps_(output_fps),
-      layout_(0),       // NULL
-      layout_error_code_(kProcessorUninitializedError),
-      last_update_image_(kFrontImage) {
+      layout_(nullptr),
+      layout_error_code_(ErrorCode::kProcessorUninitializedError),
+      last_update_image_(ImageIndex::kFront) {
   MyDbgLog((LOG_MEMORY, kDbgNewDelete,
           TEXT("Engine: NEW(%d, %d, %d, %.1f)"),
           output_pixel_format, output_width, output_height, output_fps));
@@ -94,9 +94,10 @@ Engine::~Engine() {
   MyDbgLog((LOG_MEMORY, kDbgNewDelete,
           TEXT("Engine: DELETE")));
 
-  CallWorker(kRequestStop);
-  CallWorker(kRequestResetLayout);
-  CallWorker(kRequestExit);
+  /// @attention enum->DWORD
+  CallWorker(static_cast<DWORD>(RequestType::kStop));
+  CallWorker(static_cast<DWORD>(RequestType::kResetLayout));
+  CallWorker(static_cast<DWORD>(RequestType::kExit));
 }
 
 //---------------------------------------------------------------------
@@ -118,7 +119,7 @@ ErrorCode Engine::Init() {
       front_image_.Create(output_pixel_format_,
                           output_width_,
                           output_height_);
-  if (error_front_image != kNoError) {
+  if (error_front_image != ErrorCode::kNoError) {
     return ErrorOccured(error_front_image);
   }
   // バックイメージ
@@ -126,7 +127,7 @@ ErrorCode Engine::Init() {
       back_image_.Create(output_pixel_format_,
                          output_width_,
                          output_height_);
-  if (error_back_image != kNoError) {
+  if (error_back_image != ErrorCode::kNoError) {
     return ErrorOccured(error_back_image);
   }
   // スプラッシュイメージ
@@ -134,7 +135,7 @@ ErrorCode Engine::Init() {
       splash_image_.Create(output_pixel_format_,
                            output_width_,
                            output_height_);
-  if (error_splash_image != kNoError) {
+  if (error_splash_image != ErrorCode::kNoError) {
     return ErrorOccured(error_splash_image);
   }
 
@@ -142,11 +143,11 @@ ErrorCode Engine::Init() {
   SplashScreen splash_screen;
   splash_screen.SetOutputImage(&splash_image_);
   const ErrorCode error_splash_screen = splash_screen.Init();
-  if (error_splash_screen != kNoError) {
+  if (error_splash_screen != ErrorCode::kNoError) {
     return ErrorOccured(error_splash_screen);
   }
   const ErrorCode error_splash_image_pull = splash_screen.Run();
-  if (error_splash_image_pull != kNoError) {
+  if (error_splash_image_pull != ErrorCode::kNoError) {
     return ErrorOccured(error_splash_image_pull);
   }
 
@@ -158,7 +159,7 @@ ErrorCode Engine::Init() {
 
   // スレッド作成
   Create();
-  CallWorker(kRequestResetLayout);
+  CallWorker(static_cast<DWORD>(RequestType::kResetLayout));
 
   // 作成成功
   return InitDone();
@@ -167,12 +168,12 @@ ErrorCode Engine::Init() {
 // リクエストに対する処理を行う
 ErrorCode Engine::Accept(Request *request) {
   // 何かエラーが発生している場合は何もしない
-  if (GetCurrentError() != kNoError) {
+  if (GetCurrentError() != ErrorCode::kNoError) {
     return GetCurrentError();
   }
 
   // NULLリクエスト(何もしない)ならば、何もしない
-  if (request == 0) {   // NULL
+  if (request == nullptr) {
     return GetCurrentError();
   }
 
@@ -195,17 +196,17 @@ ErrorCode Engine::Accept(Request *request) {
 // フロントイメージをサンプルにコピー
 /// @attention エラー発生中に追加の処理を行うのはEngineだけ
 ErrorCode Engine::CopyFrontImage(BYTE *sample, DWORD data_size) {
-  /// @attention processorのポインタがNULLであることはエラーではない
+  /// @attention processorのポインタがnullptrであることはエラーではない
 
   // Engine自体にエラーが発生していたら0クリア
-  if (GetCurrentError() != kNoError) {
+  if (GetCurrentError() != ErrorCode::kNoError) {
     // Splashすら表示できない状態である可能性がある
     ZeroMemory(sample, data_size);
     return GetCurrentError();
   }
 
   // layout_にエラーが発生していたらスプラッシュを書く
-  if (GetCurrentLayoutError() != kNoError) {
+  if (GetCurrentLayoutError() != ErrorCode::kNoError) {
     ASSERT(data_size == Utilities::CalculateImageSize(splash_image_));
     avpicture_layout(splash_image_.avpicture(),
                      splash_image_.av_pixel_format(),
@@ -216,14 +217,14 @@ ErrorCode Engine::CopyFrontImage(BYTE *sample, DWORD data_size) {
   }
 
   // sampleにコピー
-  if (last_update_image_ == kFrontImage) {
+  if (last_update_image_ == ImageIndex::kFront) {
     ASSERT(data_size == Utilities::CalculateImageSize(front_image_));
     avpicture_layout(front_image_.avpicture(),
                      front_image_.av_pixel_format(),
                      front_image_.width(),
                      front_image_.height(),
                      sample, data_size);
-  } else if (last_update_image_ == kBackImage) {
+  } else if (last_update_image_ == ImageIndex::kBack) {
     ASSERT(data_size == Utilities::CalculateImageSize(back_image_));
     avpicture_layout(back_image_.avpicture(),
                      back_image_.av_pixel_format(),
@@ -242,23 +243,26 @@ ErrorCode Engine::CopyFrontImage(BYTE *sample, DWORD data_size) {
 
 // 現在のプロセッサを解放してスプラッシュを表示する
 void Engine::ResetLayout() {
-  CallWorker(kRequestStop);
-  CallWorker(kRequestResetLayout);
-  CallWorker(kRequestRun);
+  /// @attention enum->DWORD
+  CallWorker(static_cast<DWORD>(RequestType::kStop));
+  CallWorker(static_cast<DWORD>(RequestType::kResetLayout));
+  CallWorker(static_cast<DWORD>(RequestType::kRun));
 }
 
 // 現在のプロセッサを新しいNativeLayoutに設定する
 void Engine::SetNativeLayout() {
-  CallWorker(kRequestStop);
-  CallWorker(kRequestSetNativeLayout);
-  CallWorker(kRequestRun);
+  /// @attention enum->DWORD
+  CallWorker(static_cast<DWORD>(RequestType::kStop));
+  CallWorker(static_cast<DWORD>(RequestType::kSetNativeLayout));
+  CallWorker(static_cast<DWORD>(RequestType::kRun));
 }
 
 // 現在のプロセッサを新しいComplexLayoutに設定する
 void Engine::SetComplexLayout() {
-  CallWorker(kRequestStop);
-  CallWorker(kRequestSetComplexLayout);
-  CallWorker(kRequestRun);
+  /// @attention enum->DWORD
+  CallWorker(static_cast<DWORD>(RequestType::kStop));
+  CallWorker(static_cast<DWORD>(RequestType::kSetComplexLayout));
+  CallWorker(static_cast<DWORD>(RequestType::kRun));
 }
 
 // スレッド間で共有: レイアウトパラメータの設定
@@ -291,13 +295,13 @@ void Engine::DoResetLayout() {
           TEXT("Engine: Reset Layout")));
 
   // 解放+0クリア
-  if (layout_ != 0) {       // NULL
+  if (layout_ != nullptr) {
     delete layout_;
-    layout_ = 0;            // NULL
+    layout_ = nullptr;
   }
   // 未初期化
   CAutoLock lock(&m_WorkerLock);
-  layout_error_code_ = kProcessorUninitializedError;
+  layout_error_code_ = ErrorCode::kProcessorUninitializedError;
 }
 
 // 現在のプロセッサを新しいNativeLayoutに設定する
@@ -309,7 +313,7 @@ void Engine::DoSetNativeLayout() {
   NativeLayout *native_layout = new NativeLayout(parameters_[0]);
   native_layout->SetOutputImage(&front_image_);
   const ErrorCode error_layout = native_layout->Init();
-  if (error_layout != kNoError) {
+  if (error_layout != ErrorCode::kNoError) {
     // 失敗
     delete native_layout;
     LayoutErrorOccured(error_layout);
@@ -330,7 +334,7 @@ void Engine::DoSetComplexLayout() {
       new ComplexLayout(element_count_, parameters_);
   complex_layout->SetOutputImage(&front_image_);
   const ErrorCode error_layout = complex_layout->Init();
-  if (error_layout != kNoError) {
+  if (error_layout != ErrorCode::kNoError) {
     // 失敗
     delete complex_layout;
     LayoutErrorOccured(error_layout);
@@ -363,52 +367,55 @@ void Engine::DoLoop() {
       last_update = ::clock();
     }
 
-    if (request == kRequestRun) {
+    /// @attention enum->DWORD
+    if (request == static_cast<DWORD>(RequestType::kRun)) {
       Reply(NOERROR);
     }
-  } while (request != kRequestStop);
+  } while (request != static_cast<DWORD>(RequestType::kStop));
 }
 
 // CAMThread::ThreadProc()の実装
 DWORD Engine::ThreadProc() {
   HRESULT result = ERROR;
-  DWORD request = kRequestInvalid;
+  RequestType request = RequestType::kInvalid;
 
   do {
-    request = GetRequest();
+    DWORD actual_request = GetRequest();
+    /// @warning DWORD->enum
+    request = static_cast<RequestType>(actual_request);
 
     switch (request) {
-    case kRequestResetLayout:
+    case RequestType::kResetLayout:
       DoResetLayout();
       Reply(NOERROR);
       break;
-    case kRequestSetNativeLayout:
+    case RequestType::kSetNativeLayout:
       DoSetNativeLayout();
       Reply(NOERROR);
       break;
-    case kRequestSetComplexLayout:
+    case RequestType::kSetComplexLayout:
       DoSetComplexLayout();
       Reply(NOERROR);
       break;
-    case kRequestRun:
+    case RequestType::kRun:
       Reply(NOERROR);
       DoLoop();
       break;
-    case kRequestStop:
-    case kRequestExit:
+    case RequestType::kStop:
+    case RequestType::kExit:
       Reply(NOERROR);
       break;
     }
-  } while (request != kRequestExit);
+  } while (request != RequestType::kExit);
 
   return 0;
 }
 
 // Processor::Run
 ErrorCode Engine::Run() {
-  ASSERT(layout_ != 0);   // NULL
+  ASSERT(layout_ != nullptr);
   const ErrorCode error = layout_->Run();
-  if (error != kNoError) {
+  if (error != ErrorCode::kNoError) {
     /// @attention layout_でエラーが発生してもEngine自体はエラー状態ではない
     LayoutErrorOccured(error);
   }
@@ -417,27 +424,27 @@ ErrorCode Engine::Run() {
 
 // バッファを更新
 void Engine::Update() {
-  if (GetCurrentLayoutError() != kNoError) {
+  if (GetCurrentLayoutError() != ErrorCode::kNoError) {
     return;
   }
 
-  if (last_update_image_ == kFrontImage) {
+  if (last_update_image_ == ImageIndex::kFront) {
     layout_->SwapOutputImage(&back_image_);
     Run();
-    last_update_image_ = kBackImage;
-  } else if (last_update_image_ == kBackImage) {
+    last_update_image_ = ImageIndex::kBack;
+  } else if (last_update_image_ == ImageIndex::kBack) {
     layout_->SwapOutputImage(&front_image_);
     Run();
-    last_update_image_ = kFrontImage;
+    last_update_image_ = ImageIndex::kFront;
   }
 }
 
 // 唯一レイアウトエラーコードをkNoErrorにできるメソッド
 ErrorCode Engine::LayoutInitDone() {
   CAutoLock lock(&m_WorkerLock);
-  ASSERT(layout_error_code_ == kProcessorUninitializedError);
-  if (layout_error_code_ == kProcessorUninitializedError) {
-    layout_error_code_ = kNoError;
+  ASSERT(layout_error_code_ == ErrorCode::kProcessorUninitializedError);
+  if (layout_error_code_ == ErrorCode::kProcessorUninitializedError) {
+    layout_error_code_ = ErrorCode::kNoError;
 
     // ここで一回FrontImage/BackImageを黒で塗りつぶす
     Clear(&front_image_);
@@ -449,7 +456,7 @@ ErrorCode Engine::LayoutInitDone() {
 // レイアウトエラーが発生したときに呼び出す
 ErrorCode Engine::LayoutErrorOccured(ErrorCode error_code) {
   CAutoLock lock(&m_WorkerLock);
-  if (error_code != kNoError) {
+  if (error_code != ErrorCode::kNoError) {
     // 後からkNoErrorにしようとしてもできない
     // ASSERT(false);
     MyDbgLog((LOG_TRACE, kDbgImportant,

@@ -104,6 +104,6 @@ void MyDebugMessageBox(LPCTSTR format, ...) {
   _vstprintf_s(buffer, 512, format, ap);
   va_end(ap);
 
-  MessageBox(NULL, buffer, TEXT("debug info"), MB_OK);
+  MessageBox(nullptr, buffer, TEXT("debug info"), MB_OK);
 }
 #endif  // _DEBUG

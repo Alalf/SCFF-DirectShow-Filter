@@ -60,10 +60,11 @@ bool SCFFMonitor::Init(scff_imaging::ImagePixelFormat pixel_format,
   entry.process_id = process_id;
   GetModuleBaseNameA(
       GetCurrentProcess(),
-      NULL,
+      nullptr,
       entry.process_name,
       scff_interprocess::kMaxPath);
-  entry.sample_image_pixel_format = pixel_format;
+  /// @attention enum->int32_t
+  entry.sample_image_pixel_format = static_cast<int32_t>(pixel_format);
   entry.sample_width = width;
   entry.sample_height = height;
   entry.fps = fps;
@@ -86,42 +87,42 @@ static void ConvertSWScaleConfig(
     scff_imaging::SWScaleConfig *output) {
   // enumは無理にキャストせずswitchで変換
   switch (input.flags) {
-  case scff_interprocess::kFastBilinear:
-    output->flags = scff_imaging::kFastBilinear;
+  case scff_interprocess::SWScaleFlags::kFastBilinear:
+    output->flags = scff_imaging::SWScaleFlags::kFastBilinear;
     break;
-  case scff_interprocess::kBilinear:
-    output->flags = scff_imaging::kBilinear;
+  case scff_interprocess::SWScaleFlags::kBilinear:
+    output->flags = scff_imaging::SWScaleFlags::kBilinear;
     break;
-  case scff_interprocess::kBicubic:
-    output->flags = scff_imaging::kBicubic;
+  case scff_interprocess::SWScaleFlags::kBicubic:
+    output->flags = scff_imaging::SWScaleFlags::kBicubic;
     break;
-  case scff_interprocess::kX:
-    output->flags = scff_imaging::kX;
+  case scff_interprocess::SWScaleFlags::kX:
+    output->flags = scff_imaging::SWScaleFlags::kX;
     break;
-  case scff_interprocess::kPoint:
-    output->flags = scff_imaging::kPoint;
+  case scff_interprocess::SWScaleFlags::kPoint:
+    output->flags = scff_imaging::SWScaleFlags::kPoint;
     break;
-  case scff_interprocess::kArea:
-    output->flags = scff_imaging::kArea;
+  case scff_interprocess::SWScaleFlags::kArea:
+    output->flags = scff_imaging::SWScaleFlags::kArea;
     break;
-  case scff_interprocess::kBicublin:
-    output->flags = scff_imaging::kBicublin;
+  case scff_interprocess::SWScaleFlags::kBicublin:
+    output->flags = scff_imaging::SWScaleFlags::kBicublin;
     break;
-  case scff_interprocess::kGauss:
-    output->flags = scff_imaging::kGauss;
+  case scff_interprocess::SWScaleFlags::kGauss:
+    output->flags = scff_imaging::SWScaleFlags::kGauss;
     break;
-  case scff_interprocess::kSinc:
-    output->flags = scff_imaging::kSinc;
+  case scff_interprocess::SWScaleFlags::kSinc:
+    output->flags = scff_imaging::SWScaleFlags::kSinc;
     break;
-  case scff_interprocess::kLanczos:
-    output->flags = scff_imaging::kLanczos;
+  case scff_interprocess::SWScaleFlags::kLanczos:
+    output->flags = scff_imaging::SWScaleFlags::kLanczos;
     break;
-  case scff_interprocess::kSpline:
-    output->flags = scff_imaging::kSpline;
+  case scff_interprocess::SWScaleFlags::kSpline:
+    output->flags = scff_imaging::SWScaleFlags::kSpline;
     break;
   default:
     ASSERT(false);
-    output->flags = scff_imaging::kFastBilinear;
+    output->flags = scff_imaging::SWScaleFlags::kFastBilinear;
     break;
   }
 
@@ -161,21 +162,21 @@ static void ConvertLayoutParameter(
 
   // enumは無理にキャストせずswitchで変換
   switch (input.rotate_direction) {
-  case scff_interprocess::kNoRotate:
-    output->rotate_direction = scff_imaging::kNoRotate;
+  case scff_interprocess::RotateDirection::kNoRotate:
+    output->rotate_direction = scff_imaging::RotateDirection::kNoRotate;
     break;
-  case scff_interprocess::k90Degrees:
-    output->rotate_direction = scff_imaging::k90Degrees;
+  case scff_interprocess::RotateDirection::k90Degrees:
+    output->rotate_direction = scff_imaging::RotateDirection::k90Degrees;
     break;
-  case scff_interprocess::k180Degrees:
-    output->rotate_direction = scff_imaging::k180Degrees;
+  case scff_interprocess::RotateDirection::k180Degrees:
+    output->rotate_direction = scff_imaging::RotateDirection::k180Degrees;
     break;
-  case scff_interprocess::k270Degrees:
-    output->rotate_direction = scff_imaging::k270Degrees;
+  case scff_interprocess::RotateDirection::k270Degrees:
+    output->rotate_direction = scff_imaging::RotateDirection::k270Degrees;
     break;
   default:
     ASSERT(false);
-    output->rotate_direction = scff_imaging::kNoRotate;
+    output->rotate_direction = scff_imaging::RotateDirection::kNoRotate;
     break;
   }
 }
@@ -197,7 +198,7 @@ scff_imaging::Request* SCFFMonitor::CreateRequest() {
 
   // ポーリングはkSCFFMonitorPollingInterval秒に1回である
   if (erapsed_time_from_last_polling < kSCFFMonitorPollingInterval) {
-    return 0;   // NULL
+    return nullptr;
   }
 
   // ポーリング記録の更新
@@ -225,9 +226,14 @@ scff_imaging::Request* SCFFMonitor::CreateRequest() {
   last_message_timestamp_ = message.timestamp;
 
   //-----------------------------------------------------------------
+  /// @warning int32_t->enum
+  scff_interprocess::LayoutType layout_type =
+      static_cast<scff_interprocess::LayoutType>(message.layout_type);
+
+  //-----------------------------------------------------------------
   // ResetLayoutRequest
   //-----------------------------------------------------------------
-  if (message.layout_type == scff_interprocess::kNullLayout) {
+  if (layout_type == scff_interprocess::LayoutType::kNullLayout) {
     MyDbgLog((LOG_TRACE, kDbgImportant,
               TEXT("SCFFMonitor: ResetLayoutRequest arrived(%lld)."),
               message.timestamp));
@@ -237,8 +243,8 @@ scff_imaging::Request* SCFFMonitor::CreateRequest() {
   //-----------------------------------------------------------------
   // SetLayoutRequest
   //-----------------------------------------------------------------
-  ASSERT(message.layout_type == scff_interprocess::kNativeLayout ||
-         message.layout_type == scff_interprocess::kComplexLayout);
+  ASSERT(layout_type == scff_interprocess::LayoutType::kNativeLayout ||
+         layout_type == scff_interprocess::LayoutType::kComplexLayout);
 
   MyDbgLog((LOG_TRACE, kDbgImportant,
             TEXT("SCFFMonitor: SetLayoutRequest arrived(%d, %lld)."),
@@ -257,11 +263,11 @@ scff_imaging::Request* SCFFMonitor::CreateRequest() {
 
 // 使い終わったリクエストを解放する
 void SCFFMonitor::ReleaseRequest(scff_imaging::Request *request) {
-  if (request == 0) {   // NULL
-    // NULLなら何もしない
+  if (request == nullptr) {
+    // nullptrなら何もしない
     return;
   } else {
     delete request;
-    request = 0;        // NULL
+    request = nullptr;
   }
 }

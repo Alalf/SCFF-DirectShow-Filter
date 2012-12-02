@@ -29,7 +29,7 @@ namespace scff_imaging {
 class WindowsDDBImage: public Image {
  public:
   /// @brief Windowsビットマップの生成方法
-  enum Source {
+  enum class Source {
     /// @brief ありえない値
     kInvalidSource,
     /// @brief WindowハンドルからCreateCompatibleBitmapで生成

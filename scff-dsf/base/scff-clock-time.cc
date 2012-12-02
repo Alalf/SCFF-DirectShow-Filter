@@ -28,8 +28,8 @@
 
 // コンストラクタ
 SCFFClockTime::SCFFClockTime()
-    : graph_clock_(NULL),           // NULL
-      system_clock_(NULL),          // NULL
+    : graph_clock_(nullptr),
+      system_clock_(nullptr),
       target_frame_interval_(-1),   // ありえない値
       zero_(-1),                    // ありえない値
       graph_cursor_(-1),            // ありえない値
@@ -42,43 +42,43 @@ SCFFClockTime::SCFFClockTime()
 
 // デストラクタ
 SCFFClockTime::~SCFFClockTime() {
-  if (system_clock_ != NULL) {
+  if (system_clock_ != nullptr) {
     system_clock_->Release();
-    system_clock_ = NULL;
+    system_clock_ = nullptr;
   }
-  if (graph_clock_ != NULL) {
+  if (graph_clock_ != nullptr) {
     graph_clock_->Release();
-    graph_clock_ = NULL;
+    graph_clock_ = nullptr;
   }
 }
 
 // ストリームタイムをリセット
 void SCFFClockTime::Reset(double fps, CSource* parent) {
-  if (system_clock_ != NULL) {
+  if (system_clock_ != nullptr) {
     system_clock_->Release();
-    system_clock_ = NULL;
+    system_clock_ = nullptr;
   }
-  if (graph_clock_ != NULL) {
+  if (graph_clock_ != nullptr) {
     graph_clock_->Release();
-    graph_clock_ = NULL;
+    graph_clock_ = nullptr;
   }
 
   // システムクロックを取得
   HRESULT result_system_clock = CoCreateInstance(
     CLSID_SystemClock,
-    NULL,
+    NULL, // nullptr
     CLSCTX_INPROC_SERVER,
     IID_IReferenceClock,
     reinterpret_cast<void**>(&system_clock_));
   ASSERT(result_system_clock == S_OK);
-  ASSERT(system_clock_ != NULL);
+  ASSERT(system_clock_ != nullptr);
 
   // グラフクロックを取得
-  ASSERT(parent != NULL);
+  ASSERT(parent != nullptr);
   IReferenceClock *graph_clock;
   HRESULT result_graph_clock = parent->GetSyncSource(&graph_clock);
   ASSERT(result_graph_clock == S_OK);
-  if (graph_clock != NULL) {
+  if (graph_clock != nullptr) {
     graph_clock_ = graph_clock;
   } else {
     // 参照カウント追加
@@ -97,8 +97,8 @@ void SCFFClockTime::Reset(double fps, CSource* parent) {
 
 /// @brief 現在のストリームタイムを得る
 REFERENCE_TIME SCFFClockTime::GetNow(REFERENCE_TIME filter_zero) {
-  ASSERT(graph_clock_ != 0);
-  ASSERT(system_clock_ != 0);
+  ASSERT(graph_clock_ != nullptr);
+  ASSERT(system_clock_ != nullptr);
 
   REFERENCE_TIME system_now;
   system_clock_->GetTime(&system_now);

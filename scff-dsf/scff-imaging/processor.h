@@ -39,7 +39,7 @@ class Processor {
  public:
   /// @brief コンストラクタ
   explicit Processor(int size = 1)
-      : error_code_(kProcessorUninitializedError),
+      : error_code_(ErrorCode::kProcessorUninitializedError),
         size_(size) {
     // nop
   }
@@ -83,14 +83,14 @@ class Processor {
   /// @brief Setter: input_image_
   void SetInputImage(InputImageType *input_image, int index = 0) {
     ASSERT(0 <= index && index < size());
-    ASSERT(GetCurrentError() == kProcessorUninitializedError);
+    ASSERT(GetCurrentError() == ErrorCode::kProcessorUninitializedError);
     input_image_[index] = input_image;
   }
   /// @brief Swap: input_image_
   InputImageType* SwapInputImage(InputImageType *input_image, int index = 0) {
     ASSERT(0 <= index && index < size());
-    ASSERT(GetCurrentError() == kNoError);
-    ASSERT(input_image_[index] != 0);
+    ASSERT(GetCurrentError() == ErrorCode::kNoError);
+    ASSERT(input_image_[index] != nullptr);
     InputImageType *original_image = input_image_[index];
     input_image_[index] = input_image;
     return original_image;
@@ -103,15 +103,15 @@ class Processor {
   /// @brief Setter: output_image_
   void SetOutputImage(OutputImageType *output_image, int index = 0) {
     ASSERT(0 <= index && index < size());
-    ASSERT(GetCurrentError() == kProcessorUninitializedError);
+    ASSERT(GetCurrentError() == ErrorCode::kProcessorUninitializedError);
     output_image_[index] = output_image;
   }
   /// @brief Swap: output_image_
   OutputImageType* SwapOutputImage(OutputImageType *output_image,
                                    int index = 0) {
     ASSERT(0 <= index && index < size());
-    ASSERT(GetCurrentError() == kNoError);
-    ASSERT(output_image_[index] != 0);
+    ASSERT(GetCurrentError() == ErrorCode::kNoError);
+    ASSERT(output_image_[index] != nullptr);
     OutputImageType *original_image = output_image_[index];
     output_image_[index] = output_image;
     return original_image;
@@ -127,9 +127,9 @@ class Processor {
   /// @brief 唯一エラーコードをkNoErrorにできる関数
   /// @attention Initが成功したらこちら
   ErrorCode InitDone() {
-    ASSERT(error_code_ == kProcessorUninitializedError);
-    if (error_code_ == kProcessorUninitializedError) {
-      error_code_ = kNoError;
+    ASSERT(error_code_ == ErrorCode::kProcessorUninitializedError);
+    if (error_code_ == ErrorCode::kProcessorUninitializedError) {
+      error_code_ = ErrorCode::kNoError;
     }
     return error_code_;
   }
@@ -137,7 +137,7 @@ class Processor {
   /// @return 発生したエラーコード。
   /// @attention エラーがいったんおきたら解除は不可能
   ErrorCode ErrorOccured(ErrorCode error_code) {
-    if (error_code != kNoError) {
+    if (error_code != ErrorCode::kNoError) {
       // 後からkNoErrorにしようとしてもできない
       // ASSERT(false);
       MyDbgLog((LOG_TRACE, kDbgImportant,

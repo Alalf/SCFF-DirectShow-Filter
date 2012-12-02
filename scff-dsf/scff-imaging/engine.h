@@ -67,14 +67,14 @@ class Engine : public CAMThread, public Layout {
   //===================================================================
   // キャプチャスレッド関連
   //===================================================================
-  enum {
-    kRequestInvalid,
-    kRequestResetLayout,
-    kRequestSetNativeLayout,
-    kRequestSetComplexLayout,
-    kRequestRun,
-    kRequestStop,
-    kRequestExit,
+  enum class RequestType : DWORD {
+    kInvalid,
+    kResetLayout,
+    kSetNativeLayout,
+    kSetComplexLayout,
+    kRun,
+    kStop,
+    kExit,
   };
 
   /// @brief 現在のレイアウトを解放する（スプラッシュを表示する）
@@ -98,9 +98,9 @@ class Engine : public CAMThread, public Layout {
 
   /// @brief 更新中のバッファを表すインデックス
   /// @attention あえてLockしない
-  enum ImageIndex {
-    kFrontImage,
-    kBackImage,
+  enum class ImageIndex {
+    kFront,
+    kBack,
   } last_update_image_;
 
   /// @brief レイアウト

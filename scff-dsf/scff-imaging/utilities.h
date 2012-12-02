@@ -26,10 +26,10 @@ extern "C" {
 #include <libavcodec/avcodec.h>
 }
 
-#include "scff-imaging/imaging-types.h"
-
 namespace scff_imaging {
 
+enum class ErrorCode;
+enum class ImagePixelFormat;
 class Image;
 class AVPictureImage;
 

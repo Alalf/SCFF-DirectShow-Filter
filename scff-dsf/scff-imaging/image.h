@@ -29,11 +29,13 @@ extern "C" {
 #include <cstdint>
 
 #include "scff-imaging/common.h"
-#include "scff-imaging/imaging-types.h"
 
 struct AVPicture;
 
 namespace scff_imaging {
+
+enum class ErrorCode;
+enum class ImagePixelFormat;
 
 /// @brief イメージの実体を管理する(union的な)クラス
 /// @attention Imageのインスタンスはメモリ領域の作成、解放まで責任を持つ

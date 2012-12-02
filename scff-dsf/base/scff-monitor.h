@@ -39,7 +39,7 @@ class SCFFMonitor {
   bool Init(scff_imaging::ImagePixelFormat pixel_format,
             int width, int height, double fps);
 
-  /// @brief リクエストがあるかどうか調べ、あれば実体を、なければNULLを返す
+  /// @brief リクエストがあるかどうか調べ、あれば実体を、なければnullptrを返す
   scff_imaging::Request* CreateRequest();
   /// @brief 使い終わったリクエストを解放する
   void ReleaseRequest(scff_imaging::Request *request);

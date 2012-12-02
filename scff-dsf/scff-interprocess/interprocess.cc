@@ -32,12 +32,12 @@ namespace scff_interprocess {
 
 // コンストラクタ
 Interprocess::Interprocess()
-    : directory_(NULL),
-      view_of_directory_(0),    // NULL
-      mutex_directory_(NULL),
-      message_(NULL),
-      view_of_message_(0),      // NULL
-      mutex_message_(NULL) {    // NULL
+    : directory_(nullptr),
+      view_of_directory_(nullptr),
+      mutex_directory_(nullptr),
+      message_(nullptr),
+      view_of_message_(nullptr),
+      mutex_message_(nullptr) {
   // nop
   OutputDebugString(TEXT("****Interprocess: NEW\n"));
 }
@@ -60,12 +60,12 @@ bool Interprocess::InitDirectory() {
   // 仮想メモリ(Directory)の作成
   HANDLE tmp_directory =
       CreateFileMappingA(INVALID_HANDLE_VALUE,
-                          NULL,
+                          nullptr,
                           PAGE_READWRITE,
                           0,
                           sizeof(Directory),
                           kDirectoryName);
-  if (tmp_directory == NULL) {
+  if (tmp_directory == nullptr) {
     // 仮想メモリ作成失敗
     return false;
   }
@@ -76,22 +76,22 @@ bool Interprocess::InitDirectory() {
       MapViewOfFile(tmp_directory,
                     FILE_MAP_ALL_ACCESS,
                     0, 0, 0);
-  if (tmp_view_of_directory == NULL) {
+  if (tmp_view_of_directory == nullptr) {
     // ビュー作成失敗
     CloseHandle(tmp_directory);
     return false;
   }
 
   // 最初に共有メモリを作成した場合は0クリアしておく
-  if (tmp_view_of_directory != NULL &&
+  if (tmp_view_of_directory != nullptr &&
       error_create_file_mapping != ERROR_ALREADY_EXISTS) {
     ZeroMemory(tmp_view_of_directory, sizeof(Directory));
   }
 
   // Mutexの作成
   HANDLE tmp_mutex_directory =
-      CreateMutexA(NULL, false, kDirectoryMutexName);
-  if (tmp_mutex_directory == NULL) {
+      CreateMutexA(nullptr, false, kDirectoryMutexName);
+  if (tmp_mutex_directory == nullptr) {
     // Mutex作成失敗
     UnmapViewOfFile(tmp_view_of_directory);
     CloseHandle(tmp_directory);
@@ -100,7 +100,7 @@ bool Interprocess::InitDirectory() {
   DWORD error_create_mutex = GetLastError();
 
   // 最初にMutexを作成した場合は…なにもしなくていい
-  if (tmp_mutex_directory != NULL &&
+  if (tmp_mutex_directory != nullptr &&
       error_create_mutex != ERROR_ALREADY_EXISTS) {
     // nop
   }
@@ -116,24 +116,24 @@ bool Interprocess::InitDirectory() {
 
 // Directoryの初期化が成功したか
 bool Interprocess::IsDirectoryInitialized() {
-  return directory_ != NULL &&
-         view_of_directory_ != NULL &&
-         mutex_directory_ != NULL;
+  return directory_ != nullptr &&
+         view_of_directory_ != nullptr &&
+         mutex_directory_ != nullptr;
 }
 
 // Directory解放
 void Interprocess::ReleaseDirectory() {
-  if (mutex_directory_ != NULL) {
+  if (mutex_directory_ != nullptr) {
     CloseHandle(mutex_directory_);
-    mutex_directory_ = NULL;
+    mutex_directory_ = nullptr;
   }
-  if (view_of_directory_ != 0) {   // NULL
+  if (view_of_directory_ != nullptr) {
     UnmapViewOfFile(view_of_directory_);
-    view_of_directory_ = 0;
+    view_of_directory_ = nullptr;
   }
-  if (directory_ != NULL) {
+  if (directory_ != nullptr) {
     CloseHandle(directory_);
-    directory_ = NULL;
+    directory_ = nullptr;
   }
 }
 
@@ -154,12 +154,12 @@ bool Interprocess::InitMessage(uint32_t process_id) {
   // 仮想メモリ(Message<process_id>)の作成
   HANDLE tmp_message =
       CreateFileMappingA(INVALID_HANDLE_VALUE,
-                          NULL,
+                          nullptr,
                           PAGE_READWRITE,
                           0,
                           sizeof(Message),
                           message_name);
-  if (tmp_message == NULL) {
+  if (tmp_message == nullptr) {
     // 仮想メモリ作成失敗
     return false;
   }
@@ -170,14 +170,14 @@ bool Interprocess::InitMessage(uint32_t process_id) {
       MapViewOfFile(tmp_message,
                     FILE_MAP_ALL_ACCESS,
                     0, 0, 0);
-  if (tmp_view_of_message == NULL) {
+  if (tmp_view_of_message == nullptr) {
     // ビュー作成失敗
     CloseHandle(tmp_message);
     return false;
   }
 
   // 最初に共有メモリを作成した場合は0クリアしておく
-  if (tmp_view_of_message != NULL &&
+  if (tmp_view_of_message != nullptr &&
       error_create_file_mapping != ERROR_ALREADY_EXISTS) {
     ZeroMemory(tmp_view_of_message, sizeof(Message));
   }
@@ -191,8 +191,8 @@ bool Interprocess::InitMessage(uint32_t process_id) {
 
   // Mutexの作成
   HANDLE tmp_mutex_message =
-      CreateMutexA(NULL, false, message_mutex_name);
-  if (tmp_mutex_message == NULL) {
+      CreateMutexA(nullptr, false, message_mutex_name);
+  if (tmp_mutex_message == nullptr) {
     // Mutex作成失敗
     UnmapViewOfFile(tmp_view_of_message);
     CloseHandle(tmp_message);
@@ -201,7 +201,7 @@ bool Interprocess::InitMessage(uint32_t process_id) {
   DWORD error_create_mutex = GetLastError();
 
   // 最初にMutexを作成した場合は…なにもしなくていい
-  if (tmp_mutex_message != NULL &&
+  if (tmp_mutex_message != nullptr &&
       error_create_mutex != ERROR_ALREADY_EXISTS) {
     // nop
   }
@@ -217,24 +217,24 @@ bool Interprocess::InitMessage(uint32_t process_id) {
 
 // Messageの初期化が成功したか
 bool Interprocess::IsMessageInitialized() {
-  return message_ != NULL &&
-         view_of_message_ != NULL &&
-         mutex_message_ != NULL;
+  return message_ != nullptr &&
+         view_of_message_ != nullptr &&
+         mutex_message_ != nullptr;
 }
 
 // Message解放
 void Interprocess::ReleaseMessage() {
-  if (mutex_message_ != NULL) {
+  if (mutex_message_ != nullptr) {
     CloseHandle(mutex_message_);
-    mutex_message_ = NULL;
+    mutex_message_ = nullptr;
   }
-  if (view_of_message_ != 0) {   // NULL
+  if (view_of_message_ != nullptr) {
     UnmapViewOfFile(view_of_message_);
-    view_of_message_ = 0;        // NULL
+    view_of_message_ = nullptr;
   }
-  if (message_ != NULL) {
+  if (message_ != nullptr) {
     CloseHandle(message_);
-    message_ = NULL;
+    message_ = nullptr;
   }
 }
 

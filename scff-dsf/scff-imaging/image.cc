@@ -21,6 +21,7 @@
 #include "scff-imaging/image.h"
 
 #include "scff-imaging/debug.h"
+#include "scff-imaging/imaging-types.h"
 #include "scff-imaging/utilities.h"
 
 namespace scff_imaging {
@@ -31,7 +32,7 @@ namespace scff_imaging {
 
 // コンストラクタ
 Image::Image()
-    : pixel_format_(kInvalidPixelFormat),   // ありえない値
+    : pixel_format_(ImagePixelFormat::kInvalidPixelFormat),   // ありえない値
       width_(-1),                           // ありえない値
       height_(-1) {                         // ありえない値
   // nop
@@ -69,7 +70,7 @@ ErrorCode Image::Create(ImagePixelFormat pixel_format, int width, int height) {
   pixel_format_ = pixel_format;
   width_ = width;
   height_ = height;
-  return kNoError;
+  return ErrorCode::kNoError;
 }
 //-------------------------------------------------------------------
 }   // namespace scff_imaging

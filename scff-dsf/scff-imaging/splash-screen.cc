@@ -35,8 +35,8 @@ namespace scff_imaging {
 //コンストラクタ
 SplashScreen::SplashScreen()
     : Layout(),
-      scale_(0),      // NULL
-      padding_(0) {   // NULL
+      scale_(nullptr),
+      padding_(nullptr) {
   MyDbgLog((LOG_MEMORY, kDbgNewDelete,
             TEXT("SplashScreen: NEW")));
   // 明示的に初期化していない
@@ -52,10 +52,10 @@ SplashScreen::~SplashScreen() {
           TEXT("SplashScreen: DELETE")));
   // 管理しているインスタンスをすべて破棄
   // 破棄はプロセッサ→イメージの順
-  if (scale_ != 0) {  // NULL
+  if (scale_ != nullptr) {
     delete scale_;
   }
-  if (padding_ != 0) {  // NULL
+  if (padding_ != nullptr) {
     delete padding_;
   }
 }
@@ -105,16 +105,16 @@ ErrorCode SplashScreen::Init() {
       resource_ddb_.CreateFromResource(resource_width,
                                        resource_height,
                                        resource_id);
-  if (error_resource_ddb != kNoError) {
+  if (error_resource_ddb != ErrorCode::kNoError) {
     return ErrorOccured(error_resource_ddb);
   }
 
   // GetDIBits用
   const ErrorCode error_resource_image =
-      resource_image_.Create(kRGB0,
+      resource_image_.Create(ImagePixelFormat::kRGB0,
                              resource_width,
                              resource_height);
-  if (error_resource_image != kNoError) {
+  if (error_resource_image != ErrorCode::kNoError) {
     return ErrorOccured(error_resource_image);
   }
 
@@ -124,7 +124,7 @@ ErrorCode SplashScreen::Init() {
         converted_image_.Create(GetOutputImage()->pixel_format(),
                                 converted_width,
                                 converted_height);
-    if (error_converted_image != kNoError) {
+    if (error_converted_image != ErrorCode::kNoError) {
       return ErrorOccured(error_converted_image);
     }
   }
@@ -134,7 +134,7 @@ ErrorCode SplashScreen::Init() {
   // 拡大縮小ピクセルフォーマット変換
   SWScaleConfig config;
   ZeroMemory(&config, sizeof(config));
-  config.flags = kLanczos;
+  config.flags = SWScaleFlags::kArea;
 
   Scale *scale = new Scale(config);
   scale->SetInputImage(&resource_image_);
@@ -145,7 +145,7 @@ ErrorCode SplashScreen::Init() {
     scale->SetOutputImage(GetOutputImage());
   }
   const ErrorCode error_scale_init = scale->Init();
-  if (error_scale_init != kNoError) {
+  if (error_scale_init != ErrorCode::kNoError) {
     delete scale;
     return ErrorOccured(error_scale_init);
   }
@@ -158,7 +158,7 @@ ErrorCode SplashScreen::Init() {
     padding->SetInputImage(&converted_image_);
     padding->SetOutputImage(GetOutputImage());
     const ErrorCode error_padding_init = padding->Init();
-    if (error_padding_init != kNoError) {
+    if (error_padding_init != ErrorCode::kNoError) {
       delete padding;
       return ErrorOccured(error_padding_init);
     }
@@ -177,7 +177,7 @@ ErrorCode SplashScreen::Init() {
 
 // Processor::Run
 ErrorCode SplashScreen::Run() {
-  if (GetCurrentError() != kNoError) {
+  if (GetCurrentError() != ErrorCode::kNoError) {
     // 何かエラーが発生している場合は何もしない
     return GetCurrentError();
   }
@@ -191,7 +191,7 @@ ErrorCode SplashScreen::Run() {
   }
 
   // GetDIBitsを利用してビットマップデータを転送
-  HDC resource_dc = CreateCompatibleDC(NULL);
+  HDC resource_dc = CreateCompatibleDC(nullptr);
   SelectObject(resource_dc, resource_ddb_.windows_ddb());
   GetDIBits(resource_dc, resource_ddb_.windows_ddb(),
             0, resource_ddb_.height(),
@@ -202,14 +202,14 @@ ErrorCode SplashScreen::Run() {
 
   // Scaleを利用して変換
   const ErrorCode error_scale = scale_->Run();
-  if (error_scale != kNoError) {
+  if (error_scale != ErrorCode::kNoError) {
     return ErrorOccured(error_scale);
   }
 
   // Paddingを利用してパディングを行う
   if (Utilities::CanUseDrawUtils(GetOutputImage()->pixel_format())) {
     const ErrorCode error_padding = padding_->Run();
-    if (error_padding != kNoError) {
+    if (error_padding != ErrorCode::kNoError) {
       return ErrorOccured(error_padding);
     }
   }

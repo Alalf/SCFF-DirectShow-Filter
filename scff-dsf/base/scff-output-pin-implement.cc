@@ -211,13 +211,13 @@ STDMETHODIMP SCFFOutputPin::Get(REFGUID property_set_guid, DWORD property_id,
   if (property_id != AMPROPERTY_PIN_CATEGORY) {
     return E_PROP_ID_UNSUPPORTED;
   }
-  if (property_data == NULL && returned_data_size == NULL) {
+  if (property_data == nullptr && returned_data_size == nullptr) {
     return E_POINTER;
   }
-  if (returned_data_size != NULL) {
+  if (returned_data_size != nullptr) {
     *returned_data_size = sizeof(GUID);
   }
-  if (property_data == NULL) {
+  if (property_data == nullptr) {
     // 呼び出し元はサイズだけ知りたい。
     return S_OK;
   }
@@ -249,7 +249,7 @@ STDMETHODIMP SCFFOutputPin::QuerySupported(REFGUID property_set_guid,
   if (property_id != AMPROPERTY_PIN_CATEGORY) {
     return E_PROP_ID_UNSUPPORTED;
   }
-  if (support_type != NULL) {
+  if (support_type != nullptr) {
     // このプロパティの取得はサポートしているが、設定はサポートしていない
     *support_type = KSPROPERTY_SUPPORT_GET;
   }

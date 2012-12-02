@@ -37,9 +37,9 @@ NativeLayout::NativeLayout(
     const LayoutParameter &parameter)
     : Layout(),
       parameter_(parameter),
-      screen_capture_(0),   // NULL
-      scale_(0),            // NULL
-      padding_(0) {         // NULL
+      screen_capture_(nullptr),
+      scale_(nullptr),
+      padding_(nullptr) {
   MyDbgLog((LOG_MEMORY, kDbgNewDelete,
           TEXT("NativeLayout: NEW(%dx%d)"),
           parameter_.clipping_width,
@@ -55,13 +55,13 @@ NativeLayout::~NativeLayout() {
           TEXT("NativeLayout: DELETE")));
   // 管理しているインスタンスをすべて破棄
   // 破棄はプロセッサ→イメージの順
-  if (screen_capture_ != 0) {
+  if (screen_capture_ != nullptr) {
     delete screen_capture_;
   }
-  if (scale_ != 0) {  // NULL
+  if (scale_ != nullptr) {
     delete scale_;
   }
-  if (padding_ != 0) {  // NULL
+  if (padding_ != nullptr) {
     delete padding_;
   }
 }
@@ -108,10 +108,10 @@ ErrorCode NativeLayout::Init() {
   //-------------------------------------------------------------------
   // GetDIBits用
   const ErrorCode error_captured_image =
-      captured_image_.Create(kRGB0,
+      captured_image_.Create(ImagePixelFormat::kRGB0,
                              captured_width,
                              captured_height);
-  if (error_captured_image != kNoError) {
+  if (error_captured_image != ErrorCode::kNoError) {
     return ErrorOccured(error_captured_image);
   }
 
@@ -121,7 +121,7 @@ ErrorCode NativeLayout::Init() {
         converted_image_.Create(GetOutputImage()->pixel_format(),
                                 converted_width,
                                 converted_height);
-    if (error_converted_image != kNoError) {
+    if (error_converted_image != ErrorCode::kNoError) {
       return ErrorOccured(error_converted_image);
     }
   }
@@ -137,7 +137,7 @@ ErrorCode NativeLayout::Init() {
       1, parameter_array);
   screen_capture->SetOutputImage(&captured_image_);
   const ErrorCode error_screen_capture = screen_capture->Init();
-  if (error_screen_capture != kNoError) {
+  if (error_screen_capture != ErrorCode::kNoError) {
     delete screen_capture;
     return ErrorOccured(error_screen_capture);
   }
@@ -153,7 +153,7 @@ ErrorCode NativeLayout::Init() {
     scale->SetOutputImage(GetOutputImage());
   }
   const ErrorCode error_scale_init = scale->Init();
-  if (error_scale_init != kNoError) {
+  if (error_scale_init != ErrorCode::kNoError) {
     delete scale;
     return ErrorOccured(error_scale_init);
   }
@@ -166,7 +166,7 @@ ErrorCode NativeLayout::Init() {
     padding->SetInputImage(&converted_image_);
     padding->SetOutputImage(GetOutputImage());
     const ErrorCode error_padding_init = padding->Init();
-    if (error_padding_init != kNoError) {
+    if (error_padding_init != ErrorCode::kNoError) {
       delete padding;
       return ErrorOccured(error_padding_init);
     }
@@ -179,7 +179,7 @@ ErrorCode NativeLayout::Init() {
 
 // Processor::Run
 ErrorCode NativeLayout::Run() {
-  if (GetCurrentError() != kNoError) {
+  if (GetCurrentError() != ErrorCode::kNoError) {
     // 何かエラーが発生している場合は何もしない
     return GetCurrentError();
   }
@@ -193,20 +193,20 @@ ErrorCode NativeLayout::Run() {
 
   // スクリーンキャプチャ
   const ErrorCode error_screen_capture = screen_capture_->Run();
-  if (error_screen_capture != kNoError) {
+  if (error_screen_capture != ErrorCode::kNoError) {
     return ErrorOccured(error_screen_capture);
   }
 
   // Scaleを利用して変換
   const ErrorCode error_scale = scale_->Run();
-  if (error_scale != kNoError) {
+  if (error_scale != ErrorCode::kNoError) {
     return ErrorOccured(error_scale);
   }
 
   // Paddingを利用してパディングを行う
   if (Utilities::CanUseDrawUtils(GetOutputImage()->pixel_format())) {
     const ErrorCode error_padding = padding_->Run();
-    if (error_padding != kNoError) {
+    if (error_padding != ErrorCode::kNoError) {
       return ErrorOccured(error_padding);
     }
   }

@@ -25,6 +25,7 @@ extern "C" {
 }
 
 #include "scff-imaging/debug.h"
+#include "scff-imaging/imaging-types.h"
 #include "scff-imaging/utilities.h"
 
 namespace scff_imaging {
@@ -36,20 +37,20 @@ namespace scff_imaging {
 // コンストラクタ
 AVPictureImage::AVPictureImage()
     : Image(),
-      avpicture_(0) {   // NULL
+      avpicture_(nullptr) {
   /// @attention avpicture_そのものの構築はCreateで行う
 }
 
 // デストラクタ
 AVPictureImage::~AVPictureImage() {
-  if (!IsEmpty()) {   // NULL
+  if (!IsEmpty()) {
     avpicture_free(avpicture_);
   }
 }
 
 // Create()などによって実体がまだ生成されていない場合
 bool AVPictureImage::IsEmpty() const {
-  return avpicture_ == 0;   // NULL
+  return avpicture_ == nullptr;
 }
 
 /// @brief AVPictureのみ作成する
@@ -57,7 +58,7 @@ ErrorCode AVPictureImage::Create(ImagePixelFormat pixel_format,
                                  int width, int height) {
   // pixel_format, width, heightを設定する
   ErrorCode error_create = Image::Create(pixel_format, width, height);
-  if (error_create != kNoError) {
+  if (error_create != ErrorCode::kNoError) {
     return error_create;
   }
 
@@ -68,11 +69,11 @@ ErrorCode AVPictureImage::Create(ImagePixelFormat pixel_format,
                       av_pixel_format(),
                       width, height);
   if (result_alloc != 0) {
-    return kAVPictureImageOutOfMemoryError;
+    return ErrorCode::kAVPictureImageOutOfMemoryError;
   }
   avpicture_ = avpicture;
 
-  return kNoError;
+  return ErrorCode::kNoError;
 }
 
 // Getter: AVPictureへのポインタ

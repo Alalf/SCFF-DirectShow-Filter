@@ -42,7 +42,7 @@ ScreenCapture::ScreenCapture(
   // 配列の初期化
   for (int i = 0; i < kMaxProcessorSize; i++) {
     parameters_[i] = parameters[i];
-    dc_for_bitblt_[i] = NULL;
+    dc_for_bitblt_[i] = nullptr;
     raster_operation_[i] = SRCCOPY;
   }
   // 以下のメンバは明示的に初期化していない
@@ -57,9 +57,9 @@ ScreenCapture::~ScreenCapture() {
   // 管理しているインスタンスをすべて破棄
   // 破棄はプロセッサ→イメージの順
   for (int i = 0; i < kMaxProcessorSize; i++) {
-    if (dc_for_bitblt_[i] != NULL) {
+    if (dc_for_bitblt_[i] != nullptr) {
       DeleteDC(dc_for_bitblt_[i]);
-      dc_for_bitblt_[i] = NULL;
+      dc_for_bitblt_[i] = nullptr;
     }
   }
   // No Child Processor
@@ -75,8 +75,8 @@ ErrorCode ScreenCapture::ValidateParameter(int index) {
   const int clipping_height = parameters_[index].clipping_height;
 
   // 不正なWindow
-  if (window == NULL || !IsWindow(window)) {
-    return kScreenCaptureInvalidWindowError;
+  if (window == nullptr || !IsWindow(window)) {
+    return ErrorCode::kScreenCaptureInvalidWindowError;
   }
 
   // ウィンドウ領域を取得
@@ -91,10 +91,10 @@ ErrorCode ScreenCapture::ValidateParameter(int index) {
   if (!Utilities::Contains(window_x, window_y, window_width, window_height,
                            clipping_x, clipping_y,
                            clipping_width, clipping_height)) {
-    return kScreenCaptureInvalidClippingRegionError;
+    return ErrorCode::kScreenCaptureInvalidClippingRegionError;
   }
 
-  return kNoError;
+  return ErrorCode::kNoError;
 }
 
 // インデックスを指定して初期化
@@ -102,11 +102,11 @@ ErrorCode ScreenCapture::InitByIndex(int index) {
   ASSERT(0<= index && index < size());
 
   // RGB0以外の出力はできない
-  ASSERT(GetOutputImage(index)->pixel_format() == kRGB0);
+  ASSERT(GetOutputImage(index)->pixel_format() == ImagePixelFormat::kRGB0);
 
   // パラメータのチェック
   const ErrorCode error_parameter = ValidateParameter(index);
-  if (error_parameter != kNoError) {
+  if (error_parameter != ErrorCode::kNoError) {
     return error_parameter;
   }
 
@@ -123,7 +123,7 @@ ErrorCode ScreenCapture::InitByIndex(int index) {
       image_for_bitblt_[index].CreateFromWindow(
           capture_width, capture_height,
           parameters_[index].window);
-  if (error_image_for_bitblt != kNoError) {
+  if (error_image_for_bitblt != ErrorCode::kNoError) {
     return error_image_for_bitblt;
   }
   //-------------------------------------------------------------------
@@ -152,7 +152,7 @@ ErrorCode ScreenCapture::InitByIndex(int index) {
   }
 
   // エラーなし
-  return kNoError;
+  return ErrorCode::kNoError;
 }
 
 // Processor::Init
@@ -162,7 +162,7 @@ ErrorCode ScreenCapture::Init() {
 
   for (int i = 0; i < size(); i++) {
     const ErrorCode error = InitByIndex(i);
-    if (error != kNoError) {
+    if (error != ErrorCode::kNoError) {
       // 一つでもエラーが起きたら全てエラー扱いとする
       return ErrorOccured(error);
     }
@@ -204,14 +204,14 @@ void ScreenCapture::DrawCursor(HDC dc, HWND window,
 // Processor::Run
 ErrorCode ScreenCapture::Run() {
   // 何かエラーが発生している場合は何もしない
-  if (GetCurrentError() != kNoError) {
+  if (GetCurrentError() != ErrorCode::kNoError) {
     return GetCurrentError();
   }
 
   // 全てのウインドウのチェック
   for (int i = 0; i < size(); i++) {
     const ErrorCode error_parameter = ValidateParameter(i);
-    if (error_parameter != kNoError) {
+    if (error_parameter != ErrorCode::kNoError) {
       return ErrorOccured(error_parameter);
     }
   }

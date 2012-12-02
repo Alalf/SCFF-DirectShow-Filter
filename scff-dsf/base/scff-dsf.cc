@@ -72,7 +72,7 @@ static const AMOVIESETUP_PIN kOutputPins[] = {
     FALSE,        // フィルタはゼロ個のインスタンスを作成できるか?
     FALSE,        // フィルタは複数のインスタンスを作成できるか?
     &GUID_NULL,
-    NULL,
+    nullptr,
     kSupportedPixelFormatsCount,  // メディア タイプの数。
     kMediaTypes   // メディア タイプへのポインタ。
   }
@@ -105,7 +105,7 @@ static const REGFILTERPINS2 kOutputPinsIFM2[] = {
     kMediaTypes,            // REGPINTYPES 構造体の配列へのポインタ。
                             // 配列のサイズは nMediaTypes。
     0,                      // メディア数。0 も指定できる。
-    NULL,                   // REGPINMEDIUM 構造体の配列へのポインタ。
+    nullptr,                // REGPINMEDIUM 構造体の配列へのポインタ。
                             // 配列のサイズは nMediaTypes。
     &PIN_CATEGORY_CAPTURE   // ピン プロパティ セットから得られる
                             // ピン カテゴリ (省略可能)。
@@ -152,10 +152,10 @@ STDAPI DllRegisterServer() {
   if (FAILED(result)) return result;
 
   // フィルタマッパーを取得
-  IFilterMapper2 *mapper = NULL;
+  IFilterMapper2 *mapper = nullptr;
   result = CoCreateInstance(
     CLSID_FilterMapper2,    // 作成するオブジェクトの CLSID
-    NULL,                   // （オブジェクトを結合するときにだけ使う。）
+    nullptr,                // （オブジェクトを結合するときにだけ使う。）
     CLSCTX_INPROC_SERVER,   // DLLとして実装され、アプリケーションの
                             // 処理の一部として実行される
     IID_IFilterMapper2,     // 要求するインターフェイスの
@@ -167,7 +167,7 @@ STDAPI DllRegisterServer() {
   result = mapper->RegisterFilter(
     CLSID_SCFFSource,                 // フィルタのクラス識別子
     kFilterName,                      // フィルタの内容を表すわかりやすい名前
-    NULL,                             // このフィルタのデータ出力先を決める
+    nullptr,                          // このフィルタのデータ出力先を決める
                                       // デバイス モニカへのポインタ
     &CLSID_VideoInputDeviceCategory,  // フィルタ カテゴリ:
                                       //    Video Capture Sources
@@ -185,10 +185,10 @@ STDAPI DllUnregisterServer() {
   if (FAILED(result)) return result;
 
   // フィルタマッパーを取得
-  IFilterMapper2 *mapper = NULL;
+  IFilterMapper2 *mapper = nullptr;
   result = CoCreateInstance(
     CLSID_FilterMapper2,    // 作成するオブジェクトの CLSID
-    NULL,                   // （オブジェクトを結合するときにだけ使う。）
+    nullptr,                // （オブジェクトを結合するときにだけ使う。）
     CLSCTX_INPROC_SERVER,   // DLLとして実装され、アプリケーションの
                             // 処理の一部として実行される
     IID_IFilterMapper2,     // 要求するインターフェイスの

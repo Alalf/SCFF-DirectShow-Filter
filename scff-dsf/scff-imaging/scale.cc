@@ -38,17 +38,17 @@ namespace scff_imaging {
 Scale::Scale(const SWScaleConfig &swscale_config)
     : Processor<AVPictureWithFillImage, AVPictureImage>(),
       swscale_config_(swscale_config),
-      filter_(0),   // NULL
-      scaler_(0) {  // NULL
+      filter_(nullptr),
+      scaler_(nullptr) {
   // nop
 }
 
 /// @brief デストラクタ
 Scale::~Scale() {
-  if (filter_ != 0) {   // NULL
+  if (filter_ != nullptr) {
     sws_freeFilter(filter_);
   }
-  if (scaler_ != 0) {   // NULL
+  if (scaler_ != nullptr) {
     sws_freeContext(scaler_);
   }
 }
@@ -57,10 +57,10 @@ Scale::~Scale() {
 // Processor::Init
 ErrorCode Scale::Init() {
   // 入力はRGB0限定
-  ASSERT(GetInputImage()->pixel_format() == kRGB0);
+  ASSERT(GetInputImage()->pixel_format() == ImagePixelFormat::kRGB0);
 
   // 拡大縮小時のフィルタを作成
-  SwsFilter *filter = 0;    //NULL
+  SwsFilter *filter = nullptr;
   filter = sws_getDefaultFilter(
       swscale_config_.luma_gblur,
       swscale_config_.chroma_gblur,
@@ -69,23 +69,23 @@ ErrorCode Scale::Init() {
       swscale_config_.chroma_hshift,
       swscale_config_.chroma_vshift,
       0);
-  if (filter == 0) {    // NULL
-    return ErrorOccured(kScaleCannotGetDefaultFilterError);
+  if (filter == nullptr) {
+    return ErrorOccured(ErrorCode::kScaleCannotGetDefaultFilterError);
   }
   filter_ = filter;
 
   //-------------------------------------------------------------------
   // 拡大縮小用のコンテキストを作成
   //-------------------------------------------------------------------
-  struct SwsContext *scaler = 0;    // NULL
+  struct SwsContext *scaler = nullptr;
 
   // ピクセルフォーマットの調整
   AVPixelFormat input_pixel_format = AV_PIX_FMT_NONE;
   switch (GetOutputImage()->pixel_format()) {
-  case kI420:
-  case kIYUV:
-  case kUYVY:
-  case kYUY2:
+  case ImagePixelFormat::kI420:
+  case ImagePixelFormat::kIYUV:
+  case ImagePixelFormat::kUYVY:
+  case ImagePixelFormat::kYUY2:
     // IYUV/I420/YUY2/UYVY:
     //    入力:BGR0(32bit)
     //    出力:I420(12bit)/IYUV(12bit)/UYVY(16bit)/YUY2(16bit)
@@ -93,8 +93,8 @@ ErrorCode Scale::Init() {
     ///- RGBデータをBGRデータとしてSwsContextに渡してあります
     input_pixel_format = AV_PIX_FMT_BGR0;
     break;
-  case kYV12:
-  case kRGB0:
+  case ImagePixelFormat::kYV12:
+  case ImagePixelFormat::kRGB0:
     // YV12/RGB0:
     //    入力:RGB0(32bit)
     //    出力:YV12(12bit)/RGB0(32bit)
@@ -103,28 +103,29 @@ ErrorCode Scale::Init() {
   }
 
   // フィルタの設定
-  SwsFilter *src_filter = 0;    // NULL
+  SwsFilter *src_filter = nullptr;
   if (swscale_config_.is_filter_enabled) {
     src_filter = filter_;
   }
 
   // 丸め処理
-  int flags = swscale_config_.flags;
+  /// @attention enum->int
+  int flags = static_cast<int>(swscale_config_.flags);
   if (swscale_config_.accurate_rnd) {
     flags |= SWS_ACCURATE_RND;
   }
 
   // SWScalerの作成
-  scaler = sws_getCachedContext(NULL,
+  scaler = sws_getCachedContext(nullptr,
       GetInputImage()->width(),
       GetInputImage()->height(),
       input_pixel_format,
       GetOutputImage()->width(),
       GetOutputImage()->height(),
       GetOutputImage()->av_pixel_format(),
-      flags, src_filter, NULL, NULL);
-  if (scaler == NULL) {
-    return ErrorOccured(kScaleCannotGetContextError);
+      flags, src_filter, nullptr, nullptr);
+  if (scaler == nullptr) {
+    return ErrorOccured(ErrorCode::kScaleCannotGetContextError);
   }
   scaler_ = scaler;
 

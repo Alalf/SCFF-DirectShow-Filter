@@ -22,7 +22,6 @@
 #define SCFF_DSF_SCFF_IMAGING_SCALE_H_
 
 #include "scff-imaging/common.h"
-#include "scff-imaging/imaging-types.h"
 #include "scff-imaging/processor.h"
 
 struct SwsContext;

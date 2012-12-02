@@ -39,7 +39,7 @@ const int kMaxProcessorSize = 8;
 //---------------------------------------------------------------------
 
 /// @brief 共通エラーコード
-enum ErrorCode {
+enum class ErrorCode {
   //-------------------------------------------------------------------
   // Common
   //-------------------------------------------------------------------
@@ -104,7 +104,7 @@ enum ErrorCode {
 //---------------------------------------------------------------------
 
 /// @brief イメージのピクセルフォーマット
-enum ImagePixelFormat {
+enum class ImagePixelFormat {
   /// @brief 不正なピクセルフォーマット
   kInvalidPixelFormat = -1,
   /// @brief I420(12bit)
@@ -127,7 +127,7 @@ enum ImagePixelFormat {
 
 /// @brief 拡大縮小メソッドをあらわす定数
 /// @sa libswscale/swscale.h
-enum SWScaleFlags {
+enum class SWScaleFlags {
   /// @brief fast bilinear
   kFastBilinear = SWS_FAST_BILINEAR,
   /// @brief bilinear
@@ -155,7 +155,7 @@ enum SWScaleFlags {
 //---------------------------------------------------------------------
 
 /// @brief 回転方向を表す定数
-enum RotateDirection {
+enum class RotateDirection {
   /// @brief 回転なし
   kNoRotate = 0,
   /// @brief 時計回り90度

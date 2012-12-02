@@ -39,7 +39,7 @@ SCFFOutputPin::SCFFOutputPin(HRESULT *result, CSource *source)
     width_(kPreferredSizes[1].cx),    // 0はダミーなので1
     height_(kPreferredSizes[1].cy),   // 0はダミーなので1
     fps_(kDefaultFPS),
-    pixel_format_(scff_imaging::kI420),
+    pixel_format_(scff_imaging::ImagePixelFormat::kI420),
     offset_(0) {
   MyDbgLog((LOG_MEMORY, kDbgNewDelete,
     TEXT("SCFFOutputPin: NEW(%d, %d, %.1ffps)"),
@@ -359,20 +359,20 @@ HRESULT SCFFOutputPin::SetMediaType(const CMediaType *media_type) {
   const GUID YUY2_guid = MEDIASUBTYPE_YUY2;
   const GUID RGB0_guid = MEDIASUBTYPE_RGB32;
   if (subtype == I420_guid) {
-    pixel_format_ = scff_imaging::kI420;
+    pixel_format_ = scff_imaging::ImagePixelFormat::kI420;
   } else if (subtype == IYUV_guid) {
-    pixel_format_ = scff_imaging::kIYUV;
+    pixel_format_ = scff_imaging::ImagePixelFormat::kIYUV;
   } else if (subtype == YV12_guid) {
-    pixel_format_ = scff_imaging::kYV12;
+    pixel_format_ = scff_imaging::ImagePixelFormat::kYV12;
   } else if (subtype == UYVY_guid) {
-    pixel_format_ = scff_imaging::kUYVY;
+    pixel_format_ = scff_imaging::ImagePixelFormat::kUYVY;
   } else if (subtype == YUY2_guid) {
-    pixel_format_ = scff_imaging::kYUY2;
+    pixel_format_ = scff_imaging::ImagePixelFormat::kYUY2;
   } else if (subtype == RGB0_guid) {
-    pixel_format_ = scff_imaging::kRGB0;
+    pixel_format_ = scff_imaging::ImagePixelFormat::kRGB0;
   } else {
     ASSERT(false);
-    pixel_format_ = scff_imaging::kI420;
+    pixel_format_ = scff_imaging::ImagePixelFormat::kI420;
   }
 
   return S_OK;
@@ -497,14 +497,14 @@ HRESULT SCFFOutputPin::DoBufferProcessingLoop(void) {
   // Engineを作成
   scff_imaging::Engine engine(pixel_format, width_, height_, fps_);
   const scff_imaging::ErrorCode error = engine.Init();
-  ASSERT(error == scff_imaging::kNoError);
+  ASSERT(error == scff_imaging::ErrorCode::kNoError);
 
   //-------------------------------------------------------------------
 
   // SCFFMonitorとリクエスト格納用変数を作成
   SCFFMonitor monitor;
   monitor.Init(pixel_format, width_, height_, fps_);
-  scff_imaging::Request *request = 0;
+  scff_imaging::Request *request = nullptr;
 
   // ループ開始
   do {
@@ -515,7 +515,7 @@ HRESULT SCFFOutputPin::DoBufferProcessingLoop(void) {
 
       // 接続先のピンからバッファを受け取る
       IMediaSample *sample;
-      HRESULT result = GetDeliveryBuffer(&sample, NULL, NULL, 0);
+      HRESULT result = GetDeliveryBuffer(&sample, nullptr, nullptr, 0);
       if (FAILED(result)) {
         ::Sleep(1);   // 分解能1mSec
         continue;
@@ -617,7 +617,7 @@ HRESULT SCFFOutputPin::FillBufferWithImagingEngine(
     reinterpret_cast<VIDEOINFOHEADER*>(m_mt.pbFormat);
 
   // サンプルのサイズを設定してポインタを取得
-  BYTE *data = NULL;
+  BYTE *data = nullptr;
   DWORD data_size = 0;
   sample->GetPointer(&data);
   data_size = sample->GetSize();

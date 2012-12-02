@@ -47,7 +47,7 @@ CUnknown* WINAPI SCFFSource::CreateInstance(IUnknown *unknown,
                                             HRESULT *result) {
   SCFFSource *source = new SCFFSource(unknown, result);
   if (result) {
-    if (source == NULL) {
+    if (source == nullptr) {
       *result = E_OUTOFMEMORY;
     } else {
       *result = S_OK;

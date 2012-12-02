@@ -73,7 +73,7 @@ static const int kMaxComplexLayoutElements = 8;
 //---------------------------------------------------------------------
 
 /// @brief レイアウトの種類
-enum LayoutType {
+enum class LayoutType {
   /// @brief 何も表示しない
   kNullLayout = 0,
   /// @brief 取り込み範囲1個で、境界は出力に強制的に合わせられる
@@ -87,7 +87,7 @@ enum LayoutType {
 /// @brief ピクセルフォーマットの種類
 /// @sa scff-imaging/imaging-types.h
 /// @sa scff_imaging::ImagePixelFormat
-enum ImagePixelFormat {
+enum class ImagePixelFormat {
   /// @brief 不正なピクセルフォーマット
   kInvalidPixelFormat = -1,
   /// @brief I420(12bit)
@@ -109,7 +109,7 @@ enum ImagePixelFormat {
 /// @brief 拡大縮小メソッドをあらわす定数
 /// @sa scff-imaging/imaging-types.h
 /// @sa scff_imaging::SWScaleFlags
-enum SWScaleFlags {
+enum class SWScaleFlags {
   /// @brief fast bilinear
   kFastBilinear = 1,
   /// @brief bilinear
@@ -137,7 +137,7 @@ enum SWScaleFlags {
 /// @brief 回転方向を表す定数
 /// @sa scff-imaging/imaging-types.h
 /// @sa scff_imaging::RotateDirection
-enum RotateDirection {
+enum class RotateDirection {
   /// @brief 回転なし
   kNoRotate = 0,
   /// @brief 時計回り90度

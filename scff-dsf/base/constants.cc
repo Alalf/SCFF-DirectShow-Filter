@@ -58,7 +58,8 @@ const int kSupportedPixelFormatsCount =
   // KoToEncoderは基本的に1ピクセルフォーマットしか対応していない
   1;
 #else
-  scff_imaging::kSupportedPixelFormatsCount;
+  /// @attention enum->int
+  static_cast<int>(scff_imaging::ImagePixelFormat::kSupportedPixelFormatsCount);
 #endif
 
 // 優先フォーマットの数

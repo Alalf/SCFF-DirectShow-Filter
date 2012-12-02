@@ -25,6 +25,7 @@ extern "C" {
 }
 
 #include "scff-imaging/debug.h"
+#include "scff-imaging/imaging-types.h"
 #include "scff-imaging/utilities.h"
 
 namespace scff_imaging {
@@ -36,14 +37,14 @@ namespace scff_imaging {
 // コンストラクタ
 AVPictureWithFillImage::AVPictureWithFillImage()
     : Image(),
-      raw_bitmap_(0),   // NULL
-      avpicture_(0) {   // NULL
+      raw_bitmap_(nullptr),
+      avpicture_(nullptr) {
   /// @attention avpicture_そのものの構築はCreateで行う
 }
 
 // デストラクタ
 AVPictureWithFillImage::~AVPictureWithFillImage() {
-  if (!IsEmpty()) {   // NULL
+  if (!IsEmpty()) {
     /// @attention avpicture_fillによって
     /// @attention 関連付けられたメモリ領域も解放してくれる
     avpicture_free(avpicture_);
@@ -52,7 +53,7 @@ AVPictureWithFillImage::~AVPictureWithFillImage() {
 
 // Create()などによって実体がまだ生成されていない場合
 bool AVPictureWithFillImage::IsEmpty() const {
-  return avpicture_ == 0;   // NULL
+  return avpicture_ == nullptr;
 }
 
 // AVPictureと同時にRawBitmapの実体を作成する
@@ -60,22 +61,22 @@ ErrorCode AVPictureWithFillImage::Create(ImagePixelFormat pixel_format,
                                        int width, int height) {
   // pixel_format, width, heightを設定する
   ErrorCode error_create = Image::Create(pixel_format, width, height);
-  if (error_create != kNoError) {
+  if (error_create != ErrorCode::kNoError) {
     return error_create;
   }
 
   // RawBitmapを作成
   int size = Utilities::CalculateDataSize(pixel_format, width, height);
   uint8_t *raw_bitmap = static_cast<uint8_t*>(av_malloc(size));
-  if (raw_bitmap == NULL) {
-    return kAVPictureWithFillImageOutOfMemoryError;
+  if (raw_bitmap == nullptr) {
+    return ErrorCode::kAVPictureWithFillImageOutOfMemoryError;
   }
 
   // 取り込み用AVPictureを作成
   AVPicture *avpicture = new AVPicture();
-  if (avpicture == 0) {    // NULL
+  if (avpicture == nullptr) {
     av_freep(raw_bitmap);
-    return kAVPictureWithFillImageCannotCreateAVPictureError;
+    return ErrorCode::kAVPictureWithFillImageCannotCreateAVPictureError;
   }
 
   // 取り込みバッファとAVPictureを関連付け
@@ -85,13 +86,13 @@ ErrorCode AVPictureWithFillImage::Create(ImagePixelFormat pixel_format,
                      width, height);
   if (result_fill != size) {
     av_freep(raw_bitmap);
-    return kAVPictureWithFillImageCannotFillError;
+    return ErrorCode::kAVPictureWithFillImageCannotFillError;
   }
 
   avpicture_ = avpicture;
   raw_bitmap_ = raw_bitmap;
 
-  return kNoError;
+  return ErrorCode::kNoError;
 }
 
 // Getter: AVPictureへのポインタ

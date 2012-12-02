@@ -344,7 +344,8 @@ void Engine::DoSetComplexLayout() {
 // バッファにキャプチャ結果を格納する
 void Engine::DoLoop() {
   DWORD request;
-  const clock_t output_interval = static_cast<clock_t>((1 / output_fps_) * CLOCKS_PER_SEC);
+  const clock_t output_interval =
+      static_cast<clock_t>((1 / output_fps_) * CLOCKS_PER_SEC);
   clock_t last_update = ::clock();
 
   do {

@@ -107,7 +107,8 @@ class Processor {
     output_image_[index] = output_image;
   }
   /// @brief Swap: output_image_
-  OutputImageType* SwapOutputImage(OutputImageType *output_image, int index = 0) {
+  OutputImageType* SwapOutputImage(OutputImageType *output_image,
+                                   int index = 0) {
     ASSERT(0 <= index && index < size());
     ASSERT(GetCurrentError() == kNoError);
     ASSERT(output_image_[index] != 0);

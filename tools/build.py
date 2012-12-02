@@ -2,8 +2,8 @@
 #======================================================================
 
 # option
-#OPTIONS = ['download_ffmpeg', 'msbuild', 'dist', 'upload']
-OPTIONS = ['download_ffmpeg', 'msbuild', 'dist']
+OPTIONS = ['download_ffmpeg', 'msbuild', 'dist', 'upload']
+#OPTIONS = ['download_ffmpeg', 'msbuild', 'dist']
 #OPTIONS = ['download_ffmpeg']
 
 #----------------------------------------------------------------------
@@ -57,8 +57,8 @@ def msbuild():
     msbuild.BUILD_32BIT_BAT = msbuild.TMP_DIR + '\\build-Win32.bat'
     msbuild.BUILD_64BIT_BAT = msbuild.TMP_DIR + '\\build-x64.bat'
 
-    msbuild.ENV_32BIT_BAT = 'D:\\Program Files\\MSVC2010\\VC\\bin\\vcvars32.bat'
-    msbuild.ENV_64BIT_BAT = 'D:\\Program Files\\Microsoft SDKs\\Windows\\v7.1\\Bin\\SetEnv.cmd'
+    msbuild.ENV_32BIT_BAT = 'D:\\Program Files\\MSVS2012\\VC\\vcvarsall.bat'
+    msbuild.ENV_64BIT_BAT = 'D:\\Program Files\\MSVS2012\\VC\\vcvarsall.bat'
     msbuild.DSF_SLN = ROOT_DIR + '\\scff-dsf.sln'
     msbuild.APP_SLN = ROOT_DIR + '\\scff-app.sln'
 
@@ -90,7 +90,7 @@ def dist():
         ROOT_DIR + '\\dist\\Release-Win32\\*.ax',
         ROOT_DIR + '\\tools\\bin\\regsvrex32.exe',
         ROOT_DIR + '\\tools\\dist-files\\Microsoft .NET Framework 4 Client Profile.url',
-        ROOT_DIR + '\\tools\\dist-files\\VC2010SP1 Redistributable Package (x86).url',
+        ROOT_DIR + '\\tools\\dist-files\\Visual C++ Redistributable for Visual Studio 2012 Update 1.url',
         ROOT_DIR + '\\tools\\dist-files\\install-Win32.bat',
         ROOT_DIR + '\\tools\\dist-files\\uninstall-Win32.bat',
         ]
@@ -102,7 +102,7 @@ def dist():
         ROOT_DIR + '\\dist\\Release-x64\\*.ax',
         ROOT_DIR + '\\tools\\bin\\regsvrex64.exe',
         ROOT_DIR + '\\tools\\dist-files\\Microsoft .NET Framework 4 Client Profile.url',
-        ROOT_DIR + '\\tools\\dist-files\\VC2010SP1 Redistributable Package (x64).url',
+        ROOT_DIR + '\\tools\\dist-files\\Visual C++ Redistributable for Visual Studio 2012 Update 1.url',
         ROOT_DIR + '\\tools\\dist-files\\install-x64.bat',
         ROOT_DIR + '\\tools\\dist-files\\uninstall-x64.bat',
         ]

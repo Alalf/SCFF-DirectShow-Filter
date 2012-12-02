@@ -45,6 +45,7 @@ def download_ffmpeg():
     download_ffmpeg.extract()
     download_ffmpeg.relocate()
     download_ffmpeg.patch()
+    download_ffmpeg.move_to_ext()
     download_ffmpeg.copy_dll()
     download_ffmpeg.make_tools_bat()
 
@@ -145,6 +146,8 @@ if __name__=='__main__':
     # download_ffmpeg.py
     if 'download_ffmpeg' in OPTIONS:
         download_ffmpeg()
+    
+    exit()
     
     # msbuild.py
     if 'msbuild' in OPTIONS:

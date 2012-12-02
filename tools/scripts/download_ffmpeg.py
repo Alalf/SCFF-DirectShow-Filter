@@ -144,18 +144,17 @@ def patch():
 
 #-----------------------------------------------------------------------
 
-def move():
+def move_to_ext():
     from sys import stderr
     from shutil import move
     from shutil import rmtree
     
-    print >>stderr, 'move:'
+    print >>stderr, 'move_to_ext:'
     
     # extの元あったディレクトリを削除する
     rmtree(EXT_FFMPEG_32BIT_DIR, True)
     rmtree(EXT_FFMPEG_64BIT_DIR, True)
-
-    # 移動
+    
     move(FFMPEG_32BIT_DIR, EXT_FFMPEG_32BIT_DIR)
     move(FFMPEG_64BIT_DIR, EXT_FFMPEG_64BIT_DIR)
 

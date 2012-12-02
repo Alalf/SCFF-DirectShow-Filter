@@ -97,10 +97,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="base\scff-dsf-amd64.def">
+    <None Include="base\scff-dsf-x64.def">
       <Filter>base</Filter>
     </None>
-    <None Include="base\scff-dsf-x86.def">
+    <None Include="base\scff-dsf-Win32.def">
       <Filter>base</Filter>
     </None>
     <None Include="base\scff-dsf.dox">

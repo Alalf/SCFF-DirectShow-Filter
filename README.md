@@ -37,9 +37,9 @@
     - 64bit OS: [Microsoft Visual C++ 2010 SP1 再頒布可能パッケージ (x64)]
       (http://www.microsoft.com/downloads/ja-jp/details.aspx?FamilyID=C68CCBB6-75EF-4C9D-A326-879EAB4FCDF8)
 
-2. install-x86/amd64.batを実行してください
+2. install-Win32/x64.batを実行してください
     - ***重要！***
-      インストール後にscff-dsf-x86/amd64.axを移動させた場合は再度install-x86/amd64.batを実行してください。
+      インストール後にscff-dsf-Win32/x64.axを移動させた場合は再度install-Win32/x64.batを実行してください。
 
 
 使用方法
@@ -77,7 +77,7 @@
 
 1. エンコーダおよびGUIクライアント(scff-app.exe)が実行されていないことを確認して下さい。
 
-2. uninstall-x86.bat/uninstall-amd64.batを実行してください。
+2. uninstall-Win32.bat/uninstall-x64.batを実行してください。
 
 3. フォルダ・ファイルを削除してください。
 
@@ -117,12 +117,12 @@
       (http://ffmpeg.zeranoe.com/builds/win64/shared/ffmpeg-latest-win64-shared.7z)
     - [64bit Builds (Dev)]
       (http://ffmpeg.zeranoe.com/builds/win64/dev/ffmpeg-latest-win64-dev.7z)
-    - ext/ffmpeg/amd64に64bit版を、ext/ffmpeg/x86に32bit版を展開する
+    - ext/ffmpeg/x64に64bit版を、ext/ffmpeg/Win32に32bit版を展開する
     - SharedもDevも同じディレクトリに展開すること（数個のファイルが上書きされるが問題ない）
-    - ext/ffmpeg/amd64/README.txt, ext/ffmpeg/x86/README.txtが存在するように確認すること
+    - ext/ffmpeg/x64/README.txt, ext/ffmpeg/Win32/README.txtが存在するように確認すること
 
-2. ***重要！*** ext/ffmpeg/amd64/include/libavutil/pixdesc.hおよび
-    - ext/ffmpeg/x86/include/libavutil/pixdesc.hの以下の部分:
+2. ***重要！*** ext/ffmpeg/x64/include/libavutil/pixdesc.hおよび
+    - ext/ffmpeg/Win32/include/libavutil/pixdesc.hの以下の部分:
 
             extern const AVPixFmtDescriptor av_pix_fmt_descriptors[];
       

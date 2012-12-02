@@ -22,10 +22,10 @@ def download_ffmpeg():
     download_ffmpeg.TMP_DIR = TMP_DIR + '\\download_ffmpeg'
     download_ffmpeg.ROOT_DIR = ROOT_DIR
 
-    download_ffmpeg.FFMPEG_32BIT_DIR = download_ffmpeg.TMP_DIR + '\\x86'
-    download_ffmpeg.FFMPEG_64BIT_DIR = download_ffmpeg.TMP_DIR + '\\amd64'
-    download_ffmpeg.EXT_FFMPEG_32BIT_DIR = ROOT_DIR + '\\ext\\ffmpeg\\x86'
-    download_ffmpeg.EXT_FFMPEG_64BIT_DIR = ROOT_DIR + '\\ext\\ffmpeg\\amd64'
+    download_ffmpeg.FFMPEG_32BIT_DIR = download_ffmpeg.TMP_DIR + '\\Win32'
+    download_ffmpeg.FFMPEG_64BIT_DIR = download_ffmpeg.TMP_DIR + '\\x64'
+    download_ffmpeg.EXT_FFMPEG_32BIT_DIR = ROOT_DIR + '\\ext\\ffmpeg\\Win32'
+    download_ffmpeg.EXT_FFMPEG_64BIT_DIR = ROOT_DIR + '\\ext\\ffmpeg\\x64'
 
     download_ffmpeg.DOWNLOADS = [
         'http://ffmpeg.zeranoe.com/builds/win32/shared/ffmpeg-latest-win32-shared.7z',
@@ -56,8 +56,8 @@ def msbuild():
     
     from scripts import msbuild    
     msbuild.TMP_DIR = TMP_DIR + '\\msbuild'
-    msbuild.BUILD_32BIT_BAT = msbuild.TMP_DIR + '\\build-x86.bat'
-    msbuild.BUILD_64BIT_BAT = msbuild.TMP_DIR + '\\build-amd64.bat'
+    msbuild.BUILD_32BIT_BAT = msbuild.TMP_DIR + '\\build-Win32.bat'
+    msbuild.BUILD_64BIT_BAT = msbuild.TMP_DIR + '\\build-x64.bat'
 
     msbuild.ENV_32BIT_BAT = 'D:\\Program Files\\MSVC2010\\VC\\bin\\vcvars32.bat'
     msbuild.ENV_64BIT_BAT = 'D:\\Program Files\\Microsoft SDKs\\Windows\\v7.1\\Bin\\SetEnv.cmd'
@@ -65,10 +65,10 @@ def msbuild():
     msbuild.APP_SLN = ROOT_DIR + '\\scff-app.sln'
 
     msbuild.init()
-    msbuild.make_build_x86_bat()
-    msbuild.make_build_amd64_bat()
-    msbuild.build_x86()
-    msbuild.build_amd64()
+    msbuild.make_build_Win32_bat()
+    msbuild.make_build_x64_bat()
+    msbuild.build_Win32()
+    msbuild.build_x64()
 
 #----------------------------------------------------------------------
 
@@ -79,8 +79,8 @@ def dist():
     from scripts import dist
     dist.TMP_DIR = TMP_DIR + '\\dist'
 
-    dist.BASENAME_32BIT_DIR = 'SCFF-DirectShow-Filter-x86'
-    dist.BASENAME_64BIT_DIR = 'SCFF-DirectShow-Filter-amd64'
+    dist.BASENAME_32BIT_DIR = 'SCFF-DirectShow-Filter-Win32'
+    dist.BASENAME_64BIT_DIR = 'SCFF-DirectShow-Filter-x64'
     dist.DIST_32BIT_DIR = dist.TMP_DIR + '\\' + dist.BASENAME_32BIT_DIR
     dist.DIST_64BIT_DIR = dist.TMP_DIR + '\\' + dist.BASENAME_64BIT_DIR
 
@@ -88,25 +88,25 @@ def dist():
         ROOT_DIR + '\\README.md',
         ROOT_DIR + '\\LICENSE',
         ROOT_DIR + '\\dist\\Release\\scff-app.exe',
-        ROOT_DIR + '\\dist\\Release-x86\\*.dll',
-        ROOT_DIR + '\\dist\\Release-x86\\*.ax',
+        ROOT_DIR + '\\dist\\Release-Win32\\*.dll',
+        ROOT_DIR + '\\dist\\Release-Win32\\*.ax',
         ROOT_DIR + '\\tools\\bin\\regsvrex32.exe',
         ROOT_DIR + '\\tools\\dist-files\\Microsoft .NET Framework 4 Client Profile.url',
         ROOT_DIR + '\\tools\\dist-files\\VC2010SP1 Redistributable Package (x86).url',
-        ROOT_DIR + '\\tools\\dist-files\\install-x86.bat',
-        ROOT_DIR + '\\tools\\dist-files\\uninstall-x86.bat',
+        ROOT_DIR + '\\tools\\dist-files\\install-Win32.bat',
+        ROOT_DIR + '\\tools\\dist-files\\uninstall-Win32.bat',
         ]
     dist.FILES_64BIT = [
         ROOT_DIR + '\\README.md',
         ROOT_DIR + '\\LICENSE',
         ROOT_DIR + '\\dist\\Release\\scff-app.exe',
-        ROOT_DIR + '\\dist\\Release-amd64\\*.dll',
-        ROOT_DIR + '\\dist\\Release-amd64\\*.ax',
+        ROOT_DIR + '\\dist\\Release-x64\\*.dll',
+        ROOT_DIR + '\\dist\\Release-x64\\*.ax',
         ROOT_DIR + '\\tools\\bin\\regsvrex64.exe',
         ROOT_DIR + '\\tools\\dist-files\\Microsoft .NET Framework 4 Client Profile.url',
         ROOT_DIR + '\\tools\\dist-files\\VC2010SP1 Redistributable Package (x64).url',
-        ROOT_DIR + '\\tools\\dist-files\\install-amd64.bat',
-        ROOT_DIR + '\\tools\\dist-files\\uninstall-amd64.bat',
+        ROOT_DIR + '\\tools\\dist-files\\install-x64.bat',
+        ROOT_DIR + '\\tools\\dist-files\\uninstall-x64.bat',
         ]
         
     dist.ARCHIVE_COMMAND = BIN_DIR + '\\7zr.exe'

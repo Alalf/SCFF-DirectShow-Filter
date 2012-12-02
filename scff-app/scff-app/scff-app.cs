@@ -93,22 +93,22 @@ partial class SCFFApp {
     //------------------
     // 32bit版のチェック
     //------------------
-    bool is_correctly_installed_x86 = false;
-    bool is_dll_found_x86 = false;
-    string dll_path_x86 = "";
+    bool is_correctly_installed_Win32 = false;
+    bool is_dll_found_Win32 = false;
+    string dll_path_Win32 = "";
     try {
       RegistryKey scff_dsf_key =
           RegistryKey.OpenBaseKey(
               RegistryHive.ClassesRoot,
               RegistryView.Registry32).OpenSubKey(kRegistryKey);
       if (scff_dsf_key != null) {
-        is_correctly_installed_x86 = true;
+        is_correctly_installed_Win32 = true;
       }
 
       RegistryKey scff_dsf_path_key = scff_dsf_key.OpenSubKey("InprocServer32");
-      dll_path_x86 = scff_dsf_path_key.GetValue("").ToString();
-      if (File.Exists(dll_path_x86)) {
-        is_dll_found_x86 = true;
+      dll_path_Win32 = scff_dsf_path_key.GetValue("").ToString();
+      if (File.Exists(dll_path_Win32)) {
+        is_dll_found_Win32 = true;
       }
     } catch {
       // 念のためエラーが出た場合も考慮
@@ -117,22 +117,22 @@ partial class SCFFApp {
     //------------------
     // 64bit版のチェック
     //------------------
-    bool is_correctly_installed_amd64 = false;
-    bool is_dll_found_amd64 = false;
-    string dll_path_amd64 = "";
+    bool is_correctly_installed_x64 = false;
+    bool is_dll_found_x64 = false;
+    string dll_path_x64 = "";
     try {
       RegistryKey scff_dsf_key =
           RegistryKey.OpenBaseKey(
               RegistryHive.ClassesRoot,
               RegistryView.Registry64).OpenSubKey(kRegistryKey);
       if (scff_dsf_key != null) {
-        is_correctly_installed_amd64 = true;
+        is_correctly_installed_x64 = true;
       }
 
       RegistryKey scff_dsf_path_key = scff_dsf_key.OpenSubKey("InprocServer32");
       dll_path_amd64 = scff_dsf_path_key.GetValue("").ToString();
-      if (File.Exists(dll_path_amd64)) {
-        is_dll_found_amd64 = true;
+      if (File.Exists(dll_path_x64)) {
+        is_dll_found_x64 = true;
       }
     } catch {
       // 念のためエラーが出た場合も考慮
@@ -142,7 +142,7 @@ partial class SCFFApp {
     // エラーダイアログの表示
     // （若干不正確だがないよりましだろう）
     //----------------------
-    if (!is_correctly_installed_x86 && !is_correctly_installed_amd64) {
+    if (!is_correctly_installed_Win32 && !is_correctly_installed_x64) {
       // 32bit版も64bit版もインストールされていない場合
       MessageBox.Show("scff-*.ax is not correctly installed.\nPlease re-install SCFF DirectShow Filter.",
                       "Not correctly installed",
@@ -151,12 +151,12 @@ partial class SCFFApp {
       return false;
     }
 
-    if (!is_dll_found_x86 && !is_dll_found_amd64) {
+    if (!is_dll_found_Win32 && !is_dll_found_x64) {
       // 32bit版のDLLも64bit版のDLLも指定された場所に存在していない場合
       string message = "scff-*.ax is not found:\n";
       message += "\n";
-      message += "  32bit: " + dll_path_x86 + "\n";
-      message += "  64bit: " + dll_path_amd64 + "\n"; 
+      message += "  32bit: " + dll_path_Win32 + "\n";
+      message += "  64bit: " + dll_path_x64 + "\n"; 
       message += "\n";
       message += "Check your SCFF directory.";
       MessageBox.Show(message,

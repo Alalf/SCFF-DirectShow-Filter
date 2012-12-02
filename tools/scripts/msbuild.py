@@ -25,10 +25,10 @@ def init():
 
 #----------------------------------------------------------------------
 
-def make_build_x86_bat():
+def make_build_Win32_bat():
     from sys import stderr
     
-    print >>stderr, 'make-build-x86-bat:'
+    print >>stderr, 'make-build-Win32-bat:'
     
     # ビルドスクリプト生成
     build_script = '''@ECHO OFF
@@ -47,10 +47,10 @@ msbuild /verbosity:m /t:build /p:Configuration=Release /p:Platform=x86 "%s"
 
 #----------------------------------------------------------------------
 
-def make_build_amd64_bat():
+def make_build_x64_bat():
     from sys import stderr
     
-    print >>stderr, 'make-build-amd64-bat:'
+    print >>stderr, 'make-build-x64-bat:'
     
     # ビルドスクリプト生成
     build_script = '''@ECHO OFF
@@ -66,46 +66,46 @@ msbuild /verbosity:m /t:build /p:Configuration=Release /p:Platform=x64 "%s"
 
 #----------------------------------------------------------------------
 
-def build_x86():
+def build_Win32():
     from sys import stderr
     from sys import exit
     from subprocess import call
 
-    print >>stderr, 'build-x86:'
+    print >>stderr, 'build-Win32:'
     
     # 32bit版ビルド
     try:
-        print >>stderr, '\t[build-x86] START'
+        print >>stderr, '\t[build-Win32] START'
         retcode = call(BUILD_32BIT_BAT)
         if retcode < 0:
-            print >>stderr, '\t[build-x86] FAILED!', -retcode
+            print >>stderr, '\t[build-Win32] FAILED!', -retcode
             exit()
         else:
-            print >>stderr, '\t[build-x86] SUCCESS!', retcode
+            print >>stderr, '\t[build-Win32] SUCCESS!', retcode
     except OSError, e:
-        print >>stderr, '\t[build-x86] Execution failed:', e
+        print >>stderr, '\t[build-Win32] Execution failed:', e
         exit()
 
 #----------------------------------------------------------------------
 
-def build_amd64():
+def build_x64():
     from sys import stderr
     from sys import exit
     from subprocess import call
 
-    print >>stderr, 'build-amd64:'
+    print >>stderr, 'build-x64:'
 
     # 64bit版ビルド
     try:
-        print >>stderr, '\t[build-amd64] START'
+        print >>stderr, '\t[build-x64] START'
         retcode = call(BUILD_64BIT_BAT)
         if retcode < 0:
-            print >>stderr, '\t[build-amd64] FAILED!', -retcode
+            print >>stderr, '\t[build-x64] FAILED!', -retcode
             exit()
         else:
-            print >>stderr, '\t[build-amd64] SUCCESS!', retcode
+            print >>stderr, '\t[build-x64] SUCCESS!', retcode
     except OSError, e:
-        print >>stderr, '\t[build-amd64] Execution failed:', e
+        print >>stderr, '\t[build-x64] Execution failed:', e
         exit()
 
 #----------------------------------------------------------------------

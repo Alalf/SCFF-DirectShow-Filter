@@ -6,7 +6,7 @@ SET OUTPUT_DIR=tools\tmp
 SET OUTPUT=%OUTPUT_DIR%\test-ffmpeg.flv
 SET VIDEO=SCFF DirectShow Filter
 SET AUDIO=Mixer (Creative SB X-Fi)
-SET FFMPEG_EXE=ext\ffmpeg\amd64\bin\ffmpeg.exe
+SET FFMPEG_EXE=ext\ffmpeg\x64\bin\ffmpeg.exe
 
 MKDIR "%OUTPUT_DIR%"
 DEL "%OUTPUT%"

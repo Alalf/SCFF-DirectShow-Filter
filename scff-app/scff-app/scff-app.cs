@@ -130,7 +130,7 @@ partial class SCFFApp {
       }
 
       RegistryKey scff_dsf_path_key = scff_dsf_key.OpenSubKey("InprocServer32");
-      dll_path_amd64 = scff_dsf_path_key.GetValue("").ToString();
+      dll_path_x64 = scff_dsf_path_key.GetValue("").ToString();
       if (File.Exists(dll_path_x64)) {
         is_dll_found_x64 = true;
       }

@@ -1,1 +1,1 @@
-regsvrex64 /u /s scff-dsf-amd64.ax
+regsvrex64 /u /s scff-dsf-x64.ax

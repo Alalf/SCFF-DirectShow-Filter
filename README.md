@@ -9,10 +9,19 @@
     - Nightly-Build:  https://github.com/Alalf/SCFF-DirectShow-Filter/downloads
 
 
+使用上の注意！
+-----------------------------------------------------------------------
+
+- バージョン0.1.6-(2012/12版)からフィルタのファイル名が変わりました。
+- 旧バージョンをアンインストールするか、フォルダごと削除した上で再インストールをお願いします。
+- また開発環境がVisual Studio 2012になりましたので、XPでの動作が不安定になる可能性があります。
+
+
 必要動作環境
 -----------------------------------------------------------------------
 
-- Windows XP SP3
+- Windows 7
+-- Windows XP SP3では不安定になる可能性があります
 - 画面の色数: 32bit True Color
 - (調査中)
 
@@ -121,19 +130,8 @@
     - SharedもDevも同じディレクトリに展開すること（数個のファイルが上書きされるが問題ない）
     - ext/ffmpeg/x64/README.txt, ext/ffmpeg/Win32/README.txtが存在するように確認すること
 
-2. ***重要！*** ext/ffmpeg/x64/include/libavutil/pixdesc.hおよび
-    - ext/ffmpeg/Win32/include/libavutil/pixdesc.hの以下の部分:
-
-            extern const AVPixFmtDescriptor av_pix_fmt_descriptors[];
-      
-      を
-
-            extern __declspec(dllimport) const AVPixFmtDescriptor av_pix_fmt_descriptors[];
-
-      のように書き換えてください。一応tools/pixdesc.patchも添付してあります。
-
-3. scff-dsf.slnソリューションを開き、全てのビルドが通ることを確認
-   - Microsoft Visual C++ 2010 Express Edition + Windows SDK 7.1で確認済み
+2. scff-dsf.slnソリューションを開き、全てのビルドが通ることを確認
+   - Microsoft Visual Studio Express 2012で確認済み
    - 必要ならばいくつかのプロジェクト設定を書き換えること
 
 4. tools/copy-ffmpeg-dll.batを実行してdistディレクトリにffmpeg付属のdllをコピー
@@ -143,7 +141,7 @@
 6. 各種エンコーダを起動しフィルタが認識されているかチェック
 
 7. scff-app.slnソリューションを開き、全てのビルドが通ることを確認
-    - Microsoft Visual C# 2010 Express Editionで確認済み
+    - Microsoft Visual Studio Express 2012で確認済み
 
 8. dist/Debugかdist/Releaseにあるヘルパーアプリケーションを起動し取り込み設定を行う
 
@@ -215,24 +213,22 @@
 
 - ffmpegプロジェクト(http://ffmpeg.org)
     - 利用しているLGPLライブラリ:
+        - libswscale:
+          a library performing highly optimized image scaling and
+          color space/pixel format conversion operations.
         - libavutil:
           a library containing functions for simplifying programming, 
           including random number generators, data structures, mathematics routines,
           core multimedia utilities, and much more.
         - libavcodec:
           a library containing decoders and encoders for audio/video codecs.
-        - libswscale:
-          a library performing highly optimized image scaling and
-          color space/pixel format conversion operations.
-        - libavfilter: a library containing media filters.
-        - libavformat: a library containing demuxers and muxers
-          for multimedia container formats.
-        - libswresample: a library performing highly optimized audio resampling, 
-          rematrixing and sample format conversion operations.
     - 利用しているLGPLライセンスのソースコード
         - libavutil/colorspace.h
         - libavfilter/drawutils.c
+        - libavfilter/formats.c
         - libavfilter/drawutils.h
+        - libavfilter/formats.h
+        - libavfilter/all_channel_layouts.inc
 
 
 注意

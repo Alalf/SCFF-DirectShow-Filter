@@ -48,7 +48,7 @@ ImagePixelFormat Image::pixel_format() const {
 }
 
   /// @brief イメージのピクセルフォーマットをAVPicture用に変換
-PixelFormat Image::avpicture_pixel_format() const {
+AVPixelFormat Image::av_pixel_format() const {
   return Utilities::ToAVPicturePixelFormat(pixel_format());
 }
 

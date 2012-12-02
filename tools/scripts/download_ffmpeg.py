@@ -109,41 +109,6 @@ def relocate():
 
 #-----------------------------------------------------------------------
 
-def patch():
-    from sys import stderr
-    from shutil import move
-    
-    print >>stderr, 'patch:'
-    
-    # オリジナルをコピーして保存しておく
-    target_32bit = FFMPEG_32BIT_DIR + '\\include\\libavutil\\pixdesc.h'
-    orig_32bit = FFMPEG_32BIT_DIR + '\\include\\libavutil\\pixdesc.h.orig'
-    target_64bit = FFMPEG_64BIT_DIR + '\\include\\libavutil\\pixdesc.h'
-    orig_64bit = FFMPEG_64BIT_DIR + '\\include\\libavutil\\pixdesc.h.orig'
- 
-    move(target_32bit, orig_32bit)
-    move(target_64bit, orig_64bit)
-
-    # ファイルを開いて修正箇所を変更
-    # 改行コードが変わってしまうが、多分大丈夫だろう
-    print >>stderr, '\t[add-dllimport] ', target_32bit
-    with open(orig_32bit, 'r') as src:
-        with open(target_32bit, 'w') as dst:
-            for line in src:
-                for p in PATCHES:
-                    replaced = line.replace(p[0], p[1])
-                    dst.write(replaced)
-                
-    print >>stderr, '\t[add-dllimport] ', target_64bit
-    with open(orig_64bit, 'r') as src:
-        with open(target_64bit, 'w') as dst:
-            for line in src:
-                for p in PATCHES:
-                    replaced = line.replace(p[0], p[1])
-                    dst.write(replaced)
-
-#-----------------------------------------------------------------------
-
 def move_to_ext():
     from sys import stderr
     from shutil import move

@@ -45,7 +45,7 @@ static void Clear(AVPictureImage *image) {
   // パディング用のコンテキストの初期化
   const int error_init =
       ff_draw_init(&draw_context,
-                   image->avpicture_pixel_format(),
+                   image->av_pixel_format(),
                    0);
   ASSERT(error_init == 0);
 
@@ -208,7 +208,7 @@ ErrorCode Engine::CopyFrontImage(BYTE *sample, DWORD data_size) {
   if (GetCurrentLayoutError() != kNoError) {
     ASSERT(data_size == Utilities::CalculateImageSize(splash_image_));
     avpicture_layout(splash_image_.avpicture(),
-                     splash_image_.avpicture_pixel_format(),
+                     splash_image_.av_pixel_format(),
                      splash_image_.width(),
                      splash_image_.height(),
                      sample, data_size);
@@ -219,14 +219,14 @@ ErrorCode Engine::CopyFrontImage(BYTE *sample, DWORD data_size) {
   if (last_update_image_ == kFrontImage) {
     ASSERT(data_size == Utilities::CalculateImageSize(front_image_));
     avpicture_layout(front_image_.avpicture(),
-                     front_image_.avpicture_pixel_format(),
+                     front_image_.av_pixel_format(),
                      front_image_.width(),
                      front_image_.height(),
                      sample, data_size);
   } else if (last_update_image_ == kBackImage) {
     ASSERT(data_size == Utilities::CalculateImageSize(back_image_));
     avpicture_layout(back_image_.avpicture(),
-                     back_image_.avpicture_pixel_format(),
+                     back_image_.av_pixel_format(),
                      back_image_.width(),
                      back_image_.height(),
                      sample, data_size);

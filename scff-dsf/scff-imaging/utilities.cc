@@ -104,28 +104,28 @@ int Utilities::CalculateImageSize(const Image &image) {
                       image.height());
 }
 
-// AVPicture用PixelFormatを取得
+// AVPixelFormatを取得
 /// @attention ピクセルフォーマットを追加するときはここを修正すること
-PixelFormat Utilities::ToAVPicturePixelFormat(ImagePixelFormat pixel_format) {
+AVPixelFormat Utilities::ToAVPicturePixelFormat(ImagePixelFormat pixel_format) {
   switch (pixel_format) {
   case kI420:
   case kIYUV:
   case kYV12:
-    return PIX_FMT_YUV420P;
+    return AV_PIX_FMT_YUV420P;
     break;
   case kUYVY:
-    return PIX_FMT_UYVY422;
+    return AV_PIX_FMT_UYVY422;
     break;
   case kYUY2:
-    return PIX_FMT_YUYV422;
+    return AV_PIX_FMT_YUYV422;
     break;
   case kRGB0:
-    return PIX_FMT_RGB0;
+    return AV_PIX_FMT_RGB0;
     break;
   }
 
   ASSERT(false);
-  return PIX_FMT_NONE;
+  return AV_PIX_FMT_NONE;
 }
 
 // BITMAPINFOHEADERを取得

@@ -2,7 +2,9 @@
 #======================================================================
 
 # option
-OPTIONS = ['download_ffmpeg', 'msbuild', 'dist', 'upload']
+#OPTIONS = ['download_ffmpeg', 'msbuild', 'dist', 'upload']
+OPTIONS = ['download_ffmpeg', 'msbuild', 'dist']
+#OPTIONS = ['download_ffmpeg']
 
 #----------------------------------------------------------------------
 
@@ -36,15 +38,10 @@ def download_ffmpeg():
     download_ffmpeg.EXTRACT_COMMAND = BIN_DIR + '\\7zr.exe'
     download_ffmpeg.EXTRACT_OPTIONS = 'x -o"%s"' % download_ffmpeg.TMP_DIR
 
-    download_ffmpeg.PATCHES = [(
-        'extern const AVPixFmtDescriptor av_pix_fmt_descriptors[];',
-         'extern __declspec(dllimport) const AVPixFmtDescriptor av_pix_fmt_descriptors[];')]
-    
     download_ffmpeg.init()
     download_ffmpeg.download()
     download_ffmpeg.extract()
     download_ffmpeg.relocate()
-    download_ffmpeg.patch()
     download_ffmpeg.move_to_ext()
     download_ffmpeg.copy_dll()
     download_ffmpeg.make_tools_bat()
@@ -146,8 +143,6 @@ if __name__=='__main__':
     # download_ffmpeg.py
     if 'download_ffmpeg' in OPTIONS:
         download_ffmpeg()
-    
-    exit()
     
     # msbuild.py
     if 'msbuild' in OPTIONS:

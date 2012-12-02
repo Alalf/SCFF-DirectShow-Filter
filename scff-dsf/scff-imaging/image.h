@@ -45,7 +45,7 @@ class Image {
   /// @brief Getter: イメージのピクセルフォーマット
   ImagePixelFormat pixel_format() const;
   /// @brief イメージのピクセルフォーマットをAVPicture用に変換
-  PixelFormat avpicture_pixel_format() const;
+  AVPixelFormat av_pixel_format() const;
   /// @brief Getter: イメージの幅
   int width() const;
   /// @brief Getter: イメージの高さ

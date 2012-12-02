@@ -195,7 +195,7 @@ ErrorCode ComplexLayout::Init() {
   // 描画用コンテキストの初期化
   const int error_init =
       ff_draw_init(&draw_context_,
-                   GetOutputImage()->avpicture_pixel_format(),
+                   GetOutputImage()->av_pixel_format(),
                    0);
   ASSERT(error_init == 0);
 

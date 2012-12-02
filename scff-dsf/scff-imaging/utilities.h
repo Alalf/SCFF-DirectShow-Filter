@@ -65,8 +65,8 @@ class Utilities {
   /// @brief イメージのサイズを直接求める
   static int CalculateImageSize(const Image &image);
 
-  /// @brief AVPicture用PixelFormatを取得
-  static PixelFormat ToAVPicturePixelFormat(ImagePixelFormat pixel_format);
+  /// @brief AVPixelFormatを取得
+  static AVPixelFormat ToAVPicturePixelFormat(ImagePixelFormat pixel_format);
 
   /// @brief BITMAPINFOHEADERを取得
   static void ToWindowsBitmapInfo(ImagePixelFormat pixel_format,

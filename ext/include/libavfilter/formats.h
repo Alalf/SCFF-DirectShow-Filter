@@ -1,5 +1,5 @@
 /*
- * This file is part of FFMpeg.
+ * This file is part of FFmpeg.
  *
  * FFmpeg is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -160,7 +160,7 @@ AVFilterFormats *ff_make_format_list(const int *fmts);
 int ff_add_format(AVFilterFormats **avff, int64_t fmt);
 
 /**
- * Return a list of all formats supported by Libav for the given media type.
+ * Return a list of all formats supported by FFmpeg for the given media type.
  */
 AVFilterFormats *ff_all_formats(enum AVMediaType type);
 
@@ -225,4 +225,4 @@ void ff_formats_unref(AVFilterFormats **ref);
  */
 void ff_formats_changeref(AVFilterFormats **oldref, AVFilterFormats **newref);
 
-#endif // AVFILTER_FORMATS_H
+#endif /* AVFILTER_FORMATS_H */

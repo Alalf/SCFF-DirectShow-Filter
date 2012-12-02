@@ -81,7 +81,7 @@ ErrorCode AVPictureWithFillImage::Create(ImagePixelFormat pixel_format,
   // 取り込みバッファとAVPictureを関連付け
   int result_fill =
       avpicture_fill(avpicture, raw_bitmap,
-                     avpicture_pixel_format(),
+                     av_pixel_format(),
                      width, height);
   if (result_fill != size) {
     av_freep(raw_bitmap);

@@ -80,7 +80,7 @@ ErrorCode Scale::Init() {
   struct SwsContext *scaler = 0;    // NULL
 
   // ピクセルフォーマットの調整
-  PixelFormat input_pixel_format = PIX_FMT_NONE;
+  AVPixelFormat input_pixel_format = AV_PIX_FMT_NONE;
   switch (GetOutputImage()->pixel_format()) {
   case kI420:
   case kIYUV:
@@ -91,14 +91,14 @@ ErrorCode Scale::Init() {
     //    出力:I420(12bit)/IYUV(12bit)/UYVY(16bit)/YUY2(16bit)
     /// @attention RGB->YUV変換時にUVが逆になるのを修正
     ///- RGBデータをBGRデータとしてSwsContextに渡してあります
-    input_pixel_format = PIX_FMT_BGR0;
+    input_pixel_format = AV_PIX_FMT_BGR0;
     break;
   case kYV12:
   case kRGB0:
     // YV12/RGB0:
     //    入力:RGB0(32bit)
     //    出力:YV12(12bit)/RGB0(32bit)
-    input_pixel_format = PIX_FMT_RGB0;
+    input_pixel_format = AV_PIX_FMT_RGB0;
     break;
   }
 
@@ -121,7 +121,7 @@ ErrorCode Scale::Init() {
       input_pixel_format,
       GetOutputImage()->width(),
       GetOutputImage()->height(),
-      GetOutputImage()->avpicture_pixel_format(),
+      GetOutputImage()->av_pixel_format(),
       flags, src_filter, NULL, NULL);
   if (scaler == NULL) {
     return ErrorOccured(kScaleCannotGetContextError);

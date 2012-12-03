@@ -24,11 +24,11 @@
 #include <streams.h>
 #include <cstdint>
 
-/// SCFFQualityControlledTimeが使えない場合の代替手段
-///- 特にFFMpegでは全てのメディアタイムスタンプが無視されるため、
-///  FillBufferの速度を自分で調整しなければならない
-///- よってこのクラスの目的は、正確なタイムスタンプを求めることではなく
-///  正確なSleepTimeを測定することが目的といえよう
+/// タイムスタンプとSleep時間を計算するためのクラス
+/// - 特にFFMpegでは全てのメディアタイムスタンプが無視されるため、
+///   FillBufferの速度を自分で調整しなければならない
+/// - よって、正確なタイムスタンプを求めるよりも
+///   正確なSleep時間の計算が優先される
 class SCFFClockTime {
  public:
   /// コンストラクタ

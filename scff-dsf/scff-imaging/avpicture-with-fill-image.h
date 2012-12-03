@@ -35,9 +35,10 @@ class AVPictureWithFillImage: public Image {
   ~AVPictureWithFillImage();
 
   //-------------------------------------------------------------------
-  /// Create()などによって実体がまだ生成されていない場合
+  /// @copydoc Image::IsEmpty
   bool IsEmpty() const;
   /// AVPictureと同時にRawBitmapの実体を作成する
+  /// @sa Image::Create
   ErrorCode Create(ImagePixelFormat pixel_format, int width, int height);
   //-------------------------------------------------------------------
 

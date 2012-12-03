@@ -32,7 +32,6 @@ namespace scff_imaging {
 // scff_imaging::ComplexLayout
 //=====================================================================
 
-// コンストラクタ
 ComplexLayout::ComplexLayout(
     int element_count,
     const LayoutParameter (&parameters)[kMaxProcessorSize])
@@ -56,7 +55,6 @@ ComplexLayout::ComplexLayout(
   // background_color_
 }
 
-// デストラクタ
 ComplexLayout::~ComplexLayout() {
   MyDbgLog((LOG_MEMORY, kDbgNewDelete,
           TEXT("ComplexLayout: DELETE")));
@@ -72,7 +70,6 @@ ComplexLayout::~ComplexLayout() {
   }
 }
 
-// インデックスを指定して初期化
 ErrorCode ComplexLayout::InitByIndex(int index) {
   ASSERT(0 <= index && index < element_count_);
   if (!Utilities::Contains(0, 0,
@@ -155,7 +152,6 @@ ErrorCode ComplexLayout::InitByIndex(int index) {
 
 //-------------------------------------------------------------------
 
-// Processor::Init
 ErrorCode ComplexLayout::Init() {
   MyDbgLog((LOG_TRACE, kDbgImportant,
           TEXT("ComplexLayout: Init")));
@@ -208,7 +204,6 @@ ErrorCode ComplexLayout::Init() {
   return InitDone();
 }
 
-// Processor::Run
 ErrorCode ComplexLayout::Run() {
   if (GetCurrentError() != ErrorCode::kNoError) {
     // 何かエラーが発生している場合は何もしない

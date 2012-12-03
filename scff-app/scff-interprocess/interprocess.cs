@@ -18,7 +18,7 @@
 /// @file scff-interprocess/interprocess.cs
 /// SCFFのプロセス間通信に関する定数、型の宣言
 /// @warning To me: このファイルの中から別のファイルへのusingは禁止！
-///- 別の言語に移植する場合も最大2ファイルでお願いします
+/// - 別の言語に移植する場合も最大2ファイルでお願いします
 
 /// scff_interprocessモジュールのC#版(オリジナルはC++)
 namespace scff_interprocess {
@@ -27,21 +27,21 @@ using System;
 using System.Runtime.InteropServices;
 
 //=====================================================================
-// SCFF Messaging Protocol v1 (by 2012/05/22 Alalf)
-//
-// [全体的な注意点]
-// - Windows固有の型名はビットサイズが分かりにくいので
-///  System.***で置き換える
-//   - 対応表
-//     - DWORD        = UInt32 32bit
-//     - HWND(void*)  = UInt64 64bit
-//       - SCFHから変更: 念のため32bitから64bitに
-//     - bool         = Byte 8bit
-// - 不動小数点数は基本的にはdoubleでやりとりすること
-//   - Double = 64bit
-//   - Single = 32bit
-// - すべての構造体はPOD(Plain Old Data)であること
-//   - 基本型、コンストラクタ、デストラクタ、仮想関数を持たない構造体のみ
+/// @page smp SCFF Messaging Protocol v1 (by 2012/05/22 Alalf)
+///
+/// [全体的な注意点]
+/// - Windows固有の型名はビットサイズが分かりにくいのでSystem.***で置き換える
+///   - 対応表
+///     - DWORD        = UInt32 (32bit)
+///     - HWND(void*)  = UInt64 (64bit)
+///       - SCFHから変更: 念のため32bitから64bitに
+///     - bool         = Byte (8bit)
+/// - 不動小数点数は基本的にはdoubleで(floatも利用可)
+///   - 対応表
+///     - double       = Double (64bit)
+///     - float        = Single (32bit)
+/// - すべての構造体はPOD(Plain Old Data)であること
+///   - 基本型、コンストラクタ、デストラクタ、仮想関数を持たない構造体のみ
 //=====================================================================
 
 /// プロセス間通信を担当するクラス

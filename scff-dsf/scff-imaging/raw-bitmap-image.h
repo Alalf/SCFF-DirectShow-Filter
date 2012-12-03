@@ -34,9 +34,10 @@ class RawBitmapImage: public Image {
   ~RawBitmapImage();
 
   //-------------------------------------------------------------------
-  /// Create()などによって実体がまだ生成されていない場合
+  /// @copydoc Image::IsEmpty
   bool IsEmpty() const;
-  /// 実体を作る
+  /// 必要な分だけメモリを確保する
+  /// @sa Image::Create
   ErrorCode Create(ImagePixelFormat pixel_format, int width, int height);
   //-------------------------------------------------------------------
 

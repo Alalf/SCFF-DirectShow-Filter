@@ -32,7 +32,7 @@
 
 namespace scff_imaging {
 
-// 指定されたAVPictureImageを黒で塗りつぶす
+/// 指定されたAVPictureImageを黒で塗りつぶす
 static void Clear(AVPictureImage *image) {
   if (!Utilities::CanUseDrawUtils(image->pixel_format())) {
     // 塗りつぶせなければなにもしない
@@ -68,7 +68,6 @@ static void Clear(AVPictureImage *image) {
 // scff_imaging::Engine
 //=====================================================================
 
-// コンストラクタ
 Engine::Engine(ImagePixelFormat output_pixel_format,
                int output_width, int output_height, double output_fps)
     : CAMThread(),
@@ -89,7 +88,6 @@ Engine::Engine(ImagePixelFormat output_pixel_format,
   // splash_image_
 }
 
-// デストラクタ
 Engine::~Engine() {
   MyDbgLog((LOG_MEMORY, kDbgNewDelete,
           TEXT("Engine: DELETE")));
@@ -104,7 +102,6 @@ Engine::~Engine() {
 // Processor
 //---------------------------------------------------------------------
 
-// Processor::Init
 ErrorCode Engine::Init() {
   MyDbgLog((LOG_TRACE, kDbgImportant,
           TEXT("Engine: Init")));
@@ -165,7 +162,6 @@ ErrorCode Engine::Init() {
   return InitDone();
 }
 
-// リクエストに対する処理を行う
 ErrorCode Engine::Accept(Request *request) {
   // 何かエラーが発生している場合は何もしない
   if (GetCurrentError() != ErrorCode::kNoError) {
@@ -193,7 +189,6 @@ ErrorCode Engine::Accept(Request *request) {
 
 //-------------------------------------------------------------------
 
-// フロントイメージをサンプルにコピー
 /// @attention エラー発生中に追加の処理を行うのはEngineだけ
 ErrorCode Engine::CopyFrontImage(BYTE *sample, DWORD data_size) {
   /// @attention processorのポインタがnullptrであることはエラーではない
@@ -241,7 +236,6 @@ ErrorCode Engine::CopyFrontImage(BYTE *sample, DWORD data_size) {
 // リクエストハンドラ
 //-------------------------------------------------------------------
 
-// 現在のプロセッサを解放してスプラッシュを表示する
 void Engine::ResetLayout() {
   /// @attention enum->DWORD
   CallWorker(static_cast<DWORD>(RequestType::kStop));
@@ -249,7 +243,6 @@ void Engine::ResetLayout() {
   CallWorker(static_cast<DWORD>(RequestType::kRun));
 }
 
-// 現在のプロセッサを新しいNativeLayoutに設定する
 void Engine::SetNativeLayout() {
   /// @attention enum->DWORD
   CallWorker(static_cast<DWORD>(RequestType::kStop));
@@ -257,7 +250,6 @@ void Engine::SetNativeLayout() {
   CallWorker(static_cast<DWORD>(RequestType::kRun));
 }
 
-// 現在のプロセッサを新しいComplexLayoutに設定する
 void Engine::SetComplexLayout() {
   /// @attention enum->DWORD
   CallWorker(static_cast<DWORD>(RequestType::kStop));
@@ -265,7 +257,6 @@ void Engine::SetComplexLayout() {
   CallWorker(static_cast<DWORD>(RequestType::kRun));
 }
 
-// スレッド間で共有: レイアウトパラメータの設定
 void Engine::SetLayoutParameters(
     int element_count,
     const LayoutParameter (&parameters)[kMaxProcessorSize]) {
@@ -288,8 +279,6 @@ void Engine::SetLayoutParameters(
 // キャプチャスレッド関連
 //===================================================================
 
-// 現在のレイアウトを解放する（スプラッシュを表示する）
-// レイアウトエラーコードをkUninitializedErrorにする
 void Engine::DoResetLayout() {
   MyDbgLog((LOG_MEMORY, kDbgNewDelete,
           TEXT("Engine: Reset Layout")));
@@ -304,7 +293,6 @@ void Engine::DoResetLayout() {
   layout_error_code_ = ErrorCode::kProcessorUninitializedError;
 }
 
-// 現在のプロセッサを新しいNativeLayoutに設定する
 void Engine::DoSetNativeLayout() {
   // 現在のプロセッサは必要ないので削除
   DoResetLayout();
@@ -324,7 +312,6 @@ void Engine::DoSetNativeLayout() {
   }
 }
 
-// 現在のプロセッサを新しいComplexLayoutに設定する
 void Engine::DoSetComplexLayout() {
   // 現在のプロセッサは必要ないので削除
   DoResetLayout();
@@ -345,7 +332,6 @@ void Engine::DoSetComplexLayout() {
   }
 }
 
-// バッファにキャプチャ結果を格納する
 void Engine::DoLoop() {
   DWORD request;
   const clock_t output_interval =
@@ -374,7 +360,6 @@ void Engine::DoLoop() {
   } while (request != static_cast<DWORD>(RequestType::kStop));
 }
 
-// CAMThread::ThreadProc()の実装
 DWORD Engine::ThreadProc() {
   HRESULT result = ERROR;
   RequestType request = RequestType::kInvalid;
@@ -411,7 +396,6 @@ DWORD Engine::ThreadProc() {
   return 0;
 }
 
-// Processor::Run
 ErrorCode Engine::Run() {
   ASSERT(layout_ != nullptr);
   const ErrorCode error = layout_->Run();
@@ -422,7 +406,6 @@ ErrorCode Engine::Run() {
   return GetCurrentError();
 }
 
-// バッファを更新
 void Engine::Update() {
   if (GetCurrentLayoutError() != ErrorCode::kNoError) {
     return;
@@ -439,7 +422,6 @@ void Engine::Update() {
   }
 }
 
-// 唯一レイアウトエラーコードをkNoErrorにできるメソッド
 ErrorCode Engine::LayoutInitDone() {
   CAutoLock lock(&m_WorkerLock);
   ASSERT(layout_error_code_ == ErrorCode::kProcessorUninitializedError);
@@ -453,7 +435,6 @@ ErrorCode Engine::LayoutInitDone() {
   return layout_error_code_;
 }
 
-// レイアウトエラーが発生したときに呼び出す
 ErrorCode Engine::LayoutErrorOccured(ErrorCode error_code) {
   CAutoLock lock(&m_WorkerLock);
   if (error_code != ErrorCode::kNoError) {
@@ -467,7 +448,6 @@ ErrorCode Engine::LayoutErrorOccured(ErrorCode error_code) {
   return layout_error_code_;
 }
 
-// レイアウトプロセッサに異常が発生している場合NoError以外を返す
 ErrorCode Engine::GetCurrentLayoutError() {
   CAutoLock lock(&m_WorkerLock);
   return layout_error_code_;

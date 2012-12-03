@@ -41,12 +41,10 @@ namespace scff_imaging {
 /// リソースの取得用DLLインスタンスハンドル
 static HINSTANCE g_dll_instance;
 
-// Getter: リソースの取得用DLLインスタンスハンドル
 HINSTANCE Utilities::dll_instance() {
   return g_dll_instance;
 }
 
-// Setter: リソースの取得用DLLインスタンスハンドル
 void Utilities::set_dll_instance(HINSTANCE dll_instance) {
   g_dll_instance = dll_instance;
 }
@@ -55,7 +53,6 @@ void Utilities::set_dll_instance(HINSTANCE dll_instance) {
 // イメージの操作
 //-------------------------------------------------------------------
 
-// ピクセルフォーマットがTopdownか
 bool Utilities::IsTopdownPixelFormat(ImagePixelFormat pixel_format) {
   switch (pixel_format) {
   case ImagePixelFormat::kRGB0:
@@ -70,7 +67,6 @@ bool Utilities::IsTopdownPixelFormat(ImagePixelFormat pixel_format) {
   }
 }
 
-/// drawutilsが使用可能なピクセルフォーマットか
 bool Utilities::CanUseDrawUtils(ImagePixelFormat pixel_format) {
   /// @warning 2012/05/08現在drawutilsはPlaner Formatにしか対応していない
   switch (pixel_format) {
@@ -90,21 +86,18 @@ bool Utilities::CanUseDrawUtils(ImagePixelFormat pixel_format) {
 // イメージのタイプ
 //-------------------------------------------------------------------
 
-// イメージのサイズを求める
 int Utilities::CalculateDataSize(ImagePixelFormat pixel_format,
                             int width, int height) {
   return avpicture_get_size(ToAVPicturePixelFormat(pixel_format),
                             width, height);
 }
 
-// イメージのサイズを直接求める
 int Utilities::CalculateImageSize(const Image &image) {
   return CalculateDataSize(image.pixel_format(),
                       image.width(),
                       image.height());
 }
 
-// AVPixelFormatを取得
 /// @attention ピクセルフォーマットを追加するときはここを修正すること
 AVPixelFormat Utilities::ToAVPicturePixelFormat(ImagePixelFormat pixel_format) {
   switch (pixel_format) {
@@ -128,7 +121,6 @@ AVPixelFormat Utilities::ToAVPicturePixelFormat(ImagePixelFormat pixel_format) {
   return AV_PIX_FMT_NONE;
 }
 
-// BITMAPINFOHEADERを取得
 /// @attention ピクセルフォーマットを追加するときはここを修正すること
 void Utilities::ToWindowsBitmapInfo(ImagePixelFormat pixel_format,
                                     int width,
@@ -176,7 +168,6 @@ void Utilities::ToWindowsBitmapInfo(ImagePixelFormat pixel_format,
   }
 }
 
-// イメージからBITMAPINFOHEADERを取得
 void Utilities::ImageToWindowsBitmapInfo(const Image &image,
                                          bool vertical_invert,
                                          BITMAPINFO *info) {
@@ -187,7 +178,6 @@ void Utilities::ImageToWindowsBitmapInfo(const Image &image,
                                  info);
 }
 
-// int(index)->enum(ImagePixelFormat)変換
 ImagePixelFormat Utilities::IndexToPixelFormat(int index) {
   /// @attention enum->int
   ASSERT(0 <= index &&
@@ -196,7 +186,6 @@ ImagePixelFormat Utilities::IndexToPixelFormat(int index) {
   return static_cast<ImagePixelFormat>(index);
 }
 
-// BITMAPINFOHEADERからImagePixelFormatを取得
 ImagePixelFormat Utilities::WindowsBitmapInfoHeaderToPixelFormat(
     const BITMAPINFOHEADER &info_header) {
   switch (info_header.biCompression) {
@@ -219,7 +208,6 @@ ImagePixelFormat Utilities::WindowsBitmapInfoHeaderToPixelFormat(
   return ImagePixelFormat::kInvalidPixelFormat;
 }
 
-// BITMAPINFOHEADERから対応ピクセルフォーマットかどうかを求める
 bool Utilities::IsSupportedPixelFormat(const BITMAPINFOHEADER &info_header) {
   return
       WindowsBitmapInfoHeaderToPixelFormat(info_header) !=
@@ -230,7 +218,6 @@ bool Utilities::IsSupportedPixelFormat(const BITMAPINFOHEADER &info_header) {
 // レイアウト
 //-------------------------------------------------------------------
 
-/// 指定された範囲（同じ座標系）が中に含まれているか
 bool Utilities::Contains(int bound_x, int bound_y,
                          int bound_width, int bound_height,
                          int x, int y, int width, int height) {
@@ -253,7 +240,6 @@ bool Utilities::Contains(int bound_x, int bound_y,
          bottom <= bound_bottom;
 }
 
-/// 境界の座標系と同じ座標系の新しい配置を計算する
 bool Utilities::CalculateLayout(int bound_x, int bound_y,
                                 int bound_width, int bound_height,
                                 int input_width, int input_height,
@@ -330,7 +316,6 @@ bool Utilities::CalculateLayout(int bound_x, int bound_y,
   return true;
 }
 
-/// 幅と高さから拡大縮小した場合のパディングサイズを求める
 bool Utilities::CalculatePaddingSize(int bound_width, int bound_height,
                                      int input_width, int input_height,
                                      bool stretch, bool keep_aspect_ratio,
@@ -354,7 +339,6 @@ bool Utilities::CalculatePaddingSize(int bound_width, int bound_height,
   return true;
 }
 
-// マルチモニタを考慮してウィンドウ領域を求める
 void Utilities::GetWindowRectangle(HWND window, int *x, int *y,
                                    int *width, int *height) {
   *x = 0;

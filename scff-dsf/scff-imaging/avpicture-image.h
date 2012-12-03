@@ -35,9 +35,10 @@ class AVPictureImage: public Image {
   ~AVPictureImage();
 
   //-------------------------------------------------------------------
-  /// Create()などによって実体がまだ生成されていない場合
+  /// @copydoc Image::IsEmpty
   bool IsEmpty() const;
   /// AVPictureの実体を作成する
+  /// @sa Image::Create
   ErrorCode Create(ImagePixelFormat pixel_format, int width, int height);
   //-------------------------------------------------------------------
 

@@ -29,14 +29,12 @@
 // SCFFMonitor
 //=====================================================================
 
-// コンストラクタ
 SCFFMonitor::SCFFMonitor()
     : last_polling_clock_(-1),        // ありえない値
       last_message_timestamp_(-1) {   // ありえない値
   MyDbgLog((LOG_MEMORY, kDbgNewDelete, TEXT("NEW SCFFMonitor")));
 }
 
-// デストラクタ
 SCFFMonitor::~SCFFMonitor() {
   MyDbgLog((LOG_MEMORY, kDbgNewDelete, TEXT("DELETE SCFFMonitor")));
   // プロセスIDの取得
@@ -44,7 +42,6 @@ SCFFMonitor::~SCFFMonitor() {
   interprocess_.RemoveEntry(process_id);
 }
 
-// 初期化
 bool SCFFMonitor::Init(scff_imaging::ImagePixelFormat pixel_format,
                        int width, int height, double fps) {
   // プロセスIDの取得
@@ -81,7 +78,7 @@ bool SCFFMonitor::Init(scff_imaging::ImagePixelFormat pixel_format,
 // リクエスト
 //---------------------------------------------------------------------
 
-// モジュール間のSWScaleConfigの変換
+/// モジュール間のSWScaleConfigの変換
 static void ConvertSWScaleConfig(
     const scff_interprocess::SWScaleConfig &input,
     scff_imaging::SWScaleConfig *output) {
@@ -136,7 +133,7 @@ static void ConvertSWScaleConfig(
   output->chroma_vshift = input.chroma_vshift;
 }
 
-// モジュール間のLayoutParameterの変換
+/// モジュール間のLayoutParameterの変換
 static void ConvertLayoutParameter(
     const scff_interprocess::LayoutParameter &input,
     scff_imaging::LayoutParameter *output) {
@@ -181,6 +178,7 @@ static void ConvertLayoutParameter(
   }
 }
 
+/// MessageからLayoutParameterへの変換
 static void MessageToLayoutParameter(
     const scff_interprocess::Message &message,
     int index,
@@ -189,7 +187,6 @@ static void MessageToLayoutParameter(
   ConvertLayoutParameter(message.layout_parameters[index], parameter);
 }
 
-// リクエストがあるかどうか調べ、あれば実体を、なければNULLを返す
 scff_imaging::Request* SCFFMonitor::CreateRequest() {
   // 前回のCreateRequestからの経過時間(Sec)
   const clock_t now = clock();
@@ -261,7 +258,6 @@ scff_imaging::Request* SCFFMonitor::CreateRequest() {
       parameters);
 }
 
-// 使い終わったリクエストを解放する
 void SCFFMonitor::ReleaseRequest(scff_imaging::Request *request) {
   if (request == nullptr) {
     // nullptrなら何もしない

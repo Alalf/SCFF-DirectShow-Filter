@@ -34,7 +34,6 @@ namespace scff_imaging {
 // scff_imaging::AVPictureWithFillImage
 //=====================================================================
 
-// コンストラクタ
 AVPictureWithFillImage::AVPictureWithFillImage()
     : Image(),
       raw_bitmap_(nullptr),
@@ -42,7 +41,6 @@ AVPictureWithFillImage::AVPictureWithFillImage()
   /// @attention avpicture_そのものの構築はCreateで行う
 }
 
-// デストラクタ
 AVPictureWithFillImage::~AVPictureWithFillImage() {
   if (!IsEmpty()) {
     /// @attention avpicture_fillによって
@@ -51,12 +49,10 @@ AVPictureWithFillImage::~AVPictureWithFillImage() {
   }
 }
 
-// Create()などによって実体がまだ生成されていない場合
 bool AVPictureWithFillImage::IsEmpty() const {
   return avpicture_ == nullptr;
 }
 
-// AVPictureと同時にRawBitmapの実体を作成する
 ErrorCode AVPictureWithFillImage::Create(ImagePixelFormat pixel_format,
                                        int width, int height) {
   // pixel_format, width, heightを設定する
@@ -95,12 +91,10 @@ ErrorCode AVPictureWithFillImage::Create(ImagePixelFormat pixel_format,
   return ErrorCode::kNoError;
 }
 
-// Getter: AVPictureへのポインタ
 AVPicture* AVPictureWithFillImage::avpicture() const {
   return avpicture_;
 }
 
-// Getter: 各種ビットマップ
 uint8_t* AVPictureWithFillImage::raw_bitmap() const {
   return raw_bitmap_;
 }

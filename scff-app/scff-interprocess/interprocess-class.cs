@@ -18,7 +18,7 @@
 /// @file scff-interprocess/interprocess-class.cs
 /// SCFFのプロセス間通信に関するクラスの宣言
 /// @warning To me: このファイルの中から別のファイルへのusingは禁止！
-///- 別の言語に移植する場合も最大2ファイルでお願いします
+/// - 別の言語に移植する場合も最大2ファイルでお願いします
 
 namespace scff_interprocess {
 

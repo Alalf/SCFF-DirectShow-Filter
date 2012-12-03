@@ -32,7 +32,6 @@ namespace scff_imaging {
 // scff_imaging::NativeLayout
 //=====================================================================
 
-// コンストラクタ
 NativeLayout::NativeLayout(
     const LayoutParameter &parameter)
     : Layout(),
@@ -49,7 +48,6 @@ NativeLayout::NativeLayout(
   // converted_image_
 }
 
-// デストラクタ
 NativeLayout::~NativeLayout() {
   MyDbgLog((LOG_MEMORY, kDbgNewDelete,
           TEXT("NativeLayout: DELETE")));
@@ -68,7 +66,6 @@ NativeLayout::~NativeLayout() {
 
 //-------------------------------------------------------------------
 
-// Processor::Init
 ErrorCode NativeLayout::Init() {
   MyDbgLog((LOG_TRACE, kDbgImportant,
           TEXT("NativeLayout: Init")));
@@ -177,7 +174,6 @@ ErrorCode NativeLayout::Init() {
   return InitDone();
 }
 
-// Processor::Run
 ErrorCode NativeLayout::Run() {
   if (GetCurrentError() != ErrorCode::kNoError) {
     // 何かエラーが発生している場合は何もしない

@@ -26,7 +26,6 @@
 // SCFFClockTime
 //=====================================================================
 
-// コンストラクタ
 SCFFClockTime::SCFFClockTime()
     : graph_clock_(nullptr),
       system_clock_(nullptr),
@@ -40,7 +39,6 @@ SCFFClockTime::SCFFClockTime()
   // nop
 }
 
-// デストラクタ
 SCFFClockTime::~SCFFClockTime() {
   if (system_clock_ != nullptr) {
     system_clock_->Release();
@@ -52,7 +50,6 @@ SCFFClockTime::~SCFFClockTime() {
   }
 }
 
-// ストリームタイムをリセット
 void SCFFClockTime::Reset(double fps, CSource* parent) {
   if (system_clock_ != nullptr) {
     system_clock_->Release();
@@ -95,7 +92,6 @@ void SCFFClockTime::Reset(double fps, CSource* parent) {
             TEXT("SCFFClockTime: RESET!!!!!!!!!!!!")));
 }
 
-/// 現在のストリームタイムを得る
 REFERENCE_TIME SCFFClockTime::GetNow(REFERENCE_TIME filter_zero) {
   ASSERT(graph_clock_ != nullptr);
   ASSERT(system_clock_ != nullptr);
@@ -130,8 +126,6 @@ REFERENCE_TIME SCFFClockTime::GetNow(REFERENCE_TIME filter_zero) {
   }
 }
 
-// sample->SetTime用のストリームタイムを返す
-/// @attention フレームカウンタも更新している
 void SCFFClockTime::GetTimestamp(REFERENCE_TIME filter_zero,
                                  REFERENCE_TIME *start,
                                  REFERENCE_TIME *end) {
@@ -194,8 +188,6 @@ void SCFFClockTime::GetTimestamp(REFERENCE_TIME filter_zero,
 #endif
 }
 
-// fpsが上限を超えないようにSleepをかける
-// 具体的には直前のGetTimestampのendまでSleep
 void SCFFClockTime::Sleep(REFERENCE_TIME filter_zero) {
   // 現在のストリームタイムを取得
   const REFERENCE_TIME now_in_stream = GetNow(filter_zero);

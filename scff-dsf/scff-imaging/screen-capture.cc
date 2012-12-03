@@ -29,7 +29,6 @@ namespace scff_imaging {
 // scff_imaging::ScreenCapture
 //=====================================================================
 
-// コンストラクタ
 ScreenCapture::ScreenCapture(
     bool vertical_invert,
     int count,
@@ -50,7 +49,6 @@ ScreenCapture::ScreenCapture(
   // info_for_getdibits_
 }
 
-// デストラクタ
 ScreenCapture::~ScreenCapture() {
   MyDbgLog((LOG_MEMORY, kDbgNewDelete,
           TEXT("ScreenCapture: DELETE")));
@@ -65,7 +63,6 @@ ScreenCapture::~ScreenCapture() {
   // No Child Processor
 }
 
-// Windowがキャプチャに適切な状態になっているか判定する
 ErrorCode ScreenCapture::ValidateParameter(int index) {
   // パラメータ
   HWND window = parameters_[index].window;
@@ -97,7 +94,6 @@ ErrorCode ScreenCapture::ValidateParameter(int index) {
   return ErrorCode::kNoError;
 }
 
-// インデックスを指定して初期化
 ErrorCode ScreenCapture::InitByIndex(int index) {
   ASSERT(0<= index && index < size());
 
@@ -155,7 +151,6 @@ ErrorCode ScreenCapture::InitByIndex(int index) {
   return ErrorCode::kNoError;
 }
 
-// Processor::Init
 ErrorCode ScreenCapture::Init() {
   MyDbgLog((LOG_TRACE, kDbgImportant,
           TEXT("ScreenCapture: Init")));
@@ -172,7 +167,6 @@ ErrorCode ScreenCapture::Init() {
   return InitDone();
 }
 
-// 渡されたDCにカーソルを描画する
 void ScreenCapture::DrawCursor(HDC dc, HWND window,
                                int clipping_x, int clipping_y) {
   POINT cursor_screen_point;
@@ -201,7 +195,6 @@ void ScreenCapture::DrawCursor(HDC dc, HWND window,
   }
 }
 
-// Processor::Run
 ErrorCode ScreenCapture::Run() {
   // 何かエラーが発生している場合は何もしない
   if (GetCurrentError() != ErrorCode::kNoError) {
@@ -250,4 +243,5 @@ ErrorCode ScreenCapture::Run() {
   // エラー発生なし
   return GetCurrentError();
 }
+
 }   // namespace scff_imaging

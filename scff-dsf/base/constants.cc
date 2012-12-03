@@ -25,15 +25,11 @@
 // 定数
 //=====================================================================
 
-// フィルタ名
 const TCHAR kFilterName[] = TEXT("SCFF DirectShow Filter");
 
-// GUID
-// {D64DB8AA-9055-418F-AFE9-A080A4FAE47A}
 const GUID CLSID_SCFFSource = { 0xd64db8aa, 0x9055, 0x418f,
         {0xaf, 0xe9, 0xa0, 0x80, 0xa4, 0xfa, 0xe4, 0x7a }};
 
-// 優先ビデオサイズ
 const SIZE kPreferredSizes[] = {
   {-1, -1},                   // 起動時の最初のSetMediaTypeによって決定
                               // プログラムからはkPreferredSizes[0]は使わない！
@@ -48,11 +44,9 @@ const SIZE kPreferredSizes[] = {
   {1600, 900}, {1920, 1080}   // リクエストのあった解像度2
 };
 
-// 優先ビデオサイズの数
 const int kPreferredSizesCount =
   sizeof(kPreferredSizes) / sizeof(kPreferredSizes[0]);
 
-/// 対応ピクセルフォーマットの数
 const int kSupportedPixelFormatsCount =
 #if defined(FOR_KOTOENCODER)
   // KoToEncoderは基本的に1ピクセルフォーマットしか対応していない
@@ -62,34 +56,23 @@ const int kSupportedPixelFormatsCount =
   static_cast<int>(scff_imaging::ImagePixelFormat::kSupportedPixelFormatsCount);
 #endif
 
-// 優先フォーマットの数
 /// @warning 最初の1個はSetFormat用
 const int kSupportedFormatsCount =
     kPreferredSizesCount * kSupportedPixelFormatsCount + 1;
 
-// デフォルトFPS
 const int kDefaultFPS = 30;
 
-// 最小出力width
 const int kMinOutputWidth   = 32;
-// 最小出力height
 const int kMinOutputHeight  = 32;
-// 最大出力width
 const int kMaxOutputWidth   = 4096;
-// 最大出力height
 const int kMaxOutputHeight  = 4096;
 
-// 最高FPS(1/Sec)
 const double kMaxFPS        = 120.0;
-// 最低FPS(1/Sec)
 const double kMinFPS        = 0.1;
 
-// フレーム区間の最短の長さ(100nSec)
 const REFERENCE_TIME kMinFrameInterval =
     static_cast<REFERENCE_TIME>(UNITS / kMaxFPS);   // 120FPS
-// フレーム区間の最長の長さ(100nSec)
 const REFERENCE_TIME kMaxFrameInterval =
     static_cast<REFERENCE_TIME>(UNITS / kMinFPS);   // 0.1FPS
 
-// SCFFMonitorのポーリング間隔
 const double kSCFFMonitorPollingInterval = 1.0; // 1Sec

@@ -18,26 +18,20 @@
 /// @file base/debug.cc
 /// デバッグ用定数、関数定義
 
-// デバッグ関数切り替えフラグ
 #include "base/debug.h"
 
-#ifdef MY_DBGLOG_
-#include <stdio.h>
-#endif
 #include <tchar.h>
 
 //=====================================================================
 // デバッグ用定数
 //=====================================================================
 
-// DbgOut用
 const int kDbgTrace     = 1;
 const int kDbgRare      = 2;
 const int kDbgImportant = 3;
 const int kDbgNewDelete = 4;
 const int kDbgMax       = 5;
 
-// 現在のデバッグレベル。これ"以下"は表示しない。
 const int kDbgCurrentLevel = kDbgTrace;
 
 //=====================================================================

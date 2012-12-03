@@ -31,7 +31,6 @@
 // IQualityControl
 //---------------------------------------------------------------------
 
-// 品質の変更が要求されたことをフィルタに通知
 /// @retval E_FAIL
 STDMETHODIMP SCFFOutputPin::Notify(IBaseFilter *self, Quality quality) {
   /// @attention Notifyは別スレッドから呼ばれることを確認
@@ -42,9 +41,8 @@ STDMETHODIMP SCFFOutputPin::Notify(IBaseFilter *self, Quality quality) {
 // IAMStreamConfig
 //---------------------------------------------------------------------
 
-// 優先出力フォーマットを取得
-// CoTaskMemAllocではプロセス単位の既定ヒープを使用してメモリを確保する
-// COM内ではmallocよりもCoTaskMemAllocを使うべきである
+/// - CoTaskMemAllocではプロセス単位の既定ヒープを使用してメモリを確保する
+/// - COM内ではmallocよりもCoTaskMemAllocを使うべきである
 /// @retval E_POINTER
 /// @retval E_INVALIDARG
 /// @retval VFW_S_NO_MORE_ITEMS
@@ -74,7 +72,6 @@ STDMETHODIMP SCFFOutputPin::GetPreferredFormat(int position,
   return S_OK;
 }
 
-// 現在の出力フォーマットまたは優先出力フォーマットを取得
 /// @retval E_POINTER
 /// @retval E_INVALIDARG
 /// @retval VFW_S_NO_MORE_ITEMS
@@ -86,7 +83,6 @@ STDMETHODIMP SCFFOutputPin::GetFormat(AM_MEDIA_TYPE **media_type) {
   return GetPreferredFormat(0, media_type);
 }
 
-// このピンがサポートするフォーマット機能の数を取得
 /// @retval S_OK
 /// @retval E_POINTER
 STDMETHODIMP SCFFOutputPin::GetNumberOfCapabilities(
@@ -103,7 +99,6 @@ STDMETHODIMP SCFFOutputPin::GetNumberOfCapabilities(
   return S_OK;
 }
 
-// フォーマット機能のセットを取得
 /// @retval E_POINTER
 /// @retval E_INVALIDARG
 /// @retval E_OUTOFMEMORY
@@ -161,7 +156,6 @@ STDMETHODIMP SCFFOutputPin::GetStreamCaps(
   return S_OK;
 }
 
-// ピン上で出力フォーマットを設定
 /// @retval E_POINTER
 /// @retval E_UNEXPECTED
 /// @retval E_INVALIDARG
@@ -185,7 +179,6 @@ STDMETHODIMP SCFFOutputPin::SetFormat(
 // IKsPropertySet
 //---------------------------------------------------------------------
 
-// プロパティ セットのプロパティの値を設定
 /// @retval E_NOTIMPL
 STDMETHODIMP SCFFOutputPin::Set(REFGUID property_set_guid, DWORD property_id,
                               LPVOID instance_data, DWORD instance_data_size,
@@ -195,7 +188,6 @@ STDMETHODIMP SCFFOutputPin::Set(REFGUID property_set_guid, DWORD property_id,
   return E_NOTIMPL;
 }
 
-// プロパティ セットの項目に対するデータを取得
 /// @retval E_PROP_SET_UNSUPPORTED
 /// @retval E_PROP_ID_UNSUPPORTED
 /// @retval E_POINTER
@@ -236,8 +228,6 @@ STDMETHODIMP SCFFOutputPin::Get(REFGUID property_set_guid, DWORD property_id,
   return S_OK;
 }
 
-// プロパティ セットのプロパティが、
-// ポートまたはデバイスでサポートされているかどうかを確認
 /// @retval E_PROP_SET_UNSUPPORTED
 /// @retval E_PROP_ID_UNSUPPORTED
 /// @retval S_OK
@@ -261,7 +251,6 @@ STDMETHODIMP SCFFOutputPin::QuerySupported(REFGUID property_set_guid,
 // IAMLatency
 //---------------------------------------------------------------------
 
-// フィルタに関連付けられている、予期される遅延時間を取得
 /// @retval S_OK
 /// @retval E_POINTER
 STDMETHODIMP SCFFOutputPin::GetLatency(REFERENCE_TIME *latency) {
@@ -284,7 +273,6 @@ STDMETHODIMP SCFFOutputPin::GetLatency(REFERENCE_TIME *latency) {
 // IAMPushSource
 //---------------------------------------------------------------------
 
-// フィルタの動作を表すフラグの組み合わせを取得
 /// @retval E_POINTER
 /// @retval S_OK
 STDMETHODIMP SCFFOutputPin::GetPushSourceFlags(ULONG *flags) {
@@ -296,7 +284,6 @@ STDMETHODIMP SCFFOutputPin::GetPushSourceFlags(ULONG *flags) {
   return S_OK;
 }
 
-// フィルタの動作を指定するフラグを設定
 /// @retval E_NOTIMPL
 STDMETHODIMP SCFFOutputPin::SetPushSourceFlags(ULONG flags) {
   MyDbgLog((LOG_TRACE, kDbgImportant,
@@ -305,7 +292,6 @@ STDMETHODIMP SCFFOutputPin::SetPushSourceFlags(ULONG flags) {
   return E_NOTIMPL;
 }
 
-// フィルタがサポートできる最大ストリーム オフセットを取得
 /// @retval S_OK
 STDMETHODIMP SCFFOutputPin::GetMaxStreamOffset(REFERENCE_TIME *max_offset) {
   MyDbgLog((LOG_TRACE, kDbgImportant,
@@ -317,7 +303,6 @@ STDMETHODIMP SCFFOutputPin::GetMaxStreamOffset(REFERENCE_TIME *max_offset) {
   return S_OK;
 }
 
-// 最大ストリーム オフセットを指定する基準タイム
 /// @retval S_OK
 STDMETHODIMP SCFFOutputPin::SetMaxStreamOffset(REFERENCE_TIME max_offset) {
   // max_offsetは設定できない
@@ -327,7 +312,6 @@ STDMETHODIMP SCFFOutputPin::SetMaxStreamOffset(REFERENCE_TIME max_offset) {
   return S_OK;
 }
 
-// タイム スタンプを生成するときにフィルタが使うオフセットを取得
 /// @retval S_OK
 /// @retval E_POINTER
 STDMETHODIMP SCFFOutputPin::GetStreamOffset(REFERENCE_TIME *offset) {
@@ -340,7 +324,6 @@ STDMETHODIMP SCFFOutputPin::GetStreamOffset(REFERENCE_TIME *offset) {
   return S_OK;
 }
 
-// このフィルタで生成されるタイム スタンプのオフセットを設定
 /// @retval S_OK
 STDMETHODIMP SCFFOutputPin::SetStreamOffset(REFERENCE_TIME offset) {
   MyDbgLog((LOG_TRACE, kDbgTrace,

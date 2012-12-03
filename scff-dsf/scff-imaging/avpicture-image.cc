@@ -34,26 +34,22 @@ namespace scff_imaging {
 // scff_imaging::AVPictureImage
 //=====================================================================
 
-// コンストラクタ
 AVPictureImage::AVPictureImage()
     : Image(),
       avpicture_(nullptr) {
   /// @attention avpicture_そのものの構築はCreateで行う
 }
 
-// デストラクタ
 AVPictureImage::~AVPictureImage() {
   if (!IsEmpty()) {
     avpicture_free(avpicture_);
   }
 }
 
-// Create()などによって実体がまだ生成されていない場合
 bool AVPictureImage::IsEmpty() const {
   return avpicture_ == nullptr;
 }
 
-/// AVPictureのみ作成する
 ErrorCode AVPictureImage::Create(ImagePixelFormat pixel_format,
                                  int width, int height) {
   // pixel_format, width, heightを設定する
@@ -76,7 +72,6 @@ ErrorCode AVPictureImage::Create(ImagePixelFormat pixel_format,
   return ErrorCode::kNoError;
 }
 
-// Getter: AVPictureへのポインタ
 AVPicture* AVPictureImage::avpicture() const {
   return avpicture_;
 }

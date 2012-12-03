@@ -44,11 +44,13 @@ class WindowsDDBImage: public Image {
   ~WindowsDDBImage();
 
   //-------------------------------------------------------------------
-  /// Create()などによって実体がまだ生成されていない場合
+  /// @copydoc Image::IsEmpty
   bool IsEmpty() const;
   /// リソースから実体を作る
+  /// @sa Image::Create
   ErrorCode CreateFromResource(int width, int height, WORD resource_id);
   /// 与えられたWindowからCompatibleBitmapを作成する
+  /// @sa Image::Create
   ErrorCode CreateFromWindow(int width, int height, HWND window);
   //-------------------------------------------------------------------
 

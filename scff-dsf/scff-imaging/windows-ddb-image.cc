@@ -32,7 +32,6 @@ namespace scff_imaging {
 // scff_imaging::WindowsDDBImage
 //=====================================================================
 
-// コンストラクタ
 WindowsDDBImage::WindowsDDBImage()
     : Image(),
       windows_ddb_(nullptr),
@@ -40,19 +39,16 @@ WindowsDDBImage::WindowsDDBImage()
   /// @attention windows_ddb_そのものの構築はCreateで行う
 }
 
-// デストラクタ
 WindowsDDBImage::~WindowsDDBImage() {
   if (!IsEmpty()) {
     DeleteObject(windows_ddb_);
   }
 }
 
-// Create()などによって実体がまだ生成されていない場合
 bool WindowsDDBImage::IsEmpty() const {
   return windows_ddb_ == nullptr;
 }
 
-// リソースから実体を作る
 ErrorCode WindowsDDBImage::CreateFromResource(int width, int height,
                                               WORD resource_id) {
   // pixel_format, width, height, fromを設定する
@@ -81,7 +77,6 @@ ErrorCode WindowsDDBImage::CreateFromResource(int width, int height,
   return ErrorCode::kNoError;
 }
 
-// 与えられたWindowからCompatibleBitmapを作成する
 ErrorCode WindowsDDBImage::CreateFromWindow(int width, int height,
                                             HWND window) {
   // pixel_format, width, height, fromを設定する
@@ -119,7 +114,6 @@ ErrorCode WindowsDDBImage::CreateFromWindow(int width, int height,
   return ErrorCode::kNoError;
 }
 
-// Getter: Windowsビットマップハンドル
 HBITMAP WindowsDDBImage::windows_ddb() const {
   return windows_ddb_;
 }

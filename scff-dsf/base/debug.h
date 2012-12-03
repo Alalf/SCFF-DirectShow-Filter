@@ -30,32 +30,32 @@
 // デバッグ用定数
 //=====================================================================
 
-/// トレース表示用
+/// DbgOut用: トレース表示
 extern const int kDbgTrace;
-/// あまり実行されない操作
+/// DbgOut用: あまり実行されない操作
 extern const int kDbgRare;
-/// 重要な操作
+/// DbgOut用: 重要な操作
 extern const int kDbgImportant;
-/// New/Delete/Load/Unloadなどの深刻バグが発生しやすい部分
+/// DbgOut用: New/Delete/Load/Unloadなどの深刻バグが発生しやすい部分
 extern const int kDbgNewDelete;
-/// 最大デバッグレベル
+/// DbgOut用: 最大デバッグレベル
 extern const int kDbgMax;
 
-/// 現在のデバッグレベル。これ"以下"は表示しない。
+/// DbgOut用: 現在のデバッグレベル。これ"以下"は表示しない。
 extern const int kDbgCurrentLevel;
 
 //=====================================================================
 // デバッグ関数
 //=====================================================================
 
-// DbgOutの使い方が分からないので
-// @todo(me) DbgOutの使い方が分かり次第置き換え
 #ifdef _DEBUG
 
 /// DbgLogの代わり。改行をはさみ、少しフォーマットを変える
+/// @todo(me) DbgOutの使い方が分かり次第置き換え
 int MyDebugLog(DWORD types, DWORD level, LPCTSTR format, ...);
 
 /// MessageBoxの代わり。フォーマット対応。
+/// @todo(me) DbgOutの使い方が分かり次第置き換え
 void MyDebugMessageBox(LPCTSTR format, ...);
 
 #define MyDbgLog(_x_) MyDebugLog _x_

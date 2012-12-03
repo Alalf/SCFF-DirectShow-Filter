@@ -33,7 +33,6 @@
 // SCFFOutputPin
 //=====================================================================
 
-// コンストラクタ
 SCFFOutputPin::SCFFOutputPin(HRESULT *result, CSource *source)
   : CSourceStream(kFilterName, result, source, L"Capture"),
     width_(kPreferredSizes[1].cx),    // 0はダミーなので1
@@ -46,7 +45,6 @@ SCFFOutputPin::SCFFOutputPin(HRESULT *result, CSource *source)
     width_, height_, fps_));
 }
 
-// デストラクタ
 SCFFOutputPin::~SCFFOutputPin() {
   MyDbgLog((LOG_MEMORY, kDbgNewDelete,
     TEXT("SCFFOutputPin: DELETE(%d, %d, %.1ffps)"),
@@ -61,19 +59,17 @@ SCFFOutputPin::~SCFFOutputPin() {
 // CBasePin
 //---------------------------------------------------------------------
 
-// インデックス値で優先メディア タイプを取得
-//
-///- 以後ピンに渡されるmedia_typeは必ず以下になることが保障される:
-///  - biCompression:  I420/IYUV/YV12/UYVY/YUY2/RGB0
-///  - biBitCount:     12/16/32
-///  - biWidth:        width_
-///  - biHeight:       height_
-///  - biSizeImage:    CalculateDataSize(*)
-///  - biPlanes:       1
-///  - FPS(AvgTimePerFrame): 1/fps_
-///  - Type:           MEDIATYPE_Video
-///  - FormatType:     FORMAT_VideoInfo
-///  - SampleSize:     (== biSizeImage)
+/// - 以後ピンに渡されるmedia_typeは必ず以下になることが保障される:
+///   - biCompression:  I420/IYUV/YV12/UYVY/YUY2/RGB0
+///   - biBitCount:     12/16/32
+///   - biWidth:        width_
+///   - biHeight:       height_
+///   - biSizeImage:    CalculateDataSize(*)
+///   - biPlanes:       1
+///   - FPS(AvgTimePerFrame): 1/fps_
+///   - Type:           MEDIATYPE_Video
+///   - FormatType:     FORMAT_VideoInfo
+///   - SampleSize:     (== biSizeImage)
 ///
 /// @retval E_POINTER
 /// @retval E_INVALIDARG
@@ -183,10 +179,9 @@ HRESULT SCFFOutputPin::GetMediaType(int position, CMediaType *media_type) {
   return S_OK;
 }
 
-// ピンが特定のメディア タイプを受け入れるかどうかを判定
-//
-// さまざまなアプリケーションがこのメソッドを利用しているので
-// 優先メディアタイプが一つであっても実装したほうがよさそうだ
+/// - さまざまなアプリケーションがこのメソッドを利用しているので
+///   優先メディアタイプが一つであっても実装したほうがよさそうだ
+///
 /// @todo(me) ワイルドカード的なことを処理する場合はS_FALSE
 /// @code
 /// // We treat MEDIASUBTYPE_NULL subtype as a wild card
@@ -244,17 +239,15 @@ HRESULT SCFFOutputPin::CheckMediaType(const CMediaType *media_type) {
   }
 
   /// @todo(me) Skypeに対応する場合はサイズ(0,0)を許さなければならない
-  /// @code
-  /// if (video_info->bmiHeader.biWidth == 0 &&
-  ///     video_info->bmiHeader.biHeight == 0) {
-  ///   // nop
-  /// } else if (video_info->bmiHeader.biWidth == 0 ||
-  ///            video_info->bmiHeader.biHeight <= 0 ||
-  ///            video_info->AvgTimePerFrame == 0) {
-  ///   // Skypeでなければきっちりエラー処理する
-  ///   return E_INVALIDARG;
-  /// }
-  /// @endcode
+  // if (video_info->bmiHeader.biWidth == 0 &&
+  //     video_info->bmiHeader.biHeight == 0) {
+  //   // nop
+  // } else if (video_info->bmiHeader.biWidth == 0 ||
+  //            video_info->bmiHeader.biHeight <= 0 ||
+  //            video_info->AvgTimePerFrame == 0) {
+  //   // Skypeでなければきっちりエラー処理する
+  //   return E_INVALIDARG;
+  // }
 
   MyDbgLog((LOG_TRACE, kDbgTrace,
     TEXT("[pin] <- check: mediatype(%dbpp, %d, %d, %.1ffps)"),
@@ -265,9 +258,8 @@ HRESULT SCFFOutputPin::CheckMediaType(const CMediaType *media_type) {
   return S_OK;
 }
 
-// 接続のメディア タイプを設定
-//
-// ここではじめて下位のフィルタが要求したフレームの画像サイズを取得できる
+/// - ここではじめて下位のフィルタが要求したフレームの画像サイズを取得できる
+///
 /// @pre media_typeはCheckMediaTypeによってチェック済み
 /// @retval E_POINTER
 /// @retval E_UNEXPECTED
@@ -302,7 +294,7 @@ HRESULT SCFFOutputPin::SetMediaType(const CMediaType *media_type) {
   HRESULT result = CSourceStream::SetMediaType(media_type);
   if (FAILED(result)) return result;
 
-  // // for Skype
+  /// @todo(me) Skype対応
   // if (video_info->bmiHeader.biWidth == 0 &&
   //     video_info->bmiHeader.biHeight == 0) {
   //   // 書き換えるのはまずい気がするのでコピーを行う
@@ -382,14 +374,11 @@ HRESULT SCFFOutputPin::SetMediaType(const CMediaType *media_type) {
 // CBaseOutputPin
 //---------------------------------------------------------------------
 
-// fpsから適切なバッファの数を求める
 /// @attention バッファの数はSCFH DSFに準拠
 int SCFFOutputPin::CalcBufferCount() {
   return max(static_cast<int>(ceil(fps_ * 0.3)), 4);
 }
 
-// バッファ要求を設定
-//
 /// @pre SetMediaTypeによってm_mtには適切なフォーマットが格納済み
 /// @retval E_POINTER
 /// @retval E_FAIL
@@ -432,27 +421,22 @@ HRESULT SCFFOutputPin::DecideBufferSize(IMemAllocator *allocator,
 // CSourceStream
 //---------------------------------------------------------------------
 
-//-----------------------------------------------------------------
-// ストリーミング スレッドが初期化されたときに呼び出される
-// スレッド終了させるにはE_を返す
 /// @retval S_OK
 HRESULT SCFFOutputPin::OnThreadCreate(void) {
   MyDbgLog((LOG_TRACE, kDbgImportant,
     TEXT("SCFFOutputPin: OnThreadCreate")));
+  // スレッド終了させるにはE_を返す
   return S_OK;
 }
 
-// ストリーミング スレッドが間もなく終了するときに呼び出される
-// スレッド終了させるにはE_を返す
 /// @retval S_OK
 HRESULT SCFFOutputPin::OnThreadDestroy(void) {
   MyDbgLog((LOG_TRACE, kDbgImportant,
     TEXT("SCFFOutputPin: OnThreadDestroy")));
+  // スレッド終了させるにはE_を返す
   return S_OK;
 }
 
-// CSourceStream::DoBufferProcessingLoop メソッドの
-// 処理が開始されたときに呼び出される
 /// @retval S_OK
 HRESULT SCFFOutputPin::OnThreadStartPlay(void) {
   MyDbgLog((LOG_TRACE, kDbgImportant,
@@ -463,13 +447,11 @@ HRESULT SCFFOutputPin::OnThreadStartPlay(void) {
   return S_OK;
 }
 
-// メディア データを生成し、ダウンストリームの入力ピンに提供
-//
-// デフォルトの動作だとまったく待たずに最速でFillBufferを埋めてしまうので
-// 適切なWaitをはさむ様に置き換えている。
-// また、ワーカースレッドを作成しFillBufferのためのデータをバックグラウンドで
-// 生成するようにしている。
-//
+/// - デフォルトの動作だとまったく待たずに最速でFillBufferを埋めてしまうので
+///   適切なWaitをはさむ様に置き換えている。
+/// - また、ワーカースレッドを作成しFillBufferのためのデータをバックグラウンドで
+///   生成するようにしている。
+///
 /// @retval S_OK
 /// @retval S_FALSE ループ正常終了
 HRESULT SCFFOutputPin::DoBufferProcessingLoop(void) {
@@ -593,8 +575,6 @@ HRESULT SCFFOutputPin::DoBufferProcessingLoop(void) {
   return S_FALSE;
 }
 
-// 取得した空のメディア サンプルにデータを挿入
-//
 /// @pre GetMediaTypeによってm_mtには適切なフォーマットが格納済み
 /// @retval S_OK
 /// @retval S_FALSE ストリーム終了
@@ -603,7 +583,6 @@ HRESULT SCFFOutputPin::FillBuffer(IMediaSample *sample) {
   return S_OK;
 }
 
-// 取得した空のメディア サンプルにデータを挿入
 /// @retval S_OK
 /// @retval S_FALSE ストリーム終了
 HRESULT SCFFOutputPin::FillBufferWithImagingEngine(

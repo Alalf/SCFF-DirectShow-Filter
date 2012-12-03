@@ -34,7 +34,6 @@ namespace scff_imaging {
 // scff_imaging::Scale
 //=====================================================================
 
-/// コンストラクタ
 Scale::Scale(const SWScaleConfig &swscale_config)
     : Processor<AVPictureWithFillImage, AVPictureImage>(),
       swscale_config_(swscale_config),
@@ -43,7 +42,6 @@ Scale::Scale(const SWScaleConfig &swscale_config)
   // nop
 }
 
-/// デストラクタ
 Scale::~Scale() {
   if (filter_ != nullptr) {
     sws_freeFilter(filter_);
@@ -54,7 +52,7 @@ Scale::~Scale() {
 }
 
 //-------------------------------------------------------------------
-// Processor::Init
+
 ErrorCode Scale::Init() {
   // 入力はRGB0限定
   ASSERT(GetInputImage()->pixel_format() == ImagePixelFormat::kRGB0);
@@ -90,7 +88,7 @@ ErrorCode Scale::Init() {
     //    入力:BGR0(32bit)
     //    出力:I420(12bit)/IYUV(12bit)/UYVY(16bit)/YUY2(16bit)
     /// @attention RGB->YUV変換時にUVが逆になるのを修正
-    ///- RGBデータをBGRデータとしてSwsContextに渡してあります
+    /// - RGBデータをBGRデータとしてSwsContextに渡してあります
     input_pixel_format = AV_PIX_FMT_BGR0;
     break;
   case ImagePixelFormat::kYV12:
@@ -133,7 +131,6 @@ ErrorCode Scale::Init() {
   return InitDone();
 }
 
-// Processor::Run
 ErrorCode Scale::Run() {
   // SWScaleを使って拡大・縮小を行う
   int scale_height =
@@ -148,5 +145,5 @@ ErrorCode Scale::Run() {
   // エラー発生なし
   return GetCurrentError();
 }
-//-------------------------------------------------------------------
+
 }   // namespace scff_imaging

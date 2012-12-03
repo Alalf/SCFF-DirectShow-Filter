@@ -18,7 +18,7 @@
 /// @file scff-interprocess/interprocess.cc
 /// SCFFのプロセス間通信に関するクラスの定義
 /// @warning To me: このファイルの中から別のファイルへのIncludeは禁止！
-///- 別の言語に移植する場合も最大2ファイルでお願いします
+/// - 別の言語に移植する場合も最大2ファイルでお願いします
 
 #include "scff-interprocess/interprocess.h"
 
@@ -30,7 +30,6 @@ namespace scff_interprocess {
 // scff-interprocess::Interprocess
 //=====================================================================
 
-// コンストラクタ
 Interprocess::Interprocess()
     : directory_(nullptr),
       view_of_directory_(nullptr),
@@ -42,7 +41,6 @@ Interprocess::Interprocess()
   OutputDebugString(TEXT("****Interprocess: NEW\n"));
 }
 
-// デストラクタ
 Interprocess::~Interprocess() {
   OutputDebugString(TEXT("****Interprocess: DELETE\n"));
   // 解放忘れがないように
@@ -52,7 +50,6 @@ Interprocess::~Interprocess() {
 
 //---------------------------------------------------------------------
 
-// Directory初期化
 bool Interprocess::InitDirectory() {
   // 念のため解放
   ReleaseDirectory();
@@ -114,14 +111,12 @@ bool Interprocess::InitDirectory() {
   return true;
 }
 
-// Directoryの初期化が成功したか
 bool Interprocess::IsDirectoryInitialized() {
   return directory_ != nullptr &&
          view_of_directory_ != nullptr &&
          mutex_directory_ != nullptr;
 }
 
-// Directory解放
 void Interprocess::ReleaseDirectory() {
   if (mutex_directory_ != nullptr) {
     CloseHandle(mutex_directory_);
@@ -139,7 +134,6 @@ void Interprocess::ReleaseDirectory() {
 
 //---------------------------------------------------------------------
 
-// Message初期化
 bool Interprocess::InitMessage(uint32_t process_id) {
   // 念のため解放
   ReleaseMessage();
@@ -215,14 +209,12 @@ bool Interprocess::InitMessage(uint32_t process_id) {
   return true;
 }
 
-// Messageの初期化が成功したか
 bool Interprocess::IsMessageInitialized() {
   return message_ != nullptr &&
          view_of_message_ != nullptr &&
          mutex_message_ != nullptr;
 }
 
-// Message解放
 void Interprocess::ReleaseMessage() {
   if (mutex_message_ != nullptr) {
     CloseHandle(mutex_message_);
@@ -242,7 +234,6 @@ void Interprocess::ReleaseMessage() {
 // for SCFF DirectShow Filter
 //-------------------------------------------------------------------
 
-// エントリを作成する
 bool Interprocess::AddEntry(const Entry &entry) {
   // 初期化されていなければ失敗
   if (!IsDirectoryInitialized()) {
@@ -278,7 +269,6 @@ bool Interprocess::AddEntry(const Entry &entry) {
   return success;
 }
 
-// エントリを削除する
 bool Interprocess::RemoveEntry(uint32_t process_id) {
   // 初期化されていなければ失敗
   if (!IsDirectoryInitialized()) {
@@ -307,7 +297,6 @@ bool Interprocess::RemoveEntry(uint32_t process_id) {
   return true;
 }
 
-// メッセージを受け取る
 bool Interprocess::ReceiveMessage(Message *message) {
   // 初期化されていなければ失敗
   if (!IsMessageInitialized()) {
@@ -331,7 +320,6 @@ bool Interprocess::ReceiveMessage(Message *message) {
 
 //-------------------------------------------------------------------
 
-// ディレクトリを取得する
 bool Interprocess::GetDirectory(Directory *directory) {
   // 初期化されていなければ失敗
   if (!IsDirectoryInitialized()) {
@@ -353,7 +341,6 @@ bool Interprocess::GetDirectory(Directory *directory) {
   return true;
 }
 
-// メッセージを作成する
 bool Interprocess::SendMessage(const Message &message) {
   // 初期化されていなければ失敗
   if (!IsMessageInitialized()) {

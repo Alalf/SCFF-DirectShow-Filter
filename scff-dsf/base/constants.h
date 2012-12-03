@@ -40,6 +40,7 @@
 extern const TCHAR kFilterName[];
 
 /// SCFF DirectShow FilterのGUID
+/// - {D64DB8AA-9055-418F-AFE9-A080A4FAE47A}
 extern const GUID CLSID_SCFFSource;
 
 /// 優先ビデオサイズ

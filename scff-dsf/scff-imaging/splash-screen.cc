@@ -32,7 +32,6 @@ namespace scff_imaging {
 // scff_imaging::SplashScreen
 //=====================================================================
 
-//コンストラクタ
 SplashScreen::SplashScreen()
     : Layout(),
       scale_(nullptr),
@@ -46,7 +45,6 @@ SplashScreen::SplashScreen()
   // resource_ddb_info_;
 }
 
-// デストラクタ
 SplashScreen::~SplashScreen() {
   MyDbgLog((LOG_MEMORY, kDbgNewDelete,
           TEXT("SplashScreen: DELETE")));
@@ -62,7 +60,6 @@ SplashScreen::~SplashScreen() {
 
 //-------------------------------------------------------------------
 
-// Processor::Init
 ErrorCode SplashScreen::Init() {
   MyDbgLog((LOG_TRACE, kDbgImportant,
           TEXT("SplashScreen: Init")));
@@ -175,7 +172,6 @@ ErrorCode SplashScreen::Init() {
   return InitDone();
 }
 
-// Processor::Run
 ErrorCode SplashScreen::Run() {
   if (GetCurrentError() != ErrorCode::kNoError) {
     // 何かエラーが発生している場合は何もしない

@@ -28,7 +28,6 @@
 // SCFFSource
 //=====================================================================
 
-// コンストラクタ
 SCFFSource::SCFFSource(IUnknown *unknown, HRESULT *result)
   : CSource(kFilterName, unknown, CLSID_SCFFSource) {
   MyDbgLog((LOG_MEMORY, kDbgNewDelete, TEXT("SCFFSource: NEW")));
@@ -37,12 +36,10 @@ SCFFSource::SCFFSource(IUnknown *unknown, HRESULT *result)
   ASSERT(GetPinCount() == 1);
 }
 
-// デストラクタ
 SCFFSource::~SCFFSource() {
   MyDbgLog((LOG_MEMORY, kDbgNewDelete, TEXT("SCFFSource: DELETE")));
 }
 
-// DLL読み込み中に呼ばれるインスタンス生成関数
 CUnknown* WINAPI SCFFSource::CreateInstance(IUnknown *unknown,
                                             HRESULT *result) {
   SCFFSource *source = new SCFFSource(unknown, result);
@@ -56,7 +53,6 @@ CUnknown* WINAPI SCFFSource::CreateInstance(IUnknown *unknown,
   return source;
 }
 
-// DLL読み込み中に呼ばれる初期化関数
 void WINAPI SCFFSource::Init(BOOL loading, const CLSID *clsid) {
   if (loading) {
     // DLLがロードされた場合の処理

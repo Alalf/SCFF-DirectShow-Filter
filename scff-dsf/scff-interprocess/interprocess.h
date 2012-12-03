@@ -18,7 +18,7 @@
 /// @file scff-interprocess/interprocess.h
 /// SCFFのプロセス間通信に関するクラス、定数、型の宣言
 /// @warning To me: このファイルの中から別のファイルへのIncludeは禁止！
-///- 別の言語に移植する場合も最大2ファイルでお願いします
+/// - 別の言語に移植する場合も最大2ファイルでお願いします
 
 #ifndef SCFF_DSF_SCFF_INTERPROCESS_INTERPROCESS_H_
 #define SCFF_DSF_SCFF_INTERPROCESS_INTERPROCESS_H_
@@ -29,22 +29,23 @@
 /// SCFFのプロセス間通信モジュール
 namespace scff_interprocess {
 
-//=====================================================================
-// SCFF Messaging Protocol v1 (by 2012/05/22 Alalf)
-//
-// [全体的な注意点]
-// - Windows固有の型名はビットサイズが分かりにくいのでcstdintで置き換える
-//   - 対応表
-//     - DWORD        = uint32_t 32bit
-//     - HWND(void*)  = uint64_t 64bit
-//       - SCFHから変更: 念のため32bitから64bitに
-//     - bool         = int8_t 8bit
-// - 不動小数点数は基本的にはdoubleでやりとりすること
-//   - double = 64bit
-//   = float  = 32bit
-// - すべての構造体はPOD(Plain Old Data)であること
-//   - 基本型、コンストラクタ、デストラクタ、仮想関数を持たない構造体のみ
-//=====================================================================
+//====================================================================
+/// @page smp SCFF Messaging Protocol v1 (by 2012/05/22 Alalf)
+///
+/// [全体的な注意点]
+/// - Windows固有の型名はビットサイズが分かりにくいのでcstdintで置き換える
+///   - 対応表
+///     - DWORD        = uint32_t (32bit)
+///     - HWND(void*)  = uint64_t (64bit)
+///       - SCFHから変更: 念のため32bitから64bitに
+///     - bool         = int8_t (8bit)
+/// - 不動小数点数は基本的にはdoubleで(floatも利用可)
+///   - 対応表
+///     - double       = double (64bit)
+///     - float        = float (32bit)
+/// - すべての構造体はPOD(Plain Old Data)であること
+///   - 基本型、コンストラクタ、デストラクタ、仮想関数を持たない構造体のみ
+//====================================================================
 
 /// 共有メモリ名: SCFFエントリを格納するディレクトリ
 static const char kDirectoryName[] = "scff-v1-directory";

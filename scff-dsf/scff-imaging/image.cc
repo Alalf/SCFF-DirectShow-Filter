@@ -30,7 +30,6 @@ namespace scff_imaging {
 // scff_imaging::Image
 //=====================================================================
 
-// コンストラクタ
 Image::Image()
     : pixel_format_(ImagePixelFormat::kInvalidPixelFormat),   // ありえない値
       width_(-1),                           // ありえない値
@@ -38,33 +37,27 @@ Image::Image()
   // nop
 }
 
-// デストラクタ
 Image::~Image() {
   // nop
 }
 
-// Getter: イメージのピクセルフォーマット
 ImagePixelFormat Image::pixel_format() const {
   return pixel_format_;
 }
 
-  /// イメージのピクセルフォーマットをAVPicture用に変換
 AVPixelFormat Image::av_pixel_format() const {
   return Utilities::ToAVPicturePixelFormat(pixel_format());
 }
 
-/// Getter: イメージの幅
 int Image::width() const {
   return width_;
 }
 
-/// Getter: イメージの高さ
 int Image::height() const {
   return height_;
 }
 
 //-------------------------------------------------------------------
-// 実体を生成する
 ErrorCode Image::Create(ImagePixelFormat pixel_format, int width, int height) {
   ASSERT(IsEmpty());
   pixel_format_ = pixel_format;

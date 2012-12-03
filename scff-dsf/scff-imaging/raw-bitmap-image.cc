@@ -34,14 +34,12 @@ namespace scff_imaging {
 // scff_imaging::RawBitmapImage
 //=====================================================================
 
-// コンストラクタ
 RawBitmapImage::RawBitmapImage()
     : Image(),
       raw_bitmap_(nullptr) {
   /// @attention raw_bitmap_そのものの構築はCreate()で行う
 }
 
-// デストラクタ
 RawBitmapImage::~RawBitmapImage() {
   if (!IsEmpty()) {
     // av_freepで解放
@@ -49,12 +47,10 @@ RawBitmapImage::~RawBitmapImage() {
   }
 }
 
-// Create()などによって実体がまだ生成されていない場合
 bool RawBitmapImage::IsEmpty() const {
   return raw_bitmap_ == nullptr;
 }
 
-// 実態を作る
 ErrorCode RawBitmapImage::Create(ImagePixelFormat pixel_format,
                                  int width, int height) {
   // pixel_format, width, heightを設定する
@@ -74,7 +70,6 @@ ErrorCode RawBitmapImage::Create(ImagePixelFormat pixel_format,
   return ErrorCode::kNoError;
 }
 
-// Getter: 各種ビットマップ
 uint8_t* RawBitmapImage::raw_bitmap() const {
   return raw_bitmap_;
 }

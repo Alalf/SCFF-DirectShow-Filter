@@ -28,7 +28,6 @@ namespace scff_imaging {
 // scff_imaging::Padding
 //=====================================================================
 
-// コンストラクタ
 Padding::Padding(int padding_left, int padding_right,
                  int padding_top, int padding_bottom)
     : padding_left_(padding_left),        // ありえない値
@@ -40,13 +39,12 @@ Padding::Padding(int padding_left, int padding_right,
   // padding_color_
 }
 
-// デストラクタ
 Padding::~Padding() {
   // nop
 }
 
 //-------------------------------------------------------------------
-// Processor::Init
+
 ErrorCode Padding::Init() {
   ASSERT(GetInputImage()->pixel_format() == GetOutputImage()->pixel_format());
 
@@ -66,7 +64,6 @@ ErrorCode Padding::Init() {
   return InitDone();
 }
 
-// Processor::Run
 ErrorCode Padding::Run() {
   // 左の枠を書く
   ff_fill_rectangle(&draw_context_, &padding_color_,
@@ -119,5 +116,5 @@ ErrorCode Padding::Run() {
 
   return GetCurrentError();
 }
-//-------------------------------------------------------------------
+
 }   // namespace scff_imaging

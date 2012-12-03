@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scff-imaging/windows-ddb-image.cc
-/// @brief scff_imaging::WindowsDDBImageの定義
+/// scff_imaging::WindowsDDBImageの定義
 
 #include "scff-imaging/windows-ddb-image.h"
 

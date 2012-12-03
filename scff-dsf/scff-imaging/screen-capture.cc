@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scff-imaging/screen-capture.cc
-/// @brief scff_imaging::ScreenCaptureの定義
+/// scff_imaging::ScreenCaptureの定義
 
 #include "scff-imaging/screen-capture.h"
 

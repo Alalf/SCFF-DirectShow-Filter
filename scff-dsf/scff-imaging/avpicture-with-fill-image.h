@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scff-imaging/avpicture-with-fill-image.h
-/// @brief scff_imaging::AVPictureWithFillImageの宣言
+/// scff_imaging::AVPictureWithFillImageの宣言
 
 #ifndef SCFF_DSF_SCFF_IMAGING_AVPICTURE_WITH_FILL_IMAGE_H_
 #define SCFF_DSF_SCFF_IMAGING_AVPICTURE_WITH_FILL_IMAGE_H_
@@ -26,30 +26,30 @@
 
 namespace scff_imaging {
 
-/// @brief AVPicture(ffmpeg)の実体を管理するクラス
+/// AVPicture(ffmpeg)の実体を管理するクラス
 class AVPictureWithFillImage: public Image {
  public:
-  /// @brief コンストラクタ
+  /// コンストラクタ
   AVPictureWithFillImage();
-  /// @brief デストラクタ
+  /// デストラクタ
   ~AVPictureWithFillImage();
 
   //-------------------------------------------------------------------
-  /// @brief Create()などによって実体がまだ生成されていない場合
+  /// Create()などによって実体がまだ生成されていない場合
   bool IsEmpty() const;
-  /// @brief AVPictureと同時にRawBitmapの実体を作成する
+  /// AVPictureと同時にRawBitmapの実体を作成する
   ErrorCode Create(ImagePixelFormat pixel_format, int width, int height);
   //-------------------------------------------------------------------
 
-  /// @brief Getter: 各種ビットマップ
+  /// Getter: 各種ビットマップ
   uint8_t* raw_bitmap() const;
-  /// @brief Getter: AVPictureへのポインタ
+  /// Getter: AVPictureへのポインタ
   AVPicture* avpicture() const;
 
  private:
-  /// @brief 各種ビットマップ
+  /// 各種ビットマップ
   uint8_t *raw_bitmap_;
-  /// @brief AVPictureへのポインタ
+  /// AVPictureへのポインタ
   AVPicture *avpicture_;
 
   // コピー＆代入禁止

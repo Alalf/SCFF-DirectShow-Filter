@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scff-app/view/LayoutPanel.cs
-/// @brief LayoutPanelコントロールの定義
+/// LayoutPanelコントロールの定義
 
 namespace scff_app.view {
 

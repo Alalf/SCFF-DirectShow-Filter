@@ -16,14 +16,14 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scff-app/viewmodel/message-properties.cs
-/// @brief scff_app.viewmodel.Messageのプロパティの定義
+/// scff_app.viewmodel.Messageのプロパティの定義
 
 namespace scff_app.viewmodel {
 
 using System;
 using System.ComponentModel;
 
-/// @brief scff_inteprocess.Messageのビューモデル
+/// scff_inteprocess.Messageのビューモデル
 partial class Message {
   public Int64 Timestamp {
     get {

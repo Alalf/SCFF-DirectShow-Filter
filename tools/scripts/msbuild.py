@@ -7,7 +7,6 @@
 # ENV_32BIT_BAT
 # ENV_64BIT_BAT
 # DSF_SLN
-# APP_SLN
 # BUILD_32BIT_BAT
 # BUILD_64BIT_BAT
 
@@ -35,10 +34,7 @@ def make_build_Win32_bat():
 CALL "%s"
 msbuild /verbosity:m /t:build /p:Configuration=Debug /p:Platform=Win32 "%s"
 msbuild /verbosity:m /t:build /p:Configuration=Release /p:Platform=Win32 "%s"
-
-msbuild /verbosity:m /t:build /p:Configuration=Debug /p:Platform=x86 "%s"
-msbuild /verbosity:m /t:build /p:Configuration=Release /p:Platform=x86 "%s"
-''' % (ENV_32BIT_BAT, DSF_SLN, DSF_SLN, APP_SLN, APP_SLN)
+''' % (ENV_32BIT_BAT, DSF_SLN, DSF_SLN)
     
     # ファイルに書き込み
     with open(BUILD_32BIT_BAT, 'w') as f:

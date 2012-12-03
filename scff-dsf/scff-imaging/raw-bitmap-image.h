@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scff-imaging/raw-bitmap-image.h
-/// @brief scff_imaging::RawBitmapImageの宣言
+/// scff_imaging::RawBitmapImageの宣言
 
 #ifndef SCFF_DSF_SCFF_IMAGING_RAW_BITMAP_IMAGE_H_
 #define SCFF_DSF_SCFF_IMAGING_RAW_BITMAP_IMAGE_H_
@@ -25,26 +25,26 @@
 
 namespace scff_imaging {
 
-/// @brief 各種ビットマップの実体を管理するクラス
+/// 各種ビットマップの実体を管理するクラス
 class RawBitmapImage: public Image {
  public:
-  /// @brief コンストラクタ
+  /// コンストラクタ
   RawBitmapImage();
-  /// @brief デストラクタ
+  /// デストラクタ
   ~RawBitmapImage();
 
   //-------------------------------------------------------------------
-  /// @brief Create()などによって実体がまだ生成されていない場合
+  /// Create()などによって実体がまだ生成されていない場合
   bool IsEmpty() const;
-  /// @brief 実体を作る
+  /// 実体を作る
   ErrorCode Create(ImagePixelFormat pixel_format, int width, int height);
   //-------------------------------------------------------------------
 
-  /// @brief Getter: 各種ビットマップ
+  /// Getter: 各種ビットマップ
   uint8_t* raw_bitmap() const;
 
  private:
-  /// @brief 各種ビットマップ
+  /// 各種ビットマップ
   uint8_t *raw_bitmap_;
 
   // コピー＆代入禁止

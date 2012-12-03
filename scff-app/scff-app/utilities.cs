@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scff-app/utilities.cs
-/// @brief scff_app用ユーティリティクラスの定義
+/// scff_app用ユーティリティクラスの定義
 
 namespace scff_app {
 
@@ -24,9 +24,9 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 
-/// @brief scff_app用ユーティリティクラス
+/// scff_app用ユーティリティクラス
 class Utilities {
-  /// @brief マルチモニタを考慮してウィンドウ領域を求める
+  /// マルチモニタを考慮してウィンドウ領域を求める
   public static Rectangle GetWindowRectangle(UIntPtr window) {
     Rectangle window_rectangle = new Rectangle(0, 0, 0, 0);
     if (window == ExternalAPI.GetDesktopWindow()) {

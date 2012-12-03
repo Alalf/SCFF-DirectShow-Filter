@@ -16,14 +16,14 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scff-app/viewmodel/swscale-config-properties.cs
-/// @brief scff_app.viewmodel.SWScaleConfigのプロパティの定義
+/// scff_app.viewmodel.SWScaleConfigのプロパティの定義
 
 namespace scff_app.viewmodel {
 
 using System;
 using System.Runtime.Serialization;
 
-/// @brief scff_interprocess.SWScaleConfigのビューモデル
+/// scff_interprocess.SWScaleConfigのビューモデル
 [DataContract]
 partial class SWScaleConfig {
   [DataMember]

@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file base/scff-clock-time.cc
-/// @brief SCFFClockTimeの定義
+/// SCFFClockTimeの定義
 
 #include "base/scff-clock-time.h"
 
@@ -95,7 +95,7 @@ void SCFFClockTime::Reset(double fps, CSource* parent) {
             TEXT("SCFFClockTime: RESET!!!!!!!!!!!!")));
 }
 
-/// @brief 現在のストリームタイムを得る
+/// 現在のストリームタイムを得る
 REFERENCE_TIME SCFFClockTime::GetNow(REFERENCE_TIME filter_zero) {
   ASSERT(graph_clock_ != nullptr);
   ASSERT(system_clock_ != nullptr);

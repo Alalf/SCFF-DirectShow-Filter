@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scff-imaging/raw-bitmap-image.cc
-/// @brief scff_imaging::RawBitmapImageの定義
+/// scff_imaging::RawBitmapImageの定義
 
 #include "scff-imaging/raw-bitmap-image.h"
 

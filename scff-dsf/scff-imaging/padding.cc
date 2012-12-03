@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scff-imaging/padding.cc
-/// @brief scff_imaging::Paddingの定義
+/// scff_imaging::Paddingの定義
 
 #include "scff-imaging/padding.h"
 

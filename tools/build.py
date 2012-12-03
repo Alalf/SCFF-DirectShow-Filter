@@ -60,7 +60,6 @@ def msbuild():
     msbuild.ENV_32BIT_BAT = 'D:\\Program Files\\MSVS2012\\VC\\vcvarsall.bat'
     msbuild.ENV_64BIT_BAT = 'D:\\Program Files\\MSVS2012\\VC\\vcvarsall.bat'
     msbuild.DSF_SLN = ROOT_DIR + '\\scff-dsf.sln'
-    msbuild.APP_SLN = ROOT_DIR + '\\scff-app.sln'
 
     msbuild.init()
     msbuild.make_build_Win32_bat()

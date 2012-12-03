@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scff-app/scff-ap-profile.cs
-/// @brief SCFFAppのプロファイル機能関連のメソッドの定義
+/// SCFFAppのプロファイル機能関連のメソッドの定義
 
 namespace scff_app {
 
@@ -28,7 +28,7 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Xml;
 
-/// @brief MVCパターンにおけるController
+/// MVCパターンにおけるController
 partial class SCFFApp {
 
   // 定数

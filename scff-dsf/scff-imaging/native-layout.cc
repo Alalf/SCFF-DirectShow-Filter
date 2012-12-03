@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scff-imaging/native-layout.cc
-/// @brief scff_imaging::NativeLayoutの定義
+/// scff_imaging::NativeLayoutの定義
 
 #include "scff-imaging/native-layout.h"
 

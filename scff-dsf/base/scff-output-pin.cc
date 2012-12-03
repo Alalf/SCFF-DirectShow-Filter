@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file base/scff-output-pin.cc
-/// @brief SCFFOutputPinの実装(基底クラスのみ)
+/// SCFFOutputPinの実装(基底クラスのみ)
 
 #include "base/scff-output-pin.h"
 
@@ -188,8 +188,7 @@ HRESULT SCFFOutputPin::GetMediaType(int position, CMediaType *media_type) {
 // さまざまなアプリケーションがこのメソッドを利用しているので
 // 優先メディアタイプが一つであっても実装したほうがよさそうだ
 /// @todo(me) ワイルドカード的なことを処理する場合はS_FALSE
-///
-/// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cc}
+/// @code
 /// // We treat MEDIASUBTYPE_NULL subtype as a wild card
 /// if((m_pReader->LoadType()->majortype == pType->majortype) &&
 ///    (m_pReader->LoadType()->subtype == MEDIASUBTYPE_NULL   ||
@@ -198,7 +197,7 @@ HRESULT SCFFOutputPin::GetMediaType(int position, CMediaType *media_type) {
 ///   return S_OK;
 /// }
 /// return S_FALSE;
-/// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/// @endcode
 /// @retval E_POINTER
 /// @retval E_INVALIDARG
 /// @retval E_UNEXPECTED
@@ -238,23 +237,24 @@ HRESULT SCFFOutputPin::CheckMediaType(const CMediaType *media_type) {
   CheckPointer(video_info, E_UNEXPECTED);
 
   // サイズとFPSの設定が正しくされているか？
-  /// @attention Skypeに対応する場合はサイズ(0,0)を許さなければならない
   if (video_info->bmiHeader.biWidth == 0 ||
       video_info->bmiHeader.biHeight <= 0 ||
       video_info->AvgTimePerFrame == 0) {
     return E_INVALIDARG;
   }
 
-  // // for Skype
-  // if (video_info->bmiHeader.biWidth == 0 &&
-  //     video_info->bmiHeader.biHeight == 0) {
-  //   // nop
-  // } else if (video_info->bmiHeader.biWidth == 0 ||
-  //            video_info->bmiHeader.biHeight <= 0 ||
-  //            video_info->AvgTimePerFrame == 0) {
-  //   // Skypeでなければきっちりエラー処理する
-  //   return E_INVALIDARG;
-  // }
+  /// @todo(me) Skypeに対応する場合はサイズ(0,0)を許さなければならない
+  /// @code
+  /// if (video_info->bmiHeader.biWidth == 0 &&
+  ///     video_info->bmiHeader.biHeight == 0) {
+  ///   // nop
+  /// } else if (video_info->bmiHeader.biWidth == 0 ||
+  ///            video_info->bmiHeader.biHeight <= 0 ||
+  ///            video_info->AvgTimePerFrame == 0) {
+  ///   // Skypeでなければきっちりエラー処理する
+  ///   return E_INVALIDARG;
+  /// }
+  /// @endcode
 
   MyDbgLog((LOG_TRACE, kDbgTrace,
     TEXT("[pin] <- check: mediatype(%dbpp, %d, %d, %.1ffps)"),

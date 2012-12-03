@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scff-imaging/windows-ddb-image.h
-/// @brief scff_imaging::WindowsDDBImageの宣言
+/// scff_imaging::WindowsDDBImageの宣言
 
 #ifndef SCFF_DSF_SCFF_IMAGING_WINDOWS_DDB_IMAGE_H_
 #define SCFF_DSF_SCFF_IMAGING_WINDOWS_DDB_IMAGE_H_
@@ -25,41 +25,41 @@
 
 namespace scff_imaging {
 
-/// @brief Windowsビットマップ(HBITMAP)の実体を管理するクラス
+/// Windowsビットマップ(HBITMAP)の実体を管理するクラス
 class WindowsDDBImage: public Image {
  public:
-  /// @brief Windowsビットマップの生成方法
+  /// Windowsビットマップの生成方法
   enum class Source {
-    /// @brief ありえない値
+    /// ありえない値
     kInvalidSource,
-    /// @brief WindowハンドルからCreateCompatibleBitmapで生成
+    /// WindowハンドルからCreateCompatibleBitmapで生成
     kFromWindow,
-    /// @brief DLLリソースから生成
+    /// DLLリソースから生成
     kFromResource
   };
 
-  /// @brief コンストラクタ
+  /// コンストラクタ
   WindowsDDBImage();
-  /// @brief デストラクタ
+  /// デストラクタ
   ~WindowsDDBImage();
 
   //-------------------------------------------------------------------
-  /// @brief Create()などによって実体がまだ生成されていない場合
+  /// Create()などによって実体がまだ生成されていない場合
   bool IsEmpty() const;
-  /// @brief リソースから実体を作る
+  /// リソースから実体を作る
   ErrorCode CreateFromResource(int width, int height, WORD resource_id);
-  /// @brief 与えられたWindowからCompatibleBitmapを作成する
+  /// 与えられたWindowからCompatibleBitmapを作成する
   ErrorCode CreateFromWindow(int width, int height, HWND window);
   //-------------------------------------------------------------------
 
-  /// @brief Getter: Windowsビットマップハンドル
+  /// Getter: Windowsビットマップハンドル
   HBITMAP windows_ddb() const;
 
  private:
-  /// @brief Windowsビットマップの生成方法
+  /// Windowsビットマップの生成方法
   Source from_;
 
-  /// @brief Windowsビットマップハンドル
+  /// Windowsビットマップハンドル
   HBITMAP windows_ddb_;
 
   // コピー＆代入禁止

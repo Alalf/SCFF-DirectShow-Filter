@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scff-imaging/utilities.cc
-/// @brief scff_imaging::Utilitiesの定義
+/// scff_imaging::Utilitiesの定義
 
 #include "scff-imaging/utilities.h"
 
@@ -38,7 +38,7 @@ namespace scff_imaging {
 // リソースの取得用DLLインスタンスハンドルの取得
 //-------------------------------------------------------------------
 
-/// @brief リソースの取得用DLLインスタンスハンドル
+/// リソースの取得用DLLインスタンスハンドル
 static HINSTANCE g_dll_instance;
 
 // Getter: リソースの取得用DLLインスタンスハンドル
@@ -70,7 +70,7 @@ bool Utilities::IsTopdownPixelFormat(ImagePixelFormat pixel_format) {
   }
 }
 
-/// @brief drawutilsが使用可能なピクセルフォーマットか
+/// drawutilsが使用可能なピクセルフォーマットか
 bool Utilities::CanUseDrawUtils(ImagePixelFormat pixel_format) {
   /// @warning 2012/05/08現在drawutilsはPlaner Formatにしか対応していない
   switch (pixel_format) {
@@ -230,7 +230,7 @@ bool Utilities::IsSupportedPixelFormat(const BITMAPINFOHEADER &info_header) {
 // レイアウト
 //-------------------------------------------------------------------
 
-/// @brief 指定された範囲（同じ座標系）が中に含まれているか
+/// 指定された範囲（同じ座標系）が中に含まれているか
 bool Utilities::Contains(int bound_x, int bound_y,
                          int bound_width, int bound_height,
                          int x, int y, int width, int height) {
@@ -253,7 +253,7 @@ bool Utilities::Contains(int bound_x, int bound_y,
          bottom <= bound_bottom;
 }
 
-/// @brief 境界の座標系と同じ座標系の新しい配置を計算する
+/// 境界の座標系と同じ座標系の新しい配置を計算する
 bool Utilities::CalculateLayout(int bound_x, int bound_y,
                                 int bound_width, int bound_height,
                                 int input_width, int input_height,
@@ -330,7 +330,7 @@ bool Utilities::CalculateLayout(int bound_x, int bound_y,
   return true;
 }
 
-/// @brief 幅と高さから拡大縮小した場合のパディングサイズを求める
+/// 幅と高さから拡大縮小した場合のパディングサイズを求める
 bool Utilities::CalculatePaddingSize(int bound_width, int bound_height,
                                      int input_width, int input_height,
                                      bool stretch, bool keep_aspect_ratio,

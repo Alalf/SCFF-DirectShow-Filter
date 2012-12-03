@@ -16,14 +16,14 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scff-app/view/utilities.cs
-/// @brief View用ユーティリティクラス
+/// View用ユーティリティクラス
 
 namespace scff_app.view {
 
 using System;
 using System.Drawing;
 
-/// @brief View用ユーティリティ
+/// View用ユーティリティ
 class Utilities {
 
   //===================================================================

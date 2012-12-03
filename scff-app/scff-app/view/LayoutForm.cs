@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scff-app/view/LayoutForm.cs
-/// @brief レイアウトをGUIで編集するためのフォームの定義
+/// レイアウトをGUIで編集するためのフォームの定義
 /// @todo(progre) 移植未達部分が完了次第名称含め全体をリファクタリング
 /// @todo(me) 全体的にBindingSourceをカスタムコントロールで利用する方法さえわかれば、
 ///           いろいろとエレガントに対応できそうではある
@@ -27,10 +27,10 @@ using System.Drawing;
 using System.Windows.Forms;
 using scff_app.viewmodel;
 
-/// @brief レイアウトをGUIで編集するためのフォーム
+/// レイアウトをGUIで編集するためのフォーム
 partial class LayoutForm : Form {
 
-  /// @brief コンストラクタ
+  /// コンストラクタ
   public LayoutForm(BindingSource entries, BindingSource layoutParameters) {
     //---------------------------------------------------------------
     // DO NOT DELETE THIS!!!

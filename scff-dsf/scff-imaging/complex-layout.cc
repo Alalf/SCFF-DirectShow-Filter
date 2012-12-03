@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scff-imaging/complex-layout.cc
-/// @brief scff_imaging::ComplexLayoutの定義
+/// scff_imaging::ComplexLayoutの定義
 
 #include "scff-imaging/complex-layout.h"
 

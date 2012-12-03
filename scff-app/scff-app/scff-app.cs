@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scff-app/scff-app.cs
-/// @brief MVCパターンにおけるControllerの定義
+/// MVCパターンにおけるControllerの定義
 
 namespace scff_app {
 
@@ -28,7 +28,7 @@ using System.IO;
 using System.Windows.Forms;
 using Microsoft.Win32;
 
-/// @brief MVCパターンにおけるController
+/// MVCパターンにおけるController
 partial class SCFFApp {
 
   // 定数
@@ -38,7 +38,7 @@ partial class SCFFApp {
   const string kSCFFSourceGUID = "D64DB8AA-9055-418F-AFE9-A080A4FAE47A";
   const string kRegistryKey = "CLSID\\{" + kSCFFSourceGUID + "}";
 
-  /// @brief ResizeMethodコンボボックス用リスト
+  /// ResizeMethodコンボボックス用リスト
   static SortedList<scff_interprocess.SWScaleFlags, string> kResizeMethodSortedList =
       new SortedList<scff_interprocess.SWScaleFlags, string> {
     {scff_interprocess.SWScaleFlags.kFastBilinear, "FastBilinear (fast bilinear)"},
@@ -56,7 +56,7 @@ partial class SCFFApp {
 
   //-------------------------------------------------------------------
 
-  /// @brief コンストラクタ
+  /// コンストラクタ
   public SCFFApp(BindingSource entries, BindingSource layout_parameters) {
     interprocess_ = new scff_interprocess.Interprocess();
     directory_ = new viewmodel.Directory();
@@ -78,7 +78,7 @@ partial class SCFFApp {
     };
   }
 
-  /// @brief メインフォームのLoad時に呼ばれることを想定
+  /// メインフォームのLoad時に呼ばれることを想定
   public void OnLoad() {
     // ディレクトリとBindingSourceを共有メモリから更新
     UpdateDirectory();
@@ -88,7 +88,7 @@ partial class SCFFApp {
     LoadDefaultProfile();
   }
 
-  /// @brief 起動時のチェックを行うメソッド
+  /// 起動時のチェックを行うメソッド
   public bool CheckEnvironment() {
     //------------------
     // 32bit版のチェック

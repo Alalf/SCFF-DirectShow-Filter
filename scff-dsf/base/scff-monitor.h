@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file base/scff-monitor.h
-/// @brief SCFFMonitorの宣言
+/// SCFFMonitorの宣言
 
 #ifndef SCFF_DSF_BASE_SCFF_MONITOR_H_
 #define SCFF_DSF_BASE_SCFF_MONITOR_H_
@@ -27,31 +27,31 @@
 #include "scff-interprocess/interprocess.h"
 #include "scff-imaging/imaging.h"
 
-/// @brief SCFF DirectShow Filterの外部インターフェースを担当するクラス
+/// SCFF DirectShow Filterの外部インターフェースを担当するクラス
 class SCFFMonitor {
  public:
-  /// @brief コンストラクタ
+  /// コンストラクタ
   SCFFMonitor();
-  /// @brief デストラクタ
+  /// デストラクタ
   ~SCFFMonitor();
 
-  /// @brief 初期化
+  /// 初期化
   bool Init(scff_imaging::ImagePixelFormat pixel_format,
             int width, int height, double fps);
 
-  /// @brief リクエストがあるかどうか調べ、あれば実体を、なければnullptrを返す
+  /// リクエストがあるかどうか調べ、あれば実体を、なければnullptrを返す
   scff_imaging::Request* CreateRequest();
-  /// @brief 使い終わったリクエストを解放する
+  /// 使い終わったリクエストを解放する
   void ReleaseRequest(scff_imaging::Request *request);
 
  private:
-  /// @brief プロセス間通信のためのインスタンス
+  /// プロセス間通信のためのインスタンス
   scff_interprocess::Interprocess interprocess_;
 
-  /// @brief 内部時刻を保持するための変数
+  /// 内部時刻を保持するための変数
   clock_t last_polling_clock_;
 
-  /// @brief 最後に受信したSCFFMessageのタイムスタンプ
+  /// 最後に受信したSCFFMessageのタイムスタンプ
   int64_t last_message_timestamp_;
 };
 

@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scff-imaging/screen-capture.h
-/// @brief scff_imaging::ScreenCaptureの宣言
+/// scff_imaging::ScreenCaptureの宣言
 
 #ifndef SCFF_DSF_SCFF_IMAGING_SCREEN_CAPTURE_H_
 #define SCFF_DSF_SCFF_IMAGING_SCREEN_CAPTURE_H_
@@ -29,15 +29,15 @@
 
 namespace scff_imaging {
 
-/// @brief スクリーンキャプチャを行うプロセッサ
+/// スクリーンキャプチャを行うプロセッサ
 class ScreenCapture : public Processor<void, AVPictureWithFillImage> {
  public:
-  /// @brief コンストラクタ
+  /// コンストラクタ
   ScreenCapture(
       bool vertical_invert,
       int count,
       const LayoutParameter (&parameters)[kMaxProcessorSize]);
-  /// @brief デストラクタ
+  /// デストラクタ
   ~ScreenCapture();
 
   //-------------------------------------------------------------------
@@ -48,13 +48,13 @@ class ScreenCapture : public Processor<void, AVPictureWithFillImage> {
   //-------------------------------------------------------------------
 
  private:
-  /// @brief 渡されたDCにカーソルを描画する
+  /// 渡されたDCにカーソルを描画する
   void DrawCursor(HDC dc, HWND window, int clipping_x, int clipping_y);
 
-  /// @brief キャプチャ設定を検証する
+  /// キャプチャ設定を検証する
   ErrorCode ValidateParameter(int index);
 
-  /// @brief インデックスを指定して初期化
+  /// インデックスを指定して初期化
   ErrorCode InitByIndex(int index);
 
   //-------------------------------------------------------------------
@@ -64,22 +64,22 @@ class ScreenCapture : public Processor<void, AVPictureWithFillImage> {
   //-------------------------------------------------------------------
   // Image
   //-------------------------------------------------------------------
-  /// @brief BitBlt用DDB
+  /// BitBlt用DDB
   WindowsDDBImage image_for_bitblt_[kMaxProcessorSize];
   //-------------------------------------------------------------------
 
-  /// @brief BitBlt用DDBのデバイスコンテキスト
+  /// BitBlt用DDBのデバイスコンテキスト
   HDC dc_for_bitblt_[kMaxProcessorSize];
-  /// @brief GetDIBits用BITMAPINFO
+  /// GetDIBits用BITMAPINFO
   BITMAPINFO info_for_getdibits_[kMaxProcessorSize];
 
-  /// @brief BitBltに渡すラスターオペレーションコード
+  /// BitBltに渡すラスターオペレーションコード
   DWORD raster_operation_[kMaxProcessorSize];
 
-  /// @brief レイアウトパラメータ
+  /// レイアウトパラメータ
   LayoutParameter parameters_[kMaxProcessorSize];
 
-  /// @brief 取り込み時に上下反転を行うか
+  /// 取り込み時に上下反転を行うか
   const bool vertical_invert_;
 
   // コピー＆代入禁止

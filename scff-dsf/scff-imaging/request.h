@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scff-imaging/request.h
-/// @brief scff_imaging::Requestの宣言
+/// scff_imaging::Requestの宣言
 
 #ifndef SCFF_DSF_SCFF_IMAGING_REQUEST_H_
 #define SCFF_DSF_SCFF_IMAGING_REQUEST_H_
@@ -25,43 +25,43 @@
 
 namespace scff_imaging {
 
-/// @brief エンジンに対するリクエストをカプセル化したクラス
+/// エンジンに対するリクエストをカプセル化したクラス
 class Request {
  public:
-  /// @brief デストラクタ
+  /// デストラクタ
   virtual ~Request() {
     // nop
   }
-  /// @brief ダブルディスパッチ用
+  /// ダブルディスパッチ用
   virtual void SendTo(Engine *engine) const = 0;
  protected:
-  /// @brief コンストラクタ
+  /// コンストラクタ
   Request() {
     // nop
   }
 };
 
-/// @brief リクエスト: ResetLayout
+/// リクエスト: ResetLayout
 class ResetLayoutRequest : public Request {
  public:
-  /// @brief コンストラクタ
+  /// コンストラクタ
   ResetLayoutRequest() : Request() {
     // このリクエストは特に情報を必要としない
   }
-  /// @brief デストラクタ
+  /// デストラクタ
   ~ResetLayoutRequest() {
     // nop
   }
-  /// @brief ダブルディスパッチ用
+  /// ダブルディスパッチ用
   void SendTo(Engine *engine) const {
     engine->ResetLayout();
   }
 };
 
-/// @brief リクエスト: SetLayout
+/// リクエスト: SetLayout
 class SetLayoutRequest : public Request {
  public:
-  /// @brief コンストラクタ
+  /// コンストラクタ
   SetLayoutRequest(
       int element_count,
       const LayoutParameter (&parameters)[kMaxProcessorSize])
@@ -72,11 +72,11 @@ class SetLayoutRequest : public Request {
       parameters_[i] = parameters[i];
     }
   }
-  /// @brief デストラクタ
+  /// デストラクタ
   ~SetLayoutRequest() {
     // nop
   }
-  /// @brief ダブルディスパッチ用
+  /// ダブルディスパッチ用
   void SendTo(Engine *engine) const {
     engine->SetLayoutParameters(element_count_, parameters_);
     if (element_count_ == 1) {
@@ -87,10 +87,10 @@ class SetLayoutRequest : public Request {
   }
 
  private:
-  /// @brief レイアウト要素数
+  /// レイアウト要素数
   const int element_count_;
 
-  /// @brief レイアウトパラメータ
+  /// レイアウトパラメータ
   LayoutParameter parameters_[kMaxProcessorSize];
 };
 

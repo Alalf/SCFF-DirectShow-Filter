@@ -16,15 +16,15 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scff-app/external-dwmapi.cs
-/// @brief scff_appモジュールで利用するDWMAPIをまとめたクラスの定義
+/// scff_appモジュールで利用するDWMAPIをまとめたクラスの定義
 
 namespace scff_app {
 
 using System.Runtime.InteropServices;
 
-/// @brief scff_appモジュールで利用するDWMAPIをまとめたクラス
+/// scff_appモジュールで利用するDWMAPIをまとめたクラス
 class ExternalDWMAPI {
-  /// @brief 生成禁止用コンストラクタ
+  /// 生成禁止用コンストラクタ
   private ExternalDWMAPI() {}
 
   //-------------------------------------------------------------------

@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scff-app/viewmodel/directory.cs
-/// @brief scff_app.viewmodel.Directoryのメソッドの定義
+/// scff_app.viewmodel.Directoryのメソッドの定義
 
 namespace scff_app.viewmodel {
 
@@ -25,12 +25,12 @@ using System.ComponentModel;
 // scff_interprocess.Directoryのビューモデル
 partial class Directory {
 
-  /// @brief デフォルトコンストラクタ
+  /// デフォルトコンストラクタ
   public Directory() {
     this.Init();
   }
 
-  /// @brief scff_interprocessから変換
+  /// scff_interprocessから変換
   public void LoadFromInterprocess(scff_interprocess.Directory input) {
     this.Entries.Clear();
     const int kMaxEntry = scff_interprocess.Interprocess.kMaxEntry;
@@ -44,7 +44,7 @@ partial class Directory {
 
   //-------------------------------------------------------------------
 
-  /// @brief デフォルトパラメータを設定
+  /// デフォルトパラメータを設定
   void Init() {
     this.Entries = new BindingList<Entry>();
   }

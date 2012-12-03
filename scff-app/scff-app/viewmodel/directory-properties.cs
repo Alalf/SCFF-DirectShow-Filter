@@ -16,13 +16,13 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scff-app/viewmodel/directory-properties.cs
-/// @brief scff_app.viewmodel.Directoryのプロパティの定義
+/// scff_app.viewmodel.Directoryのプロパティの定義
 
 namespace scff_app.viewmodel {
 
 using System.ComponentModel;
 
-/// @brief scff_interprocess.Directoryのビューモデル
+/// scff_interprocess.Directoryのビューモデル
 partial class Directory {
   public BindingList<Entry> Entries { get; set; }
 }

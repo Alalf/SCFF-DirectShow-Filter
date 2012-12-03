@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scff-imaging/native-layout.h
-/// @brief scff_imaging::NativeLayoutの宣言
+/// scff_imaging::NativeLayoutの宣言
 
 #ifndef SCFF_DSF_SCFF_IMAGING_NATIVE_LAYOUT_H_
 #define SCFF_DSF_SCFF_IMAGING_NATIVE_LAYOUT_H_
@@ -31,12 +31,12 @@ class ScreenCapture;
 class Scale;
 class Padding;
 
-/// @brief スクリーンキャプチャ出力一つだけを処理するレイアウトプロセッサ
+/// スクリーンキャプチャ出力一つだけを処理するレイアウトプロセッサ
 class NativeLayout : public Layout {
  public:
-  /// @brief コンストラクタ
+  /// コンストラクタ
   explicit NativeLayout(const LayoutParameter &parameter);
-  /// @brief デストラクタ
+  /// デストラクタ
   ~NativeLayout();
 
   //-------------------------------------------------------------------
@@ -50,22 +50,22 @@ class NativeLayout : public Layout {
   //-------------------------------------------------------------------
   // Processor
   //-------------------------------------------------------------------
-  /// @brief スクリーンキャプチャ
+  /// スクリーンキャプチャ
   ScreenCapture *screen_capture_;
-  /// @brief 拡大縮小ピクセルフォーマット変換
+  /// 拡大縮小ピクセルフォーマット変換
   Scale *scale_;
-  /// @brief パディング
+  /// パディング
   Padding *padding_;
   //-------------------------------------------------------------------
   // Image
   //-------------------------------------------------------------------
-  /// @brief ScreenCaptureから取得した変換処理前のイメージ
+  /// ScreenCaptureから取得した変換処理前のイメージ
   AVPictureWithFillImage captured_image_;
-  /// @brief SWScaleで拡大縮小ピクセルフォーマット変換を行った後のイメージ
+  /// SWScaleで拡大縮小ピクセルフォーマット変換を行った後のイメージ
   AVPictureImage converted_image_;
   //-------------------------------------------------------------------
 
-  /// @brief レイアウトパラメータ
+  /// レイアウトパラメータ
   const LayoutParameter parameter_;
 
   // コピー＆代入禁止

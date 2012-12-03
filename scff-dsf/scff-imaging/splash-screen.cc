@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scff-imaging/splash-screen.cc
-/// @brief scff_imaging::SplashScreenの定義
+/// scff_imaging::SplashScreenの定義
 
 #include "scff-imaging/splash-screen.h"
 

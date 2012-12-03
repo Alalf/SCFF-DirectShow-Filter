@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file base/debug.h
-/// @brief デバッグ用定数、関数宣言
+/// デバッグ用定数、関数宣言
 
 #ifndef SCFF_DSF_BASE_DEBUG_H_
 #define SCFF_DSF_BASE_DEBUG_H_
@@ -30,18 +30,18 @@
 // デバッグ用定数
 //=====================================================================
 
-/// @brief トレース表示用
+/// トレース表示用
 extern const int kDbgTrace;
-/// @brief あまり実行されない操作
+/// あまり実行されない操作
 extern const int kDbgRare;
-/// @brief 重要な操作
+/// 重要な操作
 extern const int kDbgImportant;
-/// @brief New/Delete/Load/Unloadなどの深刻バグが発生しやすい部分
+/// New/Delete/Load/Unloadなどの深刻バグが発生しやすい部分
 extern const int kDbgNewDelete;
-/// @brief 最大デバッグレベル
+/// 最大デバッグレベル
 extern const int kDbgMax;
 
-/// @brief 現在のデバッグレベル。これ"以下"は表示しない。
+/// 現在のデバッグレベル。これ"以下"は表示しない。
 extern const int kDbgCurrentLevel;
 
 //=====================================================================
@@ -52,10 +52,10 @@ extern const int kDbgCurrentLevel;
 // @todo(me) DbgOutの使い方が分かり次第置き換え
 #ifdef _DEBUG
 
-/// @brief DbgLogの代わり。改行をはさみ、少しフォーマットを変える
+/// DbgLogの代わり。改行をはさみ、少しフォーマットを変える
 int MyDebugLog(DWORD types, DWORD level, LPCTSTR format, ...);
 
-/// @brief MessageBoxの代わり。フォーマット対応。
+/// MessageBoxの代わり。フォーマット対応。
 void MyDebugMessageBox(LPCTSTR format, ...);
 
 #define MyDbgLog(_x_) MyDebugLog _x_

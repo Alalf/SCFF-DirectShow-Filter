@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scff-interprocess/interprocess-class.cs
-/// @brief SCFFのプロセス間通信に関するクラスの宣言
+/// SCFFのプロセス間通信に関するクラスの宣言
 /// @warning To me: このファイルの中から別のファイルへのusingは禁止！
 ///- 別の言語に移植する場合も最大2ファイルでお願いします
 
@@ -31,7 +31,7 @@ using System.Diagnostics;
 
 // プロセス間通信を担当するクラス
 partial class Interprocess {
-  /// @brief コンストラクタ
+  /// コンストラクタ
   public Interprocess() {
     directory_ = null;
     view_of_directory_ = null;
@@ -46,7 +46,7 @@ partial class Interprocess {
     Trace.WriteLine("****Interprocess: NEW");
   }
 
-  /// @brief デストラクタ
+  /// デストラクタ
   ~Interprocess() {
     // 解放忘れがないように
     ReleaseDirectory();
@@ -58,7 +58,7 @@ partial class Interprocess {
   // Directory
   //-------------------------------------------------------------------
 
-  /// @brief Directory初期化
+  /// Directory初期化
   /// @todo(me) 全体的に例外処理を考慮していないコード。要注意。
   public bool InitDirectory() {
     // 念のため解放
@@ -100,7 +100,7 @@ partial class Interprocess {
     return true;
   }
 
-  /// @brief Directoryの初期化が成功したか
+  /// Directoryの初期化が成功したか
   public bool IsDirectoryInitialized() {
     return directory_ != null &&
            view_of_directory_ != null &&
@@ -111,7 +111,7 @@ partial class Interprocess {
   // Message
   //-------------------------------------------------------------------
 
-  /// @brief Message初期化
+  /// Message初期化
   public bool InitMessage(UInt32 process_id) {
     // 念のため解放
     ReleaseMessage();
@@ -157,7 +157,7 @@ partial class Interprocess {
     return true;
   }
 
-  /// @brief Messageの初期化が成功したか
+  /// Messageの初期化が成功したか
   public bool IsMessageInitialized() {
     return message_ != null &&
            view_of_message_ != null &&
@@ -167,7 +167,7 @@ partial class Interprocess {
   //-------------------------------------------------------------------
   // for SCFF DirectShow Filter
   //-------------------------------------------------------------------
-  /// @brief エントリを作成する
+  /// エントリを作成する
   public bool AddEntry(Entry entry) {
     // 初期化されていなければ失敗
     if (!IsDirectoryInitialized()) {
@@ -207,7 +207,7 @@ partial class Interprocess {
     return success;
   }
 
-  /// @brief エントリを削除する
+  /// エントリを削除する
   public bool RemoveEntry(UInt32 process_id) {
     // 初期化されていなければ失敗
     if (!IsDirectoryInitialized()) {
@@ -246,7 +246,7 @@ partial class Interprocess {
     return true;
   }
 
-  /// @brief メッセージを受け取る
+  /// メッセージを受け取る
   /// @pre 事前にInitMessageが実行されている必要がある
   public bool ReceiveMessage(out Message message) {
     // 初期化されていなければ失敗
@@ -273,7 +273,7 @@ partial class Interprocess {
   //-------------------------------------------------------------------
   // for SCFF GUI Client
   //-------------------------------------------------------------------
-  /// @brief ディレクトリを取得する
+  /// ディレクトリを取得する
   public bool GetDirectory(out Directory directory) {
     // 初期化されていなければ失敗
     if (!IsDirectoryInitialized()) {
@@ -296,7 +296,7 @@ partial class Interprocess {
     return true;
   }
 
-  /// @brief メッセージを作成する
+  /// メッセージを作成する
   /// @pre 事前にInitMessageが実行されている必要がある
   public bool SendMessage(Message message) {
     // 初期化されていなければ失敗
@@ -323,7 +323,7 @@ partial class Interprocess {
   // Private
   //-------------------------------------------------------------------
 
-  /// @brief Directory解放
+  /// Directory解放
   void ReleaseDirectory() {
     if (mutex_directory_ != null) {
       mutex_directory_.Dispose();
@@ -339,7 +339,7 @@ partial class Interprocess {
     }
   }
 
-  /// @brief Message解放
+  /// Message解放
   void ReleaseMessage() {
     if (mutex_message_ != null) {
       mutex_message_.Dispose();
@@ -355,7 +355,7 @@ partial class Interprocess {
     }
   }
 
-  /// @brief Messageを読み込む
+  /// Messageを読み込む
   Message ReadMessage() {
     byte[] buffer = new byte[size_of_message_];
     view_of_message_.Read(buffer, 0, size_of_message_);
@@ -363,7 +363,7 @@ partial class Interprocess {
     return (Message)Marshal.PtrToStructure(gch.AddrOfPinnedObject(), typeof(Message));
   }
 
-  /// @brief Messageを書き込む
+  /// Messageを書き込む
   void WriteMessage(Message message) {
     byte[] buffer = new byte[size_of_message_];
     IntPtr ptr = Marshal.AllocHGlobal(size_of_message_);
@@ -373,7 +373,7 @@ partial class Interprocess {
     view_of_message_.Write(buffer, 0, size_of_message_);
   }
 
-  /// @brief Directoryを読み込む
+  /// Directoryを読み込む
   Directory ReadDirectory() {
     byte[] buffer = new byte[size_of_directory_];
     view_of_directory_.Read(buffer, 0, size_of_directory_);
@@ -381,7 +381,7 @@ partial class Interprocess {
     return (Directory)Marshal.PtrToStructure(gch.AddrOfPinnedObject(), typeof(Directory));
   }
 
-  /// @brief Directoryを書き込む
+  /// Directoryを書き込む
   void WriteDirectory(Directory directory) {
     byte[] buffer = new byte[size_of_directory_];
     IntPtr ptr = Marshal.AllocHGlobal(size_of_directory_);
@@ -395,23 +395,23 @@ partial class Interprocess {
   // メンバ変数
   //-------------------------------------------------------------------
 
-  /// @brief Directoryのサイズ
+  /// Directoryのサイズ
   int size_of_directory_;
-  /// @brief Messageのサイズ
+  /// Messageのサイズ
   int size_of_message_;
 
-  /// @brief 共有メモリ: Directory
+  /// 共有メモリ: Directory
   MemoryMappedFile directory_;
-  /// @brief ビュー: Directory
+  /// ビュー: Directory
   MemoryMappedViewStream view_of_directory_;
-  /// @brief Mutex: Directory
+  /// Mutex: Directory
   Mutex mutex_directory_;
 
-  /// @brief 共有メモリ: Message
+  /// 共有メモリ: Message
   MemoryMappedFile message_;
-  /// @brief ビュー: Message
+  /// ビュー: Message
   MemoryMappedViewStream view_of_message_;
-  /// @brief Mutex: Message
+  /// Mutex: Message
   Mutex mutex_message_;
 }
 }   // namespace scff_interprocess

@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scff-imaging/engine.cc
-/// @brief scff_imaging::Engineの定義
+/// scff_imaging::Engineの定義
 
 #include "scff-imaging/engine.h"
 
@@ -187,7 +187,7 @@ ErrorCode Engine::Accept(Request *request) {
   request->SendTo(this);
 
   /// @attention 現状、Chain of Resiposibilityはない＝
-  /// @attention 下位のプロセッサへリクエストは送らない
+  ///            下位のプロセッサへリクエストは送らない
   return GetCurrentError();
 }
 

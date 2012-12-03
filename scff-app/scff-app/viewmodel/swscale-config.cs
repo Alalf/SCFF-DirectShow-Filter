@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scff-app/viewmodel/swscale-config.cs
-/// @brief scff_app.viewmodel.SWScaleConfigのメソッドの定義
+/// scff_app.viewmodel.SWScaleConfigのメソッドの定義
 
 namespace scff_app.viewmodel {
 
@@ -25,12 +25,12 @@ using System;
 // scff_interprocess.SWScaleConfigのビューモデル
 partial class SWScaleConfig {
 
-  /// @brief デフォルトコンストラクタ
+  /// デフォルトコンストラクタ
   public SWScaleConfig() {
     this.Init();
   }
 
-  /// @brief scff_interprocess用に変換
+  /// scff_interprocess用に変換
   public scff_interprocess.SWScaleConfig ToInterprocess() {
     scff_interprocess.SWScaleConfig output = new scff_interprocess.SWScaleConfig();
 
@@ -53,7 +53,7 @@ partial class SWScaleConfig {
 
   //-------------------------------------------------------------------
 
-  /// @brief デフォルトパラメータを設定
+  /// デフォルトパラメータを設定
   void Init() {
     this.Flags = scff_interprocess.SWScaleFlags.kArea;
     this.IsFilterEnabled = false;

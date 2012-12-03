@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file base/debug.cc
-/// @brief デバッグ用定数、関数定義
+/// デバッグ用定数、関数定義
 
 // デバッグ関数切り替えフラグ
 #include "base/debug.h"

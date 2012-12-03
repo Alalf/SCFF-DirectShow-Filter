@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scff-imaging/splash-screen.h
-/// @brief scff_imaging::SplashScreenの宣言
+/// scff_imaging::SplashScreenの宣言
 
 #ifndef SCFF_DSF_SCFF_IMAGING_SPLASH_SCREEN_H_
 #define SCFF_DSF_SCFF_IMAGING_SPLASH_SCREEN_H_
@@ -30,12 +30,12 @@ namespace scff_imaging {
 class Scale;
 class Padding;
 
-/// @brief スプラッシュスクリーンを表示する
+/// スプラッシュスクリーンを表示する
 class SplashScreen : public Layout {
  public:
-  /// @brief コンストラクタ
+  /// コンストラクタ
   SplashScreen();
-  /// @brief デストラクタ
+  /// デストラクタ
   ~SplashScreen();
 
   //-------------------------------------------------------------------
@@ -49,22 +49,22 @@ class SplashScreen : public Layout {
   //-------------------------------------------------------------------
   // Processor
   //-------------------------------------------------------------------
-  /// @brief 拡大縮小ピクセルフォーマット変換
+  /// 拡大縮小ピクセルフォーマット変換
   Scale *scale_;
-  /// @brief パディング
+  /// パディング
   Padding *padding_;
   //-------------------------------------------------------------------
   // Image
   //-------------------------------------------------------------------
-  /// @brief リソースのビットマップ読み込み用
+  /// リソースのビットマップ読み込み用
   WindowsDDBImage resource_ddb_;
-  /// @brief GetDIBits用
+  /// GetDIBits用
   AVPictureWithFillImage resource_image_;
-  /// @brief 変換後
+  /// 変換後
   AVPictureImage converted_image_;
   //-------------------------------------------------------------------
 
-  /// @brief 取り込み用BITMAPINFO
+  /// 取り込み用BITMAPINFO
   BITMAPINFO resource_ddb_info_;
 
   // コピー＆代入禁止

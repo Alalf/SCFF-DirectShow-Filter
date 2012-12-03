@@ -16,17 +16,17 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file Program.cs
-/// @brief アプリケーションのエントリポイント
+/// アプリケーションのエントリポイント
 
 namespace scff_app {
 
 using System;
 using System.Windows.Forms;
 
-/// @brief アプリケーションのエントリポイントを格納するクラス
+/// アプリケーションのエントリポイントを格納するクラス
 static class Program {
 
-  /// @brief アプリケーションのエントリポイント
+  /// アプリケーションのエントリポイント
   [STAThread]
   static void Main() {
     Application.EnableVisualStyles();

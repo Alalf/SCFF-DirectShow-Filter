@@ -16,11 +16,11 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scff-interprocess/interprocess.cs
-/// @brief SCFFのプロセス間通信に関する定数、型の宣言
+/// SCFFのプロセス間通信に関する定数、型の宣言
 /// @warning To me: このファイルの中から別のファイルへのusingは禁止！
 ///- 別の言語に移植する場合も最大2ファイルでお願いします
 
-/// @brief scff_interprocessモジュールのC#版(オリジナルはC++)
+/// scff_interprocessモジュールのC#版(オリジナルはC++)
 namespace scff_interprocess {
 
 using System;
@@ -44,218 +44,218 @@ using System.Runtime.InteropServices;
 //   - 基本型、コンストラクタ、デストラクタ、仮想関数を持たない構造体のみ
 //=====================================================================
 
-/// @brief プロセス間通信を担当するクラス
+/// プロセス間通信を担当するクラス
 partial class Interprocess {
-  /// @brief 共有メモリ名: SCFFエントリを格納するディレクトリ
+  /// 共有メモリ名: SCFFエントリを格納するディレクトリ
   const string kDirectoryName = "scff-v1-directory";
 
-  /// @brief Directoryの保護用Mutex名
+  /// Directoryの保護用Mutex名
   const string kDirectoryMutexName = "mutex-scff-v1-directory";
 
-  /// @brief 共有メモリ名の接頭辞: SCFFで使うメッセージを格納する
+  /// 共有メモリ名の接頭辞: SCFFで使うメッセージを格納する
   const string kMessageNamePrefix = "scff-v1-message-";
 
-  /// @brief Messageの保護用Mutex名の接頭辞
+  /// Messageの保護用Mutex名の接頭辞
   const string kMessageMutexNamePrefix = "mutex-scff-v1-message-";
 
   //-------------------------------------------------------------------
 
-  /// @brief Path文字列の長さ
+  /// Path文字列の長さ
   public const int kMaxPath = 260;
 
-  /// @brief Directoryに格納されるEntryの最大の数
+  /// Directoryに格納されるEntryの最大の数
   public const int kMaxEntry = 8;
 
-  /// @brief ComplexLayout利用時の最大の要素数
-  /// @sa imaging::kMaxProcessorSize
+  /// ComplexLayout利用時の最大の要素数
+  /// @sa scff_imaging::kMaxProcessorSize
   public const int kMaxComplexLayoutElements = 8;
 }
 
 //-------------------------------------------------------------------
 
-/// @brief レイアウトの種類
+/// レイアウトの種類
 public enum LayoutType {
-  /// @brief 何も表示しない
+  /// 何も表示しない
   kNullLayout = 0,
-  /// @brief 取り込み範囲1個で、境界は出力に強制的に合わせられる
+  /// 取り込み範囲1個で、境界は出力に強制的に合わせられる
   kNativeLayout,
-  /// @brief 取り込み範囲が複数ある
+  /// 取り込み範囲が複数ある
   kComplexLayout
 }
 
 //-------------------------------------------------------------------
 
-/// @brief ピクセルフォーマットの種類
+/// ピクセルフォーマットの種類
 /// @sa scff-imaging/imaging-types.h
 /// @sa scff_imaging::ImagePixelFormat
 public enum ImagePixelFormat {
-  /// @brief 不正なピクセルフォーマット
+  /// 不正なピクセルフォーマット
   kInvalidPixelFormat = -1,
-  /// @brief I420(12bit)
+  /// I420(12bit)
   kI420 = 0,
-  /// @brief IYUV(12bit)
+  /// IYUV(12bit)
   kIYUV,
-  /// @brief YV12(12bit)
+  /// YV12(12bit)
   kYV12,
-  /// @brief UYVY(16bit)
+  /// UYVY(16bit)
   kUYVY,
-  /// @brief YUY2(16bit)
+  /// YUY2(16bit)
   kYUY2,
-  /// @brief RGB0(32bit)
+  /// RGB0(32bit)
   kRGB0,
-  /// @brief 対応ピクセルフォーマット数
+  /// 対応ピクセルフォーマット数
   kSupportedPixelFormatsCount
 }
 
 //-------------------------------------------------------------------
 
-/// @brief 拡大縮小メソッドをあらわす定数
+/// 拡大縮小メソッドをあらわす定数
 /// @sa scff-imaging/imaging-types.h
 /// @sa scff_imaging::SWScaleFlags
 public enum SWScaleFlags {
-  /// @brief fast bilinear
+  /// fast bilinear
   kFastBilinear = 1,
-  /// @brief bilinear
+  /// bilinear
   kBilinear = 2,
-  /// @brief bicubic
+  /// bicubic
   kBicubic = 4,
-  /// @brief experimental
+  /// experimental
   kX = 8,
-  /// @brief nearest neighbor
+  /// nearest neighbor
   kPoint = 0x10,
-  /// @brief averaging area
+  /// averaging area
   kArea = 0x20,
-  /// @brief luma bicubic, chroma bilinear
+  /// luma bicubic, chroma bilinear
   kBicublin = 0x40,
-  /// @brief gaussian
+  /// gaussian
   kGauss = 0x80,
-  /// @brief sinc
+  /// sinc
   kSinc = 0x100,
-  /// @brief lanczos
+  /// lanczos
   kLanczos = 0x200,
-  /// @brief natural bicubic spline
+  /// natural bicubic spline
   kSpline = 0x400
 }
 
-/// @brief 回転方向を表す定数
+/// 回転方向を表す定数
 /// @sa scff-imaging/imaging-types.h
 /// @sa scff_imaging::RotateDirection
 public enum RotateDirection {
-  /// @brief 回転なし
+  /// 回転なし
   kNoRotate = 0,
-  /// @brief 時計回り90度
+  /// 時計回り90度
   k90Degrees,
-  /// @brief 時計回り180度
+  /// 時計回り180度
   k180Degrees,
-  /// @brief 時計回り270度
+  /// 時計回り270度
   k270Degrees
 }
 
-/// @brief 共有メモリ(Directory)に格納する構造体のエントリ
+/// 共有メモリ(Directory)に格納する構造体のエントリ
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public struct Entry {
-  /// @brief SCFF DSFのDLLが使われれているプロセスID
+  /// SCFF DSFのDLLが使われれているプロセスID
   public UInt32 process_id;
-  /// @brief SCFF DSFのDLLが使われているプロセス名
+  /// SCFF DSFのDLLが使われているプロセス名
   [MarshalAs(UnmanagedType.ByValTStr, SizeConst = Interprocess.kMaxPath)]
   public string process_name;
-  /// @brief サンプルの出力width
+  /// サンプルの出力width
   public Int32 sample_width;
-  /// @brief サンプルの出力height
+  /// サンプルの出力height
   public Int32 sample_height;
-  /// @brief サンプルの出力ピクセルフォーマット
+  /// サンプルの出力ピクセルフォーマット
   /// @attention ImagePixelFormatを操作に使うこと
   public Int32 sample_pixel_format;
-  /// @brief 目標fps
+  /// 目標fps
   public Double fps;
 }
 
-/// @brief 共有メモリ(Directory)に格納する構造体
+/// 共有メモリ(Directory)に格納する構造体
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public struct Directory {
   [MarshalAs(UnmanagedType.ByValArray, SizeConst = Interprocess.kMaxEntry)]
   public Entry[] entries;
 }
 
-/// @brief 拡大縮小設定
+/// 拡大縮小設定
 /// @sa scff_imaging::SWScaleConfig
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public struct SWScaleConfig {
-  /// @brief 拡大縮小メソッド(Chroma/Luma共通)
+  /// 拡大縮小メソッド(Chroma/Luma共通)
   /// @attention 操作にはSWScaleFlagsを使うこと！
   public Int32 flags;
-  /// @brief 正確な丸め処理
+  /// 正確な丸め処理
   public Byte accurate_rnd;
-  /// @brief 変換前にフィルタをかけるか
+  /// 変換前にフィルタをかけるか
   public Byte is_filter_enabled;
-  /// @brief 輝度のガウスぼかし
+  /// 輝度のガウスぼかし
   public Single luma_gblur;
-  /// @brief 色差のガウスぼかし
+  /// 色差のガウスぼかし
   public Single chroma_gblur;
-  /// @brief 輝度のシャープ化
+  /// 輝度のシャープ化
   public Single luma_sharpen;
-  /// @brief 色差のシャープ化
+  /// 色差のシャープ化
   public Single chroma_sharpen;
-  /// @brief 水平方向のワープ
+  /// 水平方向のワープ
   public Single chroma_hshift;
-  /// @brief 垂直方向のワープ
+  /// 垂直方向のワープ
   public Single chroma_vshift;
 };
 
-/// @brief レイアウトパラメータ
+/// レイアウトパラメータ
 /// @sa scff_imaging::ScreenCaptureParameter
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public struct LayoutParameter {
-  /// @brief サンプル内の原点のX座標
+  /// サンプル内の原点のX座標
   /// @warning NullLayout,NativeLayoutでは無視される
   public Int32 bound_x;
-  /// @brief サンプル内の原点のY座標
+  /// サンプル内の原点のY座標
   /// @warning NullLayout,NativeLayoutでは無視される
   public Int32 bound_y;
-  /// @brief サンプル内の幅
+  /// サンプル内の幅
   /// @warning NullLayout,NativeLayoutでは無視される
   public Int32 bound_width;
-  /// @brief サンプル内の高さ
+  /// サンプル内の高さ
   /// @warning NullLayout,NativeLayoutでは無視される
   public Int32 bound_height;
-  /// @brief キャプチャを行う対象となるウィンドウ
+  /// キャプチャを行う対象となるウィンドウ
   public UInt64 window;
-  /// @brief 取り込み範囲の開始X座標
+  /// 取り込み範囲の開始X座標
   public Int32 clipping_x;
-  /// @brief 取り込み範囲の開始y座標
+  /// 取り込み範囲の開始y座標
   public Int32 clipping_y;
-  /// @brief 取り込み範囲の幅
+  /// 取り込み範囲の幅
   public Int32 clipping_width;
-  /// @brief 取り込み範囲の高さ
+  /// 取り込み範囲の高さ
   public Int32 clipping_height;
-  /// @brief マウスカーソルの表示
+  /// マウスカーソルの表示
   public Byte show_cursor;
-  /// @brief レイヤードウィンドウの表示
+  /// レイヤードウィンドウの表示
   public Byte show_layered_window;
-  /// @brief 拡大縮小設定
+  /// 拡大縮小設定
   public SWScaleConfig swscale_config;
-  /// @brief 取り込み範囲が出力サイズより小さい場合拡張
+  /// 取り込み範囲が出力サイズより小さい場合拡張
   public Byte stretch;
-  /// @brief アスペクト比の保持
+  /// アスペクト比の保持
   public Byte keep_aspect_ratio;
-  /// @brief 回転方向
+  /// 回転方向
   /// @attention RotateDirectionを操作に使うこと
   public Int32 rotate_direction;
 }
 
-/// @brief 共有メモリ(Message)に格納する構造体
+/// 共有メモリ(Message)に格納する構造体
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public struct Message {
-  /// @brief タイムスタンプ(time()で求められたものを想定)
+  /// タイムスタンプ(time()で求められたものを想定)
   /// @warning 1ではじまり単調増加が必須条件
   /// @warning (0および負数は無効なメッセージを示す)
   public Int64 timestamp;
-  /// @brief レイアウトの種類
+  /// レイアウトの種類
   /// @attention LayoutTypeを操作に使うこと
   public Int32 layout_type;
-  /// @brief 有効なレイアウト要素の数
+  /// 有効なレイアウト要素の数
   public Int32 layout_element_count;
-  /// @brief レイアウトパラメータの配列
+  /// レイアウトパラメータの配列
   [MarshalAs(UnmanagedType.ByValArray, SizeConst = Interprocess.kMaxComplexLayoutElements)]
   public LayoutParameter[] layout_parameters;
 }

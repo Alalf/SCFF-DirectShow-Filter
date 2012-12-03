@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scff-app/view/AreaSelectForm.cs
-/// @brief エリア選択ウィンドウの定義
+/// エリア選択ウィンドウの定義
 
 namespace scff_app.view {
 
@@ -25,10 +25,10 @@ using System.Drawing;
 using System.Windows.Forms;
 using scff_app.viewmodel;
 
-/// @brief エリア選択ウィンドウ
+/// エリア選択ウィンドウ
 public partial class AreaSelectForm : Form {
 
-  /// @brief コンストラクタ
+  /// コンストラクタ
   public AreaSelectForm(BindingSource layoutParameters) {
     //---------------------------------------------------------------
     // DO NOT DELETE THIS!!!

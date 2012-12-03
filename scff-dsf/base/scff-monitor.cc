@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file base/scff-monitor.cc
-/// @brief SCFFMonitorの定義
+/// SCFFMonitorの定義
 
 #include "base/scff-monitor.h"
 

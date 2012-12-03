@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file base/constants.cc
-/// @brief グローバル定数定義
+/// グローバル定数定義
 
 #include "base/constants.h"
 #include "scff-imaging/imaging.h"
@@ -52,7 +52,7 @@ const SIZE kPreferredSizes[] = {
 const int kPreferredSizesCount =
   sizeof(kPreferredSizes) / sizeof(kPreferredSizes[0]);
 
-/// @brief 対応ピクセルフォーマットの数
+/// 対応ピクセルフォーマットの数
 const int kSupportedPixelFormatsCount =
 #if defined(FOR_KOTOENCODER)
   // KoToEncoderは基本的に1ピクセルフォーマットしか対応していない

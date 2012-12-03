@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file base/scff-source.cc
-/// @brief SCFFSourceの定義
+/// SCFFSourceの定義
 
 #include "base/scff-source.h"
 

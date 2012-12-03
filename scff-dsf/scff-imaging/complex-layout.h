@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scff-imaging/complex-layout.h
-/// @brief scff_imaging::ComplexLayoutの宣言
+/// scff_imaging::ComplexLayoutの宣言
 
 #ifndef SCFF_DSF_SCFF_IMAGING_COMPLEX_LAYOUT_H_
 #define SCFF_DSF_SCFF_IMAGING_COMPLEX_LAYOUT_H_
@@ -33,14 +33,14 @@ class ScreenCapture;
 class Scale;
 class Padding;
 
-/// @brief 複数のスクリーンキャプチャ領域を取り扱い可能なレイアウト
+/// 複数のスクリーンキャプチャ領域を取り扱い可能なレイアウト
 class ComplexLayout : public Layout {
  public:
-  /// @brief コンストラクタ
+  /// コンストラクタ
   ComplexLayout(
       int element_count,
       const LayoutParameter (&parameters)[kMaxProcessorSize]);
-  /// @brief デストラクタ
+  /// デストラクタ
   ~ComplexLayout();
 
   //-------------------------------------------------------------------
@@ -51,39 +51,39 @@ class ComplexLayout : public Layout {
   //-------------------------------------------------------------------
 
  private:
-  /// @brief インデックスを指定して初期化
+  /// インデックスを指定して初期化
   ErrorCode InitByIndex(int index);
 
   //-------------------------------------------------------------------
   // Processor
   //-------------------------------------------------------------------
-  /// @brief スクリーンキャプチャ
+  /// スクリーンキャプチャ
   ScreenCapture *screen_capture_;
-  /// @brief 拡大縮小ピクセルフォーマット変換
+  /// 拡大縮小ピクセルフォーマット変換
   Scale *scale_[kMaxProcessorSize];
   //-------------------------------------------------------------------
   // Image
   //-------------------------------------------------------------------
-  /// @brief ScreenCaptureから取得した変換処理前のイメージ
+  /// ScreenCaptureから取得した変換処理前のイメージ
   AVPictureWithFillImage captured_image_[kMaxProcessorSize];
-  /// @brief SWScaleで拡大縮小ピクセルフォーマット変換を行った後のイメージ
+  /// SWScaleで拡大縮小ピクセルフォーマット変換を行った後のイメージ
   AVPictureImage converted_image_[kMaxProcessorSize];
   //-------------------------------------------------------------------
 
-  /// @brief 描画用コンテキスト
+  /// 描画用コンテキスト
   FFDrawContext draw_context_;
-  /// @brief 背景カラー
+  /// 背景カラー
   FFDrawColor background_color_;
 
-  /// @brief レイアウト要素拡大縮小後の新しい原点のX座標
+  /// レイアウト要素拡大縮小後の新しい原点のX座標
   int element_x_[kMaxProcessorSize];
-  /// @brief レイアウト要素拡大縮小後の新しい原点のY座標
+  /// レイアウト要素拡大縮小後の新しい原点のY座標
   int element_y_[kMaxProcessorSize];
 
-  /// @brief レイアウト要素の数
+  /// レイアウト要素の数
   const int element_count_;
 
-  /// @brief レイアウトパラメータ
+  /// レイアウトパラメータ
   LayoutParameter parameters_[kMaxProcessorSize];
 
   // コピー＆代入禁止

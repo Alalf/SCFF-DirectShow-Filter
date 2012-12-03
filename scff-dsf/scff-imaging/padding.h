@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scff-imaging/padding.h
-/// @brief scff_imaging::Paddingの宣言
+/// scff_imaging::Paddingの宣言
 
 #ifndef SCFF_DSF_SCFF_IMAGING_PADDING_H_
 #define SCFF_DSF_SCFF_IMAGING_PADDING_H_
@@ -28,13 +28,13 @@
 
 namespace scff_imaging {
 
-/// @brief drawutilsを利用してパディングを行う
+/// drawutilsを利用してパディングを行う
 class Padding : public Processor<AVPictureImage, AVPictureImage> {
  public:
-  /// @brief コンストラクタ
+  /// コンストラクタ
   Padding(int padding_left, int padding_right,
           int padding_top, int padding_bottom);
-  /// @brief デストラクタ
+  /// デストラクタ
   ~Padding();
 
   //-------------------------------------------------------------------
@@ -45,18 +45,18 @@ class Padding : public Processor<AVPictureImage, AVPictureImage> {
   //-------------------------------------------------------------------
 
  private:
-  /// @brief 描画用コンテキスト
+  /// 描画用コンテキスト
   FFDrawContext draw_context_;
-  /// @brief 枠描画用カラー
+  /// 枠描画用カラー
   FFDrawColor padding_color_;
 
-  /// @brief パディング(left)
+  /// パディング(left)
   const int padding_left_;
-  /// @brief パディング(right)
+  /// パディング(right)
   const int padding_right_;
-  /// @brief パディング(top)
+  /// パディング(top)
   const int padding_top_;
-  /// @brief パディング(bottom)
+  /// パディング(bottom)
   const int padding_bottom_;
 
   // コピー＆代入禁止

@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scff-imaging/avpicture-image.h
-/// @brief scff_imaging::AVPictureImageの宣言
+/// scff_imaging::AVPictureImageの宣言
 
 #ifndef SCFF_DSF_SCFF_IMAGING_AVPICTURE_IMAGE_H_
 #define SCFF_DSF_SCFF_IMAGING_AVPICTURE_IMAGE_H_
@@ -26,26 +26,26 @@
 
 namespace scff_imaging {
 
-/// @brief AVPicture(ffmpeg)の実体を管理するクラス
+/// AVPicture(ffmpeg)の実体を管理するクラス
 class AVPictureImage: public Image {
  public:
-  /// @brief コンストラクタ
+  /// コンストラクタ
   AVPictureImage();
-  /// @brief デストラクタ
+  /// デストラクタ
   ~AVPictureImage();
 
   //-------------------------------------------------------------------
-  /// @brief Create()などによって実体がまだ生成されていない場合
+  /// Create()などによって実体がまだ生成されていない場合
   bool IsEmpty() const;
-  /// @brief AVPictureの実体を作成する
+  /// AVPictureの実体を作成する
   ErrorCode Create(ImagePixelFormat pixel_format, int width, int height);
   //-------------------------------------------------------------------
 
-  /// @brief Getter: AVPictureへのポインタ
+  /// Getter: AVPictureへのポインタ
   AVPicture* avpicture() const;
 
  private:
-  /// @brief AVPictureへのポインタ
+  /// AVPictureへのポインタ
   AVPicture *avpicture_;
 
   // コピー＆代入禁止

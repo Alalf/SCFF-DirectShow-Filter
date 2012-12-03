@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file base/scff-dsf.cc
-/// @brief DirectShow Filterに必要なデータをまとめたファイル
+/// DirectShow Filterに必要なデータをまとめたファイル
 
 #include <streams.h>
 
@@ -28,27 +28,27 @@
 // フィルタ/ピン設定
 //=====================================================================
 
-/// @brief メディアサブタイプGUID: I420
+/// メディアサブタイプGUID: I420
 static const GUID kMediaSubtypeI420 =
     static_cast<GUID>(FOURCCMap(MAKEFOURCC('I', '4', '2', '0')));
 
-/// @brief メディアサブタイプGUID: IYUV
+/// メディアサブタイプGUID: IYUV
 static const GUID kMediaSubtypeIYUV = MEDIASUBTYPE_IYUV;
 
-/// @brief メディアサブタイプGUID: YV12
+/// メディアサブタイプGUID: YV12
 static const GUID kMediaSubtypeYV12 = MEDIASUBTYPE_YV12;
 
-/// @brief メディアサブタイプGUID: UYVY
+/// メディアサブタイプGUID: UYVY
 static const GUID kMediaSubtypeUYVY = MEDIASUBTYPE_UYVY;
 
-/// @brief メディアサブタイプGUID: YUY2
+/// メディアサブタイプGUID: YUY2
 static const GUID kMediaSubtypeYUY2 = MEDIASUBTYPE_YUY2;
 
-/// @brief メディアサブタイプGUID: RGB0
+/// メディアサブタイプGUID: RGB0
 /// @warning リトルエンディアンであることに注意
 static const GUID kMediaSubtypeRGB0 = MEDIASUBTYPE_RGB32;
 
-/// @brief メディアタイプ: Video
+/// メディアタイプ: Video
 static const AMOVIESETUP_MEDIATYPE kMediaTypes[] = {
 #if defined(FOR_KOTOENCODER)
   {&MEDIATYPE_Video, &kMediaSubtypeI420},
@@ -62,7 +62,7 @@ static const AMOVIESETUP_MEDIATYPE kMediaTypes[] = {
 #endif
 };
 
-/// @brief ピン: 出力ピンは必ず１個存在する
+/// ピン: 出力ピンは必ず１個存在する
 /// - コメントのないフィールドは使われていない
 static const AMOVIESETUP_PIN kOutputPins[] = {
   {
@@ -78,7 +78,7 @@ static const AMOVIESETUP_PIN kOutputPins[] = {
   }
 };
 
-/// @brief フィルタ: メリット設定なし。IDは<CLSID_SCFFSource>。
+/// フィルタ: メリット設定なし。IDは<CLSID_SCFFSource>。
 static const AMOVIESETUP_FILTER kSCFFSource = {
   &CLSID_SCFFSource,  // フィルタのクラス識別子。
   kFilterName,        // フィルタの名前。
@@ -94,7 +94,7 @@ static const AMOVIESETUP_FILTER kSCFFSource = {
 // キャプチャデバイス設定(IFilterMapper2)
 //---------------------------------------------------------------------
 
-/// @brief ピン(IFM2): 出力ピン(カテゴリ: Capture)は必ず１個存在する。
+/// ピン(IFM2): 出力ピン(カテゴリ: Capture)は必ず１個存在する。
 /// - REGPINMEDIUMは使用していない。WDMデバイスではないので必要ない？
 static const REGFILTERPINS2 kOutputPinsIFM2[] = {
   {
@@ -112,7 +112,7 @@ static const REGFILTERPINS2 kOutputPinsIFM2[] = {
   }
 };
 
-/// @brief フィルタ(IFM2): Version 2。ピン数は1。
+/// フィルタ(IFM2): Version 2。ピン数は1。
 static const REGFILTER2 kSCFFSourceIFM2 = {
   2,                        // フィルタ登録のフォーマット。Version 2。
   MERIT_DO_NOT_USE,         // メリット値が高いフィルタほど先に列挙される。
@@ -126,7 +126,7 @@ static const REGFILTER2 kSCFFSourceIFM2 = {
 // Strmbase.libの未定義部分の実装
 //=====================================================================
 
-/// @brief ファクトリ テンプレートの配列
+/// ファクトリ テンプレートの配列
 CFactoryTemplate g_Templates[1] = {
   {
     kFilterName,                  // フィルタの名前。
@@ -139,14 +139,14 @@ CFactoryTemplate g_Templates[1] = {
   }
 };
 
-/// @brief ファクトリ テンプレートの配列
+/// ファクトリ テンプレートの配列
 int g_cTemplates = sizeof(g_Templates) / sizeof(g_Templates[0]);
 
 //=====================================================================
 // DLL Export
 //=====================================================================
 
-/// @brief regsvr*.exeから呼ばれる登録関数
+/// regsvr*.exeから呼ばれる登録関数
 STDAPI DllRegisterServer() {
   HRESULT result = AMovieDllRegisterServer2(TRUE);
   if (FAILED(result)) return result;
@@ -179,7 +179,7 @@ STDAPI DllRegisterServer() {
   return result;
 }
 
-/// @brief regsvr*.exe /uから呼ばれる登録解除関数
+/// regsvr*.exe /uから呼ばれる登録解除関数
 STDAPI DllUnregisterServer() {
   HRESULT result = AMovieDllRegisterServer2(FALSE);
   if (FAILED(result)) return result;
@@ -207,10 +207,10 @@ STDAPI DllUnregisterServer() {
   return result;
 }
 
-/// @brief DLLEntryPointへの前方参照
+/// DLLEntryPointへの前方参照
 extern "C" BOOL WINAPI DllEntryPoint(HINSTANCE, ULONG, LPVOID);
 
-/// @brief DLLMain。DLLEntryPointを呼び出して処理をStrmbase.libに任せる。
+/// DLLMain。DLLEntryPointを呼び出して処理をStrmbase.libに任せる。
 BOOL APIENTRY DllMain(HANDLE hModule, DWORD dwReason, LPVOID lpReserved) {
   scff_imaging::Utilities::set_dll_instance(static_cast<HINSTANCE>(hModule));
   return DllEntryPoint((HINSTANCE)(hModule), dwReason, lpReserved);

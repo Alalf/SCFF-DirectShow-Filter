@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scff-imaging/scale.cc
-/// @brief scff_imaging::Scaleの定義
+/// scff_imaging::Scaleの定義
 
 #include "scff-imaging/scale.h"
 
@@ -34,7 +34,7 @@ namespace scff_imaging {
 // scff_imaging::Scale
 //=====================================================================
 
-/// @brief コンストラクタ
+/// コンストラクタ
 Scale::Scale(const SWScaleConfig &swscale_config)
     : Processor<AVPictureWithFillImage, AVPictureImage>(),
       swscale_config_(swscale_config),
@@ -43,7 +43,7 @@ Scale::Scale(const SWScaleConfig &swscale_config)
   // nop
 }
 
-/// @brief デストラクタ
+/// デストラクタ
 Scale::~Scale() {
   if (filter_ != nullptr) {
     sws_freeFilter(filter_);

@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scff-imaging/scale.h
-/// @brief scff_imaging::Scaleの宣言
+/// scff_imaging::Scaleの宣言
 
 #ifndef SCFF_DSF_SCFF_IMAGING_SCALE_H_
 #define SCFF_DSF_SCFF_IMAGING_SCALE_H_
@@ -28,12 +28,12 @@ struct SwsContext;
 
 namespace scff_imaging {
 
-/// @brief SWScaleを利用してイメージの拡大・縮小・ピクセルフォーマット変換を行う
+/// SWScaleを利用してイメージの拡大・縮小・ピクセルフォーマット変換を行う
 class Scale : public Processor<AVPictureWithFillImage, AVPictureImage> {
  public:
-  /// @brief コンストラクタ
+  /// コンストラクタ
   explicit Scale(const SWScaleConfig &swscale_config);
-  /// @brief デストラクタ
+  /// デストラクタ
   ~Scale();
 
   //-------------------------------------------------------------------
@@ -44,12 +44,12 @@ class Scale : public Processor<AVPictureWithFillImage, AVPictureImage> {
   //-------------------------------------------------------------------
 
  private:
-  /// @brief 拡大縮小パラメータ
+  /// 拡大縮小パラメータ
   const SWScaleConfig swscale_config_;
 
-  /// @brief 拡大縮小時に設定するフィルタ
+  /// 拡大縮小時に設定するフィルタ
   SwsFilter *filter_;
-  /// @brief 拡大縮小用のコンテキスト
+  /// 拡大縮小用のコンテキスト
   SwsContext *scaler_;
 
   // コピー＆代入禁止

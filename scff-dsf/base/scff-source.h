@@ -16,33 +16,33 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file base/scff-source.h
-/// @brief SCFFSourceの宣言
+/// SCFFSourceの宣言
 
 #ifndef SCFF_DSF_BASE_SCFF_SOURCE_H_
 #define SCFF_DSF_BASE_SCFF_SOURCE_H_
 
 #include <streams.h>
 
-/// @brief DirectShowビデオキャプチャフィルタ
+/// DirectShowビデオキャプチャフィルタ
 class SCFFSource : public CSource {
  public:
-  /// @brief DLL読み込み中に呼ばれるインスタンス生成関数
+  /// DLL読み込み中に呼ばれるインスタンス生成関数
   /// @sa g_Templates(strmbase.lib)
   static CUnknown* WINAPI CreateInstance(IUnknown *unknown, HRESULT *result);
 
-  /// @brief DLL読み込み中に呼ばれる初期化関数
+  /// DLL読み込み中に呼ばれる初期化関数
   /// @sa g_Templates(strmbase.lib)
   static void WINAPI Init(BOOL loading, const CLSID *clsid);
 
-  /// @brief m_tStart.m_timeへのアクセッサ
+  /// m_tStart.m_timeへのアクセッサ
   REFERENCE_TIME GetStartTime() {
     return m_tStart.m_time;
   }
 
  private:
-  /// @brief コンストラクタ
+  /// コンストラクタ
   SCFFSource(IUnknown *unknown, HRESULT *result);
-  /// @brief デストラクタ
+  /// デストラクタ
   ~SCFFSource();
 };
 

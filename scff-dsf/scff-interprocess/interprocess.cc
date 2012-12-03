@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scff-interprocess/interprocess.cc
-/// @brief SCFFのプロセス間通信に関するクラスの定義
+/// SCFFのプロセス間通信に関するクラスの定義
 /// @warning To me: このファイルの中から別のファイルへのIncludeは禁止！
 ///- 別の言語に移植する場合も最大2ファイルでお願いします
 

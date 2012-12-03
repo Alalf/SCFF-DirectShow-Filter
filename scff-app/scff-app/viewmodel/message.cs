@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scff-app/viewmodel/message.cs
-/// @brief scff_app.viewmodel.Messageのメソッドの定義
+/// scff_app.viewmodel.Messageのメソッドの定義
 
 namespace scff_app.viewmodel {
 
@@ -27,12 +27,12 @@ using System.Text;
 // scff_inteprocess.Messageのビューモデル
 partial class Message {
 
-  /// @brief デフォルトコンストラクタ
+  /// デフォルトコンストラクタ
   public Message() {
     this.Init();
   }
 
-  /// @brief 検証
+  /// 検証
   public bool IsValid() {
     bool result = true;
     foreach (LayoutParameter i in this.LayoutParameters) {
@@ -41,7 +41,7 @@ partial class Message {
     return result;
   }
 
-  /// @brief エラー
+  /// エラー
   public string Error {
     get {
       StringBuilder error_string = new StringBuilder();
@@ -57,7 +57,7 @@ partial class Message {
     }
   }
 
-  /// @brief scff_Interprocess用に変換
+  /// scff_Interprocess用に変換
   public scff_interprocess.Message ToInterprocess(int bound_width, int bound_height, bool force_null_layout) {
     scff_interprocess.Message output = new scff_interprocess.Message();
 
@@ -86,7 +86,7 @@ partial class Message {
 
   //-------------------------------------------------------------------
 
-  /// @brief デフォルトパラメータを設定
+  /// デフォルトパラメータを設定
   void Init() {
     this.LayoutParameters = new BindingList<LayoutParameter>();
   }

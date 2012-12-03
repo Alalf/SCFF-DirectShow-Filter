@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scff-imaging/avpicture-with-fill-image.cc
-/// @brief scff_imaging::AVPictureWithFillImageの定義
+/// scff_imaging::AVPictureWithFillImageの定義
 
 #include "scff-imaging/avpicture-with-fill-image.h"
 
@@ -46,7 +46,7 @@ AVPictureWithFillImage::AVPictureWithFillImage()
 AVPictureWithFillImage::~AVPictureWithFillImage() {
   if (!IsEmpty()) {
     /// @attention avpicture_fillによって
-    /// @attention 関連付けられたメモリ領域も解放してくれる
+    ///            関連付けられたメモリ領域も解放してくれる
     avpicture_free(avpicture_);
   }
 }

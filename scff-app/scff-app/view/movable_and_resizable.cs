@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scff-app/view/movable_and_resizable.cs
-/// @brief コントロールに対し、ドラッグでの移動/リサイズ機能を付加するためのクラスの定義
+/// コントロールに対し、ドラッグでの移動/リサイズ機能を付加するためのクラスの定義
 
 namespace scff_app.view {
 
@@ -24,7 +24,7 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 
-/// @brief コントロールに対し、ドラッグでの移動/リサイズ機能を付加するためのクラス
+/// コントロールに対し、ドラッグでの移動/リサイズ機能を付加するためのクラス
 // メモ:
 //  座標系はいくつかあるが、注意しないといけない点
 //  ControlLocation:      これはTarget内の座標系を意味する
@@ -32,13 +32,13 @@ using System.Windows.Forms;
 //  なお、サイズ(幅、高さ)は無次元数なので特に区別をする必要はない。
 class MovableAndResizable : IDisposable {
 
-  /// @brief リサイズとする領域のサイズ
+  /// リサイズとする領域のサイズ
   const int kBorder = 16;
 
-  /// @brief 最小サイズ
+  /// 最小サイズ
   const int kMinimumSize = kBorder * 3;
 
-  /// @brief 現在の状態を表す定数
+  /// 現在の状態を表す定数
   enum Mode {
     kNop,
     kMove,
@@ -54,7 +54,7 @@ class MovableAndResizable : IDisposable {
 
   //-------------------------------------------------------------------
 
-  /// @brief コンストラクタ
+  /// コンストラクタ
   public MovableAndResizable(Control target, bool is_parent_exists) {
     // デスクトップ領域外へは行かないように
     if (is_parent_exists) {
@@ -72,7 +72,7 @@ class MovableAndResizable : IDisposable {
     target_.SizeChanged += target_SizeChanged;
   }
 
-  /// @brief Dispose（GCを考慮したデストラクタ）
+  /// Dispose（GCを考慮したデストラクタ）
   public void Dispose() {
     // イベントハンドラの登録解除
     target_.MouseDown -= target_MouseDown;
@@ -195,7 +195,7 @@ class MovableAndResizable : IDisposable {
 
   // 座標変換、型変換
 
-  /// @brief ModeからSendMessage用のメッセージに変換する
+  /// ModeからSendMessage用のメッセージに変換する
   int GetHitTestResult(Mode mode) {
     switch (mode) {
     case Mode.kResizeTopLeft:
@@ -221,7 +221,7 @@ class MovableAndResizable : IDisposable {
     }
   }
 
-  /// @brief マウスが押された時のコントロール座標が上下左右斜めのどの領域にあるか
+  /// マウスが押された時のコントロール座標が上下左右斜めのどの領域にあるか
   Mode GetModeFromMouseControlLocation(Point control_location) {
     var on_top_border = control_location.Y < kBorder;
     var on_bottom_border = control_location.Y > target_.Height - kBorder;
@@ -253,7 +253,7 @@ class MovableAndResizable : IDisposable {
     return tmp_mode;
   }
 
-  /// @brief モードからカーソルを取得
+  /// モードからカーソルを取得
   Cursor GetCursorFromMode(Mode mode) {
     switch (mode) {
     case Mode.kResizeTopLeft:
@@ -285,7 +285,7 @@ class MovableAndResizable : IDisposable {
   //===================================================================
 
   readonly Rectangle bounds_;
-  /// @brief 操作の対象となるコントロール
+  /// 操作の対象となるコントロール
   readonly Control target_;
 
   Mode mode_;

@@ -16,9 +16,9 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scff-imaging/debug.h
-/// @brief Debug用マクロなどの宣言
+/// Debug用マクロなどの宣言
 /// @todo(me) ASSERTとDbgLog利用のためだけに
-/// @todo(me) DirectShowBaseclassesに依存ができるのは気持ち悪い
+///           DirectShowBaseclassesに依存ができるのは気持ち悪い
 
 #ifndef SCFF_DSF_SCFF_IMAGING_DEBUG_H_
 #define SCFF_DSF_SCFF_IMAGING_DEBUG_H_

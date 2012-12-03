@@ -16,15 +16,15 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scff_imaging/utilities.cs
-/// @brief scff_imaging/utilities.ccとhの移植版
+/// scff_imaging/utilities.ccとhの移植版
 
 namespace scff_imaging {
 
 using System.Diagnostics;
 
-/// @brief 画像の操作に便利な関数をまとめたクラス
+/// 画像の操作に便利な関数をまとめたクラス
 class Utilities {
-  /// @brief 境界の座標系と同じ座標系の新しい配置を計算する
+  /// 境界の座標系と同じ座標系の新しい配置を計算する
   public static bool CalculateLayout(int bound_x, int bound_y,
                               int bound_width, int bound_height,
                               int input_width, int input_height,
@@ -105,7 +105,7 @@ class Utilities {
     return true;
   }
 
-  /// @brief 幅と高さから拡大縮小した場合のパディングサイズを求める
+  /// 幅と高さから拡大縮小した場合のパディングサイズを求める
   public static bool CalculatePaddingSize(int bound_width, int bound_height,
                                    int input_width, int input_height,
                                    bool stretch, bool keep_aspect_ratio,

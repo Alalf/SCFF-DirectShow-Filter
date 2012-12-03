@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file SCFFAppForm.cs
-/// @brief SCFFAppFormのUIに関連するメソッドの定義
+/// SCFFAppFormのUIに関連するメソッドの定義
 /// @todo(progre) 移植未達部分が完了次第名称含め全体をリファクタリング
 
 namespace scff_app {
@@ -27,10 +27,10 @@ using System.Windows.Forms;
 
 using scff_app.view;
 
-/// @brief メインウィンドウ
+/// メインウィンドウ
 public partial class SCFFAppForm : Form {
 
-  /// @brief コンストラクタ
+  /// コンストラクタ
   public SCFFAppForm() {
     //---------------------------------------------------------------
     // DO NOT DELETE THIS!!!
@@ -371,7 +371,7 @@ public partial class SCFFAppForm : Form {
   // メンバ変数
   //===================================================================
 
-  /// @brief MVCパターンにおけるController
+  /// MVCパターンにおけるController
   SCFFApp app_;
 }
 }   // namespace scff_app

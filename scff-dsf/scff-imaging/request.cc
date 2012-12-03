@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scff-imaging/request.cc
-/// @brief scff_imaging::Requestの定義
+/// scff_imaging::Requestの定義
 
 #include "scff-imaging/request.h"
 

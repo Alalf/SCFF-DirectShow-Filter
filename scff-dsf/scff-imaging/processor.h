@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scff-imaging/processor.h
-/// @brief scff_imaging::Processorの宣言
+/// scff_imaging::Processorの宣言
 
 #ifndef SCFF_DSF_SCFF_IMAGING_PROCESSOR_H_
 #define SCFF_DSF_SCFF_IMAGING_PROCESSOR_H_
@@ -24,7 +24,7 @@
 #include "scff-imaging/imaging-types.h"
 #include "scff-imaging/debug.h"
 
-/// @brief 画像処理を行うクラスをまとめたネームスペース
+/// 画像処理を行うクラスをまとめたネームスペース
 namespace scff_imaging {
 
 class Request;
@@ -33,35 +33,35 @@ class AVPictureWithFillImage;
 class RawBitmapImage;
 class WindowsDDBImage;
 
-/// @brief 実際に処理を行う仮想クラス
+/// 実際に処理を行う仮想クラス
 template <class InputImageType, class OutputImageType>
 class Processor {
  public:
-  /// @brief コンストラクタ
+  /// コンストラクタ
   explicit Processor(int size = 1)
       : error_code_(ErrorCode::kProcessorUninitializedError),
         size_(size) {
     // nop
   }
-  /// @brief 仮想デストラクタ
+  /// 仮想デストラクタ
   virtual ~Processor() {
     // nop
   }
 
   //-------------------------------------------------------------------
-  /// @brief 初期化
+  /// 初期化
   /// @pre SetXXXImageで入出力の形式がすでに定まっていること
   /// @warning Init後にSetXXXImageを実行した場合、動作は不定だが
-  /// @warning ピクセルフォーマットもサイズも変わらない場合は問題ない。
+  ///          ピクセルフォーマットもサイズも変わらない場合は問題ない。
   /// @retval InitDone()      初期化成功
   /// @retval ErrorOccured()  エラーが発生した場合
   virtual ErrorCode Init() = 0;
-  /// @brief 実際の処理を行う
+  /// 実際の処理を行う
   /// @retval GetCurrentError()   Accept成功
   /// @retval ErrorOccured()      エラーが発生した場合
   virtual ErrorCode Run() = 0;
 
-  /// @brief リクエストに対する処理を行う
+  /// リクエストに対する処理を行う
   /// @param[in] request          リクエスト
   /// @retval GetCurrentError()   Accept成功
   /// @retval ErrorOccured()      エラーが発生した場合
@@ -71,22 +71,22 @@ class Processor {
   }
   //-------------------------------------------------------------------
 
-  /// @brief プロセッサに異常が発生している場合NoError以外を返す
+  /// プロセッサに異常が発生している場合NoError以外を返す
   ErrorCode GetCurrentError() const  {
     return error_code_;
   }
-  /// @brief Getter: 入出力のサイズ
+  /// Getter: 入出力のサイズ
   int size() const {
     return size_;
   }
 
-  /// @brief Setter: input_image_
+  /// Setter: input_image_
   void SetInputImage(InputImageType *input_image, int index = 0) {
     ASSERT(0 <= index && index < size());
     ASSERT(GetCurrentError() == ErrorCode::kProcessorUninitializedError);
     input_image_[index] = input_image;
   }
-  /// @brief Swap: input_image_
+  /// Swap: input_image_
   InputImageType* SwapInputImage(InputImageType *input_image, int index = 0) {
     ASSERT(0 <= index && index < size());
     ASSERT(GetCurrentError() == ErrorCode::kNoError);
@@ -95,18 +95,18 @@ class Processor {
     input_image_[index] = input_image;
     return original_image;
   }
-  /// @brief Getter: input_image_
+  /// Getter: input_image_
   InputImageType* GetInputImage(int index = 0) const {
     ASSERT(0 <= index && index < size());
     return input_image_[index];
   }
-  /// @brief Setter: output_image_
+  /// Setter: output_image_
   void SetOutputImage(OutputImageType *output_image, int index = 0) {
     ASSERT(0 <= index && index < size());
     ASSERT(GetCurrentError() == ErrorCode::kProcessorUninitializedError);
     output_image_[index] = output_image;
   }
-  /// @brief Swap: output_image_
+  /// Swap: output_image_
   OutputImageType* SwapOutputImage(OutputImageType *output_image,
                                    int index = 0) {
     ASSERT(0 <= index && index < size());
@@ -116,7 +116,7 @@ class Processor {
     output_image_[index] = output_image;
     return original_image;
   }
-  /// @brief Getter: output_image_
+  /// Getter: output_image_
   OutputImageType* GetOutputImage(int index = 0) const {
     ASSERT(0 <= index && index < size());
     return output_image_[index];
@@ -124,7 +124,7 @@ class Processor {
 
  protected:
   //-------------------------------------------------------------------
-  /// @brief 唯一エラーコードをkNoErrorにできる関数
+  /// 唯一エラーコードをkNoErrorにできる関数
   /// @attention Initが成功したらこちら
   ErrorCode InitDone() {
     ASSERT(error_code_ == ErrorCode::kProcessorUninitializedError);
@@ -133,7 +133,7 @@ class Processor {
     }
     return error_code_;
   }
-  /// @brief エラーが発生したときに呼び出す。
+  /// エラーが発生したときに呼び出す。
   /// @return 発生したエラーコード。
   /// @attention エラーがいったんおきたら解除は不可能
   ErrorCode ErrorOccured(ErrorCode error_code) {
@@ -150,14 +150,14 @@ class Processor {
   //-------------------------------------------------------------------
 
  private:
-  /// @brief エラーコード
+  /// エラーコード
   ErrorCode error_code_;
-  /// @brief 入出力のサイズ
+  /// 入出力のサイズ
   const int size_;
 
-  /// @brief 設定済みの入力
+  /// 設定済みの入力
   InputImageType *input_image_[kMaxProcessorSize];
-  /// @brief 設定済みの出力
+  /// 設定済みの出力
   OutputImageType *output_image_[kMaxProcessorSize];
 };
 }   // namespace scff_imaging

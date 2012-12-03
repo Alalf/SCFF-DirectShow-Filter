@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scff-interprocess/interprocess.h
-/// @brief SCFFのプロセス間通信に関するクラス、定数、型の宣言
+/// SCFFのプロセス間通信に関するクラス、定数、型の宣言
 /// @warning To me: このファイルの中から別のファイルへのIncludeは禁止！
 ///- 別の言語に移植する場合も最大2ファイルでお願いします
 
@@ -26,7 +26,7 @@
 #include <Windows.h>
 #include <cstdint>
 
-/// @brief SCFFのプロセス間通信モジュール
+/// SCFFのプロセス間通信モジュール
 namespace scff_interprocess {
 
 //=====================================================================
@@ -46,105 +46,105 @@ namespace scff_interprocess {
 //   - 基本型、コンストラクタ、デストラクタ、仮想関数を持たない構造体のみ
 //=====================================================================
 
-/// @brief 共有メモリ名: SCFFエントリを格納するディレクトリ
+/// 共有メモリ名: SCFFエントリを格納するディレクトリ
 static const char kDirectoryName[] = "scff-v1-directory";
 
-/// @brief Directoryの保護用Mutex名
+/// Directoryの保護用Mutex名
 static const char kDirectoryMutexName[] = "mutex-scff-v1-directory";
 
-/// @brief 共有メモリ名の接頭辞: SCFFで使うメッセージを格納する
+/// 共有メモリ名の接頭辞: SCFFで使うメッセージを格納する
 static const char kMessageNamePrefix[] = "scff-v1-message-";
 
-/// @brief Messageの保護用Mutex名の接頭辞
+/// Messageの保護用Mutex名の接頭辞
 static const char kMessageMutexNamePrefix[] = "mutex-scff-v1-message-";
 
 //---------------------------------------------------------------------
 
-/// @brief Path文字列の長さ
+/// Path文字列の長さ
 static const int kMaxPath = 260;
 
-/// @brief Directoryに格納されるEntryの最大の数
+/// Directoryに格納されるEntryの最大の数
 static const int kMaxEntry = 8;
 
-/// @brief ComplexLayout利用時の最大の要素数
-/// @sa imaging::kMaxProcessorSize
+/// ComplexLayout利用時の最大の要素数
+/// @sa scff_imaging::kMaxProcessorSize
 static const int kMaxComplexLayoutElements = 8;
 
 //---------------------------------------------------------------------
 
-/// @brief レイアウトの種類
+/// レイアウトの種類
 enum class LayoutType {
-  /// @brief 何も表示しない
+  /// 何も表示しない
   kNullLayout = 0,
-  /// @brief 取り込み範囲1個で、境界は出力に強制的に合わせられる
+  /// 取り込み範囲1個で、境界は出力に強制的に合わせられる
   kNativeLayout,
-  /// @brief 取り込み範囲が複数ある
+  /// 取り込み範囲が複数ある
   kComplexLayout
 };
 
 //---------------------------------------------------------------------
 
-/// @brief ピクセルフォーマットの種類
+/// ピクセルフォーマットの種類
 /// @sa scff-imaging/imaging-types.h
 /// @sa scff_imaging::ImagePixelFormat
 enum class ImagePixelFormat {
-  /// @brief 不正なピクセルフォーマット
+  /// 不正なピクセルフォーマット
   kInvalidPixelFormat = -1,
-  /// @brief I420(12bit)
+  /// I420(12bit)
   kI420 = 0,
-  /// @brief IYUV(12bit)
+  /// IYUV(12bit)
   kIYUV,
-  /// @brief YV12(12bit)
+  /// YV12(12bit)
   kYV12,
-  /// @brief UYVY(16bit)
+  /// UYVY(16bit)
   kUYVY,
-  /// @brief YUY2(16bit)
+  /// YUY2(16bit)
   kYUY2,
-  /// @brief RGB0(32bit)
+  /// RGB0(32bit)
   kRGB0,
-  /// @brief 対応ピクセルフォーマット数
+  /// 対応ピクセルフォーマット数
   kSupportedPixelFormatsCount
 };
 
-/// @brief 拡大縮小メソッドをあらわす定数
+/// 拡大縮小メソッドをあらわす定数
 /// @sa scff-imaging/imaging-types.h
 /// @sa scff_imaging::SWScaleFlags
 enum class SWScaleFlags {
-  /// @brief fast bilinear
+  /// fast bilinear
   kFastBilinear = 1,
-  /// @brief bilinear
+  /// bilinear
   kBilinear     = 2,
-  /// @brief bicubic
+  /// bicubic
   kBicubic      = 4,
-  /// @brief experimental
+  /// experimental
   kX            = 8,
-  /// @brief nearest neighbor
+  /// nearest neighbor
   kPoint        = 0x10,
-  /// @brief averaging area
+  /// averaging area
   kArea         = 0x20,
-  /// @brief luma bicubic, chroma bilinear
+  /// luma bicubic, chroma bilinear
   kBicublin     = 0x40,
-  /// @brief gaussian
+  /// gaussian
   kGauss        = 0x80,
-  /// @brief sinc
+  /// sinc
   kSinc         = 0x100,
-  /// @brief lanczos
+  /// lanczos
   kLanczos      = 0x200,
-  /// @brief natural bicubic spline
+  /// natural bicubic spline
   kSpline       = 0x400
 };
 
-/// @brief 回転方向を表す定数
+/// 回転方向を表す定数
 /// @sa scff-imaging/imaging-types.h
 /// @sa scff_imaging::RotateDirection
 enum class RotateDirection {
-  /// @brief 回転なし
+  /// 回転なし
   kNoRotate = 0,
-  /// @brief 時計回り90度
+  /// 時計回り90度
   k90Degrees,
-  /// @brief 時計回り180度
+  /// 時計回り180度
   k180Degrees,
-  /// @brief 時計回り270度
+  /// 時計回り270度
   k270Degrees
 };
 
@@ -152,104 +152,104 @@ enum class RotateDirection {
 
 // アラインメントをコンパイラに変えられないように
 #pragma pack(push, 1)
-/// @brief 共有メモリ(Directory)に格納する構造体のエントリ
+/// 共有メモリ(Directory)に格納する構造体のエントリ
 struct Entry {
-  /// @brief SCFF DSFのDLLが使われれているプロセスID
+  /// SCFF DSFのDLLが使われれているプロセスID
   uint32_t process_id;
-  /// @brief SCFF DSFのDLLが使われているプロセス名
+  /// SCFF DSFのDLLが使われているプロセス名
   /// @warning 長さが260バイトに制限されているので注意！
   char process_name[kMaxPath];
-  /// @brief サンプルの出力width
+  /// サンプルの出力width
   int32_t sample_width;
-  /// @brief サンプルの出力height
+  /// サンプルの出力height
   int32_t sample_height;
-  /// @brief サンプルの出力ピクセルフォーマット
+  /// サンプルの出力ピクセルフォーマット
   /// @attention ImagePixelFormatを操作に使うこと
   int32_t sample_image_pixel_format;
-  /// @brief 目標fps
+  /// 目標fps
   double fps;
 };
 
-/// @brief 共有メモリ(Directory)に格納する構造体
+/// 共有メモリ(Directory)に格納する構造体
 struct Directory {
   Entry entries[kMaxEntry];
 };
 
-/// @brief 拡大縮小設定
+/// 拡大縮小設定
 /// @sa scff_imaging::SWScaleConfig
 struct SWScaleConfig {
-  /// @brief 拡大縮小メソッド(Chroma/Luma共通)
+  /// 拡大縮小メソッド(Chroma/Luma共通)
   int32_t flags;
-  /// @brief 正確な丸め処理
+  /// 正確な丸め処理
   int8_t accurate_rnd;
-  /// @brief 変換前にフィルタをかけるか
+  /// 変換前にフィルタをかけるか
   int8_t is_filter_enabled;
-  /// @brief 輝度のガウスぼかし
+  /// 輝度のガウスぼかし
   float luma_gblur;
-  /// @brief 色差のガウスぼかし
+  /// 色差のガウスぼかし
   float chroma_gblur;
-  /// @brief 輝度のシャープ化
+  /// 輝度のシャープ化
   float luma_sharpen;
-  /// @brief 色差のシャープ化
+  /// 色差のシャープ化
   float chroma_sharpen;
-  /// @brief 水平方向のワープ
+  /// 水平方向のワープ
   float chroma_hshift;
-  /// @brief 垂直方向のワープ
+  /// 垂直方向のワープ
   float chroma_vshift;
 };
 
-/// @brief レイアウトパラメータ
+/// レイアウトパラメータ
 /// @sa scff_imaging::LayoutParameter
 struct LayoutParameter {
-  /// @brief サンプル内の原点のX座標
+  /// サンプル内の原点のX座標
   /// @warning NullLayout,NativeLayoutでは無視される
   int32_t bound_x;
-  /// @brief サンプル内の原点のY座標
+  /// サンプル内の原点のY座標
   /// @warning NullLayout,NativeLayoutでは無視される
   int32_t bound_y;
-  /// @brief サンプル内の幅
+  /// サンプル内の幅
   /// @warning NullLayout,NativeLayoutでは無視される
   int32_t bound_width;
-  /// @brief サンプル内の高さ
+  /// サンプル内の高さ
   /// @warning NullLayout,NativeLayoutでは無視される
   int32_t bound_height;
-  /// @brief キャプチャを行う対象となるウィンドウ
+  /// キャプチャを行う対象となるウィンドウ
   uint64_t window;
-  /// @brief 取り込み範囲の開始X座標
+  /// 取り込み範囲の開始X座標
   int32_t clipping_x;
-  /// @brief 取り込み範囲の開始y座標
+  /// 取り込み範囲の開始y座標
   int32_t clipping_y;
-  /// @brief 取り込み範囲の幅
+  /// 取り込み範囲の幅
   int32_t clipping_width;
-  /// @brief 取り込み範囲の高さ
+  /// 取り込み範囲の高さ
   int32_t clipping_height;
-  /// @brief マウスカーソルの表示
+  /// マウスカーソルの表示
   int8_t show_cursor;
-  /// @brief レイヤードウィンドウの表示
+  /// レイヤードウィンドウの表示
   int8_t show_layered_window;
-  /// @brief 拡大縮小設定
+  /// 拡大縮小設定
   SWScaleConfig swscale_config;
-  /// @brief 取り込み範囲が出力サイズより小さい場合拡張
+  /// 取り込み範囲が出力サイズより小さい場合拡張
   int8_t stretch;
-  /// @brief アスペクト比の保持
+  /// アスペクト比の保持
   int8_t keep_aspect_ratio;
-  /// @brief 回転方向
+  /// 回転方向
   /// @attention RotateDirectionを操作に使うこと
   int32_t rotate_direction;
 };
 
-/// @brief 共有メモリ(Message)に格納する構造体
+/// 共有メモリ(Message)に格納する構造体
 struct Message {
-  /// @brief タイムスタンプ(time()で求められたものを想定)
+  /// タイムスタンプ(time()で求められたものを想定)
   /// @warning 1ではじまり単調増加が必須条件
-  /// @warning (0および負数は無効なメッセージを示す)
+  ///          (0および負数は無効なメッセージを示す)
   int64_t timestamp;
-  /// @brief レイアウトの種類
+  /// レイアウトの種類
   /// @attention LayoutTypeを操作に使うこと
   int32_t layout_type;
-  /// @brief 有効なレイアウト要素の数
+  /// 有効なレイアウト要素の数
   int32_t layout_element_count;
-  /// @brief レイアウトパラメータの配列
+  /// レイアウトパラメータの配列
   LayoutParameter
       layout_parameters[kMaxComplexLayoutElements];
 };
@@ -257,60 +257,60 @@ struct Message {
 
 //---------------------------------------------------------------------
 
-/// @brief SCFFのプロセス間通信を担当するクラス
+/// SCFFのプロセス間通信を担当するクラス
 class Interprocess {
  public:
-  /// @brief コンストラクタ
+  /// コンストラクタ
   Interprocess();
-  /// @brief デストラクタ
+  /// デストラクタ
   ~Interprocess();
 
-  /// @brief Directory初期化
+  /// Directory初期化
   bool InitDirectory();
-  /// @brief Directoryの初期化が成功したか
+  /// Directoryの初期化が成功したか
   bool IsDirectoryInitialized();
 
-  /// @brief Message初期化
+  /// Message初期化
   bool InitMessage(uint32_t process_id);
-  /// @brief Messageの初期化が成功したか
+  /// Messageの初期化が成功したか
   bool IsMessageInitialized();
 
   //-------------------------------------------------------------------
   // for SCFF DirectShow Filter
   //-------------------------------------------------------------------
-  /// @brief エントリを作成する
+  /// エントリを作成する
   bool AddEntry(const Entry &entry);
-  /// @brief エントリを削除する
+  /// エントリを削除する
   bool RemoveEntry(uint32_t process_id);
-  /// @brief メッセージを受け取る
+  /// メッセージを受け取る
   /// @pre 事前にInitMessageが実行されている必要がある
   bool ReceiveMessage(Message *message);
   //-------------------------------------------------------------------
 
-  /// @brief ディレクトリを取得する
+  /// ディレクトリを取得する
   bool GetDirectory(Directory *directory);
-  /// @brief メッセージを作成する
+  /// メッセージを作成する
   /// @pre 事前にInitMessageが実行されている必要がある
   bool SendMessage(const Message &message);
 
  private:
-  /// @brief Directory解放
+  /// Directory解放
   void ReleaseDirectory();
-  /// @brief Message解放
+  /// Message解放
   void ReleaseMessage();
 
-  /// @brief 共有メモリ: Directory
+  /// 共有メモリ: Directory
   HANDLE directory_;
-  /// @brief ビュー: Directory
+  /// ビュー: Directory
   LPVOID view_of_directory_;
-  /// @brief Mutex: Directory
+  /// Mutex: Directory
   HANDLE mutex_directory_;
 
-  /// @brief 共有メモリ: Message
+  /// 共有メモリ: Message
   HANDLE message_;
-  /// @brief ビュー: Message
+  /// ビュー: Message
   LPVOID view_of_message_;
-  /// @brief Mutex: Message
+  /// Mutex: Message
   HANDLE mutex_message_;
 };
 }   // namespace scff_interprocess

@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scff-app/scff-app-dwmapi.cs
-/// @brief SCFFAppのDWMAPI関連のメソッドの定義
+/// SCFFAppのDWMAPI関連のメソッドの定義
 
 namespace scff_app {
 
@@ -25,7 +25,7 @@ using System;
 // MVCパターンにおけるController
 partial class SCFFApp {
 
-  /// @brief Dwmapi.dllを利用してAeroをOffに
+  /// Dwmapi.dllを利用してAeroをOffに
   public void DWMAPIOff() {
     if (!CanUseDWMAPIDLL()) {
       // dwmapi.dllを利用できなければ何もしない
@@ -41,7 +41,7 @@ partial class SCFFApp {
     was_dwm_enabled_on_start_ = was_dwm_enabled_on_start;
   }
 
-  /// @brief 強制的にAeroのOn/Offを切り替える
+  /// 強制的にAeroのOn/Offを切り替える
   public void DWMAPIFlip(bool current) {
     if (!CanUseDWMAPIDLL()) {
       // dwmapi.dllを利用できなければ何もしない
@@ -55,7 +55,7 @@ partial class SCFFApp {
     }
   }
 
-  /// @brief AeroをOffにしていたらOnに戻す
+  /// AeroをOffにしていたらOnに戻す
   public void DWMAPIRestore() {
     if (!CanUseDWMAPIDLL()) {
       // dwmapi.dllを利用できなければ何もしない
@@ -69,7 +69,7 @@ partial class SCFFApp {
 
   //-------------------------------------------------------------------
 
-  /// @brief DWMAPI.DLLが利用可能かどうか
+  /// DWMAPI.DLLが利用可能かどうか
   bool CanUseDWMAPIDLL() {
     if (Environment.OSVersion.Platform == PlatformID.Win32NT &&
         Environment.OSVersion.Version.Major >= 6) {
@@ -79,7 +79,7 @@ partial class SCFFApp {
     }
   }
 
-  /// @brief Aeroが起動時にONになっていたかどうか
+  /// Aeroが起動時にONになっていたかどうか
   bool was_dwm_enabled_on_start_ = false;
 }
 }   // namespace scff_app

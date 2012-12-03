@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scff-imaging/avpicture-image.cc
-/// @brief scff_imaging::AVPictureImageの定義
+/// scff_imaging::AVPictureImageの定義
 
 #include "scff-imaging/avpicture-image.h"
 
@@ -53,7 +53,7 @@ bool AVPictureImage::IsEmpty() const {
   return avpicture_ == nullptr;
 }
 
-/// @brief AVPictureのみ作成する
+/// AVPictureのみ作成する
 ErrorCode AVPictureImage::Create(ImagePixelFormat pixel_format,
                                  int width, int height) {
   // pixel_format, width, heightを設定する

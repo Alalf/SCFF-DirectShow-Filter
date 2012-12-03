@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file base/constants.h
-/// @brief グローバル定数宣言
+/// グローバル定数宣言
 
 #ifndef SCFF_DSF_BASE_CONSTANTS_H_
 #define SCFF_DSF_BASE_CONSTANTS_H_
@@ -29,54 +29,54 @@
 // プリプロセッサ
 //=====================================================================
 
-/// @brief KoToEncoder(KTE)を利用してYUV出力を利用する場合
+/// KoToEncoder(KTE)を利用してYUV出力を利用する場合
 // #define FOR_KOTOENCODER
 
 //=====================================================================
 // 定数
 //=====================================================================
 
-/// @brief フィルタ名: "SCFF DirectShow Filter"
+/// フィルタ名: "SCFF DirectShow Filter"
 extern const TCHAR kFilterName[];
 
-/// @brief SCFF DirectShow FilterのGUID
+/// SCFF DirectShow FilterのGUID
 extern const GUID CLSID_SCFFSource;
 
-/// @brief 優先ビデオサイズ
+/// 優先ビデオサイズ
 extern const SIZE kPreferredSizes[];
 
-/// @brief 優先ビデオサイズの数
+/// 優先ビデオサイズの数
 extern const int kPreferredSizesCount;
 
-/// @brief 対応ピクセルフォーマットの数
+/// 対応ピクセルフォーマットの数
 extern const int kSupportedPixelFormatsCount;
 
-/// @brief 対応フォーマットの数
+/// 対応フォーマットの数
 extern const int kSupportedFormatsCount;
 
-/// @brief デフォルトFPS
+/// デフォルトFPS
 extern const int kDefaultFPS;
 
-/// @brief 最小出力width
+/// 最小出力width
 extern const int kMinOutputWidth;
-/// @brief 最小出力height
+/// 最小出力height
 extern const int kMinOutputHeight;
-/// @brief 最大出力width
+/// 最大出力width
 extern const int kMaxOutputWidth;
-/// @brief 最大出力height
+/// 最大出力height
 extern const int kMaxOutputHeight;
 
-/// @brief 最高FPS(1/Sec)
+/// 最高FPS(1/Sec)
 extern const double kMaxFPS;
-/// @brief 最低FPS(1/Sec)
+/// 最低FPS(1/Sec)
 extern const double kMinFPS;
 
-/// @brief フレーム区間の最短の長さ(100nSec)
+/// フレーム区間の最短の長さ(100nSec)
 extern const REFERENCE_TIME kMinFrameInterval;
-/// @brief フレーム区間の最長の長さ(100nSec)
+/// フレーム区間の最長の長さ(100nSec)
 extern const REFERENCE_TIME kMaxFrameInterval;
 
-/// @brief SCFFMonitorのポーリング間隔
+/// SCFFMonitorのポーリング間隔
 extern const double kSCFFMonitorPollingInterval;
 
 #endif  // SCFF_DSF_BASE_CONSTANTS_H_

@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scff-imaging/image.cc
-/// @brief scff_imaging::Imageの定義
+/// scff_imaging::Imageの定義
 
 #include "scff-imaging/image.h"
 
@@ -48,7 +48,7 @@ ImagePixelFormat Image::pixel_format() const {
   return pixel_format_;
 }
 
-  /// @brief イメージのピクセルフォーマットをAVPicture用に変換
+  /// イメージのピクセルフォーマットをAVPicture用に変換
 AVPixelFormat Image::av_pixel_format() const {
   return Utilities::ToAVPicturePixelFormat(pixel_format());
 }

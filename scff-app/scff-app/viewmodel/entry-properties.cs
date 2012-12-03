@@ -16,13 +16,13 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scff-app/viewmodel/entry-properties.cs
-/// @brief scff_app.viewmodel.Entryのプロパティの定義
+/// scff_app.viewmodel.Entryのプロパティの定義
 
 namespace scff_app.viewmodel {
 
 using System;
 
-/// @brief scff_interprocess.Entryのビューモデル
+/// scff_interprocess.Entryのビューモデル
 partial class Entry {
   public UInt32 ProcessID { get; set; }
   public string ProcessName { get; set; }
@@ -33,7 +33,7 @@ partial class Entry {
 
   //-------------------------------------------------------------------
 
-  /// @brief コンボボックス表示用
+  /// コンボボックス表示用
   public string ProcessInformation {
     get { return ToString(); }
   }

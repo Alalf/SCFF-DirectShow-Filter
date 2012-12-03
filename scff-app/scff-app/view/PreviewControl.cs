@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scff-app/view/PreviewControl.cs
-/// @brief LayoutForm内で使用するプレビューコントロールの定義
+/// LayoutForm内で使用するプレビューコントロールの定義
 
 namespace scff_app.view {
 
@@ -25,10 +25,10 @@ using System.Drawing;
 using System.Windows.Forms;
 using scff_app.viewmodel;
 
-/// @brief LayoutForm内で使用するプレビューコントロール
+/// LayoutForm内で使用するプレビューコントロール
 partial class PreviewControl : UserControl {
 
-  /// @brief コンストラクタ
+  /// コンストラクタ
   public PreviewControl(BindingSource layout_parameters, int index) {
     //---------------------------------------------------------------
     // DO NOT DELETE THIS!!!

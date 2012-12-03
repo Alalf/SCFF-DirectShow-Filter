@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scff-imaging/image.h
-/// @brief scff_imaging::Imageの宣言
+/// scff_imaging::Imageの宣言
 
 #ifndef SCFF_DSF_SCFF_IMAGING_IMAGE_H_
 #define SCFF_DSF_SCFF_IMAGING_IMAGE_H_
@@ -37,36 +37,36 @@ namespace scff_imaging {
 enum class ErrorCode;
 enum class ImagePixelFormat;
 
-/// @brief イメージの実体を管理する(union的な)クラス
+/// イメージの実体を管理する(union的な)クラス
 /// @attention Imageのインスタンスはメモリ領域の作成、解放まで責任を持つ
 class Image {
  public:
-  /// @brief 仮想デストラクタ
+  /// 仮想デストラクタ
   virtual ~Image();
 
-  /// @brief Getter: イメージのピクセルフォーマット
+  /// Getter: イメージのピクセルフォーマット
   ImagePixelFormat pixel_format() const;
-  /// @brief イメージのピクセルフォーマットをAVPicture用に変換
+  /// イメージのピクセルフォーマットをAVPicture用に変換
   AVPixelFormat av_pixel_format() const;
-  /// @brief Getter: イメージの幅
+  /// Getter: イメージの幅
   int width() const;
-  /// @brief Getter: イメージの高さ
+  /// Getter: イメージの高さ
   int height() const;
 
   //-------------------------------------------------------------------
-  /// @brief Create()などによって実体がまだ生成されていない場合
+  /// Create()などによって実体がまだ生成されていない場合
   virtual bool IsEmpty() const = 0;
   //-------------------------------------------------------------------
 
  protected:
   //-------------------------------------------------------------------
   // (new禁止＝抽象クラス)
-  /// @brief コンストラクタ
+  /// コンストラクタ
   Image();
-  /// @brief 実体を生成する
+  /// 実体を生成する
   /// @attention 各継承クラスでは以下のようなpublicメソッドを作り、
-  /// @attention 内部でCreate()を呼び出すこと
-  /// @attention (pixel_format_,width_,height_を設定する手段はこのメソッドのみ)
+  ///            内部でCreate()を呼び出すこと
+  ///            (pixel_format_,width_,height_を設定する手段はこのメソッドのみ)
   /// @code
   /// ErrorCode CreateWith___(ImagePixelFormat pixel_format,
   ///                         int width, int height, ___);
@@ -77,11 +77,11 @@ class Image {
                            int width, int height);
   //-------------------------------------------------------------------
  private:
-  /// @brief イメージのピクセルフォーマット
+  /// イメージのピクセルフォーマット
   ImagePixelFormat pixel_format_;
-  /// @brief イメージの幅
+  /// イメージの幅
   int width_;
-  /// @brief イメージの高さ
+  /// イメージの高さ
   int height_;
 
   // コピー＆代入禁止

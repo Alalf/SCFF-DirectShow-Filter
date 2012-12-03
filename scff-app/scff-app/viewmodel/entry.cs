@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scff-app/viewmodel/entry.cs
-/// @brief scff_app.viewmodel.Entryのメソッドの定義
+/// scff_app.viewmodel.Entryのメソッドの定義
 
 namespace scff_app.viewmodel {
 
@@ -26,12 +26,12 @@ using System.Collections.Generic;
 // scff_interprocess.Entryのビューモデル
 partial class Entry {
 
-  /// @brief 変換コンストラクタ
+  /// 変換コンストラクタ
   public Entry(scff_interprocess.Entry input) {
     LoadFromInterprocess(input);
   }
 
-  /// @brief 人間が読みやすい文字列に変換
+  /// 人間が読みやすい文字列に変換
   public override string ToString() {
     return
         "[" + this.ProcessID + "] " +
@@ -43,7 +43,7 @@ partial class Entry {
 
   //-------------------------------------------------------------------
 
-  /// @brief scff_interprocessから変換
+  /// scff_interprocessから変換
   void LoadFromInterprocess(scff_interprocess.Entry input) {
     this.ProcessID = input.process_id;
     this.ProcessName = input.process_name;
@@ -54,7 +54,7 @@ partial class Entry {
     this.FPS = input.fps;
   }
 
-  /// @brief Enum->String用辞書
+  /// Enum->String用辞書
   Dictionary<scff_interprocess.ImagePixelFormat, string> pixel_format_dictionary_ =
       new Dictionary<scff_interprocess.ImagePixelFormat, string>() {
     {scff_interprocess.ImagePixelFormat.kI420, "I420"},

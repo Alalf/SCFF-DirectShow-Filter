@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scff-app/viewmodel/layout-parameter-properties.cs
-/// @brief scff_app.viewmodel.LayoutParameterのプロパティの定義
+/// scff_app.viewmodel.LayoutParameterのプロパティの定義
 
 namespace scff_app.viewmodel {
 
@@ -27,7 +27,7 @@ using System.Text;
 using System.Runtime.Serialization;
 using System.Collections.Generic;
 
-/// @brief scff_inteprocess.LayoutParameterのビューモデル
+/// scff_inteprocess.LayoutParameterのビューモデル
 [DataContract]
 partial class LayoutParameter : INotifyPropertyChanged {
 
@@ -303,7 +303,7 @@ partial class LayoutParameter : INotifyPropertyChanged {
   // scff_app独自の値 (Messageには書き込まれない)
   //-------------------------------------------------------------------
 
-  /// @brief 0.0-1.0を境界の幅としたときの境界内の左端の座標
+  /// 0.0-1.0を境界の幅としたときの境界内の左端の座標
   [DataMember]
   public Double BoundRelativeLeft {
     get {
@@ -318,7 +318,7 @@ partial class LayoutParameter : INotifyPropertyChanged {
   }
   Double bound_relative_left_;
 
-  /// @brief 0.0-1.0を境界の幅としたときの境界内の右端の座標
+  /// 0.0-1.0を境界の幅としたときの境界内の右端の座標
   [DataMember]
   public Double BoundRelativeRight {
     get {
@@ -333,7 +333,7 @@ partial class LayoutParameter : INotifyPropertyChanged {
   }
   Double bound_relative_right_;
 
-  /// @brief 0.0-1.0を境界の高さとしたときの境界内の上端の座標
+  /// 0.0-1.0を境界の高さとしたときの境界内の上端の座標
   [DataMember]
   public Double BoundRelativeTop {
     get {
@@ -348,7 +348,7 @@ partial class LayoutParameter : INotifyPropertyChanged {
   }
   Double bound_relative_top_;
 
-  /// @brief 0.0-1.0を境界の高さとしたときの境界内の下端の座標
+  /// 0.0-1.0を境界の高さとしたときの境界内の下端の座標
   [DataMember]
   public Double BoundRelativeBottom {
     get {
@@ -363,7 +363,7 @@ partial class LayoutParameter : INotifyPropertyChanged {
   }
   Double bound_relative_bottom_;
 
-  /// @brief Clipping領域のFitオプション
+  /// Clipping領域のFitオプション
   [DataMember]
   public Boolean Fit {
     get {
@@ -442,7 +442,7 @@ partial class LayoutParameter : INotifyPropertyChanged {
   // 表示用
   //-------------------------------------------------------------------
 
-  /// @brief レイアウトの名前代わりに使用するWindowのクラス名
+  /// レイアウトの名前代わりに使用するWindowのクラス名
   public string WindowText {
     get {
       if (this.Window == UIntPtr.Zero || !ExternalAPI.IsWindow(window_)) {

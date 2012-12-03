@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scff-app/viewmodel/layout-parameter.cs
-/// @brief scff_app.viewmodel.LayoutParameterのメソッドの定義
+/// scff_app.viewmodel.LayoutParameterのメソッドの定義
 
 namespace scff_app.viewmodel {
 
@@ -29,12 +29,12 @@ using System.Text;
 // scff_inteprocess.LayoutParameterのビューモデル
 partial class LayoutParameter : IDataErrorInfo {
 
-  /// @brief デフォルトコンストラクタ
+  /// デフォルトコンストラクタ
   public LayoutParameter() {
     this.Init();
   }
 
-  /// @brief scff_interprocess用に変換
+  /// scff_interprocess用に変換
   public scff_interprocess.LayoutParameter ToInterprocess(int bound_width, int bound_height) {
     scff_interprocess.LayoutParameter output = new scff_interprocess.LayoutParameter();
 
@@ -91,7 +91,7 @@ partial class LayoutParameter : IDataErrorInfo {
     }
   }
 
-  /// @brief 検証
+  /// 検証
   void Validate() {
     errors_.Clear();
 
@@ -167,7 +167,7 @@ partial class LayoutParameter : IDataErrorInfo {
         primary_desktop_rect.right, primary_desktop_rect.bottom);
   }
 
-  /// @brief クリッピング領域をスクリーン座標に変換したもの
+  /// クリッピング領域をスクリーン座標に変換したもの
   public Rectangle ClippingScreenRectangle {
     get {
       ExternalAPI.POINT clipping_screen_origin;
@@ -183,7 +183,7 @@ partial class LayoutParameter : IDataErrorInfo {
     }
   }
 
-  /// @brief クリッピング領域を得る
+  /// クリッピング領域を得る
   Rectangle ClippingRectangle {
     get {
       return new Rectangle(this.ClippingX, this.ClippingY, this.ClippingWidth, this.ClippingHeight);
@@ -217,7 +217,7 @@ partial class LayoutParameter : IDataErrorInfo {
     }
   }
 
-  /// @brief デフォルトパラメータを設定
+  /// デフォルトパラメータを設定
   void Init() {
     // プライマリディスプレイを初期値にする
     SetPrimaryDesktopWindow();

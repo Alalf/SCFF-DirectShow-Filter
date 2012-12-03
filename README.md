@@ -135,7 +135,7 @@
    - Microsoft Visual Studio Express 2012で確認済み
    - 必要ならばいくつかのプロジェクト設定を書き換えること
 
-3. tools/copy-ffmpeg-dll.batを実行してdistディレクトリにffmpeg付属のdllをコピー
+3. tools/copy-ffmpeg-dll.batを実行してbinディレクトリにffmpeg付属のdllをコピー
 
 4. tools/install-debug.batかtools/install-release.batを実行
 
@@ -144,7 +144,7 @@
 6. scff-app.slnソリューションを開き、全てのビルドが通ることを確認
     - Microsoft Visual Studio Express 2012で確認済み
 
-7. dist/Debugかdist/Releaseにあるヘルパーアプリケーションを起動し取り込み設定を行う
+7. bin/Debugかbin/Releaseにあるヘルパーアプリケーションを起動し取り込み設定を行う
 
 8. （scff-dsfのデバッグバージョンを利用する場合:）
     - プロジェクト設定からローカルWindowsデバッガーを選ぶ

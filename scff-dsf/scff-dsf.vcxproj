@@ -140,7 +140,7 @@
     <LinkIncremental>true</LinkIncremental>
     <TargetName>$(ProjectName)-$(PlatformName)</TargetName>
     <IntDir>$(SolutionDir)\obj\$(ProjectName)\$(Configuration)-$(PlatformName)\</IntDir>
-    <OutDir>$(SolutionDir)\dist\$(Configuration)-$(PlatformName)\</OutDir>
+    <OutDir>$(SolutionDir)\bin\$(Configuration)-$(PlatformName)\</OutDir>
     <ExtensionsToDeleteOnClean>*.ax;$(ExtensionsToDeleteOnClean)</ExtensionsToDeleteOnClean>
     <TargetExt>.ax</TargetExt>
   </PropertyGroup>
@@ -148,7 +148,7 @@
     <LinkIncremental>true</LinkIncremental>
     <TargetName>$(ProjectName)-$(PlatformName)</TargetName>
     <IntDir>$(SolutionDir)\obj\$(ProjectName)\$(Configuration)-$(PlatformName)\</IntDir>
-    <OutDir>$(SolutionDir)\dist\$(Configuration)-$(PlatformName)\</OutDir>
+    <OutDir>$(SolutionDir)\bin\$(Configuration)-$(PlatformName)\</OutDir>
     <ExtensionsToDeleteOnClean>*.ax;$(ExtensionsToDeleteOnClean)</ExtensionsToDeleteOnClean>
     <TargetExt>.ax</TargetExt>
   </PropertyGroup>
@@ -156,7 +156,7 @@
     <LinkIncremental>false</LinkIncremental>
     <TargetName>$(ProjectName)-$(PlatformName)</TargetName>
     <IntDir>$(SolutionDir)\obj\$(ProjectName)\$(Configuration)-$(PlatformName)\</IntDir>
-    <OutDir>$(SolutionDir)\dist\$(Configuration)-$(PlatformName)\</OutDir>
+    <OutDir>$(SolutionDir)\bin\$(Configuration)-$(PlatformName)\</OutDir>
     <ExtensionsToDeleteOnClean>*.ax;$(ExtensionsToDeleteOnClean)</ExtensionsToDeleteOnClean>
     <TargetExt>.ax</TargetExt>
   </PropertyGroup>
@@ -164,7 +164,7 @@
     <LinkIncremental>false</LinkIncremental>
     <TargetName>$(ProjectName)-$(PlatformName)</TargetName>
     <IntDir>$(SolutionDir)\obj\$(ProjectName)\$(Configuration)-$(PlatformName)\</IntDir>
-    <OutDir>$(SolutionDir)\dist\$(Configuration)-$(PlatformName)\</OutDir>
+    <OutDir>$(SolutionDir)\bin\$(Configuration)-$(PlatformName)\</OutDir>
     <ExtensionsToDeleteOnClean>*.ax;$(ExtensionsToDeleteOnClean)</ExtensionsToDeleteOnClean>
     <TargetExt>.ax</TargetExt>
   </PropertyGroup>

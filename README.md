@@ -158,7 +158,9 @@
     - https://github.com/Alalf/SCFF-DirectShow-Filter
 
 - パッチを作成したい場合やコードを追加したい場合、まずGoogle C++スタイルガイドを一読してください。
-    - [Google C++スタイルガイド 日本語訳]
+    - [Google C++ Style Guide (Revision 3.231)]
+      (http://google-styleguide.googlecode.com/svn/trunk/cppguide.xml)
+    - [Google C++スタイルガイド 日本語訳 (Revision 3.199)]
       (http://www.textdrop.net/google-styleguide-ja/cppguide.xml)
     - このガイドは単純に決め事ではなく、バグを減らすために役に立つテクニックもいくらか含まれているようです。
 

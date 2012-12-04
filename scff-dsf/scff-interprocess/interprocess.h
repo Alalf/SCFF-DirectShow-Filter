@@ -31,8 +31,9 @@ namespace scff_interprocess {
 
 //====================================================================
 /// @page smp SCFF Messaging Protocol v1 (by 2012/05/22 Alalf)
+/// SCFF-DSFおよびそのクライアントで共有する共有メモリ内のデータ配置の仕様
 ///
-/// # [全体的な注意点]
+/// [全体的な注意点]
 /// - Windows固有の型名はビットサイズが分かりにくいのでcstdintで置き換える
 ///   - 対応表
 ///     - DWORD        = uint32_t (32bit)

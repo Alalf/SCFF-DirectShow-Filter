@@ -42,10 +42,10 @@
 1. 以下のランタイムをインストールしてください:
     - 共通: [Microsoft .NET Framework 4 Client Profile]
       (http://www.microsoft.com/downloads/ja-jp/details.aspx?FamilyID=e5ad0459-cbcc-4b4f-97b6-fb17111cf544)
-    - 32bit OS: [Microsoft Visual C++ 2010 SP1 再頒布可能パッケージ (x86)]
-      (http://www.microsoft.com/downloads/ja-jp/details.aspx?familyid=c32f406a-f8fc-4164-b6eb-5328b8578f03)
-    - 64bit OS: [Microsoft Visual C++ 2010 SP1 再頒布可能パッケージ (x64)]
-      (http://www.microsoft.com/downloads/ja-jp/details.aspx?FamilyID=C68CCBB6-75EF-4C9D-A326-879EAB4FCDF8)
+    - 32bit OS: [Visual Studio 2012 Update 1 の Visual C++ 再頒布可能パッケージ (VSU1\vcredist_x86.exe)]
+      (http://www.microsoft.com/ja-jp/download/details.aspx?id=30679)
+    - 64bit OS: [Visual Studio 2012 Update 1 の Visual C++ 再頒布可能パッケージ (VSU1\vcredist_x64.exe)]
+      (http://www.microsoft.com/ja-jp/download/details.aspx?id=30679)
 
 2. install-Win32/x64.batを実行してください
     - ***重要！***

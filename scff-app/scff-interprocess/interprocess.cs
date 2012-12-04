@@ -29,7 +29,7 @@ using System.Runtime.InteropServices;
 //=====================================================================
 /// @page smp SCFF Messaging Protocol v1 (by 2012/05/22 Alalf)
 ///
-/// [全体的な注意点]
+/// # [全体的な注意点]
 /// - Windows固有の型名はビットサイズが分かりにくいのでSystem.***で置き換える
 ///   - 対応表
 ///     - DWORD        = UInt32 (32bit)

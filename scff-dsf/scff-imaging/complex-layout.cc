@@ -60,7 +60,7 @@ ComplexLayout::~ComplexLayout() {
           TEXT("ComplexLayout: DELETE")));
   // 管理しているインスタンスをすべて破棄
   // 破棄はプロセッサ→イメージの順
-  if (screen_capture_ != 0) {
+  if (screen_capture_ != nullptr) {
     delete screen_capture_;
   }
   for (int i = 0; i < kMaxProcessorSize; i++) {

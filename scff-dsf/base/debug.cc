@@ -52,30 +52,36 @@ int MyDebugLog(DWORD types, DWORD level, LPCTSTR format, ...) {
   for (int i = kDbgMax-level; i > 1; i--) _tcscat_s(spaces, 32, TEXT(" "));
 
   switch (types) {
-  case LOG_TRACE:
-    _stprintf_s(new_format, 512, TEXT("%s%s: %s\r\n"),
-                spaces, TEXT("LOG_TRACE"), format);
-    break;
-  case LOG_ERROR:
-    _stprintf_s(new_format, 512, TEXT("%s%s: %s\r\n"),
-                spaces, TEXT("LOG_ERROR"), format);
-    break;
-  case LOG_LOCKING:
-    _stprintf_s(new_format, 512, TEXT("%s%s: %s\r\n"),
-                spaces, TEXT("LOG_LOCKING"), format);
-    break;
-  case LOG_MEMORY:
-    _stprintf_s(new_format, 512, TEXT("%s%s: %s\r\n"),
-                spaces, TEXT("LOG_MEMORY"), format);
-    break;
-  case LOG_TIMING:
-    _stprintf_s(new_format, 512, TEXT("%s%s: %s\r\n"),
-                spaces, TEXT("LOG_TIMING"), format);
-    break;
-  default:
-    _stprintf_s(new_format, 512, TEXT("%s%s: %s\r\n"),
-                spaces, TEXT("LOG"), format);
-    break;
+    case LOG_TRACE: {
+      _stprintf_s(new_format, 512, TEXT("%s%s: %s\r\n"),
+                  spaces, TEXT("LOG_TRACE"), format);
+      break;
+    }
+    case LOG_ERROR: {
+      _stprintf_s(new_format, 512, TEXT("%s%s: %s\r\n"),
+                  spaces, TEXT("LOG_ERROR"), format);
+      break;
+    }
+    case LOG_LOCKING: {
+      _stprintf_s(new_format, 512, TEXT("%s%s: %s\r\n"),
+                  spaces, TEXT("LOG_LOCKING"), format);
+      break;
+    }
+    case LOG_MEMORY: {
+      _stprintf_s(new_format, 512, TEXT("%s%s: %s\r\n"),
+                  spaces, TEXT("LOG_MEMORY"), format);
+      break;
+    }
+    case LOG_TIMING: {
+      _stprintf_s(new_format, 512, TEXT("%s%s: %s\r\n"),
+                  spaces, TEXT("LOG_TIMING"), format);
+      break;
+    }
+    default: {
+      _stprintf_s(new_format, 512, TEXT("%s%s: %s\r\n"),
+                  spaces, TEXT("LOG"), format);
+      break;
+    }
   }
   TCHAR buffer[512];
   ZeroMemory(buffer, sizeof(buffer));

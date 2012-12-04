@@ -80,24 +80,26 @@ ErrorCode Scale::Init() {
   // ピクセルフォーマットの調整
   AVPixelFormat input_pixel_format = AV_PIX_FMT_NONE;
   switch (GetOutputImage()->pixel_format()) {
-  case ImagePixelFormat::kI420:
-  case ImagePixelFormat::kIYUV:
-  case ImagePixelFormat::kUYVY:
-  case ImagePixelFormat::kYUY2:
-    // IYUV/I420/YUY2/UYVY:
-    //    入力:BGR0(32bit)
-    //    出力:I420(12bit)/IYUV(12bit)/UYVY(16bit)/YUY2(16bit)
-    /// @attention RGB->YUV変換時にUVが逆になるのを修正
-    /// - RGBデータをBGRデータとしてSwsContextに渡してあります
-    input_pixel_format = AV_PIX_FMT_BGR0;
-    break;
-  case ImagePixelFormat::kYV12:
-  case ImagePixelFormat::kRGB0:
-    // YV12/RGB0:
-    //    入力:RGB0(32bit)
-    //    出力:YV12(12bit)/RGB0(32bit)
-    input_pixel_format = AV_PIX_FMT_RGB0;
-    break;
+    case ImagePixelFormat::kI420:
+    case ImagePixelFormat::kIYUV:
+    case ImagePixelFormat::kUYVY:
+    case ImagePixelFormat::kYUY2: {
+      // IYUV/I420/YUY2/UYVY:
+      //    入力:BGR0(32bit)
+      //    出力:I420(12bit)/IYUV(12bit)/UYVY(16bit)/YUY2(16bit)
+      /// @attention RGB->YUV変換時にUVが逆になるのを修正
+      /// - RGBデータをBGRデータとしてSwsContextに渡してあります
+      input_pixel_format = AV_PIX_FMT_BGR0;
+      break;
+    }
+    case ImagePixelFormat::kYV12:
+    case ImagePixelFormat::kRGB0: {
+      // YV12/RGB0:
+      //    入力:RGB0(32bit)
+      //    出力:YV12(12bit)/RGB0(32bit)
+      input_pixel_format = AV_PIX_FMT_RGB0;
+      break;
+    }
   }
 
   // フィルタの設定

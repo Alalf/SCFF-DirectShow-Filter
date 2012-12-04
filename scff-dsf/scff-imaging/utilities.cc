@@ -58,30 +58,34 @@ void set_dll_instance(HINSTANCE dll_instance) {
 
 bool IsTopdownPixelFormat(ImagePixelFormat pixel_format) {
   switch (pixel_format) {
-  case ImagePixelFormat::kRGB0:
-    return true;
-  case ImagePixelFormat::kI420:
-  case ImagePixelFormat::kIYUV:
-  case ImagePixelFormat::kYV12:
-  case ImagePixelFormat::kUYVY:
-  case ImagePixelFormat::kYUY2:
-  default:
-    return false;
+    case ImagePixelFormat::kRGB0: {
+      return true;
+    }
+    case ImagePixelFormat::kI420:
+    case ImagePixelFormat::kIYUV:
+    case ImagePixelFormat::kYV12:
+    case ImagePixelFormat::kUYVY:
+    case ImagePixelFormat::kYUY2:
+    default: {
+      return false;
+    }
   }
 }
 
 bool CanUseDrawUtils(ImagePixelFormat pixel_format) {
   /// @warning 2012/05/08現在drawutilsはPlaner Formatにしか対応していない
   switch (pixel_format) {
-  case ImagePixelFormat::kI420:
-  case ImagePixelFormat::kIYUV:
-  case ImagePixelFormat::kYV12:
-  case ImagePixelFormat::kRGB0:
-    return true;
-  case ImagePixelFormat::kUYVY:
-  case ImagePixelFormat::kYUY2:
-  default:
-    return false;
+    case ImagePixelFormat::kI420:
+    case ImagePixelFormat::kIYUV:
+    case ImagePixelFormat::kYV12:
+    case ImagePixelFormat::kRGB0: {
+      return true;
+    }
+    case ImagePixelFormat::kUYVY:
+    case ImagePixelFormat::kYUY2:
+    default: {
+      return false;
+    }
   }
 }
 
@@ -104,20 +108,20 @@ int CalculateImageSize(const Image &image) {
 /// @attention ピクセルフォーマットを追加するときはここを修正すること
 AVPixelFormat ToAVPicturePixelFormat(ImagePixelFormat pixel_format) {
   switch (pixel_format) {
-  case ImagePixelFormat::kI420:
-  case ImagePixelFormat::kIYUV:
-  case ImagePixelFormat::kYV12:
-    return AV_PIX_FMT_YUV420P;
-    break;
-  case ImagePixelFormat::kUYVY:
-    return AV_PIX_FMT_UYVY422;
-    break;
-  case ImagePixelFormat::kYUY2:
-    return AV_PIX_FMT_YUYV422;
-    break;
-  case ImagePixelFormat::kRGB0:
-    return AV_PIX_FMT_RGB0;
-    break;
+    case ImagePixelFormat::kI420:
+    case ImagePixelFormat::kIYUV:
+    case ImagePixelFormat::kYV12: {
+      return AV_PIX_FMT_YUV420P;
+    }
+    case ImagePixelFormat::kUYVY: {
+      return AV_PIX_FMT_UYVY422;
+    }
+    case ImagePixelFormat::kYUY2: {
+      return AV_PIX_FMT_YUYV422;
+    }
+    case ImagePixelFormat::kRGB0: {
+      return AV_PIX_FMT_RGB0;
+    }
   }
 
   ASSERT(false);
@@ -144,30 +148,36 @@ void ToWindowsBitmapInfo(ImagePixelFormat pixel_format,
   info->bmiHeader.biClrUsed       = 0;
   info->bmiHeader.biClrImportant  = 0;
   switch (pixel_format) {
-  case ImagePixelFormat::kI420:
-    info->bmiHeader.biBitCount    = 12;
-    info->bmiHeader.biCompression = MAKEFOURCC('I', '4', '2', '0');
-    break;
-  case ImagePixelFormat::kIYUV:
-    info->bmiHeader.biBitCount    = 12;
-    info->bmiHeader.biCompression = MAKEFOURCC('I', 'Y', 'U', 'V');
-    break;
-  case ImagePixelFormat::kYV12:
-    info->bmiHeader.biBitCount    = 12;
-    info->bmiHeader.biCompression = MAKEFOURCC('Y', 'V', '1', '2');
-    break;
-  case ImagePixelFormat::kUYVY:
-    info->bmiHeader.biBitCount    = 16;
-    info->bmiHeader.biCompression = MAKEFOURCC('U', 'Y', 'V', 'Y');
-    break;
-  case ImagePixelFormat::kYUY2:
-    info->bmiHeader.biBitCount    = 16;
-    info->bmiHeader.biCompression = MAKEFOURCC('Y', 'U', 'Y', '2');
-    break;
-  case ImagePixelFormat::kRGB0:
-    info->bmiHeader.biBitCount    = 32;
-    info->bmiHeader.biCompression = BI_RGB;
-    break;
+    case ImagePixelFormat::kI420: {
+      info->bmiHeader.biBitCount    = 12;
+      info->bmiHeader.biCompression = MAKEFOURCC('I', '4', '2', '0');
+      break;
+    }
+    case ImagePixelFormat::kIYUV: {
+      info->bmiHeader.biBitCount    = 12;
+      info->bmiHeader.biCompression = MAKEFOURCC('I', 'Y', 'U', 'V');
+      break;
+    }
+    case ImagePixelFormat::kYV12: {
+      info->bmiHeader.biBitCount    = 12;
+      info->bmiHeader.biCompression = MAKEFOURCC('Y', 'V', '1', '2');
+      break;
+    }
+    case ImagePixelFormat::kUYVY: {
+      info->bmiHeader.biBitCount    = 16;
+      info->bmiHeader.biCompression = MAKEFOURCC('U', 'Y', 'V', 'Y');
+      break;
+    }
+    case ImagePixelFormat::kYUY2: {
+      info->bmiHeader.biBitCount    = 16;
+      info->bmiHeader.biCompression = MAKEFOURCC('Y', 'U', 'Y', '2');
+      break;
+    }
+    case ImagePixelFormat::kRGB0: {
+      info->bmiHeader.biBitCount    = 32;
+      info->bmiHeader.biCompression = BI_RGB;
+      break;
+    }
   }
 }
 
@@ -192,19 +202,25 @@ ImagePixelFormat IndexToPixelFormat(int index) {
 ImagePixelFormat WindowsBitmapInfoHeaderToPixelFormat(
     const BITMAPINFOHEADER &info_header) {
   switch (info_header.biCompression) {
-  case MAKEFOURCC('I', '4', '2', '0'):
-    return ImagePixelFormat::kI420;
-  case MAKEFOURCC('I', 'Y', 'U', 'V'):
-    return ImagePixelFormat::kIYUV;
-  case MAKEFOURCC('Y', 'V', '1', '2'):
-    return ImagePixelFormat::kYV12;
-  case MAKEFOURCC('U', 'Y', 'V', 'Y'):
-    return ImagePixelFormat::kUYVY;
-  case MAKEFOURCC('Y', 'U', 'Y', '2'):
-    return ImagePixelFormat::kYUY2;
-  case BI_RGB:
-    if (info_header.biBitCount == 32) {
-      return ImagePixelFormat::kRGB0;
+    case MAKEFOURCC('I', '4', '2', '0'): {
+      return ImagePixelFormat::kI420;
+    }
+    case MAKEFOURCC('I', 'Y', 'U', 'V'): {
+      return ImagePixelFormat::kIYUV;
+    }
+    case MAKEFOURCC('Y', 'V', '1', '2'): {
+      return ImagePixelFormat::kYV12;
+    }
+    case MAKEFOURCC('U', 'Y', 'V', 'Y'): {
+      return ImagePixelFormat::kUYVY;
+    }
+    case MAKEFOURCC('Y', 'U', 'Y', '2'): {
+      return ImagePixelFormat::kYUY2;
+    }
+    case BI_RGB: {
+      if (info_header.biBitCount == 32) {
+        return ImagePixelFormat::kRGB0;
+      }
     }
   }
 

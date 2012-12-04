@@ -263,7 +263,7 @@ STDMETHODIMP SCFFOutputPin::GetLatency(REFERENCE_TIME *latency) {
   if (fps_ > 0.0) {
     *latency = ToFrameInterval(fps_);
   } else {
-    *latency = 0;
+    *latency = 0LL;
   }
 
   return S_OK;
@@ -326,8 +326,9 @@ STDMETHODIMP SCFFOutputPin::GetStreamOffset(REFERENCE_TIME *offset) {
 
 /// @retval S_OK
 STDMETHODIMP SCFFOutputPin::SetStreamOffset(REFERENCE_TIME offset) {
+  /// @todo(me) %lldではなく%"PRId64"が適切だがコンパイルエラーになる
   MyDbgLog((LOG_TRACE, kDbgTrace,
-            TEXT("SCFFOutputPin: SetStreamOffset(%llu)"), offset));
+            TEXT("SCFFOutputPin: SetStreamOffset(%lld)"), offset));
   offset_ = offset;
   return S_OK;
 }

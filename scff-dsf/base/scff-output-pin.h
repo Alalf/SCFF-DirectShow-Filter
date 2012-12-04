@@ -173,13 +173,13 @@ class SCFFOutputPin : public CSourceStream,
 
   /// frame_intervalからfpsを求める
   double ToFPS(const REFERENCE_TIME frame_interval) {
-    ASSERT(frame_interval != 0);
+    ASSERT(frame_interval != 0LL);
     return static_cast<double>(UNITS) / frame_interval;
   }
 
   /// fpsからframe_intervalを求める
   REFERENCE_TIME ToFrameInterval(const double fps) {
-    ASSERT(fps != 0);
+    ASSERT(fps != 0.0);
     return static_cast<REFERENCE_TIME>(UNITS / fps_);
   }
 

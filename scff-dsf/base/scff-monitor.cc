@@ -31,7 +31,7 @@
 
 SCFFMonitor::SCFFMonitor()
     : last_polling_clock_(-1),        // ありえない値
-      last_message_timestamp_(-1) {   // ありえない値
+      last_message_timestamp_(-1LL) {   // ありえない値
   MyDbgLog((LOG_MEMORY, kDbgNewDelete, TEXT("NEW SCFFMonitor")));
 }
 
@@ -86,43 +86,55 @@ void ConvertSWScaleConfig(
     scff_imaging::SWScaleConfig *output) {
   // enumは無理にキャストせずswitchで変換
   switch (input.flags) {
-  case scff_interprocess::SWScaleFlags::kFastBilinear:
-    output->flags = scff_imaging::SWScaleFlags::kFastBilinear;
-    break;
-  case scff_interprocess::SWScaleFlags::kBilinear:
-    output->flags = scff_imaging::SWScaleFlags::kBilinear;
-    break;
-  case scff_interprocess::SWScaleFlags::kBicubic:
-    output->flags = scff_imaging::SWScaleFlags::kBicubic;
-    break;
-  case scff_interprocess::SWScaleFlags::kX:
-    output->flags = scff_imaging::SWScaleFlags::kX;
-    break;
-  case scff_interprocess::SWScaleFlags::kPoint:
-    output->flags = scff_imaging::SWScaleFlags::kPoint;
-    break;
-  case scff_interprocess::SWScaleFlags::kArea:
-    output->flags = scff_imaging::SWScaleFlags::kArea;
-    break;
-  case scff_interprocess::SWScaleFlags::kBicublin:
-    output->flags = scff_imaging::SWScaleFlags::kBicublin;
-    break;
-  case scff_interprocess::SWScaleFlags::kGauss:
-    output->flags = scff_imaging::SWScaleFlags::kGauss;
-    break;
-  case scff_interprocess::SWScaleFlags::kSinc:
-    output->flags = scff_imaging::SWScaleFlags::kSinc;
-    break;
-  case scff_interprocess::SWScaleFlags::kLanczos:
-    output->flags = scff_imaging::SWScaleFlags::kLanczos;
-    break;
-  case scff_interprocess::SWScaleFlags::kSpline:
-    output->flags = scff_imaging::SWScaleFlags::kSpline;
-    break;
-  default:
-    ASSERT(false);
-    output->flags = scff_imaging::SWScaleFlags::kFastBilinear;
-    break;
+    case scff_interprocess::SWScaleFlags::kFastBilinear: {
+      output->flags = scff_imaging::SWScaleFlags::kFastBilinear;
+      break;
+    }
+    case scff_interprocess::SWScaleFlags::kBilinear: {
+      output->flags = scff_imaging::SWScaleFlags::kBilinear;
+      break;
+    }
+    case scff_interprocess::SWScaleFlags::kBicubic: {
+      output->flags = scff_imaging::SWScaleFlags::kBicubic;
+      break;
+    }
+    case scff_interprocess::SWScaleFlags::kX: {
+      output->flags = scff_imaging::SWScaleFlags::kX;
+      break;
+    }
+    case scff_interprocess::SWScaleFlags::kPoint: {
+      output->flags = scff_imaging::SWScaleFlags::kPoint;
+      break;
+    }
+    case scff_interprocess::SWScaleFlags::kArea: {
+      output->flags = scff_imaging::SWScaleFlags::kArea;
+      break;
+    }
+    case scff_interprocess::SWScaleFlags::kBicublin: {
+      output->flags = scff_imaging::SWScaleFlags::kBicublin;
+      break;
+    }
+    case scff_interprocess::SWScaleFlags::kGauss: {
+      output->flags = scff_imaging::SWScaleFlags::kGauss;
+      break;
+    }
+    case scff_interprocess::SWScaleFlags::kSinc: {
+      output->flags = scff_imaging::SWScaleFlags::kSinc;
+      break;
+    }
+    case scff_interprocess::SWScaleFlags::kLanczos: {
+      output->flags = scff_imaging::SWScaleFlags::kLanczos;
+      break;
+    }
+    case scff_interprocess::SWScaleFlags::kSpline: {
+      output->flags = scff_imaging::SWScaleFlags::kSpline;
+      break;
+    }
+    default: {
+      ASSERT(false);
+      output->flags = scff_imaging::SWScaleFlags::kFastBilinear;
+      break;
+    }
   }
 
   output->accurate_rnd = input.accurate_rnd != 0;
@@ -161,22 +173,27 @@ void ConvertLayoutParameter(
 
   // enumは無理にキャストせずswitchで変換
   switch (input.rotate_direction) {
-  case scff_interprocess::RotateDirection::kNoRotate:
-    output->rotate_direction = scff_imaging::RotateDirection::kNoRotate;
-    break;
-  case scff_interprocess::RotateDirection::k90Degrees:
-    output->rotate_direction = scff_imaging::RotateDirection::k90Degrees;
-    break;
-  case scff_interprocess::RotateDirection::k180Degrees:
-    output->rotate_direction = scff_imaging::RotateDirection::k180Degrees;
-    break;
-  case scff_interprocess::RotateDirection::k270Degrees:
-    output->rotate_direction = scff_imaging::RotateDirection::k270Degrees;
-    break;
-  default:
-    ASSERT(false);
-    output->rotate_direction = scff_imaging::RotateDirection::kNoRotate;
-    break;
+    case scff_interprocess::RotateDirection::kNoRotate: {
+      output->rotate_direction = scff_imaging::RotateDirection::kNoRotate;
+      break;
+    }
+    case scff_interprocess::RotateDirection::k90Degrees: {
+      output->rotate_direction = scff_imaging::RotateDirection::k90Degrees;
+      break;
+    }
+    case scff_interprocess::RotateDirection::k180Degrees: {
+      output->rotate_direction = scff_imaging::RotateDirection::k180Degrees;
+      break;
+    }
+    case scff_interprocess::RotateDirection::k270Degrees: {
+      output->rotate_direction = scff_imaging::RotateDirection::k270Degrees;
+      break;
+    }
+    default: {
+      ASSERT(false);
+      output->rotate_direction = scff_imaging::RotateDirection::kNoRotate;
+      break;
+    }
   }
 }
 
@@ -214,7 +231,7 @@ scff_imaging::Request* SCFFMonitor::CreateRequest() {
   interprocess_.ReceiveMessage(&message);
 
   // タイムスタンプが0以下ならメッセージは空と同じ扱いとなる
-  if (message.timestamp <= 0) {
+  if (message.timestamp <= 0LL) {
     return 0;
   }
 
@@ -235,6 +252,7 @@ scff_imaging::Request* SCFFMonitor::CreateRequest() {
   // ResetLayoutRequest
   //-----------------------------------------------------------------
   if (layout_type == scff_interprocess::LayoutType::kNullLayout) {
+    /// @todo(me) %lldではなく%"PRId64"が適切だがコンパイルエラーになる
     MyDbgLog((LOG_TRACE, kDbgImportant,
               TEXT("SCFFMonitor: ResetLayoutRequest arrived(%lld)."),
               message.timestamp));
@@ -247,6 +265,7 @@ scff_imaging::Request* SCFFMonitor::CreateRequest() {
   ASSERT(layout_type == scff_interprocess::LayoutType::kNativeLayout ||
          layout_type == scff_interprocess::LayoutType::kComplexLayout);
 
+  /// @todo(me) %lldではなく%"PRId64"が適切だがコンパイルエラーになる
   MyDbgLog((LOG_TRACE, kDbgImportant,
             TEXT("SCFFMonitor: SetLayoutRequest arrived(%d, %lld)."),
             message.layout_type,

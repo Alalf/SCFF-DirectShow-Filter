@@ -39,7 +39,7 @@ SCFFOutputPin::SCFFOutputPin(HRESULT *result, CSource *source)
     height_(kPreferredSizes[1].cy),   // 0はダミーなので1
     fps_(kDefaultFPS),
     pixel_format_(scff_imaging::ImagePixelFormat::kI420),
-    offset_(0) {
+    offset_(0LL) {
   MyDbgLog((LOG_MEMORY, kDbgNewDelete,
     TEXT("SCFFOutputPin: NEW(%d, %d, %.1ffps)"),
     width_, height_, fps_));
@@ -234,7 +234,7 @@ HRESULT SCFFOutputPin::CheckMediaType(const CMediaType *media_type) {
   // サイズとFPSの設定が正しくされているか？
   if (video_info->bmiHeader.biWidth == 0 ||
       video_info->bmiHeader.biHeight <= 0 ||
-      video_info->AvgTimePerFrame == 0) {
+      video_info->AvgTimePerFrame == 0LL) {
     return E_INVALIDARG;
   }
 
@@ -244,7 +244,7 @@ HRESULT SCFFOutputPin::CheckMediaType(const CMediaType *media_type) {
   //   // nop
   // } else if (video_info->bmiHeader.biWidth == 0 ||
   //            video_info->bmiHeader.biHeight <= 0 ||
-  //            video_info->AvgTimePerFrame == 0) {
+  //            video_info->AvgTimePerFrame == 0LL) {
   //   // Skypeでなければきっちりエラー処理する
   //   return E_INVALIDARG;
   // }
@@ -286,7 +286,7 @@ HRESULT SCFFOutputPin::SetMediaType(const CMediaType *media_type) {
   /// @attention ここもSkypeで引っかかるかも
   if (video_info->bmiHeader.biWidth == 0 ||
       video_info->bmiHeader.biHeight == 0 ||
-      video_info->AvgTimePerFrame == 0) {
+      video_info->AvgTimePerFrame == 0LL) {
     return E_INVALIDARG;
   }
 
@@ -313,7 +313,7 @@ HRESULT SCFFOutputPin::SetMediaType(const CMediaType *media_type) {
   //
   // } else if (video_info->bmiHeader.biWidth == 0 ||
   //            video_info->bmiHeader.biHeight == 0 ||
-  //            video_info->AvgTimePerFrame == 0) {
+  //            video_info->AvgTimePerFrame == 0LL) {
   //   // Skypeでなければきっちりエラー処理する
   //   return E_INVALIDARG;
   //
@@ -328,7 +328,7 @@ HRESULT SCFFOutputPin::SetMediaType(const CMediaType *media_type) {
     reinterpret_cast<VIDEOINFO*>(m_mt.Format());
   CheckPointer(specified_video_info, E_UNEXPECTED);
 
-  if (specified_video_info->AvgTimePerFrame <= 0) {
+  if (specified_video_info->AvgTimePerFrame <= 0LL) {
     return E_INVALIDARG;
   }
 

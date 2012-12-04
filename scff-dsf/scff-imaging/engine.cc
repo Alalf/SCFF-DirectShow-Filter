@@ -373,26 +373,31 @@ DWORD Engine::ThreadProc() {
     request = static_cast<RequestType>(actual_request);
 
     switch (request) {
-    case RequestType::kResetLayout:
-      DoResetLayout();
-      Reply(NOERROR);
-      break;
-    case RequestType::kSetNativeLayout:
-      DoSetNativeLayout();
-      Reply(NOERROR);
-      break;
-    case RequestType::kSetComplexLayout:
-      DoSetComplexLayout();
-      Reply(NOERROR);
-      break;
-    case RequestType::kRun:
-      Reply(NOERROR);
-      DoLoop();
-      break;
-    case RequestType::kStop:
-    case RequestType::kExit:
-      Reply(NOERROR);
-      break;
+      case RequestType::kResetLayout: {
+        DoResetLayout();
+        Reply(NOERROR);
+        break;
+      }
+      case RequestType::kSetNativeLayout: {
+        DoSetNativeLayout();
+        Reply(NOERROR);
+        break;
+      }
+      case RequestType::kSetComplexLayout: {
+        DoSetComplexLayout();
+        Reply(NOERROR);
+        break;
+      }
+      case RequestType::kRun: {
+        Reply(NOERROR);
+        DoLoop();
+        break;
+      }
+      case RequestType::kStop:
+      case RequestType::kExit: {
+        Reply(NOERROR);
+        break;
+      }
     }
   } while (request != RequestType::kExit);
 

@@ -29,13 +29,13 @@
 SCFFClockTime::SCFFClockTime()
     : graph_clock_(nullptr),
       system_clock_(nullptr),
-      target_frame_interval_(-1),   // ありえない値
-      zero_(-1),                    // ありえない値
-      graph_cursor_(-1),            // ありえない値
-      system_cursor_(-1),           // ありえない値
-      frame_counter_(-1),           // ありえない値
-      last_(-1),                    // ありえない値
-      last_end_(-1) {               // ありえない値
+      target_frame_interval_(-1LL),   // ありえない値
+      zero_(-1LL),                    // ありえない値
+      graph_cursor_(-1LL),            // ありえない値
+      system_cursor_(-1LL),           // ありえない値
+      frame_counter_(-1LL),           // ありえない値
+      last_(-1LL),                    // ありえない値
+      last_end_(-1LL) {               // ありえない値
   // nop
 }
 
@@ -85,8 +85,8 @@ void SCFFClockTime::Reset(double fps, CSource* parent) {
 
   target_frame_interval_ = static_cast<REFERENCE_TIME>(UNITS / fps);
   graph_clock_->GetTime(&zero_);
-  frame_counter_ = 0;
-  last_end_ = 0;
+  frame_counter_ = 0LL;
+  last_end_ = 0LL;
 
   MyDbgLog((LOG_TRACE, kDbgImportant,
             TEXT("SCFFClockTime: RESET!!!!!!!!!!!!")));
@@ -115,7 +115,7 @@ REFERENCE_TIME SCFFClockTime::GetNow(REFERENCE_TIME filter_zero) {
 
   // zero_がparentから得られる場合がある
   REFERENCE_TIME delta_zero = zero_ - filter_zero;
-  if (delta_zero < 0) {
+  if (delta_zero < 0LL) {
     delta_zero = -delta_zero;
   }
   if (delta_zero < UNITS) {
@@ -134,7 +134,7 @@ void SCFFClockTime::GetTimestamp(REFERENCE_TIME filter_zero,
 
 #if defined(FOR_FFMPEG)
   // 最初の1回だけは正確な値を計算する
-  if (frame_counter_ == 0) {
+  if (frame_counter_ == 0LL) {
     REFERENCE_TIME tmp_start;
     REFERENCE_TIME tmp_end;
 

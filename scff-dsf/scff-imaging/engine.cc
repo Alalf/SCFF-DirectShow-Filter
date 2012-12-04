@@ -30,11 +30,11 @@
 #include "scff-imaging/request.h"
 #include "scff-imaging/utilities.h"
 
-namespace scff_imaging {
+namespace {
 
 /// 指定されたAVPictureImageを黒で塗りつぶす
-static void Clear(AVPictureImage *image) {
-  if (!Utilities::CanUseDrawUtils(image->pixel_format())) {
+void Clear(scff_imaging::AVPictureImage *image) {
+  if (!scff_imaging::utilities::CanUseDrawUtils(image->pixel_format())) {
     // 塗りつぶせなければなにもしない
     return;
   }
@@ -63,6 +63,9 @@ static void Clear(AVPictureImage *image) {
                     image->width(),
                     image->height());
 }
+}   // namespace
+
+namespace scff_imaging {
 
 //=====================================================================
 // scff_imaging::Engine
@@ -202,7 +205,7 @@ ErrorCode Engine::CopyFrontImage(BYTE *sample, DWORD data_size) {
 
   // layout_にエラーが発生していたらスプラッシュを書く
   if (GetCurrentLayoutError() != ErrorCode::kNoError) {
-    ASSERT(data_size == Utilities::CalculateImageSize(splash_image_));
+    ASSERT(data_size == utilities::CalculateImageSize(splash_image_));
     avpicture_layout(splash_image_.avpicture(),
                      splash_image_.av_pixel_format(),
                      splash_image_.width(),
@@ -213,14 +216,14 @@ ErrorCode Engine::CopyFrontImage(BYTE *sample, DWORD data_size) {
 
   // sampleにコピー
   if (last_update_image_ == ImageIndex::kFront) {
-    ASSERT(data_size == Utilities::CalculateImageSize(front_image_));
+    ASSERT(data_size == utilities::CalculateImageSize(front_image_));
     avpicture_layout(front_image_.avpicture(),
                      front_image_.av_pixel_format(),
                      front_image_.width(),
                      front_image_.height(),
                      sample, data_size);
   } else if (last_update_image_ == ImageIndex::kBack) {
-    ASSERT(data_size == Utilities::CalculateImageSize(back_image_));
+    ASSERT(data_size == utilities::CalculateImageSize(back_image_));
     avpicture_layout(back_image_.avpicture(),
                      back_image_.av_pixel_format(),
                      back_image_.width(),
@@ -264,7 +267,7 @@ void Engine::SetLayoutParameters(
   element_count_ = element_count;
   for (int i = 0; i < kMaxProcessorSize; i++) {
     parameters_[i] = parameters[i];
-    if (Utilities::IsTopdownPixelFormat(output_pixel_format_)) {
+    if (utilities::IsTopdownPixelFormat(output_pixel_format_)) {
       // * Topdownピクセルフォーマットの場合はbound_yの値を補正する
       // まずbound_yは左上のy座標になっているので、左下のy座標にする(y+height)
       // 左下のy座標は左上原点の座標系になっているので、左下原点の座標に直す

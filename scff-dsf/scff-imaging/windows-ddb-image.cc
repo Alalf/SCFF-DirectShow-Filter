@@ -63,7 +63,7 @@ ErrorCode WindowsDDBImage::CreateFromResource(int width, int height,
   // LoadImageをつかってDDBを読み込む
   /// @attention Bitmapイメージの形式はチェックしていない
   HBITMAP windows_ddb = static_cast<HBITMAP>(
-      LoadImage(Utilities::dll_instance(),
+      LoadImage(utilities::dll_instance(),
                 MAKEINTRESOURCE(resource_id),
                 IMAGE_BITMAP,
                 0, 0, 0));

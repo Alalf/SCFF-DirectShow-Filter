@@ -80,9 +80,9 @@ ErrorCode NativeLayout::Init() {
   int padding_left = 0;
   int padding_right = 0;
 
-  if (Utilities::CanUseDrawUtils(GetOutputImage()->pixel_format())) {
+  if (utilities::CanUseDrawUtils(GetOutputImage()->pixel_format())) {
     // パディングサイズの計算
-    const bool no_error = Utilities::CalculatePaddingSize(
+    const bool no_error = utilities::CalculatePaddingSize(
         GetOutputImage()->width(),
         GetOutputImage()->height(),
         captured_width,
@@ -113,7 +113,7 @@ ErrorCode NativeLayout::Init() {
   }
 
   // 変換後パディング用
-  if (Utilities::CanUseDrawUtils(GetOutputImage()->pixel_format())) {
+  if (utilities::CanUseDrawUtils(GetOutputImage()->pixel_format())) {
     const ErrorCode error_converted_image =
         converted_image_.Create(GetOutputImage()->pixel_format(),
                                 converted_width,
@@ -130,7 +130,7 @@ ErrorCode NativeLayout::Init() {
   parameter_array[0] = parameter_;
   // NativeLayoutなのでsize=1
   ScreenCapture *screen_capture = new ScreenCapture(
-      !Utilities::IsTopdownPixelFormat(GetOutputImage()->pixel_format()),
+      !utilities::IsTopdownPixelFormat(GetOutputImage()->pixel_format()),
       1, parameter_array);
   screen_capture->SetOutputImage(&captured_image_);
   const ErrorCode error_screen_capture = screen_capture->Init();
@@ -143,7 +143,7 @@ ErrorCode NativeLayout::Init() {
   // 拡大縮小ピクセルフォーマット変換
   Scale *scale = new Scale(parameter_.swscale_config);
   scale->SetInputImage(&captured_image_);
-  if (Utilities::CanUseDrawUtils(GetOutputImage()->pixel_format())) {
+  if (utilities::CanUseDrawUtils(GetOutputImage()->pixel_format())) {
     // パディング可能ならバッファをはさむ
     scale->SetOutputImage(&converted_image_);
   } else {
@@ -157,7 +157,7 @@ ErrorCode NativeLayout::Init() {
   scale_ = scale;
 
   // パディング
-  if (Utilities::CanUseDrawUtils(GetOutputImage()->pixel_format())) {
+  if (utilities::CanUseDrawUtils(GetOutputImage()->pixel_format())) {
     Padding *padding =
         new Padding(padding_left, padding_right, padding_top, padding_bottom);
     padding->SetInputImage(&converted_image_);
@@ -181,7 +181,7 @@ ErrorCode NativeLayout::Run() {
   }
 
   // OutputImageを設定しなおす
-  if (Utilities::CanUseDrawUtils(GetOutputImage()->pixel_format())) {
+  if (utilities::CanUseDrawUtils(GetOutputImage()->pixel_format())) {
     padding_->SwapOutputImage(GetOutputImage());
   } else {
     scale_->SwapOutputImage(GetOutputImage());
@@ -200,7 +200,7 @@ ErrorCode NativeLayout::Run() {
   }
 
   // Paddingを利用してパディングを行う
-  if (Utilities::CanUseDrawUtils(GetOutputImage()->pixel_format())) {
+  if (utilities::CanUseDrawUtils(GetOutputImage()->pixel_format())) {
     const ErrorCode error_padding = padding_->Run();
     if (error_padding != ErrorCode::kNoError) {
       return ErrorOccured(error_padding);

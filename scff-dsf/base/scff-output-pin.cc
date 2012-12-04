@@ -125,7 +125,7 @@ HRESULT SCFFOutputPin::GetMediaType(int position, CMediaType *media_type) {
     current_pixel_format = scff_imaging::kI420;
 #else
     current_pixel_format =
-        scff_imaging::Utilities::IndexToPixelFormat(position_in_pixel_formats);
+        scff_imaging::utilities::IndexToPixelFormat(position_in_pixel_formats);
 #endif
     // サイズ設定の優先度は以下のとおり:
     //  0.  SetMediaTypeでピン接続先から指定されたサイズ
@@ -143,7 +143,7 @@ HRESULT SCFFOutputPin::GetMediaType(int position, CMediaType *media_type) {
 
   // ピクセルフォーマットからBITMAPINFOを取得
   BITMAPINFO current_info;
-  scff_imaging::Utilities::ToWindowsBitmapInfo(current_pixel_format,
+  scff_imaging::utilities::ToWindowsBitmapInfo(current_pixel_format,
                                                current_width,
                                                current_height,
                                                false,
@@ -333,7 +333,7 @@ HRESULT SCFFOutputPin::SetMediaType(const CMediaType *media_type) {
   }
 
   // 対応形式であるか確認
-  if (!scff_imaging::Utilities::IsSupportedPixelFormat(
+  if (!scff_imaging::utilities::IsSupportedPixelFormat(
           specified_video_info->bmiHeader)) {
     return E_INVALIDARG;
   }
@@ -473,7 +473,7 @@ HRESULT SCFFOutputPin::DoBufferProcessingLoop(void) {
 
   // BITMAPINFOHEADERからピクセルフォーマットを取得
   scff_imaging::ImagePixelFormat pixel_format =
-      scff_imaging::Utilities::WindowsBitmapInfoHeaderToPixelFormat(
+      scff_imaging::utilities::WindowsBitmapInfoHeaderToPixelFormat(
           video_info->bmiHeader);
 
   // Engineを作成

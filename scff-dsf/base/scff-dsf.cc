@@ -212,6 +212,6 @@ extern "C" BOOL WINAPI DllEntryPoint(HINSTANCE, ULONG, LPVOID);
 
 /// DLLMain。DLLEntryPointを呼び出して処理をStrmbase.libに任せる。
 BOOL APIENTRY DllMain(HANDLE hModule, DWORD dwReason, LPVOID lpReserved) {
-  scff_imaging::Utilities::set_dll_instance(static_cast<HINSTANCE>(hModule));
+  scff_imaging::utilities::set_dll_instance(static_cast<HINSTANCE>(hModule));
   return DllEntryPoint((HINSTANCE)(hModule), dwReason, lpReserved);
 }

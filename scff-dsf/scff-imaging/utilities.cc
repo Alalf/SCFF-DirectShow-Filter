@@ -28,32 +28,35 @@ extern "C" {
 #include "scff-imaging/imaging-types.h"
 #include "scff-imaging/avpicture-image.h"
 
+namespace {
+/// リソースの取得用DLLインスタンスハンドル
+HINSTANCE g_dll_instance;
+}   // namespace
+
 namespace scff_imaging {
 
 //=====================================================================
-// scff_imaging::Utilities
+// scff_imaging::utilities
 //=====================================================================
+namespace utilities {
 
 //-------------------------------------------------------------------
 // リソースの取得用DLLインスタンスハンドルの取得
 //-------------------------------------------------------------------
 
-/// リソースの取得用DLLインスタンスハンドル
-static HINSTANCE g_dll_instance;
-
-HINSTANCE Utilities::dll_instance() {
-  return g_dll_instance;
+HINSTANCE dll_instance() {
+  return ::g_dll_instance;
 }
 
-void Utilities::set_dll_instance(HINSTANCE dll_instance) {
-  g_dll_instance = dll_instance;
+void set_dll_instance(HINSTANCE dll_instance) {
+  ::g_dll_instance = dll_instance;
 }
 
 //-------------------------------------------------------------------
 // イメージの操作
 //-------------------------------------------------------------------
 
-bool Utilities::IsTopdownPixelFormat(ImagePixelFormat pixel_format) {
+bool IsTopdownPixelFormat(ImagePixelFormat pixel_format) {
   switch (pixel_format) {
   case ImagePixelFormat::kRGB0:
     return true;
@@ -67,7 +70,7 @@ bool Utilities::IsTopdownPixelFormat(ImagePixelFormat pixel_format) {
   }
 }
 
-bool Utilities::CanUseDrawUtils(ImagePixelFormat pixel_format) {
+bool CanUseDrawUtils(ImagePixelFormat pixel_format) {
   /// @warning 2012/05/08現在drawutilsはPlaner Formatにしか対応していない
   switch (pixel_format) {
   case ImagePixelFormat::kI420:
@@ -86,20 +89,20 @@ bool Utilities::CanUseDrawUtils(ImagePixelFormat pixel_format) {
 // イメージのタイプ
 //-------------------------------------------------------------------
 
-int Utilities::CalculateDataSize(ImagePixelFormat pixel_format,
-                            int width, int height) {
+int CalculateDataSize(ImagePixelFormat pixel_format,
+                      int width, int height) {
   return avpicture_get_size(ToAVPicturePixelFormat(pixel_format),
                             width, height);
 }
 
-int Utilities::CalculateImageSize(const Image &image) {
+int CalculateImageSize(const Image &image) {
   return CalculateDataSize(image.pixel_format(),
                       image.width(),
                       image.height());
 }
 
 /// @attention ピクセルフォーマットを追加するときはここを修正すること
-AVPixelFormat Utilities::ToAVPicturePixelFormat(ImagePixelFormat pixel_format) {
+AVPixelFormat ToAVPicturePixelFormat(ImagePixelFormat pixel_format) {
   switch (pixel_format) {
   case ImagePixelFormat::kI420:
   case ImagePixelFormat::kIYUV:
@@ -122,11 +125,11 @@ AVPixelFormat Utilities::ToAVPicturePixelFormat(ImagePixelFormat pixel_format) {
 }
 
 /// @attention ピクセルフォーマットを追加するときはここを修正すること
-void Utilities::ToWindowsBitmapInfo(ImagePixelFormat pixel_format,
-                                    int width,
-                                    int height,
-                                    bool vertical_invert,
-                                    BITMAPINFO *info) {
+void ToWindowsBitmapInfo(ImagePixelFormat pixel_format,
+                         int width,
+                         int height,
+                         bool vertical_invert,
+                         BITMAPINFO *info) {
   ZeroMemory(info, sizeof(BITMAPINFO));
   // どの形式でもカラーテーブルはない
   info->bmiHeader.biSize          = sizeof(BITMAPINFOHEADER);
@@ -168,17 +171,17 @@ void Utilities::ToWindowsBitmapInfo(ImagePixelFormat pixel_format,
   }
 }
 
-void Utilities::ImageToWindowsBitmapInfo(const Image &image,
-                                         bool vertical_invert,
-                                         BITMAPINFO *info) {
-  Utilities::ToWindowsBitmapInfo(image.pixel_format(),
-                                 image.width(),
-                                 image.height(),
-                                 vertical_invert,
-                                 info);
+void ImageToWindowsBitmapInfo(const Image &image,
+                              bool vertical_invert,
+                              BITMAPINFO *info) {
+  ToWindowsBitmapInfo(image.pixel_format(),
+                      image.width(),
+                      image.height(),
+                      vertical_invert,
+                      info);
 }
 
-ImagePixelFormat Utilities::IndexToPixelFormat(int index) {
+ImagePixelFormat IndexToPixelFormat(int index) {
   /// @attention enum->int
   ASSERT(0 <= index &&
       index < static_cast<int>(ImagePixelFormat::kSupportedPixelFormatsCount));
@@ -186,7 +189,7 @@ ImagePixelFormat Utilities::IndexToPixelFormat(int index) {
   return static_cast<ImagePixelFormat>(index);
 }
 
-ImagePixelFormat Utilities::WindowsBitmapInfoHeaderToPixelFormat(
+ImagePixelFormat WindowsBitmapInfoHeaderToPixelFormat(
     const BITMAPINFOHEADER &info_header) {
   switch (info_header.biCompression) {
   case MAKEFOURCC('I', '4', '2', '0'):
@@ -208,7 +211,7 @@ ImagePixelFormat Utilities::WindowsBitmapInfoHeaderToPixelFormat(
   return ImagePixelFormat::kInvalidPixelFormat;
 }
 
-bool Utilities::IsSupportedPixelFormat(const BITMAPINFOHEADER &info_header) {
+bool IsSupportedPixelFormat(const BITMAPINFOHEADER &info_header) {
   return
       WindowsBitmapInfoHeaderToPixelFormat(info_header) !=
           ImagePixelFormat::kInvalidPixelFormat;
@@ -218,9 +221,9 @@ bool Utilities::IsSupportedPixelFormat(const BITMAPINFOHEADER &info_header) {
 // レイアウト
 //-------------------------------------------------------------------
 
-bool Utilities::Contains(int bound_x, int bound_y,
-                         int bound_width, int bound_height,
-                         int x, int y, int width, int height) {
+bool Contains(int bound_x, int bound_y,
+              int bound_width, int bound_height,
+              int x, int y, int width, int height) {
   ASSERT(bound_width >= 0 && bound_height >= 0 &&
          width >= 0 && height >= 0);
 
@@ -240,12 +243,12 @@ bool Utilities::Contains(int bound_x, int bound_y,
          bottom <= bound_bottom;
 }
 
-bool Utilities::CalculateLayout(int bound_x, int bound_y,
-                                int bound_width, int bound_height,
-                                int input_width, int input_height,
-                                bool stretch, bool keep_aspect_ratio,
-                                int *new_x, int *new_y,
-                                int *new_width, int *new_height) {
+bool CalculateLayout(int bound_x, int bound_y,
+                     int bound_width, int bound_height,
+                     int input_width, int input_height,
+                     bool stretch, bool keep_aspect_ratio,
+                     int *new_x, int *new_y,
+                     int *new_width, int *new_height) {
   // 高さと幅はかならず0より上
   ASSERT(input_width > 0 && input_height > 0 &&
          bound_width > 0 && bound_height > 0);
@@ -316,11 +319,11 @@ bool Utilities::CalculateLayout(int bound_x, int bound_y,
   return true;
 }
 
-bool Utilities::CalculatePaddingSize(int bound_width, int bound_height,
-                                     int input_width, int input_height,
-                                     bool stretch, bool keep_aspect_ratio,
-                                     int *padding_top, int *padding_bottom,
-                                     int *padding_left, int *padding_right) {
+bool CalculatePaddingSize(int bound_width, int bound_height,
+                          int input_width, int input_height,
+                          bool stretch, bool keep_aspect_ratio,
+                          int *padding_top, int *padding_bottom,
+                          int *padding_left, int *padding_right) {
   int new_x, new_y, new_width, new_height;
   // 座標系はbound領域内
   const bool error =
@@ -339,8 +342,8 @@ bool Utilities::CalculatePaddingSize(int bound_width, int bound_height,
   return true;
 }
 
-void Utilities::GetWindowRectangle(HWND window, int *x, int *y,
-                                   int *width, int *height) {
+void GetWindowRectangle(HWND window, int *x, int *y,
+                        int *width, int *height) {
   *x = 0;
   *y = 0;
   *width = 0;
@@ -359,4 +362,5 @@ void Utilities::GetWindowRectangle(HWND window, int *x, int *y,
     *height = window_rect.bottom - window_rect.top;
   }
 }
+}   // namespace utilities
 }   // namespace scff_imaging

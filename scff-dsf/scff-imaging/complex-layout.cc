@@ -72,7 +72,7 @@ ComplexLayout::~ComplexLayout() {
 
 ErrorCode ComplexLayout::InitByIndex(int index) {
   ASSERT(0 <= index && index < element_count_);
-  if (!Utilities::Contains(0, 0,
+  if (!utilities::Contains(0, 0,
                            GetOutputImage()->width(),
                            GetOutputImage()->height(),
                            parameters_[index].bound_x,
@@ -87,7 +87,7 @@ ErrorCode ComplexLayout::InitByIndex(int index) {
   int virtual_padding_bottom = 0;
   int virtual_padding_left = 0;
   int virtual_padding_right = 0;
-  const bool no_error = Utilities::CalculatePaddingSize(
+  const bool no_error = utilities::CalculatePaddingSize(
       parameters_[index].bound_width,
       parameters_[index].bound_height,
       parameters_[index].clipping_width,
@@ -157,7 +157,7 @@ ErrorCode ComplexLayout::Init() {
           TEXT("ComplexLayout: Init")));
 
   // DrawUtilsが使えるフォーマットでなければComplexLayoutは使えない
-  if (!Utilities::CanUseDrawUtils(GetOutputImage()->pixel_format())) {
+  if (!utilities::CanUseDrawUtils(GetOutputImage()->pixel_format())) {
     return ErrorOccured(ErrorCode::kComplexLayoutInvalidPixelFormatError);
   }
 
@@ -175,7 +175,7 @@ ErrorCode ComplexLayout::Init() {
   //-------------------------------------------------------------------
   // スクリーンキャプチャ
   ScreenCapture *screen_capture = new ScreenCapture(
-      !Utilities::IsTopdownPixelFormat(GetOutputImage()->pixel_format()),
+      !utilities::IsTopdownPixelFormat(GetOutputImage()->pixel_format()),
       element_count_, parameters_);
   for (int i = 0; i < element_count_; i++) {
     screen_capture->SetOutputImage(&(captured_image_[i]), i);

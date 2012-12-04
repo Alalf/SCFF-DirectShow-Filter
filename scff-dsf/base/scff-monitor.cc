@@ -78,8 +78,10 @@ bool SCFFMonitor::Init(scff_imaging::ImagePixelFormat pixel_format,
 // リクエスト
 //---------------------------------------------------------------------
 
+namespace {
+
 /// モジュール間のSWScaleConfigの変換
-static void ConvertSWScaleConfig(
+void ConvertSWScaleConfig(
     const scff_interprocess::SWScaleConfig &input,
     scff_imaging::SWScaleConfig *output) {
   // enumは無理にキャストせずswitchで変換
@@ -134,7 +136,7 @@ static void ConvertSWScaleConfig(
 }
 
 /// モジュール間のLayoutParameterの変換
-static void ConvertLayoutParameter(
+void ConvertLayoutParameter(
     const scff_interprocess::LayoutParameter &input,
     scff_imaging::LayoutParameter *output) {
   output->bound_x = input.bound_x;
@@ -179,13 +181,15 @@ static void ConvertLayoutParameter(
 }
 
 /// MessageからLayoutParameterへの変換
-static void MessageToLayoutParameter(
+void MessageToLayoutParameter(
     const scff_interprocess::Message &message,
     int index,
     scff_imaging::LayoutParameter *parameter) {
   ASSERT(0 <= index && index < message.layout_element_count);
   ConvertLayoutParameter(message.layout_parameters[index], parameter);
 }
+
+}   // namespace
 
 scff_imaging::Request* SCFFMonitor::CreateRequest() {
   // 前回のCreateRequestからの経過時間(Sec)

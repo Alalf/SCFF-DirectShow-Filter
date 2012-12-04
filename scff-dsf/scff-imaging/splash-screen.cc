@@ -74,9 +74,9 @@ ErrorCode SplashScreen::Init() {
   int padding_left = 0;
   int padding_right = 0;
 
-  if (Utilities::CanUseDrawUtils(GetOutputImage()->pixel_format())) {
+  if (utilities::CanUseDrawUtils(GetOutputImage()->pixel_format())) {
     // パディングサイズの計算
-    const bool no_error = Utilities::CalculatePaddingSize(
+    const bool no_error = utilities::CalculatePaddingSize(
         GetOutputImage()->width(),
         GetOutputImage()->height(),
         resource_width,
@@ -116,7 +116,7 @@ ErrorCode SplashScreen::Init() {
   }
 
   // 変換後パディング用
-  if (Utilities::CanUseDrawUtils(GetOutputImage()->pixel_format())) {
+  if (utilities::CanUseDrawUtils(GetOutputImage()->pixel_format())) {
     const ErrorCode error_converted_image =
         converted_image_.Create(GetOutputImage()->pixel_format(),
                                 converted_width,
@@ -135,7 +135,7 @@ ErrorCode SplashScreen::Init() {
 
   Scale *scale = new Scale(config);
   scale->SetInputImage(&resource_image_);
-  if (Utilities::CanUseDrawUtils(GetOutputImage()->pixel_format())) {
+  if (utilities::CanUseDrawUtils(GetOutputImage()->pixel_format())) {
     // パディング可能ならバッファをはさむ
     scale->SetOutputImage(&converted_image_);
   } else {
@@ -149,7 +149,7 @@ ErrorCode SplashScreen::Init() {
   scale_ = scale;
 
   // パディング
-  if (Utilities::CanUseDrawUtils(GetOutputImage()->pixel_format())) {
+  if (utilities::CanUseDrawUtils(GetOutputImage()->pixel_format())) {
     Padding *padding =
         new Padding(padding_left, padding_right, padding_top, padding_bottom);
     padding->SetInputImage(&converted_image_);
@@ -164,9 +164,9 @@ ErrorCode SplashScreen::Init() {
   //-------------------------------------------------------------------
 
   // 取り込み用BITMAPINFOを作成
-  Utilities::ImageToWindowsBitmapInfo(
+  utilities::ImageToWindowsBitmapInfo(
       resource_ddb_,
-      !Utilities::IsTopdownPixelFormat(GetOutputImage()->pixel_format()),
+      !utilities::IsTopdownPixelFormat(GetOutputImage()->pixel_format()),
       &resource_ddb_info_);
 
   return InitDone();
@@ -179,7 +179,7 @@ ErrorCode SplashScreen::Run() {
   }
 
   // OutputImageを設定しなおす
-  if (Utilities::CanUseDrawUtils(GetOutputImage()->pixel_format())) {
+  if (utilities::CanUseDrawUtils(GetOutputImage()->pixel_format())) {
     // パディング可能ならバッファをはさむ
     padding_->SwapOutputImage(GetOutputImage());
   } else {
@@ -203,7 +203,7 @@ ErrorCode SplashScreen::Run() {
   }
 
   // Paddingを利用してパディングを行う
-  if (Utilities::CanUseDrawUtils(GetOutputImage()->pixel_format())) {
+  if (utilities::CanUseDrawUtils(GetOutputImage()->pixel_format())) {
     const ErrorCode error_padding = padding_->Run();
     if (error_padding != ErrorCode::kNoError) {
       return ErrorOccured(error_padding);

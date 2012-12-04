@@ -33,91 +33,91 @@ enum class ImagePixelFormat;
 class Image;
 class AVPictureImage;
 
-/// scff_imagingモジュールを使う上で便利な機能を集めたクラス
-class Utilities {
- public:
-  //-------------------------------------------------------------------
-  // リソースの取得用DLLインスタンスハンドルの取得
-  //-------------------------------------------------------------------
+/// scff_imagingモジュールを使う上で便利な機能を集めた名前空間
+namespace utilities {
 
-  /// Getter: リソースの取得用DLLインスタンスハンドル
-  static HINSTANCE dll_instance();
-  /// Setter: リソースの取得用DLLインスタンスハンドル
-  static void set_dll_instance(HINSTANCE dll_instance);
+//-------------------------------------------------------------------
+// リソースの取得用DLLインスタンスハンドルの取得
+//-------------------------------------------------------------------
 
-  //-------------------------------------------------------------------
-  // イメージの操作
-  //-------------------------------------------------------------------
+/// Getter: リソースの取得用DLLインスタンスハンドル
+HINSTANCE dll_instance();
+/// Setter: リソースの取得用DLLインスタンスハンドル
+void set_dll_instance(HINSTANCE dll_instance);
 
-  /// ピクセルフォーマットがTopdownか
-  static bool IsTopdownPixelFormat(ImagePixelFormat pixel_format);
+//-------------------------------------------------------------------
+// イメージの操作
+//-------------------------------------------------------------------
 
-  /// drawutilsが使用可能なピクセルフォーマットか
-  static bool CanUseDrawUtils(ImagePixelFormat pixel_format);
+/// ピクセルフォーマットがTopdownか
+bool IsTopdownPixelFormat(ImagePixelFormat pixel_format);
 
-  //-------------------------------------------------------------------
-  // イメージのタイプ（サイズ、形式など）
-  //-------------------------------------------------------------------
+/// drawutilsが使用可能なピクセルフォーマットか
+bool CanUseDrawUtils(ImagePixelFormat pixel_format);
 
-  /// イメージのサイズを求める
-  static int CalculateDataSize(ImagePixelFormat pixel_format,
-                               int width, int height);
-  /// イメージのサイズを直接求める
-  static int CalculateImageSize(const Image &image);
+//-------------------------------------------------------------------
+// イメージのタイプ（サイズ、形式など）
+//-------------------------------------------------------------------
 
-  /// AVPixelFormatを取得
-  static AVPixelFormat ToAVPicturePixelFormat(ImagePixelFormat pixel_format);
+/// イメージのサイズを求める
+int CalculateDataSize(ImagePixelFormat pixel_format,
+                      int width, int height);
+/// イメージのサイズを直接求める
+int CalculateImageSize(const Image &image);
 
-  /// BITMAPINFOHEADERを取得
-  static void ToWindowsBitmapInfo(ImagePixelFormat pixel_format,
-                                  int width,
-                                  int height,
-                                  bool vertical_invert,
-                                  BITMAPINFO *info);
-  /// イメージからBITMAPINFOHEADERを取得
-  static void ImageToWindowsBitmapInfo(const Image &image,
-                                       bool vertical_invert,
-                                       BITMAPINFO *info);
+/// AVPixelFormatを取得
+AVPixelFormat ToAVPicturePixelFormat(ImagePixelFormat pixel_format);
 
-  /// int(index)->enum(ImagePixelFormat)変換
-  /// @warning バグの元なので注意して使うこと
-  static ImagePixelFormat IndexToPixelFormat(int index);
+/// BITMAPINFOHEADERを取得
+void ToWindowsBitmapInfo(ImagePixelFormat pixel_format,
+                         int width,
+                         int height,
+                         bool vertical_invert,
+                         BITMAPINFO *info);
+/// イメージからBITMAPINFOHEADERを取得
+void ImageToWindowsBitmapInfo(const Image &image,
+                              bool vertical_invert,
+                              BITMAPINFO *info);
 
-  /// BITMAPINFOHEADERからImagePixelFormatを取得
-  static ImagePixelFormat WindowsBitmapInfoHeaderToPixelFormat(
-      const BITMAPINFOHEADER &info_header);
+/// int(index)->enum(ImagePixelFormat)変換
+/// @warning バグの元なので注意して使うこと
+ImagePixelFormat IndexToPixelFormat(int index);
 
-  /// BITMAPINFOHEADERから対応ピクセルフォーマットかどうかを求める
-  static bool IsSupportedPixelFormat(const BITMAPINFOHEADER &info_header);
+/// BITMAPINFOHEADERからImagePixelFormatを取得
+ImagePixelFormat WindowsBitmapInfoHeaderToPixelFormat(
+    const BITMAPINFOHEADER &info_header);
 
-  //-------------------------------------------------------------------
-  // レイアウト
-  //-------------------------------------------------------------------
+/// BITMAPINFOHEADERから対応ピクセルフォーマットかどうかを求める
+bool IsSupportedPixelFormat(const BITMAPINFOHEADER &info_header);
 
-  /// 指定された範囲（同じ座標系）が中に含まれているか
-  static bool Contains(int bound_x, int bound_y,
-                       int bound_width, int bound_height,
-                       int x, int y, int width, int height);
+//-------------------------------------------------------------------
+// レイアウト
+//-------------------------------------------------------------------
 
-  /// 境界の座標系と同じ座標系の新しい配置を計算する
-  static bool CalculateLayout(int bound_x, int bound_y,
-                              int bound_width, int bound_height,
-                              int input_width, int input_height,
-                              bool stretch, bool keep_aspect_ratio,
-                              int *new_x, int *new_y,
-                              int *new_width, int *new_height);
+/// 指定された範囲（同じ座標系）が中に含まれているか
+bool Contains(int bound_x, int bound_y,
+              int bound_width, int bound_height,
+              int x, int y, int width, int height);
 
-  /// 幅と高さから拡大縮小した場合のパディングサイズを求める
-  static bool CalculatePaddingSize(int bound_width, int bound_height,
-                                   int input_width, int input_height,
-                                   bool stretch, bool keep_aspect_ratio,
-                                   int *padding_top, int *padding_bottom,
-                                   int *padding_left, int *padding_right);
+/// 境界の座標系と同じ座標系の新しい配置を計算する
+bool CalculateLayout(int bound_x, int bound_y,
+                     int bound_width, int bound_height,
+                     int input_width, int input_height,
+                     bool stretch, bool keep_aspect_ratio,
+                     int *new_x, int *new_y,
+                     int *new_width, int *new_height);
 
-  /// マルチモニタを考慮してウィンドウ領域を求める
-  static void GetWindowRectangle(HWND window, int *x, int *y,
-                                 int *width, int *height);
-};
+/// 幅と高さから拡大縮小した場合のパディングサイズを求める
+bool CalculatePaddingSize(int bound_width, int bound_height,
+                          int input_width, int input_height,
+                          bool stretch, bool keep_aspect_ratio,
+                          int *padding_top, int *padding_bottom,
+                          int *padding_left, int *padding_right);
+
+/// マルチモニタを考慮してウィンドウ領域を求める
+void GetWindowRectangle(HWND window, int *x, int *y,
+                        int *width, int *height);
+}   // namespace utilities
 }   // namespace scff_imaging
 
 #endif  // SCFF_DSF_SCFF_IMAGING_UTILITIES_H_

@@ -46,7 +46,7 @@ ImagePixelFormat Image::pixel_format() const {
 }
 
 AVPixelFormat Image::av_pixel_format() const {
-  return Utilities::ToAVPicturePixelFormat(pixel_format());
+  return utilities::ToAVPicturePixelFormat(pixel_format());
 }
 
 int Image::width() const {

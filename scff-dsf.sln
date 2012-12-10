@@ -14,8 +14,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "scff-app", "scff-app\scff-a
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "scff-app-wpf", "scff-app-wpf\scff-app-wpf.csproj", "{6F4403BB-4B85-43C3-BDBD-941B583586A6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Windows.Shell", "ext\Microsoft.Windows.Shell\Microsoft.Windows.Shell.csproj", "{55D5297C-F1DF-4B76-A3C1-D82CC294EEBB}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug_MBCS|Win32 = Debug_MBCS|Win32
@@ -108,22 +106,6 @@ Global
 		{6F4403BB-4B85-43C3-BDBD-941B583586A6}.Release|Win32.Build.0 = Release|Any CPU
 		{6F4403BB-4B85-43C3-BDBD-941B583586A6}.Release|x64.ActiveCfg = Release|Any CPU
 		{6F4403BB-4B85-43C3-BDBD-941B583586A6}.Release|x64.Build.0 = Release|Any CPU
-		{55D5297C-F1DF-4B76-A3C1-D82CC294EEBB}.Debug_MBCS|Win32.ActiveCfg = Debug|Any CPU
-		{55D5297C-F1DF-4B76-A3C1-D82CC294EEBB}.Debug_MBCS|Win32.Build.0 = Debug|Any CPU
-		{55D5297C-F1DF-4B76-A3C1-D82CC294EEBB}.Debug_MBCS|x64.ActiveCfg = Debug|Any CPU
-		{55D5297C-F1DF-4B76-A3C1-D82CC294EEBB}.Debug_MBCS|x64.Build.0 = Debug|Any CPU
-		{55D5297C-F1DF-4B76-A3C1-D82CC294EEBB}.Debug|Win32.ActiveCfg = Debug|Any CPU
-		{55D5297C-F1DF-4B76-A3C1-D82CC294EEBB}.Debug|Win32.Build.0 = Debug|Any CPU
-		{55D5297C-F1DF-4B76-A3C1-D82CC294EEBB}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{55D5297C-F1DF-4B76-A3C1-D82CC294EEBB}.Debug|x64.Build.0 = Debug|Any CPU
-		{55D5297C-F1DF-4B76-A3C1-D82CC294EEBB}.Release_MBCS|Win32.ActiveCfg = Release|Any CPU
-		{55D5297C-F1DF-4B76-A3C1-D82CC294EEBB}.Release_MBCS|Win32.Build.0 = Release|Any CPU
-		{55D5297C-F1DF-4B76-A3C1-D82CC294EEBB}.Release_MBCS|x64.ActiveCfg = Release|Any CPU
-		{55D5297C-F1DF-4B76-A3C1-D82CC294EEBB}.Release_MBCS|x64.Build.0 = Release|Any CPU
-		{55D5297C-F1DF-4B76-A3C1-D82CC294EEBB}.Release|Win32.ActiveCfg = Release|Any CPU
-		{55D5297C-F1DF-4B76-A3C1-D82CC294EEBB}.Release|Win32.Build.0 = Release|Any CPU
-		{55D5297C-F1DF-4B76-A3C1-D82CC294EEBB}.Release|x64.ActiveCfg = Release|Any CPU
-		{55D5297C-F1DF-4B76-A3C1-D82CC294EEBB}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

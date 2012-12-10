@@ -21,5 +21,9 @@ namespace scff_app_wpf {
     public MainWindow() {
       InitializeComponent();
     }
+
+    private void Button_Click_1(object sender, RoutedEventArgs e) {
+      MessageBox.Show("hoge");
+    }
   }
 }

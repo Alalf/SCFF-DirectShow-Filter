@@ -58,8 +58,7 @@ ErrorCode Scale::Init() {
   ASSERT(GetInputImage()->pixel_format() == ImagePixelFormat::kRGB0);
 
   // 拡大縮小時のフィルタを作成
-  SwsFilter *filter = nullptr;
-  filter = sws_getDefaultFilter(
+  SwsFilter *filter = sws_getDefaultFilter(
       swscale_config_.luma_gblur,
       swscale_config_.chroma_gblur,
       swscale_config_.luma_sharpen,

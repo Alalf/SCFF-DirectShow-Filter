@@ -8,8 +8,8 @@
   </shell:WindowChrome.WindowChrome>
   <Border BorderBrush="#FF3F3F46" BorderThickness="1">
     <Grid>
-      <Button Content="クリックのテスト" HorizontalAlignment="Left" Margin="36,149,0,0" VerticalAlignment="Top" Width="137" Click="Button_Click_1" Height="37"/>
-      <Image HorizontalAlignment="Left" Height="122" Margin="10,10,0,0" VerticalAlignment="Top" Width="193" MouseDown="Image_MouseDown_1">
+      <Button Content="クリックのテスト" Margin="36,0,40,10" Click="Button_Click_1" Height="37" VerticalAlignment="Bottom"/>
+      <Image Margin="10,10,10,64" MouseDown="Image_MouseDown_1">
         <Image.Source>
           <DrawingImage>
             <DrawingImage.Drawing>

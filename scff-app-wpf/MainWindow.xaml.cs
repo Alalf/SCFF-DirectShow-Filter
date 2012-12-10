@@ -24,9 +24,9 @@ namespace scff_app_wpf {
 
     private void Button_Click_1(object sender, RoutedEventArgs e) {
       using (var dc = myDrawingGroup.Open()) {
-        dc.DrawEllipse(null, new Pen(Brushes.Red, 1), new Point(100, 50), 80, 40);
+        dc.DrawEllipse(null, new Pen(Brushes.Red, 1), new Point(320, 240), 640, 480);
 
-        dc.DrawText(new FormattedText("Drawing sample!",
+        dc.DrawText(new FormattedText("Hello!",
         System.Globalization.CultureInfo.CurrentUICulture,
         FlowDirection.LeftToRight, new Typeface("Verdana" ),
         16, Brushes.Black), new Point(40, 40));

@@ -1,8 +1,16 @@
 
 /bin
 /obj
+/ipch
+/doc/html
+/scff-app/obj
+/tools/tmp
 *.opensdf
+*.suo
+*.user
 *.sdf
+*.pyc
+*.bak
 /ext/ffmpeg/x64/README.txt
 /ext/ffmpeg/x64/presets
 /ext/ffmpeg/x64/licenses
@@ -17,10 +25,4 @@
 /ext/ffmpeg/Win32/include
 /ext/ffmpeg/Win32/doc
 /ext/ffmpeg/Win32/bin
-/ipch
-*.suo
-/doc/html
-/scff-app/obj
-/package
-/scff-app/Service References
-/tools/tmp
+/scff-app-wpf/obj

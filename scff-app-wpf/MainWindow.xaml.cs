@@ -18,23 +18,46 @@ namespace scff_app_wpf {
   /// MainWindow.xaml の相互作用ロジック
   /// </summary>
   public partial class MainWindow : Window {
+    private Point circle_point_ = new Point(50, 50);
+    private Point text_point_ = new Point(40, 40);
+
+    private static Pen pen_ = new Pen(Brushes.Red, 1);
+    private static Typeface text_font_ = new Typeface("Verdana");
+    private static FormattedText text_ = new FormattedText(
+        "Hello!",
+        System.Globalization.CultureInfo.CurrentUICulture,
+        FlowDirection.LeftToRight,
+        text_font_,
+        16,
+        Brushes.Black);
+
     public MainWindow() {
       InitializeComponent();
+      this.MouseLeftButtonDown += (sender, e) => this.DragMove();
     }
 
     private void Button_Click_1(object sender, RoutedEventArgs e) {
       using (var dc = myDrawingGroup.Open()) {
-        dc.DrawEllipse(null, new Pen(Brushes.Red, 1), new Point(320, 240), 640, 480);
+        dc.DrawEllipse(null, pen_, circle_point_, 100, 100);
+        dc.DrawText(text_, text_point_);
 
-        dc.DrawText(new FormattedText("Hello!",
-        System.Globalization.CultureInfo.CurrentUICulture,
-        FlowDirection.LeftToRight, new Typeface("Verdana" ),
-        16, Brushes.Black), new Point(40, 40));
+        ++circle_point_.X;
+        ++circle_point_.Y;
+        --text_point_.X;
+        --text_point_.Y;
       }
     }
 
     private void Image_MouseDown_1(object sender, MouseButtonEventArgs e) {
-      MessageBox.Show("hoge");
+      
+    }
+
+    private void Button_Click_2(object sender, RoutedEventArgs e) {
+      if (myCanvas.Visibility == Visibility.Visible) {
+        myCanvas.Visibility = Visibility.Collapsed;
+      } else {
+        myCanvas.Visibility = Visibility.Visible;
+      }
     }
   }
 }

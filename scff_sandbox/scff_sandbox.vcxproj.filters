@@ -18,7 +18,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="base\scff_tests.cc">
+    <ClCompile Include="base\scff_sandbox.cc">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="..\ext\src\libavfilter\drawutils.cc">
@@ -29,7 +29,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="base\scff_tests.h">
+    <ClInclude Include="base\scff_sandbox.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="..\ext\include\libavutil\colorspace.h">

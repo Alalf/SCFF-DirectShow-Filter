@@ -21,13 +21,13 @@
   <ItemGroup>
     <ClCompile Include="..\ext\src\libavfilter\drawutils.cc" />
     <ClCompile Include="..\ext\src\libavfilter\formats.cc" />
-    <ClCompile Include="base\scff_tests.cc" />
+    <ClCompile Include="base\scff_sandbox.cc" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\ext\include\libavfilter\drawutils.h" />
     <ClInclude Include="..\ext\include\libavfilter\formats.h" />
     <ClInclude Include="..\ext\include\libavutil\colorspace.h" />
-    <ClInclude Include="base\scff_tests.h" />
+    <ClInclude Include="base\scff_sandbox.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{6D985C11-1892-4951-A2D3-62A2AE85F229}</ProjectGuid>

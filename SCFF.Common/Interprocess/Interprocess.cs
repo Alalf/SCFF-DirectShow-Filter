@@ -49,7 +49,7 @@ using System.Diagnostics;
 //=====================================================================
 
 /// プロセス間通信を担当するクラス
-class Interprocess {
+partial class Interprocess {
 
   /// 共有メモリ名: SCFFエントリを格納するディレクトリ
   const string kDirectoryName = "scff_v1_directory";
@@ -74,7 +74,198 @@ class Interprocess {
   /// ComplexLayout利用時の最大の要素数
   /// @sa scff_imaging::kMaxProcessorSize
   public const int kMaxComplexLayoutElements = 8;
+}
 
+//-------------------------------------------------------------------
+
+/// レイアウトの種類
+public enum LayoutType {
+  /// 何も表示しない
+  kNullLayout = 0,
+  /// 取り込み範囲1個で、境界は出力に強制的に合わせられる
+  kNativeLayout,
+  /// 取り込み範囲が複数ある
+  kComplexLayout
+}
+
+//-------------------------------------------------------------------
+
+/// ピクセルフォーマットの種類
+/// @sa scff_imaging/imaging_types.h
+/// @sa scff_imaging::ImagePixelFormat
+public enum ImagePixelFormat {
+  /// 不正なピクセルフォーマット
+  kInvalidPixelFormat = -1,
+  /// I420(12bit)
+  kI420 = 0,
+  /// IYUV(12bit)
+  kIYUV,
+  /// YV12(12bit)
+  kYV12,
+  /// UYVY(16bit)
+  kUYVY,
+  /// YUY2(16bit)
+  kYUY2,
+  /// RGB0(32bit)
+  kRGB0,
+  /// 対応ピクセルフォーマット数
+  kSupportedPixelFormatsCount
+}
+
+//-------------------------------------------------------------------
+
+/// 拡大縮小メソッドをあらわす定数
+/// @sa scff_imaging/imaging_types.h
+/// @sa scff_imaging::SWScaleFlags
+public enum SWScaleFlags {
+  /// fast bilinear
+  kFastBilinear = 1,
+  /// bilinear
+  kBilinear = 2,
+  /// bicubic
+  kBicubic = 4,
+  /// experimental
+  kX = 8,
+  /// nearest neighbor
+  kPoint = 0x10,
+  /// averaging area
+  kArea = 0x20,
+  /// luma bicubic, chroma bilinear
+  kBicublin = 0x40,
+  /// gaussian
+  kGauss = 0x80,
+  /// sinc
+  kSinc = 0x100,
+  /// lanczos
+  kLanczos = 0x200,
+  /// natural bicubic spline
+  kSpline = 0x400
+}
+
+/// 回転方向を表す定数
+/// @sa scff_imaging/imaging_types.h
+/// @sa scff_imaging::RotateDirection
+public enum RotateDirection {
+  /// 回転なし
+  kNoRotate = 0,
+  /// 時計回り90度
+  k90Degrees,
+  /// 時計回り180度
+  k180Degrees,
+  /// 時計回り270度
+  k270Degrees
+}
+
+/// 共有メモリ(Directory)に格納する構造体のエントリ
+[StructLayout(LayoutKind.Sequential, Pack = 1)]
+public struct Entry {
+  /// SCFF DSFのDLLが使われれているプロセスID
+  public UInt32 process_id;
+  /// SCFF DSFのDLLが使われているプロセス名
+  [MarshalAs(UnmanagedType.ByValTStr, SizeConst = Interprocess.kMaxPath)]
+  public string process_name;
+  /// サンプルの出力width
+  public Int32 sample_width;
+  /// サンプルの出力height
+  public Int32 sample_height;
+  /// サンプルの出力ピクセルフォーマット
+  /// @attention ImagePixelFormatを操作に使うこと
+  public Int32 sample_pixel_format;
+  /// 目標fps
+  public Double fps;
+}
+
+/// 共有メモリ(Directory)に格納する構造体
+[StructLayout(LayoutKind.Sequential, Pack = 1)]
+public struct Directory {
+  [MarshalAs(UnmanagedType.ByValArray, SizeConst = Interprocess.kMaxEntry)]
+  public Entry[] entries;
+}
+
+/// 拡大縮小設定
+/// @sa scff_imaging::SWScaleConfig
+[StructLayout(LayoutKind.Sequential, Pack = 1)]
+public struct SWScaleConfig {
+  /// 拡大縮小メソッド(Chroma/Luma共通)
+  /// @attention 操作にはSWScaleFlagsを使うこと！
+  public Int32 flags;
+  /// 正確な丸め処理
+  public Byte accurate_rnd;
+  /// 変換前にフィルタをかけるか
+  public Byte is_filter_enabled;
+  /// 輝度のガウスぼかし
+  public Single luma_gblur;
+  /// 色差のガウスぼかし
+  public Single chroma_gblur;
+  /// 輝度のシャープ化
+  public Single luma_sharpen;
+  /// 色差のシャープ化
+  public Single chroma_sharpen;
+  /// 水平方向のワープ
+  public Single chroma_hshift;
+  /// 垂直方向のワープ
+  public Single chroma_vshift;
+};
+
+/// レイアウトパラメータ
+/// @sa scff_imaging::ScreenCaptureParameter
+[StructLayout(LayoutKind.Sequential, Pack = 1)]
+public struct LayoutParameter {
+  /// サンプル内の原点のX座標
+  /// @warning NullLayout,NativeLayoutでは無視される
+  public Int32 bound_x;
+  /// サンプル内の原点のY座標
+  /// @warning NullLayout,NativeLayoutでは無視される
+  public Int32 bound_y;
+  /// サンプル内の幅
+  /// @warning NullLayout,NativeLayoutでは無視される
+  public Int32 bound_width;
+  /// サンプル内の高さ
+  /// @warning NullLayout,NativeLayoutでは無視される
+  public Int32 bound_height;
+  /// キャプチャを行う対象となるウィンドウ
+  public UInt64 window;
+  /// 取り込み範囲の開始X座標
+  public Int32 clipping_x;
+  /// 取り込み範囲の開始y座標
+  public Int32 clipping_y;
+  /// 取り込み範囲の幅
+  public Int32 clipping_width;
+  /// 取り込み範囲の高さ
+  public Int32 clipping_height;
+  /// マウスカーソルの表示
+  public Byte show_cursor;
+  /// レイヤードウィンドウの表示
+  public Byte show_layered_window;
+  /// 拡大縮小設定
+  public SWScaleConfig swscale_config;
+  /// 取り込み範囲が出力サイズより小さい場合拡張
+  public Byte stretch;
+  /// アスペクト比の保持
+  public Byte keep_aspect_ratio;
+  /// 回転方向
+  /// @attention RotateDirectionを操作に使うこと
+  public Int32 rotate_direction;
+}
+
+/// 共有メモリ(Message)に格納する構造体
+[StructLayout(LayoutKind.Sequential, Pack = 1)]
+public struct Message {
+  /// タイムスタンプ(time()で求められたものを想定)
+  /// @warning 1ではじまり単調増加が必須条件
+  /// @warning (0および負数は無効なメッセージを示す)
+  public Int64 timestamp;
+  /// レイアウトの種類
+  /// @attention LayoutTypeを操作に使うこと
+  public Int32 layout_type;
+  /// 有効なレイアウト要素の数
+  public Int32 layout_element_count;
+  /// レイアウトパラメータの配列
+  [MarshalAs(UnmanagedType.ByValArray, SizeConst = Interprocess.kMaxComplexLayoutElements)]
+  public LayoutParameter[] layout_parameters;
+}
+
+partial class Interprocess {
   /// コンストラクタ
   public Interprocess() {
     directory_ = null;
@@ -458,192 +649,4 @@ class Interprocess {
   /// Mutex: Message
   Mutex mutex_message_;
 }
-
-/// レイアウトの種類
-public enum LayoutType {
-  /// 何も表示しない
-  kNullLayout = 0,
-  /// 取り込み範囲1個で、境界は出力に強制的に合わせられる
-  kNativeLayout,
-  /// 取り込み範囲が複数ある
-  kComplexLayout
-}
-
-//-------------------------------------------------------------------
-
-/// ピクセルフォーマットの種類
-/// @sa scff_imaging/imaging_types.h
-/// @sa scff_imaging::ImagePixelFormat
-public enum ImagePixelFormat {
-  /// 不正なピクセルフォーマット
-  kInvalidPixelFormat = -1,
-  /// I420(12bit)
-  kI420 = 0,
-  /// IYUV(12bit)
-  kIYUV,
-  /// YV12(12bit)
-  kYV12,
-  /// UYVY(16bit)
-  kUYVY,
-  /// YUY2(16bit)
-  kYUY2,
-  /// RGB0(32bit)
-  kRGB0,
-  /// 対応ピクセルフォーマット数
-  kSupportedPixelFormatsCount
-}
-
-//-------------------------------------------------------------------
-
-/// 拡大縮小メソッドをあらわす定数
-/// @sa scff_imaging/imaging_types.h
-/// @sa scff_imaging::SWScaleFlags
-public enum SWScaleFlags {
-  /// fast bilinear
-  kFastBilinear = 1,
-  /// bilinear
-  kBilinear = 2,
-  /// bicubic
-  kBicubic = 4,
-  /// experimental
-  kX = 8,
-  /// nearest neighbor
-  kPoint = 0x10,
-  /// averaging area
-  kArea = 0x20,
-  /// luma bicubic, chroma bilinear
-  kBicublin = 0x40,
-  /// gaussian
-  kGauss = 0x80,
-  /// sinc
-  kSinc = 0x100,
-  /// lanczos
-  kLanczos = 0x200,
-  /// natural bicubic spline
-  kSpline = 0x400
-}
-
-/// 回転方向を表す定数
-/// @sa scff_imaging/imaging_types.h
-/// @sa scff_imaging::RotateDirection
-public enum RotateDirection {
-  /// 回転なし
-  kNoRotate = 0,
-  /// 時計回り90度
-  k90Degrees,
-  /// 時計回り180度
-  k180Degrees,
-  /// 時計回り270度
-  k270Degrees
-}
-
-/// 共有メモリ(Directory)に格納する構造体のエントリ
-[StructLayout(LayoutKind.Sequential, Pack = 1)]
-public struct Entry {
-  /// SCFF DSFのDLLが使われれているプロセスID
-  public UInt32 process_id;
-  /// SCFF DSFのDLLが使われているプロセス名
-  [MarshalAs(UnmanagedType.ByValTStr, SizeConst = Interprocess.kMaxPath)]
-  public string process_name;
-  /// サンプルの出力width
-  public Int32 sample_width;
-  /// サンプルの出力height
-  public Int32 sample_height;
-  /// サンプルの出力ピクセルフォーマット
-  /// @attention ImagePixelFormatを操作に使うこと
-  public Int32 sample_pixel_format;
-  /// 目標fps
-  public Double fps;
-}
-
-/// 共有メモリ(Directory)に格納する構造体
-[StructLayout(LayoutKind.Sequential, Pack = 1)]
-public struct Directory {
-  [MarshalAs(UnmanagedType.ByValArray, SizeConst = Interprocess.kMaxEntry)]
-  public Entry[] entries;
-}
-
-/// 拡大縮小設定
-/// @sa scff_imaging::SWScaleConfig
-[StructLayout(LayoutKind.Sequential, Pack = 1)]
-public struct SWScaleConfig {
-  /// 拡大縮小メソッド(Chroma/Luma共通)
-  /// @attention 操作にはSWScaleFlagsを使うこと！
-  public Int32 flags;
-  /// 正確な丸め処理
-  public Byte accurate_rnd;
-  /// 変換前にフィルタをかけるか
-  public Byte is_filter_enabled;
-  /// 輝度のガウスぼかし
-  public Single luma_gblur;
-  /// 色差のガウスぼかし
-  public Single chroma_gblur;
-  /// 輝度のシャープ化
-  public Single luma_sharpen;
-  /// 色差のシャープ化
-  public Single chroma_sharpen;
-  /// 水平方向のワープ
-  public Single chroma_hshift;
-  /// 垂直方向のワープ
-  public Single chroma_vshift;
-};
-
-/// レイアウトパラメータ
-/// @sa scff_imaging::ScreenCaptureParameter
-[StructLayout(LayoutKind.Sequential, Pack = 1)]
-public struct LayoutParameter {
-  /// サンプル内の原点のX座標
-  /// @warning NullLayout,NativeLayoutでは無視される
-  public Int32 bound_x;
-  /// サンプル内の原点のY座標
-  /// @warning NullLayout,NativeLayoutでは無視される
-  public Int32 bound_y;
-  /// サンプル内の幅
-  /// @warning NullLayout,NativeLayoutでは無視される
-  public Int32 bound_width;
-  /// サンプル内の高さ
-  /// @warning NullLayout,NativeLayoutでは無視される
-  public Int32 bound_height;
-  /// キャプチャを行う対象となるウィンドウ
-  public UInt64 window;
-  /// 取り込み範囲の開始X座標
-  public Int32 clipping_x;
-  /// 取り込み範囲の開始y座標
-  public Int32 clipping_y;
-  /// 取り込み範囲の幅
-  public Int32 clipping_width;
-  /// 取り込み範囲の高さ
-  public Int32 clipping_height;
-  /// マウスカーソルの表示
-  public Byte show_cursor;
-  /// レイヤードウィンドウの表示
-  public Byte show_layered_window;
-  /// 拡大縮小設定
-  public SWScaleConfig swscale_config;
-  /// 取り込み範囲が出力サイズより小さい場合拡張
-  public Byte stretch;
-  /// アスペクト比の保持
-  public Byte keep_aspect_ratio;
-  /// 回転方向
-  /// @attention RotateDirectionを操作に使うこと
-  public Int32 rotate_direction;
-}
-
-/// 共有メモリ(Message)に格納する構造体
-[StructLayout(LayoutKind.Sequential, Pack = 1)]
-public struct Message {
-  /// タイムスタンプ(time()で求められたものを想定)
-  /// @warning 1ではじまり単調増加が必須条件
-  /// @warning (0および負数は無効なメッセージを示す)
-  public Int64 timestamp;
-  /// レイアウトの種類
-  /// @attention LayoutTypeを操作に使うこと
-  public Int32 layout_type;
-  /// 有効なレイアウト要素の数
-  public Int32 layout_element_count;
-  /// レイアウトパラメータの配列
-  [MarshalAs(UnmanagedType.ByValArray, SizeConst = Interprocess.kMaxComplexLayoutElements)]
-  public LayoutParameter[] layout_parameters;
-}
-
 }   // namespace scff_interprocess

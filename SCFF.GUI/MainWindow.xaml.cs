@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -12,17 +13,13 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace scff_app_wpf {
+namespace SCFF.GUI {
   /// <summary>
-  /// UserControl1.xaml の相互作用ロジック
+  /// MainWindow.xaml の相互作用ロジック
   /// </summary>
-  public partial class UserControl1 : UserControl {
-    public UserControl1() {
+  public partial class MainWindow : Window {
+    public MainWindow() {
       InitializeComponent();
-    }
-
-    private void Viewbox_Loaded_1(object sender, RoutedEventArgs e) {
-      var myApp = App.GetMyApp();
     }
   }
 }

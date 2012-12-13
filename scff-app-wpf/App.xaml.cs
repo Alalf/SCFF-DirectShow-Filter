@@ -11,5 +11,14 @@ namespace scff_app_wpf {
   /// App.xaml の相互作用ロジック
   /// </summary>
   public partial class App : Application {
+    private static Application myApp;
+    
+    public App() {
+      myApp = this;
+    }
+
+    public static Application GetMyApp() {
+      return myApp;
+    }
   }
 }

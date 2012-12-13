@@ -1,13 +1,14 @@
 ﻿<Window x:Class="scff_app_wpf.MainWindow"
+        xmlns:uc="clr-namespace:scff_app_wpf"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:shell="http://schemas.microsoft.com/winfx/2006/xaml/presentation/shell"
-        Title="MainWindow" SnapsToDevicePixels="True" Background="#FF333333" Height="381.537" Width="673.331">
+        Title="MainWindow" SnapsToDevicePixels="True" Background="#FF333333" Height="604.626" Width="673.331">
   <shell:WindowChrome.WindowChrome>
     <shell:WindowChrome CaptionHeight="0" ResizeBorderThickness="8" GlassFrameThickness="0,0,0,1" />
   </shell:WindowChrome.WindowChrome>
   <Border BorderBrush="#FF3F3F46" BorderThickness="1">
-    <WrapPanel>
+    <WrapPanel x:Name="myWrapPanel">
       <Menu Width="298">
         <MenuItem Header="aaa"/>
         <MenuItem Header="bbb">
@@ -35,7 +36,7 @@
         <TabItem Header="1">
           <Grid>
             <Button Content="クリックのテスト" Margin="66,0,10,10" Click="Button_Click_1" Height="24" VerticalAlignment="Bottom"/>
-            <Image Margin="10,10,57,39" MouseDown="Image_MouseDown_1">
+            <Image Margin="10,10,10,39" MouseDown="Image_MouseDown_1">
               <Image.Source>
                 <DrawingImage>
                   <DrawingImage.Drawing>
@@ -53,9 +54,9 @@
         </TabItem>
 
       </TabControl>
-      <Expander Header="Layout" ExpandDirection="Right" IsExpanded="True">
+      <Expander Header="Layout" ExpandDirection="Right" IsExpanded="True" x:Name="myExpander">
         <Grid>
-          <Canvas x:Name="myCanvas" Background="#FF571D1D" HorizontalAlignment="Right" Width="250" Height="250"/>
+          <uc:UserControl1 />
         </Grid>
       </Expander>
     </WrapPanel>

@@ -49,15 +49,15 @@ namespace scff_app_wpf {
     }
 
     private void Image_MouseDown_1(object sender, MouseButtonEventArgs e) {
-      
     }
 
     private void Button_Click_2(object sender, RoutedEventArgs e) {
-      if (myCanvas.Visibility == Visibility.Visible) {
-        myCanvas.Visibility = Visibility.Collapsed;
-      } else {
-        myCanvas.Visibility = Visibility.Visible;
-      }
+      //if (myUserControl.Visibility == Visibility.Visible) {
+      //  myUserControl.Visibility = Visibility.Collapsed;
+      //} else {
+      //  myUserControl.Visibility = Visibility.Visible;
+      //}
+      myExpander.IsExpanded = !myExpander.IsExpanded;
     }
   }
 }

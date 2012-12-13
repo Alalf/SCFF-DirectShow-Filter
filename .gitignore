@@ -3,7 +3,7 @@
 /obj
 /ipch
 /doc/html
-/scff-app/obj
+/scff_app/obj
 /tools/tmp
 *.opensdf
 *.suo
@@ -25,4 +25,4 @@
 /ext/ffmpeg/Win32/include
 /ext/ffmpeg/Win32/doc
 /ext/ffmpeg/Win32/bin
-/scff-app-wpf/obj
+/scff_app_wpf/obj

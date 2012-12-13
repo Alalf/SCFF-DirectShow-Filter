@@ -7,6 +7,16 @@
     <shell:WindowChrome CaptionHeight="15" ResizeBorderThickness="8" GlassFrameThickness="0,0,0,1" />
   </shell:WindowChrome.WindowChrome>
   <Border BorderBrush="#FF3F3F46" BorderThickness="1">
-    <Grid/>
+    <Grid>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="229*"/>
+        <ColumnDefinition Width="286*"/>
+      </Grid.ColumnDefinitions>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="16*"/>
+        <RowDefinition Height="15*"/>
+        <RowDefinition Height="128*"/>
+      </Grid.RowDefinitions>
+    </Grid>
   </Border>
 </Window>

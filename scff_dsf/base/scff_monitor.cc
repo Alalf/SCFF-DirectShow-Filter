@@ -177,16 +177,16 @@ void ConvertLayoutParameter(
       output->rotate_direction = scff_imaging::RotateDirection::kNoRotate;
       break;
     }
-    case scff_interprocess::RotateDirection::k90Degrees: {
-      output->rotate_direction = scff_imaging::RotateDirection::k90Degrees;
+    case scff_interprocess::RotateDirection::kDegrees90: {
+      output->rotate_direction = scff_imaging::RotateDirection::kDegrees90;
       break;
     }
-    case scff_interprocess::RotateDirection::k180Degrees: {
-      output->rotate_direction = scff_imaging::RotateDirection::k180Degrees;
+    case scff_interprocess::RotateDirection::kDegrees180: {
+      output->rotate_direction = scff_imaging::RotateDirection::kDegrees180;
       break;
     }
-    case scff_interprocess::RotateDirection::k270Degrees: {
-      output->rotate_direction = scff_imaging::RotateDirection::k270Degrees;
+    case scff_interprocess::RotateDirection::kDegrees270: {
+      output->rotate_direction = scff_imaging::RotateDirection::kDegrees270;
       break;
     }
     default: {

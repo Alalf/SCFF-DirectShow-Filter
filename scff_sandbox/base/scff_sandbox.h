@@ -15,8 +15,8 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef SCFF_TESTS_BASE_SCFF_TESTS_H_
-#define SCFF_TESTS_BASE_SCFF_TESTS_H_
+#ifndef SCFF_SANDBOX_BASE_SCFF_SANDBOX_H_
+#define SCFF_SANDBOX_BASE_SCFF_SANDBOX_H_
 
 #include <SDKDDKVer.h>
 #include <stdio.h>
@@ -28,4 +28,4 @@ extern "C" {
 #include <libswscale/swscale.h>
 }
 
-#endif  // SCFF_TESTS_BASE_SCFF_TESTS_H_
+#endif  // SCFF_SANDBOX_BASE_SCFF_SANDBOX_H_

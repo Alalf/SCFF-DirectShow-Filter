@@ -29,11 +29,12 @@
 /// SCFFのプロセス間通信モジュール
 namespace scff_interprocess {
 
-//====================================================================
+// ====================================================================
 /// @page smp SCFF Messaging Protocol v1 (by 2012/05/22 Alalf)
 /// SCFF_DSFおよびそのクライアントで共有する共有メモリ内のデータ配置の仕様
 ///
-/// [全体的な注意点]
+/// C++版の実装
+/// -------------------------------------------------------------------
 /// - Windows固有の型名はビットサイズが分かりにくいのでcstdintで置き換える
 ///   - 対応表
 ///     - DWORD        = uint32_t (32bit)
@@ -46,7 +47,19 @@ namespace scff_interprocess {
 ///     - float        = float (32bit)
 /// - すべての構造体はPOD(Plain Old Data)であること
 ///   - 基本型、コンストラクタ、デストラクタ、仮想関数を持たない構造体のみ
-//====================================================================
+// ====================================================================
+
+/// Path文字列の長さ
+static const int kMaxPath = 260;
+
+/// Directoryに格納されるEntryの最大の数
+static const int kMaxEntry = 8;
+
+/// ComplexLayout利用時の最大の要素数
+/// @sa scff_imaging::kMaxProcessorSize
+static const int kMaxComplexLayoutElements = 8;
+
+//---------------------------------------------------------------------
 
 /// 共有メモリ名: SCFFエントリを格納するディレクトリ
 static const char kDirectoryName[] = "scff_v1_directory";
@@ -59,18 +72,6 @@ static const char kMessageNamePrefix[] = "scff_v1_message_";
 
 /// Messageの保護用Mutex名の接頭辞
 static const char kMessageMutexNamePrefix[] = "mutex_scff_v1_message_";
-
-//---------------------------------------------------------------------
-
-/// Path文字列の長さ
-static const int kMaxPath = 260;
-
-/// Directoryに格納されるEntryの最大の数
-static const int kMaxEntry = 8;
-
-/// ComplexLayout利用時の最大の要素数
-/// @sa scff_imaging::kMaxProcessorSize
-static const int kMaxComplexLayoutElements = 8;
 
 //---------------------------------------------------------------------
 
@@ -143,11 +144,11 @@ enum class RotateDirection {
   /// 回転なし
   kNoRotate = 0,
   /// 時計回り90度
-  k90Degrees,
+  kDegrees90,
   /// 時計回り180度
-  k180Degrees,
+  kDegrees180,
   /// 時計回り270度
-  k270Degrees
+  kDegrees270
 };
 
 //---------------------------------------------------------------------

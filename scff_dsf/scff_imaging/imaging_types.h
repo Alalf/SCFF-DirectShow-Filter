@@ -159,11 +159,11 @@ enum class RotateDirection {
   /// 回転なし
   kNoRotate = 0,
   /// 時計回り90度
-  k90Degrees,
+  kDegrees90,
   /// 時計回り180度
-  k180Degrees,
+  kDegrees180,
   /// 時計回り270度
-  k270Degrees
+  kDegrees270
 };
 
 //=====================================================================

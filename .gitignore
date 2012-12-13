@@ -28,3 +28,4 @@
 /scff_app_wpf/obj
 /SCFF.Common/obj
 /SCFF.GUI/obj
+*.Cache

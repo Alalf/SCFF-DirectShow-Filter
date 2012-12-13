@@ -24,82 +24,83 @@ namespace SCFF.Common.Imaging {
 using System.Diagnostics;
 
 /// 画像の操作に便利な関数をまとめたクラス(C#では関数をまとめる為に名前空間は使えない)
-class Utilities {
+internal class Utilities {
   /// 境界の座標系と同じ座標系の新しい配置を計算する
-  public static bool CalculateLayout(int bound_x, int bound_y,
-                              int bound_width, int bound_height,
-                              int input_width, int input_height,
-                              bool stretch, bool keep_aspect_ratio,
-                              out int new_x, out int new_y,
-                              out int new_width, out int new_height) {
+  public static bool CalculateLayout(int boundX, int boundY,
+      int boundWidth, int boundHeight,
+      int inputWidth, int inputHeight,
+      bool stretch, bool keepAspectRatio,
+      out int newX, out int newY,
+      out int newWidth, out int newHeight) {
     // 高さと幅はかならず0より上
-    Debug.Assert(input_width > 0 && input_height > 0 &&
-                 bound_width > 0 && bound_height > 0);
+    Debug.Assert(inputWidth > 0 && inputHeight > 0 &&
+                 boundWidth > 0 && boundHeight > 0,
+                 "Invalid parameters");
 
     // 高さ、幅が境界と一致しているか？
-    if (input_width == bound_width && input_height == bound_height) {
+    if (inputWidth == boundWidth && inputHeight == boundHeight) {
       // サイズが完全に同じならば何もしなくてもよい
-      new_x = bound_x;
-      new_y = bound_y;
-      new_width = bound_width;
-      new_height = bound_height;
+      newX = boundX;
+      newY = boundY;
+      newWidth = boundWidth;
+      newHeight = boundHeight;
       return true;
     }
 
     // 高さと幅の比率を求めておく
-    double bound_aspect = (double)(bound_width) / bound_height;
-    double input_aspect = (double)(input_width) / input_height;
+    double boundAspect = (double)boundWidth / boundHeight;
+    double inputAspect = (double)inputWidth / inputHeight;
 
     // inputのサイズがboundより完全に小さいかどうか
-    bool need_expand = input_width <= bound_width &&
-                       input_height <= bound_height;
+    bool needExpand = inputWidth <= boundWidth &&
+                      inputHeight <= boundHeight;
 
     // オプションごとに条件分岐
-    if (!keep_aspect_ratio && need_expand && stretch ||
-        !keep_aspect_ratio && !need_expand) {
+    if ((!keepAspectRatio && needExpand && stretch) ||
+        (!keepAspectRatio && !needExpand)) {
       // 境界と一致させる
-      new_x = bound_x;
-      new_y = bound_y;
-      new_width = bound_width;
-      new_height = bound_height;
-    } else if (keep_aspect_ratio && need_expand && stretch ||
-               keep_aspect_ratio && !need_expand) {
+      newX = boundX;
+      newY = boundY;
+      newWidth = boundWidth;
+      newHeight = boundHeight;
+    } else if ((keepAspectRatio && needExpand && stretch) ||
+               (keepAspectRatio && !needExpand)) {
       // アスペクト比維持しつつ拡大縮小:
-      if (input_aspect >= bound_aspect) {
+      if (inputAspect >= boundAspect) {
         // 入力のほうが横長
         //    = widthを境界にあわせる
         //    = heightの倍率はwidthの引き伸ばし比率で求められる
-        new_width = bound_width;
-        new_height = input_height * bound_width / input_width;
-        Debug.Assert(new_height <= bound_height);
-        new_x = bound_x;
-        int padding_height = (bound_height - new_height) / 2;
-        new_y = bound_y + padding_height;
+        newWidth = boundWidth;
+        newHeight = inputHeight * boundWidth / inputWidth;
+        Debug.Assert(newHeight <= boundHeight, "Cannot expand over bound-height");
+        newX = boundX;
+        int paddingHeight = (boundHeight - newHeight) / 2;
+        newY = boundY + paddingHeight;
       } else {
         // 出力のほうが横長
         //    = heightを境界にあわせる
         //    = widthの倍率はheightの引き伸ばし比率で求められる
-        new_height = bound_height;
-        new_width = input_width * bound_height / input_height;
-        Debug.Assert(new_height <= bound_height);
-        new_y = bound_y;
-        int padding_width = (bound_width - new_width) / 2;
-        new_x = bound_x + padding_width;
+        newHeight = boundHeight;
+        newWidth = inputWidth * boundHeight / inputHeight;
+        Debug.Assert(newHeight <= boundHeight, "Cannot expand over bound-height");
+        newY = boundY;
+        int paddingWidth = (boundWidth - newWidth) / 2;
+        newX = boundX + paddingWidth;
       }
-    } else if (need_expand && !stretch) {
+    } else if (needExpand && !stretch) {
       // パディングを入れる
-      int padding_width = (bound_width - input_width) / 2;
-      int padding_height = (bound_height - input_height) / 2;
-      new_x = bound_x + padding_width;
-      new_y = bound_y + padding_height;
-      new_width = input_width;
-      new_height = input_height;
+      int paddingWidth = (boundWidth - inputWidth) / 2;
+      int paddingHeight = (boundHeight - inputHeight) / 2;
+      newX = boundX + paddingWidth;
+      newY = boundY + paddingHeight;
+      newWidth = inputWidth;
+      newHeight = inputHeight;
     } else {
-      Debug.Assert(false);
-      new_x = -1;
-      new_y = -1;
-      new_width = -1;
-      new_height = -1;
+      Debug.Assert(false, "Fail");
+      newX = -1;
+      newY = -1;
+      newWidth = -1;
+      newHeight = -1;
       return false;
     }
 
@@ -107,30 +108,29 @@ class Utilities {
   }
 
   /// 幅と高さから拡大縮小した場合のパディングサイズを求める
-  public static bool CalculatePaddingSize(int bound_width, int bound_height,
-                                   int input_width, int input_height,
-                                   bool stretch, bool keep_aspect_ratio,
-                                   out int padding_top, out int padding_bottom,
-                                   out int padding_left, out int padding_right) {
-    int new_x, new_y, new_width, new_height;
+  public static bool CalculatePaddingSize(int boundWidth, int boundHeight,
+      int inputWidth, int inputHeight,
+      bool stretch, bool keepAspectRatio,
+      out int paddingTop, out int paddingBottom,
+      out int paddingLeft, out int paddingRight) {
+    int newX, newY, newWidth, newHeight;
     // 座標系はbound領域内
-    bool error =
-        CalculateLayout(0, 0, bound_width, bound_height,
-                        input_width, input_height,
-                        stretch, keep_aspect_ratio,
-                        out new_x,  out new_y, out new_width, out new_height);
+    bool error = CalculateLayout(0, 0, boundWidth, boundHeight,
+        inputWidth, inputHeight,
+        stretch, keepAspectRatio,
+        out newX,  out newY, out newWidth, out newHeight);
     if (error != true) {
-      Debug.Assert(false);
-      padding_left = -1;
-      padding_right = -1;
-      padding_top = -1;
-      padding_bottom = -1;
+      Debug.Assert(false, "Fail");
+      paddingLeft = -1;
+      paddingRight = -1;
+      paddingTop = -1;
+      paddingBottom = -1;
       return error;
     }
-    padding_left = new_x;
-    padding_top = new_y;
-    padding_right = bound_width - (new_x + new_width);
-    padding_bottom = bound_height - (new_y + new_height);
+    paddingLeft = newX;
+    paddingTop = newY;
+    paddingRight = boundWidth - (newX + newWidth);
+    paddingBottom = boundHeight - (newY + newHeight);
     return true;
   }
 }

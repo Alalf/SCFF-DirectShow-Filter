@@ -23,13 +23,13 @@
 namespace SCFF.Common.Interprocess {
 
 using System;
-using System.Runtime.InteropServices;
+using System.Diagnostics;
 using System.IO;
 using System.IO.MemoryMappedFiles;
+using System.Runtime.InteropServices;
 using System.Threading;
-using System.Diagnostics;
 
-//=====================================================================
+// =====================================================================
 /// @page smp SCFF Messaging Protocol v1 (by 2012/05/22 Alalf)
 /// SCFF_DSFおよびそのクライアントで共有する共有メモリ内のデータ配置の仕様
 ///
@@ -46,34 +46,34 @@ using System.Diagnostics;
 ///     - float        = Single (32bit)
 /// - すべての構造体はPOD(Plain Old Data)であること
 ///   - 基本型、コンストラクタ、デストラクタ、仮想関数を持たない構造体のみ
-//=====================================================================
+// =====================================================================
 
 /// プロセス間通信を担当するクラス
-partial class Interprocess {
-
-  /// 共有メモリ名: SCFFエントリを格納するディレクトリ
-  const string kDirectoryName = "scff_v1_directory";
-
-  /// Directoryの保護用Mutex名
-  const string kDirectoryMutexName = "mutex_scff_v1_directory";
-
-  /// 共有メモリ名の接頭辞: SCFFで使うメッセージを格納する
-  const string kMessageNamePrefix = "scff_v1_message_";
-
-  /// Messageの保護用Mutex名の接頭辞
-  const string kMessageMutexNamePrefix = "mutex_scff_v1_message_";
-
-  //-------------------------------------------------------------------
+internal partial class Interprocess {
 
   /// Path文字列の長さ
-  public const int kMaxPath = 260;
+  public const int MaxPath = 260;
 
   /// Directoryに格納されるEntryの最大の数
-  public const int kMaxEntry = 8;
+  public const int MaxEntry = 8;
 
   /// ComplexLayout利用時の最大の要素数
   /// @sa scff_imaging::kMaxProcessorSize
-  public const int kMaxComplexLayoutElements = 8;
+  public const int MaxComplexLayoutElements = 8;
+
+  //-------------------------------------------------------------------
+
+  /// 共有メモリ名: SCFFエントリを格納するディレクトリ
+  private const string DirectoryName = "scff_v1_directory";
+
+  /// Directoryの保護用Mutex名
+  private const string DirectoryMutexName = "mutex_scff_v1_directory";
+
+  /// 共有メモリ名の接頭辞: SCFFで使うメッセージを格納する
+  private const string MessageNamePrefix = "scff_v1_message_";
+
+  /// Messageの保護用Mutex名の接頭辞
+  private const string MessageMutexNamePrefix = "mutex_scff_v1_message_";
 }
 
 //-------------------------------------------------------------------
@@ -81,11 +81,11 @@ partial class Interprocess {
 /// レイアウトの種類
 public enum LayoutType {
   /// 何も表示しない
-  kNullLayout = 0,
+  NullLayout = 0,
   /// 取り込み範囲1個で、境界は出力に強制的に合わせられる
-  kNativeLayout,
+  NativeLayout,
   /// 取り込み範囲が複数ある
-  kComplexLayout
+  ComplexLayout
 }
 
 //-------------------------------------------------------------------
@@ -95,21 +95,21 @@ public enum LayoutType {
 /// @sa scff_imaging::ImagePixelFormat
 public enum ImagePixelFormat {
   /// 不正なピクセルフォーマット
-  kInvalidPixelFormat = -1,
+  InvalidPixelFormat = -1,
   /// I420(12bit)
-  kI420 = 0,
+  I420 = 0,
   /// IYUV(12bit)
-  kIYUV,
+  IYUV,
   /// YV12(12bit)
-  kYV12,
+  YV12,
   /// UYVY(16bit)
-  kUYVY,
+  UYVY,
   /// YUY2(16bit)
-  kYUY2,
+  YUY2,
   /// RGB0(32bit)
-  kRGB0,
+  RGB0,
   /// 対応ピクセルフォーマット数
-  kSupportedPixelFormatsCount
+  SupportedPixelFormatsCount
 }
 
 //-------------------------------------------------------------------
@@ -119,27 +119,27 @@ public enum ImagePixelFormat {
 /// @sa scff_imaging::SWScaleFlags
 public enum SWScaleFlags {
   /// fast bilinear
-  kFastBilinear = 1,
+  FastBilinear = 1,
   /// bilinear
-  kBilinear = 2,
+  Bilinear = 2,
   /// bicubic
-  kBicubic = 4,
+  Bicubic = 4,
   /// experimental
-  kX = 8,
+  X = 8,
   /// nearest neighbor
-  kPoint = 0x10,
+  Point = 0x10,
   /// averaging area
-  kArea = 0x20,
+  Area = 0x20,
   /// luma bicubic, chroma bilinear
-  kBicublin = 0x40,
+  Bicublin = 0x40,
   /// gaussian
-  kGauss = 0x80,
+  Gauss = 0x80,
   /// sinc
-  kSinc = 0x100,
+  Sinc = 0x100,
   /// lanczos
-  kLanczos = 0x200,
+  Lanczos = 0x200,
   /// natural bicubic spline
-  kSpline = 0x400
+  Spline = 0x400
 }
 
 /// 回転方向を表す定数
@@ -147,39 +147,40 @@ public enum SWScaleFlags {
 /// @sa scff_imaging::RotateDirection
 public enum RotateDirection {
   /// 回転なし
-  kNoRotate = 0,
+  NoRotate = 0,
   /// 時計回り90度
-  k90Degrees,
+  Degrees90,
   /// 時計回り180度
-  k180Degrees,
+  Degrees180,
   /// 時計回り270度
-  k270Degrees
+  Degrees270
 }
 
 /// 共有メモリ(Directory)に格納する構造体のエントリ
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public struct Entry {
   /// SCFF DSFのDLLが使われれているプロセスID
-  public UInt32 process_id;
+  public UInt32 PrrocessID;
   /// SCFF DSFのDLLが使われているプロセス名
-  [MarshalAs(UnmanagedType.ByValTStr, SizeConst = Interprocess.kMaxPath)]
-  public string process_name;
+  [MarshalAs(UnmanagedType.ByValTStr, SizeConst = Interprocess.MaxPath)]
+  public string ProcessName;
   /// サンプルの出力width
-  public Int32 sample_width;
+  public Int32 SampleWidth;
   /// サンプルの出力height
-  public Int32 sample_height;
+  public Int32 SampleHeight;
   /// サンプルの出力ピクセルフォーマット
   /// @attention ImagePixelFormatを操作に使うこと
-  public Int32 sample_pixel_format;
+  public Int32 SamplePixelFormat;
   /// 目標fps
-  public Double fps;
+  public Double FPS;
 }
 
 /// 共有メモリ(Directory)に格納する構造体
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public struct Directory {
-  [MarshalAs(UnmanagedType.ByValArray, SizeConst = Interprocess.kMaxEntry)]
-  public Entry[] entries;
+  /// エントリの配列
+  [MarshalAs(UnmanagedType.ByValArray, SizeConst = Interprocess.MaxEntry)]
+  public Entry[] Entries;
 }
 
 /// 拡大縮小設定
@@ -188,24 +189,24 @@ public struct Directory {
 public struct SWScaleConfig {
   /// 拡大縮小メソッド(Chroma/Luma共通)
   /// @attention 操作にはSWScaleFlagsを使うこと！
-  public Int32 flags;
+  public Int32 Flags;
   /// 正確な丸め処理
-  public Byte accurate_rnd;
+  public Byte AccurateRnd;
   /// 変換前にフィルタをかけるか
-  public Byte is_filter_enabled;
+  public Byte IsFilterEnabled;
   /// 輝度のガウスぼかし
-  public Single luma_gblur;
+  public Single LumaGblur;
   /// 色差のガウスぼかし
-  public Single chroma_gblur;
+  public Single ChromaGblur;
   /// 輝度のシャープ化
-  public Single luma_sharpen;
+  public Single LumaSharpen;
   /// 色差のシャープ化
-  public Single chroma_sharpen;
+  public Single ChromaSharpen;
   /// 水平方向のワープ
-  public Single chroma_hshift;
+  public Single ChromaHshift;
   /// 垂直方向のワープ
-  public Single chroma_vshift;
-};
+  public Single ChromaVshift;
+}
 
 /// レイアウトパラメータ
 /// @sa scff_imaging::ScreenCaptureParameter
@@ -213,39 +214,39 @@ public struct SWScaleConfig {
 public struct LayoutParameter {
   /// サンプル内の原点のX座標
   /// @warning NullLayout,NativeLayoutでは無視される
-  public Int32 bound_x;
+  public Int32 BoundX;
   /// サンプル内の原点のY座標
   /// @warning NullLayout,NativeLayoutでは無視される
-  public Int32 bound_y;
+  public Int32 BoundY;
   /// サンプル内の幅
   /// @warning NullLayout,NativeLayoutでは無視される
-  public Int32 bound_width;
+  public Int32 BoundWidth;
   /// サンプル内の高さ
   /// @warning NullLayout,NativeLayoutでは無視される
-  public Int32 bound_height;
+  public Int32 BoundHeight;
   /// キャプチャを行う対象となるウィンドウ
-  public UInt64 window;
+  public UInt64 Window;
   /// 取り込み範囲の開始X座標
-  public Int32 clipping_x;
+  public Int32 ClippingX;
   /// 取り込み範囲の開始y座標
-  public Int32 clipping_y;
+  public Int32 ClippingY;
   /// 取り込み範囲の幅
-  public Int32 clipping_width;
+  public Int32 ClippingWidth;
   /// 取り込み範囲の高さ
-  public Int32 clipping_height;
+  public Int32 ClippingHeight;
   /// マウスカーソルの表示
-  public Byte show_cursor;
+  public Byte ShowCursor;
   /// レイヤードウィンドウの表示
-  public Byte show_layered_window;
+  public Byte ShowLayeredWindow;
   /// 拡大縮小設定
-  public SWScaleConfig swscale_config;
+  public SWScaleConfig SwscaleConfig;
   /// 取り込み範囲が出力サイズより小さい場合拡張
-  public Byte stretch;
+  public Byte Stretch;
   /// アスペクト比の保持
-  public Byte keep_aspect_ratio;
+  public Byte KeepAspectRatio;
   /// 回転方向
   /// @attention RotateDirectionを操作に使うこと
-  public Int32 rotate_direction;
+  public Int32 RotateDirection;
 }
 
 /// 共有メモリ(Message)に格納する構造体
@@ -254,29 +255,29 @@ public struct Message {
   /// タイムスタンプ(time()で求められたものを想定)
   /// @warning 1ではじまり単調増加が必須条件
   /// @warning (0および負数は無効なメッセージを示す)
-  public Int64 timestamp;
+  public Int64 Timestamp;
   /// レイアウトの種類
   /// @attention LayoutTypeを操作に使うこと
-  public Int32 layout_type;
+  public Int32 LayoutType;
   /// 有効なレイアウト要素の数
-  public Int32 layout_element_count;
+  public Int32 LayoutElementCount;
   /// レイアウトパラメータの配列
-  [MarshalAs(UnmanagedType.ByValArray, SizeConst = Interprocess.kMaxComplexLayoutElements)]
-  public LayoutParameter[] layout_parameters;
+  [MarshalAs(UnmanagedType.ByValArray, SizeConst = Interprocess.MaxComplexLayoutElements)]
+  public LayoutParameter[] LayoutParameters;
 }
 
-partial class Interprocess {
+internal partial class Interprocess {
   /// コンストラクタ
   public Interprocess() {
-    directory_ = null;
-    view_of_directory_ = null;
-    mutex_directory_ = null;
-    message_ = null;
-    view_of_message_ = null;
-    mutex_message_ = null;
+    this.directory = null;
+    this.viewOfDirectory = null;
+    this.mutexDirectory = null;
+    this.message = null;
+    this.viewOfMessage = null;
+    this.mutexMessage = null;
 
-    size_of_directory_ = Marshal.SizeOf(typeof(Directory));
-    size_of_message_ = Marshal.SizeOf(typeof(Message));
+    this.sizeOfDirectory = Marshal.SizeOf(typeof(Directory));
+    this.sizeOfMessage = Marshal.SizeOf(typeof(Message));
 
     Trace.WriteLine("****Interprocess: NEW");
   }
@@ -284,8 +285,8 @@ partial class Interprocess {
   /// デストラクタ
   ~Interprocess() {
     // 解放忘れがないように
-    ReleaseDirectory();
-    ReleaseMessage();
+    this.ReleaseDirectory();
+    this.ReleaseMessage();
     Trace.WriteLine("****Interprocess: DELETE");
   }
 
@@ -297,39 +298,39 @@ partial class Interprocess {
   /// @todo(me) 全体的に例外処理を考慮していないコード。要注意。
   public bool InitDirectory() {
     // 念のため解放
-    ReleaseDirectory();
+    this.ReleaseDirectory();
 
     // 仮想メモリ(Directory)の作成
     /// @todo(me) あまりにも邪悪な例外処理の使い方。なんとかしたい。
-    MemoryMappedFile tmp_directory;
-    bool already_exists = true;
+    MemoryMappedFile tmpDirectory;
+    bool alreadyExists = true;
     try {
-      tmp_directory = MemoryMappedFile.OpenExisting(kDirectoryName);
+      tmpDirectory = MemoryMappedFile.OpenExisting(DirectoryName);
     } catch (FileNotFoundException) {
-      tmp_directory =
-          MemoryMappedFile.CreateNew(kDirectoryName, size_of_directory_);
-      already_exists = false;
+      tmpDirectory =
+          MemoryMappedFile.CreateNew(DirectoryName, this.sizeOfDirectory);
+      alreadyExists = false;
     }
 
     // ビューの作成
-    MemoryMappedViewStream tmp_view_of_directory =
-        tmp_directory.CreateViewStream();
+    MemoryMappedViewStream tmpViewOfDirectory =
+        tmpDirectory.CreateViewStream();
 
     // 最初に共有メモリを作成した場合は0クリアしておく
-    if (!already_exists) {
-      for (int i = 0; i < size_of_directory_; i++) {
-        tmp_view_of_directory.Seek(i, SeekOrigin.Begin);
-        tmp_view_of_directory.WriteByte(0);
+    if (!alreadyExists) {
+      for (int i = 0; i < this.sizeOfDirectory; i++) {
+        tmpViewOfDirectory.Seek(i, SeekOrigin.Begin);
+        tmpViewOfDirectory.WriteByte(0);
       }
     }
 
     // Mutexの作成
-    Mutex tmp_mutex_directory = new Mutex(false, kDirectoryMutexName);
+    Mutex tmpMutexDirectory = new Mutex(false, DirectoryMutexName);
 
     // メンバ変数に設定
-    directory_ = tmp_directory;
-    view_of_directory_ = tmp_view_of_directory;
-    mutex_directory_ = tmp_mutex_directory;
+    this.directory = tmpDirectory;
+    this.viewOfDirectory = tmpViewOfDirectory;
+    this.mutexDirectory = tmpMutexDirectory;
 
     Trace.WriteLine("****Interprocess: InitDirectory Done");
     return true;
@@ -337,9 +338,9 @@ partial class Interprocess {
 
   /// Directoryの初期化が成功したか
   public bool IsDirectoryInitialized() {
-    return directory_ != null &&
-           view_of_directory_ != null &&
-           mutex_directory_ != null;
+    return this.directory != null &&
+           this.viewOfDirectory != null &&
+           this.mutexDirectory != null;
   }
 
   //-------------------------------------------------------------------
@@ -347,46 +348,46 @@ partial class Interprocess {
   //-------------------------------------------------------------------
 
   /// Message初期化
-  public bool InitMessage(UInt32 process_id) {
+  public bool InitMessage(UInt32 processID) {
     // 念のため解放
-    ReleaseMessage();
+    this.ReleaseMessage();
 
     // 仮想メモリの名前
-    string message_name = kMessageNamePrefix + process_id;
+    string messageName = MessageNamePrefix + processID;
 
-    // 仮想メモリ(Message<process_id>)の作成
-    MemoryMappedFile tmp_message;
-    bool already_exists = true;
+    // 仮想メモリ(Message<PrrocessID>)の作成
+    MemoryMappedFile tmpMessage;
+    bool alreadyExists = true;
     try {
-      tmp_message = MemoryMappedFile.OpenExisting(message_name);
+      tmpMessage = MemoryMappedFile.OpenExisting(messageName);
     } catch (FileNotFoundException) {
-      tmp_message =
-          MemoryMappedFile.CreateNew(message_name, size_of_message_);
-      already_exists = false;
+      tmpMessage =
+          MemoryMappedFile.CreateNew(messageName, this.sizeOfMessage);
+      alreadyExists = false;
     }
 
     // ビューの作成
-    MemoryMappedViewStream tmp_view_of_message =
-        tmp_message.CreateViewStream();
+    MemoryMappedViewStream tmpViewOfMessage =
+        tmpMessage.CreateViewStream();
 
     // 最初に共有メモリを作成した場合は0クリアしておく
-    if (!already_exists) {
-      for (int i = 0; i < size_of_message_; i++) {
-        tmp_view_of_message.Seek(i, SeekOrigin.Begin);
-        tmp_view_of_message.WriteByte(0);
+    if (!alreadyExists) {
+      for (int i = 0; i < this.sizeOfMessage; i++) {
+        tmpViewOfMessage.Seek(i, SeekOrigin.Begin);
+        tmpViewOfMessage.WriteByte(0);
       }
     }
 
     // Mutexの名前
-    string message_mutex_name = kMessageMutexNamePrefix + process_id;
+    string messageMutexName = MessageMutexNamePrefix + processID;
 
     // Mutexの作成
-    Mutex tmp_mutex_message = new Mutex(false, message_mutex_name);
+    Mutex tmpMutexMessage = new Mutex(false, messageMutexName);
 
     // メンバ変数に設定
-    message_ = tmp_message;
-    view_of_message_ = tmp_view_of_message;
-    mutex_message_ = tmp_mutex_message;
+    this.message = tmpMessage;
+    this.viewOfMessage = tmpViewOfMessage;
+    this.mutexMessage = tmpMutexMessage;
 
     Trace.WriteLine("****Interprocess: InitMessage Done");
     return true;
@@ -394,9 +395,9 @@ partial class Interprocess {
 
   /// Messageの初期化が成功したか
   public bool IsMessageInitialized() {
-    return message_ != null &&
-           view_of_message_ != null &&
-           mutex_message_ != null;
+    return this.message != null &&
+           this.viewOfMessage != null &&
+           this.mutexMessage != null;
   }
 
   //-------------------------------------------------------------------
@@ -405,7 +406,7 @@ partial class Interprocess {
   /// エントリを作成する
   public bool AddEntry(Entry entry) {
     // 初期化されていなければ失敗
-    if (!IsDirectoryInitialized()) {
+    if (!this.IsDirectoryInitialized()) {
       Trace.WriteLine("****Interprocess: AddEntry FAILED");
       return false;
     }
@@ -413,27 +414,27 @@ partial class Interprocess {
     Trace.WriteLine("****Interprocess: AddEntry");
 
     // ロック取得
-    mutex_directory_.WaitOne();
+    this.mutexDirectory.WaitOne();
 
     // コピー取得
-    Directory directory = ReadDirectory();
+    Directory directory = this.ReadDirectory();
 
     bool success = false;
-    for (int i = 0; i < kMaxEntry; i++) {
+    for (int i = 0; i < MaxEntry; i++) {
       /// @warning 重複する場合がある？
-      if (directory.entries[i].process_id == 0) {
+      if (directory.Entries[i].PrrocessID == 0) {
         // PODなのでコピー可能（のはず）
-        directory.entries[i] = entry;
+        directory.Entries[i] = entry;
         success = true;
         break;
       }
     }
 
     // 変更を適用
-    WriteDirectory(directory);
+    this.WriteDirectory(directory);
 
     // ロック解放
-    mutex_directory_.ReleaseMutex();
+    this.mutexDirectory.ReleaseMutex();
 
     if (success) {
       Trace.WriteLine("****Interprocess: AddEntry SUCCESS");
@@ -443,9 +444,9 @@ partial class Interprocess {
   }
 
   /// エントリを削除する
-  public bool RemoveEntry(UInt32 process_id) {
+  public bool RemoveEntry(UInt32 processID) {
     // 初期化されていなければ失敗
-    if (!IsDirectoryInitialized()) {
+    if (!this.IsDirectoryInitialized()) {
       Trace.WriteLine("****Interprocess: RemoveEntry FAILED");
       return false;
     }
@@ -453,30 +454,30 @@ partial class Interprocess {
     Trace.WriteLine("****Interprocess: RemoveEntry");
 
     // ロック取得
-    mutex_directory_.WaitOne();
+    this.mutexDirectory.WaitOne();
 
     // コピー取得
-    Directory directory = ReadDirectory();
+    Directory directory = this.ReadDirectory();
 
-    for (int i = 0; i < kMaxEntry; i++) {
-      if (directory.entries[i].process_id == process_id) {
+    for (int i = 0; i < MaxEntry; i++) {
+      if (directory.Entries[i].PrrocessID == processID) {
         // zero clear
-        directory.entries[i].process_id = 0;
-        directory.entries[i].process_name = "";
-        directory.entries[i].sample_pixel_format = 0;
-        directory.entries[i].sample_width = 0;
-        directory.entries[i].sample_height = 0;
-        directory.entries[i].fps = 0.0;
+        directory.Entries[i].PrrocessID = 0;
+        directory.Entries[i].ProcessName = String.Empty;
+        directory.Entries[i].SamplePixelFormat = 0;
+        directory.Entries[i].SampleWidth = 0;
+        directory.Entries[i].SampleHeight = 0;
+        directory.Entries[i].FPS = 0.0;
         Trace.WriteLine("****Interprocess: RemoveEntry SUCCESS");
         break;
       }
     }
 
     // 変更を適用
-    WriteDirectory(directory);
+    this.WriteDirectory(directory);
 
     // ロック解放
-    mutex_directory_.ReleaseMutex();
+    this.mutexDirectory.ReleaseMutex();
 
     return true;
   }
@@ -485,22 +486,22 @@ partial class Interprocess {
   /// @pre 事前にInitMessageが実行されている必要がある
   public bool ReceiveMessage(out Message message) {
     // 初期化されていなければ失敗
-    if (!IsMessageInitialized()) {
+    if (!this.IsMessageInitialized()) {
       Trace.WriteLine("****Interprocess: ReceiveMessage FAILED");
       message = new Message();
       return false;
     }
 
-    //Trace.WriteLine("****Interprocess: ReceiveMessage");
+    // Trace.WriteLine("****Interprocess: ReceiveMessage");
 
     // ロック取得
-    mutex_message_.WaitOne();
+    this.mutexMessage.WaitOne();
 
     // そのままコピー
-    message = ReadMessage();
+    message = this.ReadMessage();
 
     // ロック解放
-    mutex_message_.ReleaseMutex();
+    this.mutexMessage.ReleaseMutex();
 
     return true;
   }
@@ -511,7 +512,7 @@ partial class Interprocess {
   /// ディレクトリを取得する
   public bool GetDirectory(out Directory directory) {
     // 初期化されていなければ失敗
-    if (!IsDirectoryInitialized()) {
+    if (!this.IsDirectoryInitialized()) {
       Trace.WriteLine("****Interprocess: GetDirectory FAILED");
       directory = new Directory();
       return false;
@@ -520,13 +521,13 @@ partial class Interprocess {
     Trace.WriteLine("****Interprocess: GetDirectory");
 
     // ロック取得
-    mutex_directory_.WaitOne();
+    this.mutexDirectory.WaitOne();
 
     // そのままコピー
-    directory = ReadDirectory();
+    directory = this.ReadDirectory();
 
     // ロック解放
-    mutex_directory_.ReleaseMutex();
+    this.mutexDirectory.ReleaseMutex();
 
     return true;
   }
@@ -535,7 +536,7 @@ partial class Interprocess {
   /// @pre 事前にInitMessageが実行されている必要がある
   public bool SendMessage(Message message) {
     // 初期化されていなければ失敗
-    if (!IsMessageInitialized()) {
+    if (!this.IsMessageInitialized()) {
       Trace.WriteLine("****Interprocess: SendMessage FAILED");
       return false;
     }
@@ -543,13 +544,13 @@ partial class Interprocess {
     Trace.WriteLine("****Interprocess: SendMessage");
 
     // ロック取得
-    mutex_message_.WaitOne();
+    this.mutexMessage.WaitOne();
 
     // そのままコピー
-    WriteMessage(message);
+    this.WriteMessage(message);
 
     // ロック解放
-    mutex_message_.ReleaseMutex();
+    this.mutexMessage.ReleaseMutex();
 
     return true;
   }
@@ -559,71 +560,71 @@ partial class Interprocess {
   //-------------------------------------------------------------------
 
   /// Directory解放
-  void ReleaseDirectory() {
-    if (mutex_directory_ != null) {
-      mutex_directory_.Dispose();
-      mutex_directory_ = null;
+  private void ReleaseDirectory() {
+    if (this.mutexDirectory != null) {
+      this.mutexDirectory.Dispose();
+      this.mutexDirectory = null;
     }
-    if (view_of_directory_ != null) {
-      view_of_directory_.Dispose();
-      view_of_directory_ = null;
+    if (this.viewOfDirectory != null) {
+      this.viewOfDirectory.Dispose();
+      this.viewOfDirectory = null;
     }
-    if (directory_ != null) {
-      directory_.Dispose();
-      directory_ = null;
+    if (this.directory != null) {
+      this.directory.Dispose();
+      this.directory = null;
     }
   }
 
   /// Message解放
-  void ReleaseMessage() {
-    if (mutex_message_ != null) {
-      mutex_message_.Dispose();
-      mutex_message_ = null;
+  private void ReleaseMessage() {
+    if (this.mutexMessage != null) {
+      this.mutexMessage.Dispose();
+      this.mutexMessage = null;
     }
-    if (view_of_message_ != null) {
-      view_of_message_.Dispose();
-      view_of_message_ = null;
+    if (this.viewOfMessage != null) {
+      this.viewOfMessage.Dispose();
+      this.viewOfMessage = null;
     }
-    if (message_ != null) {
-      message_.Dispose();
-      message_ = null;
+    if (this.message != null) {
+      this.message.Dispose();
+      this.message = null;
     }
   }
 
   /// Messageを読み込む
-  Message ReadMessage() {
-    byte[] buffer = new byte[size_of_message_];
-    view_of_message_.Read(buffer, 0, size_of_message_);
+  private Message ReadMessage() {
+    byte[] buffer = new byte[this.sizeOfMessage];
+    this.viewOfMessage.Read(buffer, 0, this.sizeOfMessage);
     GCHandle gch = GCHandle.Alloc(buffer, GCHandleType.Pinned);
     return (Message)Marshal.PtrToStructure(gch.AddrOfPinnedObject(), typeof(Message));
   }
 
   /// Messageを書き込む
-  void WriteMessage(Message message) {
-    byte[] buffer = new byte[size_of_message_];
-    IntPtr ptr = Marshal.AllocHGlobal(size_of_message_);
+  private void WriteMessage(Message message) {
+    byte[] buffer = new byte[this.sizeOfMessage];
+    IntPtr ptr = Marshal.AllocHGlobal(this.sizeOfMessage);
     Marshal.StructureToPtr(message, ptr, false);
-    Marshal.Copy(ptr, buffer, 0, size_of_message_);
+    Marshal.Copy(ptr, buffer, 0, this.sizeOfMessage);
     Marshal.FreeHGlobal(ptr);
-    view_of_message_.Write(buffer, 0, size_of_message_);
+    this.viewOfMessage.Write(buffer, 0, this.sizeOfMessage);
   }
 
   /// Directoryを読み込む
-  Directory ReadDirectory() {
-    byte[] buffer = new byte[size_of_directory_];
-    view_of_directory_.Read(buffer, 0, size_of_directory_);
+  private Directory ReadDirectory() {
+    byte[] buffer = new byte[this.sizeOfDirectory];
+    this.viewOfDirectory.Read(buffer, 0, this.sizeOfDirectory);
     GCHandle gch = GCHandle.Alloc(buffer, GCHandleType.Pinned);
     return (Directory)Marshal.PtrToStructure(gch.AddrOfPinnedObject(), typeof(Directory));
   }
 
   /// Directoryを書き込む
-  void WriteDirectory(Directory directory) {
-    byte[] buffer = new byte[size_of_directory_];
-    IntPtr ptr = Marshal.AllocHGlobal(size_of_directory_);
+  private void WriteDirectory(Directory directory) {
+    byte[] buffer = new byte[this.sizeOfDirectory];
+    IntPtr ptr = Marshal.AllocHGlobal(this.sizeOfDirectory);
     Marshal.StructureToPtr(directory, ptr, false);
-    Marshal.Copy(ptr, buffer, 0, size_of_directory_);
+    Marshal.Copy(ptr, buffer, 0, this.sizeOfDirectory);
     Marshal.FreeHGlobal(ptr);
-    view_of_directory_.Write(buffer, 0, size_of_directory_);
+    this.viewOfDirectory.Write(buffer, 0, this.sizeOfDirectory);
   }
 
   //-------------------------------------------------------------------
@@ -631,22 +632,22 @@ partial class Interprocess {
   //-------------------------------------------------------------------
 
   /// Directoryのサイズ
-  int size_of_directory_;
+  private int sizeOfDirectory;
   /// Messageのサイズ
-  int size_of_message_;
+  private int sizeOfMessage;
 
   /// 共有メモリ: Directory
-  MemoryMappedFile directory_;
+  private MemoryMappedFile directory;
   /// ビュー: Directory
-  MemoryMappedViewStream view_of_directory_;
+  private MemoryMappedViewStream viewOfDirectory;
   /// Mutex: Directory
-  Mutex mutex_directory_;
+  private Mutex mutexDirectory;
 
   /// 共有メモリ: Message
-  MemoryMappedFile message_;
+  private MemoryMappedFile message;
   /// ビュー: Message
-  MemoryMappedViewStream view_of_message_;
+  private MemoryMappedViewStream viewOfMessage;
   /// Mutex: Message
-  Mutex mutex_message_;
+  private Mutex mutexMessage;
 }
-}   // namespace scff_interprocess
+}   // namespace SCFF.Common.Interprocess

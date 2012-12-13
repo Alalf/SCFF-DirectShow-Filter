@@ -7,10 +7,10 @@ FOR /R "scff_dsf" %%i in (*.cc) do (
 FOR /R "scff_dsf" %%i in (*.h) do (
 "tools\bin\cpplint.py" --filter=-whitespace/comments "%%i"
 )
-FOR /R "scff_tests" %%i in (*.cc) do (
+FOR /R "scff_sandbox" %%i in (*.cc) do (
 "tools\bin\cpplint.py" --filter=-whitespace/comments "%%i"
 )
-FOR /R "scff_tests" %%i in (*.h) do (
+FOR /R "scff_sandbox" %%i in (*.h) do (
 "tools\bin\cpplint.py" --filter=-whitespace/comments "%%i"
 )
 popd

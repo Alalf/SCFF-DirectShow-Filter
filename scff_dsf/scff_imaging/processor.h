@@ -15,14 +15,14 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file scff-imaging/processor.h
+/// @file scff_imaging/processor.h
 /// scff_imaging::Processorの宣言
 
 #ifndef SCFF_DSF_SCFF_IMAGING_PROCESSOR_H_
 #define SCFF_DSF_SCFF_IMAGING_PROCESSOR_H_
 
-#include "scff-imaging/imaging-types.h"
-#include "scff-imaging/debug.h"
+#include "scff_imaging/imaging_types.h"
+#include "scff_imaging/debug.h"
 
 /// 画像処理を行うクラスをまとめたネームスペース
 namespace scff_imaging {

@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file scff-app/scff-app-dwmapi.cs
+/// @file scff_app/scff_app_dwmapi.cs
 /// SCFFAppのDWMAPI関連のメソッドの定義
 
 namespace scff_app {

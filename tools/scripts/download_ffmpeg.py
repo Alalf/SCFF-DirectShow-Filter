@@ -1,4 +1,4 @@
-﻿# download-ffmpeg.py
+﻿# download_ffmpeg.py
 #======================================================================
 
 # config
@@ -22,7 +22,7 @@ def init():
     from shutil import rmtree
 
     print >>stderr, 'init:'
-    
+
     rmtree(TMP_DIR, True)
     makedirs(TMP_DIR)
 
@@ -46,7 +46,7 @@ def download():
 def extract():
     from sys import stderr
     from subprocess import call
-    
+
     print >>stderr, 'extract:'
 
     # アーカイブをすべて解凍する
@@ -89,18 +89,18 @@ def relocate():
     # Xcopyでファイルを上書きコピーする
     for k, v in ffmpeg_dirs.items():
         try:
-            print >>stderr, '\t[copy-%s] START' % k
+            print >>stderr, '\t[copy_%s] START' % k
             if k.startswith('win32'):
                 retcode = call('XCOPY /Q /C /Y /R /E "%s" "%s"' % (v, FFMPEG_32BIT_DIR))
             else:
                 retcode = call('XCOPY /Q /C /Y /R /E "%s" "%s"' % (v, FFMPEG_64BIT_DIR))
             if retcode < 0:
-                print >>stderr, '\t[copy-%s] FAILED!' % k, -retcode
+                print >>stderr, '\t[copy_%s] FAILED!' % k, -retcode
                 sys.exit()
             else:
-                print >>stderr, '\t[copy-%s] SUCCESS!' % k, retcode
+                print >>stderr, '\t[copy_%s] SUCCESS!' % k, retcode
         except OSError, e:
-            print >>stderr, '\t[copy-%s] Execution failed:' % k, e
+            print >>stderr, '\t[copy_%s] Execution failed:' % k, e
             sys.exit()
 
     # scffのext/ffmpeg/*ディレクトリからdummy.txtをコピーしてくる
@@ -113,13 +113,13 @@ def move_to_ext():
     from sys import stderr
     from shutil import move
     from shutil import rmtree
-    
+
     print >>stderr, 'move_to_ext:'
-    
+
     # extの元あったディレクトリを削除する
     rmtree(EXT_FFMPEG_32BIT_DIR, True)
     rmtree(EXT_FFMPEG_64BIT_DIR, True)
-    
+
     move(FFMPEG_32BIT_DIR, EXT_FFMPEG_32BIT_DIR)
     move(FFMPEG_64BIT_DIR, EXT_FFMPEG_64BIT_DIR)
 
@@ -128,39 +128,39 @@ def move_to_ext():
 def copy_dll():
     from sys import stderr
     from subprocess import call
-    
+
     print >>stderr, 'copy_dll:'
 
     bat_string = '''@ECHO OFF
 SET ROOT_DIR=%s
 PUSHD "%%ROOT_DIR%%"
 
-MKDIR "bin\\Debug-x64\\"
-MKDIR "bin\\Release-x64\\"
-MKDIR "bin\\Debug-Win32\\"
-MKDIR "bin\\Release-Win32\\"
+MKDIR "bin\\Debug_x64\\"
+MKDIR "bin\\Release_x64\\"
+MKDIR "bin\\Debug_Win32\\"
+MKDIR "bin\\Release_Win32\\"
 
-COPY /Y "ext\\ffmpeg\\x64\\bin\\avcodec*.dll" "bin\\Debug-x64\\"
-COPY /Y "ext\\ffmpeg\\x64\\bin\\avutil*.dll" "bin\\Debug-x64\\"
-COPY /Y "ext\\ffmpeg\\x64\\bin\\swscale*.dll" "bin\\Debug-x64\\"
+COPY /Y "ext\\ffmpeg\\x64\\bin\\avcodec*.dll" "bin\\Debug_x64\\"
+COPY /Y "ext\\ffmpeg\\x64\\bin\\avutil*.dll" "bin\\Debug_x64\\"
+COPY /Y "ext\\ffmpeg\\x64\\bin\\swscale*.dll" "bin\\Debug_x64\\"
 
-COPY /Y "ext\\ffmpeg\\x64\\bin\\avcodec*.dll" "bin\\Release-x64\\"
-COPY /Y "ext\\ffmpeg\\x64\\bin\\avutil*.dll" "bin\\Release-x64\\"
-COPY /Y "ext\\ffmpeg\\x64\\bin\\swscale*.dll" "bin\\Release-x64\\"
+COPY /Y "ext\\ffmpeg\\x64\\bin\\avcodec*.dll" "bin\\Release_x64\\"
+COPY /Y "ext\\ffmpeg\\x64\\bin\\avutil*.dll" "bin\\Release_x64\\"
+COPY /Y "ext\\ffmpeg\\x64\\bin\\swscale*.dll" "bin\\Release_x64\\"
 
-COPY /Y "ext\\ffmpeg\\Win32\\bin\\avcodec*.dll" "bin\\Debug-Win32\\"
-COPY /Y "ext\\ffmpeg\\Win32\\bin\\avutil*.dll" "bin\\Debug-Win32\\"
-COPY /Y "ext\\ffmpeg\\Win32\\bin\\swscale*.dll" "bin\\Debug-Win32\\"
+COPY /Y "ext\\ffmpeg\\Win32\\bin\\avcodec*.dll" "bin\\Debug_Win32\\"
+COPY /Y "ext\\ffmpeg\\Win32\\bin\\avutil*.dll" "bin\\Debug_Win32\\"
+COPY /Y "ext\\ffmpeg\\Win32\\bin\\swscale*.dll" "bin\\Debug_Win32\\"
 
-COPY /Y "ext\\ffmpeg\\Win32\\bin\\avcodec*.dll" "bin\\Release-Win32\\"
-COPY /Y "ext\\ffmpeg\\Win32\\bin\\avutil*.dll" "bin\\Release-Win32\\"
-COPY /Y "ext\\ffmpeg\\Win32\\bin\\swscale*.dll" "bin\\Release-Win32\\"
+COPY /Y "ext\\ffmpeg\\Win32\\bin\\avcodec*.dll" "bin\\Release_Win32\\"
+COPY /Y "ext\\ffmpeg\\Win32\\bin\\avutil*.dll" "bin\\Release_Win32\\"
+COPY /Y "ext\\ffmpeg\\Win32\\bin\\swscale*.dll" "bin\\Release_Win32\\"
 
 POPD
 ''' % ROOT_DIR
 
     # ファイル出力
-    bat = TMP_DIR + '\\copy-ffmpeg-dll.bat'
+    bat = TMP_DIR + '\\copy_ffmpeg_dll.bat'
     with open(bat, 'w') as f:
         f.write(bat_string)
 
@@ -173,9 +173,9 @@ def make_tools_bat():
     from sys import stderr
 
     print >>stderr, 'make_tools_bat:'
-    
-    src_bat = TMP_DIR + '\\copy-ffmpeg-dll.bat'
-    dst_bat = ROOT_DIR + '\\tools\\copy-ffmpeg-dll.bat'
+
+    src_bat = TMP_DIR + '\\copy_ffmpeg_dll.bat'
+    dst_bat = ROOT_DIR + '\\tools\\copy_ffmpeg_dll.bat'
     with open(src_bat, 'r') as src:
         with open(dst_bat, 'w') as dst:
             for line in src:

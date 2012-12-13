@@ -15,13 +15,13 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file scff-imaging/screen-capture.cc
+/// @file scff_imaging/screen_capture.cc
 /// scff_imaging::ScreenCaptureの定義
 
-#include "scff-imaging/screen-capture.h"
+#include "scff_imaging/screen_capture.h"
 
-#include "scff-imaging/debug.h"
-#include "scff-imaging/utilities.h"
+#include "scff_imaging/debug.h"
+#include "scff_imaging/utilities.h"
 
 namespace scff_imaging {
 

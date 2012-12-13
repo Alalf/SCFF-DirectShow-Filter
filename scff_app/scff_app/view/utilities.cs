@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file scff-app/view/utilities.cs
+/// @file scff_app/view/utilities.cs
 /// View用ユーティリティクラス
 
 namespace scff_app.view {
@@ -35,7 +35,7 @@ class Utilities {
   //===================================================================
   // メソッド
   //===================================================================
-  
+
   static int GetHitTestResult(Rectangle client_rect, Point client_point) {
     var on_top_border = client_point.Y < kBorderSize;
     var on_bottom_border = client_point.Y > client_rect.Height - kBorderSize;

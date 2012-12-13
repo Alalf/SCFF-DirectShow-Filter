@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file scff-imaging/complex-layout.h
+/// @file scff_imaging/complex_layout.h
 /// scff_imaging::ComplexLayoutの宣言
 
 #ifndef SCFF_DSF_SCFF_IMAGING_COMPLEX_LAYOUT_H_
@@ -23,9 +23,9 @@
 
 #include <libavfilter/drawutils.h>
 
-#include "scff-imaging/common.h"
-#include "scff-imaging/layout.h"
-#include "scff-imaging/avpicture-with-fill-image.h"
+#include "scff_imaging/common.h"
+#include "scff_imaging/layout.h"
+#include "scff_imaging/avpicture_with_fill_image.h"
 
 namespace scff_imaging {
 

@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file scff-app/viewmodel/directory.cs
+/// @file scff_app/viewmodel/directory.cs
 /// scff_app.viewmodel.Directoryのメソッドの定義
 
 namespace scff_app.viewmodel {

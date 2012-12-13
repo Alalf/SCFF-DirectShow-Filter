@@ -15,14 +15,14 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file base/scff-dsf.cc
+/// @file base/scff_dsf.cc
 /// DirectShow Filterに必要なデータをまとめたファイル
 
 #include <streams.h>
 
 #include "base/constants.h"
-#include "base/scff-source.h"
-#include "scff-imaging/imaging.h"
+#include "base/scff_source.h"
+#include "scff_imaging/imaging.h"
 
 //=====================================================================
 // フィルタ/ピン設定

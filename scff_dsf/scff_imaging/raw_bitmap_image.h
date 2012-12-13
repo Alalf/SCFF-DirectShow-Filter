@@ -15,13 +15,13 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file scff-imaging/raw-bitmap-image.h
+/// @file scff_imaging/raw_bitmap_image.h
 /// scff_imaging::RawBitmapImageの宣言
 
 #ifndef SCFF_DSF_SCFF_IMAGING_RAW_BITMAP_IMAGE_H_
 #define SCFF_DSF_SCFF_IMAGING_RAW_BITMAP_IMAGE_H_
 
-#include "scff-imaging/image.h"
+#include "scff_imaging/image.h"
 
 namespace scff_imaging {
 

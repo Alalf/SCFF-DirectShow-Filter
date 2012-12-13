@@ -15,16 +15,16 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file scff-imaging/complex-layout.cc
+/// @file scff_imaging/complex_layout.cc
 /// scff_imaging::ComplexLayoutの定義
 
-#include "scff-imaging/complex-layout.h"
+#include "scff_imaging/complex_layout.h"
 
-#include "scff-imaging/debug.h"
-#include "scff-imaging/utilities.h"
-#include "scff-imaging/screen-capture.h"
-#include "scff-imaging/scale.h"
-#include "scff-imaging/padding.h"
+#include "scff_imaging/debug.h"
+#include "scff_imaging/utilities.h"
+#include "scff_imaging/screen_capture.h"
+#include "scff_imaging/scale.h"
+#include "scff_imaging/padding.h"
 
 namespace scff_imaging {
 

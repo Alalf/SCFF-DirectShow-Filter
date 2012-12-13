@@ -15,14 +15,14 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file base/scff-source.cc
+/// @file base/scff_source.cc
 /// SCFFSourceの定義
 
-#include "base/scff-source.h"
+#include "base/scff_source.h"
 
 #include "base/constants.h"
 #include "base/debug.h"
-#include "base/scff-output-pin.h"
+#include "base/scff_output_pin.h"
 
 //=====================================================================
 // SCFFSource
@@ -56,9 +56,9 @@ CUnknown* WINAPI SCFFSource::CreateInstance(IUnknown *unknown,
 void WINAPI SCFFSource::Init(BOOL loading, const CLSID *clsid) {
   if (loading) {
     // DLLがロードされた場合の処理
-    MyDbgLog((LOG_MEMORY, kDbgNewDelete, TEXT("scff-dsf-*.ax: LOAD")));
+    MyDbgLog((LOG_MEMORY, kDbgNewDelete, TEXT("scff_dsf_*.ax: LOAD")));
   } else {
     // DLLがアンロードされた場合の処理
-    MyDbgLog((LOG_MEMORY, kDbgNewDelete, TEXT("scff-dsf-*.ax: UNLOAD")));
+    MyDbgLog((LOG_MEMORY, kDbgNewDelete, TEXT("scff_dsf_*.ax: UNLOAD")));
   }
 }

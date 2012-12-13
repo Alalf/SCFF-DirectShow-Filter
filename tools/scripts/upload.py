@@ -18,10 +18,10 @@ def init():
     from shutil import rmtree
 
     print >>stderr, 'init:'
-    
+
     rmtree(TMP_DIR, True)
     makedirs(TMP_DIR)
-    
+
 #----------------------------------------------------------------------
 
 def upload():
@@ -39,12 +39,12 @@ def upload():
 
     # common
     headers = {'content-type':'application/json', 'accept':'application/json'}
-    
-    # get-downloads
-    print >>stderr, '\t[get-downloads]'
+
+    # get_downloads
+    print >>stderr, '\t[get_downloads]'
     response = get(DOWNLOADS_URL, headers=headers)
     data = response.json
-    
+
     # TODO(me): 古くなったファイルは削除する
     for i in data:
         for archive in glob(ARCHIVES):
@@ -59,15 +59,15 @@ def upload():
         dist_dir = split(archive)[0]
         filename = split(archive)[1]
         filesize = getsize(archive)
-        
-        # create-downloads-resource
-        print >>stderr, '\t[create-downloads-resource] ' + filename
+
+        # create_downloads_resource
+        print >>stderr, '\t[create_downloads_resource] ' + filename
         payload = {'name':filename, 'size':filesize}
         response = post(DOWNLOADS_URL, auth=AUTH, headers=headers, data=dumps(payload))
         data = response.json
 
-        # upload-file-to-s3
-        print >>stderr, '\t[upload-file-to-s3] ' + filename
+        # upload_file_to_s3
+        print >>stderr, '\t[upload_file_to_s3] ' + filename
 
         params = [
             ('key', data['path']),
@@ -84,5 +84,5 @@ def upload():
         for k, v in params:
             command += ' -F"' + k +'=' + str(v) + '"'
         command += ' ' + data['s3_url']
-        
+
         call(command)

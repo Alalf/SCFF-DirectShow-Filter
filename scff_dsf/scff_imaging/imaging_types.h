@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file scff-imaging/imaging-types.h
+/// @file scff_imaging/imaging_types.h
 /// scff_imagingモジュール用型宣言
 
 #ifndef SCFF_DSF_SCFF_IMAGING_IMAGING_TYPES_H_

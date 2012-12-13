@@ -49,7 +49,7 @@ int MyDebugLog(DWORD types, DWORD level, LPCTSTR format, ...) {
   ZeroMemory(spaces, sizeof(spaces));
   spaces[0] = '\0';
 
-  for (int i = kDbgMax-level; i > 1; i--) _tcscat_s(spaces, 32, TEXT(" "));
+  for (int i = kDbgMax - level; i > 1; i--) _tcscat_s(spaces, 32, TEXT(" "));
 
   switch (types) {
     case LOG_TRACE: {

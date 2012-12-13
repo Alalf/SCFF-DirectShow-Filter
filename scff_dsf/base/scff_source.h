@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file base/scff-source.h
+/// @file base/scff_source.h
 /// SCFFSourceの宣言
 
 #ifndef SCFF_DSF_BASE_SCFF_SOURCE_H_

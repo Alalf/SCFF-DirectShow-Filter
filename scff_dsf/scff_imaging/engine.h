@@ -15,14 +15,14 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file scff-imaging/engine.h
+/// @file scff_imaging/engine.h
 /// scff_imaging::Engineの宣言
 
 #ifndef SCFF_DSF_SCFF_IMAGING_ENGINE_H_
 #define SCFF_DSF_SCFF_IMAGING_ENGINE_H_
 
-#include "scff-imaging/common.h"
-#include "scff-imaging/layout.h"
+#include "scff_imaging/common.h"
+#include "scff_imaging/layout.h"
 
 /// 画像処理を行うクラスをまとめたネームスペース
 namespace scff_imaging {

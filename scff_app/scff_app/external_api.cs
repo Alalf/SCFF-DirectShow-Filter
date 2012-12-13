@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file scff-app/external-api.cs
+/// @file scff_app/external_api.cs
 /// scff_appモジュールで利用する外部APIをまとめたクラスの定義
 
 namespace scff_app {
@@ -70,7 +70,7 @@ class ExternalAPI {
   [DllImport("user32.dll")]
   [return: MarshalAs(UnmanagedType.Bool)]
   internal static extern bool IsWindow(UIntPtr hWnd);
-  
+
   [DllImport("user32.dll", SetLastError = false)]
   internal static extern UIntPtr GetDesktopWindow();
 

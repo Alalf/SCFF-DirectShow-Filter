@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file scff-app/scff-app.cs
+/// @file scff_app/scff_app.cs
 /// MVCパターンにおけるControllerの定義
 
 namespace scff_app {
@@ -144,7 +144,7 @@ partial class SCFFApp {
     //----------------------
     if (!is_correctly_installed_Win32 && !is_correctly_installed_x64) {
       // 32bit版も64bit版もインストールされていない場合
-      MessageBox.Show("scff-*.ax is not correctly installed.\nPlease re-install SCFF DirectShow Filter.",
+      MessageBox.Show("scff_dsf_*.ax is not correctly installed.\nPlease re-install SCFF DirectShow Filter.",
                       "Not correctly installed",
                       MessageBoxButtons.OK,
                       MessageBoxIcon.Error);
@@ -153,10 +153,10 @@ partial class SCFFApp {
 
     if (!is_dll_found_Win32 && !is_dll_found_x64) {
       // 32bit版のDLLも64bit版のDLLも指定された場所に存在していない場合
-      string message = "scff-*.ax is not found:\n";
+      string message = "scff_dsf_*.ax is not found:\n";
       message += "\n";
       message += "  32bit: " + dll_path_Win32 + "\n";
-      message += "  64bit: " + dll_path_x64 + "\n"; 
+      message += "  64bit: " + dll_path_x64 + "\n";
       message += "\n";
       message += "Check your SCFF directory.";
       MessageBox.Show(message,
@@ -231,7 +231,7 @@ partial class SCFFApp {
     // Messageを変換
     scff_interprocess.Message interprocess_message =
         message_.ToInterprocess(current_entry.SampleWidth, current_entry.SampleHeight, force_null_layout);
-    
+
     // 共有メモリにアクセス
     interprocess_.InitMessage(current_entry.ProcessID);
     interprocess_.SendMessage(interprocess_message);

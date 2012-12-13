@@ -9,7 +9,7 @@
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>scff_app</RootNamespace>
-    <AssemblyName>scff-app</AssemblyName>
+    <AssemblyName>scff_app</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
@@ -65,69 +65,69 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="scff-app\viewmodel\directory-properties.cs" />
-    <Compile Include="scff-app\viewmodel\entry-properties.cs" />
-    <Compile Include="scff-app\viewmodel\layout-parameter-properties.cs" />
-    <Compile Include="scff-app\viewmodel\layout-parameter.cs" />
-    <Compile Include="scff-app\viewmodel\message-properties.cs" />
-    <Compile Include="scff-app\viewmodel\swscale-config-properties.cs" />
-    <Compile Include="scff-app\viewmodel\message.cs" />
-    <Compile Include="scff-app\viewmodel\entry.cs" />
-    <Compile Include="scff-app\viewmodel\directory.cs" />
-    <Compile Include="scff-app\viewmodel\swscale-config.cs" />
-    <Compile Include="scff-app\external-dwmapi.cs" />
-    <Compile Include="scff-app\external-api.cs" />
-    <Compile Include="scff-app\view\AreaSelectForm.cs">
+    <Compile Include="scff_app\viewmodel\directory_properties.cs" />
+    <Compile Include="scff_app\viewmodel\entry_properties.cs" />
+    <Compile Include="scff_app\viewmodel\layout_parameter_properties.cs" />
+    <Compile Include="scff_app\viewmodel\layout_parameter.cs" />
+    <Compile Include="scff_app\viewmodel\message_properties.cs" />
+    <Compile Include="scff_app\viewmodel\swscale_config_properties.cs" />
+    <Compile Include="scff_app\viewmodel\message.cs" />
+    <Compile Include="scff_app\viewmodel\entry.cs" />
+    <Compile Include="scff_app\viewmodel\directory.cs" />
+    <Compile Include="scff_app\viewmodel\swscale_config.cs" />
+    <Compile Include="scff_app\external_dwmapi.cs" />
+    <Compile Include="scff_app\external_api.cs" />
+    <Compile Include="scff_app\view\AreaSelectForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="scff-app\view\AreaSelectForm.designer.cs">
+    <Compile Include="scff_app\view\AreaSelectForm.designer.cs">
       <DependentUpon>AreaSelectForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="scff-app\view\LayoutForm.cs">
+    <Compile Include="scff_app\view\LayoutForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="scff-app\view\LayoutForm.designer.cs">
+    <Compile Include="scff_app\view\LayoutForm.designer.cs">
       <DependentUpon>LayoutForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="scff-app\view\LayoutPanel.cs">
+    <Compile Include="scff_app\view\LayoutPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="scff-app\view\LayoutPanel.Designer.cs">
+    <Compile Include="scff_app\view\LayoutPanel.Designer.cs">
       <DependentUpon>LayoutPanel.cs</DependentUpon>
     </Compile>
-    <Compile Include="scff-app\view\PreviewControl.cs">
+    <Compile Include="scff_app\view\PreviewControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="scff-app\view\PreviewControl.designer.cs">
+    <Compile Include="scff_app\view\PreviewControl.designer.cs">
       <DependentUpon>PreviewControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="scff-app\view\movable_and_resizable.cs" />
-    <Compile Include="scff-app\view\utilities.cs" />
-    <Compile Include="scff-app\scff-app-profile.cs" />
+    <Compile Include="scff_app\view\movable_and_resizable.cs" />
+    <Compile Include="scff_app\view\utilities.cs" />
+    <Compile Include="scff_app\scff_app_profile.cs" />
     <Compile Include="SCFFAppForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="SCFFAppForm.Designer.cs">
       <DependentUpon>SCFFAppForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="scff-app\scff-app-dwmapi.cs" />
-    <Compile Include="scff-app\scff-app.cs" />
-    <Compile Include="scff-app\utilities.cs" />
-    <Compile Include="scff-imaging\utilities.cs" />
-    <Compile Include="scff-interprocess\interprocess-class.cs" />
-    <Compile Include="scff-interprocess\interprocess.cs">
+    <Compile Include="scff_app\scff_app_dwmapi.cs" />
+    <Compile Include="scff_app\scff_app.cs" />
+    <Compile Include="scff_app\utilities.cs" />
+    <Compile Include="scff_imaging\utilities.cs" />
+    <Compile Include="scff_interprocess\interprocess_class.cs" />
+    <Compile Include="scff_interprocess\interprocess.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="scff-app\view\LayoutPanel.resx">
+    <EmbeddedResource Include="scff_app\view\LayoutPanel.resx">
       <DependentUpon>LayoutPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SCFFAppForm.resx">
       <DependentUpon>SCFFAppForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="scff-app\view\AreaSelectForm.resx">
+    <EmbeddedResource Include="scff_app\view\AreaSelectForm.resx">
       <DependentUpon>AreaSelectForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -141,10 +141,10 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="scff-app\view\LayoutForm.resx">
+    <EmbeddedResource Include="scff_app\view\LayoutForm.resx">
       <DependentUpon>LayoutForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="scff-app\view\PreviewControl.resx">
+    <EmbeddedResource Include="scff_app\view\PreviewControl.resx">
       <DependentUpon>PreviewControl.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
@@ -191,7 +191,7 @@
     <Folder Include="Properties\DataSources\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>

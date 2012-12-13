@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file scff-imaging/common.h
+/// @file scff_imaging/common.h
 /// scff_imagingで使うマクロなどを定義
 
 #ifndef SCFF_DSF_SCFF_IMAGING_COMMON_H_

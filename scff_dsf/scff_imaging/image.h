@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file scff-imaging/image.h
+/// @file scff_imaging/image.h
 /// scff_imaging::Imageの宣言
 
 #ifndef SCFF_DSF_SCFF_IMAGING_IMAGE_H_
@@ -28,7 +28,7 @@ extern "C" {
 
 #include <cstdint>
 
-#include "scff-imaging/common.h"
+#include "scff_imaging/common.h"
 
 struct AVPicture;
 

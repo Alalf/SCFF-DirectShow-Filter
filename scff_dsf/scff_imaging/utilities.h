@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file scff-imaging/utilities.h
+/// @file scff_imaging/utilities.h
 /// scff_imaging::Utilitiesの宣言
 
 #ifndef SCFF_DSF_SCFF_IMAGING_UTILITIES_H_

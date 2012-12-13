@@ -15,15 +15,15 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file base/scff-output-pin.h
+/// @file base/scff_output_pin.h
 /// SCFFOutputPinの宣言
 
 #ifndef SCFF_DSF_BASE_SCFF_OUTPUT_PIN_H_
 #define SCFF_DSF_BASE_SCFF_OUTPUT_PIN_H_
 
 #include <streams.h>
-#include "base/scff-clock-time.h"
-#include "scff-imaging/imaging.h"
+#include "base/scff_clock_time.h"
+#include "scff_imaging/imaging.h"
 
 /// DirectShowビデオキャプチャフィルタの出力ピン
 class SCFFOutputPin : public CSourceStream,

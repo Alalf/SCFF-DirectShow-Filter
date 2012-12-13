@@ -15,16 +15,16 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file scff-imaging/splash-screen.cc
+/// @file scff_imaging/splash_screen.cc
 /// scff_imaging::SplashScreenの定義
 
-#include "scff-imaging/splash-screen.h"
+#include "scff_imaging/splash_screen.h"
 
 #include "resource.h"   // NOLINT
-#include "scff-imaging/debug.h"
-#include "scff-imaging/utilities.h"
-#include "scff-imaging/scale.h"
-#include "scff-imaging/padding.h"
+#include "scff_imaging/debug.h"
+#include "scff_imaging/utilities.h"
+#include "scff_imaging/scale.h"
+#include "scff_imaging/padding.h"
 
 namespace scff_imaging {
 

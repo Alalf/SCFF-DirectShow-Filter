@@ -19,7 +19,7 @@
 /// グローバル定数定義
 
 #include "base/constants.h"
-#include "scff-imaging/imaging.h"
+#include "scff_imaging/imaging.h"
 
 //=====================================================================
 // 定数

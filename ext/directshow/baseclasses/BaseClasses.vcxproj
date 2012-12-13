@@ -110,22 +110,22 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\obj\$(ProjectName)\$(Configuration)-$(PlatformName)\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\obj\$(ProjectName)\$(Configuration)-$(PlatformName)\</IntDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\obj\$(ProjectName)\$(Configuration)-$(PlatformName)\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\obj\$(ProjectName)\$(Configuration)-$(PlatformName)\</IntDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug_MBCS|Win32'">$(SolutionDir)\obj\$(ProjectName)\$(Configuration)-$(PlatformName)\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug_MBCS|Win32'">$(SolutionDir)\obj\$(ProjectName)\$(Configuration)-$(PlatformName)\</IntDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release_MBCS|Win32'">$(SolutionDir)\obj\$(ProjectName)\$(Configuration)-$(PlatformName)\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release_MBCS|Win32'">$(SolutionDir)\obj\$(ProjectName)\$(Configuration)-$(PlatformName)\</IntDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)\obj\$(ProjectName)\$(Configuration)-$(PlatformName)\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)\obj\$(ProjectName)\$(Configuration)-$(PlatformName)\</IntDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)\obj\$(ProjectName)\$(Configuration)-$(PlatformName)\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)\obj\$(ProjectName)\$(Configuration)-$(PlatformName)\</IntDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug_MBCS|x64'">$(SolutionDir)\obj\$(ProjectName)\$(Configuration)-$(PlatformName)\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug_MBCS|x64'">$(SolutionDir)\obj\$(ProjectName)\$(Configuration)-$(PlatformName)\</IntDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release_MBCS|x64'">$(SolutionDir)\obj\$(ProjectName)\$(Configuration)-$(PlatformName)\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release_MBCS|x64'">$(SolutionDir)\obj\$(ProjectName)\$(Configuration)-$(PlatformName)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\obj\$(ProjectName)\$(Configuration)_$(PlatformName)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\obj\$(ProjectName)\$(Configuration)_$(PlatformName)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\obj\$(ProjectName)\$(Configuration)_$(PlatformName)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\obj\$(ProjectName)\$(Configuration)_$(PlatformName)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug_MBCS|Win32'">$(SolutionDir)\obj\$(ProjectName)\$(Configuration)_$(PlatformName)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug_MBCS|Win32'">$(SolutionDir)\obj\$(ProjectName)\$(Configuration)_$(PlatformName)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release_MBCS|Win32'">$(SolutionDir)\obj\$(ProjectName)\$(Configuration)_$(PlatformName)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release_MBCS|Win32'">$(SolutionDir)\obj\$(ProjectName)\$(Configuration)_$(PlatformName)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)\obj\$(ProjectName)\$(Configuration)_$(PlatformName)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)\obj\$(ProjectName)\$(Configuration)_$(PlatformName)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)\obj\$(ProjectName)\$(Configuration)_$(PlatformName)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)\obj\$(ProjectName)\$(Configuration)_$(PlatformName)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug_MBCS|x64'">$(SolutionDir)\obj\$(ProjectName)\$(Configuration)_$(PlatformName)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug_MBCS|x64'">$(SolutionDir)\obj\$(ProjectName)\$(Configuration)_$(PlatformName)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release_MBCS|x64'">$(SolutionDir)\obj\$(ProjectName)\$(Configuration)_$(PlatformName)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release_MBCS|x64'">$(SolutionDir)\obj\$(ProjectName)\$(Configuration)_$(PlatformName)\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug_MBCS|Win32'">strmbasd</TargetName>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">strmbasd</TargetName>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release_MBCS|Win32'">strmbase</TargetName>

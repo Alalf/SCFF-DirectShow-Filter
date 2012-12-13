@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file scff-imaging/debug.h
+/// @file scff_imaging/debug.h
 /// Debug用マクロなどの宣言
 /// @todo(me) ASSERTとDbgLog利用のためだけに
 ///           DirectShowBaseclassesに依存ができるのは気持ち悪い

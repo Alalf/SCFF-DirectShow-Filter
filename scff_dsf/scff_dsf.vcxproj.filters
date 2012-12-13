@@ -11,28 +11,28 @@
     <Filter Include="ext">
       <UniqueIdentifier>{a5377094-f746-475b-bb08-29f90d6ce201}</UniqueIdentifier>
     </Filter>
-    <Filter Include="scff-interprocess">
+    <Filter Include="scff_interprocess">
       <UniqueIdentifier>{4abe54c4-1a72-4204-91e2-38b1e8749f52}</UniqueIdentifier>
     </Filter>
-    <Filter Include="scff-imaging">
+    <Filter Include="scff_imaging">
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="base\scff-dsf.cc">
+    <ClCompile Include="base\scff_dsf.cc">
       <Filter>base</Filter>
     </ClCompile>
-    <ClCompile Include="base\scff-output-pin-implement.cc">
+    <ClCompile Include="base\scff_output_pin_implement.cc">
       <Filter>base</Filter>
     </ClCompile>
-    <ClCompile Include="base\scff-output-pin.cc">
+    <ClCompile Include="base\scff_output_pin.cc">
       <Filter>base</Filter>
     </ClCompile>
-    <ClCompile Include="base\scff-source.cc">
+    <ClCompile Include="base\scff_source.cc">
       <Filter>base</Filter>
     </ClCompile>
-    <ClCompile Include="base\scff-monitor.cc">
+    <ClCompile Include="base\scff_monitor.cc">
       <Filter>base</Filter>
     </ClCompile>
     <ClCompile Include="base\constants.cc">
@@ -41,72 +41,72 @@
     <ClCompile Include="base\debug.cc">
       <Filter>base</Filter>
     </ClCompile>
-    <ClCompile Include="base\scff-clock-time.cc">
+    <ClCompile Include="base\scff_clock_time.cc">
       <Filter>base</Filter>
     </ClCompile>
     <ClCompile Include="..\ext\src\libavfilter\drawutils.cc">
       <Filter>ext</Filter>
     </ClCompile>
-    <ClCompile Include="scff-imaging\avpicture-image.cc">
-      <Filter>scff-imaging</Filter>
+    <ClCompile Include="scff_imaging\avpicture_image.cc">
+      <Filter>scff_imaging</Filter>
     </ClCompile>
-    <ClCompile Include="scff-imaging\avpicture-with-fill-image.cc">
-      <Filter>scff-imaging</Filter>
+    <ClCompile Include="scff_imaging\avpicture_with_fill_image.cc">
+      <Filter>scff_imaging</Filter>
     </ClCompile>
-    <ClCompile Include="scff-imaging\engine.cc">
-      <Filter>scff-imaging</Filter>
+    <ClCompile Include="scff_imaging\engine.cc">
+      <Filter>scff_imaging</Filter>
     </ClCompile>
-    <ClCompile Include="scff-imaging\image.cc">
-      <Filter>scff-imaging</Filter>
+    <ClCompile Include="scff_imaging\image.cc">
+      <Filter>scff_imaging</Filter>
     </ClCompile>
-    <ClCompile Include="scff-imaging\native-layout.cc">
-      <Filter>scff-imaging</Filter>
+    <ClCompile Include="scff_imaging\native_layout.cc">
+      <Filter>scff_imaging</Filter>
     </ClCompile>
-    <ClCompile Include="scff-imaging\padding.cc">
-      <Filter>scff-imaging</Filter>
+    <ClCompile Include="scff_imaging\padding.cc">
+      <Filter>scff_imaging</Filter>
     </ClCompile>
-    <ClCompile Include="scff-imaging\raw-bitmap-image.cc">
-      <Filter>scff-imaging</Filter>
+    <ClCompile Include="scff_imaging\raw_bitmap_image.cc">
+      <Filter>scff_imaging</Filter>
     </ClCompile>
-    <ClCompile Include="scff-imaging\request.cc">
-      <Filter>scff-imaging</Filter>
+    <ClCompile Include="scff_imaging\request.cc">
+      <Filter>scff_imaging</Filter>
     </ClCompile>
-    <ClCompile Include="scff-imaging\scale.cc">
-      <Filter>scff-imaging</Filter>
+    <ClCompile Include="scff_imaging\scale.cc">
+      <Filter>scff_imaging</Filter>
     </ClCompile>
-    <ClCompile Include="scff-imaging\screen-capture.cc">
-      <Filter>scff-imaging</Filter>
+    <ClCompile Include="scff_imaging\screen_capture.cc">
+      <Filter>scff_imaging</Filter>
     </ClCompile>
-    <ClCompile Include="scff-imaging\splash-screen.cc">
-      <Filter>scff-imaging</Filter>
+    <ClCompile Include="scff_imaging\splash_screen.cc">
+      <Filter>scff_imaging</Filter>
     </ClCompile>
-    <ClCompile Include="scff-imaging\utilities.cc">
-      <Filter>scff-imaging</Filter>
+    <ClCompile Include="scff_imaging\utilities.cc">
+      <Filter>scff_imaging</Filter>
     </ClCompile>
-    <ClCompile Include="scff-imaging\windows-ddb-image.cc">
-      <Filter>scff-imaging</Filter>
+    <ClCompile Include="scff_imaging\windows_ddb_image.cc">
+      <Filter>scff_imaging</Filter>
     </ClCompile>
-    <ClCompile Include="scff-interprocess\interprocess.cc">
-      <Filter>scff-interprocess</Filter>
+    <ClCompile Include="scff_interprocess\interprocess.cc">
+      <Filter>scff_interprocess</Filter>
     </ClCompile>
-    <ClCompile Include="scff-imaging\complex-layout.cc">
-      <Filter>scff-imaging</Filter>
+    <ClCompile Include="scff_imaging\complex_layout.cc">
+      <Filter>scff_imaging</Filter>
     </ClCompile>
     <ClCompile Include="..\ext\src\libavfilter\formats.cc">
       <Filter>ext</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="base\scff-dsf-x64.def">
+    <None Include="base\scff_dsf_x64.def">
       <Filter>base</Filter>
     </None>
-    <None Include="base\scff-dsf-Win32.def">
+    <None Include="base\scff_dsf_Win32.def">
       <Filter>base</Filter>
     </None>
-    <None Include="base\scff-dsf.dox">
+    <None Include="base\scff_dsf.dox">
       <Filter>base</Filter>
     </None>
-    <None Include="scff-dsf.bmp">
+    <None Include="scff_dsf.bmp">
       <Filter>リソース ファイル</Filter>
     </None>
     <None Include="..\ext\include\libavfilter\all_channel_layouts.inc">
@@ -114,13 +114,13 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="base\scff-source.h">
+    <ClInclude Include="base\scff_source.h">
       <Filter>base</Filter>
     </ClInclude>
-    <ClInclude Include="base\scff-output-pin.h">
+    <ClInclude Include="base\scff_output_pin.h">
       <Filter>base</Filter>
     </ClInclude>
-    <ClInclude Include="base\scff-monitor.h">
+    <ClInclude Include="base\scff_monitor.h">
       <Filter>base</Filter>
     </ClInclude>
     <ClInclude Include="base\constants.h">
@@ -129,7 +129,7 @@
     <ClInclude Include="base\debug.h">
       <Filter>base</Filter>
     </ClInclude>
-    <ClInclude Include="base\scff-clock-time.h">
+    <ClInclude Include="base\scff_clock_time.h">
       <Filter>base</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
@@ -141,75 +141,75 @@
     <ClInclude Include="..\ext\include\libavutil\colorspace.h">
       <Filter>ext</Filter>
     </ClInclude>
-    <ClInclude Include="scff-imaging\avpicture-image.h">
-      <Filter>scff-imaging</Filter>
+    <ClInclude Include="scff_imaging\avpicture_image.h">
+      <Filter>scff_imaging</Filter>
     </ClInclude>
-    <ClInclude Include="scff-imaging\avpicture-with-fill-image.h">
-      <Filter>scff-imaging</Filter>
+    <ClInclude Include="scff_imaging\avpicture_with_fill_image.h">
+      <Filter>scff_imaging</Filter>
     </ClInclude>
-    <ClInclude Include="scff-imaging\engine.h">
-      <Filter>scff-imaging</Filter>
+    <ClInclude Include="scff_imaging\engine.h">
+      <Filter>scff_imaging</Filter>
     </ClInclude>
-    <ClInclude Include="scff-imaging\image.h">
-      <Filter>scff-imaging</Filter>
+    <ClInclude Include="scff_imaging\image.h">
+      <Filter>scff_imaging</Filter>
     </ClInclude>
-    <ClInclude Include="scff-imaging\imaging.h">
-      <Filter>scff-imaging</Filter>
+    <ClInclude Include="scff_imaging\imaging.h">
+      <Filter>scff_imaging</Filter>
     </ClInclude>
-    <ClInclude Include="scff-imaging\imaging-types.h">
-      <Filter>scff-imaging</Filter>
+    <ClInclude Include="scff_imaging\imaging_types.h">
+      <Filter>scff_imaging</Filter>
     </ClInclude>
-    <ClInclude Include="scff-imaging\native-layout.h">
-      <Filter>scff-imaging</Filter>
+    <ClInclude Include="scff_imaging\native_layout.h">
+      <Filter>scff_imaging</Filter>
     </ClInclude>
-    <ClInclude Include="scff-imaging\padding.h">
-      <Filter>scff-imaging</Filter>
+    <ClInclude Include="scff_imaging\padding.h">
+      <Filter>scff_imaging</Filter>
     </ClInclude>
-    <ClInclude Include="scff-imaging\processor.h">
-      <Filter>scff-imaging</Filter>
+    <ClInclude Include="scff_imaging\processor.h">
+      <Filter>scff_imaging</Filter>
     </ClInclude>
-    <ClInclude Include="scff-imaging\raw-bitmap-image.h">
-      <Filter>scff-imaging</Filter>
+    <ClInclude Include="scff_imaging\raw_bitmap_image.h">
+      <Filter>scff_imaging</Filter>
     </ClInclude>
-    <ClInclude Include="scff-imaging\request.h">
-      <Filter>scff-imaging</Filter>
+    <ClInclude Include="scff_imaging\request.h">
+      <Filter>scff_imaging</Filter>
     </ClInclude>
-    <ClInclude Include="scff-imaging\scale.h">
-      <Filter>scff-imaging</Filter>
+    <ClInclude Include="scff_imaging\scale.h">
+      <Filter>scff_imaging</Filter>
     </ClInclude>
-    <ClInclude Include="scff-imaging\screen-capture.h">
-      <Filter>scff-imaging</Filter>
+    <ClInclude Include="scff_imaging\screen_capture.h">
+      <Filter>scff_imaging</Filter>
     </ClInclude>
-    <ClInclude Include="scff-imaging\splash-screen.h">
-      <Filter>scff-imaging</Filter>
+    <ClInclude Include="scff_imaging\splash_screen.h">
+      <Filter>scff_imaging</Filter>
     </ClInclude>
-    <ClInclude Include="scff-imaging\utilities.h">
-      <Filter>scff-imaging</Filter>
+    <ClInclude Include="scff_imaging\utilities.h">
+      <Filter>scff_imaging</Filter>
     </ClInclude>
-    <ClInclude Include="scff-imaging\windows-ddb-image.h">
-      <Filter>scff-imaging</Filter>
+    <ClInclude Include="scff_imaging\windows_ddb_image.h">
+      <Filter>scff_imaging</Filter>
     </ClInclude>
-    <ClInclude Include="scff-interprocess\interprocess.h">
-      <Filter>scff-interprocess</Filter>
+    <ClInclude Include="scff_interprocess\interprocess.h">
+      <Filter>scff_interprocess</Filter>
     </ClInclude>
-    <ClInclude Include="scff-imaging\debug.h">
-      <Filter>scff-imaging</Filter>
+    <ClInclude Include="scff_imaging\debug.h">
+      <Filter>scff_imaging</Filter>
     </ClInclude>
-    <ClInclude Include="scff-imaging\complex-layout.h">
-      <Filter>scff-imaging</Filter>
+    <ClInclude Include="scff_imaging\complex_layout.h">
+      <Filter>scff_imaging</Filter>
     </ClInclude>
-    <ClInclude Include="scff-imaging\common.h">
-      <Filter>scff-imaging</Filter>
+    <ClInclude Include="scff_imaging\common.h">
+      <Filter>scff_imaging</Filter>
     </ClInclude>
-    <ClInclude Include="scff-imaging\layout.h">
-      <Filter>scff-imaging</Filter>
+    <ClInclude Include="scff_imaging\layout.h">
+      <Filter>scff_imaging</Filter>
     </ClInclude>
     <ClInclude Include="..\ext\include\libavfilter\formats.h">
       <Filter>ext</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="scff-dsf.rc">
+    <ResourceCompile Include="scff_dsf.rc">
       <Filter>リソース ファイル</Filter>
     </ResourceCompile>
   </ItemGroup>

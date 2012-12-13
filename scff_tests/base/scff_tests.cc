@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "base/scff-tests.h"
+#include "base/scff_tests.h"
 #include <libavfilter/drawutils.h>
 
 int _tmain(int argc, _TCHAR* argv[]) {

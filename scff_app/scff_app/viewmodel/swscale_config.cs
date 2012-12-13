@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file scff-app/viewmodel/swscale-config.cs
+/// @file scff_app/viewmodel/swscale_config.cs
 /// scff_app.viewmodel.SWScaleConfigのメソッドの定義
 
 namespace scff_app.viewmodel {

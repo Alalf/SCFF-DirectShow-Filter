@@ -15,16 +15,16 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file scff-imaging/native-layout.cc
+/// @file scff_imaging/native_layout.cc
 /// scff_imaging::NativeLayoutの定義
 
-#include "scff-imaging/native-layout.h"
+#include "scff_imaging/native_layout.h"
 
-#include "scff-imaging/debug.h"
-#include "scff-imaging/utilities.h"
-#include "scff-imaging/screen-capture.h"
-#include "scff-imaging/scale.h"
-#include "scff-imaging/padding.h"
+#include "scff_imaging/debug.h"
+#include "scff_imaging/utilities.h"
+#include "scff_imaging/screen_capture.h"
+#include "scff_imaging/scale.h"
+#include "scff_imaging/padding.h"
 
 namespace scff_imaging {
 

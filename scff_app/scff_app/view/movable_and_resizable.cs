@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file scff-app/view/movable_and_resizable.cs
+/// @file scff_app/view/movable_and_resizable.cs
 /// コントロールに対し、ドラッグでの移動/リサイズ機能を付加するためのクラスの定義
 
 namespace scff_app.view {
@@ -110,8 +110,8 @@ class MovableAndResizable : IDisposable {
     // 何もしない
     if (mode_ == Mode.kNop) {
       return;
-    } 
-    
+    }
+
     // 移動モード
     if (mode_ == Mode.kMove) {
       // 差分の計算
@@ -155,7 +155,7 @@ class MovableAndResizable : IDisposable {
     // 何もしない
     if (mode_ == Mode.kNop || mode_ == Mode.kMove) {
       return;
-    } 
+    }
 
     // とりあえず小さくなりすぎないように変更
     bool size_changed = false;

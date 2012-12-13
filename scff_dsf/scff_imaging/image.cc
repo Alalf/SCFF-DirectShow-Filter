@@ -15,14 +15,14 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file scff-imaging/image.cc
+/// @file scff_imaging/image.cc
 /// scff_imaging::Imageの定義
 
-#include "scff-imaging/image.h"
+#include "scff_imaging/image.h"
 
-#include "scff-imaging/debug.h"
-#include "scff-imaging/imaging-types.h"
-#include "scff-imaging/utilities.h"
+#include "scff_imaging/debug.h"
+#include "scff_imaging/imaging_types.h"
+#include "scff_imaging/utilities.h"
 
 namespace scff_imaging {
 

@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file scff-app/view/LayoutPanel.cs
+/// @file scff_app/view/LayoutPanel.cs
 /// LayoutPanelコントロールの定義
 
 namespace scff_app.view {
@@ -89,5 +89,5 @@ partial class LayoutPanel : UserControl {
   //===================================================================
   // メンバ変数
   //===================================================================
-}  
+}
 }

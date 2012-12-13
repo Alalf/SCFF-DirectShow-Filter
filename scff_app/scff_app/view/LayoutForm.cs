@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file scff-app/view/LayoutForm.cs
+/// @file scff_app/view/LayoutForm.cs
 /// レイアウトをGUIで編集するためのフォームの定義
 /// @todo(progre) 移植未達部分が完了次第名称含め全体をリファクタリング
 /// @todo(me) 全体的にBindingSourceをカスタムコントロールで利用する方法さえわかれば、

@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file scff-imaging/padding.h
+/// @file scff_imaging/padding.h
 /// scff_imaging::Paddingの宣言
 
 #ifndef SCFF_DSF_SCFF_IMAGING_PADDING_H_
@@ -23,8 +23,8 @@
 
 #include <libavfilter/drawutils.h>
 
-#include "scff-imaging/common.h"
-#include "scff-imaging/processor.h"
+#include "scff_imaging/common.h"
+#include "scff_imaging/processor.h"
 
 namespace scff_imaging {
 

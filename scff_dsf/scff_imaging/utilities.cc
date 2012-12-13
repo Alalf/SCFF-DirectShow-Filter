@@ -15,18 +15,18 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file scff-imaging/utilities.cc
+/// @file scff_imaging/utilities.cc
 /// scff_imaging::Utilitiesの定義
 
-#include "scff-imaging/utilities.h"
+#include "scff_imaging/utilities.h"
 
 extern "C" {
 #include <libavcodec/avcodec.h>
 }
 
-#include "scff-imaging/debug.h"
-#include "scff-imaging/imaging-types.h"
-#include "scff-imaging/avpicture-image.h"
+#include "scff_imaging/debug.h"
+#include "scff_imaging/imaging_types.h"
+#include "scff_imaging/avpicture_image.h"
 
 namespace {
 /// リソースの取得用DLLインスタンスハンドル

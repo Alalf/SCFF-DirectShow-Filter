@@ -15,10 +15,10 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file scff-imaging/splash-screen.cc
+/// @file scff_imaging/splash_screen.cc
 /// @brief scff_imaging::SplashScreenの定義
 
-#include "imaging/splash-screen.h"
+#include "imaging/splash_screen.h"
 
 namespace scff_imaging {
 

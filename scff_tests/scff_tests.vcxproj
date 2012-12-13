@@ -21,13 +21,13 @@
   <ItemGroup>
     <ClCompile Include="..\ext\src\libavfilter\drawutils.cc" />
     <ClCompile Include="..\ext\src\libavfilter\formats.cc" />
-    <ClCompile Include="base\scff-tests.cc" />
+    <ClCompile Include="base\scff_tests.cc" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\ext\include\libavfilter\drawutils.h" />
     <ClInclude Include="..\ext\include\libavfilter\formats.h" />
     <ClInclude Include="..\ext\include\libavutil\colorspace.h" />
-    <ClInclude Include="base\scff-tests.h" />
+    <ClInclude Include="base\scff_tests.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{6D985C11-1892-4951-A2D3-62A2AE85F229}</ProjectGuid>
@@ -79,27 +79,27 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(SolutionDir)\bin\$(Configuration)-$(PlatformName)\</OutDir>
-    <IntDir>$(SolutionDir)\obj\$(ProjectName)\$(Configuration)-$(PlatformName)\</IntDir>
-    <TargetName>$(ProjectName)-$(PlatformName)</TargetName>
+    <OutDir>$(SolutionDir)\bin\$(Configuration)_$(PlatformName)\</OutDir>
+    <IntDir>$(SolutionDir)\obj\$(ProjectName)\$(Configuration)_$(PlatformName)\</IntDir>
+    <TargetName>$(ProjectName)_$(PlatformName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(SolutionDir)\bin\$(Configuration)-$(PlatformName)\</OutDir>
-    <IntDir>$(SolutionDir)\obj\$(ProjectName)\$(Configuration)-$(PlatformName)\</IntDir>
-    <TargetName>$(ProjectName)-$(PlatformName)</TargetName>
+    <OutDir>$(SolutionDir)\bin\$(Configuration)_$(PlatformName)\</OutDir>
+    <IntDir>$(SolutionDir)\obj\$(ProjectName)\$(Configuration)_$(PlatformName)\</IntDir>
+    <TargetName>$(ProjectName)_$(PlatformName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)\bin\$(Configuration)-$(PlatformName)\</OutDir>
-    <IntDir>$(SolutionDir)\obj\$(ProjectName)\$(Configuration)-$(PlatformName)\</IntDir>
-    <TargetName>$(ProjectName)-$(PlatformName)</TargetName>
+    <OutDir>$(SolutionDir)\bin\$(Configuration)_$(PlatformName)\</OutDir>
+    <IntDir>$(SolutionDir)\obj\$(ProjectName)\$(Configuration)_$(PlatformName)\</IntDir>
+    <TargetName>$(ProjectName)_$(PlatformName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)\bin\$(Configuration)-$(PlatformName)\</OutDir>
-    <IntDir>$(SolutionDir)\obj\$(ProjectName)\$(Configuration)-$(PlatformName)\</IntDir>
-    <TargetName>$(ProjectName)-$(PlatformName)</TargetName>
+    <OutDir>$(SolutionDir)\bin\$(Configuration)_$(PlatformName)\</OutDir>
+    <IntDir>$(SolutionDir)\obj\$(ProjectName)\$(Configuration)_$(PlatformName)\</IntDir>
+    <TargetName>$(ProjectName)_$(PlatformName)</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

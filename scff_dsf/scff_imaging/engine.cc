@@ -15,20 +15,20 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file scff-imaging/engine.cc
+/// @file scff_imaging/engine.cc
 /// scff_imaging::Engineの定義
 
-#include "scff-imaging/engine.h"
+#include "scff_imaging/engine.h"
 
 #include <ctime>
 
-#include "scff-imaging/debug.h"
-#include "scff-imaging/avpicture-image.h"
-#include "scff-imaging/splash-screen.h"
-#include "scff-imaging/native-layout.h"
-#include "scff-imaging/complex-layout.h"
-#include "scff-imaging/request.h"
-#include "scff-imaging/utilities.h"
+#include "scff_imaging/debug.h"
+#include "scff_imaging/avpicture_image.h"
+#include "scff_imaging/splash_screen.h"
+#include "scff_imaging/native_layout.h"
+#include "scff_imaging/complex_layout.h"
+#include "scff_imaging/request.h"
+#include "scff_imaging/utilities.h"
 
 namespace {
 

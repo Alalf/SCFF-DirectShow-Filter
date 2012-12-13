@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file scff-app/viewmodel/entry.cs
+/// @file scff_app/viewmodel/entry.cs
 /// scff_app.viewmodel.Entryのメソッドの定義
 
 namespace scff_app.viewmodel {

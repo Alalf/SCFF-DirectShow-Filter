@@ -15,18 +15,18 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file scff-imaging/scale.cc
+/// @file scff_imaging/scale.cc
 /// scff_imaging::Scaleの定義
 
-#include "scff-imaging/scale.h"
+#include "scff_imaging/scale.h"
 
 extern "C" {
 #include <libswscale/swscale.h>
 }
 
-#include "scff-imaging/utilities.h"
-#include "scff-imaging/avpicture-image.h"
-#include "scff-imaging/avpicture-with-fill-image.h"
+#include "scff_imaging/utilities.h"
+#include "scff_imaging/avpicture_image.h"
+#include "scff_imaging/avpicture_with_fill_image.h"
 
 namespace scff_imaging {
 

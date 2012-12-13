@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file scff-app/viewmodel/layout-parameter.cs
+/// @file scff_app/viewmodel/layout_parameter.cs
 /// scff_app.viewmodel.LayoutParameterのメソッドの定義
 
 namespace scff_app.viewmodel {
@@ -57,7 +57,7 @@ partial class LayoutParameter : IDataErrorInfo {
 
     // 拡大縮小設定
     output.swscale_config = this.SWScaleConfig.ToInterprocess();
-   
+
     output.stretch = Convert.ToByte(this.Stretch);
     output.keep_aspect_ratio = Convert.ToByte(this.KeepAspectRatio);
     output.rotate_direction = (Int32)this.RotateDirection;

@@ -47,9 +47,9 @@
     - 64bit OS: [Visual Studio 2012 Update 1 の Visual C++ 再頒布可能パッケージ (VSU1\vcredist_x64.exe)]
       (http://www.microsoft.com/ja-jp/download/details.aspx?id=30679)
 
-2. install-Win32/x64.batを実行してください
+2. install_Win32/x64.batを実行してください
     - ***重要！***
-      インストール後にscff-dsf-Win32/x64.axを移動させた場合は再度install-Win32/x64.batを実行してください。
+      インストール後にscff_dsf_Win32/x64.axを移動させた場合は再度install_Win32/x64.batを実行してください。
 
 
 使用方法
@@ -64,7 +64,7 @@
 
 3. プレビュー画面を確認し、ロゴが中央に表示されることを確認してください。
 
-4. scff-app.exeを実行してください。
+4. scff_app.exeを実行してください。
 
 5. 左上のプロセスメニューから目的のプロセスを選択し、
    取り込み設定後、Applyボタンを押してください。
@@ -77,7 +77,7 @@
 バージョンアップ方法
 -----------------------------------------------------------------------
 
-1. エンコーダおよびGUIクライアント(scff-app.exe)が実行されていないことを確認して下さい。
+1. エンコーダおよびGUIクライアント(scff_app.exe)が実行されていないことを確認して下さい。
 
 2. 確認後、ファイルを上書きしてください。
 
@@ -85,9 +85,9 @@
 アンインストール方法
 -----------------------------------------------------------------------
 
-1. エンコーダおよびGUIクライアント(scff-app.exe)が実行されていないことを確認して下さい。
+1. エンコーダおよびGUIクライアント(scff_app.exe)が実行されていないことを確認して下さい。
 
-2. uninstall-Win32.bat/uninstall-x64.batを実行してください。
+2. uninstall_Win32.bat/uninstall_x64.batを実行してください。
 
 3. フォルダ・ファイルを削除してください。
 
@@ -131,22 +131,19 @@
     - SharedもDevも同じディレクトリに展開すること（数個のファイルが上書きされるが問題ない）
     - ext/ffmpeg/x64/README.txt, ext/ffmpeg/Win32/README.txtが存在するように確認すること
 
-2. scff-dsf.slnソリューションを開き、全てのビルドが通ることを確認
+2. scff.slnソリューションを開き、全てのビルドが通ることを確認
    - Microsoft Visual Studio Express 2012で確認済み
    - 必要ならばいくつかのプロジェクト設定を書き換えること
 
-3. tools/copy-ffmpeg-dll.batを実行してbinディレクトリにffmpeg付属のdllをコピー
+3. tools/copy_ffmpeg_dll.batを実行してbinディレクトリにffmpeg付属のdllをコピー
 
-4. tools/install-debug.batかtools/install-release.batを実行
+4. tools/install_debug.batかtools/install_release.batを実行
 
 5. 各種エンコーダを起動しフィルタが認識されているかチェック
 
-6. scff-app.slnソリューションを開き、全てのビルドが通ることを確認
-    - Microsoft Visual Studio Express 2012で確認済み
+6. bin/Debugかbin/Releaseにあるヘルパーアプリケーションを起動し取り込み設定を行う
 
-7. bin/Debugかbin/Releaseにあるヘルパーアプリケーションを起動し取り込み設定を行う
-
-8. （scff-dsfのデバッグバージョンを利用する場合:）
+7. （scff_dsfのデバッグバージョンを利用する場合:）
     - プロジェクト設定からローカルWindowsデバッガーを選ぶ
     - コマンドにWME/KTE/FMEなどを選択すればデバッグ文字列などを見ることが出来る。
 
@@ -164,7 +161,7 @@
       (http://www.textdrop.net/google-styleguide-ja/cppguide.xml)
     - このガイドは単純に決め事ではなく、バグを減らすために役に立つテクニックもいくらか含まれているようです。
 
-- scff-dsfにはdoxygenコメントをつけてあります
+- scff_dsfにはdoxygenコメントをつけてあります
     - [Doxygen]
       (http://www.stack.nl/~dimitri/doxygen/index.html)
     - プログラムの全体的な構造を把握したい場合はぜひ利用してみてください。
@@ -174,7 +171,7 @@
 -----------------------------------------------------------------------
 
 ### ffmpeg
-- サンプル設定がtools/test-ffmpeg.batにあります。
+- サンプル設定がtools/test_ffmpeg.batにあります。
 
 ### xSplit
 - xSplitと併用する場合、ffmpegの一部ライブラリが干渉することがあります。
@@ -184,13 +181,13 @@
 - YUV420P(I420)に加えて各種ピクセルフォーマット出力が利用可能です。
     - YUV420P: IYUV/YV12
     - RGB32
-    - [暫定対応] YUV422: UYVY/YUY2 
+    - [暫定対応] YUV422: UYVY/YUY2
         - レイアウト機能、Keep Aspect Ratioなどの設定が使えません
 - WMEのノンインターレース化処理の利用は非推奨です。
     - アマレコやpecatvのデインタレース機能を利用することをおすすめします。
 
 ### KoToEncoder(KTE)
-- KTEでYUV420P出力を利用する場合、scff-dsf/base/constants.hの以下の部分：
+- KTEでYUV420P出力を利用する場合、scff_dsf/base/constants.hの以下の部分：
 
         // #define FOR_KOTOENCODER
 
@@ -220,7 +217,7 @@
           a library performing highly optimized image scaling and
           color space/pixel format conversion operations.
         - libavutil:
-          a library containing functions for simplifying programming, 
+          a library containing functions for simplifying programming,
           including random number generators, data structures, mathematics routines,
           core multimedia utilities, and much more.
         - libavcodec:

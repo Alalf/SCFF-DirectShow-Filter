@@ -15,14 +15,14 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file scff-imaging/layout.h
+/// @file scff_imaging/layout.h
 /// scff_imaging::Layoutの宣言
 
 #ifndef SCFF_DSF_SCFF_IMAGING_LAYOUT_H_
 #define SCFF_DSF_SCFF_IMAGING_LAYOUT_H_
 
-#include "scff-imaging/processor.h"
-#include "scff-imaging/avpicture-image.h"
+#include "scff_imaging/processor.h"
+#include "scff_imaging/avpicture_image.h"
 
 namespace scff_imaging {
 

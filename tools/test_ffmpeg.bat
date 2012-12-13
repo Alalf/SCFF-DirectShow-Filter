@@ -3,7 +3,7 @@ SET ROOT_DIR=%~dp0..\
 PUSHD "%ROOT_DIR%"
 
 SET OUTPUT_DIR=tools\tmp
-SET OUTPUT=%OUTPUT_DIR%\test-ffmpeg.flv
+SET OUTPUT=%OUTPUT_DIR%\test_ffmpeg.flv
 SET VIDEO=SCFF DirectShow Filter
 SET AUDIO=Mixer (Creative SB X-Fi)
 SET FFMPEG_EXE=ext\ffmpeg\x64\bin\ffmpeg.exe

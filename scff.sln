@@ -1,18 +1,18 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Express 2012 for Windows Desktop
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "scff-dsf", "scff-dsf\scff-dsf.vcxproj", "{B525A541-2E41-424C-B549-D70CA0AA982F}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "scff_dsf", "scff_dsf\scff_dsf.vcxproj", "{B525A541-2E41-424C-B549-D70CA0AA982F}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E8A3F6FA-AE1C-4C8E-A0B6-9C8480324EAA} = {E8A3F6FA-AE1C-4C8E-A0B6-9C8480324EAA}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "scff-tests", "scff-tests\scff-tests.vcxproj", "{6D985C11-1892-4951-A2D3-62A2AE85F229}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "scff_tests", "scff_tests\scff_tests.vcxproj", "{6D985C11-1892-4951-A2D3-62A2AE85F229}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BaseClasses", "ext\directshow\baseclasses\BaseClasses.vcxproj", "{E8A3F6FA-AE1C-4C8E-A0B6-9C8480324EAA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "scff-app", "scff-app\scff-app.csproj", "{0BBF8DC0-C538-4841-BF39-8657EB9619EE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "scff_app", "scff_app\scff_app.csproj", "{0BBF8DC0-C538-4841-BF39-8657EB9619EE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "scff-app-wpf", "scff-app-wpf\scff-app-wpf.csproj", "{6F4403BB-4B85-43C3-BDBD-941B583586A6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "scff_app_wpf", "scff_app_wpf\scff_app_wpf.csproj", "{6F4403BB-4B85-43C3-BDBD-941B583586A6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

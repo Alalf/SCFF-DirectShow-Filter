@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file scff-app/external-dwmapi.cs
+/// @file scff_app/external_dwmapi.cs
 /// scff_appモジュールで利用するDWMAPIをまとめたクラスの定義
 
 namespace scff_app {
@@ -34,7 +34,7 @@ class ExternalDWMAPI {
   internal static extern int DwmIsCompositionEnabled(out bool enabled);
   [DllImport("dwmapi.dll")]
   internal static extern int DwmEnableComposition(uint uCompositionAction);
-  
+
   internal const int DWM_EC_DISABLECOMPOSITION = 0;
   internal const int DWM_EC_ENABLECOMPOSITION = 1;
 }

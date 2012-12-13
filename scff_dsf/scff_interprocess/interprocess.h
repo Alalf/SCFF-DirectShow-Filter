@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file scff-interprocess/interprocess.h
+/// @file scff_interprocess/interprocess.h
 /// SCFFのプロセス間通信に関するクラス、定数、型の宣言
 /// @warning To me: このファイルの中から別のファイルへのIncludeは禁止！
 /// - 別の言語に移植する場合も最大2ファイルでお願いします
@@ -31,7 +31,7 @@ namespace scff_interprocess {
 
 //====================================================================
 /// @page smp SCFF Messaging Protocol v1 (by 2012/05/22 Alalf)
-/// SCFF-DSFおよびそのクライアントで共有する共有メモリ内のデータ配置の仕様
+/// SCFF_DSFおよびそのクライアントで共有する共有メモリ内のデータ配置の仕様
 ///
 /// [全体的な注意点]
 /// - Windows固有の型名はビットサイズが分かりにくいのでcstdintで置き換える
@@ -49,16 +49,16 @@ namespace scff_interprocess {
 //====================================================================
 
 /// 共有メモリ名: SCFFエントリを格納するディレクトリ
-static const char kDirectoryName[] = "scff-v1-directory";
+static const char kDirectoryName[] = "scff_v1_directory";
 
 /// Directoryの保護用Mutex名
-static const char kDirectoryMutexName[] = "mutex-scff-v1-directory";
+static const char kDirectoryMutexName[] = "mutex_scff_v1_directory";
 
 /// 共有メモリ名の接頭辞: SCFFで使うメッセージを格納する
-static const char kMessageNamePrefix[] = "scff-v1-message-";
+static const char kMessageNamePrefix[] = "scff_v1_message_";
 
 /// Messageの保護用Mutex名の接頭辞
-static const char kMessageMutexNamePrefix[] = "mutex-scff-v1-message-";
+static const char kMessageMutexNamePrefix[] = "mutex_scff_v1_message_";
 
 //---------------------------------------------------------------------
 
@@ -87,7 +87,7 @@ enum class LayoutType {
 //---------------------------------------------------------------------
 
 /// ピクセルフォーマットの種類
-/// @sa scff-imaging/imaging-types.h
+/// @sa scff_imaging/imaging_types.h
 /// @sa scff_imaging::ImagePixelFormat
 enum class ImagePixelFormat {
   /// 不正なピクセルフォーマット
@@ -109,7 +109,7 @@ enum class ImagePixelFormat {
 };
 
 /// 拡大縮小メソッドをあらわす定数
-/// @sa scff-imaging/imaging-types.h
+/// @sa scff_imaging/imaging_types.h
 /// @sa scff_imaging::SWScaleFlags
 enum class SWScaleFlags {
   /// fast bilinear
@@ -137,7 +137,7 @@ enum class SWScaleFlags {
 };
 
 /// 回転方向を表す定数
-/// @sa scff-imaging/imaging-types.h
+/// @sa scff_imaging/imaging_types.h
 /// @sa scff_imaging::RotateDirection
 enum class RotateDirection {
   /// 回転なし

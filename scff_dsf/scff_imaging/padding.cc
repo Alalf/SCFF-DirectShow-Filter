@@ -15,12 +15,12 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file scff-imaging/padding.cc
+/// @file scff_imaging/padding.cc
 /// scff_imaging::Paddingの定義
 
-#include "scff-imaging/padding.h"
+#include "scff_imaging/padding.h"
 
-#include "scff-imaging/avpicture-image.h"
+#include "scff_imaging/avpicture_image.h"
 
 namespace scff_imaging {
 

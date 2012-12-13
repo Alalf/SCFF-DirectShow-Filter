@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file scff-app/utilities.cs
+/// @file scff_app/utilities.cs
 /// scff_app用ユーティリティクラスの定義
 
 namespace scff_app {

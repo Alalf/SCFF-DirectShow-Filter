@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file scff-app/viewmodel/message-properties.cs
+/// @file scff_app/viewmodel/message_properties.cs
 /// scff_app.viewmodel.Messageのプロパティの定義
 
 namespace scff_app.viewmodel {

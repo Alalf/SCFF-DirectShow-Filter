@@ -15,10 +15,10 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file scff-imaging/request.cc
+/// @file scff_imaging/request.cc
 /// scff_imaging::Requestの定義
 
-#include "scff-imaging/request.h"
+#include "scff_imaging/request.h"
 
 namespace scff_imaging {
 //=====================================================================

@@ -15,14 +15,14 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file scff-imaging/scale.h
+/// @file scff_imaging/scale.h
 /// scff_imaging::Scaleの宣言
 
 #ifndef SCFF_DSF_SCFF_IMAGING_SCALE_H_
 #define SCFF_DSF_SCFF_IMAGING_SCALE_H_
 
-#include "scff-imaging/common.h"
-#include "scff-imaging/processor.h"
+#include "scff_imaging/common.h"
+#include "scff_imaging/processor.h"
 
 struct SwsContext;
 

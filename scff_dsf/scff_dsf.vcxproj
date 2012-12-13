@@ -23,34 +23,34 @@
     <ClCompile Include="..\ext\src\libavfilter\formats.cc" />
     <ClCompile Include="base\constants.cc" />
     <ClCompile Include="base\debug.cc" />
-    <ClCompile Include="base\scff-clock-time.cc" />
-    <ClCompile Include="base\scff-dsf.cc" />
-    <ClCompile Include="base\scff-monitor.cc" />
-    <ClCompile Include="base\scff-output-pin-implement.cc" />
-    <ClCompile Include="base\scff-output-pin.cc" />
-    <ClCompile Include="base\scff-source.cc" />
-    <ClCompile Include="scff-imaging\avpicture-image.cc" />
-    <ClCompile Include="scff-imaging\avpicture-with-fill-image.cc" />
-    <ClCompile Include="scff-imaging\complex-layout.cc" />
-    <ClCompile Include="scff-imaging\engine.cc" />
-    <ClCompile Include="scff-imaging\image.cc" />
-    <ClCompile Include="scff-imaging\native-layout.cc" />
-    <ClCompile Include="scff-imaging\padding.cc" />
-    <ClCompile Include="scff-imaging\raw-bitmap-image.cc" />
-    <ClCompile Include="scff-imaging\request.cc" />
-    <ClCompile Include="scff-imaging\scale.cc" />
-    <ClCompile Include="scff-imaging\screen-capture.cc" />
-    <ClCompile Include="scff-imaging\splash-screen.cc" />
-    <ClCompile Include="scff-imaging\utilities.cc" />
-    <ClCompile Include="scff-imaging\windows-ddb-image.cc" />
-    <ClCompile Include="scff-interprocess\interprocess.cc" />
+    <ClCompile Include="base\scff_clock_time.cc" />
+    <ClCompile Include="base\scff_dsf.cc" />
+    <ClCompile Include="base\scff_monitor.cc" />
+    <ClCompile Include="base\scff_output_pin_implement.cc" />
+    <ClCompile Include="base\scff_output_pin.cc" />
+    <ClCompile Include="base\scff_source.cc" />
+    <ClCompile Include="scff_imaging\avpicture_image.cc" />
+    <ClCompile Include="scff_imaging\avpicture_with_fill_image.cc" />
+    <ClCompile Include="scff_imaging\complex_layout.cc" />
+    <ClCompile Include="scff_imaging\engine.cc" />
+    <ClCompile Include="scff_imaging\image.cc" />
+    <ClCompile Include="scff_imaging\native_layout.cc" />
+    <ClCompile Include="scff_imaging\padding.cc" />
+    <ClCompile Include="scff_imaging\raw_bitmap_image.cc" />
+    <ClCompile Include="scff_imaging\request.cc" />
+    <ClCompile Include="scff_imaging\scale.cc" />
+    <ClCompile Include="scff_imaging\screen_capture.cc" />
+    <ClCompile Include="scff_imaging\splash_screen.cc" />
+    <ClCompile Include="scff_imaging\utilities.cc" />
+    <ClCompile Include="scff_imaging\windows_ddb_image.cc" />
+    <ClCompile Include="scff_interprocess\interprocess.cc" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\ext\include\libavfilter\all_channel_layouts.inc" />
-    <None Include="base\scff-dsf-x64.def" />
-    <None Include="base\scff-dsf-Win32.def" />
-    <None Include="base\scff-dsf.dox" />
-    <None Include="scff-dsf.bmp" />
+    <None Include="base\scff_dsf_x64.def" />
+    <None Include="base\scff_dsf_Win32.def" />
+    <None Include="base\scff_dsf.dox" />
+    <None Include="scff_dsf.bmp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\ext\include\libavfilter\drawutils.h" />
@@ -58,35 +58,35 @@
     <ClInclude Include="..\ext\include\libavutil\colorspace.h" />
     <ClInclude Include="base\constants.h" />
     <ClInclude Include="base\debug.h" />
-    <ClInclude Include="base\scff-clock-time.h" />
-    <ClInclude Include="base\scff-monitor.h" />
-    <ClInclude Include="base\scff-output-pin.h" />
-    <ClInclude Include="base\scff-source.h" />
+    <ClInclude Include="base\scff_clock_time.h" />
+    <ClInclude Include="base\scff_monitor.h" />
+    <ClInclude Include="base\scff_output_pin.h" />
+    <ClInclude Include="base\scff_source.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="scff-imaging\avpicture-image.h" />
-    <ClInclude Include="scff-imaging\avpicture-with-fill-image.h" />
-    <ClInclude Include="scff-imaging\common.h" />
-    <ClInclude Include="scff-imaging\complex-layout.h" />
-    <ClInclude Include="scff-imaging\debug.h" />
-    <ClInclude Include="scff-imaging\engine.h" />
-    <ClInclude Include="scff-imaging\image.h" />
-    <ClInclude Include="scff-imaging\imaging-types.h" />
-    <ClInclude Include="scff-imaging\imaging.h" />
-    <ClInclude Include="scff-imaging\layout.h" />
-    <ClInclude Include="scff-imaging\native-layout.h" />
-    <ClInclude Include="scff-imaging\padding.h" />
-    <ClInclude Include="scff-imaging\processor.h" />
-    <ClInclude Include="scff-imaging\raw-bitmap-image.h" />
-    <ClInclude Include="scff-imaging\request.h" />
-    <ClInclude Include="scff-imaging\scale.h" />
-    <ClInclude Include="scff-imaging\screen-capture.h" />
-    <ClInclude Include="scff-imaging\splash-screen.h" />
-    <ClInclude Include="scff-imaging\utilities.h" />
-    <ClInclude Include="scff-imaging\windows-ddb-image.h" />
-    <ClInclude Include="scff-interprocess\interprocess.h" />
+    <ClInclude Include="scff_imaging\avpicture_image.h" />
+    <ClInclude Include="scff_imaging\avpicture_with_fill_image.h" />
+    <ClInclude Include="scff_imaging\common.h" />
+    <ClInclude Include="scff_imaging\complex_layout.h" />
+    <ClInclude Include="scff_imaging\debug.h" />
+    <ClInclude Include="scff_imaging\engine.h" />
+    <ClInclude Include="scff_imaging\image.h" />
+    <ClInclude Include="scff_imaging\imaging_types.h" />
+    <ClInclude Include="scff_imaging\imaging.h" />
+    <ClInclude Include="scff_imaging\layout.h" />
+    <ClInclude Include="scff_imaging\native_layout.h" />
+    <ClInclude Include="scff_imaging\padding.h" />
+    <ClInclude Include="scff_imaging\processor.h" />
+    <ClInclude Include="scff_imaging\raw_bitmap_image.h" />
+    <ClInclude Include="scff_imaging\request.h" />
+    <ClInclude Include="scff_imaging\scale.h" />
+    <ClInclude Include="scff_imaging\screen_capture.h" />
+    <ClInclude Include="scff_imaging\splash_screen.h" />
+    <ClInclude Include="scff_imaging\utilities.h" />
+    <ClInclude Include="scff_imaging\windows_ddb_image.h" />
+    <ClInclude Include="scff_interprocess\interprocess.h" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="scff-dsf.rc" />
+    <ResourceCompile Include="scff_dsf.rc" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B525A541-2E41-424C-B549-D70CA0AA982F}</ProjectGuid>
@@ -138,33 +138,33 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <TargetName>$(ProjectName)-$(PlatformName)</TargetName>
-    <IntDir>$(SolutionDir)\obj\$(ProjectName)\$(Configuration)-$(PlatformName)\</IntDir>
-    <OutDir>$(SolutionDir)\bin\$(Configuration)-$(PlatformName)\</OutDir>
+    <TargetName>$(ProjectName)_$(PlatformName)</TargetName>
+    <IntDir>$(SolutionDir)\obj\$(ProjectName)\$(Configuration)_$(PlatformName)\</IntDir>
+    <OutDir>$(SolutionDir)\bin\$(Configuration)_$(PlatformName)\</OutDir>
     <ExtensionsToDeleteOnClean>*.ax;$(ExtensionsToDeleteOnClean)</ExtensionsToDeleteOnClean>
     <TargetExt>.ax</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <TargetName>$(ProjectName)-$(PlatformName)</TargetName>
-    <IntDir>$(SolutionDir)\obj\$(ProjectName)\$(Configuration)-$(PlatformName)\</IntDir>
-    <OutDir>$(SolutionDir)\bin\$(Configuration)-$(PlatformName)\</OutDir>
+    <TargetName>$(ProjectName)_$(PlatformName)</TargetName>
+    <IntDir>$(SolutionDir)\obj\$(ProjectName)\$(Configuration)_$(PlatformName)\</IntDir>
+    <OutDir>$(SolutionDir)\bin\$(Configuration)_$(PlatformName)\</OutDir>
     <ExtensionsToDeleteOnClean>*.ax;$(ExtensionsToDeleteOnClean)</ExtensionsToDeleteOnClean>
     <TargetExt>.ax</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <TargetName>$(ProjectName)-$(PlatformName)</TargetName>
-    <IntDir>$(SolutionDir)\obj\$(ProjectName)\$(Configuration)-$(PlatformName)\</IntDir>
-    <OutDir>$(SolutionDir)\bin\$(Configuration)-$(PlatformName)\</OutDir>
+    <TargetName>$(ProjectName)_$(PlatformName)</TargetName>
+    <IntDir>$(SolutionDir)\obj\$(ProjectName)\$(Configuration)_$(PlatformName)\</IntDir>
+    <OutDir>$(SolutionDir)\bin\$(Configuration)_$(PlatformName)\</OutDir>
     <ExtensionsToDeleteOnClean>*.ax;$(ExtensionsToDeleteOnClean)</ExtensionsToDeleteOnClean>
     <TargetExt>.ax</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <TargetName>$(ProjectName)-$(PlatformName)</TargetName>
-    <IntDir>$(SolutionDir)\obj\$(ProjectName)\$(Configuration)-$(PlatformName)\</IntDir>
-    <OutDir>$(SolutionDir)\bin\$(Configuration)-$(PlatformName)\</OutDir>
+    <TargetName>$(ProjectName)_$(PlatformName)</TargetName>
+    <IntDir>$(SolutionDir)\obj\$(ProjectName)\$(Configuration)_$(PlatformName)\</IntDir>
+    <OutDir>$(SolutionDir)\bin\$(Configuration)_$(PlatformName)\</OutDir>
     <ExtensionsToDeleteOnClean>*.ax;$(ExtensionsToDeleteOnClean)</ExtensionsToDeleteOnClean>
     <TargetExt>.ax</TargetExt>
   </PropertyGroup>
@@ -181,8 +181,8 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)\obj\BaseClasses\$(Configuration)-$(PlatformName)\;$(SolutionDir)ext\ffmpeg\$(PlatformName)\lib</AdditionalLibraryDirectories>
-      <ModuleDefinitionFile>base\$(ProjectName)-$(PlatformName).def</ModuleDefinitionFile>
+      <AdditionalLibraryDirectories>$(SolutionDir)\obj\BaseClasses\$(Configuration)_$(PlatformName)\;$(SolutionDir)ext\ffmpeg\$(PlatformName)\lib</AdditionalLibraryDirectories>
+      <ModuleDefinitionFile>base\$(ProjectName)_$(PlatformName).def</ModuleDefinitionFile>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
       <AdditionalDependencies>strmbasd.lib;Msvcrtd.lib;Winmm.lib;PSAPI.lib;swscale.lib;avcodec.lib;avutil.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
@@ -204,8 +204,8 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)\obj\BaseClasses\$(Configuration)-$(PlatformName)\;$(SolutionDir)ext\ffmpeg\$(PlatformName)\lib</AdditionalLibraryDirectories>
-      <ModuleDefinitionFile>base\$(ProjectName)-$(PlatformName).def</ModuleDefinitionFile>
+      <AdditionalLibraryDirectories>$(SolutionDir)\obj\BaseClasses\$(Configuration)_$(PlatformName)\;$(SolutionDir)ext\ffmpeg\$(PlatformName)\lib</AdditionalLibraryDirectories>
+      <ModuleDefinitionFile>base\$(ProjectName)_$(PlatformName).def</ModuleDefinitionFile>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
       <AdditionalDependencies>strmbasd.lib;Msvcrtd.lib;Winmm.lib;PSAPI.lib;swscale.lib;avcodec.lib;avutil.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
@@ -230,8 +230,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(SolutionDir)\obj\BaseClasses\$(Configuration)-$(PlatformName)\;$(SolutionDir)ext\ffmpeg\$(PlatformName)\lib</AdditionalLibraryDirectories>
-      <ModuleDefinitionFile>base\$(ProjectName)-$(PlatformName).def</ModuleDefinitionFile>
+      <AdditionalLibraryDirectories>$(SolutionDir)\obj\BaseClasses\$(Configuration)_$(PlatformName)\;$(SolutionDir)ext\ffmpeg\$(PlatformName)\lib</AdditionalLibraryDirectories>
+      <ModuleDefinitionFile>base\$(ProjectName)_$(PlatformName).def</ModuleDefinitionFile>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
       <AdditionalDependencies>strmbase.lib;Msvcrt.lib;Winmm.lib;PSAPI.lib;swscale.lib;avcodec.lib;avutil.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
@@ -257,8 +257,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(SolutionDir)\obj\BaseClasses\$(Configuration)-$(PlatformName)\;$(SolutionDir)ext\ffmpeg\$(PlatformName)\lib</AdditionalLibraryDirectories>
-      <ModuleDefinitionFile>base\$(ProjectName)-$(PlatformName).def</ModuleDefinitionFile>
+      <AdditionalLibraryDirectories>$(SolutionDir)\obj\BaseClasses\$(Configuration)_$(PlatformName)\;$(SolutionDir)ext\ffmpeg\$(PlatformName)\lib</AdditionalLibraryDirectories>
+      <ModuleDefinitionFile>base\$(ProjectName)_$(PlatformName).def</ModuleDefinitionFile>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
       <AdditionalDependencies>strmbase.lib;Msvcrt.lib;Winmm.lib;PSAPI.lib;swscale.lib;avcodec.lib;avutil.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>

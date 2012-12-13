@@ -19,7 +19,7 @@ BIN_DIR = ROOT_DIR + '\\tools\\bin'
 def download_ffmpeg():
     from sys import stderr
     print >>stderr, '--- download_ffmpeg ---\n'
-    
+
     from scripts import download_ffmpeg
     download_ffmpeg.TMP_DIR = TMP_DIR + '\\download_ffmpeg'
     download_ffmpeg.ROOT_DIR = ROOT_DIR
@@ -51,15 +51,15 @@ def download_ffmpeg():
 def msbuild():
     from sys import stderr
     print >>stderr, '--- msbuild ---\n'
-    
-    from scripts import msbuild    
+
+    from scripts import msbuild
     msbuild.TMP_DIR = TMP_DIR + '\\msbuild'
-    msbuild.BUILD_32BIT_BAT = msbuild.TMP_DIR + '\\build-Win32.bat'
-    msbuild.BUILD_64BIT_BAT = msbuild.TMP_DIR + '\\build-x64.bat'
+    msbuild.BUILD_32BIT_BAT = msbuild.TMP_DIR + '\\build_Win32.bat'
+    msbuild.BUILD_64BIT_BAT = msbuild.TMP_DIR + '\\build_x64.bat'
 
     msbuild.ENV_32BIT_BAT = 'D:\\Program Files\\MSVS2012\\VC\\vcvarsall.bat'
     msbuild.ENV_64BIT_BAT = 'D:\\Program Files\\MSVS2012\\VC\\vcvarsall.bat'
-    msbuild.DSF_SLN = ROOT_DIR + '\\scff-dsf.sln'
+    msbuild.DSF_SLN = ROOT_DIR + '\\scff.sln'
 
     msbuild.init()
     msbuild.make_build_Win32_bat()
@@ -72,7 +72,7 @@ def msbuild():
 def dist():
     from sys import stderr
     print >>stderr, '--- dist ---\n'
-    
+
     from scripts import dist
     dist.TMP_DIR = TMP_DIR + '\\dist'
 
@@ -84,28 +84,28 @@ def dist():
     dist.FILES_32BIT = [
         ROOT_DIR + '\\README.md',
         ROOT_DIR + '\\LICENSE',
-        ROOT_DIR + '\\bin\\Release\\scff-app.exe',
-        ROOT_DIR + '\\bin\\Release-Win32\\*.dll',
-        ROOT_DIR + '\\bin\\Release-Win32\\*.ax',
+        ROOT_DIR + '\\bin\\Release\\scff_app.exe',
+        ROOT_DIR + '\\bin\\Release_Win32\\*.dll',
+        ROOT_DIR + '\\bin\\Release_Win32\\*.ax',
         ROOT_DIR + '\\tools\\bin\\regsvrex32.exe',
-        ROOT_DIR + '\\tools\\dist-files\\Microsoft .NET Framework 4 Client Profile.url',
-        ROOT_DIR + '\\tools\\dist-files\\Visual C++ Redistributable for Visual Studio 2012 Update 1.url',
-        ROOT_DIR + '\\tools\\dist-files\\install-Win32.bat',
-        ROOT_DIR + '\\tools\\dist-files\\uninstall-Win32.bat',
+        ROOT_DIR + '\\tools\\dist\\Microsoft .NET Framework 4 Client Profile.url',
+        ROOT_DIR + '\\tools\\dist\\Visual C++ Redistributable for Visual Studio 2012 Update 1.url',
+        ROOT_DIR + '\\tools\\dist\\install_Win32.bat',
+        ROOT_DIR + '\\tools\\dist\\uninstall_Win32.bat',
         ]
     dist.FILES_64BIT = [
         ROOT_DIR + '\\README.md',
         ROOT_DIR + '\\LICENSE',
-        ROOT_DIR + '\\bin\\Release\\scff-app.exe',
-        ROOT_DIR + '\\bin\\Release-x64\\*.dll',
-        ROOT_DIR + '\\bin\\Release-x64\\*.ax',
+        ROOT_DIR + '\\bin\\Release\\scff_app.exe',
+        ROOT_DIR + '\\bin\\Release_x64\\*.dll',
+        ROOT_DIR + '\\bin\\Release_x64\\*.ax',
         ROOT_DIR + '\\tools\\bin\\regsvrex64.exe',
-        ROOT_DIR + '\\tools\\dist-files\\Microsoft .NET Framework 4 Client Profile.url',
-        ROOT_DIR + '\\tools\\dist-files\\Visual C++ Redistributable for Visual Studio 2012 Update 1.url',
-        ROOT_DIR + '\\tools\\dist-files\\install-x64.bat',
-        ROOT_DIR + '\\tools\\dist-files\\uninstall-x64.bat',
+        ROOT_DIR + '\\tools\\dist\\Microsoft .NET Framework 4 Client Profile.url',
+        ROOT_DIR + '\\tools\\dist\\Visual C++ Redistributable for Visual Studio 2012 Update 1.url',
+        ROOT_DIR + '\\tools\\dist\\install_x64.bat',
+        ROOT_DIR + '\\tools\\dist\\uninstall_x64.bat',
         ]
-        
+
     dist.ARCHIVE_COMMAND = BIN_DIR + '\\7zr.exe'
     dist.ARCHIVE_OPTIONS = 'a'
 
@@ -118,7 +118,7 @@ def dist():
 def upload():
     from sys import stderr
     print >>stderr, '--- upload ---\n'
-    
+
     from scripts import upload
     upload.TMP_DIR = TMP_DIR + '\\upload'
     upload.ARCHIVES = TMP_DIR + '\\dist\\*.7z'
@@ -136,21 +136,21 @@ def upload():
 # main()
 if __name__=='__main__':
     from sys import stderr
-    
+
     print >>stderr, '=== SCFF-DirectShow-Filter Build Script ===\n'
-    
+
     # download_ffmpeg.py
     if 'download_ffmpeg' in OPTIONS:
         download_ffmpeg()
-    
+
     # msbuild.py
     if 'msbuild' in OPTIONS:
         msbuild()
-    
+
     # dist.py
     if 'dist' in OPTIONS:
         dist()
-    
+
     # upload.py
     if 'upload' in OPTIONS:
         upload()

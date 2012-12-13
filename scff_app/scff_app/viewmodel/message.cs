@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file scff-app/viewmodel/message.cs
+/// @file scff_app/viewmodel/message.cs
 /// scff_app.viewmodel.Messageのメソッドの定義
 
 namespace scff_app.viewmodel {
@@ -68,7 +68,7 @@ partial class Message {
       output.layout_type = (Int32)this.LayoutType;
     }
     output.layout_element_count = this.LayoutElementCount;
-    
+
     // Listの前から順番に書き込む
     const int kMaxComplexLayoutElements = scff_interprocess.Interprocess.kMaxComplexLayoutElements;
     output.layout_parameters = new scff_interprocess.LayoutParameter[kMaxComplexLayoutElements];

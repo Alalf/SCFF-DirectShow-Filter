@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file base/scff-monitor.h
+/// @file base/scff_monitor.h
 /// SCFFMonitorの宣言
 
 #ifndef SCFF_DSF_BASE_SCFF_MONITOR_H_
@@ -24,8 +24,8 @@
 #include <cstdint>
 #include <ctime>
 
-#include "scff-interprocess/interprocess.h"
-#include "scff-imaging/imaging.h"
+#include "scff_interprocess/interprocess.h"
+#include "scff_imaging/imaging.h"
 
 /// SCFF DirectShow Filterの外部インターフェースを担当するクラス
 class SCFFMonitor {

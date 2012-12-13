@@ -15,10 +15,10 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file base/scff-output-pin-implement.cc
+/// @file base/scff_output_pin_implement.cc
 /// SCFFOutputPinの実装(Interfaceのみ)
 
-#include "base/scff-output-pin.h"
+#include "base/scff_output_pin.h"
 
 #include "base/debug.h"
 #include "base/constants.h"

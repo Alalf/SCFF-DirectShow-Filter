@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file scff-app/view/PreviewControl.cs
+/// @file scff_app/view/PreviewControl.cs
 /// LayoutForm内で使用するプレビューコントロールの定義
 
 namespace scff_app.view {
@@ -108,7 +108,7 @@ partial class PreviewControl : UserControl {
         target_parameter.Stretch,
         target_parameter.KeepAspectRatio,
         out new_x, out new_y, out new_width, out new_height);
-    
+
     // しょうがないので枠は黒で塗りつぶす
     int padding_left = new_x;
     int padding_top = new_y;
@@ -191,7 +191,7 @@ partial class PreviewControl : UserControl {
            window_dc, target_parameter.ClippingX, target_parameter.ClippingY, ExternalAPI.SRCCOPY);
     graphics.ReleaseHdc(captured_bitmap_dc);
     graphics.Dispose();
-    
+
     ExternalAPI.ReleaseDC(window, window_dc);
   }
 

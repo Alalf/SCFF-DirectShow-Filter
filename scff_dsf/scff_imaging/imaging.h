@@ -15,15 +15,15 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file scff-imaging/imaging.h
+/// @file scff_imaging/imaging.h
 /// scff_imagingモジュールの外部公開ヘッダー
 
 #ifndef SCFF_DSF_SCFF_IMAGING_IMAGING_H_
 #define SCFF_DSF_SCFF_IMAGING_IMAGING_H_
 
-#include "scff-imaging/utilities.h"
-#include "scff-imaging/engine.h"
-#include "scff-imaging/request.h"
-#include "scff-imaging/imaging-types.h"
+#include "scff_imaging/utilities.h"
+#include "scff_imaging/engine.h"
+#include "scff_imaging/request.h"
+#include "scff_imaging/imaging_types.h"
 
 #endif  // SCFF_DSF_SCFF_IMAGING_IMAGING_H_

@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file base/scff-clock-time.h
+/// @file base/scff_clock_time.h
 /// SCFFClockTimeの宣言
 
 #ifndef SCFF_DSF_BASE_SCFF_CLOCK_TIME_H_

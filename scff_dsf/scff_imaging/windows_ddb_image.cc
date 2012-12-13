@@ -15,16 +15,16 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file scff-imaging/windows-ddb-image.cc
+/// @file scff_imaging/windows_ddb_image.cc
 /// scff_imaging::WindowsDDBImageの定義
 
-#include "scff-imaging/windows-ddb-image.h"
+#include "scff_imaging/windows_ddb_image.h"
 
 #include <tchar.h>
 
-#include "scff-imaging/debug.h"
-#include "scff-imaging/imaging-types.h"
-#include "scff-imaging/utilities.h"
+#include "scff_imaging/debug.h"
+#include "scff_imaging/imaging_types.h"
+#include "scff_imaging/utilities.h"
 
 namespace scff_imaging {
 

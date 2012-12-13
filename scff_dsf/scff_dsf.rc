@@ -14,4 +14,4 @@
 // Bitmap resources
 //
 LANGUAGE 0, SUBLANG_NEUTRAL
-IDB_SPLASH         BITMAP         "scff-dsf.bmp"
+IDB_SPLASH         BITMAP         "scff_dsf.bmp"

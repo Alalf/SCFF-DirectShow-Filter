@@ -15,10 +15,10 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file base/scff-monitor.cc
+/// @file base/scff_monitor.cc
 /// SCFFMonitorの定義
 
-#include "base/scff-monitor.h"
+#include "base/scff_monitor.h"
 
 #include <Psapi.h>
 

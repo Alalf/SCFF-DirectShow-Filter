@@ -15,10 +15,10 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file base/scff-clock-time.cc
+/// @file base/scff_clock_time.cc
 /// SCFFClockTimeの定義
 
-#include "base/scff-clock-time.h"
+#include "base/scff_clock_time.h"
 
 #include "base/debug.h"
 

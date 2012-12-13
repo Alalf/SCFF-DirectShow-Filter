@@ -1,6 +1,6 @@
 ﻿// Copyright 2012 Progre <djyayutto_at_gmail.com>
 //
-// This file is part of SCFF DSF.
+// This file is part of SCFF-DirectShow-Filter.
 //
 // SCFF DSF is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -128,7 +128,7 @@ public partial class SCFFAppForm : Form {
   //-------------------------------------------------------------------
 
   private void profileLoad_Click(object sender, EventArgs e) {
-    string profile_name = this.profileList.Text; 
+    string profile_name = this.profileList.Text;
     bool no_error = app_.LoadProfile(profile_name);
     if (!no_error) {
       MessageBox.Show("Cannot load profile: " + profile_name);
@@ -228,15 +228,15 @@ public partial class SCFFAppForm : Form {
     current_window_ = next_window;
     current_dc_ = ExternalAPI.GetDC(current_window_);
     current_graphics_ = System.Drawing.Graphics.FromHdc(current_dc_);
-   
+
     // 描画
     ExternalAPI.RECT current_rect;
     ExternalAPI.GetClientRect(current_window_, out current_rect);
     current_graphics_.DrawRectangle(orange_pen_,
-                                   current_rect.left, 
+                                   current_rect.left,
                                    current_rect.top,
                                    current_rect.right - current_rect.left,
-                                   current_rect.bottom - current_rect.top);    
+                                   current_rect.bottom - current_rect.top);
   }
 
   private void windowDragHere_MouseUp(object sender, MouseEventArgs e) {

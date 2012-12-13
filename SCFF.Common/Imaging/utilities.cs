@@ -15,14 +15,15 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file SCFF.Common/Imaging/utilities.cs
+/// @file SCFF.Common/Imaging/Utilities.cs
 /// scff_imaging/utilities.ccとhの移植版
 
+/// scff_imagingモジュールのC#版(オリジナルはC++)
 namespace SCFF.Common.Imaging {
 
 using System.Diagnostics;
 
-/// 画像の操作に便利な関数をまとめたクラス
+/// 画像の操作に便利な関数をまとめたクラス(C#では関数をまとめる為に名前空間は使えない)
 class Utilities {
   /// 境界の座標系と同じ座標系の新しい配置を計算する
   public static bool CalculateLayout(int bound_x, int bound_y,

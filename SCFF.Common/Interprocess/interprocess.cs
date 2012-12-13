@@ -15,8 +15,8 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file SCFF.Common/Interprocess/interprocess.cs
-/// SCFFのプロセス間通信に関する定数、型の宣言
+/// @file SCFF.Common/Interprocess/Types.cs
+/// SCFFのプロセス間通信に関する型の宣言
 /// @warning To me: このファイルの中から別のファイルへのusingは禁止！
 /// - 別の言語に移植する場合も最大2ファイルでお願いします
 
@@ -25,54 +25,6 @@ namespace SCFF.Common.Interprocess {
 
 using System;
 using System.Runtime.InteropServices;
-
-//=====================================================================
-/// @page smp SCFF Messaging Protocol v1 (by 2012/05/22 Alalf)
-/// SCFF_DSFおよびそのクライアントで共有する共有メモリ内のデータ配置の仕様
-///
-/// [全体的な注意点]
-/// - Windows固有の型名はビットサイズが分かりにくいのでSystem.***で置き換える
-///   - 対応表
-///     - DWORD        = UInt32 (32bit)
-///     - HWND(void*)  = UInt64 (64bit)
-///       - SCFHから変更: 念のため32bitから64bitに
-///     - bool         = Byte (8bit)
-/// - 不動小数点数は基本的にはdoubleで(floatも利用可)
-///   - 対応表
-///     - double       = Double (64bit)
-///     - float        = Single (32bit)
-/// - すべての構造体はPOD(Plain Old Data)であること
-///   - 基本型、コンストラクタ、デストラクタ、仮想関数を持たない構造体のみ
-//=====================================================================
-
-/// プロセス間通信を担当するクラス
-partial class Interprocess {
-  /// 共有メモリ名: SCFFエントリを格納するディレクトリ
-  const string kDirectoryName = "scff_v1_directory";
-
-  /// Directoryの保護用Mutex名
-  const string kDirectoryMutexName = "mutex_scff_v1_directory";
-
-  /// 共有メモリ名の接頭辞: SCFFで使うメッセージを格納する
-  const string kMessageNamePrefix = "scff_v1_message_";
-
-  /// Messageの保護用Mutex名の接頭辞
-  const string kMessageMutexNamePrefix = "mutex_scff_v1_message_";
-
-  //-------------------------------------------------------------------
-
-  /// Path文字列の長さ
-  public const int kMaxPath = 260;
-
-  /// Directoryに格納されるEntryの最大の数
-  public const int kMaxEntry = 8;
-
-  /// ComplexLayout利用時の最大の要素数
-  /// @sa scff_imaging::kMaxProcessorSize
-  public const int kMaxComplexLayoutElements = 8;
-}
-
-//-------------------------------------------------------------------
 
 /// レイアウトの種類
 public enum LayoutType {

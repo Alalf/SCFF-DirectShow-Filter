@@ -25,5 +25,9 @@ using System.Windows;
     public MainWindow() {
       this.InitializeComponent();
     }
+
+    private void MenuItem_Click_1(object sender, RoutedEventArgs e) {
+      this.Close();
+    }
   }
 }

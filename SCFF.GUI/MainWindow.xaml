@@ -2,7 +2,17 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:shell="http://schemas.microsoft.com/winfx/2006/xaml/presentation/shell"
-        Title="SCFF DirectShow Filter Ver.0.1.7" Height="445.274" Width="524.008" SnapsToDevicePixels="True" Background="#FF333333" Icon="Images/app.ico" ResizeMode="CanResizeWithGrip">
+        Title="SCFF DirectShow Filter Ver.0.1.7" Height="445.274" Width="524.008" SnapsToDevicePixels="True" Background="#FF333333" Icon="Images/app.ico" ResizeMode="CanResizeWithGrip" Name="mainWindow">
+  <Window.CommandBindings>
+    <CommandBinding Command="{x:Static shell:SystemCommands.CloseWindowCommand}"
+                    Executed="closeCommand_Executed"/>
+    <CommandBinding Command="{x:Static shell:SystemCommands.MaximizeWindowCommand}"
+                    Executed="maximizeWindow_Executed"/>
+    <CommandBinding Command="{x:Static shell:SystemCommands.MinimizeWindowCommand}"
+                    Executed="minimizeWindow_Executed"/>
+    <CommandBinding Command="{x:Static shell:SystemCommands.RestoreWindowCommand}"
+                    Executed="restoreWindow_Executed"/>
+  </Window.CommandBindings>
   <shell:WindowChrome.WindowChrome>
     <shell:WindowChrome CaptionHeight="{x:Static SystemParameters.CaptionHeight}" ResizeBorderThickness="8" GlassFrameThickness="0,0,0,1" />
   </shell:WindowChrome.WindowChrome>
@@ -20,23 +30,27 @@
           <StackPanel.Resources>
             <ResourceDictionary Source="Resources\CaptionButton.xaml"/>
           </StackPanel.Resources>
-          <Button Content="0" Style="{DynamicResource CaptionButton}"/>
-          <Button Content="1" Style="{DynamicResource CaptionButton}"/>
-          <Button Content="2" Style="{DynamicResource CaptionButton}"/>
-          <Button Content="r" Style="{DynamicResource CaptionButton}"/>
+          <Button Content="0" Style="{DynamicResource CaptionButton}" Command="{x:Static shell:SystemCommands.MinimizeWindowCommand}" CommandParameter="{Binding ElementName=mainWindow}"/>
+          <Button Content="1" Style="{DynamicResource CaptionButton}" Command="{x:Static shell:SystemCommands.MaximizeWindowCommand}" CommandParameter="{Binding ElementName=mainWindow}"/>
+          <Button Content="2" Style="{DynamicResource CaptionButton}" Command="{x:Static shell:SystemCommands.RestoreWindowCommand}" CommandParameter="{Binding ElementName=mainWindow}"/>
+          <Button Content="r" Style="{DynamicResource CaptionButton}" Command="{x:Static shell:SystemCommands.CloseWindowCommand}" CommandParameter="{Binding ElementName=mainWindow}"/>
         </StackPanel>
       </Grid>
       <Menu DockPanel.Dock="Top" FontSize="11">
-        <MenuItem Header="File">
-          <MenuItem Header="Open profile"/>
-          <MenuItem Header="Save profile"/>
-          <MenuItem Header="Close"/>
-          <MenuItem Header="Quit" Click="MenuItem_Click_1"/>
+        <MenuItem Header="File(_F)">
+          <MenuItem Header="Open profile(_O)..."/>
+          <MenuItem Header="Save profile(_S)"/>
+          <MenuItem Header="Save profile as(_a)..."/>
+          <MenuItem Header="Exit(_X)" Command="{x:Static shell:SystemCommands.CloseWindowCommand}" CommandParameter="{Binding ElementName=mainWindow}"/>
         </MenuItem>
-        <MenuItem Header="Mode">
-          <MenuItem Header="Compact"/>
-          <MenuItem Header="Native Layout"/>
-          <MenuItem Header="Complex Layout"/>
+        <MenuItem Header="View(_V)">
+          <MenuItem Header="Minimum(_M)"/>
+          <MenuItem Header="Native Layout(_N)"/>
+          <MenuItem Header="Complex Layout(_C)"/>
+        </MenuItem>
+        <MenuItem Header="Options(_O)">
+          <MenuItem Header="Force Aero ON(_A)"/>
+          <MenuItem Header="Restore last profile(_R)"/>
         </MenuItem>
       </Menu>
       <TabControl TabStripPlacement="Bottom" DockPanel.Dock="Left" FontSize="9">

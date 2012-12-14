@@ -17,17 +17,37 @@
 
 namespace SCFF.GUI {
 
-using System.Windows;
+  using Microsoft.Windows.Shell;
+  using System.Windows;
+  using System.Windows.Input;
 
   /// MainWindow.xaml の相互作用ロジック
   public partial class MainWindow : Window {
     /// コンストラクタ
     public MainWindow() {
       this.InitializeComponent();
+
+      this.MouseLeftButtonDown += (sender, e) => this.DragMove();
     }
 
-    private void MenuItem_Click_1(object sender, RoutedEventArgs e) {
-      this.Close();
-    }
+		private void closeCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+		{
+			SystemCommands.CloseWindow((Window)e.Parameter);
+		}
+
+		private void maximizeWindow_Executed(object sender, ExecutedRoutedEventArgs e)
+		{
+			SystemCommands.MaximizeWindow((Window)e.Parameter);
+		}
+
+		private void minimizeWindow_Executed(object sender, ExecutedRoutedEventArgs e)
+		{
+			SystemCommands.MinimizeWindow((Window)e.Parameter);
+		}
+
+		private void restoreWindow_Executed(object sender, ExecutedRoutedEventArgs e)
+		{
+			SystemCommands.RestoreWindow((Window)e.Parameter);
+		}
   }
 }

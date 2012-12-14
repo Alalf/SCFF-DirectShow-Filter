@@ -30,23 +30,19 @@ namespace SCFF.GUI {
       this.MouseLeftButtonDown += (sender, e) => this.DragMove();
     }
 
-		private void closeCommand_Executed(object sender, ExecutedRoutedEventArgs e)
-		{
+		private void closeCommand_Executed(object sender, ExecutedRoutedEventArgs e) {
 			SystemCommands.CloseWindow((Window)e.Parameter);
 		}
 
-		private void maximizeWindow_Executed(object sender, ExecutedRoutedEventArgs e)
-		{
+		private void maximizeWindow_Executed(object sender, ExecutedRoutedEventArgs e) {
 			SystemCommands.MaximizeWindow((Window)e.Parameter);
 		}
 
-		private void minimizeWindow_Executed(object sender, ExecutedRoutedEventArgs e)
-		{
+		private void minimizeWindow_Executed(object sender, ExecutedRoutedEventArgs e) {
 			SystemCommands.MinimizeWindow((Window)e.Parameter);
 		}
 
-		private void restoreWindow_Executed(object sender, ExecutedRoutedEventArgs e)
-		{
+		private void restoreWindow_Executed(object sender, ExecutedRoutedEventArgs e) {
 			SystemCommands.RestoreWindow((Window)e.Parameter);
 		}
   }

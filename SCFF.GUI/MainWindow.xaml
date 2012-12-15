@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:shell="http://schemas.microsoft.com/winfx/2006/xaml/presentation/shell"
         xmlns:uc="clr-namespace:SCFF.GUI.Controls"
-        Title="SCFF DirectShow Filter Ver.0.1.7" SnapsToDevicePixels="True" Background="{DynamicResource WindowBackgroundBrush}" Icon="Images/app.ico" ResizeMode="CanResizeWithGrip" Name="mainWindow" Height="545" Width="730" MinHeight="265" MinWidth="280" >
+        Title="SCFF DirectShow Filter Ver.0.1.7" SnapsToDevicePixels="True" Background="{DynamicResource WindowBackgroundBrush}" Icon="Images/app.ico" ResizeMode="CanResizeWithGrip" Name="mainWindow" Height="565.223" Width="730" MinHeight="265" MinWidth="280" >
   <Window.CommandBindings>
     <CommandBinding Command="{x:Static shell:SystemCommands.CloseWindowCommand}"
                     Executed="closeCommand_Executed"/>
@@ -192,7 +192,11 @@
         </Expander>
         <!-- レイアウト番号 -->
         <TabControl TabStripPlacement="Bottom" FontSize="9">
-          <TabItem Header="1"/>
+          <TabItem Header="1">
+            <Grid Background="{DynamicResource WindowBackgroundBrush}">
+              <CheckBox Content="Enable" Margin="5,3"/>
+            </Grid>
+          </TabItem>
           <TabItem Header="2">
             <Grid Background="{DynamicResource WindowBackgroundBrush}">
               <CheckBox Content="Enable" Margin="5,3"/>
@@ -246,20 +250,54 @@
       </StackPanel>
       <!-- レイアウト表示 -->
       <Expander FontSize="9" ExpandDirection="Right" Header="Layout" IsExpanded="True">
-        <Grid>
-          <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition Height="100"/>
-          </Grid.RowDefinitions>
+        <DockPanel LastChildFill="True">
+          <ToolBarTray DockPanel.Dock="Top" Background="{x:Null}" IsLocked="True">
+            <ToolBar Header="Layout " Height="25" >
+              <Button Margin="3,0">Add</Button>
+              <Button Margin="3,0">Delete</Button>
+              <Separator/>
+              <CheckBox Margin="3,0">Preview</CheckBox>
+              <CheckBox Margin="3,0">Border</CheckBox>
+            </ToolBar>
+          </ToolBarTray>
+          <GroupBox DockPanel.Dock="Bottom" Header="Layout N: (Window Classname)">
+            <Grid>
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+              </Grid.ColumnDefinitions>
+              <Grid.RowDefinitions>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="25"/>
+              </Grid.RowDefinitions>
+              <Label Height="12" Margin="5,0" HorizontalAlignment="Right" VerticalAlignment="Center">Left</Label>
+              <TextBox Grid.Column="1" Height="20" VerticalAlignment="Center">1000</TextBox>
+              <Label Grid.Column="2" Height="12" Margin="5,0" HorizontalAlignment="Right" VerticalAlignment="Center">Top</Label>
+              <TextBox Grid.Column="3" Height="20" VerticalAlignment="Center">1000</TextBox>
+              <Label Grid.Column="4" Height="12" Margin="5,0" HorizontalAlignment="Right" VerticalAlignment="Center">Right</Label>
+              <TextBox Grid.Column="5" Height="20" VerticalAlignment="Center">1000</TextBox>
+              <Label Grid.Column="6" Height="12" Margin="5,0" HorizontalAlignment="Right" VerticalAlignment="Center">Bottom</Label>
+              <TextBox Grid.Column="7" Height="20" VerticalAlignment="Center">1000</TextBox>
+              <Label Grid.Row="1" Height="12" Margin="5,0" HorizontalAlignment="Right" VerticalAlignment="Center">[%]</Label>
+              <TextBox Grid.Row="1" Grid.Column="1" Height="20" VerticalAlignment="Center" IsEnabled="False" Foreground="White">1000</TextBox>
+              <Label Grid.Row="1" Grid.Column="2" Margin="5,0" Height="12" HorizontalAlignment="Right" VerticalAlignment="Center">[%]</Label>
+              <TextBox Grid.Row="1" Grid.Column="3" Height="20" VerticalAlignment="Center" IsEnabled="False" Foreground="White">1000</TextBox>
+              <Label Grid.Row="1" Grid.Column="4" Margin="5,0" Height="12" HorizontalAlignment="Right" VerticalAlignment="Center">[%]</Label>
+              <TextBox Grid.Row="1" Grid.Column="5" Height="20" VerticalAlignment="Center" IsEnabled="False" Foreground="White">1000</TextBox>
+              <Label Grid.Row="1" Grid.Column="6" Margin="5,0" Height="12" HorizontalAlignment="Right" VerticalAlignment="Center">[%]</Label>
+              <TextBox Grid.Row="1" Grid.Column="7" Height="20" VerticalAlignment="Center" IsEnabled="False" Foreground="White">1000</TextBox>
+            </Grid>
+          </GroupBox>
           <Viewbox Stretch="Uniform">
             <uc:LayoutEdit/>
           </Viewbox>
-          <GroupBox Grid.Row="1" Header="Layout">
-            <Grid Height="50">
-            
-            </Grid>
-          </GroupBox>
-        </Grid>
+        </DockPanel>
       </Expander>
     </DockPanel>
   </Border>

@@ -26,8 +26,6 @@ namespace SCFF.GUI {
     /// コンストラクタ
     public MainWindow() {
       this.InitializeComponent();
-
-      this.MouseLeftButtonDown += (sender, e) => this.DragMove();
     }
 
 		private void closeCommand_Executed(object sender, ExecutedRoutedEventArgs e) {

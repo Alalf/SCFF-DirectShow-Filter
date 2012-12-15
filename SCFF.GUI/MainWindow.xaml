@@ -2,7 +2,8 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:shell="http://schemas.microsoft.com/winfx/2006/xaml/presentation/shell"
-        Title="SCFF DirectShow Filter Ver.0.1.7" Height="445.274" Width="524.008" SnapsToDevicePixels="True" Background="#FF333333" Icon="Images/app.ico" ResizeMode="CanResizeWithGrip" Name="mainWindow">
+        xmlns:uc="clr-namespace:SCFF.GUI.Controls"
+        Title="SCFF DirectShow Filter Ver.0.1.7" SnapsToDevicePixels="True" Background="{DynamicResource WindowBackgroundBrush}" Icon="Images/app.ico" ResizeMode="CanResizeWithGrip" Name="mainWindow" Height="545" Width="730" MinHeight="265" MinWidth="280" >
   <Window.CommandBindings>
     <CommandBinding Command="{x:Static shell:SystemCommands.CloseWindowCommand}"
                     Executed="closeCommand_Executed"/>
@@ -16,75 +17,250 @@
   <shell:WindowChrome.WindowChrome>
     <shell:WindowChrome CaptionHeight="{x:Static SystemParameters.CaptionHeight}" ResizeBorderThickness="8" GlassFrameThickness="0,0,0,1" />
   </shell:WindowChrome.WindowChrome>
-  <Border BorderBrush="#FF3F3F46" BorderThickness="1">
-    <DockPanel LastChildFill="False" Margin="0,0,0,0">
-      <Grid DockPanel.Dock="Top" Height="{x:Static SystemParameters.CaptionHeight}">
+  <Border BorderBrush="{DynamicResource SolidBorderBrush}" BorderThickness="1">
+    <DockPanel LastChildFill="True" Margin="0,0,0,0">
+      <!-- キャプションバー -->
+      <Grid DockPanel.Dock="Top">
+        <Grid.RowDefinitions>
+          <RowDefinition Height="{x:Static SystemParameters.CaptionHeight}"/>
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-          <ColumnDefinition Width="21"/>
+          <ColumnDefinition Width="20"/>
           <ColumnDefinition/>
-          <ColumnDefinition Width="65"/>
+          <ColumnDefinition Width="17"/>
+          <ColumnDefinition Width="17"/>
+          <ColumnDefinition Width="17"/>
+          <ColumnDefinition Width="17"/>
+          <ColumnDefinition Width="8"/>
         </Grid.ColumnDefinitions>
-        <Rectangle Width="11" Height="11" Fill="#FF003B00" Margin="5"/>
-        <Label Grid.Column="1" Foreground="#FFA0A0A0" FontSize="11" Content="SCFF DirectShow Filter Ver.0.1.7" VerticalAlignment="Center" Margin="0,2,0,3"/>
-        <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
-          <StackPanel.Resources>
-            <ResourceDictionary Source="Resources\CaptionButton.xaml"/>
-          </StackPanel.Resources>
-          <Button Content="0" Style="{DynamicResource CaptionButton}" Command="{x:Static shell:SystemCommands.MinimizeWindowCommand}" CommandParameter="{Binding ElementName=mainWindow}"/>
-          <Button Content="1" Style="{DynamicResource CaptionButton}" Command="{x:Static shell:SystemCommands.MaximizeWindowCommand}" CommandParameter="{Binding ElementName=mainWindow}"/>
-          <Button Content="2" Style="{DynamicResource CaptionButton}" Command="{x:Static shell:SystemCommands.RestoreWindowCommand}" CommandParameter="{Binding ElementName=mainWindow}"/>
-          <Button Content="r" Style="{DynamicResource CaptionButton}" Command="{x:Static shell:SystemCommands.CloseWindowCommand}" CommandParameter="{Binding ElementName=mainWindow}"/>
-        </StackPanel>
+        <Grid.Resources>
+          <ResourceDictionary Source="Resources\CaptionButton.xaml"/>
+        </Grid.Resources>
+        <Rectangle Width="10" Height="10" Fill="#FF003B00" Margin="5,0" VerticalAlignment="Center"/>
+        <Label Grid.Column="1" FontSize="10" Content="SCFF DirectShow Filter Ver.0.1.7" VerticalAlignment="Center"/>
+        <Button Grid.Column="2" Height="12" VerticalAlignment="Center" Style="{DynamicResource CaptionButton}" Command="{x:Static shell:SystemCommands.MinimizeWindowCommand}" CommandParameter="{Binding ElementName=mainWindow}">0</Button>
+        <Button Grid.Column="3" Height="12" VerticalAlignment="Center" Style="{DynamicResource CaptionButton}" Command="{x:Static shell:SystemCommands.MaximizeWindowCommand}" CommandParameter="{Binding ElementName=mainWindow}">1</Button>
+        <Button Grid.Column="4" Height="12" VerticalAlignment="Center" Style="{DynamicResource CaptionButton}" Command="{x:Static shell:SystemCommands.RestoreWindowCommand}" CommandParameter="{Binding ElementName=mainWindow}">2</Button>
+        <Button Grid.Column="5" Height="12" VerticalAlignment="Center" Style="{DynamicResource CaptionButton}" Command="{x:Static shell:SystemCommands.CloseWindowCommand}" CommandParameter="{Binding ElementName=mainWindow}">r</Button>
       </Grid>
-      <Menu DockPanel.Dock="Top" FontSize="11">
+      <!-- メニューバー -->
+      <Menu DockPanel.Dock="Top" FontSize="9">
         <MenuItem Header="File(_F)">
+          <MenuItem Header="New profile(_N)"/>
+          <Separator/>
           <MenuItem Header="Open profile(_O)..."/>
+          <Separator/>
           <MenuItem Header="Save profile(_S)"/>
           <MenuItem Header="Save profile as(_a)..."/>
+          <Separator/>
           <MenuItem Header="Exit(_X)" Command="{x:Static shell:SystemCommands.CloseWindowCommand}" CommandParameter="{Binding ElementName=mainWindow}"/>
         </MenuItem>
-        <MenuItem Header="View(_V)">
+        <MenuItem Header="Options(_O)">
           <MenuItem Header="Minimum(_M)"/>
           <MenuItem Header="Native Layout(_N)"/>
           <MenuItem Header="Complex Layout(_C)"/>
-        </MenuItem>
-        <MenuItem Header="Options(_O)">
+          <Separator/>
           <MenuItem Header="Force Aero ON(_A)"/>
           <MenuItem Header="Restore last profile(_R)"/>
         </MenuItem>
       </Menu>
-      <TabControl TabStripPlacement="Bottom" DockPanel.Dock="Left" FontSize="9">
-        <TabItem Header="1">
-          <StackPanel Width="300">
-            <GroupBox Header="Target" FontSize="9">
-              <Grid Height="130">
-                <Grid.RowDefinitions>
-                  <RowDefinition Height="23*"/>
-                  <RowDefinition Height="42*"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                  <ColumnDefinition Width="45*"/>
-                  <ColumnDefinition Width="64*"/>
-                  <ColumnDefinition Width="37*"/>
-                </Grid.ColumnDefinitions>
-                <Label HorizontalAlignment="Center" VerticalAlignment="Center" Height="18" Width="44">Caption</Label>
-              </Grid>
-            </GroupBox>
-            <Expander Header="Area" IsExpanded="True">
-              <Grid Height="130" Background="#FF333333">
-
-              </Grid>
-            </Expander>
-          </StackPanel>
-        </TabItem>
-        <TabItem Header="2"></TabItem>
-        <TabItem Header="3"></TabItem>
-        <TabItem Header="4"></TabItem>
-        <TabItem Header="5"></TabItem>
-        <TabItem Header="6"></TabItem>
-        <TabItem Header="7"></TabItem>
-        <TabItem Header="8"></TabItem>
-      </TabControl>
+      <!-- 各種設定 -->
+      <StackPanel Width="250" DockPanel.Dock="Left">
+        <!-- プロセス -->
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="50"/>
+          </Grid.ColumnDefinitions>
+          <Grid.RowDefinitions>
+            <RowDefinition Height="25"/>
+          </Grid.RowDefinitions>
+          <ComboBox FontSize="9" Height="20" VerticalAlignment="Center" Margin="5,0">
+            <ComboBoxItem>Process1</ComboBoxItem>
+            <ComboBoxItem>Process2</ComboBoxItem>
+            <ComboBoxItem>Process3</ComboBoxItem>
+          </ComboBox>
+          <Button FontSize="9" Grid.Column="1" VerticalAlignment="Center" Content="Refresh" Height="20"/>
+        </Grid>
+        <!-- 取り込みウィンドウ -->
+        <GroupBox FontSize="9" Header="Target Window">
+          <Grid>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="30"/>
+              <RowDefinition Height="20"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="45"/>
+              <ColumnDefinition/>
+              <ColumnDefinition Width="30"/>
+              <ColumnDefinition Width="50"/>
+            </Grid.ColumnDefinitions>
+            <Label Height="15" Width="40" HorizontalAlignment="Right" VerticalAlignment="Center">Caption</Label>
+            <TextBox Height="20" Grid.Column="1" Grid.ColumnSpan="3" VerticalAlignment="Center" IsEnabled="False" Foreground="White">(Window Classname)</TextBox>
+            <Button Height="20" Grid.Row="1" Grid.ColumnSpan="2">Drag here.</Button>
+            <Button Height="20" Grid.Row="1" Grid.Column="2">Root</Button>
+            <Button Height="20" Grid.Row="1" Grid.Column="3">Desktop</Button>
+          </Grid>
+        </GroupBox>
+        <!-- 取り込み範囲 -->
+        <Expander FontSize="9" Header="Area" IsExpanded="True">
+          <Grid>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="12"/>
+              <ColumnDefinition Width="1*"/>
+              <ColumnDefinition Width="12"/>
+              <ColumnDefinition Width="1*"/>
+              <ColumnDefinition Width="25"/>
+              <ColumnDefinition Width="1*"/>
+              <ColumnDefinition Width="12"/>
+              <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="25"/>
+              <RowDefinition Height="25"/>
+            </Grid.RowDefinitions>
+            <Label Margin="3,0" Height="12" VerticalAlignment="Center">X</Label>
+            <Label Grid.Column="2" Margin="3,0" Height="12" VerticalAlignment="Center">Y</Label>
+            <Label Grid.Column="4" Margin="3,0" Height="12" VerticalAlignment="Center">Size</Label>
+            <Label Grid.Column="6" Margin="3,0" Height="12" VerticalAlignment="Center">x</Label>
+            <TextBox Grid.Column="1" Margin="0,0,5,0" Height="20" VerticalAlignment="Center">9999</TextBox>
+            <TextBox Grid.Column="3" Margin="0,0,5,0" Height="20" VerticalAlignment="Center">9999</TextBox>
+            <TextBox Grid.Column="5" Margin="0,0,5,0" Height="20" VerticalAlignment="Center">9999</TextBox>
+            <TextBox Grid.Column="8" Margin="0,0,5,0" Height="20" VerticalAlignment="Center">9999</TextBox>
+            <CheckBox Grid.Row="1" Grid.ColumnSpan="2" Height="16" VerticalAlignment="Center" Margin="0,4">Fit</CheckBox>
+            <Button Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="3" Height="20" VerticalAlignment="Center" Margin="0,2">Area Select</Button>
+            <Button Grid.Row="1" Grid.Column="5" Height="20" VerticalAlignment="Center">Root</Button>
+            <Button Grid.Row="1" Grid.Column="6" Grid.ColumnSpan="2" Height="20" VerticalAlignment="Center">Desktop</Button>
+          </Grid>
+        </Expander>
+        <!-- 取り込みオプション -->
+        <Expander FontSize="9" Header="Options" IsExpanded="True">
+          <Grid>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="20"/>
+              <RowDefinition Height="20"/>
+              <RowDefinition Height="20"/>
+              <RowDefinition Height="20"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="140"/>
+              <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <CheckBox Height="15" VerticalAlignment="Center">Show Mouse Cursor</CheckBox>
+            <CheckBox Grid.Row="1" Height="15" VerticalAlignment="Center">Show Layered Window</CheckBox>
+            <CheckBox Grid.Row="2" Height="15" VerticalAlignment="Center">Keep Aspect Ratio</CheckBox>
+            <CheckBox Grid.Row="3" Height="15" VerticalAlignment="Center">Enable Enlargement</CheckBox>
+            <CheckBox Grid.Column="1" Height="15" VerticalAlignment="Center" IsEnabled="False">Over-Sampling</CheckBox>
+            <Label Grid.Column="1" Grid.Row="2" Height="12" VerticalAlignment="Center" HorizontalAlignment="Right" IsEnabled="False">Thread Num</Label>
+            <ComboBox Grid.Column="1" Grid.Row="3" Height="20" VerticalAlignment="Center" IsEnabled="False"/>
+          </Grid>
+        </Expander>
+        <!-- 拡大縮小オプション -->
+        <Expander FontSize="9" Header="Resize Method" IsExpanded="True">
+          <Grid>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="1*"/>
+              <ColumnDefinition Width="1*"/>
+              <ColumnDefinition Width="1*"/>
+              <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="25"/>
+              <RowDefinition Height="8"/>
+              <RowDefinition Height="25"/>
+              <RowDefinition Height="25"/>
+              <RowDefinition Height="25"/>
+              <RowDefinition Height="25"/>
+            </Grid.RowDefinitions>
+            <ComboBox Grid.ColumnSpan="2" Height="20" VerticalAlignment="Center"></ComboBox>
+            <CheckBox Grid.Column="2" Grid.ColumnSpan="2" Height="16" VerticalAlignment="Center">Accurate Rounding</CheckBox>
+            <Separator Grid.Row="1" Grid.ColumnSpan="4" />
+            <CheckBox Grid.Row="2" Grid.ColumnSpan="4" Height="16" VerticalAlignment="Center">Enable filter</CheckBox>
+            <Label Grid.Row="3" Height="12" VerticalAlignment="Center" HorizontalAlignment="Right">L GBlur</Label>
+            <Label Grid.Row="4" Height="12" VerticalAlignment="Center" HorizontalAlignment="Right">L Sharpen</Label>
+            <Label Grid.Row="5" Height="12" VerticalAlignment="Center" HorizontalAlignment="Right">C HShift</Label>
+            <Label Grid.Column="2" Grid.Row="3" Height="12" VerticalAlignment="Center" HorizontalAlignment="Right">C GBlur</Label>
+            <Label Grid.Column="2" Grid.Row="4" Height="12" VerticalAlignment="Center" HorizontalAlignment="Right">C Sharpen</Label>
+            <Label Grid.Column="2" Grid.Row="5" Height="12" VerticalAlignment="Center" HorizontalAlignment="Right">C VShift</Label>
+            <TextBox Grid.Column="1" Grid.Row="3" Margin="5,0" Height="20" VerticalAlignment="Center">9999</TextBox>
+            <TextBox Grid.Column="1" Grid.Row="4" Margin="5,0" Height="20" VerticalAlignment="Center">9999</TextBox>
+            <TextBox Grid.Column="1" Grid.Row="5" Margin="5,0" Height="20" VerticalAlignment="Center">9999</TextBox>
+            <TextBox Grid.Column="3" Grid.Row="3" Margin="5,0" Height="20" VerticalAlignment="Center">9999</TextBox>
+            <TextBox Grid.Column="3" Grid.Row="4" Margin="5,0" Height="20" VerticalAlignment="Center">9999</TextBox>
+            <TextBox Grid.Column="3" Grid.Row="5" Margin="5,0" Height="20" VerticalAlignment="Center">9999</TextBox>
+          </Grid>
+        </Expander>
+        <!-- レイアウト番号 -->
+        <TabControl TabStripPlacement="Bottom" FontSize="9">
+          <TabItem Header="1"/>
+          <TabItem Header="2">
+            <Grid Background="{DynamicResource WindowBackgroundBrush}">
+              <CheckBox Content="Enable" Margin="5,3"/>
+            </Grid>
+          </TabItem>
+          <TabItem Header="3">
+            <Grid Background="{DynamicResource WindowBackgroundBrush}">
+              <CheckBox Content="Enable" Margin="5,3"/>
+            </Grid>
+          </TabItem>
+          <TabItem Header="4">
+            <Grid Background="{DynamicResource WindowBackgroundBrush}">
+              <CheckBox Content="Enable" Margin="5,3"/>
+            </Grid>
+          </TabItem>
+          <TabItem Header="5">
+            <Grid Background="{DynamicResource WindowBackgroundBrush}">
+              <CheckBox Content="Enable" Margin="5,3"/>
+            </Grid>
+          </TabItem>
+          <TabItem Header="6">
+            <Grid Background="{DynamicResource WindowBackgroundBrush}">
+              <CheckBox Content="Enable" Margin="5,3"/>
+            </Grid>
+          </TabItem>
+          <TabItem Header="7">
+            <Grid Background="{DynamicResource WindowBackgroundBrush}">
+              <CheckBox Content="Enable" Margin="5,3"/>
+            </Grid>
+          </TabItem>
+          <TabItem Header="8">
+            <Grid Background="{DynamicResource WindowBackgroundBrush}">
+              <CheckBox Content="Enable" Margin="5,3"/>
+            </Grid>
+          </TabItem>
+        </TabControl>
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+          </Grid.ColumnDefinitions>
+          <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+          </Grid.RowDefinitions>
+          <Button Height="20" VerticalAlignment="Center" FontSize="10">Splash</Button>
+          <CheckBox Grid.Column="2" Margin="5,0" Height="16" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="9">Auto</CheckBox>
+          <Button Grid.Column="3" Height="20" VerticalAlignment="Center"  FontSize="10">Apply</Button>
+        </Grid>
+      </StackPanel>
+      <!-- レイアウト表示 -->
+      <Expander FontSize="9" ExpandDirection="Right" Header="Layout" IsExpanded="True">
+        <Grid>
+          <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="100"/>
+          </Grid.RowDefinitions>
+          <Viewbox Stretch="Uniform">
+            <uc:LayoutEdit/>
+          </Viewbox>
+          <GroupBox Grid.Row="1" Header="Layout">
+            <Grid Height="50">
+            
+            </Grid>
+          </GroupBox>
+        </Grid>
+      </Expander>
     </DockPanel>
   </Border>
 </Window>

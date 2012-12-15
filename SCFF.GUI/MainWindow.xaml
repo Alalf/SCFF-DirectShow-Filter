@@ -56,9 +56,9 @@
           <MenuItem Header="Exit(_X)" Command="{x:Static shell:SystemCommands.CloseWindowCommand}" CommandParameter="{Binding ElementName=mainWindow}"/>
         </MenuItem>
         <MenuItem Header="Options(_O)">
-          <MenuItem Header="Minimum(_M)"/>
-          <MenuItem Header="Native Layout(_N)"/>
-          <MenuItem Header="Complex Layout(_C)"/>
+          <MenuItem Header="Minimum(_M)" Click="MenuItem_Click_1"/>
+          <MenuItem Header="Native Layout(_N)" Click="MenuItem_Click_2"/>
+          <MenuItem Header="Complex Layout(_C)" Click="MenuItem_Click_3"/>
           <Separator/>
           <MenuItem Header="Force Aero ON(_A)"/>
           <MenuItem Header="Restore last profile(_R)"/>
@@ -103,7 +103,7 @@
           </Grid>
         </GroupBox>
         <!-- 取り込み範囲 -->
-        <Expander FontSize="9" Header="Area" IsExpanded="True">
+        <Expander x:Name="areaExpander" FontSize="9" Header="Area" IsExpanded="True">
           <Grid>
             <Grid.ColumnDefinitions>
               <ColumnDefinition Width="12"/>
@@ -134,7 +134,7 @@
           </Grid>
         </Expander>
         <!-- 取り込みオプション -->
-        <Expander FontSize="9" Header="Options" IsExpanded="True">
+        <Expander x:Name="optionsExpander" FontSize="9" Header="Options" IsExpanded="True">
           <Grid>
             <Grid.RowDefinitions>
               <RowDefinition Height="20"/>
@@ -156,7 +156,7 @@
           </Grid>
         </Expander>
         <!-- 拡大縮小オプション -->
-        <Expander FontSize="9" Header="Resize Method" IsExpanded="True">
+        <Expander x:Name="resizeMethodExpander" FontSize="9" Header="Resize Method" IsExpanded="True">
           <Grid>
             <Grid.ColumnDefinitions>
               <ColumnDefinition Width="1*"/>
@@ -191,47 +191,8 @@
           </Grid>
         </Expander>
         <!-- レイアウト番号 -->
-        <TabControl TabStripPlacement="Bottom" FontSize="9">
-          <TabItem Header="1">
-            <Grid Background="{DynamicResource WindowBackgroundBrush}">
-              <CheckBox Content="Enable" Margin="5,3"/>
-            </Grid>
-          </TabItem>
-          <TabItem Header="2">
-            <Grid Background="{DynamicResource WindowBackgroundBrush}">
-              <CheckBox Content="Enable" Margin="5,3"/>
-            </Grid>
-          </TabItem>
-          <TabItem Header="3">
-            <Grid Background="{DynamicResource WindowBackgroundBrush}">
-              <CheckBox Content="Enable" Margin="5,3"/>
-            </Grid>
-          </TabItem>
-          <TabItem Header="4">
-            <Grid Background="{DynamicResource WindowBackgroundBrush}">
-              <CheckBox Content="Enable" Margin="5,3"/>
-            </Grid>
-          </TabItem>
-          <TabItem Header="5">
-            <Grid Background="{DynamicResource WindowBackgroundBrush}">
-              <CheckBox Content="Enable" Margin="5,3"/>
-            </Grid>
-          </TabItem>
-          <TabItem Header="6">
-            <Grid Background="{DynamicResource WindowBackgroundBrush}">
-              <CheckBox Content="Enable" Margin="5,3"/>
-            </Grid>
-          </TabItem>
-          <TabItem Header="7">
-            <Grid Background="{DynamicResource WindowBackgroundBrush}">
-              <CheckBox Content="Enable" Margin="5,3"/>
-            </Grid>
-          </TabItem>
-          <TabItem Header="8">
-            <Grid Background="{DynamicResource WindowBackgroundBrush}">
-              <CheckBox Content="Enable" Margin="5,3"/>
-            </Grid>
-          </TabItem>
+        <TabControl x:Name="layoutTab" TabStripPlacement="Bottom" FontSize="9">
+          <TabItem Header="1" />
         </TabControl>
         <Grid>
           <Grid.ColumnDefinitions>
@@ -249,49 +210,52 @@
         </Grid>
       </StackPanel>
       <!-- レイアウト表示 -->
-      <Expander FontSize="9" ExpandDirection="Right" Header="Layout" IsExpanded="True">
+      <Expander x:Name="layoutExpander" FontSize="9" ExpandDirection="Right" Header="Layout" IsExpanded="True">
         <DockPanel LastChildFill="True">
-          <ToolBarTray DockPanel.Dock="Top" Background="{x:Null}" IsLocked="True">
-            <ToolBar Header="Layout " Height="25" >
+          <ToolBarTray DockPanel.Dock="Top" Background="{x:Null}" IsLocked="True" HorizontalAlignment="Center">
+            <ToolBar Header="Layout " Height="25">
               <Button Margin="3,0">Add</Button>
               <Button Margin="3,0">Delete</Button>
               <Separator/>
               <CheckBox Margin="3,0">Preview</CheckBox>
               <CheckBox Margin="3,0">Border</CheckBox>
+              <CheckBox Margin="3,0">Snap</CheckBox>
             </ToolBar>
           </ToolBarTray>
-          <GroupBox DockPanel.Dock="Bottom" Header="Layout N: (Window Classname)">
+          <GroupBox DockPanel.Dock="Bottom" Width="320" Header="Layout N: (Window Classname)">
             <Grid>
               <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="13*"/>
+                <ColumnDefinition Width="10*"/>
+                <ColumnDefinition Width="10*"/>
+                <ColumnDefinition Width="10*"/>
+                <ColumnDefinition Width="10*"/>
+                <ColumnDefinition Width="10*"/>
+                <ColumnDefinition Width="10*"/>
+                <ColumnDefinition Width="13*"/>
+                <ColumnDefinition Width="10*"/>
               </Grid.ColumnDefinitions>
               <Grid.RowDefinitions>
                 <RowDefinition Height="25"/>
                 <RowDefinition Height="25"/>
               </Grid.RowDefinitions>
-              <Label Height="12" Margin="5,0" HorizontalAlignment="Right" VerticalAlignment="Center">Left</Label>
-              <TextBox Grid.Column="1" Height="20" VerticalAlignment="Center">1000</TextBox>
-              <Label Grid.Column="2" Height="12" Margin="5,0" HorizontalAlignment="Right" VerticalAlignment="Center">Top</Label>
-              <TextBox Grid.Column="3" Height="20" VerticalAlignment="Center">1000</TextBox>
-              <Label Grid.Column="4" Height="12" Margin="5,0" HorizontalAlignment="Right" VerticalAlignment="Center">Right</Label>
-              <TextBox Grid.Column="5" Height="20" VerticalAlignment="Center">1000</TextBox>
-              <Label Grid.Column="6" Height="12" Margin="5,0" HorizontalAlignment="Right" VerticalAlignment="Center">Bottom</Label>
-              <TextBox Grid.Column="7" Height="20" VerticalAlignment="Center">1000</TextBox>
-              <Label Grid.Row="1" Height="12" Margin="5,0" HorizontalAlignment="Right" VerticalAlignment="Center">[%]</Label>
-              <TextBox Grid.Row="1" Grid.Column="1" Height="20" VerticalAlignment="Center" IsEnabled="False" Foreground="White">1000</TextBox>
-              <Label Grid.Row="1" Grid.Column="2" Margin="5,0" Height="12" HorizontalAlignment="Right" VerticalAlignment="Center">[%]</Label>
-              <TextBox Grid.Row="1" Grid.Column="3" Height="20" VerticalAlignment="Center" IsEnabled="False" Foreground="White">1000</TextBox>
-              <Label Grid.Row="1" Grid.Column="4" Margin="5,0" Height="12" HorizontalAlignment="Right" VerticalAlignment="Center">[%]</Label>
-              <TextBox Grid.Row="1" Grid.Column="5" Height="20" VerticalAlignment="Center" IsEnabled="False" Foreground="White">1000</TextBox>
-              <Label Grid.Row="1" Grid.Column="6" Margin="5,0" Height="12" HorizontalAlignment="Right" VerticalAlignment="Center">[%]</Label>
-              <TextBox Grid.Row="1" Grid.Column="7" Height="20" VerticalAlignment="Center" IsEnabled="False" Foreground="White">1000</TextBox>
+              <Button Grid.RowSpan="2" Height="20" VerticalAlignment="Center">Fit</Button>
+              <Label Grid.Column="1" Height="12" Margin="5,0" HorizontalAlignment="Right" VerticalAlignment="Center">Left</Label>
+              <TextBox Grid.Column="2" Height="20" VerticalAlignment="Center">1000</TextBox>
+              <Label Grid.Column="3" Height="12" Margin="5,0" HorizontalAlignment="Right" VerticalAlignment="Center">Top</Label>
+              <TextBox Grid.Column="4" Height="20" VerticalAlignment="Center">1000</TextBox>
+              <Label Grid.Column="5" Height="12" Margin="5,0" HorizontalAlignment="Right" VerticalAlignment="Center">Right</Label>
+              <TextBox Grid.Column="6" Height="20" VerticalAlignment="Center">1000</TextBox>
+              <Label Grid.Column="7" Height="12" Margin="5,0" HorizontalAlignment="Right" VerticalAlignment="Center">Bottom</Label>
+              <TextBox Grid.Column="8" Height="20" VerticalAlignment="Center">1000</TextBox>
+              <Label Grid.Row="1" Grid.Column="1"  Height="12" Margin="5,0" HorizontalAlignment="Right" VerticalAlignment="Center">[%]</Label>
+              <TextBox Grid.Row="1" Grid.Column="2" Height="20" VerticalAlignment="Center" IsEnabled="False" Foreground="White">1000</TextBox>
+              <Label Grid.Row="1" Grid.Column="3" Margin="5,0" Height="12" HorizontalAlignment="Right" VerticalAlignment="Center">[%]</Label>
+              <TextBox Grid.Row="1" Grid.Column="4" Height="20" VerticalAlignment="Center" IsEnabled="False" Foreground="White">1000</TextBox>
+              <Label Grid.Row="1" Grid.Column="5" Margin="5,0" Height="12" HorizontalAlignment="Right" VerticalAlignment="Center">[%]</Label>
+              <TextBox Grid.Row="1" Grid.Column="6" Height="20" VerticalAlignment="Center" IsEnabled="False" Foreground="White">1000</TextBox>
+              <Label Grid.Row="1" Grid.Column="7" Margin="5,0" Height="12" HorizontalAlignment="Right" VerticalAlignment="Center">[%]</Label>
+              <TextBox Grid.Row="1" Grid.Column="8" Height="20" VerticalAlignment="Center" IsEnabled="False" Foreground="White">1000</TextBox>
             </Grid>
           </GroupBox>
           <Viewbox Stretch="Uniform">

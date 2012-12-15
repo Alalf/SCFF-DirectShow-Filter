@@ -35,6 +35,7 @@ namespace SCFF.GUI.Controls {
 
     public LayoutEdit() {
       InitializeComponent();
+      RenderOptions.SetBitmapScalingMode(this.drawingGroup, BitmapScalingMode.LowQuality);
       this.Draw(string.Empty);
     }
 

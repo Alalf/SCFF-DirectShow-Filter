@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:shell="http://schemas.microsoft.com/winfx/2006/xaml/presentation/shell"
         xmlns:uc="clr-namespace:SCFF.GUI.Controls"
-        Title="SCFF DirectShow Filter Ver.0.1.7" SnapsToDevicePixels="True" Background="{DynamicResource WindowBackgroundBrush}" Icon="Images/app.ico" ResizeMode="CanResizeWithGrip" Name="mainWindow" Height="565.223" Width="730" MinHeight="265" MinWidth="280" >
+        Title="SCFF DirectShow Filter Ver.0.1.7" SnapsToDevicePixels="True" Background="{DynamicResource WindowBackgroundBrush}" Icon="Images/app.ico" ResizeMode="CanResizeWithGrip" Name="mainWindow" Height="565" Width="650" MinHeight="280" MinWidth="280" >
   <Window.CommandBindings>
     <CommandBinding Command="{x:Static shell:SystemCommands.CloseWindowCommand}"
                     Executed="closeCommand_Executed"/>
@@ -52,17 +52,20 @@
           <MenuItem Header="Save profile(_S)"/>
           <MenuItem Header="Save profile as(_a)..."/>
           <Separator/>
-          <MenuItem Header="Start FFmpeg(_F)..."/>
-          <MenuItem Header="Stop FFmpeg(_f)"/>
+          <MenuItem Header="Start FFmpeg(_F)..." IsEnabled="False"/>
+          <MenuItem Header="Stop FFmpeg(_f)" IsEnabled="False"/>
+          <Separator/>
+          <MenuItem Header="1 (_1)"/>
+          <MenuItem Header="2 (_2)"/>
+          <MenuItem Header="3 (_3)"/>
+          <MenuItem Header="4 (_4)"/>
+          <MenuItem Header="5 (_5)"/>
           <Separator/>
           <MenuItem Header="Exit(_X)" Command="{x:Static shell:SystemCommands.CloseWindowCommand}" CommandParameter="{Binding ElementName=mainWindow}"/>
         </MenuItem>
-        <MenuItem Header="View(_V)">
-          <MenuItem Header="Minimum(_M)" Click="MenuItem_Click_1"/>
-          <MenuItem Header="Native Layout(_N)" Click="MenuItem_Click_2"/>
-          <MenuItem Header="Complex Layout(_C)" Click="MenuItem_Click_3"/>
-        </MenuItem>
         <MenuItem Header="Options(_O)">
+          <MenuItem x:Name="compactViewMenu" Header="Compact View(_C)" IsCheckable="True" Unchecked="MenuItem_Unchecked_1" Checked="MenuItem_Checked_1"/>
+          <Separator/>
           <MenuItem Header="Force Aero ON(_A)"/>
           <MenuItem Header="Restore last profile(_R)"/>
         </MenuItem>
@@ -197,6 +200,7 @@
         <TabControl x:Name="layoutTab" TabStripPlacement="Bottom" FontSize="9">
           <TabItem Header="1" />
         </TabControl>
+        <!-- Apply -->
         <Grid>
           <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>

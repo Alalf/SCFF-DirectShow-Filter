@@ -17,62 +17,56 @@
 
 namespace SCFF.GUI {
 
-  using Microsoft.Windows.Shell;
-  using System.Windows;
-  using System.Windows.Input;
+using Microsoft.Windows.Shell;
+using System.Windows;
+using System.Windows.Input;
 
-  /// MainWindow.xaml の相互作用ロジック
-  public partial class MainWindow : Window {
-    /// コンストラクタ
-    public MainWindow() {
-      this.InitializeComponent();
-    }
+/// MainWindow.xaml の相互作用ロジック
+public partial class MainWindow : Window {
+  private const double DefaultWidth = 730;
+  private const double DefaultHeight = 545;
+  private const double CompactWidth = 280;
+  private const double CompactHeight = 280;
 
-		private void closeCommand_Executed(object sender, ExecutedRoutedEventArgs e) {
-			SystemCommands.CloseWindow((Window)e.Parameter);
-		}
+  /// コンストラクタ
+  public MainWindow() {
+    this.InitializeComponent();
 
-		private void maximizeWindow_Executed(object sender, ExecutedRoutedEventArgs e) {
-			SystemCommands.MaximizeWindow((Window)e.Parameter);
-		}
+    // 明示的にチェックを外してみる
+    //this.compactViewMenu.IsChecked = false;
+  }
 
-		private void minimizeWindow_Executed(object sender, ExecutedRoutedEventArgs e) {
-			SystemCommands.MinimizeWindow((Window)e.Parameter);
-		}
+	private void closeCommand_Executed(object sender, ExecutedRoutedEventArgs e) {
+		SystemCommands.CloseWindow((Window)e.Parameter);
+	}
 
-		private void restoreWindow_Executed(object sender, ExecutedRoutedEventArgs e) {
-			SystemCommands.RestoreWindow((Window)e.Parameter);
-		}
+	private void maximizeWindow_Executed(object sender, ExecutedRoutedEventArgs e) {
+		SystemCommands.MaximizeWindow((Window)e.Parameter);
+	}
 
-    private void MenuItem_Click_1(object sender, RoutedEventArgs e) {
-      // this.areaExpander.Visibility = Visibility.Collapsed;
-      this.optionsExpander.Visibility = Visibility.Collapsed;
-      this.resizeMethodExpander.Visibility = Visibility.Collapsed;
-      // this.layoutTab.Visibility = Visibility.Collapsed;
-      // this.layoutExpander.Visibility = Visibility.Visible;
-      this.layoutExpander.IsExpanded = false;
-    }
+	private void minimizeWindow_Executed(object sender, ExecutedRoutedEventArgs e) {
+		SystemCommands.MinimizeWindow((Window)e.Parameter);
+	}
 
-    private void MenuItem_Click_2(object sender, RoutedEventArgs e) {
-      // this.areaExpander.Visibility = Visibility.Collapsed;
-      this.optionsExpander.Visibility = Visibility.Visible;
-      this.optionsExpander.IsExpanded = true;
-      this.resizeMethodExpander.Visibility = Visibility.Visible;
-      this.resizeMethodExpander.IsExpanded = true;
-      // this.layoutTab.Visibility = Visibility.Collapsed;
-      // this.layoutExpander.Visibility = Visibility.Visible;
-      this.layoutExpander.IsExpanded = false;
-    }
+	private void restoreWindow_Executed(object sender, ExecutedRoutedEventArgs e) {
+		SystemCommands.RestoreWindow((Window)e.Parameter);
+	}
 
-    private void MenuItem_Click_3(object sender, RoutedEventArgs e) {
-      // this.areaExpander.Visibility = Visibility.Collapsed;
-      this.optionsExpander.Visibility = Visibility.Visible;
-      this.optionsExpander.IsExpanded = true;
-      this.resizeMethodExpander.Visibility = Visibility.Visible;
-      this.resizeMethodExpander.IsExpanded = true;
-      //this.layoutTab.Visibility = Visibility.Visible;
-      // this.layoutExpander.Visibility = Visibility.Visible;
-      this.layoutExpander.IsExpanded = true;
+  private void MenuItem_Unchecked_1(object sender, RoutedEventArgs e) {
+    this.optionsExpander.Visibility = Visibility.Visible;
+    this.resizeMethodExpander.Visibility = Visibility.Visible;
+    if (this.Height < DefaultHeight) {
+      this.Height = DefaultHeight;
     }
   }
+
+  private void MenuItem_Checked_1(object sender, RoutedEventArgs e) {
+    this.optionsExpander.Visibility = Visibility.Collapsed;
+    this.resizeMethodExpander.Visibility = Visibility.Collapsed;
+    this.layoutExpander.IsExpanded = false;
+    this.Width = CompactWidth;
+    this.Height = CompactHeight;
+  }
+
+}
 }

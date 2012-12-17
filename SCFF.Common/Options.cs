@@ -19,25 +19,77 @@ namespace SCFF.Common {
 
 public class Options {
   public enum Key {
+    // Recent File Menu
     RecentFilePath1,
     RecentFilePath2,
     RecentFilePath3,
     RecentFilePath4,
     RecentFilePath5,
+
+    // FFmpeg FrontEnd Feature
     FFmpegPath,
     FFmpegArguments,
+
+    // Main Window
     MainWindowLeft,
     MainWindowTop,
     MainWindowWidth,
     MainWindowHeight,
     MainWindowState,
+
+    // Expander
+    AreaExpanderIsExpanded,
+    OptionsExpanderIsExpanded,
+    ResizeMethodExpanderIsExpanded,
+    LayoutExpanderIsExpanded,
+
+    // SCFF Feature
     AutoApply,
     LayoutPreview,
     LayoutBorder,
     LayoutSnap,
+
+    // Options Menu
     CompactView,
     ForceAeroOn,
     RestoreLastProfile
   }
+
+  public enum WindowState {
+    Normal,
+    Minimized,
+    Maximized
+  }
+
+  public void Load() {
+    
+  }
+
+  public void Save() {
+    
+  }
+
+  private const string OptionsFilePath = "SCFF.GUI.options";
+Microsoft Help Viewer 2.0
+  private string[] recentFilePath = new string[5] {
+      string.Empty, string.Empty, string.Empty, string.Empty, string.Empty};
+  private string ffmpegPath = string.Empty;
+  private string ffmpegArguments = string.Empty;
+  private double mainWindowLeft = 0.0;
+  private double mainWindowRight = 0.0;
+  private double mainWindowWidth = Defaults.MainWindowWidth;
+  private double mainWindowHeight = Defaults.MainWindowHeight;
+  private WindowState mainWindowState = WindowState.Normal;
+  private bool areaExpanderIsExpanded = true;
+  private bool optionsExpanderIsExpanded = true;
+  private bool resizeMethodExpanderIsExpanded = true;
+  private bool layoutExpanderIsExpanded = true;
+  private bool autoApply = true;
+  private bool layoutPreview = true;
+  private bool layoutBorder = true;
+  private bool layoutSnap = true;
+  private bool compactView = false;
+  private bool forceAeroOn = false;
+  private bool restoreLastProfile = true;
 }
 }

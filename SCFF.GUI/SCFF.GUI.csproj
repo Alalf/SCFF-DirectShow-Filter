@@ -113,13 +113,13 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Images\app.ico" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\SCFF.Common\SCFF.Common.csproj">
       <Project>{2e0258f9-f198-4b4c-9984-f949d26434cc}</Project>
       <Name>SCFF.Common</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\app.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

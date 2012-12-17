@@ -20,14 +20,10 @@ namespace SCFF.GUI {
 using Microsoft.Windows.Shell;
 using System.Windows;
 using System.Windows.Input;
+using SCFF.Common;
 
 /// MainWindow.xaml の相互作用ロジック
 public partial class MainWindow : Window {
-  private const double DefaultWidth = 730;
-  private const double DefaultHeight = 545;
-  private const double CompactWidth = 280;
-  private const double CompactHeight = 280;
-
   /// コンストラクタ
   public MainWindow() {
     this.InitializeComponent();
@@ -55,8 +51,8 @@ public partial class MainWindow : Window {
   private void MenuItem_Unchecked_1(object sender, RoutedEventArgs e) {
     this.optionsExpander.Visibility = Visibility.Visible;
     this.resizeMethodExpander.Visibility = Visibility.Visible;
-    if (this.Height < DefaultHeight) {
-      this.Height = DefaultHeight;
+    if (this.Height < SCFF.Common.Defaults.MainWindowWidth) {
+      this.Height = SCFF.Common.Defaults.MainWindowWidth;
     }
   }
 
@@ -64,8 +60,8 @@ public partial class MainWindow : Window {
     this.optionsExpander.Visibility = Visibility.Collapsed;
     this.resizeMethodExpander.Visibility = Visibility.Collapsed;
     this.layoutExpander.IsExpanded = false;
-    this.Width = CompactWidth;
-    this.Height = CompactHeight;
+    this.Width = SCFF.Common.Defaults.CompactMainWindowWidth;
+    this.Height = SCFF.Common.Defaults.CompactMainWindowHeight;
   }
 
 }

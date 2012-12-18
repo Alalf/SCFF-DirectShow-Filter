@@ -23,11 +23,12 @@ using SCFF.Common;
 /// App.xaml の相互作用ロジック
 public partial class App : Application {
 
-  /// アプリケーションの設定を格納するインスタンスを返す
-  public static Options Options() {
-    return options;
+  /// アプリケーションの設定を格納するインスタンス
+  public static Options Options {
+    get { return options; }
   }
-
   private static Options options = new Options();
+
+
 }
 }

@@ -24,6 +24,9 @@ using System.IO;
 using System.Text;
 
 /// プロファイル以外のアプリケーションの設定
+/// アプリケーションの起動中にプロパティが最新の状態になっている必要の無いものには
+/// Tmpという接頭辞をつけている。プログラム内部でそれらのプロパティを使うことは
+/// Loaded/Closingイベントハンドラ以外では非推奨である。
 public class Options {
 
   //===================================================================
@@ -47,17 +50,17 @@ public class Options {
     FFmpegArguments,
 
     // MainWindow
-    MainWindowLeft,
-    MainWindowTop,
-    MainWindowWidth,
-    MainWindowHeight,
-    MainWindowState,
+    TmpMainWindowLeft,
+    TmpMainWindowTop,
+    TmpMainWindowWidth,
+    TmpMainWindowHeight,
+    TmpMainWindowState,
 
     // MainWindow Expanders
-    AreaExpanderIsExpanded,
-    OptionsExpanderIsExpanded,
-    ResizeMethodExpanderIsExpanded,
-    LayoutExpanderIsExpanded,
+    TmpAreaIsExpanded,
+    TmpOptionsIsExpanded,
+    TmpResizeMethodIsExpanded,
+    TmpLayoutIsExpanded,
 
     // SCFF Options
     AutoApply,
@@ -66,9 +69,9 @@ public class Options {
     LayoutSnap,
 
     // SCFF Menu Options
-    CompactView,
+    TmpCompactView,
     ForceAeroOn,
-    RestoreLastProfile
+    TmpRestoreLastProfile
   }
 
   /// Options用WindowState。System.Windows.WindowStateと相互に変換する。
@@ -87,22 +90,22 @@ public class Options {
     {Key.RecentProfile5, "RecentProfile5"},
     {Key.FFmpegPath, "FFmpegPath"},
     {Key.FFmpegArguments, "FFmpegArguments"},
-    {Key.MainWindowLeft, "MainWindowLeft"},
-    {Key.MainWindowTop, "MainWindowTop"},
-    {Key.MainWindowWidth, "MainWindowWidth"},
-    {Key.MainWindowHeight, "MainWindowHeight"},
-    {Key.MainWindowState, "MainWindowState"},
-    {Key.AreaExpanderIsExpanded, "AreaExpanderIsExpanded"},
-    {Key.OptionsExpanderIsExpanded, "OptionsExpanderIsExpanded"},
-    {Key.ResizeMethodExpanderIsExpanded, "ResizeMethodExpanderIsExpanded"},
-    {Key.LayoutExpanderIsExpanded, "LayoutExpanderIsExpanded"},
+    {Key.TmpMainWindowLeft, "TmpMainWindowLeft"},
+    {Key.TmpMainWindowTop, "TmpMainWindowTop"},
+    {Key.TmpMainWindowWidth, "TmpMainWindowWidth"},
+    {Key.TmpMainWindowHeight, "TmpMainWindowHeight"},
+    {Key.TmpMainWindowState, "TmpMainWindowState"},
+    {Key.TmpAreaIsExpanded, "TmpAreaIsExpanded"},
+    {Key.TmpOptionsIsExpanded, "TmpOptionsIsExpanded"},
+    {Key.TmpResizeMethodIsExpanded, "TmpResizeMethodIsExpanded"},
+    {Key.TmpLayoutIsExpanded, "TmpLayoutIsExpanded"},
     {Key.AutoApply, "AutoApply"},
     {Key.LayoutPreview, "LayoutPreview"},
     {Key.LayoutBorder, "LayoutBorder"},
     {Key.LayoutSnap, "LayoutSnap"},
-    {Key.CompactView, "CompactView"},
+    {Key.TmpCompactView, "TmpCompactView"},
     {Key.ForceAeroOn, "ForceAeroOn"},
-    {Key.RestoreLastProfile, "RestoreLastProfile"},
+    {Key.TmpRestoreLastProfile, "TmpRestoreLastProfile"},
   };
 
   //===================================================================
@@ -121,22 +124,22 @@ public class Options {
         writer.WriteLine(this.keyToLabel[Key.RecentProfile5] + "=" + this.recentProfiles[0]);
         writer.WriteLine(this.keyToLabel[Key.FFmpegPath] + "=" + this.ffmpegPath);
         writer.WriteLine(this.keyToLabel[Key.FFmpegArguments] + "=" + this.ffmpegArguments);
-        writer.WriteLine(this.keyToLabel[Key.MainWindowLeft] + "=" + this.mainWindowLeft);
-        writer.WriteLine(this.keyToLabel[Key.MainWindowTop] + "=" + this.mainWindowTop);
-        writer.WriteLine(this.keyToLabel[Key.MainWindowWidth] + "=" + this.mainWindowWidth);
-        writer.WriteLine(this.keyToLabel[Key.MainWindowHeight] + "=" + this.mainWindowHeight);
-        writer.WriteLine(this.keyToLabel[Key.MainWindowState] + "=" + (int)this.mainWindowState);
-        writer.WriteLine(this.keyToLabel[Key.AreaExpanderIsExpanded] + "=" + this.areaExpanderIsExpanded);
-        writer.WriteLine(this.keyToLabel[Key.OptionsExpanderIsExpanded] + "=" + this.optionsExpanderIsExpanded);
-        writer.WriteLine(this.keyToLabel[Key.ResizeMethodExpanderIsExpanded] + "=" + this.resizeMethodExpanderIsExpanded);
-        writer.WriteLine(this.keyToLabel[Key.LayoutExpanderIsExpanded] + "=" + this.layoutExpanderIsExpanded);
+        writer.WriteLine(this.keyToLabel[Key.TmpMainWindowLeft] + "=" + this.tmpMainWindowLeft);
+        writer.WriteLine(this.keyToLabel[Key.TmpMainWindowTop] + "=" + this.tmpMainWindowTop);
+        writer.WriteLine(this.keyToLabel[Key.TmpMainWindowWidth] + "=" + this.tmpMainWindowWidth);
+        writer.WriteLine(this.keyToLabel[Key.TmpMainWindowHeight] + "=" + this.tmpMainWindowHeight);
+        writer.WriteLine(this.keyToLabel[Key.TmpMainWindowState] + "=" + (int)this.tmpMainWindowState);
+        writer.WriteLine(this.keyToLabel[Key.TmpAreaIsExpanded] + "=" + this.tmpAreaIsExpanded);
+        writer.WriteLine(this.keyToLabel[Key.TmpOptionsIsExpanded] + "=" + this.tmpOptionsIsExpanded);
+        writer.WriteLine(this.keyToLabel[Key.TmpResizeMethodIsExpanded] + "=" + this.tmpResizeMethodIsExpanded);
+        writer.WriteLine(this.keyToLabel[Key.TmpLayoutIsExpanded] + "=" + this.tmpLayoutIsExpanded);
         writer.WriteLine(this.keyToLabel[Key.AutoApply] + "=" + this.autoApply);
         writer.WriteLine(this.keyToLabel[Key.LayoutPreview] + "=" + this.layoutPreview);
         writer.WriteLine(this.keyToLabel[Key.LayoutBorder] + "=" + this.layoutBorder);
         writer.WriteLine(this.keyToLabel[Key.LayoutSnap] + "=" + this.layoutSnap);
-        writer.WriteLine(this.keyToLabel[Key.CompactView] + "=" + this.compactView);
+        writer.WriteLine(this.keyToLabel[Key.TmpCompactView] + "=" + this.tmpCompactView);
         writer.WriteLine(this.keyToLabel[Key.ForceAeroOn] + "=" + this.forceAeroOn);
-        writer.WriteLine(this.keyToLabel[Key.RestoreLastProfile] + "=" + this.restoreLastProfile);
+        writer.WriteLine(this.keyToLabel[Key.TmpRestoreLastProfile] + "=" + this.tmpRestoreLastProfile);
         return true;
       } catch {
         // 特に何も警告はしない
@@ -228,59 +231,66 @@ public class Options {
         this.ffmpegArguments = rawData;
         break;
       }
-      case Key.MainWindowLeft: {
+      case Key.TmpMainWindowLeft: {
         double parsedData;
         if (double.TryParse(rawData, out parsedData)) {
-          this.mainWindowLeft = parsedData; 
+          this.tmpMainWindowLeft = parsedData; 
         }
         break;
       }
-      case Key.MainWindowTop: {
+      case Key.TmpMainWindowTop: {
         double parsedData;
         if (double.TryParse(rawData, out parsedData)) {
-          this.mainWindowTop = parsedData;
+          this.tmpMainWindowTop = parsedData;
         }
         break;
       }
-      case Key.MainWindowWidth: {
+      case Key.TmpMainWindowWidth: {
         double parsedData;
         if (double.TryParse(rawData, out parsedData)) {
-          this.mainWindowWidth = parsedData;
+          this.tmpMainWindowWidth = parsedData;
         }
         break;
       }
-      case Key.MainWindowState: {
+      case Key.TmpMainWindowHeight: {
+        double parsedData;
+        if (double.TryParse(rawData, out parsedData)) {
+          this.tmpMainWindowHeight = parsedData;
+        }
+        break;
+      }
+      case Key.TmpMainWindowState: {
         WindowState parsedData;
         if (Enum.TryParse<WindowState>(rawData, out parsedData)) {
-          this.mainWindowState = parsedData;
+          this.tmpMainWindowState = parsedData;
         }
         break;
       }
-      case Key.AreaExpanderIsExpanded: {
+      case Key.TmpAreaIsExpanded: {
         bool parsedData;
         if (bool.TryParse(rawData, out parsedData)) {
-          this.areaExpanderIsExpanded = parsedData;
+          this.tmpAreaIsExpanded = parsedData;
         }
         break;
       }
-      case Key.OptionsExpanderIsExpanded: {
+      case Key.TmpOptionsIsExpanded: {
         bool parsedData;
         if (bool.TryParse(rawData, out parsedData)) {
-          this.optionsExpanderIsExpanded = parsedData;
+          this.tmpOptionsIsExpanded = parsedData;
         }
         break;
       }
-      case Key.ResizeMethodExpanderIsExpanded: {
+      case Key.TmpResizeMethodIsExpanded: {
         bool parsedData;
         if (bool.TryParse(rawData, out parsedData)) {
-          this.resizeMethodExpanderIsExpanded = parsedData;
+          this.tmpResizeMethodIsExpanded = parsedData;
         }
         break;
       }
-      case Key.LayoutExpanderIsExpanded: {
+      case Key.TmpLayoutIsExpanded: {
         bool parsedData;
         if (bool.TryParse(rawData, out parsedData)) {
-          this.layoutExpanderIsExpanded = parsedData; 
+          this.tmpLayoutIsExpanded = parsedData; 
         }
         break;
       }
@@ -312,10 +322,10 @@ public class Options {
         }
         break;
       }
-      case Key.CompactView: {
+      case Key.TmpCompactView: {
         bool parsedData;
         if (bool.TryParse(rawData, out parsedData)) {
-          this.compactView = parsedData;
+          this.tmpCompactView = parsedData;
         }
         break;
       }
@@ -326,10 +336,10 @@ public class Options {
         }
         break;
       }
-      case Key.RestoreLastProfile: {
+      case Key.TmpRestoreLastProfile: {
         bool parsedData;
         if (bool.TryParse(rawData, out parsedData)) {
-          this.restoreLastProfile = parsedData;
+          this.tmpRestoreLastProfile = parsedData;
         }
         break;
       }
@@ -338,9 +348,24 @@ public class Options {
 
   //===================================================================
   // アクセッサ
-  // MVVM/DataBindingを使いたくなるのを回避するため、プロパティは使わない
+  // プロパティ形式ではあるがDataBindingには使わないように！
   //===================================================================
 
+  public string RecentProfile1 {
+    get { return this.recentProfiles[4]; }
+  }
+  public string RecentProfile2 {
+    get { return this.recentProfiles[3]; }
+  }
+  public string RecentProfile3 {
+    get { return this.recentProfiles[2]; }
+  }
+  public string RecentProfile4 {
+    get { return this.recentProfiles[1]; }
+  }
+  public string RecentProfile5 {
+    get { return this.recentProfiles[0]; }
+  }
   public void AddRecentProfile(string profile) {
     // Queueに再構成してから配列に書き戻す
     var queue = new Queue<string>(this.recentProfiles);
@@ -351,113 +376,82 @@ public class Options {
     }
     queue.CopyTo(this.recentProfiles, 0);
   }
-  public string RecentProfile1() {
-    return this.recentProfiles[4];
+
+  public string FFmpegPath {
+    get { return this.ffmpegPath; }
+    set { this.ffmpegPath = value; }
   }
-  public string RecentProfile2() {
-    return this.recentProfiles[3];
-  }
-  public string RecentProfile3() {
-    return this.recentProfiles[2];
-  }
-  public string RecentProfile4() {
-    return this.recentProfiles[1];
-  }
-  public string RecentProfile5() {
-    return this.recentProfiles[0];
-  }
-  
-  public void SetFFmpegOptions(string ffmpegPath, string ffmpegArguments) {
-    this.ffmpegPath = ffmpegPath;
-    this.ffmpegArguments = ffmpegArguments;
-  }
-  public string FFmpegPath() {
-    return this.ffmpegPath;
-  }
-  public string FFmpegArguments() {
-    return this.ffmpegArguments;
+  public string FFmpegArguments {
+    get { return this.ffmpegArguments; }
+    set { this.ffmpegArguments = value; }
   }
 
-  public void SetMainWindowOptions(double mainWindowLeft,
-      double mainWindowTop, double mainWindowWidth, double mainWindowHeight,
-      WindowState mainWindowState) {
-    this.mainWindowLeft = mainWindowLeft;
-    this.mainWindowTop = mainWindowTop;
-    this.mainWindowWidth = mainWindowWidth;
-    this.mainWindowHeight = mainWindowHeight;
-    this.mainWindowState = mainWindowState;
+  public double TmpMainWindowLeft {
+    get { return this.tmpMainWindowLeft; }
+    set { this.tmpMainWindowLeft = value; }
   }
-  public double MainWindowLeft() {
-    return this.mainWindowLeft;
+  public double TmpMainWindowTop {
+    get { return this.tmpMainWindowTop; }
+    set { this.tmpMainWindowTop = value; }
   }
-  public double MainWindowTop() {
-    return this.mainWindowTop;
+  public double TmpMainWindowWidth {
+    get { return this.tmpMainWindowWidth; }
+    set { this.tmpMainWindowWidth = value; }
   }
-  public double MainWindowWidth() {
-    return this.mainWindowWidth;
+  public double TmpMainWindowHeight {
+    get { return this.tmpMainWindowHeight; }
+    set { this.tmpMainWindowHeight = value; }
   }
-  public double MainWindowHeight() {
-    return this.mainWindowHeight;
-  }
-  public WindowState MainWindowState() {
-    return this.mainWindowState;
+  public WindowState TmpMainWindowState {
+    get { return this.tmpMainWindowState; }
+    set { this.tmpMainWindowState = value; }
   }
 
-  public void SetMainWindowExpanders(bool areaExpanderIsExpanded,
-      bool optionsExpanderIsExpanded, bool resizeMethodExpanderIsExpanded,
-      bool layoutExpanderIsExpanded) {
-    this.areaExpanderIsExpanded = areaExpanderIsExpanded;
-    this.optionsExpanderIsExpanded = optionsExpanderIsExpanded;
-    this.resizeMethodExpanderIsExpanded = resizeMethodExpanderIsExpanded;
-    this.layoutExpanderIsExpanded = layoutExpanderIsExpanded;
+  public bool TmpAreaIsExpanded {
+    get { return this.tmpAreaIsExpanded; }
+    set { this.tmpAreaIsExpanded = value; }
   }
-  public bool AreaExpanderIsExpanded() {
-    return this.areaExpanderIsExpanded;
+  public bool TmpOptionsIsExpanded {
+    get { return this.tmpOptionsIsExpanded; }
+    set { this.tmpOptionsIsExpanded = value; }
   }
-  public bool OptionsExpanderIsExpanded() {
-    return this.optionsExpanderIsExpanded;
+  public bool TmpResizeMethodIsExpanded {
+    get { return this.tmpResizeMethodIsExpanded; }
+    set { this.tmpResizeMethodIsExpanded = value; }
   }
-  public bool ResizeMethodExpanderIsExpanded() {
-    return this.resizeMethodExpanderIsExpanded;
-  }
-  public bool LayoutExpanderIsExpanded() {
-    return this.layoutExpanderIsExpanded;
+  public bool TmpLayoutIsExpanded {
+    get { return this.tmpLayoutIsExpanded; }
+    set { this.tmpLayoutIsExpanded = value; }
   }
 
-  public void SetSCFFOptions(bool autoApply, bool layoutPreview,
-      bool layoutBorder, bool layoutSnap) {
-    this.autoApply = autoApply;
-    this.layoutPreview = layoutPreview;
-    this.layoutBorder = layoutBorder;
-    this.layoutSnap = layoutSnap;
+  public bool AutoApply {
+    get { return this.autoApply; }
+    set { this.autoApply = value; }
   }
-  public bool AutoApply() {
-    return this.autoApply;
+  public bool LayoutPreview {
+    get { return this.layoutPreview; }
+    set { this.layoutPreview = value; }
   }
-  public bool LayoutPreview() {
-    return this.layoutPreview;
+  public bool LayoutBorder {
+    get { return this.layoutBorder; }
+    set { this.layoutBorder = value; }
   }
-  public bool LayoutBorder() {
-    return this.layoutBorder;
-  }
-  public bool LayoutSnap() {
-    return this.layoutSnap;
+  public bool LayoutSnap {
+    get { return this.layoutSnap; }
+    set { this.layoutSnap = value; }
   }
 
-  public void SetSCFFMenuOptions(bool compactView, bool forceAeroOn,
-      bool restoreLastProfile) {
-    this.compactView = compactView;
-    this.forceAeroOn = forceAeroOn;
-    this.restoreLastProfile = restoreLastProfile;
+  public bool TmpCompactView {
+    get { return this.tmpCompactView; }
+    set { this.tmpCompactView = value; }
   }
-  public bool CompactView() {
-    return this.compactView;
+  public bool ForceAeroOn {
+    get { return this.forceAeroOn; }
+    set { this.forceAeroOn = value; }
   }
-  public bool ForceAeroOn() {
-    return this.forceAeroOn;
-  }
-  public bool RestoreLastProfile() {
-    return this.restoreLastProfile;
+  public bool TmpRestoreLastProfile {
+    get { return this.tmpRestoreLastProfile; }
+    set { this.tmpRestoreLastProfile = value; }
   }
 
   //===================================================================
@@ -469,21 +463,21 @@ public class Options {
       string.Empty, string.Empty, string.Empty, string.Empty, string.Empty};
   private string ffmpegPath = string.Empty;
   private string ffmpegArguments = string.Empty;
-  private double mainWindowLeft = 0.0;
-  private double mainWindowTop = 0.0;
-  private double mainWindowWidth = Defaults.MainWindowWidth;
-  private double mainWindowHeight = Defaults.MainWindowHeight;
-  private WindowState mainWindowState = WindowState.Normal;
-  private bool areaExpanderIsExpanded = true;
-  private bool optionsExpanderIsExpanded = true;
-  private bool resizeMethodExpanderIsExpanded = true;
-  private bool layoutExpanderIsExpanded = true;
+  private double tmpMainWindowLeft = 0.0;
+  private double tmpMainWindowTop = 0.0;
+  private double tmpMainWindowWidth = Defaults.MainWindowWidth;
+  private double tmpMainWindowHeight = Defaults.MainWindowHeight;
+  private WindowState tmpMainWindowState = WindowState.Normal;
+  private bool tmpAreaIsExpanded = true;
+  private bool tmpOptionsIsExpanded = true;
+  private bool tmpResizeMethodIsExpanded = true;
+  private bool tmpLayoutIsExpanded = true;
   private bool autoApply = true;
   private bool layoutPreview = true;
   private bool layoutBorder = true;
   private bool layoutSnap = true;
-  private bool compactView = false;
+  private bool tmpCompactView = false;
   private bool forceAeroOn = false;
-  private bool restoreLastProfile = true;
+  private bool tmpRestoreLastProfile = true;
 }
 }

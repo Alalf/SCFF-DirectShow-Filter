@@ -70,7 +70,7 @@
         <MenuItem Header="Options(_O)">
           <MenuItem x:Name="compactView" Header="Compact View(_C)" IsCheckable="True" Unchecked="MenuItem_Unchecked_1" Checked="MenuItem_Checked_1"/>
           <Separator/>
-          <MenuItem x:Name="forceAeroOn" Header="Force Aero ON(_A)" IsCheckable="True" />
+          <MenuItem x:Name="forceAeroOn" Header="Force Aero ON(_A)" IsCheckable="True" Checked="forceAeroOn_Checked" Unchecked="forceAeroOn_Unchecked" />
           <MenuItem x:Name="restoreLastProfile" Header="Restore last profile(_R)" IsCheckable="True" />
         </MenuItem>
       </Menu>
@@ -182,22 +182,26 @@
               <RowDefinition Height="25"/>
               <RowDefinition Height="25"/>
             </Grid.RowDefinitions>
-            <ComboBox Grid.ColumnSpan="2" Height="20" VerticalAlignment="Center"></ComboBox>
+            <ComboBox Grid.ColumnSpan="2" Height="20" VerticalAlignment="Center">
+              <ComboBoxItem Content="hoge" IsSelected="True"/>
+              <ComboBoxItem/>
+              <ComboBoxItem/>
+            </ComboBox>
             <CheckBox Grid.Column="2" Grid.ColumnSpan="2" Height="16" VerticalAlignment="Center">Accurate Rounding</CheckBox>
             <Separator Grid.Row="1" Grid.ColumnSpan="4" />
-            <CheckBox Grid.Row="2" Grid.ColumnSpan="4" Height="16" VerticalAlignment="Center">Enable filter</CheckBox>
+            <CheckBox x:Name="enableFilter" Grid.Row="2" Grid.ColumnSpan="4" Height="16" VerticalAlignment="Center" Checked="enableFilter_Checked" Unchecked="enableFilter_Unchecked">Enable filter</CheckBox>
             <Label Grid.Row="3" Height="12" VerticalAlignment="Center" HorizontalAlignment="Right">L GBlur</Label>
             <Label Grid.Row="4" Height="12" VerticalAlignment="Center" HorizontalAlignment="Right">L Sharpen</Label>
             <Label Grid.Row="5" Height="12" VerticalAlignment="Center" HorizontalAlignment="Right">C HShift</Label>
             <Label Grid.Column="2" Grid.Row="3" Height="12" VerticalAlignment="Center" HorizontalAlignment="Right">C GBlur</Label>
             <Label Grid.Column="2" Grid.Row="4" Height="12" VerticalAlignment="Center" HorizontalAlignment="Right">C Sharpen</Label>
             <Label Grid.Column="2" Grid.Row="5" Height="12" VerticalAlignment="Center" HorizontalAlignment="Right">C VShift</Label>
-            <TextBox Grid.Column="1" Grid.Row="3" Margin="5,0" Height="20" VerticalAlignment="Center">9999</TextBox>
-            <TextBox Grid.Column="1" Grid.Row="4" Margin="5,0" Height="20" VerticalAlignment="Center">9999</TextBox>
-            <TextBox Grid.Column="1" Grid.Row="5" Margin="5,0" Height="20" VerticalAlignment="Center">9999</TextBox>
-            <TextBox Grid.Column="3" Grid.Row="3" Margin="5,0" Height="20" VerticalAlignment="Center">9999</TextBox>
-            <TextBox Grid.Column="3" Grid.Row="4" Margin="5,0" Height="20" VerticalAlignment="Center">9999</TextBox>
-            <TextBox Grid.Column="3" Grid.Row="5" Margin="5,0" Height="20" VerticalAlignment="Center">9999</TextBox>
+            <TextBox x:Name="filterLGBlur" Grid.Column="1" Grid.Row="3" Margin="5,0" Height="20" VerticalAlignment="Center" IsEnabled="False" Foreground="White">9999</TextBox>
+            <TextBox x:Name="filterLSharpen" Grid.Column="1" Grid.Row="4" Margin="5,0" Height="20" VerticalAlignment="Center" IsEnabled="False" Foreground="White">9999</TextBox>
+            <TextBox x:Name="filterCHShift" Grid.Column="1" Grid.Row="5" Margin="5,0" Height="20" VerticalAlignment="Center" IsEnabled="False" Foreground="White">9999</TextBox>
+            <TextBox x:Name="filterCGBlur" Grid.Column="3" Grid.Row="3" Margin="5,0" Height="20" VerticalAlignment="Center" IsEnabled="False" Foreground="White">9999</TextBox>
+            <TextBox x:Name="filterCSharpen" Grid.Column="3" Grid.Row="4" Margin="5,0" Height="20" VerticalAlignment="Center" IsEnabled="False" Foreground="White">9999</TextBox>
+            <TextBox x:Name="filterCVShift" Grid.Column="3" Grid.Row="5" Margin="5,0" Height="20" VerticalAlignment="Center" IsEnabled="False" Foreground="White">9999</TextBox>
           </Grid>
         </Expander>
         <!-- レイアウト番号 -->
@@ -216,7 +220,7 @@
             <RowDefinition Height="30"/>
           </Grid.RowDefinitions>
           <Button Height="20" VerticalAlignment="Center" FontSize="10">Splash</Button>
-          <CheckBox x:Name="autoApply" Grid.Column="2" Margin="5,0" Height="16" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="9">Auto</CheckBox>
+          <CheckBox x:Name="autoApply" Grid.Column="2" Margin="5,0" Height="16" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="9" Checked="autoApply_Checked" Unchecked="autoApply_Unchecked">Auto</CheckBox>
           <Button Grid.Column="3" Height="20" VerticalAlignment="Center"  FontSize="10">Apply</Button>
         </Grid>
       </StackPanel>
@@ -228,9 +232,9 @@
               <Button Margin="3,0,0,0">Add</Button>
               <Button Margin="3,0,0,0">Delete</Button>
               <Separator/>
-              <CheckBox x:Name="layoutPreview" Margin="3,0,0,0">Preview</CheckBox>
-              <CheckBox x:Name="layoutBorder" Margin="3,0,0,0">Border</CheckBox>
-              <CheckBox x:Name="layoutSnap" Margin="3,0,8,0">Snap</CheckBox>
+              <CheckBox x:Name="layoutPreview" Margin="3,0,0,0" Checked="layoutPreview_Checked" Unchecked="layoutPreview_Unchecked">Preview</CheckBox>
+              <CheckBox x:Name="layoutBorder" Margin="3,0,0,0" Checked="layoutBorder_Checked" Unchecked="layoutBorder_Unchecked">Border</CheckBox>
+              <CheckBox x:Name="layoutSnap" Margin="3,0,8,0" Unchecked="layoutSnap_Unchecked" Checked="layoutSnap_Checked">Snap</CheckBox>
             </ToolBar>
           </ToolBarTray>
           <GroupBox DockPanel.Dock="Bottom" Width="320" Header="Layout N: (Window Classname)">

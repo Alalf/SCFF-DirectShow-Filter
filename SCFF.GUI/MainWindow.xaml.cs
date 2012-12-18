@@ -30,36 +30,36 @@ public partial class MainWindow : Window {
   }
 
   private void UpdateRecentProfiles() {
-    if (App.Options().RecentProfile1() != string.Empty) {
-      this.recentProfile1.Header = "1 " + App.Options().RecentProfile1() + "(_1)";
+    if (App.Options.RecentProfile1 != string.Empty) {
+      this.recentProfile1.Header = "1 " + App.Options.RecentProfile1 + "(_1)";
       this.recentProfile1.IsEnabled = true;
     } else {
       this.recentProfile1.Header = "1 (_1)";
       this.recentProfile1.IsEnabled = false;
     }
-    if (App.Options().RecentProfile2() != string.Empty) {
-      this.recentProfile2.Header = "2 " + App.Options().RecentProfile2() + "(_2)";
+    if (App.Options.RecentProfile2 != string.Empty) {
+      this.recentProfile2.Header = "2 " + App.Options.RecentProfile2 + "(_2)";
       this.recentProfile2.IsEnabled = true;
     } else {
       this.recentProfile2.Header = "2 (_2)";
       this.recentProfile2.IsEnabled = false;
     }
-    if (App.Options().RecentProfile3() != string.Empty) {
-      this.recentProfile3.Header = "3 " + App.Options().RecentProfile3() + "(_3)";
+    if (App.Options.RecentProfile3 != string.Empty) {
+      this.recentProfile3.Header = "3 " + App.Options.RecentProfile3 + "(_3)";
       this.recentProfile3.IsEnabled = true;
     } else {
       this.recentProfile3.Header = "3 (_3)";
       this.recentProfile3.IsEnabled = false;
     }
-    if (App.Options().RecentProfile4() != string.Empty) {
-      this.recentProfile4.Header = "4 " + App.Options().RecentProfile4() + "(_4)";
+    if (App.Options.RecentProfile4 != string.Empty) {
+      this.recentProfile4.Header = "4 " + App.Options.RecentProfile4 + "(_4)";
       this.recentProfile4.IsEnabled = true;
     } else {
       this.recentProfile4.Header = "4 (_4)";
       this.recentProfile4.IsEnabled = false;
     }
-    if (App.Options().RecentProfile5() != string.Empty) {
-      this.recentProfile5.Header = "5 " + App.Options().RecentProfile5() + "(_5)";
+    if (App.Options.RecentProfile5 != string.Empty) {
+      this.recentProfile5.Header = "5 " + App.Options.RecentProfile5 + "(_5)";
       this.recentProfile5.IsEnabled = true;
     } else {
       this.recentProfile5.Header = "5 (_5)";
@@ -71,67 +71,57 @@ public partial class MainWindow : Window {
   private void mainWindow_Loaded(object sender, RoutedEventArgs e) {
     // アプリケーションの設定からUIに関連するものを読み込む
     // 存在しない場合は勝手にデフォルト値が読み込まれる・・・はず
-    App.Options().Load();
+    App.Options.Load();
 
     // Recent Profiles
     this.UpdateRecentProfiles();
 
     // MainWindow
-    this.Left = App.Options().MainWindowLeft();
-    this.Top = App.Options().MainWindowTop();
-    this.Width = App.Options().MainWindowWidth();
-    this.Height = App.Options().MainWindowHeight();
-    this.WindowState = (WindowState)App.Options().MainWindowState();
+    this.Left = App.Options.TmpMainWindowLeft;
+    this.Top = App.Options.TmpMainWindowTop;
+    this.Width = App.Options.TmpMainWindowWidth;
+    this.Height = App.Options.TmpMainWindowHeight;
+    this.WindowState = (WindowState)App.Options.TmpMainWindowState;
     
     // MainWindow Expanders
-    this.areaExpander.IsExpanded = App.Options().AreaExpanderIsExpanded();
-    this.optionsExpander.IsExpanded = App.Options().OptionsExpanderIsExpanded();
-    this.resizeMethodExpander.IsExpanded = App.Options().ResizeMethodExpanderIsExpanded();
-    this.layoutExpander.IsExpanded = App.Options().LayoutExpanderIsExpanded();
+    this.areaExpander.IsExpanded = App.Options.TmpAreaIsExpanded;
+    this.optionsExpander.IsExpanded = App.Options.TmpOptionsIsExpanded;
+    this.resizeMethodExpander.IsExpanded = App.Options.TmpResizeMethodIsExpanded;
+    this.layoutExpander.IsExpanded = App.Options.TmpLayoutIsExpanded;
 
     // SCFF Options
-    this.autoApply.IsChecked = App.Options().AutoApply();
-    this.layoutPreview.IsChecked = App.Options().LayoutPreview();
-    this.layoutBorder.IsChecked = App.Options().LayoutBorder();
-    this.layoutSnap.IsChecked = App.Options().LayoutSnap();
+    this.autoApply.IsChecked = App.Options.AutoApply;
+    this.layoutPreview.IsChecked = App.Options.LayoutPreview;
+    this.layoutBorder.IsChecked = App.Options.LayoutBorder;
+    this.layoutSnap.IsChecked = App.Options.LayoutSnap;
 
     // SCFF Menu Options
-    this.compactView.IsChecked = App.Options().CompactView();
-    this.forceAeroOn.IsChecked = App.Options().ForceAeroOn();
-    this.restoreLastProfile.IsChecked = App.Options().RestoreLastProfile();
+    this.compactView.IsChecked = App.Options.TmpCompactView;
+    this.forceAeroOn.IsChecked = App.Options.ForceAeroOn;
+    this.restoreLastProfile.IsChecked = App.Options.TmpRestoreLastProfile;
   }
 
   /// アプリケーション終了時に発生するClosingイベントハンドラ
   private void mainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
-    // 念のため取れる範囲でUIから最新のデータを取ってくる
-
-    // MainWindow
-    if (this.WindowState == WindowState.Normal) {
-      App.Options().SetMainWindowOptions(this.Left, this.Top,
-          this.Width, this.Height, (Options.WindowState)this.WindowState);
-    } else {
-      App.Options().SetMainWindowOptions(this.RestoreBounds.Left,
-          this.RestoreBounds.Top, this.RestoreBounds.Width,
-          this.RestoreBounds.Height, (Options.WindowState)this.WindowState);
-    }
+    // Tmp接頭辞のプロパティだけはここで更新する必要がある
+    var isNormal = this.WindowState == WindowState.Normal;
+    App.Options.TmpMainWindowLeft = isNormal ? this.Left : this.RestoreBounds.Left;
+    App.Options.TmpMainWindowTop = isNormal ? this.Top : this.RestoreBounds.Top;
+    App.Options.TmpMainWindowWidth = isNormal ? this.Width : this.RestoreBounds.Width;
+    App.Options.TmpMainWindowHeight = isNormal ? this.Height : this.RestoreBounds.Height;
+    App.Options.TmpMainWindowState = (Options.WindowState)this.WindowState;
 
     // MainWindow Expanders
-    App.Options().SetMainWindowExpanders(this.areaExpander.IsExpanded,
-        this.optionsExpander.IsExpanded, this.resizeMethodExpander.IsExpanded,
-        this.layoutExpander.IsExpanded);
-
-    // SCFF Options
-    App.Options().SetSCFFOptions((bool)this.autoApply.IsChecked,
-        (bool)this.layoutPreview.IsChecked,
-        (bool)this.layoutBorder.IsChecked,
-        (bool)this.layoutSnap.IsChecked);
+    App.Options.TmpAreaIsExpanded = this.areaExpander.IsExpanded;
+    App.Options.TmpOptionsIsExpanded = this.optionsExpander.IsExpanded;
+    App.Options.TmpResizeMethodIsExpanded = this.resizeMethodExpander.IsExpanded;
+    App.Options.TmpLayoutIsExpanded = this.layoutExpander.IsExpanded;
 
     // SCFF Menu Options
-    App.Options().SetSCFFMenuOptions((bool)this.compactView.IsChecked,
-        (bool)this.forceAeroOn.IsChecked,
-        (bool)this.restoreLastProfile.IsChecked);
+    App.Options.TmpCompactView = this.compactView.IsChecked;
+    App.Options.TmpRestoreLastProfile = this.restoreLastProfile.IsChecked;
 
-    App.Options().Save();
+    App.Options.Save();
   }
 
 	private void CloseWindow_Executed(object sender, ExecutedRoutedEventArgs e) {
@@ -153,9 +143,6 @@ public partial class MainWindow : Window {
   private void MenuItem_Unchecked_1(object sender, RoutedEventArgs e) {
     this.optionsExpander.Visibility = Visibility.Visible;
     this.resizeMethodExpander.Visibility = Visibility.Visible;
-    if (this.Height < SCFF.Common.Defaults.MainWindowHeight) {
-      this.Height = SCFF.Common.Defaults.MainWindowHeight;
-    }
   }
 
   private void MenuItem_Checked_1(object sender, RoutedEventArgs e) {
@@ -178,8 +165,67 @@ public partial class MainWindow : Window {
   private void SaveAs_Executed(object sender, ExecutedRoutedEventArgs e) {
   }
 
+  private void autoApply_Checked(object sender, RoutedEventArgs e) {
+    App.Options.AutoApply = true;
+  }
 
+  private void autoApply_Unchecked(object sender, RoutedEventArgs e) {
+    App.Options.AutoApply = false;
+  }
 
+  private void forceAeroOn_Checked(object sender, RoutedEventArgs e) {
+    App.Options.ForceAeroOn = true;
+  }
+
+  private void forceAeroOn_Unchecked(object sender, RoutedEventArgs e) {
+    App.Options.ForceAeroOn = false;
+  }
+
+  private void layoutPreview_Checked(object sender, RoutedEventArgs e) {
+    App.Options.LayoutPreview = true;
+  }
+
+  private void layoutPreview_Unchecked(object sender, RoutedEventArgs e) {
+    App.Options.LayoutPreview = false;
+  }
+
+  private void layoutBorder_Checked(object sender, RoutedEventArgs e) {
+    App.Options.LayoutBorder = true;
+  }
+
+  private void layoutBorder_Unchecked(object sender, RoutedEventArgs e) {
+    App.Options.LayoutBorder = false;
+  }
+
+  private void layoutSnap_Unchecked(object sender, RoutedEventArgs e) {
+    App.Options.LayoutSnap = false;
+  }
+
+  private void layoutSnap_Checked(object sender, RoutedEventArgs e) {
+    App.Options.LayoutSnap = true;
+  }
+
+  private void CheckBox_Checked_1(object sender, RoutedEventArgs e) {
+
+  }
+
+  private void enableFilter_Checked(object sender, RoutedEventArgs e) {
+    this.filterLGBlur.IsEnabled = true;
+    this.filterLSharpen.IsEnabled = true;
+    this.filterCVShift.IsEnabled = true;
+    this.filterCGBlur.IsEnabled = true;
+    this.filterCSharpen.IsEnabled = true;
+    this.filterCHShift.IsEnabled = true;
+  }
+
+  private void enableFilter_Unchecked(object sender, RoutedEventArgs e) {
+    this.filterLGBlur.IsEnabled = false;
+    this.filterLSharpen.IsEnabled = false;
+    this.filterCVShift.IsEnabled = false;
+    this.filterCGBlur.IsEnabled = false;
+    this.filterCSharpen.IsEnabled = false;
+    this.filterCHShift.IsEnabled = false;
+  }
 
 
 }

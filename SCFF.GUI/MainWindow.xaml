@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:shell="http://schemas.microsoft.com/winfx/2006/xaml/presentation/shell"
         xmlns:uc="clr-namespace:SCFF.GUI.Controls"
-        Title="SCFF DirectShow Filter Ver.0.1.7" SnapsToDevicePixels="True" Background="{DynamicResource WindowBackgroundBrush}" Icon="Images/app.ico" ResizeMode="CanResizeWithGrip" Name="mainWindow" Height="565" Width="650" MinHeight="280" MinWidth="280" >
+        Title="SCFF DirectShow Filter Ver.0.1.7" SnapsToDevicePixels="True" Background="{DynamicResource WindowBackgroundBrush}" Icon="Images/app.ico" ResizeMode="CanResizeWithGrip" Name="mainWindow" Height="565" Width="650" MinHeight="280" MinWidth="280" Loaded="mainWindow_Loaded" Closing="mainWindow_Closing" >
   <Window.CommandBindings>
     <CommandBinding Command="{x:Static shell:SystemCommands.CloseWindowCommand}"
                     Executed="CloseWindow_Executed"/>
@@ -59,19 +59,19 @@
           <MenuItem Header="Start FFmpeg(_F)..." IsEnabled="False"/>
           <MenuItem Header="Stop FFmpeg(_f)" IsEnabled="False"/>
           <Separator/>
-          <MenuItem Header="1 (_1)"/>
-          <MenuItem Header="2 (_2)"/>
-          <MenuItem Header="3 (_3)"/>
-          <MenuItem Header="4 (_4)"/>
-          <MenuItem Header="5 (_5)"/>
+          <MenuItem x:Name="recentProfile1" Header="1 (_1)" IsEnabled="False"/>
+          <MenuItem x:Name="recentProfile2" Header="2 (_2)" IsEnabled="False"/>
+          <MenuItem x:Name="recentProfile3" Header="3 (_3)" IsEnabled="False"/>
+          <MenuItem x:Name="recentProfile4" Header="4 (_4)" IsEnabled="False"/>
+          <MenuItem x:Name="recentProfile5" Header="5 (_5)" IsEnabled="False"/>
           <Separator/>
           <MenuItem Header="Exit(_X)" Command="{x:Static shell:SystemCommands.CloseWindowCommand}" CommandParameter="{Binding ElementName=mainWindow}"/>
         </MenuItem>
         <MenuItem Header="Options(_O)">
-          <MenuItem x:Name="compactViewMenu" Header="Compact View(_C)" IsCheckable="True" Unchecked="MenuItem_Unchecked_1" Checked="MenuItem_Checked_1"/>
+          <MenuItem x:Name="compactView" Header="Compact View(_C)" IsCheckable="True" Unchecked="MenuItem_Unchecked_1" Checked="MenuItem_Checked_1"/>
           <Separator/>
-          <MenuItem Header="Force Aero ON(_A)"/>
-          <MenuItem Header="Restore last profile(_R)"/>
+          <MenuItem x:Name="forceAeroOn" Header="Force Aero ON(_A)" IsCheckable="True" />
+          <MenuItem x:Name="restoreLastProfile" Header="Restore last profile(_R)" IsCheckable="True" />
         </MenuItem>
       </Menu>
       <!-- 各種設定 -->
@@ -216,7 +216,7 @@
             <RowDefinition Height="30"/>
           </Grid.RowDefinitions>
           <Button Height="20" VerticalAlignment="Center" FontSize="10">Splash</Button>
-          <CheckBox Grid.Column="2" Margin="5,0" Height="16" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="9">Auto</CheckBox>
+          <CheckBox x:Name="autoApply" Grid.Column="2" Margin="5,0" Height="16" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="9">Auto</CheckBox>
           <Button Grid.Column="3" Height="20" VerticalAlignment="Center"  FontSize="10">Apply</Button>
         </Grid>
       </StackPanel>
@@ -228,9 +228,9 @@
               <Button Margin="3,0,0,0">Add</Button>
               <Button Margin="3,0,0,0">Delete</Button>
               <Separator/>
-              <CheckBox Margin="3,0,0,0">Preview</CheckBox>
-              <CheckBox Margin="3,0,0,0">Border</CheckBox>
-              <CheckBox Margin="3,0,8,0">Snap</CheckBox>
+              <CheckBox x:Name="layoutPreview" Margin="3,0,0,0">Preview</CheckBox>
+              <CheckBox x:Name="layoutBorder" Margin="3,0,0,0">Border</CheckBox>
+              <CheckBox x:Name="layoutSnap" Margin="3,0,8,0">Snap</CheckBox>
             </ToolBar>
           </ToolBarTray>
           <GroupBox DockPanel.Dock="Bottom" Width="320" Header="Layout N: (Window Classname)">

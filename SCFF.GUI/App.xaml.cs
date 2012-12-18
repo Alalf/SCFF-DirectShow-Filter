@@ -18,8 +18,16 @@
 namespace SCFF.GUI {
 
 using System.Windows;
+using SCFF.Common;
 
-  /// App.xaml の相互作用ロジック
-  public partial class App : Application {
+/// App.xaml の相互作用ロジック
+public partial class App : Application {
+
+  /// アプリケーションの設定を格納するインスタンスを返す
+  public static Options Options() {
+    return options;
   }
+
+  private static Options options = new Options();
+}
 }

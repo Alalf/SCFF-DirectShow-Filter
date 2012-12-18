@@ -33,34 +33,7 @@ public class Options {
   private const string OptionsFilePath = "SCFF.GUI.ini";
   private const string OptionsHeader = "; SCFF-DirectShow-Filter Options Ver.0.1.7";
 
-  // リフレクションの使用回避
-  private readonly Dictionary<Key, string> keyToLabel = new Dictionary<Key, string>() {
-    {Key.RecentProfile1, "RecentProfile1"},
-    {Key.RecentProfile2, "RecentProfile2"},
-    {Key.RecentProfile3, "RecentProfile3"},
-    {Key.RecentProfile4, "RecentProfile4"},
-    {Key.RecentProfile5, "RecentProfile5"},
-    {Key.FFmpegPath, "FFmpegPath"},
-    {Key.FFmpegArguments, "FFmpegArguments"},
-    {Key.MainWindowLeft, "MainWindowLeft"},
-    {Key.MainWindowTop, "MainWindowTop"},
-    {Key.MainWindowWidth, "MainWindowWidth"},
-    {Key.MainWindowHeight, "MainWindowHeight"},
-    {Key.MainWindowState, "MainWindowState"},
-    {Key.AreaExpanderIsExpanded, "AreaExpanderIsExpanded"},
-    {Key.OptionsExpanderIsExpanded, "OptionsExpanderIsExpanded"},
-    {Key.ResizeMethodExpanderIsExpanded, "ResizeMethodExpanderIsExpanded"},
-    {Key.LayoutExpanderIsExpanded, "LayoutExpanderIsExpanded"},
-    {Key.AutoApply, "AutoApply"},
-    {Key.LayoutPreview, "LayoutPreview"},
-    {Key.LayoutBorder, "LayoutBorder"},
-    {Key.LayoutSnap, "LayoutSnap"},
-    {Key.CompactView, "CompactView"},
-    {Key.ForceAeroOn, "ForceAeroOn"},
-    {Key.RestoreLastProfile, "RestoreLastProfile"},
-  };
-
-  // そもそも大した数じゃないんだし手書きでもエンバグはしないだろう
+  /// ファイル入出力に用いるキー
   public enum Key {
     // Recent Profiles
     RecentProfile1,
@@ -98,11 +71,39 @@ public class Options {
     RestoreLastProfile
   }
 
+  /// Options用WindowState。System.Windows.WindowStateと相互に変換する。
   public enum WindowState {
     Normal,
     Minimized,
     Maximized
   }
+
+  /// Key(Enum)->String変換用の辞書。リフレクション利用回避のためわざわざ作成した。
+  private readonly Dictionary<Key, string> keyToLabel = new Dictionary<Key, string>() {
+    {Key.RecentProfile1, "RecentProfile1"},
+    {Key.RecentProfile2, "RecentProfile2"},
+    {Key.RecentProfile3, "RecentProfile3"},
+    {Key.RecentProfile4, "RecentProfile4"},
+    {Key.RecentProfile5, "RecentProfile5"},
+    {Key.FFmpegPath, "FFmpegPath"},
+    {Key.FFmpegArguments, "FFmpegArguments"},
+    {Key.MainWindowLeft, "MainWindowLeft"},
+    {Key.MainWindowTop, "MainWindowTop"},
+    {Key.MainWindowWidth, "MainWindowWidth"},
+    {Key.MainWindowHeight, "MainWindowHeight"},
+    {Key.MainWindowState, "MainWindowState"},
+    {Key.AreaExpanderIsExpanded, "AreaExpanderIsExpanded"},
+    {Key.OptionsExpanderIsExpanded, "OptionsExpanderIsExpanded"},
+    {Key.ResizeMethodExpanderIsExpanded, "ResizeMethodExpanderIsExpanded"},
+    {Key.LayoutExpanderIsExpanded, "LayoutExpanderIsExpanded"},
+    {Key.AutoApply, "AutoApply"},
+    {Key.LayoutPreview, "LayoutPreview"},
+    {Key.LayoutBorder, "LayoutBorder"},
+    {Key.LayoutSnap, "LayoutSnap"},
+    {Key.CompactView, "CompactView"},
+    {Key.ForceAeroOn, "ForceAeroOn"},
+    {Key.RestoreLastProfile, "RestoreLastProfile"},
+  };
 
   //===================================================================
   // ファイル入出力
@@ -169,11 +170,17 @@ public class Options {
         continue;
       }
 
-      var labelAndRawData = line.Split(separator, 1);
-      if (labelAndRawData.Length == 2) {
-        // *=*になっていなければ処理はしない
-        labelToRawData.Add(labelAndRawData[0], labelAndRawData[1]);
+      var splitIndex = line.IndexOf('=');
+      if (splitIndex == -1) {
+        // '='が見つからなければ読みとばす
+        continue;
+      } else if (splitIndex == line.Length - 1) {
+        // 空文字列なので読み飛ばす
+        continue;
       }
+      var label = line.Substring(0, splitIndex);
+      var rawData = line.Substring(splitIndex+1);
+      labelToRawData.Add(label, rawData);
     }
 
     // keyToLabelから値を設定していく
@@ -432,6 +439,9 @@ public class Options {
   }
   public bool LayoutBorder() {
     return this.layoutBorder;
+  }
+  public bool LayoutSnap() {
+    return this.layoutSnap;
   }
 
   public void SetSCFFMenuOptions(bool compactView, bool forceAeroOn,

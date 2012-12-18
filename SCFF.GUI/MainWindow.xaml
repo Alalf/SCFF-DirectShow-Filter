@@ -6,13 +6,17 @@
         Title="SCFF DirectShow Filter Ver.0.1.7" SnapsToDevicePixels="True" Background="{DynamicResource WindowBackgroundBrush}" Icon="Images/app.ico" ResizeMode="CanResizeWithGrip" Name="mainWindow" Height="565" Width="650" MinHeight="280" MinWidth="280" >
   <Window.CommandBindings>
     <CommandBinding Command="{x:Static shell:SystemCommands.CloseWindowCommand}"
-                    Executed="closeCommand_Executed"/>
+                    Executed="CloseWindow_Executed"/>
     <CommandBinding Command="{x:Static shell:SystemCommands.MaximizeWindowCommand}"
-                    Executed="maximizeWindow_Executed"/>
+                    Executed="MaximizeWindow_Executed"/>
     <CommandBinding Command="{x:Static shell:SystemCommands.MinimizeWindowCommand}"
-                    Executed="minimizeWindow_Executed"/>
+                    Executed="MinimizeWindow_Executed"/>
     <CommandBinding Command="{x:Static shell:SystemCommands.RestoreWindowCommand}"
-                    Executed="restoreWindow_Executed"/>
+                    Executed="RestoreWindow_Executed"/>
+    <CommandBinding Command="New" Executed="New_Executed"/>
+    <CommandBinding Command="Open" Executed="Open_Executed"/>
+    <CommandBinding Command="Save" Executed="Save_Executed"/>
+    <CommandBinding Command="SaveAs" Executed="SaveAs_Executed"/>
   </Window.CommandBindings>
   <shell:WindowChrome.WindowChrome>
     <shell:WindowChrome CaptionHeight="{x:Static SystemParameters.CaptionHeight}" ResizeBorderThickness="8" GlassFrameThickness="0,0,0,1" />
@@ -46,11 +50,11 @@
       <!-- メニューバー -->
       <Menu DockPanel.Dock="Top" FontSize="9">
         <MenuItem Header="File(_F)">
-          <MenuItem Header="New profile(_N)"/>
-          <MenuItem Header="Open profile(_O)..."/>
+          <MenuItem Header="New profile(_N)" Command="New"/>
+          <MenuItem Header="Open profile(_O)..." Command="Open"/>
           <Separator/>
-          <MenuItem Header="Save profile(_S)"/>
-          <MenuItem Header="Save profile as(_a)..."/>
+          <MenuItem Header="Save profile(_S)" Command="Save"/>
+          <MenuItem Header="Save profile as(_a)..." Command="SaveAs"/>
           <Separator/>
           <MenuItem Header="Start FFmpeg(_F)..." IsEnabled="False"/>
           <MenuItem Header="Stop FFmpeg(_f)" IsEnabled="False"/>

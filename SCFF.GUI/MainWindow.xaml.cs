@@ -32,19 +32,23 @@ public partial class MainWindow : Window {
     //this.compactViewMenu.IsChecked = false;
   }
 
-	private void closeCommand_Executed(object sender, ExecutedRoutedEventArgs e) {
+  private void mainWindow_Loaded(object sender, RoutedEventArgs e) {
+
+  }
+
+	private void CloseWindow_Executed(object sender, ExecutedRoutedEventArgs e) {
 		SystemCommands.CloseWindow((Window)e.Parameter);
 	}
 
-	private void maximizeWindow_Executed(object sender, ExecutedRoutedEventArgs e) {
+	private void MaximizeWindow_Executed(object sender, ExecutedRoutedEventArgs e) {
 		SystemCommands.MaximizeWindow((Window)e.Parameter);
 	}
 
-	private void minimizeWindow_Executed(object sender, ExecutedRoutedEventArgs e) {
+	private void MinimizeWindow_Executed(object sender, ExecutedRoutedEventArgs e) {
 		SystemCommands.MinimizeWindow((Window)e.Parameter);
 	}
 
-	private void restoreWindow_Executed(object sender, ExecutedRoutedEventArgs e) {
+	private void RestoreWindow_Executed(object sender, ExecutedRoutedEventArgs e) {
 		SystemCommands.RestoreWindow((Window)e.Parameter);
 	}
 
@@ -62,6 +66,26 @@ public partial class MainWindow : Window {
     this.layoutExpander.IsExpanded = false;
     this.Width = SCFF.Common.Defaults.CompactMainWindowWidth;
     this.Height = SCFF.Common.Defaults.CompactMainWindowHeight;
+  }
+
+  private void Save_Executed(object sender, ExecutedRoutedEventArgs e) {
+    var options = new Options();
+    options.Save();
+  }
+
+  private void New_Executed(object sender, ExecutedRoutedEventArgs e) {
+    var options = new Options();
+    options.Save();
+  }
+
+  private void Open_Executed(object sender, ExecutedRoutedEventArgs e) {
+    var options = new Options();
+    options.Save();
+  }
+
+  private void SaveAs_Executed(object sender, ExecutedRoutedEventArgs e) {
+    var options = new Options();
+    options.Save();
   }
 
 }

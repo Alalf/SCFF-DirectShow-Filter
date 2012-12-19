@@ -33,48 +33,7 @@ public class Options {
   // 定数
   //===================================================================
 
-  private const string OptionsFilePath = "SCFF.Common.Options.ini";
-  private const string OptionsHeader = "; SCFF-DirectShow-Filter Options Ver.0.1.7";
-
   private const int RecentProfilesLength = 5;
-
-  /// ファイル入出力に用いるキー
-  public enum Key {
-    // Recent Profiles
-    RecentProfile1,
-    RecentProfile2,
-    RecentProfile3,
-    RecentProfile4,
-    RecentProfile5,
-
-    // FFmpeg Options
-    FFmpegPath,
-    FFmpegArguments,
-
-    // MainWindow
-    TmpMainWindowLeft,
-    TmpMainWindowTop,
-    TmpMainWindowWidth,
-    TmpMainWindowHeight,
-    TmpMainWindowState,
-
-    // MainWindow Expanders
-    TmpAreaIsExpanded,
-    TmpOptionsIsExpanded,
-    TmpResizeMethodIsExpanded,
-    TmpLayoutIsExpanded,
-
-    // SCFF Options
-    AutoApply,
-    LayoutPreview,
-    LayoutBorder,
-    LayoutSnap,
-
-    // SCFF Menu Options
-    TmpCompactView,
-    ForceAeroOn,
-    TmpRestoreLastProfile
-  }
 
   /// Options用WindowState。System.Windows.WindowStateと相互に変換する。
   public enum WindowState {
@@ -83,280 +42,15 @@ public class Options {
     Maximized
   }
 
-  /// Key(Enum)->String変換用の辞書。リフレクション利用回避のためわざわざ作成した。
-  private readonly Dictionary<Key, string> keyToLabel = new Dictionary<Key, string>() {
-    {Key.RecentProfile1, "RecentProfile1"},
-    {Key.RecentProfile2, "RecentProfile2"},
-    {Key.RecentProfile3, "RecentProfile3"},
-    {Key.RecentProfile4, "RecentProfile4"},
-    {Key.RecentProfile5, "RecentProfile5"},
-    {Key.FFmpegPath, "FFmpegPath"},
-    {Key.FFmpegArguments, "FFmpegArguments"},
-    {Key.TmpMainWindowLeft, "TmpMainWindowLeft"},
-    {Key.TmpMainWindowTop, "TmpMainWindowTop"},
-    {Key.TmpMainWindowWidth, "TmpMainWindowWidth"},
-    {Key.TmpMainWindowHeight, "TmpMainWindowHeight"},
-    {Key.TmpMainWindowState, "TmpMainWindowState"},
-    {Key.TmpAreaIsExpanded, "TmpAreaIsExpanded"},
-    {Key.TmpOptionsIsExpanded, "TmpOptionsIsExpanded"},
-    {Key.TmpResizeMethodIsExpanded, "TmpResizeMethodIsExpanded"},
-    {Key.TmpLayoutIsExpanded, "TmpLayoutIsExpanded"},
-    {Key.AutoApply, "AutoApply"},
-    {Key.LayoutPreview, "LayoutPreview"},
-    {Key.LayoutBorder, "LayoutBorder"},
-    {Key.LayoutSnap, "LayoutSnap"},
-    {Key.TmpCompactView, "TmpCompactView"},
-    {Key.ForceAeroOn, "ForceAeroOn"},
-    {Key.TmpRestoreLastProfile, "TmpRestoreLastProfile"},
-  };
-
-  //===================================================================
-  // ファイル入出力
-  //===================================================================
-
-  /// ファイル出力
-  public bool Save() {
-    using (var writer = new StreamWriter(OptionsFilePath)) {
-      try {
-        writer.WriteLine(OptionsHeader);
-        writer.WriteLine(this.keyToLabel[Key.RecentProfile1] + "=" + this.reverseRecentProfiles[4]);
-        writer.WriteLine(this.keyToLabel[Key.RecentProfile2] + "=" + this.reverseRecentProfiles[3]);
-        writer.WriteLine(this.keyToLabel[Key.RecentProfile3] + "=" + this.reverseRecentProfiles[2]);
-        writer.WriteLine(this.keyToLabel[Key.RecentProfile4] + "=" + this.reverseRecentProfiles[1]);
-        writer.WriteLine(this.keyToLabel[Key.RecentProfile5] + "=" + this.reverseRecentProfiles[0]);
-        writer.WriteLine(this.keyToLabel[Key.FFmpegPath] + "=" + this.ffmpegPath);
-        writer.WriteLine(this.keyToLabel[Key.FFmpegArguments] + "=" + this.ffmpegArguments);
-        writer.WriteLine(this.keyToLabel[Key.TmpMainWindowLeft] + "=" + this.tmpMainWindowLeft);
-        writer.WriteLine(this.keyToLabel[Key.TmpMainWindowTop] + "=" + this.tmpMainWindowTop);
-        writer.WriteLine(this.keyToLabel[Key.TmpMainWindowWidth] + "=" + this.tmpMainWindowWidth);
-        writer.WriteLine(this.keyToLabel[Key.TmpMainWindowHeight] + "=" + this.tmpMainWindowHeight);
-        writer.WriteLine(this.keyToLabel[Key.TmpMainWindowState] + "=" + (int)this.tmpMainWindowState);
-        writer.WriteLine(this.keyToLabel[Key.TmpAreaIsExpanded] + "=" + this.tmpAreaIsExpanded);
-        writer.WriteLine(this.keyToLabel[Key.TmpOptionsIsExpanded] + "=" + this.tmpOptionsIsExpanded);
-        writer.WriteLine(this.keyToLabel[Key.TmpResizeMethodIsExpanded] + "=" + this.tmpResizeMethodIsExpanded);
-        writer.WriteLine(this.keyToLabel[Key.TmpLayoutIsExpanded] + "=" + this.tmpLayoutIsExpanded);
-        writer.WriteLine(this.keyToLabel[Key.AutoApply] + "=" + this.autoApply);
-        writer.WriteLine(this.keyToLabel[Key.LayoutPreview] + "=" + this.layoutPreview);
-        writer.WriteLine(this.keyToLabel[Key.LayoutBorder] + "=" + this.layoutBorder);
-        writer.WriteLine(this.keyToLabel[Key.LayoutSnap] + "=" + this.layoutSnap);
-        writer.WriteLine(this.keyToLabel[Key.TmpCompactView] + "=" + this.tmpCompactView);
-        writer.WriteLine(this.keyToLabel[Key.ForceAeroOn] + "=" + this.forceAeroOn);
-        writer.WriteLine(this.keyToLabel[Key.TmpRestoreLastProfile] + "=" + this.tmpRestoreLastProfile);
-        return true;
-      } catch {
-        // 特に何も警告はしない
-        Debug.Fail("Failed while writing options");
-        return false;
-      }
-    }
-  }
-
-  /// ファイル入力
-  public bool Load() {
-    // ファイル読み込み
-    var lines = new List<string>();
-    try {
-      using (var reader = new StreamReader(OptionsFilePath)) {
-        while (!reader.EndOfStream) {
-          lines.Add(reader.ReadLine());
-        }
-      }
-    } catch (FileNotFoundException ex) {
-      Debug.Fail(ex.ToString());
-      return false;
-    }
-
-    // 読み込んだデータを*=*でSplit
-    var separator = new char[1] {'='};
-    var labelToRawData = new Dictionary<string, string>();
-    foreach (var line in lines) {
-      if (line.Length == 0 || line[0] == ';' || line[0] == '[') {
-        // 空行、コメント行、セクション記述行は読み飛ばす
-        continue;
-      }
-
-      var splitIndex = line.IndexOf('=');
-      if (splitIndex == -1) {
-        // '='が見つからなければ読みとばす
-        continue;
-      } else if (splitIndex == line.Length - 1) {
-        // 空文字列なので読み飛ばす
-        continue;
-      }
-      var label = line.Substring(0, splitIndex);
-      var rawData = line.Substring(splitIndex+1);
-      labelToRawData.Add(label, rawData);
-    }
-
-    // keyToLabelから値を設定していく
-    foreach (var keyAndLabel in keyToLabel) {
-      if (labelToRawData.ContainsKey(keyAndLabel.Value)) {
-        // すべてO(1)
-        var key = keyAndLabel.Key;
-        var rawData = labelToRawData[keyAndLabel.Value];
-        this.ParseRawData(key, rawData);
-      }
-    }
-
-    return true;
-  }
-
-  /// ファイル入力内容からメンバ変数に値を設定する
-  private void ParseRawData(Key key, string rawData) {
-    // keyからメンバ変数に値を代入していく
-    switch (key) {
-      case Key.RecentProfile1: {
-        this.reverseRecentProfiles[4] = rawData;
-        break;
-      }
-      case Key.RecentProfile2: {
-        this.reverseRecentProfiles[3] = rawData;
-        break;
-      }
-      case Key.RecentProfile3: {
-        this.reverseRecentProfiles[2] = rawData;
-        break;
-      }
-      case Key.RecentProfile4: {
-        this.reverseRecentProfiles[1] = rawData;
-        break;
-      }
-      case Key.RecentProfile5: {
-        this.reverseRecentProfiles[0] = rawData;
-        break;
-      }
-      case Key.FFmpegPath: {
-        this.ffmpegPath = rawData;
-        break;
-      }
-      case Key.FFmpegArguments: {
-        this.ffmpegArguments = rawData;
-        break;
-      }
-      case Key.TmpMainWindowLeft: {
-        double parsedData;
-        if (double.TryParse(rawData, out parsedData)) {
-          this.tmpMainWindowLeft = parsedData; 
-        }
-        break;
-      }
-      case Key.TmpMainWindowTop: {
-        double parsedData;
-        if (double.TryParse(rawData, out parsedData)) {
-          this.tmpMainWindowTop = parsedData;
-        }
-        break;
-      }
-      case Key.TmpMainWindowWidth: {
-        double parsedData;
-        if (double.TryParse(rawData, out parsedData)) {
-          this.tmpMainWindowWidth = parsedData;
-        }
-        break;
-      }
-      case Key.TmpMainWindowHeight: {
-        double parsedData;
-        if (double.TryParse(rawData, out parsedData)) {
-          this.tmpMainWindowHeight = parsedData;
-        }
-        break;
-      }
-      case Key.TmpMainWindowState: {
-        WindowState parsedData;
-        if (Enum.TryParse<WindowState>(rawData, out parsedData)) {
-          this.tmpMainWindowState = parsedData;
-        }
-        break;
-      }
-      case Key.TmpAreaIsExpanded: {
-        bool parsedData;
-        if (bool.TryParse(rawData, out parsedData)) {
-          this.tmpAreaIsExpanded = parsedData;
-        }
-        break;
-      }
-      case Key.TmpOptionsIsExpanded: {
-        bool parsedData;
-        if (bool.TryParse(rawData, out parsedData)) {
-          this.tmpOptionsIsExpanded = parsedData;
-        }
-        break;
-      }
-      case Key.TmpResizeMethodIsExpanded: {
-        bool parsedData;
-        if (bool.TryParse(rawData, out parsedData)) {
-          this.tmpResizeMethodIsExpanded = parsedData;
-        }
-        break;
-      }
-      case Key.TmpLayoutIsExpanded: {
-        bool parsedData;
-        if (bool.TryParse(rawData, out parsedData)) {
-          this.tmpLayoutIsExpanded = parsedData; 
-        }
-        break;
-      }
-      case Key.AutoApply: {
-        bool parsedData;
-        if (bool.TryParse(rawData, out parsedData)) {
-          this.autoApply = parsedData;
-        }
-        break;
-      }
-      case Key.LayoutPreview: {
-        bool parsedData;
-        if (bool.TryParse(rawData, out parsedData)) {
-          this.layoutPreview = parsedData;
-        }
-        break;
-      }
-      case Key.LayoutBorder: {
-        bool parsedData;
-        if (bool.TryParse(rawData, out parsedData)) {
-          this.layoutBorder = parsedData;
-        }
-        break;
-      }
-      case Key.LayoutSnap: {
-        bool parsedData;
-        if (bool.TryParse(rawData, out parsedData)) {
-          this.layoutSnap = parsedData;
-        }
-        break;
-      }
-      case Key.TmpCompactView: {
-        bool parsedData;
-        if (bool.TryParse(rawData, out parsedData)) {
-          this.tmpCompactView = parsedData;
-        }
-        break;
-      }
-      case Key.ForceAeroOn: {
-        bool parsedData;
-        if (bool.TryParse(rawData, out parsedData)) {
-          this.forceAeroOn = parsedData;
-        }
-        break;
-      }
-      case Key.TmpRestoreLastProfile: {
-        bool parsedData;
-        if (bool.TryParse(rawData, out parsedData)) {
-          this.tmpRestoreLastProfile = parsedData;
-        }
-        break;
-      }
-    }
-  }
-
   //===================================================================
   // アクセッサ
   // プロパティ形式ではあるがDataBindingには使わないように！
   // なお、配列のメンバ変数へのアクセスはプロパティにはこだわらなくても良い
   //===================================================================
 
-  public string RecentProfile(int oneBasedIndex) {
+  public string GetRecentProfile(int index) {
     // 上下逆に変換
-    int reverseIndex = RecentProfilesLength - oneBasedIndex;
+    int reverseIndex = RecentProfilesLength - index - 1;
     Debug.Assert(0 <= reverseIndex && reverseIndex < RecentProfilesLength);
     return this.reverseRecentProfiles[reverseIndex];
   }
@@ -382,6 +76,13 @@ public class Options {
     // 配列に書き戻して終了
     queue.CopyTo(this.reverseRecentProfiles, 0);
   }
+  internal void SetRecentProfile(int index, string profile) {
+    // 上下逆に変換
+    int reverseIndex = RecentProfilesLength - index - 1;
+    Debug.Assert(0 <= reverseIndex && reverseIndex < RecentProfilesLength);
+    this.reverseRecentProfiles[reverseIndex] = profile;
+  }
+
 
   public string FFmpegPath {
     get { return this.ffmpegPath; }

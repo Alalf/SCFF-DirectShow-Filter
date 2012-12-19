@@ -20,6 +20,7 @@ namespace SCFF.GUI {
 using Microsoft.Windows.Shell;
 using System.Windows;
 using System.Windows.Input;
+using SCFF.Common;
 
 /// MainWindow.xaml の相互作用ロジック
 public partial class MainWindow : Window {
@@ -29,39 +30,39 @@ public partial class MainWindow : Window {
   }
 
   private void UpdateRecentProfiles() {
-    if (App.Options.RecentProfile(1) == string.Empty) {
+    if (App.Options.GetRecentProfile(0) == string.Empty) {
       this.recentProfile1.Header = "1 (_1)";
       this.recentProfile1.IsEnabled = false;
     } else {
-      this.recentProfile1.Header = "1 " + App.Options.RecentProfile(1) + "(_1)";
+      this.recentProfile1.Header = "1 " + App.Options.GetRecentProfile(0) + "(_1)";
       this.recentProfile1.IsEnabled = true;
     }
-    if (App.Options.RecentProfile(2) == string.Empty) {
+    if (App.Options.GetRecentProfile(1) == string.Empty) {
       this.recentProfile2.Header = "2 (_2)";
       this.recentProfile2.IsEnabled = false;
     } else {
-      this.recentProfile2.Header = "2 " + App.Options.RecentProfile(2) + "(_2)";
+      this.recentProfile2.Header = "2 " + App.Options.GetRecentProfile(1) + "(_2)";
       this.recentProfile2.IsEnabled = true;
     }
-    if (App.Options.RecentProfile(3) == string.Empty) {
+    if (App.Options.GetRecentProfile(2) == string.Empty) {
       this.recentProfile3.Header = "3 (_3)";
       this.recentProfile3.IsEnabled = false;
     } else {
-      this.recentProfile3.Header = "3 " + App.Options.RecentProfile(3) + "(_3)";
+      this.recentProfile3.Header = "3 " + App.Options.GetRecentProfile(2) + "(_3)";
       this.recentProfile3.IsEnabled = true;
     }
-    if (App.Options.RecentProfile(4) == string.Empty) {
+    if (App.Options.GetRecentProfile(3) == string.Empty) {
       this.recentProfile4.Header = "4 (_4)";
       this.recentProfile4.IsEnabled = false;
     } else {
-      this.recentProfile4.Header = "4 " + App.Options.RecentProfile(4) + "(_4)";
+      this.recentProfile4.Header = "4 " + App.Options.GetRecentProfile(3) + "(_4)";
       this.recentProfile4.IsEnabled = true;
     }
-    if (App.Options.RecentProfile(5) == string.Empty) {
+    if (App.Options.GetRecentProfile(4) == string.Empty) {
       this.recentProfile5.Header = "5 (_5)";
       this.recentProfile5.IsEnabled = false;
     } else {
-      this.recentProfile5.Header = "5 " + App.Options.RecentProfile(5) + "(_5)";
+      this.recentProfile5.Header = "5 " + App.Options.GetRecentProfile(4) + "(_5)";
       this.recentProfile5.IsEnabled = true;
     }
   }
@@ -70,7 +71,7 @@ public partial class MainWindow : Window {
   private void mainWindow_Loaded(object sender, RoutedEventArgs e) {
     // アプリケーションの設定からUIに関連するものを読み込む
     // 存在しない場合は勝手にデフォルト値が読み込まれる・・・はず
-    App.Options.Load();
+    OptionsINIFile.Load(App.Options);
 
     // Recent Profiles
     this.UpdateRecentProfiles();
@@ -108,7 +109,7 @@ public partial class MainWindow : Window {
     App.Options.TmpMainWindowTop = isNormal ? this.Top : this.RestoreBounds.Top;
     App.Options.TmpMainWindowWidth = isNormal ? this.Width : this.RestoreBounds.Width;
     App.Options.TmpMainWindowHeight = isNormal ? this.Height : this.RestoreBounds.Height;
-    App.Options.TmpMainWindowState = (SCFF.Common.Options.WindowState)this.WindowState;
+    App.Options.TmpMainWindowState = (Options.WindowState)this.WindowState;
 
     // MainWindow Expanders
     App.Options.TmpAreaIsExpanded = this.areaExpander.IsExpanded;
@@ -120,7 +121,7 @@ public partial class MainWindow : Window {
     App.Options.TmpCompactView = this.compactView.IsChecked;
     App.Options.TmpRestoreLastProfile = this.restoreLastProfile.IsChecked;
 
-    App.Options.Save();
+    OptionsINIFile.Save(App.Options);
   }
 
 	private void CloseWindow_Executed(object sender, ExecutedRoutedEventArgs e) {
@@ -148,11 +149,13 @@ public partial class MainWindow : Window {
     this.optionsExpander.Visibility = Visibility.Collapsed;
     this.resizeMethodExpander.Visibility = Visibility.Collapsed;
     this.layoutExpander.IsExpanded = false;
-    this.Width = SCFF.Common.Defaults.CompactMainWindowWidth;
-    this.Height = SCFF.Common.Defaults.CompactMainWindowHeight;
+    this.Width = Defaults.CompactMainWindowWidth;
+    this.Height = Defaults.CompactMainWindowHeight;
   }
 
   private void Save_Executed(object sender, ExecutedRoutedEventArgs e) {
+    //App.Options.AddRecentProfile(e.ToString());
+    //this.UpdateRecentProfiles();
   }
 
   private void New_Executed(object sender, ExecutedRoutedEventArgs e) {

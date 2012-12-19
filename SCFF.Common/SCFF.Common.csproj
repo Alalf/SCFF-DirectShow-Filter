@@ -41,12 +41,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="OptionsINIFile.cs" />
     <Compile Include="Processes.cs" />
     <Compile Include="Profile.cs" />
     <Compile Include="Defaults.cs" />
     <Compile Include="Imaging\Utilities.cs" />
     <Compile Include="Interprocess\Interprocess.cs" />
     <Compile Include="Options.cs" />
+    <Compile Include="ProfileINIFile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

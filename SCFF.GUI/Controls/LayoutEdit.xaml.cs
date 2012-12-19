@@ -28,7 +28,7 @@ namespace SCFF.GUI.Controls {
               new Typeface("Meiryo"),
               10,
               Brushes.White);
-          dc.DrawText(formattedText, new Point(10,380));
+          dc.DrawText(formattedText, new Point(10,200));
         }
       }
     }
@@ -41,12 +41,14 @@ namespace SCFF.GUI.Controls {
 
     private void Image_MouseDown_1(object sender, MouseButtonEventArgs e) {
       var pt = e.GetPosition((IInputElement)sender);
-      this.Draw("MouseDown: " + pt.ToString());
+      this.Draw("MouseDown");
     }
 
     private void Image_MouseMove_1(object sender, MouseEventArgs e) {
       var pt = e.GetPosition((IInputElement)sender);
-      this.Draw(pt.ToString());
+      var x = (int)pt.X;
+      var y = (int)pt.Y;
+      this.Draw(x + ", " + y);
     }
   }
 }

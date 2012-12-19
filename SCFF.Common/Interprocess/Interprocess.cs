@@ -240,7 +240,7 @@ public struct LayoutParameter {
   /// レイヤードウィンドウの表示
   public Byte ShowLayeredWindow;
   /// 拡大縮小設定
-  public SWScaleConfig SwscaleConfig;
+  public SWScaleConfig SWScaleConfig;
   /// 取り込み範囲が出力サイズより小さい場合拡張
   public Byte Stretch;
   /// アスペクト比の保持

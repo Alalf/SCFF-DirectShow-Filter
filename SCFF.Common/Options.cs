@@ -354,8 +354,8 @@ public class Options {
   // なお、配列のメンバ変数へのアクセスはプロパティにはこだわらなくても良い
   //===================================================================
 
-  // 上下逆に変換している
   public string RecentProfile(int oneBasedIndex) {
+    // 上下逆に変換
     int reverseIndex = RecentProfilesLength - oneBasedIndex;
     Debug.Assert(0 <= reverseIndex && reverseIndex < RecentProfilesLength);
     return this.reverseRecentProfiles[reverseIndex];

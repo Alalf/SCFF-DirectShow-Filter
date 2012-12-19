@@ -42,23 +42,66 @@ public class Profile {
   }
 
   //===================================================================
-  // アクセス変数
-  // 本当は配列を返したいのだが、残念だがそれは非推奨なのです
+  // 
   //===================================================================
-  private const int CurrentIndexAlias = -1;
 
-  public int BoundX(int index = CurrentIndexAlias) {
-    if (index == CurrentIndexAlias) {
-      index = currentIndex;
-    }
+  public Profile() {
+    
+  }
+
+  //===================================================================
+  // アクセッサ
+  // 基本的には現在編集対象のデータ以外の読み書きはできない
+  // ただしTabやLayoutエディタでは必要になるのでgetterだけは用意すること
+  //===================================================================
+
+  // 相対比率→ピクセル値変換
+  // Left/Topは切り捨て、Right/Bottomは切り上げ
+  // output.bound_x = (Int32)Math.Ceiling(this.BoundRelativeLeft * bound_width);
+  // output.bound_y = (Int32)Math.Ceiling(this.BoundRelativeTop * bound_height);
+  // output.bound_width =
+  //     (Int32)Math.Floor(this.BoundRelativeRight * bound_width) - output.bound_x;
+  // output.bound_height =
+  //     (Int32)Math.Floor(this.BoundRelativeBottom * bound_height) - output.bound_y;
+
+  // プログラムから直接は利用してはいけないもの
+  // message.layoutParameters[*].Bound*
+
+  // BoundXに関しては直接編集できるのはRelative*のみ
+  public double CurrentBoundRelativeLeft {
+    get { return this.appendices[this.currentIndex].BoundRelativeLeft; }
+    set { this.appendices[this.currentIndex].BoundRelativeLeft = value; }
+  }
+  public Int32 CurrentBoundLeft(int sampleWidth) {
+    return (Int32)Math.Ceiling(this.appendices[this.currentIndex].BoundRelativeLeft * sampleWidth);
+  }
+  public double CurrentRelativeBoundY {
+    get { return this.appendices[this.currentIndex].RelativeBoundY; }
+    set { this.appendices[this.currentIndex].RelativeBoundY = value; }
+  }
+  public Int32 CurrentBoundY(int sampleHeight) {
+    return (Int32)Math.Ceiling(this.appendices[this.currentIndex].RelativeBoundY * sampleHeight);
+  }
+  public double CurrentRelativeWidth {
+    get { return this.appendices[this.currentIndex].RelativeBoundWidth; }
+    set { this.appendices[this.currentIndex].RelativeBoundWidth = value; }
+  }
+  public Int32 CurrentBoundWidth(int sampleWidth) {
+    return (Int32)Math.Floor(this.appendices[this.currentIndex].B BoundRelativeRight * bound_width) - output.bound_x;
+  }
+  
+
+  public UInt64 CurrentWindow {
+    get { return this.message.LayoutParameters[this.currentIndex].Window; }
+    set { this.message.LayoutParameters[this.currentIndex].Window = value; }
+  }
+
+  public int GetBoundX(int index) {
     Debug.Assert(0 <= index &&
         index < Interprocess.Interprocess.MaxComplexLayoutElements);
     return message.LayoutParameters[index].BoundX;
   }
-  public int BoundY(int index = CurrentIndexAlias) {
-    if (index == CurrentIndexAlias) {
-      index = currentIndex;
-    }
+  public int GetBoundY(int index) {
     Debug.Assert(0 <= index &&
         index < Interprocess.Interprocess.MaxComplexLayoutElements);
     return message.LayoutParameters[index].BoundY;
@@ -78,10 +121,10 @@ public class Profile {
   // そのほかのデータをまとめたもの
   public class Appendix {
     public bool Fit { get; set; }
-    public double RelativeBoundX { get; set; }
-    public double RelativeBoundY { get; set; }
-    public double RelativeBoundWidth { get; set; }
-    public double RelativeBoundHeight { get; set; }
+    public double BoundRelativeLeft { get; set; }
+    public double BoundRelativeTop { get; set; }
+    public double BoundRelativeRight { get; set; }
+    public double BoundRelativeBottom { get; set; }
     public int DesktopClippingX { get; set; }
     public int DesktopClippingY { get; set; }
     public int DesktopClippingWidth { get; set; }
@@ -107,6 +150,9 @@ public class Profile {
       this.RootClippingHeight = -1;
     }
   }
-  private Appendix[] appendixes = new Appendix[Interprocess.Interprocess.MaxComplexLayoutElements];
+  private Appendix[] appendices = new Appendix[Interprocess.Interprocess.MaxComplexLayoutElements] {
+    new Appendix(), new Appendix(), new Appendix(), new Appendix(),
+    new Appendix(), new Appendix(), new Appendix(), new Appendix(),
+  };
 }
 }

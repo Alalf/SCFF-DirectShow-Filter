@@ -20,7 +20,6 @@ namespace SCFF.GUI {
 using Microsoft.Windows.Shell;
 using System.Windows;
 using System.Windows.Input;
-using SCFF.Common;
 
 /// MainWindow.xaml の相互作用ロジック
 public partial class MainWindow : Window {
@@ -30,40 +29,40 @@ public partial class MainWindow : Window {
   }
 
   private void UpdateRecentProfiles() {
-    if (App.Options.RecentProfile1 != string.Empty) {
-      this.recentProfile1.Header = "1 " + App.Options.RecentProfile1 + "(_1)";
-      this.recentProfile1.IsEnabled = true;
-    } else {
+    if (App.Options.RecentProfile(1).IsEmpty()) {
       this.recentProfile1.Header = "1 (_1)";
       this.recentProfile1.IsEnabled = false;
-    }
-    if (App.Options.RecentProfile2 != string.Empty) {
-      this.recentProfile2.Header = "2 " + App.Options.RecentProfile2 + "(_2)";
-      this.recentProfile2.IsEnabled = true;
     } else {
+      this.recentProfile1.Header = "1 " + App.Options.RecentProfile(1) + "(_1)";
+      this.recentProfile1.IsEnabled = true;
+    }
+    if (App.Options.RecentProfile(2).IsEmpty()) {
       this.recentProfile2.Header = "2 (_2)";
       this.recentProfile2.IsEnabled = false;
-    }
-    if (App.Options.RecentProfile3 != string.Empty) {
-      this.recentProfile3.Header = "3 " + App.Options.RecentProfile3 + "(_3)";
-      this.recentProfile3.IsEnabled = true;
     } else {
+      this.recentProfile2.Header = "2 " + App.Options.RecentProfile(2) + "(_2)";
+      this.recentProfile2.IsEnabled = true;
+    }
+    if (App.Options.RecentProfile(3).IsEmpty()) {
       this.recentProfile3.Header = "3 (_3)";
       this.recentProfile3.IsEnabled = false;
-    }
-    if (App.Options.RecentProfile4 != string.Empty) {
-      this.recentProfile4.Header = "4 " + App.Options.RecentProfile4 + "(_4)";
-      this.recentProfile4.IsEnabled = true;
     } else {
+      this.recentProfile3.Header = "3 " + App.Options.RecentProfile(3) + "(_3)";
+      this.recentProfile3.IsEnabled = true;
+    }
+    if (App.Options.RecentProfile(4).IsEmpty()) {
       this.recentProfile4.Header = "4 (_4)";
       this.recentProfile4.IsEnabled = false;
-    }
-    if (App.Options.RecentProfile5 != string.Empty) {
-      this.recentProfile5.Header = "5 " + App.Options.RecentProfile5 + "(_5)";
-      this.recentProfile5.IsEnabled = true;
     } else {
+      this.recentProfile4.Header = "4 " + App.Options.RecentProfile(4) + "(_4)";
+      this.recentProfile4.IsEnabled = true;
+    }
+    if (App.Options.RecentProfile(5).IsEmpty()) {
       this.recentProfile5.Header = "5 (_5)";
       this.recentProfile5.IsEnabled = false;
+    } else {
+      this.recentProfile5.Header = "5 " + App.Options.RecentProfile(5) + "(_5)";
+      this.recentProfile5.IsEnabled = true;
     }
   }
 
@@ -109,7 +108,7 @@ public partial class MainWindow : Window {
     App.Options.TmpMainWindowTop = isNormal ? this.Top : this.RestoreBounds.Top;
     App.Options.TmpMainWindowWidth = isNormal ? this.Width : this.RestoreBounds.Width;
     App.Options.TmpMainWindowHeight = isNormal ? this.Height : this.RestoreBounds.Height;
-    App.Options.TmpMainWindowState = (Options.WindowState)this.WindowState;
+    App.Options.TmpMainWindowState = (SCFF.Common.Options.WindowState)this.WindowState;
 
     // MainWindow Expanders
     App.Options.TmpAreaIsExpanded = this.areaExpander.IsExpanded;
@@ -205,26 +204,22 @@ public partial class MainWindow : Window {
     App.Options.LayoutSnap = true;
   }
 
-  private void CheckBox_Checked_1(object sender, RoutedEventArgs e) {
-
-  }
-
   private void enableFilter_Checked(object sender, RoutedEventArgs e) {
     this.filterLGBlur.IsEnabled = true;
     this.filterLSharpen.IsEnabled = true;
-    this.filterCVShift.IsEnabled = true;
+    // this.filterCVShift.IsEnabled = true;
     this.filterCGBlur.IsEnabled = true;
     this.filterCSharpen.IsEnabled = true;
-    this.filterCHShift.IsEnabled = true;
+    // this.filterCHShift.IsEnabled = true;
   }
 
   private void enableFilter_Unchecked(object sender, RoutedEventArgs e) {
     this.filterLGBlur.IsEnabled = false;
     this.filterLSharpen.IsEnabled = false;
-    this.filterCVShift.IsEnabled = false;
+    // this.filterCVShift.IsEnabled = false;
     this.filterCGBlur.IsEnabled = false;
     this.filterCSharpen.IsEnabled = false;
-    this.filterCHShift.IsEnabled = false;
+    // this.filterCHShift.IsEnabled = false;
   }
 
 

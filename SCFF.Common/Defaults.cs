@@ -17,9 +17,11 @@
 
 namespace SCFF.Common {
 public class Defaults {
-  public const double MainWindowWidth = 730;
-  public const double MainWindowHeight = 545;
-  public const double CompactMainWindowWidth = 280;
-  public const double CompactMainWindowHeight = 280;
+  public const double MainWindowLeft = 32.0;
+  public const double MainWindowTop = 32.0;
+  public const double MainWindowWidth = 730.0;
+  public const double MainWindowHeight = 545.0;
+  public const double CompactMainWindowWidth = 280.0;
+  public const double CompactMainWindowHeight = 280.0;
 }
 }

@@ -33,17 +33,29 @@ public class Options {
   // 定数
   //===================================================================
 
-  private const string OptionsFilePath = "SCFF.GUI.ini";
+  private const string OptionsFilePath = "SCFF.Common.Options.ini";
   private const string OptionsHeader = "; SCFF-DirectShow-Filter Options Ver.0.1.7";
+
+  private const int RecentProfilesLength = 5;
 
   /// ファイル入出力に用いるキー
   public enum Key {
     // Recent Profiles
-    RecentProfile1,
-    RecentProfile2,
-    RecentProfile3,
-    RecentProfile4,
-    RecentProfile5,
+    RecentProfile1FilePath,
+    RecentProfile1FileName,
+    RecentProfile1Timestamp,
+    RecentProfile2FilePath,
+    RecentProfile2FileName,
+    RecentProfile2Timestamp,
+    RecentProfile3FilePath,
+    RecentProfile3FileName,
+    RecentProfile3Timestamp,
+    RecentProfile4FilePath,
+    RecentProfile4FileName,
+    RecentProfile4Timestamp,
+    RecentProfile5FilePath,
+    RecentProfile5FileName,
+    RecentProfile5Timestamp,
 
     // FFmpeg Options
     FFmpegPath,
@@ -83,11 +95,21 @@ public class Options {
 
   /// Key(Enum)->String変換用の辞書。リフレクション利用回避のためわざわざ作成した。
   private readonly Dictionary<Key, string> keyToLabel = new Dictionary<Key, string>() {
-    {Key.RecentProfile1, "RecentProfile1"},
-    {Key.RecentProfile2, "RecentProfile2"},
-    {Key.RecentProfile3, "RecentProfile3"},
-    {Key.RecentProfile4, "RecentProfile4"},
-    {Key.RecentProfile5, "RecentProfile5"},
+    {Key.RecentProfile1FilePath, "RecentProfile1FilePath"},
+    {Key.RecentProfile1FileName, "RecentProfile1FileName"},
+    {Key.RecentProfile1Timestamp, "RecentProfile1Timestamp"},
+    {Key.RecentProfile2FilePath, "RecentProfile2FilePath"},
+    {Key.RecentProfile2FileName, "RecentProfile2FileName"},
+    {Key.RecentProfile2Timestamp, "RecentProfile2Timestamp"},
+    {Key.RecentProfile3FilePath, "RecentProfile3FilePath"},
+    {Key.RecentProfile3FileName, "RecentProfile3FileName"},
+    {Key.RecentProfile3Timestamp, "RecentProfile3Timestamp"},
+    {Key.RecentProfile4FilePath, "RecentProfile4FilePath"},
+    {Key.RecentProfile4FileName, "RecentProfile4FileName"},
+    {Key.RecentProfile4Timestamp, "RecentProfile4Timestamp"},
+    {Key.RecentProfile5FilePath, "RecentProfile5FilePath"},
+    {Key.RecentProfile5FileName, "RecentProfile5FileName"},
+    {Key.RecentProfile5Timestamp, "RecentProfile5Timestamp"},
     {Key.FFmpegPath, "FFmpegPath"},
     {Key.FFmpegArguments, "FFmpegArguments"},
     {Key.TmpMainWindowLeft, "TmpMainWindowLeft"},
@@ -117,11 +139,21 @@ public class Options {
     using (var writer = new StreamWriter(OptionsFilePath)) {
       try {
         writer.WriteLine(OptionsHeader);
-        writer.WriteLine(this.keyToLabel[Key.RecentProfile1] + "=" + this.recentProfiles[4]);
-        writer.WriteLine(this.keyToLabel[Key.RecentProfile2] + "=" + this.recentProfiles[3]);
-        writer.WriteLine(this.keyToLabel[Key.RecentProfile3] + "=" + this.recentProfiles[2]);
-        writer.WriteLine(this.keyToLabel[Key.RecentProfile4] + "=" + this.recentProfiles[1]);
-        writer.WriteLine(this.keyToLabel[Key.RecentProfile5] + "=" + this.recentProfiles[0]);
+        writer.WriteLine(this.keyToLabel[Key.RecentProfile1FilePath] + "=" + this.reverseRecentProfiles[4].FilePath);
+        writer.WriteLine(this.keyToLabel[Key.RecentProfile1FileName] + "=" + this.reverseRecentProfiles[4].FileName);
+        writer.WriteLine(this.keyToLabel[Key.RecentProfile1Timestamp] + "=" + this.reverseRecentProfiles[4].Timestamp);
+        writer.WriteLine(this.keyToLabel[Key.RecentProfile2FilePath] + "=" + this.reverseRecentProfiles[3].FilePath);
+        writer.WriteLine(this.keyToLabel[Key.RecentProfile2FileName] + "=" + this.reverseRecentProfiles[3].FileName);
+        writer.WriteLine(this.keyToLabel[Key.RecentProfile2Timestamp] + "=" + this.reverseRecentProfiles[3].Timestamp);
+        writer.WriteLine(this.keyToLabel[Key.RecentProfile3FilePath] + "=" + this.reverseRecentProfiles[2].FilePath);
+        writer.WriteLine(this.keyToLabel[Key.RecentProfile3FileName] + "=" + this.reverseRecentProfiles[2].FileName);
+        writer.WriteLine(this.keyToLabel[Key.RecentProfile3Timestamp] + "=" + this.reverseRecentProfiles[2].Timestamp);
+        writer.WriteLine(this.keyToLabel[Key.RecentProfile4FilePath] + "=" + this.reverseRecentProfiles[1].FilePath);
+        writer.WriteLine(this.keyToLabel[Key.RecentProfile4FileName] + "=" + this.reverseRecentProfiles[1].FileName);
+        writer.WriteLine(this.keyToLabel[Key.RecentProfile4Timestamp] + "=" + this.reverseRecentProfiles[1].Timestamp);
+        writer.WriteLine(this.keyToLabel[Key.RecentProfile5FilePath] + "=" + this.reverseRecentProfiles[0].FilePath);
+        writer.WriteLine(this.keyToLabel[Key.RecentProfile5FileName] + "=" + this.reverseRecentProfiles[0].FileName);
+        writer.WriteLine(this.keyToLabel[Key.RecentProfile5Timestamp] + "=" + this.reverseRecentProfiles[0].Timestamp);
         writer.WriteLine(this.keyToLabel[Key.FFmpegPath] + "=" + this.ffmpegPath);
         writer.WriteLine(this.keyToLabel[Key.FFmpegArguments] + "=" + this.ffmpegArguments);
         writer.WriteLine(this.keyToLabel[Key.TmpMainWindowLeft] + "=" + this.tmpMainWindowLeft);
@@ -203,24 +235,79 @@ public class Options {
   private void ParseRawData(Key key, string rawData) {
     // keyからメンバ変数に値を代入していく
     switch (key) {
-      case Key.RecentProfile1: {
-        this.recentProfiles[4] = rawData;
+      case Key.RecentProfile1FilePath: {
+        this.reverseRecentProfiles[4].FilePath = rawData;
         break;
       }
-      case Key.RecentProfile2: {
-        this.recentProfiles[3] = rawData;
+      case Key.RecentProfile1FileName: {
+        this.reverseRecentProfiles[4].FileName = rawData;
         break;
       }
-      case Key.RecentProfile3: {
-        this.recentProfiles[2] = rawData;
+      case Key.RecentProfile1Timestamp: {
+        DateTime parsedDate;
+        if (DateTime.TryParse(rawData, out parsedDate)) {
+          this.reverseRecentProfiles[4].Timestamp = parsedDate;
+        }
         break;
       }
-      case Key.RecentProfile4: {
-        this.recentProfiles[1] = rawData;
+      case Key.RecentProfile2FilePath: {
+        this.reverseRecentProfiles[3].FilePath = rawData;
         break;
       }
-      case Key.RecentProfile5: {
-        this.recentProfiles[0] = rawData;
+      case Key.RecentProfile2FileName: {
+        this.reverseRecentProfiles[3].FileName = rawData;
+        break;
+      }
+      case Key.RecentProfile2Timestamp: {
+        DateTime parsedDate;
+        if (DateTime.TryParse(rawData, out parsedDate)) {
+          this.reverseRecentProfiles[3].Timestamp = parsedDate;
+        }
+        break;
+      }
+      case Key.RecentProfile3FilePath: {
+        this.reverseRecentProfiles[2].FilePath = rawData;
+        break;
+      }
+      case Key.RecentProfile3FileName: {
+        this.reverseRecentProfiles[2].FileName = rawData;
+        break;
+      }
+      case Key.RecentProfile3Timestamp: {
+        DateTime parsedDate;
+        if (DateTime.TryParse(rawData, out parsedDate)) {
+          this.reverseRecentProfiles[2].Timestamp = parsedDate;
+        }
+        break;
+      }
+      case Key.RecentProfile4FilePath: {
+        this.reverseRecentProfiles[1].FilePath = rawData;
+        break;
+      }
+      case Key.RecentProfile4FileName: {
+        this.reverseRecentProfiles[1].FileName = rawData;
+        break;
+      }
+      case Key.RecentProfile4Timestamp: {
+        DateTime parsedDate;
+        if (DateTime.TryParse(rawData, out parsedDate)) {
+          this.reverseRecentProfiles[1].Timestamp = parsedDate;
+        }
+        break;
+      }
+      case Key.RecentProfile5FilePath: {
+        this.reverseRecentProfiles[0].FilePath = rawData;
+        break;
+      }
+      case Key.RecentProfile5FileName: {
+        this.reverseRecentProfiles[0].FileName = rawData;
+        break;
+      }
+      case Key.RecentProfile5Timestamp: {
+        DateTime parsedDate;
+        if (DateTime.TryParse(rawData, out parsedDate)) {
+          this.reverseRecentProfiles[0].Timestamp = parsedDate;
+        }
         break;
       }
       case Key.FFmpegPath: {
@@ -349,32 +436,36 @@ public class Options {
   //===================================================================
   // アクセッサ
   // プロパティ形式ではあるがDataBindingには使わないように！
+  // なお、配列のメンバ変数へのアクセスはプロパティにはこだわらなくても良い
   //===================================================================
 
-  public string RecentProfile1 {
-    get { return this.recentProfiles[4]; }
+  // 上下逆に変換している
+  public ProfileInfo RecentProfile(int oneBasedIndex) {
+    int reverseIndex = RecentProfilesLength - oneBasedIndex;
+    Debug.Assert(0 <= reverseIndex && reverseIndex < RecentProfilesLength);
+    return this.reverseRecentProfiles[reverseIndex];
   }
-  public string RecentProfile2 {
-    get { return this.recentProfiles[3]; }
-  }
-  public string RecentProfile3 {
-    get { return this.recentProfiles[2]; }
-  }
-  public string RecentProfile4 {
-    get { return this.recentProfiles[1]; }
-  }
-  public string RecentProfile5 {
-    get { return this.recentProfiles[0]; }
-  }
-  public void AddRecentProfile(string profile) {
+  public void AddRecentProfile(ProfileInfo profile) {
     // Queueに再構成してから配列に書き戻す
-    var queue = new Queue<string>(this.recentProfiles);
-    if (!queue.Contains(profile)) {
-      queue.Dequeue();
-      queue.Enqueue(profile);
-      Debug.Assert(queue.Count == 5); 
+    var queue = new Queue<ProfileInfo>();
+    var alreadyExists = false;
+    foreach (var recentProfile in this.reverseRecentProfiles) {
+      if (recentProfile.Equals(profile)) {
+        // 追加したいものが配列の中に見つかった場合はEnqueueしない
+        alreadyExists = true;
+        continue;
+      }
+      queue.Enqueue(recentProfile);
     }
-    queue.CopyTo(this.recentProfiles, 0);
+    if (!alreadyExists) {
+      // 新規なら古いのを一個消す
+      queue.Dequeue();
+    }
+    queue.Enqueue(profile);
+    Debug.Assert(queue.Count == RecentProfilesLength); 
+
+    // 配列に書き戻して終了
+    queue.CopyTo(this.reverseRecentProfiles, 0);
   }
 
   public string FFmpegPath {
@@ -458,13 +549,35 @@ public class Options {
   // メンバ変数
   //===================================================================
 
+  public class ProfileInfo {
+    public string FilePath { get; set; }
+    public string FileName { get; set; }
+    public DateTime Timestamp { get; set; }
+    public ProfileInfo() {
+      this.FilePath = string.Empty;
+      this.FileName = string.Empty;
+      this.Timestamp = DateTime.Now;
+    }
+    public bool IsEmpty() {
+      return this.FilePath == string.Empty;
+    }
+    // FilePathをキー代わりに使う
+    public override string ToString() {
+      return this.FilePath;
+    }
+    public override bool Equals(object obj) {
+      return this.FilePath.Equals(obj);
+    }
+  }
+
   /// @caution 先頭から古く、末尾が一番新しい
-  private string[] recentProfiles = new string[5] {
-      string.Empty, string.Empty, string.Empty, string.Empty, string.Empty};
+  private ProfileInfo[] reverseRecentProfiles = new ProfileInfo[RecentProfilesLength] {
+    new ProfileInfo(), new ProfileInfo(), new ProfileInfo(), new ProfileInfo(), new ProfileInfo()
+  };
   private string ffmpegPath = string.Empty;
   private string ffmpegArguments = string.Empty;
-  private double tmpMainWindowLeft = 0.0;
-  private double tmpMainWindowTop = 0.0;
+  private double tmpMainWindowLeft = Defaults.MainWindowLeft;
+  private double tmpMainWindowTop = Defaults.MainWindowTop;
   private double tmpMainWindowWidth = Defaults.MainWindowWidth;
   private double tmpMainWindowHeight = Defaults.MainWindowHeight;
   private WindowState tmpMainWindowState = WindowState.Normal;

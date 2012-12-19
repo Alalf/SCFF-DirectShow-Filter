@@ -41,7 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Database.cs" />
+    <Compile Include="Processes.cs" />
+    <Compile Include="Profile.cs" />
     <Compile Include="Defaults.cs" />
     <Compile Include="Imaging\Utilities.cs" />
     <Compile Include="Interprocess\Interprocess.cs" />

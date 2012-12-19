@@ -29,35 +29,35 @@ public partial class MainWindow : Window {
   }
 
   private void UpdateRecentProfiles() {
-    if (App.Options.RecentProfile(1).IsEmpty()) {
+    if (App.Options.RecentProfile(1) == string.Empty) {
       this.recentProfile1.Header = "1 (_1)";
       this.recentProfile1.IsEnabled = false;
     } else {
       this.recentProfile1.Header = "1 " + App.Options.RecentProfile(1) + "(_1)";
       this.recentProfile1.IsEnabled = true;
     }
-    if (App.Options.RecentProfile(2).IsEmpty()) {
+    if (App.Options.RecentProfile(2) == string.Empty) {
       this.recentProfile2.Header = "2 (_2)";
       this.recentProfile2.IsEnabled = false;
     } else {
       this.recentProfile2.Header = "2 " + App.Options.RecentProfile(2) + "(_2)";
       this.recentProfile2.IsEnabled = true;
     }
-    if (App.Options.RecentProfile(3).IsEmpty()) {
+    if (App.Options.RecentProfile(3) == string.Empty) {
       this.recentProfile3.Header = "3 (_3)";
       this.recentProfile3.IsEnabled = false;
     } else {
       this.recentProfile3.Header = "3 " + App.Options.RecentProfile(3) + "(_3)";
       this.recentProfile3.IsEnabled = true;
     }
-    if (App.Options.RecentProfile(4).IsEmpty()) {
+    if (App.Options.RecentProfile(4) == string.Empty) {
       this.recentProfile4.Header = "4 (_4)";
       this.recentProfile4.IsEnabled = false;
     } else {
       this.recentProfile4.Header = "4 " + App.Options.RecentProfile(4) + "(_4)";
       this.recentProfile4.IsEnabled = true;
     }
-    if (App.Options.RecentProfile(5).IsEmpty()) {
+    if (App.Options.RecentProfile(5) == string.Empty) {
       this.recentProfile5.Header = "5 (_5)";
       this.recentProfile5.IsEnabled = false;
     } else {

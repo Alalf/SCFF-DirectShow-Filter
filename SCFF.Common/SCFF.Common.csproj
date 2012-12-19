@@ -48,6 +48,7 @@
     <Compile Include="Imaging\Utilities.cs" />
     <Compile Include="Interprocess\Interprocess.cs" />
     <Compile Include="Options.cs" />
+    <Compile Include="ProfileLayout.cs" />
     <Compile Include="ProfileINIFile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

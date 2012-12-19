@@ -26,7 +26,7 @@ using System.Text;
 /// プロファイル以外のアプリケーションの設定
 /// アプリケーションの起動中にプロパティが最新の状態になっている必要の無いものには
 /// Tmpという接頭辞をつけている。プログラム内部でそれらのプロパティを使うことは
-/// Loaded/Closingイベントハンドラ以外では非推奨である。
+/// Loaded/Closingイベントハンドラ以外ではしてはいけない。
 public class Options {
 
   //===================================================================
@@ -82,7 +82,6 @@ public class Options {
     Debug.Assert(0 <= reverseIndex && reverseIndex < RecentProfilesLength);
     this.reverseRecentProfiles[reverseIndex] = profile;
   }
-
 
   public string FFmpegPath {
     get { return this.ffmpegPath; }

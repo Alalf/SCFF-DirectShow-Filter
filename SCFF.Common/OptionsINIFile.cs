@@ -17,10 +17,10 @@
 
 namespace SCFF.Common {
 
-  using System;
-  using System.Collections.Generic;
-  using System.Diagnostics;
-  using System.IO;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 
 public static class OptionsINIFile {
 

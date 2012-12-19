@@ -29,6 +29,10 @@ public partial class App : Application {
   }
   private static Options options = new Options();
 
-
+  /// 現在編集中のプロファイルを格納するインスタンス
+  public static Profile Profile {
+    get { return profile; }
+  }
+  private static Profile profile = new Profile();
 }
 }

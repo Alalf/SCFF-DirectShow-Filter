@@ -26,6 +26,7 @@ public partial class MainWindow : Window {
   // Options
   //===================================================================
 
+  /// 最近使用したプロファイルメニューの更新
   private void UpdateRecentProfiles() {
     if (App.Options.GetRecentProfile(0) == string.Empty) {
       this.recentProfile1.Header = "1 (_1)";
@@ -64,6 +65,7 @@ public partial class MainWindow : Window {
     }
   }
 
+  /// 設定からUIを更新
   private void UpdateByOptions() {
     // Recent Profiles
     this.UpdateRecentProfiles();
@@ -93,6 +95,7 @@ public partial class MainWindow : Window {
     this.restoreLastProfile.IsChecked = App.Options.TmpRestoreLastProfile;
   }
 
+  /// UIから設定にデータを保存
   private void SaveOptions() {
     // Tmp接頭辞のプロパティだけはここで更新する必要がある
     var isNormal = this.WindowState == WindowState.Normal;
@@ -116,8 +119,9 @@ public partial class MainWindow : Window {
   //===================================================================
   // Profile
   //===================================================================
+  
+  /// プロファイルからUIを更新
   void UpdateByProfile() {
-    
   }
 }
 }

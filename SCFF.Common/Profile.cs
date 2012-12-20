@@ -126,6 +126,7 @@ public partial class Profile {
 
   // そのほかのデータをまとめたもの
   public class Appendix {
+    public WindowType WindowType { get; set; }
     public bool Fit { get; set; }
     public double BoundRelativeLeft { get; set; }
     public double BoundRelativeTop { get; set; }
@@ -137,6 +138,7 @@ public partial class Profile {
     public int RootClippingY { get; set; }
 
     public Appendix() {
+      this.WindowType = WindowType.Root;
       this.Fit = true;
       this.BoundRelativeLeft = 0.0;
       this.BoundRelativeTop = 0.0;

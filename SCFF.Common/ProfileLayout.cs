@@ -22,7 +22,7 @@ using System.Diagnostics;
 
 public partial class Profile {
   //===================================================================
-  // カーソル
+  // Layout(カーソル)
   // C#のインナークラスはC++のフレンドクラスと似たようなことができる！
   //
   // プログラムから直接は利用してはいけないもの(this.profile.appendicesの内容で上書きされるため)
@@ -38,6 +38,10 @@ public partial class Profile {
     public Layout(Profile profile, int index) {
       this.profile = profile;
       this.index = index;
+    }
+
+    public int Index {
+      get { return this.index; }
     }
 
     // Window
@@ -126,6 +130,12 @@ public partial class Profile {
       set { this.profile.message.LayoutParameters[this.index].RotateDirection = Convert.ToInt32(value); }
     }
 
+    // WindowType
+    public WindowType WindowType {
+      get { return this.profile.appendices[this.index].WindowType; }
+      set { this.profile.appendices[this.index].WindowType = value; }
+    }
+
     // Fit
     public bool Fit {
       get { return this.profile.appendices[this.index].Fit; }
@@ -169,7 +179,7 @@ public partial class Profile {
       return this.BoundBottom(sampleHeight) - this.BoundTop(sampleHeight);
     }
 
-    // Root/Desktop Clipping X/Y
+    // Desktop Clipping X/Y
     public int DesktopClippingX {
       get { return this.profile.appendices[this.index].DesktopClippingX; }
       set { this.profile.appendices[this.index].DesktopClippingX = value; }
@@ -178,6 +188,8 @@ public partial class Profile {
       get { return this.profile.appendices[this.index].DesktopClippingY; }
       set { this.profile.appendices[this.index].DesktopClippingY = value; }
     }
+
+    // Root Clipping X/Y
     public int RootClippingX {
       get { return this.profile.appendices[this.index].RootClippingX; }
       set { this.profile.appendices[this.index].RootClippingX = value; }
@@ -188,8 +200,8 @@ public partial class Profile {
     } 
 
     // メンバ変数
-    private int index;
-    private Profile profile;
+    private readonly int index;
+    private readonly Profile profile;
   }
 }
 }

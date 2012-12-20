@@ -28,8 +28,8 @@ extern "C" {
 
 namespace scff_imaging {
 
-enum class ErrorCode;
-enum class ImagePixelFormat;
+enum class ErrorCodes;
+enum class ImagePixelFormats;
 class Image;
 class AVPictureImage;
 
@@ -50,26 +50,26 @@ void set_dll_instance(HINSTANCE dll_instance);
 //-------------------------------------------------------------------
 
 /// ピクセルフォーマットがTopdownか
-bool IsTopdownPixelFormat(ImagePixelFormat pixel_format);
+bool IsTopdownPixelFormat(ImagePixelFormats pixel_format);
 
 /// drawutilsが使用可能なピクセルフォーマットか
-bool CanUseDrawUtils(ImagePixelFormat pixel_format);
+bool CanUseDrawUtils(ImagePixelFormats pixel_format);
 
 //-------------------------------------------------------------------
 // イメージのタイプ（サイズ、形式など）
 //-------------------------------------------------------------------
 
 /// イメージのサイズを求める
-int CalculateDataSize(ImagePixelFormat pixel_format,
+int CalculateDataSize(ImagePixelFormats pixel_format,
                       int width, int height);
 /// イメージのサイズを直接求める
 int CalculateImageSize(const Image &image);
 
 /// AVPixelFormatを取得
-AVPixelFormat ToAVPicturePixelFormat(ImagePixelFormat pixel_format);
+AVPixelFormat ToAVPicturePixelFormat(ImagePixelFormats pixel_format);
 
 /// BITMAPINFOHEADERを取得
-void ToWindowsBitmapInfo(ImagePixelFormat pixel_format,
+void ToWindowsBitmapInfo(ImagePixelFormats pixel_format,
                          int width,
                          int height,
                          bool vertical_invert,
@@ -81,10 +81,10 @@ void ImageToWindowsBitmapInfo(const Image &image,
 
 /// int(index)->enum(ImagePixelFormat)変換
 /// @warning バグの元なので注意して使うこと
-ImagePixelFormat IndexToPixelFormat(int index);
+ImagePixelFormats IndexToPixelFormat(int index);
 
 /// BITMAPINFOHEADERからImagePixelFormatを取得
-ImagePixelFormat WindowsBitmapInfoHeaderToPixelFormat(
+ImagePixelFormats WindowsBitmapInfoHeaderToPixelFormat(
     const BITMAPINFOHEADER &info_header);
 
 /// BITMAPINFOHEADERから対応ピクセルフォーマットかどうかを求める

@@ -39,7 +39,7 @@ class Processor {
  public:
   /// コンストラクタ
   explicit Processor(int size = 1)
-      : error_code_(ErrorCode::kProcessorUninitializedError),
+      : error_code_(ErrorCodes::kProcessorUninitializedError),
         size_(size) {
     // nop
   }
@@ -55,24 +55,24 @@ class Processor {
   ///          ピクセルフォーマットもサイズも変わらない場合は問題ない。
   /// @retval InitDone()      初期化成功
   /// @retval ErrorOccured()  エラーが発生した場合
-  virtual ErrorCode Init() = 0;
+  virtual ErrorCodes Init() = 0;
   /// 実際の処理を行う
   /// @retval GetCurrentError()   Accept成功
   /// @retval ErrorOccured()      エラーが発生した場合
-  virtual ErrorCode Run() = 0;
+  virtual ErrorCodes Run() = 0;
 
   /// リクエストに対する処理を行う
   /// @param[in] request          リクエスト
   /// @retval GetCurrentError()   Accept成功
   /// @retval ErrorOccured()      エラーが発生した場合
-  virtual ErrorCode Accept(Request *request) {
+  virtual ErrorCodes Accept(Request *request) {
     ASSERT(false);
     return GetCurrentError();
   }
   //-------------------------------------------------------------------
 
   /// プロセッサに異常が発生している場合NoError以外を返す
-  ErrorCode GetCurrentError() const  {
+  ErrorCodes GetCurrentError() const  {
     return error_code_;
   }
   /// Getter: 入出力のサイズ
@@ -83,13 +83,13 @@ class Processor {
   /// Setter: input_image_
   void SetInputImage(InputImageType *input_image, int index = 0) {
     ASSERT(0 <= index && index < size());
-    ASSERT(GetCurrentError() == ErrorCode::kProcessorUninitializedError);
+    ASSERT(GetCurrentError() == ErrorCodes::kProcessorUninitializedError);
     input_image_[index] = input_image;
   }
   /// Swap: input_image_
   InputImageType* SwapInputImage(InputImageType *input_image, int index = 0) {
     ASSERT(0 <= index && index < size());
-    ASSERT(GetCurrentError() == ErrorCode::kNoError);
+    ASSERT(GetCurrentError() == ErrorCodes::kNoError);
     ASSERT(input_image_[index] != nullptr);
     InputImageType *original_image = input_image_[index];
     input_image_[index] = input_image;
@@ -103,14 +103,14 @@ class Processor {
   /// Setter: output_image_
   void SetOutputImage(OutputImageType *output_image, int index = 0) {
     ASSERT(0 <= index && index < size());
-    ASSERT(GetCurrentError() == ErrorCode::kProcessorUninitializedError);
+    ASSERT(GetCurrentError() == ErrorCodes::kProcessorUninitializedError);
     output_image_[index] = output_image;
   }
   /// Swap: output_image_
   OutputImageType* SwapOutputImage(OutputImageType *output_image,
                                    int index = 0) {
     ASSERT(0 <= index && index < size());
-    ASSERT(GetCurrentError() == ErrorCode::kNoError);
+    ASSERT(GetCurrentError() == ErrorCodes::kNoError);
     ASSERT(output_image_[index] != nullptr);
     OutputImageType *original_image = output_image_[index];
     output_image_[index] = output_image;
@@ -126,18 +126,18 @@ class Processor {
   //-------------------------------------------------------------------
   /// 唯一エラーコードをkNoErrorにできる関数
   /// @attention Initが成功したらこちら
-  ErrorCode InitDone() {
-    ASSERT(error_code_ == ErrorCode::kProcessorUninitializedError);
-    if (error_code_ == ErrorCode::kProcessorUninitializedError) {
-      error_code_ = ErrorCode::kNoError;
+  ErrorCodes InitDone() {
+    ASSERT(error_code_ == ErrorCodes::kProcessorUninitializedError);
+    if (error_code_ == ErrorCodes::kProcessorUninitializedError) {
+      error_code_ = ErrorCodes::kNoError;
     }
     return error_code_;
   }
   /// エラーが発生したときに呼び出す。
   /// @return 発生したエラーコード。
   /// @attention エラーがいったんおきたら解除は不可能
-  ErrorCode ErrorOccured(ErrorCode error_code) {
-    if (error_code != ErrorCode::kNoError) {
+  ErrorCodes ErrorOccured(ErrorCodes error_code) {
+    if (error_code != ErrorCodes::kNoError) {
       // 後からkNoErrorにしようとしてもできない
       // ASSERT(false);
       MyDbgLog((LOG_TRACE, kDbgImportant,
@@ -151,7 +151,7 @@ class Processor {
 
  private:
   /// エラーコード
-  ErrorCode error_code_;
+  ErrorCodes error_code_;
   /// 入出力のサイズ
   const int size_;
 

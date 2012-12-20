@@ -63,7 +63,7 @@ partial class Message {
 
     output.timestamp = this.Timestamp;
     if (force_null_layout) {
-      output.layout_type = (Int32)scff_interprocess.LayoutType.kNullLayout;
+      output.layout_type = (Int32)scff_interprocess.LayoutTypes.kNullLayout;
     } else {
       output.layout_type = (Int32)this.LayoutType;
     }

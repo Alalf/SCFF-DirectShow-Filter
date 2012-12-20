@@ -45,7 +45,7 @@
   </LinearGradientBrush>
 
   <!-- 2012/12/20 Modified by Alalf -->
-  <SolidColorBrush x:Key="DisabledTextBrush" Color="White" />
+  <SolidColorBrush x:Key="DisabledTextBrush" Color="#FF222222" />
 
   <SolidColorBrush x:Key="DisabledForegroundBrush" Color="#888" />
   <SolidColorBrush x:Key="DisabledBackgroundBrush" Color="#FF787878" />

@@ -31,7 +31,7 @@ namespace scff_imaging {
 //=====================================================================
 
 Image::Image()
-    : pixel_format_(ImagePixelFormat::kInvalidPixelFormat),   // ありえない値
+    : pixel_format_(ImagePixelFormats::kInvalidPixelFormat),   // ありえない値
       width_(-1),                           // ありえない値
       height_(-1) {                         // ありえない値
   // nop
@@ -41,7 +41,7 @@ Image::~Image() {
   // nop
 }
 
-ImagePixelFormat Image::pixel_format() const {
+ImagePixelFormats Image::pixel_format() const {
   return pixel_format_;
 }
 
@@ -58,12 +58,12 @@ int Image::height() const {
 }
 
 //-------------------------------------------------------------------
-ErrorCode Image::Create(ImagePixelFormat pixel_format, int width, int height) {
+ErrorCodes Image::Create(ImagePixelFormats pixel_format, int width, int height) {
   ASSERT(IsEmpty());
   pixel_format_ = pixel_format;
   width_ = width;
   height_ = height;
-  return ErrorCode::kNoError;
+  return ErrorCodes::kNoError;
 }
 //-------------------------------------------------------------------
 }   // namespace scff_imaging

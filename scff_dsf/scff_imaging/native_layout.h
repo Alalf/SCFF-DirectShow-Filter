@@ -41,9 +41,9 @@ class NativeLayout : public Layout {
 
   //-------------------------------------------------------------------
   /// @copydoc Processor::Init
-  ErrorCode Init();
+  ErrorCodes Init();
   /// @copydoc Processor::Run
-  ErrorCode Run();
+  ErrorCodes Run();
   //-------------------------------------------------------------------
 
  private:

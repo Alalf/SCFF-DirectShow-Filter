@@ -191,7 +191,7 @@ class SCFFOutputPin : public CSourceStream,
   /// fps(下流フィルタの要求から決まる)
   double fps_;
   /// pixel_format(下流フィルタの要求から決まる)
-  scff_imaging::ImagePixelFormat pixel_format_;
+  scff_imaging::ImagePixelFormats pixel_format_;
 
   /// 単純にSleepするだけの原始的なタイムマネージャ
   SCFFClockTime clock_time_;

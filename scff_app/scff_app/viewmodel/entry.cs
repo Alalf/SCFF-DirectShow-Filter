@@ -47,22 +47,22 @@ partial class Entry {
   void LoadFromInterprocess(scff_interprocess.Entry input) {
     this.ProcessID = input.process_id;
     this.ProcessName = input.process_name;
-    this.SamplePixelFormat = (scff_interprocess.ImagePixelFormat)
-        Enum.ToObject(typeof(scff_interprocess.ImagePixelFormat), input.sample_pixel_format);
+    this.SamplePixelFormat = (scff_interprocess.ImagePixelFormats)
+        Enum.ToObject(typeof(scff_interprocess.ImagePixelFormats), input.sample_pixel_format);
     this.SampleWidth = input.sample_width;
     this.SampleHeight = input.sample_height;
     this.FPS = input.fps;
   }
 
   /// Enum->String用辞書
-  Dictionary<scff_interprocess.ImagePixelFormat, string> pixel_format_dictionary_ =
-      new Dictionary<scff_interprocess.ImagePixelFormat, string>() {
-    {scff_interprocess.ImagePixelFormat.kI420, "I420"},
-    {scff_interprocess.ImagePixelFormat.kIYUV, "IYUV"},
-    {scff_interprocess.ImagePixelFormat.kYV12, "YV12"},
-    {scff_interprocess.ImagePixelFormat.kUYVY, "UYVY"},
-    {scff_interprocess.ImagePixelFormat.kYUY2, "YUY2"},
-    {scff_interprocess.ImagePixelFormat.kRGB0, "RGB0"}
+  Dictionary<scff_interprocess.ImagePixelFormats, string> pixel_format_dictionary_ =
+      new Dictionary<scff_interprocess.ImagePixelFormats, string>() {
+    {scff_interprocess.ImagePixelFormats.kI420, "I420"},
+    {scff_interprocess.ImagePixelFormats.kIYUV, "IYUV"},
+    {scff_interprocess.ImagePixelFormats.kYV12, "YV12"},
+    {scff_interprocess.ImagePixelFormats.kUYVY, "UYVY"},
+    {scff_interprocess.ImagePixelFormats.kYUY2, "YUY2"},
+    {scff_interprocess.ImagePixelFormats.kRGB0, "RGB0"}
   };
 }
 }

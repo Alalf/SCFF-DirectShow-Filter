@@ -70,7 +70,7 @@ ComplexLayout::~ComplexLayout() {
   }
 }
 
-ErrorCode ComplexLayout::InitByIndex(int index) {
+ErrorCodes ComplexLayout::InitByIndex(int index) {
   ASSERT(0 <= index && index < element_count_);
   if (!utilities::Contains(0, 0,
                            GetOutputImage()->width(),
@@ -79,7 +79,7 @@ ErrorCode ComplexLayout::InitByIndex(int index) {
                            parameters_[index].bound_y,
                            parameters_[index].bound_width,
                            parameters_[index].bound_height)) {
-    return ErrorCode::kComplexLayoutBoundError;
+    return ErrorCodes::kComplexLayoutBoundError;
   }
 
   // 仮想パディングサイズの計算
@@ -116,20 +116,20 @@ ErrorCode ComplexLayout::InitByIndex(int index) {
   // Image
   //-------------------------------------------------------------------
   // ScreenCaptureから取得した変換処理前のイメージ
-  const ErrorCode error_captured_image =
-      captured_image_[index].Create(ImagePixelFormat::kRGB0,
+  const ErrorCodes error_captured_image =
+      captured_image_[index].Create(ImagePixelFormats::kRGB0,
                                     parameters_[index].clipping_width,
                                     parameters_[index].clipping_height);
-  if (error_captured_image != ErrorCode::kNoError) {
+  if (error_captured_image != ErrorCodes::kNoError) {
     return error_captured_image;
   }
 
   // SWScaleで拡大縮小ピクセルフォーマット変換を行った後のイメージ
-  const ErrorCode error_converted_image =
+  const ErrorCodes error_converted_image =
         converted_image_[index].Create(GetOutputImage()->pixel_format(),
                                        element_width,
                                        element_height);
-  if (error_converted_image != ErrorCode::kNoError) {
+  if (error_converted_image != ErrorCodes::kNoError) {
     return error_converted_image;
   }
   //-------------------------------------------------------------------
@@ -139,32 +139,32 @@ ErrorCode ComplexLayout::InitByIndex(int index) {
   Scale *scale = new Scale(parameters_[index].swscale_config);
   scale->SetInputImage(&(captured_image_[index]));
   scale->SetOutputImage(&(converted_image_[index]));
-  const ErrorCode error_scale_init = scale->Init();
-  if (error_scale_init != ErrorCode::kNoError) {
+  const ErrorCodes error_scale_init = scale->Init();
+  if (error_scale_init != ErrorCodes::kNoError) {
     delete scale;
     return error_scale_init;
   }
   scale_[index] = scale;
   //-------------------------------------------------------------------
 
-  return ErrorCode::kNoError;
+  return ErrorCodes::kNoError;
 }
 
 //-------------------------------------------------------------------
 
-ErrorCode ComplexLayout::Init() {
+ErrorCodes ComplexLayout::Init() {
   MyDbgLog((LOG_TRACE, kDbgImportant,
           TEXT("ComplexLayout: Init")));
 
   // DrawUtilsが使えるフォーマットでなければComplexLayoutは使えない
   if (!utilities::CanUseDrawUtils(GetOutputImage()->pixel_format())) {
-    return ErrorOccured(ErrorCode::kComplexLayoutInvalidPixelFormatError);
+    return ErrorOccured(ErrorCodes::kComplexLayoutInvalidPixelFormatError);
   }
 
   // 要素を初期化
   for (int i = 0; i < element_count_; i++) {
-    const ErrorCode error_element = InitByIndex(i);
-    if (error_element != ErrorCode::kNoError) {
+    const ErrorCodes error_element = InitByIndex(i);
+    if (error_element != ErrorCodes::kNoError) {
       // 一つでも失敗したらエラー扱い
       return ErrorOccured(error_element);
     }
@@ -180,8 +180,8 @@ ErrorCode ComplexLayout::Init() {
   for (int i = 0; i < element_count_; i++) {
     screen_capture->SetOutputImage(&(captured_image_[i]), i);
   }
-  const ErrorCode error_screen_capture = screen_capture->Init();
-  if (error_screen_capture != ErrorCode::kNoError) {
+  const ErrorCodes error_screen_capture = screen_capture->Init();
+  if (error_screen_capture != ErrorCodes::kNoError) {
     delete screen_capture;
     return ErrorOccured(error_screen_capture);
   }
@@ -204,23 +204,23 @@ ErrorCode ComplexLayout::Init() {
   return InitDone();
 }
 
-ErrorCode ComplexLayout::Run() {
-  if (GetCurrentError() != ErrorCode::kNoError) {
+ErrorCodes ComplexLayout::Run() {
+  if (GetCurrentError() != ErrorCodes::kNoError) {
     // 何かエラーが発生している場合は何もしない
     return GetCurrentError();
   }
 
   // まとめてスクリーンキャプチャ
-  const ErrorCode error_screen_capture = screen_capture_->Run();
-  if (error_screen_capture != ErrorCode::kNoError) {
+  const ErrorCodes error_screen_capture = screen_capture_->Run();
+  if (error_screen_capture != ErrorCodes::kNoError) {
     return ErrorOccured(error_screen_capture);
   }
 
   // Scaleを利用して変換
   // すこしでもCacheヒット率をあげるべく逆順に
   for (int i = element_count_ - 1; i >= 0; i--) {
-    const ErrorCode error_scale = scale_[i]->Run();
-    if (error_scale != ErrorCode::kNoError) {
+    const ErrorCodes error_scale = scale_[i]->Run();
+    if (error_scale != ErrorCodes::kNoError) {
       return ErrorOccured(error_scale);
     }
   }

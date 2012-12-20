@@ -51,11 +51,11 @@ bool RawBitmapImage::IsEmpty() const {
   return raw_bitmap_ == nullptr;
 }
 
-ErrorCode RawBitmapImage::Create(ImagePixelFormat pixel_format,
-                                 int width, int height) {
+ErrorCodes RawBitmapImage::Create(ImagePixelFormats pixel_format,
+                                  int width, int height) {
   // pixel_format, width, heightを設定する
-  ErrorCode error_create = Image::Create(pixel_format, width, height);
-  if (error_create != ErrorCode::kNoError) {
+  ErrorCodes error_create = Image::Create(pixel_format, width, height);
+  if (error_create != ErrorCodes::kNoError) {
     return error_create;
   }
 
@@ -63,11 +63,11 @@ ErrorCode RawBitmapImage::Create(ImagePixelFormat pixel_format,
   int size = utilities::CalculateDataSize(pixel_format, width, height);
   uint8_t *raw_bitmap = static_cast<uint8_t*>(av_malloc(size));
   if (raw_bitmap == nullptr) {
-    return ErrorCode::kRawBitmapImageOutOfMemoryError;
+    return ErrorCodes::kRawBitmapImageOutOfMemoryError;
   }
   raw_bitmap_ = raw_bitmap;
 
-  return ErrorCode::kNoError;
+  return ErrorCodes::kNoError;
 }
 
 uint8_t* RawBitmapImage::raw_bitmap() const {

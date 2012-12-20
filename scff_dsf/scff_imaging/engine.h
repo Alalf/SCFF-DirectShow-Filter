@@ -31,20 +31,20 @@ namespace scff_imaging {
 class Engine : public CAMThread, public Layout {
  public:
   /// コンストラクタ
-  Engine(ImagePixelFormat output_pixel_format,
+  Engine(ImagePixelFormats output_pixel_format,
          int output_width, int output_height, double output_fps);
   /// デストラクタ
   ~Engine();
 
   //-------------------------------------------------------------------
   /// @copydoc Processor::Init
-  ErrorCode Init();
+  ErrorCodes Init();
   /// @copydoc Processor::Accept
-  ErrorCode Accept(Request *request);
+  ErrorCodes Accept(Request *request);
   //-------------------------------------------------------------------
 
   /// フロントイメージをサンプルにコピー
-  ErrorCode CopyFrontImage(BYTE *sample, DWORD data_size);
+  ErrorCodes CopyFrontImage(BYTE *sample, DWORD data_size);
 
   //-------------------------------------------------------------------
   // ダブルディスパッチ用
@@ -66,7 +66,7 @@ class Engine : public CAMThread, public Layout {
   //===================================================================
   // キャプチャスレッド関連
   //===================================================================
-  enum class RequestType : DWORD {
+  enum class RequestTypes : DWORD {
     kInvalid,
     kResetLayout,
     kSetNativeLayout,
@@ -90,14 +90,14 @@ class Engine : public CAMThread, public Layout {
   DWORD ThreadProc();
 
   /// @copydoc Processor::Run
-  ErrorCode Run();
+  ErrorCodes Run();
 
   /// バッファを更新
   void Update();
 
   /// 更新中のバッファを表すインデックス
   /// @attention あえてLockしない
-  enum class ImageIndex {
+  enum class ImageIndexes {
     kFront,
     kBack,
   } last_update_image_;
@@ -112,20 +112,20 @@ class Engine : public CAMThread, public Layout {
 
   /// 唯一レイアウトエラーコードをkNoErrorにできる関数
   /// @attention Initが成功したらこちら
-  ErrorCode LayoutInitDone();
+  ErrorCodes LayoutInitDone();
   /// レイアウトエラーが発生したときに呼び出す
   /// @return 発生したエラーコード
   /// @attention エラーがいったんおきたら解除は不可能
-  ErrorCode LayoutErrorOccured(ErrorCode error_code);
+  ErrorCodes LayoutErrorOccured(ErrorCodes error_code);
   /// レイアウトプロセッサに異常が発生している場合NoError以外を返す
-  ErrorCode GetCurrentLayoutError();
+  ErrorCodes GetCurrentLayoutError();
 
   /// レイアウトパラメータの要素数
   int element_count_;
   /// @biref レイアウトパラメータ
   LayoutParameter parameters_[kMaxProcessorSize];
   /// レイアウトのエラーコード
-  ErrorCode layout_error_code_;
+  ErrorCodes layout_error_code_;
 
   //===================================================================
 
@@ -141,7 +141,7 @@ class Engine : public CAMThread, public Layout {
   //-------------------------------------------------------------------
 
   /// イメージのピクセルフォーマット
-  const ImagePixelFormat output_pixel_format_;
+  const ImagePixelFormats output_pixel_format_;
   /// イメージの幅
   const int output_width_;
   /// イメージの高さ

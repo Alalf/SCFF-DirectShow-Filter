@@ -42,7 +42,7 @@ SCFFMonitor::~SCFFMonitor() {
   interprocess_.RemoveEntry(process_id);
 }
 
-bool SCFFMonitor::Init(scff_imaging::ImagePixelFormat pixel_format,
+bool SCFFMonitor::Init(scff_imaging::ImagePixelFormats pixel_format,
                        int width, int height, double fps) {
   // プロセスIDの取得
   const DWORD process_id = GetCurrentProcessId();
@@ -173,25 +173,25 @@ void ConvertLayoutParameter(
 
   // enumは無理にキャストせずswitchで変換
   switch (input.rotate_direction) {
-    case scff_interprocess::RotateDirection::kNoRotate: {
-      output->rotate_direction = scff_imaging::RotateDirection::kNoRotate;
+    case scff_interprocess::RotateDirections::kNoRotate: {
+      output->rotate_direction = scff_imaging::RotateDirections::kNoRotate;
       break;
     }
-    case scff_interprocess::RotateDirection::kDegrees90: {
-      output->rotate_direction = scff_imaging::RotateDirection::kDegrees90;
+    case scff_interprocess::RotateDirections::kDegrees90: {
+      output->rotate_direction = scff_imaging::RotateDirections::kDegrees90;
       break;
     }
-    case scff_interprocess::RotateDirection::kDegrees180: {
-      output->rotate_direction = scff_imaging::RotateDirection::kDegrees180;
+    case scff_interprocess::RotateDirections::kDegrees180: {
+      output->rotate_direction = scff_imaging::RotateDirections::kDegrees180;
       break;
     }
-    case scff_interprocess::RotateDirection::kDegrees270: {
-      output->rotate_direction = scff_imaging::RotateDirection::kDegrees270;
+    case scff_interprocess::RotateDirections::kDegrees270: {
+      output->rotate_direction = scff_imaging::RotateDirections::kDegrees270;
       break;
     }
     default: {
       ASSERT(false);
-      output->rotate_direction = scff_imaging::RotateDirection::kNoRotate;
+      output->rotate_direction = scff_imaging::RotateDirections::kNoRotate;
       break;
     }
   }
@@ -245,13 +245,13 @@ scff_imaging::Request* SCFFMonitor::CreateRequest() {
 
   //-----------------------------------------------------------------
   /// @warning int32_t->enum
-  scff_interprocess::LayoutType layout_type =
-      static_cast<scff_interprocess::LayoutType>(message.layout_type);
+  scff_interprocess::LayoutTypes layout_type =
+      static_cast<scff_interprocess::LayoutTypes>(message.layout_type);
 
   //-----------------------------------------------------------------
   // ResetLayoutRequest
   //-----------------------------------------------------------------
-  if (layout_type == scff_interprocess::LayoutType::kNullLayout) {
+  if (layout_type == scff_interprocess::LayoutTypes::kNullLayout) {
     /// @todo(me) %lldではなく%"PRId64"が適切だがコンパイルエラーになる
     MyDbgLog((LOG_TRACE, kDbgImportant,
               TEXT("SCFFMonitor: ResetLayoutRequest arrived(%lld)."),
@@ -262,8 +262,8 @@ scff_imaging::Request* SCFFMonitor::CreateRequest() {
   //-----------------------------------------------------------------
   // SetLayoutRequest
   //-----------------------------------------------------------------
-  ASSERT(layout_type == scff_interprocess::LayoutType::kNativeLayout ||
-         layout_type == scff_interprocess::LayoutType::kComplexLayout);
+  ASSERT(layout_type == scff_interprocess::LayoutTypes::kNativeLayout ||
+         layout_type == scff_interprocess::LayoutTypes::kComplexLayout);
 
   /// @todo(me) %lldではなく%"PRId64"が適切だがコンパイルエラーになる
   MyDbgLog((LOG_TRACE, kDbgImportant,

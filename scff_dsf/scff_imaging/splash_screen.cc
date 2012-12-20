@@ -60,7 +60,7 @@ SplashScreen::~SplashScreen() {
 
 //-------------------------------------------------------------------
 
-ErrorCode SplashScreen::Init() {
+ErrorCodes SplashScreen::Init() {
   MyDbgLog((LOG_TRACE, kDbgImportant,
           TEXT("SplashScreen: Init")));
 
@@ -98,30 +98,30 @@ ErrorCode SplashScreen::Init() {
   //-------------------------------------------------------------------
   // リソースのビットマップ読み込み用
   const WORD resource_id = IDB_SPLASH;
-  const ErrorCode error_resource_ddb =
+  const ErrorCodes error_resource_ddb =
       resource_ddb_.CreateFromResource(resource_width,
                                        resource_height,
                                        resource_id);
-  if (error_resource_ddb != ErrorCode::kNoError) {
+  if (error_resource_ddb != ErrorCodes::kNoError) {
     return ErrorOccured(error_resource_ddb);
   }
 
   // GetDIBits用
-  const ErrorCode error_resource_image =
-      resource_image_.Create(ImagePixelFormat::kRGB0,
+  const ErrorCodes error_resource_image =
+      resource_image_.Create(ImagePixelFormats::kRGB0,
                              resource_width,
                              resource_height);
-  if (error_resource_image != ErrorCode::kNoError) {
+  if (error_resource_image != ErrorCodes::kNoError) {
     return ErrorOccured(error_resource_image);
   }
 
   // 変換後パディング用
   if (utilities::CanUseDrawUtils(GetOutputImage()->pixel_format())) {
-    const ErrorCode error_converted_image =
+    const ErrorCodes error_converted_image =
         converted_image_.Create(GetOutputImage()->pixel_format(),
                                 converted_width,
                                 converted_height);
-    if (error_converted_image != ErrorCode::kNoError) {
+    if (error_converted_image != ErrorCodes::kNoError) {
       return ErrorOccured(error_converted_image);
     }
   }
@@ -141,8 +141,8 @@ ErrorCode SplashScreen::Init() {
   } else {
     scale->SetOutputImage(GetOutputImage());
   }
-  const ErrorCode error_scale_init = scale->Init();
-  if (error_scale_init != ErrorCode::kNoError) {
+  const ErrorCodes error_scale_init = scale->Init();
+  if (error_scale_init != ErrorCodes::kNoError) {
     delete scale;
     return ErrorOccured(error_scale_init);
   }
@@ -154,8 +154,8 @@ ErrorCode SplashScreen::Init() {
         new Padding(padding_left, padding_right, padding_top, padding_bottom);
     padding->SetInputImage(&converted_image_);
     padding->SetOutputImage(GetOutputImage());
-    const ErrorCode error_padding_init = padding->Init();
-    if (error_padding_init != ErrorCode::kNoError) {
+    const ErrorCodes error_padding_init = padding->Init();
+    if (error_padding_init != ErrorCodes::kNoError) {
       delete padding;
       return ErrorOccured(error_padding_init);
     }
@@ -172,8 +172,8 @@ ErrorCode SplashScreen::Init() {
   return InitDone();
 }
 
-ErrorCode SplashScreen::Run() {
-  if (GetCurrentError() != ErrorCode::kNoError) {
+ErrorCodes SplashScreen::Run() {
+  if (GetCurrentError() != ErrorCodes::kNoError) {
     // 何かエラーが発生している場合は何もしない
     return GetCurrentError();
   }
@@ -197,15 +197,15 @@ ErrorCode SplashScreen::Run() {
   DeleteDC(resource_dc);
 
   // Scaleを利用して変換
-  const ErrorCode error_scale = scale_->Run();
-  if (error_scale != ErrorCode::kNoError) {
+  const ErrorCodes error_scale = scale_->Run();
+  if (error_scale != ErrorCodes::kNoError) {
     return ErrorOccured(error_scale);
   }
 
   // Paddingを利用してパディングを行う
   if (utilities::CanUseDrawUtils(GetOutputImage()->pixel_format())) {
-    const ErrorCode error_padding = padding_->Run();
-    if (error_padding != ErrorCode::kNoError) {
+    const ErrorCodes error_padding = padding_->Run();
+    if (error_padding != ErrorCodes::kNoError) {
       return ErrorOccured(error_padding);
     }
   }

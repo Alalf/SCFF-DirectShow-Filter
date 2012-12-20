@@ -50,11 +50,11 @@ bool AVPictureImage::IsEmpty() const {
   return avpicture_ == nullptr;
 }
 
-ErrorCode AVPictureImage::Create(ImagePixelFormat pixel_format,
-                                 int width, int height) {
+ErrorCodes AVPictureImage::Create(ImagePixelFormats pixel_format,
+                                  int width, int height) {
   // pixel_format, width, heightを設定する
-  ErrorCode error_create = Image::Create(pixel_format, width, height);
-  if (error_create != ErrorCode::kNoError) {
+  ErrorCodes error_create = Image::Create(pixel_format, width, height);
+  if (error_create != ErrorCodes::kNoError) {
     return error_create;
   }
 
@@ -65,11 +65,11 @@ ErrorCode AVPictureImage::Create(ImagePixelFormat pixel_format,
                       av_pixel_format(),
                       width, height);
   if (result_alloc != 0) {
-    return ErrorCode::kAVPictureImageOutOfMemoryError;
+    return ErrorCodes::kAVPictureImageOutOfMemoryError;
   }
   avpicture_ = avpicture;
 
-  return ErrorCode::kNoError;
+  return ErrorCodes::kNoError;
 }
 
 AVPicture* AVPictureImage::avpicture() const {

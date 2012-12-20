@@ -39,7 +39,7 @@ const int kMaxProcessorSize = 8;
 //---------------------------------------------------------------------
 
 /// 共通エラーコード
-enum class ErrorCode {
+enum class ErrorCodes {
   //-------------------------------------------------------------------
   // Common
   //-------------------------------------------------------------------
@@ -104,7 +104,7 @@ enum class ErrorCode {
 //---------------------------------------------------------------------
 
 /// イメージのピクセルフォーマット
-enum class ImagePixelFormat {
+enum class ImagePixelFormats {
   /// 不正なピクセルフォーマット
   kInvalidPixelFormat = -1,
   /// I420(12bit)
@@ -155,7 +155,7 @@ enum class SWScaleFlags {
 //---------------------------------------------------------------------
 
 /// 回転方向を表す定数
-enum class RotateDirection {
+enum class RotateDirections {
   /// 回転なし
   kNoRotate = 0,
   /// 時計回り90度
@@ -251,7 +251,7 @@ struct LayoutParameter {
   /// アスペクト比の保持
   bool keep_aspect_ratio;
   /// 回転方向
-  RotateDirection rotate_direction;
+  RotateDirections rotate_direction;
 };
 }   // namespace scff_imaging
 

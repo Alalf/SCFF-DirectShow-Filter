@@ -233,7 +233,7 @@ partial class LayoutParameter : IDataErrorInfo {
     this.Stretch = true;
     this.KeepAspectRatio = true;
 
-    this.RotateDirection = scff_interprocess.RotateDirection.kNoRotate;
+    this.RotateDirection = scff_interprocess.RotateDirections.kNoRotate;
   }
 }
 }

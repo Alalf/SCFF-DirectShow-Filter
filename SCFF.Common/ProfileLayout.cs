@@ -133,8 +133,8 @@ public partial class Profile {
       set { this.profile.message.LayoutParameters[this.index].RotateDirection = Convert.ToInt32(value); }
     }
 
-    // WindowType
-    public WindowType WindowType {
+    // WindowTypes
+    public WindowTypes WindowType {
       get { return this.profile.appendices[this.index].WindowType; }
       set { this.profile.appendices[this.index].WindowType = value; }
     }
@@ -203,14 +203,14 @@ public partial class Profile {
     public string WindowCaption {
       get {
         switch (this.WindowType) {
-          case WindowType.Normal: {
+          case WindowTypes.Normal: {
             /// @todo(me) 実装
             return this.Window.ToString();
           }
-          case WindowType.Desktop: {
+          case WindowTypes.Desktop: {
             return "(Desktop)";
           }
-          case WindowType.Root: {
+          case WindowTypes.Root: {
             return "(Root)";
           }
         }

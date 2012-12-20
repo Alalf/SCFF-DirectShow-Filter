@@ -41,7 +41,7 @@
           <ResourceDictionary Source="Resources\CaptionButton.xaml"/>
         </Grid.Resources>
         <Rectangle Width="10" Height="10" Fill="#FF003B00" Margin="5,0" VerticalAlignment="Center"/>
-        <Label Grid.Column="1" FontSize="10" Content="SCFF DirectShow Filter Ver.0.1.7" VerticalAlignment="Center"/>
+        <Label x:Name="title" Grid.Column="1" FontSize="10" Content="SCFF DirectShow Filter Ver.0.1.7" VerticalAlignment="Center"/>
         <Button Grid.Column="2" Height="12" VerticalAlignment="Center" Style="{DynamicResource CaptionButton}" Command="{x:Static shell:SystemCommands.MinimizeWindowCommand}" CommandParameter="{Binding ElementName=mainWindow}">0</Button>
         <Button Grid.Column="3" Height="12" VerticalAlignment="Center" Style="{DynamicResource CaptionButton}" Command="{x:Static shell:SystemCommands.MaximizeWindowCommand}" CommandParameter="{Binding ElementName=mainWindow}">1</Button>
         <Button Grid.Column="4" Height="12" VerticalAlignment="Center" Style="{DynamicResource CaptionButton}" Command="{x:Static shell:SystemCommands.RestoreWindowCommand}" CommandParameter="{Binding ElementName=mainWindow}">2</Button>
@@ -85,7 +85,7 @@
           <Grid.RowDefinitions>
             <RowDefinition Height="25"/>
           </Grid.RowDefinitions>
-          <ComboBox FontSize="9" Height="20" VerticalAlignment="Center" Margin="5,0">
+          <ComboBox x:Name="processes" FontSize="9" Height="20" VerticalAlignment="Center" Margin="5,0">
             <ComboBoxItem>Process1</ComboBoxItem>
             <ComboBoxItem>Process2</ComboBoxItem>
             <ComboBoxItem>Process3</ComboBoxItem>
@@ -106,7 +106,7 @@
               <ColumnDefinition Width="50"/>
             </Grid.ColumnDefinitions>
             <Label Height="15" Width="40" HorizontalAlignment="Right" VerticalAlignment="Center">Caption</Label>
-            <TextBox Height="20" Grid.Column="1" Grid.ColumnSpan="3" VerticalAlignment="Center" IsEnabled="False">(Window Classname)</TextBox>
+            <TextBox x:Name="windowCaption" Height="20" Grid.Column="1" Grid.ColumnSpan="3" VerticalAlignment="Center" IsEnabled="False">(Window Classname)</TextBox>
             <Button Height="20" Grid.Row="1" Grid.ColumnSpan="2">Drag here.</Button>
             <Button Height="20" Grid.Row="1" Grid.Column="2">Root</Button>
             <Button Height="20" Grid.Row="1" Grid.Column="3">Desktop</Button>
@@ -156,13 +156,13 @@
               <ColumnDefinition Width="140"/>
               <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <CheckBox Height="15" VerticalAlignment="Center">Show Mouse Cursor</CheckBox>
-            <CheckBox Grid.Row="1" Height="15" VerticalAlignment="Center">Show Layered Window</CheckBox>
-            <CheckBox Grid.Row="2" Height="15" VerticalAlignment="Center">Keep Aspect Ratio</CheckBox>
-            <CheckBox Grid.Row="3" Height="15" VerticalAlignment="Center">Enable Enlargement</CheckBox>
-            <CheckBox Grid.Column="1" Height="15" VerticalAlignment="Center" IsEnabled="False">Over-Sampling</CheckBox>
+            <CheckBox x:Name="showMouseCursor" Height="15" VerticalAlignment="Center">Show Mouse Cursor</CheckBox>
+            <CheckBox x:Name="showLayeredWindow" Grid.Row="1" Height="15" VerticalAlignment="Center">Show Layered Window</CheckBox>
+            <CheckBox x:Name="keepAspectRatio" Grid.Row="2" Height="15" VerticalAlignment="Center">Keep Aspect Ratio</CheckBox>
+            <CheckBox x:Name="stretch" Grid.Row="3" Height="15" VerticalAlignment="Center">Enable Enlargement</CheckBox>
+            <CheckBox x:Name="overSampling" Grid.Column="1" Height="15" VerticalAlignment="Center" IsEnabled="False">Over-Sampling</CheckBox>
             <Label Grid.Column="1" Grid.Row="2" Height="12" VerticalAlignment="Center" HorizontalAlignment="Right" IsEnabled="False">Thread Num</Label>
-            <ComboBox Grid.Column="1" Grid.Row="3" Height="20" VerticalAlignment="Center" IsEnabled="False"/>
+            <ComboBox x:Name="threadCount" Grid.Column="1" Grid.Row="3" Height="20" VerticalAlignment="Center" IsEnabled="False"/>
           </Grid>
         </Expander>
         <!-- 拡大縮小オプション -->
@@ -182,12 +182,12 @@
               <RowDefinition Height="25"/>
               <RowDefinition Height="25"/>
             </Grid.RowDefinitions>
-            <ComboBox Grid.ColumnSpan="2" Height="20" VerticalAlignment="Center">
+            <ComboBox x:Name="resizeMethod" Grid.ColumnSpan="2" Height="20" VerticalAlignment="Center">
               <ComboBoxItem Content="hoge" IsSelected="True"/>
               <ComboBoxItem/>
               <ComboBoxItem/>
             </ComboBox>
-            <CheckBox Grid.Column="2" Grid.ColumnSpan="2" Height="16" VerticalAlignment="Center">Accurate Rounding</CheckBox>
+            <CheckBox x:Name="accurateRnd" Grid.Column="2" Grid.ColumnSpan="2" Height="16" VerticalAlignment="Center">Accurate Rounding</CheckBox>
             <Separator Grid.Row="1" Grid.ColumnSpan="4" />
             <CheckBox x:Name="enableFilter" Grid.Row="2" Grid.ColumnSpan="4" Height="16" VerticalAlignment="Center" Checked="enableFilter_Checked" Unchecked="enableFilter_Unchecked">Enable filter</CheckBox>
             <Label Grid.Row="3" Height="12" VerticalAlignment="Center" HorizontalAlignment="Right">L GBlur</Label>
@@ -245,9 +245,9 @@
                 <ColumnDefinition Width="10*"/>
                 <ColumnDefinition Width="10*"/>
                 <ColumnDefinition Width="10*"/>
+                <ColumnDefinition Width="11*"/>
                 <ColumnDefinition Width="10*"/>
-                <ColumnDefinition Width="10*"/>
-                <ColumnDefinition Width="13*"/>
+                <ColumnDefinition Width="14*"/>
                 <ColumnDefinition Width="10*"/>
               </Grid.ColumnDefinitions>
               <Grid.RowDefinitions>
@@ -263,18 +263,18 @@
               <TextBox Grid.Column="6" Height="20" VerticalAlignment="Center">1000</TextBox>
               <Label Grid.Column="7" Height="12" Margin="5,0" HorizontalAlignment="Right" VerticalAlignment="Center">Bottom</Label>
               <TextBox Grid.Column="8" Height="20" VerticalAlignment="Center">1000</TextBox>
-              <Label Grid.Row="1" Grid.Column="1"  Height="12" Margin="5,0" HorizontalAlignment="Right" VerticalAlignment="Center">[%]</Label>
+              <Label Grid.Row="1" Grid.Column="1"  Height="12" Margin="5,0" HorizontalAlignment="Right" VerticalAlignment="Center" Content="X"/>
               <TextBox Grid.Row="1" Grid.Column="2" Height="20" VerticalAlignment="Center" IsEnabled="False">1000</TextBox>
-              <Label Grid.Row="1" Grid.Column="3" Margin="5,0" Height="12" HorizontalAlignment="Right" VerticalAlignment="Center">[%]</Label>
+              <Label Grid.Row="1" Grid.Column="3" Margin="5,0" Height="12" HorizontalAlignment="Right" VerticalAlignment="Center" Content="Y"/>
               <TextBox Grid.Row="1" Grid.Column="4" Height="20" VerticalAlignment="Center" IsEnabled="False">1000</TextBox>
-              <Label Grid.Row="1" Grid.Column="5" Margin="5,0" Height="12" HorizontalAlignment="Right" VerticalAlignment="Center">[%]</Label>
+              <Label Grid.Row="1" Grid.Column="5" Margin="5,0" Height="12" HorizontalAlignment="Right" VerticalAlignment="Center" Content="Width"/>
               <TextBox Grid.Row="1" Grid.Column="6" Height="20" VerticalAlignment="Center" IsEnabled="False">1000</TextBox>
-              <Label Grid.Row="1" Grid.Column="7" Margin="5,0" Height="12" HorizontalAlignment="Right" VerticalAlignment="Center">[%]</Label>
+              <Label Grid.Row="1" Grid.Column="7" Margin="5,0" Height="12" HorizontalAlignment="Right" VerticalAlignment="Center" Content="Height"/>
               <TextBox Grid.Row="1" Grid.Column="8" Height="20" VerticalAlignment="Center" IsEnabled="False">1000</TextBox>
             </Grid>
           </GroupBox>
           <Viewbox Stretch="Uniform">
-            <uc:LayoutEdit/>
+            <uc:LayoutEdit x:Name="layoutEdit"/>
           </Viewbox>
         </DockPanel>
       </Expander>

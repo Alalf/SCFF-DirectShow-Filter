@@ -76,7 +76,7 @@ static const char kMessageMutexNamePrefix[] = "mutex_scff_v1_message_";
 //---------------------------------------------------------------------
 
 /// レイアウトの種類
-enum class LayoutType {
+enum class LayoutTypes {
   /// 何も表示しない
   kNullLayout = 0,
   /// 取り込み範囲1個で、境界は出力に強制的に合わせられる
@@ -89,8 +89,8 @@ enum class LayoutType {
 
 /// ピクセルフォーマットの種類
 /// @sa scff_imaging/imaging_types.h
-/// @sa scff_imaging::ImagePixelFormat
-enum class ImagePixelFormat {
+/// @sa scff_imaging::ImagePixelFormats
+enum class ImagePixelFormats {
   /// 不正なピクセルフォーマット
   kInvalidPixelFormat = -1,
   /// I420(12bit)
@@ -139,8 +139,8 @@ enum class SWScaleFlags {
 
 /// 回転方向を表す定数
 /// @sa scff_imaging/imaging_types.h
-/// @sa scff_imaging::RotateDirection
-enum class RotateDirection {
+/// @sa scff_imaging::RotateDirections
+enum class RotateDirections {
   /// 回転なし
   kNoRotate = 0,
   /// 時計回り90度

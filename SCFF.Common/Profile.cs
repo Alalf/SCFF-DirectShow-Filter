@@ -28,10 +28,17 @@ public partial class Profile {
   // 定数
   //===================================================================
 
-  public enum WindowType {
+  public enum WindowTypes {
     Normal,
     Desktop,
     Root,
+  }
+
+  /// @copydoc SCFF.Common.Interprocess.LayoutTypes
+  public enum LayoutTypes {
+    NullLayout    = Interprocess.LayoutTypes.NullLayout,
+    NativeLayout  = Interprocess.LayoutTypes.NativeLayout,
+    ComplexLayout = Interprocess.LayoutTypes.ComplexLayout
   }
 
   /// @copydoc SCFF.Common.Interprocess.SWScaleFlags
@@ -49,12 +56,12 @@ public partial class Profile {
     Spline        = Interprocess.SWScaleFlags.Spline
   }
 
-  /// @copydoc SCFF.Common.Interprocess.RotateDirection
+  /// @copydoc SCFF.Common.Interprocess.RotateDirections
   public enum RotateDirection {
-    NoRotate      = Interprocess.RotateDirection.NoRotate,
-    Degrees90     = Interprocess.RotateDirection.Degrees90,
-    Degrees180    = Interprocess.RotateDirection.Degrees180,
-    Degrees270    = Interprocess.RotateDirection.Degrees270,
+    NoRotate      = Interprocess.RotateDirections.NoRotate,
+    Degrees90     = Interprocess.RotateDirections.Degrees90,
+    Degrees180    = Interprocess.RotateDirections.Degrees180,
+    Degrees270    = Interprocess.RotateDirections.Degrees270,
   }
 
   //===================================================================
@@ -87,9 +94,9 @@ public partial class Profile {
     }
 
     // this.messageの初期化
-    this.message.Timestamp = DateTime.UtcNow.Ticks;
-    this.message.LayoutType = Convert.ToInt32(Interprocess.LayoutType.NativeLayout);
-    this.message.LayoutElementCount = 1;
+    this.LayoutElementCount = 1;
+    this.LayoutType = LayoutTypes.NativeLayout;
+    this.UpdateTimestamp();
 
     // currentの生成(0は絶対にあることが保障されている)
     this.current = CreateDefaultLayout(0);
@@ -102,6 +109,25 @@ public partial class Profile {
 
   //===================================================================
   // アクセッサ
+  //===================================================================
+
+  public Int64 Timestamp {
+    get { return this.message.Timestamp; }
+  } 
+  public void UpdateTimestamp() {
+    this.message.Timestamp = DateTime.UtcNow.Ticks;
+  }
+  public LayoutTypes LayoutType {
+    get { return (LayoutTypes)this.message.LayoutType; }
+    set { this.message.LayoutType = Convert.ToInt32(value); }
+  }
+  public int LayoutElementCount {
+    get { return this.message.LayoutElementCount; }
+    set { this.message.LayoutElementCount = value; }
+  }
+
+  //===================================================================
+  // イテレータ
   //===================================================================
 
   public Layout Current {
@@ -126,7 +152,7 @@ public partial class Profile {
 
   // そのほかのデータをまとめたもの
   public class Appendix {
-    public WindowType WindowType { get; set; }
+    public WindowTypes WindowType { get; set; }
     public bool Fit { get; set; }
     public double BoundRelativeLeft { get; set; }
     public double BoundRelativeTop { get; set; }
@@ -138,7 +164,7 @@ public partial class Profile {
     public int RootClippingY { get; set; }
 
     public Appendix() {
-      this.WindowType = WindowType.Root;
+      this.WindowType = WindowTypes.Root;
       this.Fit = true;
       this.BoundRelativeLeft = 0.0;
       this.BoundRelativeTop = 0.0;

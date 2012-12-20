@@ -120,7 +120,19 @@ public partial class MainWindow : Window {
   // Profile
   //===================================================================
   
+  /// タブコントロールの更新
+  private void UpdateLayoutTab() {
+    this.layoutTab.Items.Clear();
+    for (int i = 0; i < App.Profile.LayoutElementCount; ++i) {
+      this.layoutTab.Items.Add(i);
+    }
+  }
+
   /// プロファイルからUIを更新
-  void UpdateByProfile() {}
+  private void UpdateByProfile() {
+    // Window Caption
+    this.windowCaption.Text = App.Profile.Current.WindowCaption;
+    
+  }
 }
 }

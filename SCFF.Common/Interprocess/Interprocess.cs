@@ -80,7 +80,7 @@ internal partial class Interprocess {
 //-------------------------------------------------------------------
 
 /// レイアウトの種類
-public enum LayoutType {
+public enum LayoutTypes {
   /// 何も表示しない
   NullLayout = 0,
   /// 取り込み範囲1個で、境界は出力に強制的に合わせられる
@@ -93,8 +93,8 @@ public enum LayoutType {
 
 /// ピクセルフォーマットの種類
 /// @sa scff_imaging/imaging_types.h
-/// @sa scff_imaging::ImagePixelFormat
-public enum ImagePixelFormat {
+/// @sa scff_imaging::ImagePixelFormats
+public enum ImagePixelFormats {
   /// 不正なピクセルフォーマット
   InvalidPixelFormat = -1,
   /// I420(12bit)
@@ -145,8 +145,8 @@ public enum SWScaleFlags {
 
 /// 回転方向を表す定数
 /// @sa scff_imaging/imaging_types.h
-/// @sa scff_imaging::RotateDirection
-public enum RotateDirection {
+/// @sa scff_imaging::RotateDirections
+public enum RotateDirections {
   /// 回転なし
   NoRotate = 0,
   /// 時計回り90度
@@ -258,7 +258,7 @@ public struct Message {
   /// @warning (0および負数は無効なメッセージを示す)
   public Int64 Timestamp;
   /// レイアウトの種類
-  /// @attention LayoutTypeを操作に使うこと
+  /// @attention LayoutTypesを操作に使うこと
   public Int32 LayoutType;
   /// 有効なレイアウト要素の数
   public Int32 LayoutElementCount;

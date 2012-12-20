@@ -53,11 +53,11 @@ bool AVPictureWithFillImage::IsEmpty() const {
   return avpicture_ == nullptr;
 }
 
-ErrorCode AVPictureWithFillImage::Create(ImagePixelFormat pixel_format,
-                                       int width, int height) {
+ErrorCodes AVPictureWithFillImage::Create(ImagePixelFormats pixel_format,
+                                          int width, int height) {
   // pixel_format, width, heightを設定する
-  ErrorCode error_create = Image::Create(pixel_format, width, height);
-  if (error_create != ErrorCode::kNoError) {
+  ErrorCodes error_create = Image::Create(pixel_format, width, height);
+  if (error_create != ErrorCodes::kNoError) {
     return error_create;
   }
 
@@ -65,14 +65,14 @@ ErrorCode AVPictureWithFillImage::Create(ImagePixelFormat pixel_format,
   int size = utilities::CalculateDataSize(pixel_format, width, height);
   uint8_t *raw_bitmap = static_cast<uint8_t*>(av_malloc(size));
   if (raw_bitmap == nullptr) {
-    return ErrorCode::kAVPictureWithFillImageOutOfMemoryError;
+    return ErrorCodes::kAVPictureWithFillImageOutOfMemoryError;
   }
 
   // 取り込み用AVPictureを作成
   AVPicture *avpicture = new AVPicture();
   if (avpicture == nullptr) {
     av_freep(raw_bitmap);
-    return ErrorCode::kAVPictureWithFillImageCannotCreateAVPictureError;
+    return ErrorCodes::kAVPictureWithFillImageCannotCreateAVPictureError;
   }
 
   // 取り込みバッファとAVPictureを関連付け
@@ -82,13 +82,13 @@ ErrorCode AVPictureWithFillImage::Create(ImagePixelFormat pixel_format,
                      width, height);
   if (result_fill != size) {
     av_freep(raw_bitmap);
-    return ErrorCode::kAVPictureWithFillImageCannotFillError;
+    return ErrorCodes::kAVPictureWithFillImageCannotFillError;
   }
 
   avpicture_ = avpicture;
   raw_bitmap_ = raw_bitmap;
 
-  return ErrorCode::kNoError;
+  return ErrorCodes::kNoError;
 }
 
 AVPicture* AVPictureWithFillImage::avpicture() const {

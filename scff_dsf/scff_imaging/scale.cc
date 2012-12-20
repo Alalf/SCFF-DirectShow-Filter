@@ -53,9 +53,9 @@ Scale::~Scale() {
 
 //-------------------------------------------------------------------
 
-ErrorCode Scale::Init() {
+ErrorCodes Scale::Init() {
   // 入力はRGB0限定
-  ASSERT(GetInputImage()->pixel_format() == ImagePixelFormat::kRGB0);
+  ASSERT(GetInputImage()->pixel_format() == ImagePixelFormats::kRGB0);
 
   // 拡大縮小時のフィルタを作成
   SwsFilter *filter = sws_getDefaultFilter(
@@ -67,7 +67,7 @@ ErrorCode Scale::Init() {
       swscale_config_.chroma_vshift,
       0);
   if (filter == nullptr) {
-    return ErrorOccured(ErrorCode::kScaleCannotGetDefaultFilterError);
+    return ErrorOccured(ErrorCodes::kScaleCannotGetDefaultFilterError);
   }
   filter_ = filter;
 
@@ -79,10 +79,10 @@ ErrorCode Scale::Init() {
   // ピクセルフォーマットの調整
   AVPixelFormat input_pixel_format = AV_PIX_FMT_NONE;
   switch (GetOutputImage()->pixel_format()) {
-    case ImagePixelFormat::kI420:
-    case ImagePixelFormat::kIYUV:
-    case ImagePixelFormat::kUYVY:
-    case ImagePixelFormat::kYUY2: {
+    case ImagePixelFormats::kI420:
+    case ImagePixelFormats::kIYUV:
+    case ImagePixelFormats::kUYVY:
+    case ImagePixelFormats::kYUY2: {
       // IYUV/I420/YUY2/UYVY:
       //    入力:BGR0(32bit)
       //    出力:I420(12bit)/IYUV(12bit)/UYVY(16bit)/YUY2(16bit)
@@ -91,8 +91,8 @@ ErrorCode Scale::Init() {
       input_pixel_format = AV_PIX_FMT_BGR0;
       break;
     }
-    case ImagePixelFormat::kYV12:
-    case ImagePixelFormat::kRGB0: {
+    case ImagePixelFormats::kYV12:
+    case ImagePixelFormats::kRGB0: {
       // YV12/RGB0:
       //    入力:RGB0(32bit)
       //    出力:YV12(12bit)/RGB0(32bit)
@@ -124,7 +124,7 @@ ErrorCode Scale::Init() {
       GetOutputImage()->av_pixel_format(),
       flags, src_filter, nullptr, nullptr);
   if (scaler == nullptr) {
-    return ErrorOccured(ErrorCode::kScaleCannotGetContextError);
+    return ErrorOccured(ErrorCodes::kScaleCannotGetContextError);
   }
   scaler_ = scaler;
 
@@ -132,7 +132,7 @@ ErrorCode Scale::Init() {
   return InitDone();
 }
 
-ErrorCode Scale::Run() {
+ErrorCodes Scale::Run() {
   // SWScaleを使って拡大・縮小を行う
   int scale_height =
       sws_scale(scaler_,

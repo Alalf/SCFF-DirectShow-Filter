@@ -286,7 +286,7 @@ partial class LayoutParameter : INotifyPropertyChanged {
   Boolean keep_aspect_ratio_;
 
   [DataMember]
-  public scff_interprocess.RotateDirection RotateDirection {
+  public scff_interprocess.RotateDirections RotateDirection {
     get {
       return rotate_direction_;
     }
@@ -297,7 +297,7 @@ partial class LayoutParameter : INotifyPropertyChanged {
       }
     }
   }
-  scff_interprocess.RotateDirection rotate_direction_;
+  scff_interprocess.RotateDirections rotate_direction_;
 
   //-------------------------------------------------------------------
   // scff_app独自の値 (Messageには書き込まれない)

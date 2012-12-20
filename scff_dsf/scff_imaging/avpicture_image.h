@@ -39,7 +39,7 @@ class AVPictureImage: public Image {
   bool IsEmpty() const;
   /// AVPictureの実体を作成する
   /// @sa Image::Create
-  ErrorCode Create(ImagePixelFormat pixel_format, int width, int height);
+  ErrorCodes Create(ImagePixelFormats pixel_format, int width, int height);
   //-------------------------------------------------------------------
 
   /// Getter: AVPictureへのポインタ

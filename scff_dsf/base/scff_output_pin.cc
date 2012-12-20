@@ -38,7 +38,7 @@ SCFFOutputPin::SCFFOutputPin(HRESULT *result, CSource *source)
     width_(kPreferredSizes[1].cx),    // 0はダミーなので1
     height_(kPreferredSizes[1].cy),   // 0はダミーなので1
     fps_(kDefaultFPS),
-    pixel_format_(scff_imaging::ImagePixelFormat::kI420),
+    pixel_format_(scff_imaging::ImagePixelFormats::kI420),
     offset_(0LL) {
   MyDbgLog((LOG_MEMORY, kDbgNewDelete,
     TEXT("SCFFOutputPin: NEW(%d, %d, %.1ffps)"),
@@ -98,7 +98,7 @@ HRESULT SCFFOutputPin::GetMediaType(int position, CMediaType *media_type) {
   //-------------------------------------------------------------------
   // １フレームの設定を表すBITMAPINFOHEADERの設定
 
-  scff_imaging::ImagePixelFormat current_pixel_format;
+  scff_imaging::ImagePixelFormats current_pixel_format;
   int current_width;
   int current_height;
   if (position == 0) {
@@ -351,20 +351,20 @@ HRESULT SCFFOutputPin::SetMediaType(const CMediaType *media_type) {
   const GUID YUY2_guid = MEDIASUBTYPE_YUY2;
   const GUID RGB0_guid = MEDIASUBTYPE_RGB32;
   if (subtype == I420_guid) {
-    pixel_format_ = scff_imaging::ImagePixelFormat::kI420;
+    pixel_format_ = scff_imaging::ImagePixelFormats::kI420;
   } else if (subtype == IYUV_guid) {
-    pixel_format_ = scff_imaging::ImagePixelFormat::kIYUV;
+    pixel_format_ = scff_imaging::ImagePixelFormats::kIYUV;
   } else if (subtype == YV12_guid) {
-    pixel_format_ = scff_imaging::ImagePixelFormat::kYV12;
+    pixel_format_ = scff_imaging::ImagePixelFormats::kYV12;
   } else if (subtype == UYVY_guid) {
-    pixel_format_ = scff_imaging::ImagePixelFormat::kUYVY;
+    pixel_format_ = scff_imaging::ImagePixelFormats::kUYVY;
   } else if (subtype == YUY2_guid) {
-    pixel_format_ = scff_imaging::ImagePixelFormat::kYUY2;
+    pixel_format_ = scff_imaging::ImagePixelFormats::kYUY2;
   } else if (subtype == RGB0_guid) {
-    pixel_format_ = scff_imaging::ImagePixelFormat::kRGB0;
+    pixel_format_ = scff_imaging::ImagePixelFormats::kRGB0;
   } else {
     ASSERT(false);
-    pixel_format_ = scff_imaging::ImagePixelFormat::kI420;
+    pixel_format_ = scff_imaging::ImagePixelFormats::kI420;
   }
 
   return S_OK;
@@ -472,14 +472,14 @@ HRESULT SCFFOutputPin::DoBufferProcessingLoop(void) {
     reinterpret_cast<VIDEOINFOHEADER*>(m_mt.pbFormat);
 
   // BITMAPINFOHEADERからピクセルフォーマットを取得
-  scff_imaging::ImagePixelFormat pixel_format =
+  scff_imaging::ImagePixelFormats pixel_format =
       scff_imaging::utilities::WindowsBitmapInfoHeaderToPixelFormat(
           video_info->bmiHeader);
 
   // Engineを作成
   scff_imaging::Engine engine(pixel_format, width_, height_, fps_);
-  const scff_imaging::ErrorCode error = engine.Init();
-  ASSERT(error == scff_imaging::ErrorCode::kNoError);
+  const scff_imaging::ErrorCodes error = engine.Init();
+  ASSERT(error == scff_imaging::ErrorCodes::kNoError);
 
   //-------------------------------------------------------------------
 

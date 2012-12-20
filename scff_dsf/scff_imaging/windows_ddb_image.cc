@@ -35,7 +35,7 @@ namespace scff_imaging {
 WindowsDDBImage::WindowsDDBImage()
     : Image(),
       windows_ddb_(nullptr),
-      from_(Source::kInvalidSource) {
+      from_(Sources::kInvalidSource) {
   /// @attention windows_ddb_そのものの構築はCreateで行う
 }
 
@@ -49,16 +49,16 @@ bool WindowsDDBImage::IsEmpty() const {
   return windows_ddb_ == nullptr;
 }
 
-ErrorCode WindowsDDBImage::CreateFromResource(int width, int height,
-                                              WORD resource_id) {
+ErrorCodes WindowsDDBImage::CreateFromResource(int width, int height,
+                                               WORD resource_id) {
   // pixel_format, width, height, fromを設定する
   /// @attention WindowsビットマップはRGB0(32bit)限定
-  ErrorCode error_create =
-      Image::Create(ImagePixelFormat::kRGB0, width, height);
-  if (error_create != ErrorCode::kNoError) {
+  ErrorCodes error_create =
+      Image::Create(ImagePixelFormats::kRGB0, width, height);
+  if (error_create != ErrorCodes::kNoError) {
     return error_create;
   }
-  from_ = Source::kFromResource;
+  from_ = Sources::kFromResource;
 
   // LoadImageをつかってDDBを読み込む
   /// @attention Bitmapイメージの形式はチェックしていない
@@ -70,48 +70,48 @@ ErrorCode WindowsDDBImage::CreateFromResource(int width, int height,
 
   // ロード失敗
   if (windows_ddb == nullptr) {
-    return ErrorCode::kWindowsDDBImageCannotLoadResourceImageError;
+    return ErrorCodes::kWindowsDDBImageCannotLoadResourceImageError;
   }
 
   windows_ddb_ = windows_ddb;
-  return ErrorCode::kNoError;
+  return ErrorCodes::kNoError;
 }
 
-ErrorCode WindowsDDBImage::CreateFromWindow(int width, int height,
+ErrorCodes WindowsDDBImage::CreateFromWindow(int width, int height,
                                             HWND window) {
   // pixel_format, width, height, fromを設定する
   /// @attention WindowsビットマップはRGB0(32bit)限定
-  ErrorCode error_create =
-      Image::Create(ImagePixelFormat::kRGB0, width, height);
-  if (error_create != ErrorCode::kNoError) {
+  ErrorCodes error_create =
+      Image::Create(ImagePixelFormats::kRGB0, width, height);
+  if (error_create != ErrorCodes::kNoError) {
     return error_create;
   }
-  from_ = Source::kFromWindow;
+  from_ = Sources::kFromWindow;
 
   // ウィンドウから情報を得るためのDC
   HDC original_dc = GetDC(window);
   if (original_dc == nullptr) {
-    return ErrorCode::kWindowsDDBImageCannotGetDCFromWindowError;
+    return ErrorCodes::kWindowsDDBImageCannotGetDCFromWindowError;
   }
 
   // 32Bitイメージ以外は作成できない
   const int bpp = GetDeviceCaps(original_dc, BITSPIXEL);
   if (bpp != 32) {
     ASSERT(false);
-    return ErrorCode::kWindowsDDBImageNotRGB32WindowError;
+    return ErrorCodes::kWindowsDDBImageNotRGB32WindowError;
   }
 
   HBITMAP windows_ddb =
       CreateCompatibleBitmap(original_dc, width, height);
   if (windows_ddb == nullptr) {
     ReleaseDC(window, original_dc);
-    return ErrorCode::kWindowsDDBImageOutOfMemoryError;
+    return ErrorCodes::kWindowsDDBImageOutOfMemoryError;
   }
   ReleaseDC(window, original_dc);
 
   windows_ddb_ = windows_ddb;
 
-  return ErrorCode::kNoError;
+  return ErrorCodes::kNoError;
 }
 
 HBITMAP WindowsDDBImage::windows_ddb() const {

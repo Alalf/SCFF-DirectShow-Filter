@@ -39,7 +39,7 @@ class AVPictureWithFillImage: public Image {
   bool IsEmpty() const;
   /// AVPictureと同時にRawBitmapの実体を作成する
   /// @sa Image::Create
-  ErrorCode Create(ImagePixelFormat pixel_format, int width, int height);
+  ErrorCodes Create(ImagePixelFormats pixel_format, int width, int height);
   //-------------------------------------------------------------------
 
   /// Getter: 各種ビットマップ

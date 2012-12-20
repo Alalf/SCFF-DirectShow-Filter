@@ -29,7 +29,7 @@ namespace scff_imaging {
 class WindowsDDBImage: public Image {
  public:
   /// Windowsビットマップの生成方法
-  enum class Source {
+  enum class Sources {
     /// ありえない値
     kInvalidSource,
     /// WindowハンドルからCreateCompatibleBitmapで生成
@@ -48,10 +48,10 @@ class WindowsDDBImage: public Image {
   bool IsEmpty() const;
   /// リソースから実体を作る
   /// @sa Image::Create
-  ErrorCode CreateFromResource(int width, int height, WORD resource_id);
+  ErrorCodes CreateFromResource(int width, int height, WORD resource_id);
   /// 与えられたWindowからCompatibleBitmapを作成する
   /// @sa Image::Create
-  ErrorCode CreateFromWindow(int width, int height, HWND window);
+  ErrorCodes CreateFromWindow(int width, int height, HWND window);
   //-------------------------------------------------------------------
 
   /// Getter: Windowsビットマップハンドル
@@ -59,7 +59,7 @@ class WindowsDDBImage: public Image {
 
  private:
   /// Windowsビットマップの生成方法
-  Source from_;
+  Sources from_;
 
   /// Windowsビットマップハンドル
   HBITMAP windows_ddb_;

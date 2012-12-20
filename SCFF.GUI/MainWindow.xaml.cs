@@ -35,8 +35,15 @@ public partial class MainWindow : Window {
     // アプリケーションの設定からUIに関連するものを読み込む
     // 存在しない場合は勝手にデフォルト値が読み込まれる・・・はず
     OptionsINIFile.Load(App.Options);
-
     this.UpdateByOptions();
+
+    /// @todo(me) プロファイル読み込み
+    if (App.Options.TmpRestoreLastProfile) {
+      
+    } else {
+
+    }
+    this.UpdateByProfile();
   }
 
   /// アプリケーション終了時に発生するClosingイベントハンドラ

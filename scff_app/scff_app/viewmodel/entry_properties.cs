@@ -28,7 +28,7 @@ partial class Entry {
   public string ProcessName { get; set; }
   public Int32 SampleWidth { get; set; }
   public Int32 SampleHeight { get; set; }
-  public scff_interprocess.ImagePixelFormat SamplePixelFormat { get; set; }
+  public scff_interprocess.ImagePixelFormats SamplePixelFormat { get; set; }
   public Double FPS { get; set; }
 
   //-------------------------------------------------------------------

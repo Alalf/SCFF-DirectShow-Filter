@@ -30,14 +30,14 @@ partial class Message {
       return DateTime.Now.Ticks;
     }
   }
-  public scff_interprocess.LayoutType LayoutType {
+  public scff_interprocess.LayoutTypes LayoutType {
     get {
       if (this.LayoutParameters.Count == 0) {
-        return scff_interprocess.LayoutType.kNullLayout;
+        return scff_interprocess.LayoutTypes.kNullLayout;
       } else if (this.LayoutParameters.Count == 1) {
-        return scff_interprocess.LayoutType.kNativeLayout;
+        return scff_interprocess.LayoutTypes.kNativeLayout;
       } else {
-        return scff_interprocess.LayoutType.kComplexLayout;
+        return scff_interprocess.LayoutTypes.kComplexLayout;
       }
     }
   }

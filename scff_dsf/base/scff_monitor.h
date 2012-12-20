@@ -36,7 +36,7 @@ class SCFFMonitor {
   ~SCFFMonitor();
 
   /// 初期化
-  bool Init(scff_imaging::ImagePixelFormat pixel_format,
+  bool Init(scff_imaging::ImagePixelFormats pixel_format,
             int width, int height, double fps);
 
   /// リクエストがあるかどうか調べ、あれば実体を、なければnullptrを返す

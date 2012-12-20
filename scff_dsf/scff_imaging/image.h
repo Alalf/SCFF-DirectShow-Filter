@@ -34,8 +34,8 @@ struct AVPicture;
 
 namespace scff_imaging {
 
-enum class ErrorCode;
-enum class ImagePixelFormat;
+enum class ErrorCodes;
+enum class ImagePixelFormats;
 
 /// イメージの実体を管理する(union的な)クラス
 /// @attention Imageのインスタンスはメモリ領域の作成、解放まで責任を持つ
@@ -45,7 +45,7 @@ class Image {
   virtual ~Image();
 
   /// Getter: イメージのピクセルフォーマット
-  ImagePixelFormat pixel_format() const;
+  ImagePixelFormats pixel_format() const;
   /// イメージのピクセルフォーマットをAVPicture用に変換
   AVPixelFormat av_pixel_format() const;
   /// Getter: イメージの幅
@@ -68,17 +68,17 @@ class Image {
   ///            内部でCreate()を呼び出すこと
   ///            (pixel_format_,width_,height_を設定する手段はこのメソッドのみ)
   /// @code
-  /// ErrorCode CreateWith___(ImagePixelFormat pixel_format,
-  ///                         int width, int height, ___);
-  /// ErrorCode CreateFrom___(ImagePixelFormat pixel_format,
-  ///                         int width, int height, ___);
+  /// ErrorCodes CreateWith___(ImagePixelFormats pixel_format,
+  ///                          int width, int height, ___);
+  /// ErrorCodes CreateFrom___(ImagePixelFormats pixel_format,
+  ///                          int width, int height, ___);
   /// @endcode
-  virtual ErrorCode Create(ImagePixelFormat pixel_format,
-                           int width, int height);
+  virtual ErrorCodes Create(ImagePixelFormats pixel_format,
+                            int width, int height);
   //-------------------------------------------------------------------
  private:
   /// イメージのピクセルフォーマット
-  ImagePixelFormat pixel_format_;
+  ImagePixelFormats pixel_format_;
   /// イメージの幅
   int width_;
   /// イメージの高さ

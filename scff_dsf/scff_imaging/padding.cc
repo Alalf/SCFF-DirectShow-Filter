@@ -45,7 +45,7 @@ Padding::~Padding() {
 
 //-------------------------------------------------------------------
 
-ErrorCode Padding::Init() {
+ErrorCodes Padding::Init() {
   ASSERT(GetInputImage()->pixel_format() == GetOutputImage()->pixel_format());
 
   // パディング用のコンテキストの初期化
@@ -64,7 +64,7 @@ ErrorCode Padding::Init() {
   return InitDone();
 }
 
-ErrorCode Padding::Run() {
+ErrorCodes Padding::Run() {
   // 左の枠を書く
   ff_fill_rectangle(&draw_context_, &padding_color_,
                     GetOutputImage()->avpicture()->data,

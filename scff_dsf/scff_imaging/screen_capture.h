@@ -42,9 +42,9 @@ class ScreenCapture : public Processor<void, AVPictureWithFillImage> {
 
   //-------------------------------------------------------------------
   /// @copydoc Processor::Init
-  ErrorCode Init();
+  ErrorCodes Init();
   /// @copydoc Processor::Run
-  ErrorCode Run();
+  ErrorCodes Run();
   //-------------------------------------------------------------------
 
  private:
@@ -52,10 +52,10 @@ class ScreenCapture : public Processor<void, AVPictureWithFillImage> {
   void DrawCursor(HDC dc, HWND window, int clipping_x, int clipping_y);
 
   /// キャプチャ設定を検証する
-  ErrorCode ValidateParameter(int index);
+  ErrorCodes ValidateParameter(int index);
 
   /// インデックスを指定して初期化
-  ErrorCode InitByIndex(int index);
+  ErrorCodes InitByIndex(int index);
 
   //-------------------------------------------------------------------
   // Processor

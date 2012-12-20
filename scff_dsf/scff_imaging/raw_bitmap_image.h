@@ -38,7 +38,7 @@ class RawBitmapImage: public Image {
   bool IsEmpty() const;
   /// 必要な分だけメモリを確保する
   /// @sa Image::Create
-  ErrorCode Create(ImagePixelFormat pixel_format, int width, int height);
+  ErrorCodes Create(ImagePixelFormats pixel_format, int width, int height);
   //-------------------------------------------------------------------
 
   /// Getter: 各種ビットマップ

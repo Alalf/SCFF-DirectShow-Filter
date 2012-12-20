@@ -57,7 +57,7 @@ public partial class Profile {
   }
 
   /// @copydoc SCFF.Common.Interprocess.RotateDirections
-  public enum RotateDirection {
+  public enum RotateDirections {
     NoRotate      = Interprocess.RotateDirections.NoRotate,
     Degrees90     = Interprocess.RotateDirections.Degrees90,
     Degrees180    = Interprocess.RotateDirections.Degrees180,
@@ -85,21 +85,48 @@ public partial class Profile {
   public void Reset() {
     int length = Interprocess.Interprocess.MaxComplexLayoutElements;
 
-    // this.message.LayoutParametersの生成
+    // 参照型の生成
     this.message.LayoutParameters = new Interprocess.LayoutParameter[length];
     for (int i = 0; i < length; ++i) {
+
       this.message.LayoutParameters[i] = new Interprocess.LayoutParameter();
-      // this.message.LayoutParameters[i].SWScaleConfigの生成
       this.message.LayoutParameters[i].SWScaleConfig = new Interprocess.SWScaleConfig();
     }
+
+    //-----------------------------------------------------------------
 
     // this.messageの初期化
     this.LayoutElementCount = 1;
     this.LayoutType = LayoutTypes.NativeLayout;
     this.UpdateTimestamp();
 
+    // 各パラメータの初期化
+    // 念のためすべての値をクリアする
+    foreach (var profile in this) {
+
+      profile.KeepAspectRatio = true;
+      profile.RotateDirection = RotateDirections.NoRotate;
+      profile.Stretch = true;
+      profile.SWScaleFlags = SWScaleFlags.Area;
+      profile.SWScaleIsFilterEnabled = false;
+      profile.SWScaleChromaHshift = 1.0F;
+      profile.SWScaleChromaVshift = 1.0F;
+      profile.Window = UIntPtr.Zero;
+
+      profile.WindowType = WindowTypes.Root;
+      profile.Fit = true;
+      profile.BoundRelativeLeft = 0.0;
+      profile.BoundRelativeTop = 0.0;
+      profile.BoundRelativeRight = 1.0;
+      profile.BoundRelativeBottom = 1.0;
+      profile.DesktopClippingX = -1;
+      profile.DesktopClippingY = -1;
+      profile.RootClippingX = -1;
+      profile.RootClippingY = -1;
+    }
+
     // currentの生成(0は絶対にあることが保障されている)
-    this.current = CreateDefaultLayout(0);
+    this.currentLayout = CreateDefaultLayout(0);
   }
 
   public void AddLayout() {}
@@ -130,8 +157,8 @@ public partial class Profile {
   // イテレータ
   //===================================================================
 
-  public Layout Current {
-    get { return this.current; }
+  public Layout CurrentLayout {
+    get { return this.currentLayout; }
   }
   public IEnumerator<Layout> GetEnumerator() {
     for (int i = 0; i < this.message.LayoutElementCount; ++i) {
@@ -144,13 +171,13 @@ public partial class Profile {
   //===================================================================
 
   // 現在編集中のレイアウト
-  private Layout current = null;
+  private Layout currentLayout = null;
 
   // 大半の情報はこのmessage内部にあるが、messageの中身は実行時のみ有効な値が含まれている
   // (UIntPtr windowなど)。このために、messageとは別にいくらかの情報を追加して保存しなければならない。
   private Interprocess.Message message = new Interprocess.Message();
 
-  // そのほかのデータをまとめたもの
+  // そのほかのデータをまとめたもの(初期化していない)
   public class Appendix {
     public WindowTypes WindowType { get; set; }
     public bool Fit { get; set; }
@@ -162,19 +189,6 @@ public partial class Profile {
     public int DesktopClippingY { get; set; }
     public int RootClippingX { get; set; }
     public int RootClippingY { get; set; }
-
-    public Appendix() {
-      this.WindowType = WindowTypes.Root;
-      this.Fit = true;
-      this.BoundRelativeLeft = 0.0;
-      this.BoundRelativeTop = 0.0;
-      this.BoundRelativeRight = 1.0;
-      this.BoundRelativeBottom = 1.0;
-      this.DesktopClippingX = -1;
-      this.DesktopClippingY = -1;
-      this.RootClippingX = -1;
-      this.RootClippingY = -1;
-    }
   }
   private Appendix[] appendices = new Appendix[Interprocess.Interprocess.MaxComplexLayoutElements] {
     new Appendix(), new Appendix(), new Appendix(), new Appendix(),

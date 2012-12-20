@@ -1405,7 +1405,8 @@
               <Trigger.EnterActions>
                 <BeginStoryboard Storyboard="{StaticResource SelectedOn}" x:Name="SelectedOn_BeginStoryboard"/>
               </Trigger.EnterActions>
-
+              <!-- 2012/12/20 Modified by Alalf -->
+              <Setter Property="Foreground" Value="{DynamicResource DisabledTextBrush}"/>
             </Trigger>
             <Trigger Property="IsMouseOver" Value="True">
               <Trigger.ExitActions>

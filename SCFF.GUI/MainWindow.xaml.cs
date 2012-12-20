@@ -21,6 +21,7 @@ using Microsoft.Windows.Shell;
 using System.Windows;
 using System.Windows.Input;
 using SCFF.Common;
+using System.Windows.Controls;
 
 /// MainWindowのコードビハインド
 public partial class MainWindow : Window {
@@ -28,6 +29,17 @@ public partial class MainWindow : Window {
   /// コンストラクタ
   public MainWindow() {
     this.InitializeComponent();
+
+    // OptionsともProfileとも関係ないデータはここで処理
+
+    // resizeMethod
+    this.resizeMethod.Items.Clear();
+    foreach (var method in Constants.ResizeMethods) {
+      var item = new ComboBoxItem();
+      item.Tag = method.Key;
+      item.Content = method.Value;
+      this.resizeMethod.Items.Add(item);
+    }
   }
 
   /// 全ウィンドウ表示前に一度だけ起こるLoadedイベントハンドラ
@@ -78,8 +90,8 @@ public partial class MainWindow : Window {
     this.optionsExpander.Visibility = Visibility.Collapsed;
     this.resizeMethodExpander.Visibility = Visibility.Collapsed;
     this.layoutExpander.IsExpanded = false;
-    this.Width = Defaults.CompactMainWindowWidth;
-    this.Height = Defaults.CompactMainWindowHeight;
+    this.Width = Constants.CompactMainWindowWidth;
+    this.Height = Constants.CompactMainWindowHeight;
   }
 
   private void Save_Executed(object sender, ExecutedRoutedEventArgs e) {
@@ -137,21 +149,19 @@ public partial class MainWindow : Window {
   }
 
   private void enableFilter_Checked(object sender, RoutedEventArgs e) {
-    this.filterLGBlur.IsEnabled = true;
-    this.filterLSharpen.IsEnabled = true;
-    // this.filterCVShift.IsEnabled = true;
-    this.filterCGBlur.IsEnabled = true;
-    this.filterCSharpen.IsEnabled = true;
-    // this.filterCHShift.IsEnabled = true;
+    this.swscaleLumaGBlur.IsEnabled = true;
+    this.swscaleLumaSharpen.IsEnabled = true;
+    this.swscaleChromaGBlur.IsEnabled = true;
+    this.swscaleChromaSharpen.IsEnabled = true;
+    /// @todo(me) HshiftおよびVshiftの使い方がわかるまで設定できないように
   }
 
   private void enableFilter_Unchecked(object sender, RoutedEventArgs e) {
-    this.filterLGBlur.IsEnabled = false;
-    this.filterLSharpen.IsEnabled = false;
-    // this.filterCVShift.IsEnabled = false;
-    this.filterCGBlur.IsEnabled = false;
-    this.filterCSharpen.IsEnabled = false;
-    // this.filterCHShift.IsEnabled = false;
+    this.swscaleLumaGBlur.IsEnabled = false;
+    this.swscaleLumaSharpen.IsEnabled = false;
+    this.swscaleChromaGBlur.IsEnabled = false;
+    this.swscaleChromaSharpen.IsEnabled = false;
+    /// @todo(me) HshiftおよびVshiftの使い方がわかるまで設定できないように
   }
 
   private void fit_Checked(object sender, RoutedEventArgs e) {

@@ -44,7 +44,7 @@
     <Compile Include="OptionsINIFile.cs" />
     <Compile Include="Processes.cs" />
     <Compile Include="Profile.cs" />
-    <Compile Include="Defaults.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="Imaging\Utilities.cs" />
     <Compile Include="Interprocess\Interprocess.cs" />
     <Compile Include="Options.cs" />

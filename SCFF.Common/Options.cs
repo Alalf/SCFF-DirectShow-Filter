@@ -170,10 +170,10 @@ public class Options {
   };
   private string ffmpegPath = string.Empty;
   private string ffmpegArguments = string.Empty;
-  private double tmpMainWindowLeft = Defaults.MainWindowLeft;
-  private double tmpMainWindowTop = Defaults.MainWindowTop;
-  private double tmpMainWindowWidth = Defaults.MainWindowWidth;
-  private double tmpMainWindowHeight = Defaults.MainWindowHeight;
+  private double tmpMainWindowLeft = Constants.MainWindowLeft;
+  private double tmpMainWindowTop = Constants.MainWindowTop;
+  private double tmpMainWindowWidth = Constants.MainWindowWidth;
+  private double tmpMainWindowHeight = Constants.MainWindowHeight;
   private WindowState tmpMainWindowState = WindowState.Normal;
   private bool tmpAreaIsExpanded = true;
   private bool tmpOptionsIsExpanded = true;

@@ -128,8 +128,8 @@ public partial class Profile {
       get { return Convert.ToBoolean(this.profile.message.LayoutParameters[this.index].KeepAspectRatio); }
       set { this.profile.message.LayoutParameters[this.index].KeepAspectRatio = Convert.ToByte(value); }
     }
-    public RotateDirection RotateDirection {
-      get { return (RotateDirection)this.profile.message.LayoutParameters[this.index].RotateDirection; }
+    public RotateDirections RotateDirection {
+      get { return (RotateDirections)this.profile.message.LayoutParameters[this.index].RotateDirection; }
       set { this.profile.message.LayoutParameters[this.index].RotateDirection = Convert.ToInt32(value); }
     }
 
@@ -218,10 +218,10 @@ public partial class Profile {
       }
     }
 
-    internal int BoundWidth(int sampleWidth) {
+    public int BoundWidth(int sampleWidth) {
       return this.BoundRight(sampleWidth) - this.BoundLeft(sampleWidth);
     }
-    internal int BoundHeight(int index, int sampleHeight) {
+    public int BoundHeight(int sampleHeight) {
       return this.BoundBottom(sampleHeight) - this.BoundTop(sampleHeight);
     }
     internal int WindowWidth {

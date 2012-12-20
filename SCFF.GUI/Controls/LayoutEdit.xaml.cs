@@ -33,6 +33,10 @@ namespace SCFF.GUI.Controls {
       }
     }
 
+    public void Update() {
+      this.Draw("Update");
+    }
+
     public LayoutEdit() {
       InitializeComponent();
       RenderOptions.SetBitmapScalingMode(this.drawingGroup, BitmapScalingMode.LowQuality);
@@ -41,14 +45,13 @@ namespace SCFF.GUI.Controls {
 
     private void Image_MouseDown_1(object sender, MouseButtonEventArgs e) {
       var pt = e.GetPosition((IInputElement)sender);
-      this.Draw("MouseDown");
-    }
-
-    private void Image_MouseMove_1(object sender, MouseEventArgs e) {
-      var pt = e.GetPosition((IInputElement)sender);
       var x = (int)pt.X;
       var y = (int)pt.Y;
       this.Draw(x + ", " + y);
+    }
+
+    private void Image_MouseMove_1(object sender, MouseEventArgs e) {
+      // iroiro
     }
   }
 }

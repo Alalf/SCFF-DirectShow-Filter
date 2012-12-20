@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:shell="http://schemas.microsoft.com/winfx/2006/xaml/presentation/shell"
         xmlns:uc="clr-namespace:SCFF.GUI.Controls"
+        xmlns:local="clr-namespace:SCFF.GUI"
         Title="SCFF DirectShow Filter Ver.0.1.7" SnapsToDevicePixels="True" Background="{DynamicResource WindowBackgroundBrush}" Icon="Images/app.ico" ResizeMode="CanResizeWithGrip" Name="mainWindow" Height="565" Width="772.437" MinHeight="280" MinWidth="280" Loaded="mainWindow_Loaded" Closing="mainWindow_Closing" >
   <Window.CommandBindings>
     <CommandBinding Command="{x:Static shell:SystemCommands.CloseWindowCommand}"
@@ -17,6 +18,8 @@
     <CommandBinding Command="Open" Executed="Open_Executed"/>
     <CommandBinding Command="Save" Executed="Save_Executed"/>
     <CommandBinding Command="SaveAs" Executed="SaveAs_Executed"/>
+    <CommandBinding Command="{x:Static local:MainWindow.AddLayoutCommand}"
+                    Executed="AddLayout_Executed"/>
   </Window.CommandBindings>
   <shell:WindowChrome.WindowChrome>
     <shell:WindowChrome CaptionHeight="{x:Static SystemParameters.CaptionHeight}" ResizeBorderThickness="8" GlassFrameThickness="0,0,0,1" />
@@ -229,8 +232,8 @@
         <DockPanel LastChildFill="True">
           <ToolBarTray DockPanel.Dock="Top" Background="{x:Null}" IsLocked="True" HorizontalAlignment="Center">
             <ToolBar Header="Layout " Height="25">
-              <Button Margin="3,0,0,0">Add</Button>
-              <Button Margin="3,0,0,0">Delete</Button>
+              <Button Command="{x:Static local:MainWindow.AddLayoutCommand}" Margin="3,0,0,0">Add</Button>
+              <Button Margin="3,0,0,0">Remove</Button>
               <Separator/>
               <CheckBox x:Name="layoutPreview" Margin="3,0,0,0" Checked="layoutPreview_Checked" Unchecked="layoutPreview_Unchecked">Preview</CheckBox>
               <CheckBox x:Name="layoutBorder" Margin="3,0,0,0" Checked="layoutBorder_Checked" Unchecked="layoutBorder_Unchecked">Border</CheckBox>

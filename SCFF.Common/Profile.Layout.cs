@@ -135,64 +135,64 @@ public partial class Profile {
 
     // WindowTypes
     public WindowTypes WindowType {
-      get { return this.profile.appendices[this.index].WindowType; }
-      set { this.profile.appendices[this.index].WindowType = value; }
+      get { return this.profile.additionalLayoutParameters[this.index].WindowType; }
+      set { this.profile.additionalLayoutParameters[this.index].WindowType = value; }
     }
 
     // Fit
     public bool Fit {
-      get { return this.profile.appendices[this.index].Fit; }
-      set { this.profile.appendices[this.index].Fit = value; }
+      get { return this.profile.additionalLayoutParameters[this.index].Fit; }
+      set { this.profile.additionalLayoutParameters[this.index].Fit = value; }
     }
 
     // Bound *
     public double BoundRelativeLeft {
-      get { return this.profile.appendices[this.index].BoundRelativeLeft; }
-      set { this.profile.appendices[this.index].BoundRelativeLeft = value; }
+      get { return this.profile.additionalLayoutParameters[this.index].BoundRelativeLeft; }
+      set { this.profile.additionalLayoutParameters[this.index].BoundRelativeLeft = value; }
     }
     public int BoundLeft(int sampleWidth) {
-      return (int)Math.Ceiling(this.profile.appendices[this.index].BoundRelativeLeft * sampleWidth);
+      return (int)Math.Ceiling(this.profile.additionalLayoutParameters[this.index].BoundRelativeLeft * sampleWidth);
     }
     public double BoundRelativeTop {
-      get { return this.profile.appendices[this.index].BoundRelativeTop; }
-      set { this.profile.appendices[this.index].BoundRelativeTop = value; }
+      get { return this.profile.additionalLayoutParameters[this.index].BoundRelativeTop; }
+      set { this.profile.additionalLayoutParameters[this.index].BoundRelativeTop = value; }
     }
     public int BoundTop(int sampleHeight) {
-      return (int)Math.Ceiling(this.profile.appendices[this.index].BoundRelativeTop * sampleHeight);
+      return (int)Math.Ceiling(this.profile.additionalLayoutParameters[this.index].BoundRelativeTop * sampleHeight);
     }
     public double BoundRelativeRight {
-      get { return this.profile.appendices[this.index].BoundRelativeRight; }
-      set { this.profile.appendices[this.index].BoundRelativeRight = value; }
+      get { return this.profile.additionalLayoutParameters[this.index].BoundRelativeRight; }
+      set { this.profile.additionalLayoutParameters[this.index].BoundRelativeRight = value; }
     }
     public int BoundRight(int sampleWidth) {
-      return (int)Math.Floor(this.profile.appendices[this.index].BoundRelativeRight * sampleWidth);
+      return (int)Math.Floor(this.profile.additionalLayoutParameters[this.index].BoundRelativeRight * sampleWidth);
     }
     public double BoundRelativeBottom {
-      get { return this.profile.appendices[this.index].BoundRelativeBottom; }
-      set { this.profile.appendices[this.index].BoundRelativeBottom = value; }
+      get { return this.profile.additionalLayoutParameters[this.index].BoundRelativeBottom; }
+      set { this.profile.additionalLayoutParameters[this.index].BoundRelativeBottom = value; }
     }
     public int BoundBottom(int sampleHeight) {
-      return (int)Math.Floor(this.profile.appendices[this.index].BoundRelativeBottom * sampleHeight);
+      return (int)Math.Floor(this.profile.additionalLayoutParameters[this.index].BoundRelativeBottom * sampleHeight);
     }
 
     // Desktop Clipping X/Y
     public int DesktopClippingX {
-      get { return this.profile.appendices[this.index].DesktopClippingX; }
-      set { this.profile.appendices[this.index].DesktopClippingX = value; }
+      get { return this.profile.additionalLayoutParameters[this.index].DesktopClippingX; }
+      set { this.profile.additionalLayoutParameters[this.index].DesktopClippingX = value; }
     }
     public int DesktopClippingY {
-      get { return this.profile.appendices[this.index].DesktopClippingY; }
-      set { this.profile.appendices[this.index].DesktopClippingY = value; }
+      get { return this.profile.additionalLayoutParameters[this.index].DesktopClippingY; }
+      set { this.profile.additionalLayoutParameters[this.index].DesktopClippingY = value; }
     }
 
     // Root Clipping X/Y
     public int RootClippingX {
-      get { return this.profile.appendices[this.index].RootClippingX; }
-      set { this.profile.appendices[this.index].RootClippingX = value; }
+      get { return this.profile.additionalLayoutParameters[this.index].RootClippingX; }
+      set { this.profile.additionalLayoutParameters[this.index].RootClippingX = value; }
     }
     public int RootClippingY {
-      get { return this.profile.appendices[this.index].RootClippingY; }
-      set { this.profile.appendices[this.index].RootClippingY = value; }
+      get { return this.profile.additionalLayoutParameters[this.index].RootClippingY; }
+      set { this.profile.additionalLayoutParameters[this.index].RootClippingY = value; }
     }
 
     //=================================================================

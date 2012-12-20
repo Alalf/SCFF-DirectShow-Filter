@@ -68,68 +68,122 @@ public partial class Profile {
   // コンストラクタ/デストラクタ
   //===================================================================
 
+  /// コンストラクタ
   public Profile() {
-    Reset();
+    // 配列の初期化
+    var length = Interprocess.Interprocess.MaxComplexLayoutElements;
+    this.message.LayoutParameters = new Interprocess.LayoutParameter[length];
+    this.additionalLayoutParameters = new AdditionalLayoutParameter[length];
   }
 
   //===================================================================
   // メソッド
   //===================================================================
 
-  private Layout CreateDefaultLayout(int index) {
-    /// @todo(me) ここからデフォルトウィンドウの指定などを行う・・・？やっぱりWin32いるじゃねーかwww
-    var layout = new Layout(this, index);
-    return layout;
+  /// レイアウトのインスタンスを生成
+  private Layout CreateLayout(int index) {
+    var layoutParameter = new Interprocess.LayoutParameter();
+    layoutParameter.SWScaleConfig = new Interprocess.SWScaleConfig();
+    this.message.LayoutParameters[index] = layoutParameter;
+    this.additionalLayoutParameters[index] = new AdditionalLayoutParameter();
+
+    return new Layout(this, index);
   }
 
-  public void Reset() {
-    int length = Interprocess.Interprocess.MaxComplexLayoutElements;
+  /// レイアウトのゼロクリア
+  private void ClearLayout(Layout layout) {
+    /// @todo(me) インスタンスを生成する形でゼロクリアしているが非効率的？
+    var layoutParameter = new Interprocess.LayoutParameter();
+    layoutParameter.SWScaleConfig = new Interprocess.SWScaleConfig();
+    this.message.LayoutParameters[layout.Index] = layoutParameter;
+    this.additionalLayoutParameters[layout.Index] = new AdditionalLayoutParameter();
+  }
 
-    // 参照型の生成
-    this.message.LayoutParameters = new Interprocess.LayoutParameter[length];
-    for (int i = 0; i < length; ++i) {
+  /// レイアウトの初期値への設定
+  /// @pre layoutはゼロクリア済み
+  private void ResetLayout(Layout layout) {
+    this.ClearLayout(layout);
 
-      this.message.LayoutParameters[i] = new Interprocess.LayoutParameter();
-      this.message.LayoutParameters[i].SWScaleConfig = new Interprocess.SWScaleConfig();
-    }
+    layout.KeepAspectRatio = true;
+    layout.RotateDirection = RotateDirections.NoRotate;
+    layout.Stretch = true;
+    layout.SWScaleFlags = SWScaleFlags.Area;
+    layout.SWScaleIsFilterEnabled = false;
+    layout.SWScaleChromaHshift = 1.0F;
+    layout.SWScaleChromaVshift = 1.0F;
 
-    //-----------------------------------------------------------------
+    /// @todo(me) ここからデフォルトウィンドウの指定などを行う・・・？やっぱりWin32いるじゃねーかwww
+    layout.ClippingX = 0;
+    layout.ClippingY = 0;
+    layout.ClippingWidth = 320;
+    layout.ClippingHeight = 240;
 
-    // this.messageの初期化
+    layout.WindowType = WindowTypes.Root;
+    layout.Window = UIntPtr.Zero;
+    
+    layout.Fit = true;
+    layout.BoundRelativeLeft = 0.0;
+    layout.BoundRelativeTop = 0.0;
+    layout.BoundRelativeRight = 1.0;
+    layout.BoundRelativeBottom = 1.0;
+    layout.DesktopClippingX = -1;
+    layout.DesktopClippingY = -1;
+    layout.RootClippingX = -1;
+    layout.RootClippingY = -1;
+  }
+
+  //===================================================================
+  // ResetProfile
+  //===================================================================
+
+  /// 配列をクリア
+  /// @pre 配列自体は生成済み
+  private void ClearLayoutParameters() {
+    var length = Interprocess.Interprocess.MaxComplexLayoutElements;
+    Array.Clear(this.message.LayoutParameters, 0, length);
+    Array.Clear(this.additionalLayoutParameters, 0, length);
+  }
+
+  public void ResetProfile() {
+    // 配列の初期化をして中身をクリア
+    this.ClearLayoutParameters();
+    
+    // Profileのプロパティの初期化
     this.LayoutElementCount = 1;
     this.LayoutType = LayoutTypes.NativeLayout;
     this.UpdateTimestamp();
 
-    // 各パラメータの初期化
-    // 念のためすべての値をクリアする
-    foreach (var profile in this) {
-
-      profile.KeepAspectRatio = true;
-      profile.RotateDirection = RotateDirections.NoRotate;
-      profile.Stretch = true;
-      profile.SWScaleFlags = SWScaleFlags.Area;
-      profile.SWScaleIsFilterEnabled = false;
-      profile.SWScaleChromaHshift = 1.0F;
-      profile.SWScaleChromaVshift = 1.0F;
-      profile.Window = UIntPtr.Zero;
-
-      profile.WindowType = WindowTypes.Root;
-      profile.Fit = true;
-      profile.BoundRelativeLeft = 0.0;
-      profile.BoundRelativeTop = 0.0;
-      profile.BoundRelativeRight = 1.0;
-      profile.BoundRelativeBottom = 1.0;
-      profile.DesktopClippingX = -1;
-      profile.DesktopClippingY = -1;
-      profile.RootClippingX = -1;
-      profile.RootClippingY = -1;
-    }
-
-    // currentの生成(0は絶対にあることが保障されている)
-    this.currentLayout = CreateDefaultLayout(0);
+    // currentの生成
+    var layout = CreateLayout(0);
+    this.ResetLayout(layout);
+    this.currentLayout = layout;
   }
 
-  public void AddLayout() {}
+  //===================================================================
+  // Add/Remove Layout
+  //===================================================================
+
+  public bool CanAddLayout() {
+    var length = Interprocess.Interprocess.MaxComplexLayoutElements;
+    if (this.message.LayoutElementCount < length - 1) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public void AddLayout() {
+    
+  }
+
+  public bool CanRemoveLayout() {
+    if (this.message.LayoutElementCount > 1) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   public void RemoveCurrentLayout() {}
 
   public void UpdateMessage(int sampleWidth, int sampleHeight) {}
@@ -173,12 +227,12 @@ public partial class Profile {
   // 現在編集中のレイアウト
   private Layout currentLayout = null;
 
-  // 大半の情報はこのmessage内部にあるが、messageの中身は実行時のみ有効な値が含まれている
-  // (UIntPtr windowなど)。このために、messageとは別にいくらかの情報を追加して保存しなければならない。
+  /// 大半の情報はこのmessage内部にあるが、messageの中身は実行時のみ有効な値が含まれている
+  /// (UIntPtr windowなど)。このために、messageとは別にいくらかの情報を追加して保存しなければならない。
   private Interprocess.Message message = new Interprocess.Message();
 
-  // そのほかのデータをまとめたもの(初期化していない)
-  public class Appendix {
+  /// 追加レイアウトパラメータ型
+  public class AdditionalLayoutParameter {
     public WindowTypes WindowType { get; set; }
     public bool Fit { get; set; }
     public double BoundRelativeLeft { get; set; }
@@ -190,9 +244,9 @@ public partial class Profile {
     public int RootClippingX { get; set; }
     public int RootClippingY { get; set; }
   }
-  private Appendix[] appendices = new Appendix[Interprocess.Interprocess.MaxComplexLayoutElements] {
-    new Appendix(), new Appendix(), new Appendix(), new Appendix(),
-    new Appendix(), new Appendix(), new Appendix(), new Appendix(),
-  };
+
+  /// 追加レイアウトパラメータをまとめた配列
+  /// messageLayoutParametersにあわせて非初期化済みにした
+  private AdditionalLayoutParameter[] additionalLayoutParameters;
 }
 }

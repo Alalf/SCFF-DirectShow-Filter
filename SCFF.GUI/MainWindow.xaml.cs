@@ -51,9 +51,9 @@ public partial class MainWindow : Window {
 
     /// @todo(me) プロファイル読み込み
     if (App.Options.TmpRestoreLastProfile) {
-      
+      App.Profile.ResetProfile();
     } else {
-
+      App.Profile.ResetProfile();
     }
     this.UpdateByProfile();
   }
@@ -176,6 +176,9 @@ public partial class MainWindow : Window {
     this.clippingY.IsEnabled = true;
     this.clippingWidth.IsEnabled = true;
     this.clippingHeight.IsEnabled = true;
+  }
+
+  private void AddLayout_Executed(object sender, ExecutedRoutedEventArgs e) {
   }
 }
 }

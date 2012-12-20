@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExternalAPI.cs" />
     <Compile Include="OptionsINIFile.cs" />
     <Compile Include="Processes.cs" />
     <Compile Include="Profile.cs" />
@@ -48,7 +49,7 @@
     <Compile Include="Imaging\Utilities.cs" />
     <Compile Include="Interprocess\Interprocess.cs" />
     <Compile Include="Options.cs" />
-    <Compile Include="ProfileLayout.cs" />
+    <Compile Include="Profile.Layout.cs" />
     <Compile Include="ProfileINIFile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

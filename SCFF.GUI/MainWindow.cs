@@ -19,9 +19,13 @@ namespace SCFF.GUI {
 
 using System.Windows;
 using SCFF.Common;
-  using System.Windows.Controls;
+using System.Windows.Controls;
+using System.Windows.Input;
 
 public partial class MainWindow : Window {
+
+  public readonly static RoutedCommand AddLayoutCommand =
+      new RoutedCommand("AddLayoutCommand", typeof(MainWindow));
 
   //===================================================================
   // Options

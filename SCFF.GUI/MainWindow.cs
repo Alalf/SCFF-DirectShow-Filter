@@ -121,7 +121,6 @@ public partial class MainWindow : Window {
   //===================================================================
   
   /// プロファイルからUIを更新
-  void UpdateByProfile() {
-  }
+  void UpdateByProfile() {}
 }
 }

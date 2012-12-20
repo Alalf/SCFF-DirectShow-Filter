@@ -146,5 +146,19 @@ public partial class MainWindow : Window {
     this.filterCSharpen.IsEnabled = false;
     // this.filterCHShift.IsEnabled = false;
   }
+
+  private void fit_Checked(object sender, RoutedEventArgs e) {
+    this.clippingX.IsEnabled = false;
+    this.clippingY.IsEnabled = false;
+    this.clippingWidth.IsEnabled = false;
+    this.clippingHeight.IsEnabled = false;
+  }
+
+  private void fit_Unchecked(object sender, RoutedEventArgs e) {
+    this.clippingX.IsEnabled = true;
+    this.clippingY.IsEnabled = true;
+    this.clippingWidth.IsEnabled = true;
+    this.clippingHeight.IsEnabled = true;
+  }
 }
 }

@@ -106,7 +106,7 @@
               <ColumnDefinition Width="50"/>
             </Grid.ColumnDefinitions>
             <Label Height="15" Width="40" HorizontalAlignment="Right" VerticalAlignment="Center">Caption</Label>
-            <TextBox Height="20" Grid.Column="1" Grid.ColumnSpan="3" VerticalAlignment="Center" IsEnabled="False" Foreground="White">(Window Classname)</TextBox>
+            <TextBox Height="20" Grid.Column="1" Grid.ColumnSpan="3" VerticalAlignment="Center" IsEnabled="False">(Window Classname)</TextBox>
             <Button Height="20" Grid.Row="1" Grid.ColumnSpan="2">Drag here.</Button>
             <Button Height="20" Grid.Row="1" Grid.Column="2">Root</Button>
             <Button Height="20" Grid.Row="1" Grid.Column="3">Desktop</Button>
@@ -133,11 +133,11 @@
             <Label Grid.Column="2" Margin="3,0" Height="12" VerticalAlignment="Center">Y</Label>
             <Label Grid.Column="4" Margin="3,0" Height="12" VerticalAlignment="Center">Size</Label>
             <Label Grid.Column="6" Margin="3,0" Height="12" VerticalAlignment="Center">x</Label>
-            <TextBox Grid.Column="1" Margin="0,0,5,0" Height="20" VerticalAlignment="Center">9999</TextBox>
-            <TextBox Grid.Column="3" Margin="0,0,5,0" Height="20" VerticalAlignment="Center">9999</TextBox>
-            <TextBox Grid.Column="5" Margin="0,0,5,0" Height="20" VerticalAlignment="Center">9999</TextBox>
-            <TextBox Grid.Column="8" Margin="0,0,5,0" Height="20" VerticalAlignment="Center">9999</TextBox>
-            <CheckBox Grid.Row="1" Grid.ColumnSpan="2" Height="16" VerticalAlignment="Center" Margin="0,4">Fit</CheckBox>
+            <TextBox x:Name="clippingX" Grid.Column="1" Margin="0,0,5,0" Height="20" VerticalAlignment="Center">9999</TextBox>
+            <TextBox x:Name="clippingY" Grid.Column="3" Margin="0,0,5,0" Height="20" VerticalAlignment="Center">9999</TextBox>
+            <TextBox x:Name="clippingWidth" Grid.Column="5" Margin="0,0,5,0" Height="20" VerticalAlignment="Center">9999</TextBox>
+            <TextBox x:Name="clippingHeight" Grid.Column="8" Margin="0,0,5,0" Height="20" VerticalAlignment="Center">9999</TextBox>
+            <CheckBox x:Name="fit"  Grid.Row="1" Grid.ColumnSpan="2" Height="16" VerticalAlignment="Center" Margin="0,4" IsChecked="True" Checked="fit_Checked" Unchecked="fit_Unchecked">Fit</CheckBox>
             <Button Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="3" Height="20" VerticalAlignment="Center" Margin="0,2">Area Select</Button>
             <Button Grid.Row="1" Grid.Column="5" Height="20" VerticalAlignment="Center">Root</Button>
             <Button Grid.Row="1" Grid.Column="6" Grid.ColumnSpan="2" Height="20" VerticalAlignment="Center">Desktop</Button>
@@ -196,12 +196,12 @@
             <Label Grid.Column="2" Grid.Row="3" Height="12" VerticalAlignment="Center" HorizontalAlignment="Right">C GBlur</Label>
             <Label Grid.Column="2" Grid.Row="4" Height="12" VerticalAlignment="Center" HorizontalAlignment="Right">C Sharpen</Label>
             <Label Grid.Column="2" Grid.Row="5" Height="12" VerticalAlignment="Center" HorizontalAlignment="Right">C VShift</Label>
-            <TextBox x:Name="filterLGBlur" Grid.Column="1" Grid.Row="3" Margin="5,0" Height="20" VerticalAlignment="Center" IsEnabled="False" Foreground="White">9999</TextBox>
-            <TextBox x:Name="filterLSharpen" Grid.Column="1" Grid.Row="4" Margin="5,0" Height="20" VerticalAlignment="Center" IsEnabled="False" Foreground="White">9999</TextBox>
-            <TextBox x:Name="filterCHShift" Grid.Column="1" Grid.Row="5" Margin="5,0" Height="20" VerticalAlignment="Center" IsEnabled="False" Foreground="White">0.0</TextBox>
-            <TextBox x:Name="filterCGBlur" Grid.Column="3" Grid.Row="3" Margin="5,0" Height="20" VerticalAlignment="Center" IsEnabled="False" Foreground="White">9999</TextBox>
-            <TextBox x:Name="filterCSharpen" Grid.Column="3" Grid.Row="4" Margin="5,0" Height="20" VerticalAlignment="Center" IsEnabled="False" Foreground="White">9999</TextBox>
-            <TextBox x:Name="filterCVShift" Grid.Column="3" Grid.Row="5" Margin="5,0" Height="20" VerticalAlignment="Center" IsEnabled="False" Foreground="White">0.0</TextBox>
+            <TextBox x:Name="filterLGBlur" Grid.Column="1" Grid.Row="3" Margin="5,0" Height="20" VerticalAlignment="Center" IsEnabled="False">9999</TextBox>
+            <TextBox x:Name="filterLSharpen" Grid.Column="1" Grid.Row="4" Margin="5,0" Height="20" VerticalAlignment="Center" IsEnabled="False">9999</TextBox>
+            <TextBox x:Name="filterCHShift" Grid.Column="1" Grid.Row="5" Margin="5,0" Height="20" VerticalAlignment="Center" IsEnabled="False">0.0</TextBox>
+            <TextBox x:Name="filterCGBlur" Grid.Column="3" Grid.Row="3" Margin="5,0" Height="20" VerticalAlignment="Center" IsEnabled="False">9999</TextBox>
+            <TextBox x:Name="filterCSharpen" Grid.Column="3" Grid.Row="4" Margin="5,0" Height="20" VerticalAlignment="Center" IsEnabled="False">9999</TextBox>
+            <TextBox x:Name="filterCVShift" Grid.Column="3" Grid.Row="5" Margin="5,0" Height="20" VerticalAlignment="Center" IsEnabled="False">0.0</TextBox>
           </Grid>
         </Expander>
         <!-- レイアウト番号 -->
@@ -264,13 +264,13 @@
               <Label Grid.Column="7" Height="12" Margin="5,0" HorizontalAlignment="Right" VerticalAlignment="Center">Bottom</Label>
               <TextBox Grid.Column="8" Height="20" VerticalAlignment="Center">1000</TextBox>
               <Label Grid.Row="1" Grid.Column="1"  Height="12" Margin="5,0" HorizontalAlignment="Right" VerticalAlignment="Center">[%]</Label>
-              <TextBox Grid.Row="1" Grid.Column="2" Height="20" VerticalAlignment="Center" IsEnabled="False" Foreground="White">1000</TextBox>
+              <TextBox Grid.Row="1" Grid.Column="2" Height="20" VerticalAlignment="Center" IsEnabled="False">1000</TextBox>
               <Label Grid.Row="1" Grid.Column="3" Margin="5,0" Height="12" HorizontalAlignment="Right" VerticalAlignment="Center">[%]</Label>
-              <TextBox Grid.Row="1" Grid.Column="4" Height="20" VerticalAlignment="Center" IsEnabled="False" Foreground="White">1000</TextBox>
+              <TextBox Grid.Row="1" Grid.Column="4" Height="20" VerticalAlignment="Center" IsEnabled="False">1000</TextBox>
               <Label Grid.Row="1" Grid.Column="5" Margin="5,0" Height="12" HorizontalAlignment="Right" VerticalAlignment="Center">[%]</Label>
-              <TextBox Grid.Row="1" Grid.Column="6" Height="20" VerticalAlignment="Center" IsEnabled="False" Foreground="White">1000</TextBox>
+              <TextBox Grid.Row="1" Grid.Column="6" Height="20" VerticalAlignment="Center" IsEnabled="False">1000</TextBox>
               <Label Grid.Row="1" Grid.Column="7" Margin="5,0" Height="12" HorizontalAlignment="Right" VerticalAlignment="Center">[%]</Label>
-              <TextBox Grid.Row="1" Grid.Column="8" Height="20" VerticalAlignment="Center" IsEnabled="False" Foreground="White">1000</TextBox>
+              <TextBox Grid.Row="1" Grid.Column="8" Height="20" VerticalAlignment="Center" IsEnabled="False">1000</TextBox>
             </Grid>
           </GroupBox>
           <Viewbox Stretch="Uniform">

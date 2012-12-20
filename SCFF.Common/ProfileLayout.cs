@@ -21,19 +21,18 @@ using System;
 using System.Diagnostics;
 
 public partial class Profile {
-  //===================================================================
-  // Layout(カーソル)
-  // C#のインナークラスはC++のフレンドクラスと似たようなことができる！
-  //
-  // プログラムから直接は利用してはいけないもの(this.profile.appendicesの内容で上書きされるため)
-  // this.profile.message.layoutParameters[*].Bound*
-  //
-  // ProfileはProcessに関連した情報を知ることはできない
-  // よってsampleWidth/sampleHeightの存在は仮定しないこと
-  // 相対比率→ピクセル値変換
-  // Left/Topは切り捨て、Right/Bottomは切り上げ
-  //===================================================================
+  /// Layout(カーソル)
+  /// 
+  /// - C#のインナークラスはC++のフレンドクラスと似たようなことができる！
+  /// - プログラムから直接は利用してはいけないもの(this.profile.appendicesの内容で上書きされるため)
+  ///   - this.profile.message.layoutParameters[*].Bound*
+  ///
+  /// - ProfileはProcessに関連した情報を知ることはできない
+  ///   - よってsampleWidth/sampleHeightの存在は仮定しないこと
+  /// - 相対比率→ピクセル値変換
+  ///   - Left/Topは切り捨て、Right/Bottomは切り上げ
   public class Layout {
+
     // コンストラクタ
     public Layout(Profile profile, int index) {
       this.profile = profile;
@@ -43,6 +42,10 @@ public partial class Profile {
     public int Index {
       get { return this.index; }
     }
+
+    //=================================================================
+    // アクセッサ(単純なもの)
+    //=================================================================
 
     // Window
     public UIntPtr Window {
@@ -172,13 +175,6 @@ public partial class Profile {
       return (int)Math.Floor(this.profile.appendices[this.index].BoundRelativeBottom * sampleHeight);
     }
 
-    internal int BoundWidth(int sampleWidth) {
-      return this.BoundRight(sampleWidth) - this.BoundLeft(sampleWidth);
-    }
-    internal int GetBoundHeight(int index, int sampleHeight) {
-      return this.BoundBottom(sampleHeight) - this.BoundTop(sampleHeight);
-    }
-
     // Desktop Clipping X/Y
     public int DesktopClippingX {
       get { return this.profile.appendices[this.index].DesktopClippingX; }
@@ -197,9 +193,53 @@ public partial class Profile {
     public int RootClippingY {
       get { return this.profile.appendices[this.index].RootClippingY; }
       set { this.profile.appendices[this.index].RootClippingY = value; }
-    } 
+    }
 
+    //=================================================================
+    // アクセッサ(他のアクセッサやWin32APIを必要とするもの)
+    // あまり呼び出し回数が増えるようならキャッシングを考えること
+    //=================================================================
+    
+    public string WindowCaption {
+      get {
+        switch (this.WindowType) {
+          case WindowType.Normal: {
+            /// @todo(me) 実装
+            return this.Window.ToString();
+          }
+          case WindowType.Desktop: {
+            return "(Desktop)";
+          }
+          case WindowType.Root: {
+            return "(Root)";
+          }
+        }
+        return "*** Invalid Window ***";
+      }
+    }
+
+    internal int BoundWidth(int sampleWidth) {
+      return this.BoundRight(sampleWidth) - this.BoundLeft(sampleWidth);
+    }
+    internal int BoundHeight(int index, int sampleHeight) {
+      return this.BoundBottom(sampleHeight) - this.BoundTop(sampleHeight);
+    }
+    internal int WindowWidth {
+      get {
+        /// @todo(me) 実装
+        throw new NotImplementedException();
+      }
+    }
+    internal int WindowHeight {
+      get {
+        /// @todo(me) 実装
+        throw new NotImplementedException();
+      }
+    }
+
+    //=================================================================
     // メンバ変数
+    //=================================================================
     private readonly int index;
     private readonly Profile profile;
   }

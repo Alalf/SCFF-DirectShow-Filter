@@ -43,6 +43,34 @@ public class Options {
   }
 
   //===================================================================
+  // コンストラクタ/デストラクタ
+  //===================================================================
+
+  public Options() {
+    this.reverseRecentProfiles = new string[RecentProfilesLength] {
+      string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, 
+    };
+    this.FFmpegPath = string.Empty;
+    this.FFmpegArguments = string.Empty;
+    this.TmpMainWindowLeft = Constants.MainWindowLeft;
+    this.TmpMainWindowTop = Constants.MainWindowTop;
+    this.TmpMainWindowWidth = Constants.MainWindowWidth;
+    this.TmpMainWindowHeight = Constants.MainWindowHeight;
+    this.TmpMainWindowState = WindowState.Normal;
+    this.TmpAreaIsExpanded = true;
+    this.TmpOptionsIsExpanded = true;
+    this.TmpResizeMethodIsExpanded = true;
+    this.TmpLayoutIsExpanded = true;
+    this.AutoApply = false;
+    this.LayoutPreview = false;
+    this.LayoutBorder = true;
+    this.LayoutSnap = true;
+    this.TmpCompactView = false;
+    this.ForceAeroOn = false;
+    this.TmpRestoreLastProfile = true;
+  }
+
+  //===================================================================
   // アクセッサ
   // プロパティ形式ではあるがDataBindingには使わないように！
   // なお、配列のメンバ変数へのアクセスはプロパティにはこだわらなくても良い
@@ -83,108 +111,34 @@ public class Options {
     this.reverseRecentProfiles[reverseIndex] = profile;
   }
 
-  public string FFmpegPath {
-    get { return this.ffmpegPath; }
-    set { this.ffmpegPath = value; }
-  }
-  public string FFmpegArguments {
-    get { return this.ffmpegArguments; }
-    set { this.ffmpegArguments = value; }
-  }
+  public string FFmpegPath { get; set; }
+  public string FFmpegArguments { get; set; }
 
-  public double TmpMainWindowLeft {
-    get { return this.tmpMainWindowLeft; }
-    set { this.tmpMainWindowLeft = value; }
-  }
-  public double TmpMainWindowTop {
-    get { return this.tmpMainWindowTop; }
-    set { this.tmpMainWindowTop = value; }
-  }
-  public double TmpMainWindowWidth {
-    get { return this.tmpMainWindowWidth; }
-    set { this.tmpMainWindowWidth = value; }
-  }
-  public double TmpMainWindowHeight {
-    get { return this.tmpMainWindowHeight; }
-    set { this.tmpMainWindowHeight = value; }
-  }
-  public WindowState TmpMainWindowState {
-    get { return this.tmpMainWindowState; }
-    set { this.tmpMainWindowState = value; }
-  }
+  public double TmpMainWindowLeft { get; set; }
+  public double TmpMainWindowTop { get; set; }
+  public double TmpMainWindowWidth { get; set; }
+  public double TmpMainWindowHeight { get; set; }
+  public WindowState TmpMainWindowState { get; set; }
 
-  public bool TmpAreaIsExpanded {
-    get { return this.tmpAreaIsExpanded; }
-    set { this.tmpAreaIsExpanded = value; }
-  }
-  public bool TmpOptionsIsExpanded {
-    get { return this.tmpOptionsIsExpanded; }
-    set { this.tmpOptionsIsExpanded = value; }
-  }
-  public bool TmpResizeMethodIsExpanded {
-    get { return this.tmpResizeMethodIsExpanded; }
-    set { this.tmpResizeMethodIsExpanded = value; }
-  }
-  public bool TmpLayoutIsExpanded {
-    get { return this.tmpLayoutIsExpanded; }
-    set { this.tmpLayoutIsExpanded = value; }
-  }
+  public bool TmpAreaIsExpanded { get; set; }
+  public bool TmpOptionsIsExpanded { get; set; }
+  public bool TmpResizeMethodIsExpanded { get; set; }
+  public bool TmpLayoutIsExpanded { get; set; }
 
-  public bool AutoApply {
-    get { return this.autoApply; }
-    set { this.autoApply = value; }
-  }
-  public bool LayoutPreview {
-    get { return this.layoutPreview; }
-    set { this.layoutPreview = value; }
-  }
-  public bool LayoutBorder {
-    get { return this.layoutBorder; }
-    set { this.layoutBorder = value; }
-  }
-  public bool LayoutSnap {
-    get { return this.layoutSnap; }
-    set { this.layoutSnap = value; }
-  }
+  public bool AutoApply { get; set; }
+  public bool LayoutPreview { get; set; }
+  public bool LayoutBorder { get; set; }
+  public bool LayoutSnap { get; set; }
 
-  public bool TmpCompactView {
-    get { return this.tmpCompactView; }
-    set { this.tmpCompactView = value; }
-  }
-  public bool ForceAeroOn {
-    get { return this.forceAeroOn; }
-    set { this.forceAeroOn = value; }
-  }
-  public bool TmpRestoreLastProfile {
-    get { return this.tmpRestoreLastProfile; }
-    set { this.tmpRestoreLastProfile = value; }
-  }
+  public bool TmpCompactView { get; set; }
+  public bool ForceAeroOn { get; set; }
+  public bool TmpRestoreLastProfile { get; set; }
 
   //===================================================================
   // メンバ変数
   //===================================================================
 
   /// @caution 先頭から古く、末尾が一番新しい
-  private string[] reverseRecentProfiles = new string[RecentProfilesLength] {
-    string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, 
-  };
-  private string ffmpegPath = string.Empty;
-  private string ffmpegArguments = string.Empty;
-  private double tmpMainWindowLeft = Constants.MainWindowLeft;
-  private double tmpMainWindowTop = Constants.MainWindowTop;
-  private double tmpMainWindowWidth = Constants.MainWindowWidth;
-  private double tmpMainWindowHeight = Constants.MainWindowHeight;
-  private WindowState tmpMainWindowState = WindowState.Normal;
-  private bool tmpAreaIsExpanded = true;
-  private bool tmpOptionsIsExpanded = true;
-  private bool tmpResizeMethodIsExpanded = true;
-  private bool tmpLayoutIsExpanded = true;
-  private bool autoApply = true;
-  private bool layoutPreview = true;
-  private bool layoutBorder = true;
-  private bool layoutSnap = true;
-  private bool tmpCompactView = false;
-  private bool forceAeroOn = false;
-  private bool tmpRestoreLastProfile = true;
+  private string[] reverseRecentProfiles;
 }
 }

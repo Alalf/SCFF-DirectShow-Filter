@@ -15,6 +15,9 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
+/// @file SCFF.Common/OptionsINIFile.cs
+/// プロファイル以外のアプリケーション設定のINIファイル入出力機能
+
 namespace SCFF.Common {
 
 using System;
@@ -22,6 +25,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 
+/// プロファイル以外のアプリケーション設定のINIファイル入出力機能
 public static class OptionsINIFile {
 
   //===================================================================

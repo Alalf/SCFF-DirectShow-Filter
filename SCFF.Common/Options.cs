@@ -15,15 +15,16 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
+/// @file SCFF.Common/Options.cs
+/// プロファイル以外のアプリケーション設定
+
 namespace SCFF.Common {
 
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Text;
 
-/// プロファイル以外のアプリケーションの設定
+  /// プロファイル以外のアプリケーション設定
+///
 /// アプリケーションの起動中にプロパティが最新の状態になっている必要の無いものには
 /// Tmpという接頭辞をつけている。プログラム内部でそれらのプロパティを使うことは
 /// Loaded/Closingイベントハンドラ以外ではしてはいけない。

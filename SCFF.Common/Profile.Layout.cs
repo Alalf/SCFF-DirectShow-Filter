@@ -15,13 +15,16 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
+/// @file SCFF.Common/Profile.Layout.cs
+/// プロファイル内を参照・操作するためのカーソルクラス
+
 namespace SCFF.Common {
 
 using System;
 using System.Diagnostics;
 
 public partial class Profile {
-  /// LayoutElement(カーソル)
+  /// プロファイル内を参照・操作するためのカーソルクラス
   /// 
   /// - C#のインナークラスはC++のフレンドクラスと似たようなことができる！
   /// - プログラムから直接は利用してはいけないもの(this.profile.appendicesの内容で上書きされるため)

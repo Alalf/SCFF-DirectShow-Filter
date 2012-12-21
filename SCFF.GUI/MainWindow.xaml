@@ -75,9 +75,9 @@
           <MenuItem Header="Exit(_X)" Command="{x:Static shell:SystemCommands.CloseWindowCommand}" CommandParameter="{Binding ElementName=mainWindow}"/>
         </MenuItem>
         <MenuItem Header="Options(_O)">
-          <MenuItem x:Name="compactView" Header="Compact View(_C)" IsCheckable="True" Unchecked="MenuItem_Unchecked_1" Checked="MenuItem_Checked_1"/>
+          <MenuItem x:Name="compactView" Header="Compact View(_C)" IsCheckable="True" Checked="compactView_Checked" Unchecked="compactView_Unchecked" />
           <Separator/>
-          <MenuItem x:Name="forceAeroOn" Header="Force Aero ON(_A)" IsCheckable="True" Checked="forceAeroOn_Checked" Unchecked="forceAeroOn_Unchecked" />
+          <MenuItem x:Name="forceAeroOn" Header="Force Aero ON(_A)" IsCheckable="True" Click="forceAeroOn_Click"/>
           <MenuItem x:Name="restoreLastProfile" Header="Restore last profile(_R)" IsCheckable="True" />
         </MenuItem>
       </Menu>
@@ -223,7 +223,7 @@
             <RowDefinition Height="30"/>
           </Grid.RowDefinitions>
           <Button Margin="5,0" Height="20" VerticalAlignment="Center" FontSize="10">Splash</Button>
-          <CheckBox x:Name="autoApply" Grid.Column="2" Margin="5,0" Height="16" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="9" Checked="autoApply_Checked" Unchecked="autoApply_Unchecked">Auto</CheckBox>
+          <CheckBox x:Name="autoApply" Grid.Column="2" Margin="5,0" Height="16" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="9" Click="autoApply_Click">Auto</CheckBox>
           <Button Margin="5,0" Grid.Column="3" Height="20" VerticalAlignment="Center"  FontSize="10">Apply</Button>
         </Grid>
       </StackPanel>
@@ -235,9 +235,9 @@
               <Button Command="{x:Static local:Commands.AddLayoutElementCommand}" Margin="3,0,0,0">Add</Button>
               <Button Command="{x:Static local:Commands.RemoveLayoutElementCommand}" Margin="3,0,0,0">Remove</Button>
               <Separator/>
-              <CheckBox x:Name="layoutPreview" Margin="3,0,0,0" Checked="layoutPreview_Checked" Unchecked="layoutPreview_Unchecked">Preview</CheckBox>
-              <CheckBox x:Name="layoutBorder" Margin="3,0,0,0" Checked="layoutBorder_Checked" Unchecked="layoutBorder_Unchecked">Border</CheckBox>
-              <CheckBox x:Name="layoutSnap" Margin="3,0,8,0" Unchecked="layoutSnap_Unchecked" Checked="layoutSnap_Checked">Snap</CheckBox>
+              <CheckBox x:Name="layoutPreview" Margin="3,0,0,0" Click="layoutPreview_Click">Preview</CheckBox>
+              <CheckBox x:Name="layoutBorder" Margin="3,0,0,0" Click="layoutBorder_Click">Border</CheckBox>
+              <CheckBox x:Name="layoutSnap" Margin="3,0,8,0" Click="layoutSnap_Click">Snap</CheckBox>
             </ToolBar>
           </ToolBarTray>
           <GroupBox DockPanel.Dock="Bottom" Width="350" Header="Layout N: (Window Classname)">

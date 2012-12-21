@@ -15,10 +15,14 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
+/// @file SCFF.Common/Constants.cs
+/// SCFF.Commonモジュールで利用する定数・テーブル
+
 namespace SCFF.Common {
 
 using System.Collections.Generic;
 
+/// SCFF.Commonモジュールで利用する定数・テーブル
 public static class Constants {
   public const double MainWindowLeft = 32.0;
   public const double MainWindowTop = 32.0;

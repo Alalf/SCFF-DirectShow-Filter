@@ -18,12 +18,10 @@
 namespace SCFF.GUI {
 
 using System.Windows;
-using SCFF.Common;
 using System.Windows.Controls;
-using System.Windows.Input;
-  using System.Diagnostics;
+using SCFF.Common;
 
-public partial class MainWindow : Window {
+  public partial class MainWindow : Window {
 
   //===================================================================
   // Options

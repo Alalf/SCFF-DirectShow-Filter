@@ -17,13 +17,12 @@
 
 namespace SCFF.GUI {
 
-using Microsoft.Windows.Shell;
+using System.Diagnostics;
 using System.Windows;
-using System.Windows.Input;
-using SCFF.Common;
 using System.Windows.Controls;
-  using System.Diagnostics;
-  using System;
+using System.Windows.Input;
+using Microsoft.Windows.Shell;
+using SCFF.Common;
 
 /// MainWindowのコードビハインド
 public partial class MainWindow : Window {
@@ -61,15 +60,10 @@ public partial class MainWindow : Window {
   }
 
   //===================================================================
-  // メニューイベントハンドラ
+  // UIのみに影響するイベントハンドラ
   //===================================================================
 
-  private void MenuItem_Unchecked_1(object sender, RoutedEventArgs e) {
-    this.optionsExpander.Visibility = Visibility.Visible;
-    this.resizeMethodExpander.Visibility = Visibility.Visible;
-  }
-
-  private void MenuItem_Checked_1(object sender, RoutedEventArgs e) {
+  private void compactView_Checked(object sender, RoutedEventArgs e) {
     this.optionsExpander.Visibility = Visibility.Collapsed;
     this.resizeMethodExpander.Visibility = Visibility.Collapsed;
     this.layoutExpander.IsExpanded = false;
@@ -77,48 +71,9 @@ public partial class MainWindow : Window {
     this.Height = Constants.CompactMainWindowHeight;
   }
 
-  //===================================================================
-  // コントロールイベントハンドラ
-  //===================================================================
-
-  private void autoApply_Checked(object sender, RoutedEventArgs e) {
-    App.Options.AutoApply = true;
-  }
-
-  private void autoApply_Unchecked(object sender, RoutedEventArgs e) {
-    App.Options.AutoApply = false;
-  }
-
-  private void forceAeroOn_Checked(object sender, RoutedEventArgs e) {
-    App.Options.ForceAeroOn = true;
-  }
-
-  private void forceAeroOn_Unchecked(object sender, RoutedEventArgs e) {
-    App.Options.ForceAeroOn = false;
-  }
-
-  private void layoutPreview_Checked(object sender, RoutedEventArgs e) {
-    App.Options.LayoutPreview = true;
-  }
-
-  private void layoutPreview_Unchecked(object sender, RoutedEventArgs e) {
-    App.Options.LayoutPreview = false;
-  }
-
-  private void layoutBorder_Checked(object sender, RoutedEventArgs e) {
-    App.Options.LayoutBorder = true;
-  }
-
-  private void layoutBorder_Unchecked(object sender, RoutedEventArgs e) {
-    App.Options.LayoutBorder = false;
-  }
-
-  private void layoutSnap_Unchecked(object sender, RoutedEventArgs e) {
-    App.Options.LayoutSnap = false;
-  }
-
-  private void layoutSnap_Checked(object sender, RoutedEventArgs e) {
-    App.Options.LayoutSnap = true;
+  private void compactView_Unchecked(object sender, RoutedEventArgs e) {
+    this.optionsExpander.Visibility = Visibility.Visible;
+    this.resizeMethodExpander.Visibility = Visibility.Visible;
   }
 
   private void enableFilter_Checked(object sender, RoutedEventArgs e) {
@@ -151,6 +106,38 @@ public partial class MainWindow : Window {
     this.clippingHeight.IsEnabled = true;
   }
 
+  //===================================================================
+  // コントロールイベントハンドラ
+  //===================================================================
+
+  private void forceAeroOn_Click(object sender, RoutedEventArgs e) {
+    App.Options.ForceAeroOn = this.forceAeroOn.IsChecked;
+  }
+
+  private void autoApply_Click(object sender, RoutedEventArgs e) {
+    if (this.autoApply.IsChecked.HasValue) {
+      App.Options.AutoApply = (bool)this.autoApply.IsChecked;
+    }
+  }
+
+  private void layoutPreview_Click(object sender, RoutedEventArgs e) {
+    if (this.layoutPreview.IsChecked.HasValue) {
+      App.Options.LayoutPreview = (bool)this.layoutPreview.IsChecked;
+    }
+  }
+
+  private void layoutSnap_Click(object sender, RoutedEventArgs e) {
+    if (this.layoutSnap.IsChecked.HasValue) {
+      App.Options.LayoutSnap = (bool)this.layoutSnap.IsChecked;
+    }
+  }
+
+  private void layoutBorder_Click(object sender, RoutedEventArgs e) {
+    if (this.layoutBorder.IsChecked.HasValue) {
+      App.Options.LayoutBorder = (bool)this.layoutBorder.IsChecked;
+    }
+  }
+
   private void layoutElementTab_SelectionChanged(object sender, SelectionChangedEventArgs e) {
     if (!App.Profile.IsInitialized) {
       return;
@@ -171,7 +158,6 @@ public partial class MainWindow : Window {
     Debug.Assert(this.layoutElementTab.SelectedIndex == App.Profile.CurrentLayoutElement.Index);
     this.UpdateByProfile();
   }
-
 
   private void clippingX_TextChanged(object sender, TextChangedEventArgs e) {
     if (!App.Profile.IsInitialized) {

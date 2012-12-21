@@ -15,7 +15,12 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
+/// @file SCFF.Common/ProfileINIFile.cs
+/// プロファイルのINIファイル入出力機能
+
 namespace SCFF.Common {
+
+/// プロファイルのINIファイル入出力機能
 public static class ProfileINIFile {
 
   //===================================================================

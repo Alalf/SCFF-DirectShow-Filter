@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file SCFF.Common.Interprocess/Interprocess/Interprocess.cs
+/// @file SCFF.Common/Interprocess/Interprocess.cs
 /// SCFFのプロセス間通信に関するクラスの宣言
 /// @warning To me: このファイルの中から別のファイルへのusingは禁止！
 /// - 別の言語に移植する場合も最大2ファイルでお願いします

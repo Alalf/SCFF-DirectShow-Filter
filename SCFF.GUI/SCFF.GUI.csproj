@@ -66,6 +66,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Commands.cs" />
     <Compile Include="Controls\LayoutEdit.xaml.cs">
       <DependentUpon>LayoutEdit.xaml</DependentUpon>
     </Compile>

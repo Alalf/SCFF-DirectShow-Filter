@@ -81,17 +81,17 @@ public partial class Profile {
   //===================================================================
 
   /// レイアウトのインスタンスを生成
-  private Layout CreateLayout(int index) {
+  private LayoutElement CreateLayoutElement(int index) {
     var layoutParameter = new Interprocess.LayoutParameter();
     layoutParameter.SWScaleConfig = new Interprocess.SWScaleConfig();
     this.message.LayoutParameters[index] = layoutParameter;
     this.additionalLayoutParameters[index] = new AdditionalLayoutParameter();
 
-    return new Layout(this, index);
+    return new LayoutElement(this, index);
   }
 
   /// レイアウトのゼロクリア
-  private void ClearLayout(Layout layout) {
+  private void ClearLayoutElement(LayoutElement layout) {
     /// @todo(me) インスタンスを生成する形でゼロクリアしているが非効率的？
     var layoutParameter = new Interprocess.LayoutParameter();
     layoutParameter.SWScaleConfig = new Interprocess.SWScaleConfig();
@@ -101,8 +101,8 @@ public partial class Profile {
 
   /// レイアウトの初期値への設定
   /// @pre layoutはゼロクリア済み
-  private void ResetLayout(Layout layout) {
-    this.ClearLayout(layout);
+  private void ResetLayoutElement(LayoutElement layout) {
+    this.ClearLayoutElement(layout);
 
     layout.KeepAspectRatio = true;
     layout.RotateDirection = RotateDirections.NoRotate;
@@ -154,29 +154,38 @@ public partial class Profile {
     this.UpdateTimestamp();
 
     // currentの生成
-    var layout = CreateLayout(0);
-    this.ResetLayout(layout);
-    this.currentLayout = layout;
+    var layoutElement = CreateLayoutElement(0);
+    this.ResetLayoutElement(layoutElement);
+    this.currentLayoutElement = layoutElement;
   }
 
   //===================================================================
-  // Add/Remove Layout
+  // Add/Remove LayoutElement
   //===================================================================
 
-  public bool CanAddLayout() {
+  public bool CanAddLayoutElement() {
     var length = Interprocess.Interprocess.MaxComplexLayoutElements;
-    if (this.message.LayoutElementCount < length - 1) {
+    if (this.message.LayoutElementCount < length) {
       return true;
     } else {
       return false;
     }
   }
 
-  public void AddLayout() {
-    
+  public void AddLayoutElement() {
+    var nextIndex = this.LayoutElementCount;
+    ++this.LayoutElementCount;
+    this.LayoutType = LayoutTypes.ComplexLayout;
+    this.UpdateTimestamp();
+
+    // currentを新たに生成したものに切り替える
+    var layoutElement = CreateLayoutElement(nextIndex);
+    this.ResetLayoutElement(layoutElement);
+    /// @todo(me) レイアウト配置時に毎回サイズと場所がかぶっているのはわかりづらいのでずらしたい
+    this.currentLayoutElement = layoutElement;
   }
 
-  public bool CanRemoveLayout() {
+  public bool CanRemoveLayoutElement() {
     if (this.message.LayoutElementCount > 1) {
       return true;
     } else {
@@ -184,7 +193,54 @@ public partial class Profile {
     }
   }
 
-  public void RemoveCurrentLayout() {}
+  public void RemoveCurrentLayoutElement() {
+    // ややこしいので良く考えて書くこと！
+    // とりあえず一番簡単なのは全部コピーして全部に書き戻すことだろう
+    // また、全体的にスレッドセーフではないとおもうので何とかしたいところ
+    var layoutParameterList = new List<Interprocess.LayoutParameter>();
+    var additionalLayoutPararameterList = new List<AdditionalLayoutParameter>();
+
+    var currentIndex = this.currentLayoutElement.Index;
+    for (int i = 0; i < this.LayoutElementCount; ++i) {
+      if (i != currentIndex) {
+        layoutParameterList.Add(this.message.LayoutParameters[i]);
+        additionalLayoutPararameterList.Add(this.additionalLayoutParameters[i]);
+      }
+    }
+
+    // 後は配列を消去した上で書き戻す
+    this.ClearLayoutParameters();
+    layoutParameterList.CopyTo(this.message.LayoutParameters);
+    additionalLayoutPararameterList.CopyTo(this.additionalLayoutParameters);
+
+    // Profileメンバの更新
+    --this.LayoutElementCount;
+    if (this.LayoutElementCount > 1) {
+      this.LayoutType = LayoutTypes.ComplexLayout;
+    } else {
+      this.LayoutType = LayoutTypes.NativeLayout;
+    }
+    this.UpdateTimestamp();
+
+    // Currentの位置を新しい場所に移して終了
+    if (currentIndex < this.LayoutElementCount) {
+      // なにもしない
+    } else {
+      this.currentLayoutElement = new LayoutElement(this, currentIndex - 1);
+    }
+  }
+
+  //===================================================================
+  // Change Current
+  //===================================================================
+
+  public void ChangeCurrentLayoutElement(int index) {
+    this.currentLayoutElement = new LayoutElement(this, index);
+  }
+
+  //===================================================================
+  // Change Current
+  //===================================================================
 
   public void UpdateMessage(int sampleWidth, int sampleHeight) {}
 
@@ -207,16 +263,21 @@ public partial class Profile {
     set { this.message.LayoutElementCount = value; }
   }
 
+  public bool IsInitialized {
+    get { return this.currentLayoutElement != null; }
+  }
+
   //===================================================================
   // イテレータ
   //===================================================================
 
-  public Layout CurrentLayout {
-    get { return this.currentLayout; }
+  public LayoutElement CurrentLayoutElement {
+    get { return this.currentLayoutElement; }
   }
-  public IEnumerator<Layout> GetEnumerator() {
+
+  public IEnumerator<LayoutElement> GetEnumerator() {
     for (int i = 0; i < this.message.LayoutElementCount; ++i) {
-      yield return new Layout(this, i);
+      yield return new LayoutElement(this, i);
     }
   }
 
@@ -225,7 +286,7 @@ public partial class Profile {
   //===================================================================
 
   // 現在編集中のレイアウト
-  private Layout currentLayout = null;
+  private LayoutElement currentLayoutElement = null;
 
   /// 大半の情報はこのmessage内部にあるが、messageの中身は実行時のみ有効な値が含まれている
   /// (UIntPtr windowなど)。このために、messageとは別にいくらかの情報を追加して保存しなければならない。

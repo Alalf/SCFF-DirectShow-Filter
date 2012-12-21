@@ -21,7 +21,7 @@ using System;
 using System.Diagnostics;
 
 public partial class Profile {
-  /// Layout(カーソル)
+  /// LayoutElement(カーソル)
   /// 
   /// - C#のインナークラスはC++のフレンドクラスと似たようなことができる！
   /// - プログラムから直接は利用してはいけないもの(this.profile.appendicesの内容で上書きされるため)
@@ -31,10 +31,10 @@ public partial class Profile {
   ///   - よってsampleWidth/sampleHeightの存在は仮定しないこと
   /// - 相対比率→ピクセル値変換
   ///   - Left/Topは切り捨て、Right/Bottomは切り上げ
-  public class Layout {
+  public class LayoutElement {
 
     // コンストラクタ
-    public Layout(Profile profile, int index) {
+    public LayoutElement(Profile profile, int index) {
       this.profile = profile;
       this.index = index;
     }

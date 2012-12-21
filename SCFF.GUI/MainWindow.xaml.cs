@@ -22,15 +22,22 @@ using System.Windows;
 using System.Windows.Input;
 using SCFF.Common;
 using System.Windows.Controls;
+  using System.Diagnostics;
+  using System;
 
 /// MainWindowのコードビハインド
 public partial class MainWindow : Window {
 
-  /// コンストラクタ
-  public MainWindow() {
-    this.InitializeComponent();
+  //===================================================================
+  // コンストラクタ/デストラクタ
+  //===================================================================
 
-    // OptionsともProfileとも関係ないデータはここで処理
+  /// コンストラクタ
+  public MainWindow() {    
+    //-----------------------------------------------------------------
+    // Controls
+    //-----------------------------------------------------------------
+    this.InitializeComponent();
 
     // resizeMethod
     this.resizeMethod.Items.Clear();
@@ -44,42 +51,18 @@ public partial class MainWindow : Window {
 
   /// 全ウィンドウ表示前に一度だけ起こるLoadedイベントハンドラ
   private void mainWindow_Loaded(object sender, RoutedEventArgs e) {
-    // アプリケーションの設定からUIに関連するものを読み込む
-    // 存在しない場合は勝手にデフォルト値が読み込まれる・・・はず
-    OptionsINIFile.Load(App.Options);
     this.UpdateByOptions();
-
-    /// @todo(me) プロファイル読み込み
-    if (App.Options.TmpRestoreLastProfile) {
-      App.Profile.ResetProfile();
-    } else {
-      App.Profile.ResetProfile();
-    }
     this.UpdateByProfile();
   }
 
   /// アプリケーション終了時に発生するClosingイベントハンドラ
   private void mainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
     this.SaveOptions();
-
-    OptionsINIFile.Save(App.Options);
   }
 
-	private void CloseWindow_Executed(object sender, ExecutedRoutedEventArgs e) {
-		SystemCommands.CloseWindow((Window)e.Parameter);
-	}
-
-	private void MaximizeWindow_Executed(object sender, ExecutedRoutedEventArgs e) {
-		SystemCommands.MaximizeWindow((Window)e.Parameter);
-	}
-
-	private void MinimizeWindow_Executed(object sender, ExecutedRoutedEventArgs e) {
-		SystemCommands.MinimizeWindow((Window)e.Parameter);
-	}
-
-	private void RestoreWindow_Executed(object sender, ExecutedRoutedEventArgs e) {
-		SystemCommands.RestoreWindow((Window)e.Parameter);
-	}
+  //===================================================================
+  // メニューイベントハンドラ
+  //===================================================================
 
   private void MenuItem_Unchecked_1(object sender, RoutedEventArgs e) {
     this.optionsExpander.Visibility = Visibility.Visible;
@@ -94,19 +77,9 @@ public partial class MainWindow : Window {
     this.Height = Constants.CompactMainWindowHeight;
   }
 
-  private void Save_Executed(object sender, ExecutedRoutedEventArgs e) {
-    //App.Options.AddRecentProfile(e.ToString());
-    //this.UpdateRecentProfiles();
-  }
-
-  private void New_Executed(object sender, ExecutedRoutedEventArgs e) {
-  }
-
-  private void Open_Executed(object sender, ExecutedRoutedEventArgs e) {
-  }
-
-  private void SaveAs_Executed(object sender, ExecutedRoutedEventArgs e) {
-  }
+  //===================================================================
+  // コントロールイベントハンドラ
+  //===================================================================
 
   private void autoApply_Checked(object sender, RoutedEventArgs e) {
     App.Options.AutoApply = true;
@@ -178,7 +151,120 @@ public partial class MainWindow : Window {
     this.clippingHeight.IsEnabled = true;
   }
 
-  private void AddLayout_Executed(object sender, ExecutedRoutedEventArgs e) {
+  private void layoutElementTab_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+    if (!App.Profile.IsInitialized) {
+      return;
+    }
+
+    // Parse
+    var index = this.layoutElementTab.SelectedIndex;
+
+    // Validate
+    if (index < 0) {
+      // SelectedIndexは-1に一時的になる可能性があるので、その場合は処理は行わない。
+      return;
+    }
+
+    // コピー
+    Debug.WriteLine("Index Changed: " + (App.Profile.CurrentLayoutElement.Index+1) + "->" + (index+1));
+    App.Profile.ChangeCurrentLayoutElement(index);
+    Debug.Assert(this.layoutElementTab.SelectedIndex == App.Profile.CurrentLayoutElement.Index);
+    this.UpdateByProfile();
+  }
+
+
+  private void clippingX_TextChanged(object sender, TextChangedEventArgs e) {
+    if (!App.Profile.IsInitialized) {
+      return;
+    }
+
+    // Parse
+    int clippingX;
+    if (!int.TryParse(this.clippingX.Text, out clippingX)) {
+      this.clippingX.Text = "0";
+      return;
+    }
+
+    // Validation
+    /// @todo(me) Validation処理も自分で書くならここしかない
+    if (clippingX < 0) {
+      this.clippingX.Text = "0";
+      return;
+    }
+
+    // Profileに書き込み
+    var original = App.Profile.CurrentLayoutElement.ClippingX;
+    if (original != clippingX) {
+      Debug.WriteLine("ClippingX: " + original + "->" + clippingX);
+      App.Profile.CurrentLayoutElement.ClippingX = clippingX;
+    }
+  }
+
+  //===================================================================
+  // ApplicationCommandsハンドラ
+  //===================================================================
+
+  private void Save_Executed(object sender, ExecutedRoutedEventArgs e) {
+    //App.Options.AddRecentProfile(e.ToString());
+    //this.UpdateRecentProfiles();
+  }
+
+  private void New_Executed(object sender, ExecutedRoutedEventArgs e) {
+  }
+
+  private void Open_Executed(object sender, ExecutedRoutedEventArgs e) {
+  }
+
+  private void SaveAs_Executed(object sender, ExecutedRoutedEventArgs e) {
+  }
+
+  //===================================================================
+  // Windows.Shell.SystemCommandsハンドラ
+  //===================================================================
+  
+	private void CloseWindow_Executed(object sender, ExecutedRoutedEventArgs e) {
+		SystemCommands.CloseWindow((Window)e.Parameter);
+	}
+
+	private void MaximizeWindow_Executed(object sender, ExecutedRoutedEventArgs e) {
+		SystemCommands.MaximizeWindow((Window)e.Parameter);
+	}
+
+	private void MinimizeWindow_Executed(object sender, ExecutedRoutedEventArgs e) {
+		SystemCommands.MinimizeWindow((Window)e.Parameter);
+	}
+
+	private void RestoreWindow_Executed(object sender, ExecutedRoutedEventArgs e) {
+		SystemCommands.RestoreWindow((Window)e.Parameter);
+	}
+
+  //===================================================================
+  // SCFF.GUI.Commandsハンドラ
+  //===================================================================
+
+  private void AddLayoutElement_Executed(object sender, ExecutedRoutedEventArgs e) {
+    App.Profile.AddLayoutElement();
+    this.AddLayoutElementTab();
+    Debug.WriteLine("*********Add!**********");
+    this.layoutElementTab.SelectedIndex = App.Profile.CurrentLayoutElement.Index;
+    this.UpdateByProfile();
+  }
+
+  private void AddLayoutElement_CanExecute(object sender, CanExecuteRoutedEventArgs e) {
+    e.CanExecute = App.Profile.CanAddLayoutElement();
+  }
+
+  private void RemoveLayoutElement_Executed(object sender, ExecutedRoutedEventArgs e) {
+    App.Profile.RemoveCurrentLayoutElement();
+    Debug.WriteLine("========Remove=========");
+    this.RemoveLayoutElementTab();
+    Debug.WriteLine("--------Remove/Tab---------");
+    Debug.Assert(this.layoutElementTab.SelectedIndex == App.Profile.CurrentLayoutElement.Index);
+    this.UpdateByProfile();
+  }
+
+  private void RemoveLayoutElement_CanExecute(object sender, CanExecuteRoutedEventArgs e) {
+    e.CanExecute = App.Profile.CanRemoveLayoutElement();
   }
 }
 }

@@ -18,8 +18,12 @@
     <CommandBinding Command="Open" Executed="Open_Executed"/>
     <CommandBinding Command="Save" Executed="Save_Executed"/>
     <CommandBinding Command="SaveAs" Executed="SaveAs_Executed"/>
-    <CommandBinding Command="{x:Static local:MainWindow.AddLayoutCommand}"
-                    Executed="AddLayout_Executed"/>
+    <CommandBinding Command="{x:Static local:Commands.AddLayoutElementCommand}"
+                    Executed="AddLayoutElement_Executed"
+                    CanExecute="AddLayoutElement_CanExecute"/>
+    <CommandBinding Command="{x:Static local:Commands.RemoveLayoutElementCommand}"
+                    Executed="RemoveLayoutElement_Executed"
+                    CanExecute="RemoveLayoutElement_CanExecute"/>
   </Window.CommandBindings>
   <shell:WindowChrome.WindowChrome>
     <shell:WindowChrome CaptionHeight="{x:Static SystemParameters.CaptionHeight}" ResizeBorderThickness="8" GlassFrameThickness="0,0,0,1" />
@@ -136,7 +140,7 @@
             <Label Grid.Column="2" Margin="3,0" Height="12" VerticalAlignment="Center">Y</Label>
             <Label Grid.Column="4" Margin="3,0" Height="12" VerticalAlignment="Center">Size</Label>
             <Label Grid.Column="6" Margin="3,0" Height="12" VerticalAlignment="Center">x</Label>
-            <TextBox x:Name="clippingX" Grid.Column="1" Margin="0,0,5,0" Height="20" VerticalAlignment="Center">9999</TextBox>
+            <TextBox x:Name="clippingX" Grid.Column="1" Margin="0,0,5,0" Height="20" VerticalAlignment="Center" TextChanged="clippingX_TextChanged">9999</TextBox>
             <TextBox x:Name="clippingY" Grid.Column="3" Margin="0,0,5,0" Height="20" VerticalAlignment="Center">9999</TextBox>
             <TextBox x:Name="clippingWidth" Grid.Column="5" Margin="0,0,5,0" Height="20" VerticalAlignment="Center">9999</TextBox>
             <TextBox x:Name="clippingHeight" Grid.Column="8" Margin="0,0,5,0" Height="20" VerticalAlignment="Center">9999</TextBox>
@@ -185,11 +189,7 @@
               <RowDefinition Height="25"/>
               <RowDefinition Height="25"/>
             </Grid.RowDefinitions>
-            <ComboBox x:Name="resizeMethod" Grid.ColumnSpan="2" Height="20" VerticalAlignment="Center">
-              <ComboBoxItem Content="hoge" IsSelected="True"/>
-              <ComboBoxItem Content="hige"/>
-              <ComboBoxItem Content="huga"/>
-            </ComboBox>
+            <ComboBox x:Name="resizeMethod" Grid.ColumnSpan="2" Height="20" VerticalAlignment="Center" />
             <CheckBox x:Name="swscaleAccurateRnd" Grid.Column="2" Grid.ColumnSpan="2" Height="16" VerticalAlignment="Center">Accurate Rounding</CheckBox>
             <Separator Grid.Row="1" Grid.ColumnSpan="4" />
             <CheckBox x:Name="swscaleIsFilterEnabled" Grid.Row="2" Grid.ColumnSpan="4" Height="16" VerticalAlignment="Center" Checked="enableFilter_Checked" Unchecked="enableFilter_Unchecked">Enable filter</CheckBox>
@@ -208,7 +208,7 @@
           </Grid>
         </Expander>
         <!-- レイアウト番号 -->
-        <TabControl x:Name="layoutTab" TabStripPlacement="Bottom" FontSize="9">
+        <TabControl x:Name="layoutElementTab" TabStripPlacement="Bottom" FontSize="9" SelectionChanged="layoutElementTab_SelectionChanged">
           <TabItem Header="1" />
         </TabControl>
         <!-- Apply -->
@@ -232,8 +232,8 @@
         <DockPanel LastChildFill="True">
           <ToolBarTray DockPanel.Dock="Top" Background="{x:Null}" IsLocked="True" HorizontalAlignment="Center">
             <ToolBar Header="Layout " Height="25">
-              <Button Command="{x:Static local:MainWindow.AddLayoutCommand}" Margin="3,0,0,0">Add</Button>
-              <Button Margin="3,0,0,0">Remove</Button>
+              <Button Command="{x:Static local:Commands.AddLayoutElementCommand}" Margin="3,0,0,0">Add</Button>
+              <Button Command="{x:Static local:Commands.RemoveLayoutElementCommand}" Margin="3,0,0,0">Remove</Button>
               <Separator/>
               <CheckBox x:Name="layoutPreview" Margin="3,0,0,0" Checked="layoutPreview_Checked" Unchecked="layoutPreview_Unchecked">Preview</CheckBox>
               <CheckBox x:Name="layoutBorder" Margin="3,0,0,0" Checked="layoutBorder_Checked" Unchecked="layoutBorder_Unchecked">Border</CheckBox>

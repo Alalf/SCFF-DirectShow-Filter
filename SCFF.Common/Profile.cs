@@ -115,24 +115,19 @@ public partial class Profile {
     layout.SWScaleChromaHshift = 1.0F;
     layout.SWScaleChromaVshift = 1.0F;
 
-    /// @todo(me) ここからデフォルトウィンドウの指定などを行う・・・？やっぱりWin32いるじゃねーかwww
+    // プライマリモニタを表示
+    layout.WindowType = WindowTypes.Normal;
+    layout.Window = layout.DesktopWindow;
     layout.ClippingX = 0;
     layout.ClippingY = 0;
-    layout.ClippingWidth = 320;
-    layout.ClippingHeight = 240;
-
-    layout.WindowType = WindowTypes.Root;
-    layout.Window = UIntPtr.Zero;
+    layout.ClippingWidth = layout.WindowWidth;
+    layout.ClippingHeight = layout.WindowHeight;
     
     layout.Fit = true;
     layout.BoundRelativeLeft = 0.0;
     layout.BoundRelativeTop = 0.0;
     layout.BoundRelativeRight = 1.0;
     layout.BoundRelativeBottom = 1.0;
-    layout.DesktopClippingX = -1;
-    layout.DesktopClippingY = -1;
-    layout.RootClippingX = -1;
-    layout.RootClippingY = -1;
   }
 
   //===================================================================
@@ -299,10 +294,6 @@ public partial class Profile {
     public double BoundRelativeTop { get; set; }
     public double BoundRelativeRight { get; set; }
     public double BoundRelativeBottom { get; set; }
-    public int DesktopClippingX { get; set; }
-    public int DesktopClippingY { get; set; }
-    public int RootClippingX { get; set; }
-    public int RootClippingY { get; set; }
   }
 
   /// 追加レイアウトパラメータをまとめた配列

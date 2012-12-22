@@ -139,7 +139,7 @@ public partial class MainWindow : Window {
   //===================================================================
   // *Changedではないが、値が変更したときに発生するイベントハンドラ
   // プロパティへの代入で発生するので、App.Profileの変更は禁止
-  // このためthis.UpdateByProfile()の必要はない
+  // このためthis.UpdateByProfile()の必要はない(呼び出しても良い)
   //===================================================================
 
   private void compactView_Checked(object sender, RoutedEventArgs e) {
@@ -221,7 +221,10 @@ public partial class MainWindow : Window {
 
   private void fit_Click(object sender, RoutedEventArgs e) {
     if (this.fit.IsChecked.HasValue) {
+      Debug.WriteLine("fit_Click");
       App.Profile.CurrentLayoutElement.Fit = (bool)this.fit.IsChecked;
+
+      this.UpdateClippingByProfile();
     }
   }
 
@@ -267,6 +270,8 @@ public partial class MainWindow : Window {
   // App.Profileの変更も許可するが、これらのイベントハンドラが割り当てられた
   // コントロールのプロパティへの代入はイベントハンドラの一時削除後に
   // 行わなければならない
+  //
+  /// @todo(me) もうすこしリッチなバリデーションをしても良い
   //===================================================================
 
   private void layoutElementTab_SelectionChanged(object sender, SelectionChangedEventArgs e) {
@@ -294,34 +299,83 @@ public partial class MainWindow : Window {
     }
 
     // Validation
-    /// @todo(me) Validation処理も自分で書くならここしかない
     if (clippingX < 0) {
       this.clippingX.Text = "0";
+      return;
+    } else if (App.Profile.CurrentLayoutElement.WindowWidth < clippingX) {
+      this.clippingX.Text = App.Profile.CurrentLayoutElement.WindowWidth.ToString();
       return;
     }
 
     // Profileに書き込み
-    var original = App.Profile.CurrentLayoutElement.ClippingX;
-    if (original != clippingX) {
-      Debug.WriteLine("ClippingX: " + original + "->" + clippingX);
-      App.Profile.CurrentLayoutElement.ClippingX = clippingX;
-    }
+    App.Profile.CurrentLayoutElement.ClippingX = clippingX;
   }
 
   private void clippingY_TextChanged(object sender, TextChangedEventArgs e) {
+    // Parse
+    int clippingY;
+    if (!int.TryParse(this.clippingY.Text, out clippingY)) {
+      this.clippingY.Text = "0";
+      return;
+    }
 
+    // Validation
+    if (clippingY < 0) {
+      this.clippingY.Text = "0";
+      return;
+    } else if (App.Profile.CurrentLayoutElement.WindowHeight < clippingY) {
+      this.clippingY.Text = App.Profile.CurrentLayoutElement.WindowHeight.ToString();
+      return;
+    }
+
+    // Profileに書き込み
+    App.Profile.CurrentLayoutElement.ClippingY = clippingY;
   }
 
   private void clippingWidth_TextChanged(object sender, TextChangedEventArgs e) {
+    // Parse
+    int clippingWidth;
+    if (!int.TryParse(this.clippingWidth.Text, out clippingWidth)) {
+      this.clippingWidth.Text = "0";
+      return;
+    }
 
+    // Validation
+    if (clippingWidth < 0) {
+      this.clippingWidth.Text = "0";
+      return;
+    } else if (App.Profile.CurrentLayoutElement.WindowWidth < clippingWidth) {
+      this.clippingWidth.Text = App.Profile.CurrentLayoutElement.WindowWidth.ToString();
+      return;
+    }
+
+    // Profileに書き込み
+    App.Profile.CurrentLayoutElement.ClippingWidth = clippingWidth;
   }
 
   private void clippingHeight_TextChanged(object sender, TextChangedEventArgs e) {
+    // Parse
+    int clippingHeight;
+    if (!int.TryParse(this.clippingHeight.Text, out clippingHeight)) {
+      this.clippingHeight.Text = "0";
+      return;
+    }
 
+    // Validation
+    if (clippingHeight < 0) {
+      this.clippingHeight.Text = "0";
+      return;
+    } else if (App.Profile.CurrentLayoutElement.WindowHeight < clippingHeight) {
+      this.clippingHeight.Text = App.Profile.CurrentLayoutElement.WindowHeight.ToString();
+      return;
+    }
+
+    // Profileに書き込み
+    App.Profile.CurrentLayoutElement.ClippingHeight = clippingHeight;
   }
 
   private void swscaleLumaGBlur_TextChanged(object sender, TextChangedEventArgs e) {
-
+    //にたようなかんじでかけます
   }
 
   private void swscaleChromaGBlur_TextChanged(object sender, TextChangedEventArgs e) {

@@ -22,6 +22,7 @@ namespace SCFF.Common {
 
 using System;
 using System.Diagnostics;
+using System.Text;
 
 public partial class Profile {
   /// プロファイル内を参照・操作するためのカーソルクラス
@@ -178,26 +179,6 @@ public partial class Profile {
       return (int)Math.Floor(this.profile.additionalLayoutParameters[this.index].BoundRelativeBottom * sampleHeight);
     }
 
-    // Desktop Clipping X/Y
-    public int DesktopClippingX {
-      get { return this.profile.additionalLayoutParameters[this.index].DesktopClippingX; }
-      set { this.profile.additionalLayoutParameters[this.index].DesktopClippingX = value; }
-    }
-    public int DesktopClippingY {
-      get { return this.profile.additionalLayoutParameters[this.index].DesktopClippingY; }
-      set { this.profile.additionalLayoutParameters[this.index].DesktopClippingY = value; }
-    }
-
-    // Root Clipping X/Y
-    public int RootClippingX {
-      get { return this.profile.additionalLayoutParameters[this.index].RootClippingX; }
-      set { this.profile.additionalLayoutParameters[this.index].RootClippingX = value; }
-    }
-    public int RootClippingY {
-      get { return this.profile.additionalLayoutParameters[this.index].RootClippingY; }
-      set { this.profile.additionalLayoutParameters[this.index].RootClippingY = value; }
-    }
-
     //=================================================================
     // アクセッサ(他のアクセッサやWin32APIを必要とするもの)
     // あまり呼び出し回数が増えるようならキャッシングを考えること
@@ -207,8 +188,12 @@ public partial class Profile {
       get {
         switch (this.WindowType) {
           case WindowTypes.Normal: {
-            /// @todo(me) 実装
-            return this.Window.ToString();
+            if (this.Window == UIntPtr.Zero || !ExternalAPI.IsWindow(this.Window)) {
+              return "*** INVALID WINDOW ***";
+            }
+            StringBuilder className = new StringBuilder(256);
+            ExternalAPI.GetClassName(this.Window, className, 256);
+            return className.ToString();
           }
           case WindowTypes.Desktop: {
             return "(Desktop)";
@@ -216,8 +201,11 @@ public partial class Profile {
           case WindowTypes.Root: {
             return "(Root)";
           }
+          default: {
+            Debug.Fail("WindowCaption: Unknown Type");
+            return "*** UNKNOWN TYPE WINDOW ***";
+          }
         }
-        return "*** Invalid Window ***";
       }
     }
 
@@ -227,17 +215,157 @@ public partial class Profile {
     public int BoundHeight(int sampleHeight) {
       return this.BoundBottom(sampleHeight) - this.BoundTop(sampleHeight);
     }
-    internal int WindowWidth {
+    public int WindowWidth {
       get {
-        /// @todo(me) 実装
-        throw new NotImplementedException();
+        switch (this.WindowType) {
+          case WindowTypes.Normal: {
+            if (this.Window == UIntPtr.Zero || !ExternalAPI.IsWindow(this.Window)) {
+              Debug.WriteLine("WindowWidth: Invalid Window");
+              return -1;
+            }
+            ExternalAPI.RECT windowRect;
+            ExternalAPI.GetClientRect(this.Window, out windowRect);
+            return windowRect.Right - windowRect.Left;
+          }
+          case WindowTypes.Desktop: {
+            return ExternalAPI.GetSystemMetrics(ExternalAPI.SM_CXVIRTUALSCREEN);
+          }
+          case WindowTypes.Root: {
+            ExternalAPI.RECT windowRect;
+            ExternalAPI.GetClientRect(ExternalAPI.GetDesktopWindow(), out windowRect);
+            return windowRect.Right - windowRect.Left;
+          }
+          default: {
+            Debug.Fail("WindowWidth: Invalid WindowType");
+            return -1;
+          }
+        }
       }
     }
-    internal int WindowHeight {
+    public int WindowHeight {
       get {
-        /// @todo(me) 実装
-        throw new NotImplementedException();
+        switch (this.WindowType) {
+          case WindowTypes.Normal: {
+            if (this.Window == UIntPtr.Zero || !ExternalAPI.IsWindow(this.Window)) {
+              Debug.WriteLine("WindowHeight: Invalid Window");
+              return -1;
+            }
+            ExternalAPI.RECT windowRect;
+            ExternalAPI.GetClientRect(this.Window, out windowRect);
+            return windowRect.Bottom - windowRect.Top;
+          }
+          case WindowTypes.Desktop: {
+            return ExternalAPI.GetSystemMetrics(ExternalAPI.SM_CYVIRTUALSCREEN);
+          }
+          case WindowTypes.Root: {
+            ExternalAPI.RECT windowRect;
+            ExternalAPI.GetClientRect(ExternalAPI.GetDesktopWindow(), out windowRect);
+            return windowRect.Bottom - windowRect.Top;
+          }
+          default: {
+            Debug.Fail("WindowHeight: Invalid WindowType");
+            return -1;
+          }
+        }
       }
+    }
+
+    // Desktop Clipping X/Y
+    public int DesktopClippingX {
+      get {
+        return this.RootClippingX - ExternalAPI.GetSystemMetrics(ExternalAPI.SM_XVIRTUALSCREEN);
+      }
+    }
+    public int DesktopClippingY {
+      get {
+        return this.RootClippingY - ExternalAPI.GetSystemMetrics(ExternalAPI.SM_YVIRTUALSCREEN);
+      }
+    }
+
+    // Root Clipping X/Y
+    public int RootClippingX {
+      get {
+        ExternalAPI.POINT windowPoint = new ExternalAPI.POINT { X = 0, Y = 0 };
+        ExternalAPI.ClientToScreen(this.Window, ref windowPoint);
+        return windowPoint.X;
+      }
+    }
+    public int RootClippingY {
+      get {
+        ExternalAPI.POINT windowPoint = new ExternalAPI.POINT { X = 0, Y = 0 };
+        ExternalAPI.ClientToScreen(this.Window, ref windowPoint);
+        return windowPoint.Y;
+      }
+    }
+
+    // Desktop Window
+    //
+    // GetDesktopWindow()
+    //   - Progman (XP/Win7(No Aero)/Vista(No Aero))
+    //     - SHELLDLL_DefView (XP/Win7 No Aero/Vista No Aero?)
+    //       - Internet Exproler_Server (XP Active Desktop)
+    //       - SysListView32 (XP?/Win7 No Aero/Vista No Aero?)
+    //   - WorkerW[/WorkerW]* (Win7 Aero/Vista Aero?)
+    //     - SHELLDLL_DefView
+    //       - SysListView32
+    //   - EdgeUiInputWndClass (Win 8)
+    // パッと見る限り明らかに重いのはAero On時。EnumWindows必須。
+
+    private static UIntPtr enumerateWindowResult = UIntPtr.Zero;
+    private static bool EnumerateWindow(UIntPtr hWnd, UIntPtr lParam) {
+      StringBuilder className = new StringBuilder(256);
+      ExternalAPI.GetClassName(hWnd, className, 256);
+      if (className.ToString() == "WorkerW") {
+        UIntPtr shellDLLDefView = ExternalAPI.FindWindowEx(hWnd, UIntPtr.Zero, "SHELLDLL_DefView", null);
+        if (shellDLLDefView != UIntPtr.Zero) {
+          enumerateWindowResult = shellDLLDefView;
+          return false;
+        }
+      }
+      return true;
+    }
+
+    public UIntPtr DesktopWindow {
+      get {
+        UIntPtr progman = ExternalAPI.FindWindowEx(UIntPtr.Zero, UIntPtr.Zero, "Progman", null);
+        if (progman != UIntPtr.Zero) {
+          // XP/Win7(No Aero)/Vista(No Aero)
+          UIntPtr shellDLLDefView = ExternalAPI.FindWindowEx(progman, UIntPtr.Zero, "SHELLDLL_DefView", null);
+          if (shellDLLDefView != UIntPtr.Zero) {
+            UIntPtr sysListView32 = ExternalAPI.FindWindowEx(shellDLLDefView, UIntPtr.Zero, "SysListView32", null);
+            if (sysListView32 != UIntPtr.Zero) {
+              // XP(No ActiveDesktop)/Win7(No Aero)/Vista(No Aero)
+              return sysListView32;
+            } 
+            UIntPtr internetExprolerServer = ExternalAPI.FindWindowEx(shellDLLDefView, UIntPtr.Zero, "Internet Exproler_Server", null);
+            if (internetExprolerServer != UIntPtr.Zero) {
+              // XP(ActiveDesktop)
+              return internetExprolerServer;
+            }
+          }
+        }
+        UIntPtr edgeUiInputWndClass = ExternalAPI.FindWindowEx(UIntPtr.Zero, UIntPtr.Zero, "EdgeUiInputWndClass", null);
+        if (edgeUiInputWndClass != UIntPtr.Zero) {
+          // Win8
+          return edgeUiInputWndClass;
+        }
+        enumerateWindowResult = UIntPtr.Zero;
+        ExternalAPI.EnumWindows(new ExternalAPI.WNDENUMProc(EnumerateWindow), UIntPtr.Zero);
+        if (enumerateWindowResult != UIntPtr.Zero) {
+          // Win7(Aero)/Vista(Aero)
+          UIntPtr sysListView32 = ExternalAPI.FindWindowEx(enumerateWindowResult, UIntPtr.Zero, "SysListView32", null);
+          if (sysListView32 != UIntPtr.Zero) {
+            return sysListView32;
+          }
+        }
+        return this.RootWindow;
+      }
+    }
+
+    // Root Window = GetDesktopWindow()
+
+    public UIntPtr RootWindow {
+      get { return ExternalAPI.GetDesktopWindow(); }
     }
 
     //=================================================================

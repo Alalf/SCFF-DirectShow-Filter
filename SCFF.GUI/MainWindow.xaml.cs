@@ -68,8 +68,9 @@ public partial class MainWindow : Window {
   //===================================================================
 
   private void Save_Executed(object sender, ExecutedRoutedEventArgs e) {
-    //App.Options.AddRecentProfile(e.ToString());
-    //this.UpdateRecentProfiles();
+    // @todo(me) 実装
+    App.Options.AddRecentProfile(System.DateTime.UtcNow.ToString());
+    this.UpdateRecentProfiles();
   }
 
   private void New_Executed(object sender, ExecutedRoutedEventArgs e) {
@@ -137,8 +138,8 @@ public partial class MainWindow : Window {
 
   //===================================================================
   // *Changedではないが、値が変更したときに発生するイベントハンドラ
-  // プロパティへの代入で発生するが、App.Profileまでは影響せず
-  // this.UpdateByProfile()の呼び出しはしない
+  // プロパティへの代入で発生するので、App.Profileの変更は禁止
+  // このためthis.UpdateByProfile()の必要はない
   //===================================================================
 
   private void compactView_Checked(object sender, RoutedEventArgs e) {
@@ -186,7 +187,8 @@ public partial class MainWindow : Window {
 
   //===================================================================
   // *Changed以外のイベントハンドラ
-  // 同じくプロパティへの代入では発生しない
+  // プロパティへの代入では発生しないので、
+  // この中でのApp.Optionsの変更は許可
   //===================================================================
 
   private void forceAeroOn_Click(object sender, RoutedEventArgs e) {
@@ -261,6 +263,10 @@ public partial class MainWindow : Window {
 
   //===================================================================
   // *Changedイベントハンドラ
+  // プロパティへの代入で発生する
+  // App.Profileの変更も許可するが、これらのイベントハンドラが割り当てられた
+  // コントロールのプロパティへの代入はイベントハンドラの一時削除後に
+  // 行わなければならない
   //===================================================================
 
   private void layoutElementTab_SelectionChanged(object sender, SelectionChangedEventArgs e) {

@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file SCFF.Common/Profile.Layout.cs
+/// @file SCFF.Common/Profile.LayoutElement.cs
 /// プロファイル内を参照・操作するためのカーソルクラス
 
 namespace SCFF.Common {

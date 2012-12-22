@@ -38,14 +38,18 @@ public partial class MainWindow : Window {
     //-----------------------------------------------------------------
     this.InitializeComponent();
 
-    // resizeMethod
-    this.resizeMethod.Items.Clear();
-    foreach (var method in Constants.ResizeMethods) {
+    // swscaleFlags
+    this.swscaleFlags.Items.Clear();
+    foreach (var method in Constants.ResizeMethodLabels) {
       var item = new ComboBoxItem();
-      item.Tag = method.Key;
-      item.Content = method.Value;
-      this.resizeMethod.Items.Add(item);
+      item.Content = method;
+      this.swscaleFlags.Items.Add(item);
     }
+
+    //-----------------------------------------------------------------
+    // EventHandlers
+    //-----------------------------------------------------------------
+    this.AttachChangedEventHandlers();
   }
 
   /// 全ウィンドウ表示前に一度だけ起こるLoadedイベントハンドラ
@@ -57,133 +61,6 @@ public partial class MainWindow : Window {
   /// アプリケーション終了時に発生するClosingイベントハンドラ
   private void mainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
     this.SaveOptions();
-  }
-
-  //===================================================================
-  // UIのみに影響するイベントハンドラ
-  //===================================================================
-
-  private void compactView_Checked(object sender, RoutedEventArgs e) {
-    this.optionsExpander.Visibility = Visibility.Collapsed;
-    this.resizeMethodExpander.Visibility = Visibility.Collapsed;
-    this.layoutExpander.IsExpanded = false;
-    this.Width = Constants.CompactMainWindowWidth;
-    this.Height = Constants.CompactMainWindowHeight;
-  }
-
-  private void compactView_Unchecked(object sender, RoutedEventArgs e) {
-    this.optionsExpander.Visibility = Visibility.Visible;
-    this.resizeMethodExpander.Visibility = Visibility.Visible;
-  }
-
-  private void enableFilter_Checked(object sender, RoutedEventArgs e) {
-    this.swscaleLumaGBlur.IsEnabled = true;
-    this.swscaleLumaSharpen.IsEnabled = true;
-    this.swscaleChromaGBlur.IsEnabled = true;
-    this.swscaleChromaSharpen.IsEnabled = true;
-    /// @todo(me) HshiftおよびVshiftの使い方がわかるまで設定できないように
-  }
-
-  private void enableFilter_Unchecked(object sender, RoutedEventArgs e) {
-    this.swscaleLumaGBlur.IsEnabled = false;
-    this.swscaleLumaSharpen.IsEnabled = false;
-    this.swscaleChromaGBlur.IsEnabled = false;
-    this.swscaleChromaSharpen.IsEnabled = false;
-    /// @todo(me) HshiftおよびVshiftの使い方がわかるまで設定できないように
-  }
-
-  private void fit_Checked(object sender, RoutedEventArgs e) {
-    this.clippingX.IsEnabled = false;
-    this.clippingY.IsEnabled = false;
-    this.clippingWidth.IsEnabled = false;
-    this.clippingHeight.IsEnabled = false;
-  }
-
-  private void fit_Unchecked(object sender, RoutedEventArgs e) {
-    this.clippingX.IsEnabled = true;
-    this.clippingY.IsEnabled = true;
-    this.clippingWidth.IsEnabled = true;
-    this.clippingHeight.IsEnabled = true;
-  }
-
-  //===================================================================
-  // コントロールイベントハンドラ
-  //===================================================================
-
-  private void forceAeroOn_Click(object sender, RoutedEventArgs e) {
-    App.Options.ForceAeroOn = this.forceAeroOn.IsChecked;
-  }
-
-  private void autoApply_Click(object sender, RoutedEventArgs e) {
-    if (this.autoApply.IsChecked.HasValue) {
-      App.Options.AutoApply = (bool)this.autoApply.IsChecked;
-    }
-  }
-
-  private void layoutPreview_Click(object sender, RoutedEventArgs e) {
-    if (this.layoutPreview.IsChecked.HasValue) {
-      App.Options.LayoutPreview = (bool)this.layoutPreview.IsChecked;
-    }
-  }
-
-  private void layoutSnap_Click(object sender, RoutedEventArgs e) {
-    if (this.layoutSnap.IsChecked.HasValue) {
-      App.Options.LayoutSnap = (bool)this.layoutSnap.IsChecked;
-    }
-  }
-
-  private void layoutBorder_Click(object sender, RoutedEventArgs e) {
-    if (this.layoutBorder.IsChecked.HasValue) {
-      App.Options.LayoutBorder = (bool)this.layoutBorder.IsChecked;
-    }
-  }
-
-  private void layoutElementTab_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-    if (!App.Profile.IsInitialized) {
-      return;
-    }
-
-    // Parse
-    var index = this.layoutElementTab.SelectedIndex;
-
-    // Validate
-    if (index < 0) {
-      // SelectedIndexは-1に一時的になる可能性があるので、その場合は処理は行わない。
-      return;
-    }
-
-    // コピー
-    Debug.WriteLine("Index Changed: " + (App.Profile.CurrentLayoutElement.Index+1) + "->" + (index+1));
-    App.Profile.ChangeCurrentLayoutElement(index);
-    Debug.Assert(this.layoutElementTab.SelectedIndex == App.Profile.CurrentLayoutElement.Index);
-    this.UpdateByProfile();
-  }
-
-  private void clippingX_TextChanged(object sender, TextChangedEventArgs e) {
-    if (!App.Profile.IsInitialized) {
-      return;
-    }
-
-    // Parse
-    int clippingX;
-    if (!int.TryParse(this.clippingX.Text, out clippingX)) {
-      this.clippingX.Text = "0";
-      return;
-    }
-
-    // Validation
-    /// @todo(me) Validation処理も自分で書くならここしかない
-    if (clippingX < 0) {
-      this.clippingX.Text = "0";
-      return;
-    }
-
-    // Profileに書き込み
-    var original = App.Profile.CurrentLayoutElement.ClippingX;
-    if (original != clippingX) {
-      Debug.WriteLine("ClippingX: " + original + "->" + clippingX);
-      App.Profile.CurrentLayoutElement.ClippingX = clippingX;
-    }
   }
 
   //===================================================================
@@ -231,8 +108,11 @@ public partial class MainWindow : Window {
   private void AddLayoutElement_Executed(object sender, ExecutedRoutedEventArgs e) {
     App.Profile.AddLayoutElement();
     this.AddLayoutElementTab();
+
+    Debug.Assert(this.layoutElementTab.SelectedIndex == App.Profile.CurrentLayoutElement.Index);
     Debug.WriteLine("*********Add!**********");
-    this.layoutElementTab.SelectedIndex = App.Profile.CurrentLayoutElement.Index;
+    Debug.WriteLine("Current Index: " + (App.Profile.CurrentLayoutElement.Index+1));
+
     this.UpdateByProfile();
   }
 
@@ -242,15 +122,236 @@ public partial class MainWindow : Window {
 
   private void RemoveLayoutElement_Executed(object sender, ExecutedRoutedEventArgs e) {
     App.Profile.RemoveCurrentLayoutElement();
-    Debug.WriteLine("========Remove=========");
     this.RemoveLayoutElementTab();
-    Debug.WriteLine("--------Remove/Tab---------");
+
     Debug.Assert(this.layoutElementTab.SelectedIndex == App.Profile.CurrentLayoutElement.Index);
+    Debug.WriteLine("========Remove!=========");
+    Debug.WriteLine("Current Index: " + (App.Profile.CurrentLayoutElement.Index+1));
+    
     this.UpdateByProfile();
   }
 
   private void RemoveLayoutElement_CanExecute(object sender, CanExecuteRoutedEventArgs e) {
     e.CanExecute = App.Profile.CanRemoveLayoutElement();
+  }
+
+  //===================================================================
+  // *Changedではないが、値が変更したときに発生するイベントハンドラ
+  // プロパティへの代入で発生するが、App.Profileまでは影響せず
+  // this.UpdateByProfile()の呼び出しはしない
+  //===================================================================
+
+  private void compactView_Checked(object sender, RoutedEventArgs e) {
+    this.optionsExpander.Visibility = Visibility.Collapsed;
+    this.resizeMethodExpander.Visibility = Visibility.Collapsed;
+    this.layoutExpander.IsExpanded = false;
+    this.Width = Constants.CompactMainWindowWidth;
+    this.Height = Constants.CompactMainWindowHeight;
+  }
+
+  private void compactView_Unchecked(object sender, RoutedEventArgs e) {
+    this.optionsExpander.Visibility = Visibility.Visible;
+    this.resizeMethodExpander.Visibility = Visibility.Visible;
+  }
+
+  private void swscaleIsFilterEnabled_Checked(object sender, RoutedEventArgs e) {
+   this.swscaleLumaGBlur.IsEnabled = true;
+    this.swscaleLumaSharpen.IsEnabled = true;
+    this.swscaleChromaGBlur.IsEnabled = true;
+    this.swscaleChromaSharpen.IsEnabled = true;
+    /// @todo(me) HshiftおよびVshiftの使い方がわかるまで設定できないように
+  }
+
+  private void swscaleIsFilterEnabled_Unchecked(object sender, RoutedEventArgs e) {
+    this.swscaleLumaGBlur.IsEnabled = false;
+    this.swscaleLumaSharpen.IsEnabled = false;
+    this.swscaleChromaGBlur.IsEnabled = false;
+    this.swscaleChromaSharpen.IsEnabled = false;
+    /// @todo(me) HshiftおよびVshiftの使い方がわかるまで設定できないように
+  }
+
+  private void fit_Checked(object sender, RoutedEventArgs e) {
+    this.clippingX.IsEnabled = false;
+    this.clippingY.IsEnabled = false;
+    this.clippingWidth.IsEnabled = false;
+    this.clippingHeight.IsEnabled = false;
+  }
+
+  private void fit_Unchecked(object sender, RoutedEventArgs e) {
+    this.clippingX.IsEnabled = true;
+    this.clippingY.IsEnabled = true;
+    this.clippingWidth.IsEnabled = true;
+    this.clippingHeight.IsEnabled = true;
+  }
+
+  //===================================================================
+  // *Changed以外のイベントハンドラ
+  // 同じくプロパティへの代入では発生しない
+  //===================================================================
+
+  private void forceAeroOn_Click(object sender, RoutedEventArgs e) {
+    App.Options.ForceAeroOn = this.forceAeroOn.IsChecked;
+  }
+
+  private void autoApply_Click(object sender, RoutedEventArgs e) {
+    if (this.autoApply.IsChecked.HasValue) {
+      App.Options.AutoApply = (bool)this.autoApply.IsChecked;
+    }
+  }
+
+  private void layoutPreview_Click(object sender, RoutedEventArgs e) {
+    if (this.layoutPreview.IsChecked.HasValue) {
+      App.Options.LayoutPreview = (bool)this.layoutPreview.IsChecked;
+    }
+  }
+
+  private void layoutSnap_Click(object sender, RoutedEventArgs e) {
+    if (this.layoutSnap.IsChecked.HasValue) {
+      App.Options.LayoutSnap = (bool)this.layoutSnap.IsChecked;
+    }
+  }
+
+  private void layoutBorder_Click(object sender, RoutedEventArgs e) {
+    if (this.layoutBorder.IsChecked.HasValue) {
+      App.Options.LayoutBorder = (bool)this.layoutBorder.IsChecked;
+    }
+  }
+
+  private void fit_Click(object sender, RoutedEventArgs e) {
+    if (this.fit.IsChecked.HasValue) {
+      App.Profile.CurrentLayoutElement.Fit = (bool)this.fit.IsChecked;
+    }
+  }
+
+  private void showCursor_Click(object sender, RoutedEventArgs e) {
+    if (this.showCursor.IsChecked.HasValue) {
+      App.Profile.CurrentLayoutElement.ShowCursor = (bool)this.showCursor.IsChecked;
+    }
+  }
+
+  private void showLayeredWindow_Click(object sender, RoutedEventArgs e) {
+    if (this.showLayeredWindow.IsChecked.HasValue) {
+      App.Profile.CurrentLayoutElement.ShowLayeredWindow = (bool)this.showLayeredWindow.IsChecked;
+    }
+  }
+
+  private void keepAspectRatio_Click(object sender, RoutedEventArgs e) {
+    if (this.keepAspectRatio.IsChecked.HasValue) {
+      App.Profile.CurrentLayoutElement.KeepAspectRatio = (bool)this.keepAspectRatio.IsChecked;
+    }
+  }
+
+  private void stretch_Click(object sender, RoutedEventArgs e) {
+    if (this.stretch.IsChecked.HasValue) {
+      App.Profile.CurrentLayoutElement.Stretch = (bool)this.stretch.IsChecked;
+    }
+  }
+
+  private void swscaleAccurateRnd_Click(object sender, RoutedEventArgs e) {
+    if (this.swscaleAccurateRnd.IsChecked.HasValue) {
+      App.Profile.CurrentLayoutElement.SWScaleAccurateRnd = (bool)this.swscaleAccurateRnd.IsChecked;
+    }
+  }
+
+  private void swscaleIsFilterEnabled_Click(object sender, RoutedEventArgs e) {
+    if (this.swscaleIsFilterEnabled.IsChecked.HasValue) {
+      App.Profile.CurrentLayoutElement.SWScaleIsFilterEnabled = (bool)this.swscaleIsFilterEnabled.IsChecked;
+    }
+  }
+
+  //===================================================================
+  // *Changedイベントハンドラ
+  //===================================================================
+
+  private void layoutElementTab_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+    var original = App.Profile.CurrentLayoutElement.Index;
+    var next = this.layoutElementTab.SelectedIndex;
+    App.Profile.ChangeCurrentLayoutElement(next);
+
+    Debug.WriteLine("Index Changed: " + (original+1) + "->" + (next+1));
+    Debug.Assert(this.layoutElementTab.SelectedIndex == App.Profile.CurrentLayoutElement.Index);
+
+    this.UpdateByProfile();
+  }
+
+  private void swscaleFlags_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+    Profile.SWScaleFlags flags = Constants.ResizeMethodArray[this.swscaleFlags.SelectedIndex];
+    App.Profile.CurrentLayoutElement.SWScaleFlags = flags;
+  }
+
+  private void clippingX_TextChanged(object sender, TextChangedEventArgs e) {
+    // Parse
+    int clippingX;
+    if (!int.TryParse(this.clippingX.Text, out clippingX)) {
+      this.clippingX.Text = "0";
+      return;
+    }
+
+    // Validation
+    /// @todo(me) Validation処理も自分で書くならここしかない
+    if (clippingX < 0) {
+      this.clippingX.Text = "0";
+      return;
+    }
+
+    // Profileに書き込み
+    var original = App.Profile.CurrentLayoutElement.ClippingX;
+    if (original != clippingX) {
+      Debug.WriteLine("ClippingX: " + original + "->" + clippingX);
+      App.Profile.CurrentLayoutElement.ClippingX = clippingX;
+    }
+  }
+
+  private void clippingY_TextChanged(object sender, TextChangedEventArgs e) {
+
+  }
+
+  private void clippingWidth_TextChanged(object sender, TextChangedEventArgs e) {
+
+  }
+
+  private void clippingHeight_TextChanged(object sender, TextChangedEventArgs e) {
+
+  }
+
+  private void swscaleLumaGBlur_TextChanged(object sender, TextChangedEventArgs e) {
+
+  }
+
+  private void swscaleChromaGBlur_TextChanged(object sender, TextChangedEventArgs e) {
+
+  }
+
+  private void swscaleLumaSharpen_TextChanged(object sender, TextChangedEventArgs e) {
+
+  }
+
+  private void swscaleChromaSharpen_TextChanged(object sender, TextChangedEventArgs e) {
+
+  }
+
+  private void swscaleChromaHshift_TextChanged(object sender, TextChangedEventArgs e) {
+
+  }
+
+  private void swscaleChromaVshift_TextChanged(object sender, TextChangedEventArgs e) {
+
+  }
+
+  private void boundRelativeLeft_TextChanged(object sender, TextChangedEventArgs e) {
+
+  }
+
+  private void boundRelativeTop_TextChanged(object sender, TextChangedEventArgs e) {
+
+  }
+
+  private void boundRelativeRight_TextChanged(object sender, TextChangedEventArgs e) {
+
+  }
+
+  private void boundRelativeBottom_TextChanged(object sender, TextChangedEventArgs e) {
+
   }
 }
 }

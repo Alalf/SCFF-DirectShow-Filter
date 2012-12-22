@@ -140,11 +140,11 @@
             <Label Grid.Column="2" Margin="3,0" Height="12" VerticalAlignment="Center">Y</Label>
             <Label Grid.Column="4" Margin="3,0" Height="12" VerticalAlignment="Center">Size</Label>
             <Label Grid.Column="6" Margin="3,0" Height="12" VerticalAlignment="Center">x</Label>
-            <TextBox x:Name="clippingX" Grid.Column="1" Margin="0,0,5,0" Height="20" VerticalAlignment="Center" TextChanged="clippingX_TextChanged">9999</TextBox>
+            <TextBox x:Name="clippingX" Grid.Column="1" Margin="0,0,5,0" Height="20" VerticalAlignment="Center">9999</TextBox>
             <TextBox x:Name="clippingY" Grid.Column="3" Margin="0,0,5,0" Height="20" VerticalAlignment="Center">9999</TextBox>
             <TextBox x:Name="clippingWidth" Grid.Column="5" Margin="0,0,5,0" Height="20" VerticalAlignment="Center">9999</TextBox>
             <TextBox x:Name="clippingHeight" Grid.Column="8" Margin="0,0,5,0" Height="20" VerticalAlignment="Center">9999</TextBox>
-            <CheckBox x:Name="fit"  Grid.Row="1" Grid.ColumnSpan="2" Height="16" VerticalAlignment="Center" Margin="0,4" IsChecked="True" Checked="fit_Checked" Unchecked="fit_Unchecked">Fit</CheckBox>
+            <CheckBox x:Name="fit"  Grid.Row="1" Grid.ColumnSpan="2" Height="16" VerticalAlignment="Center" Margin="0,4" IsChecked="True" Checked="fit_Checked" Unchecked="fit_Unchecked" Click="fit_Click">Fit</CheckBox>
             <Button Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="3" Height="20" VerticalAlignment="Center" Margin="0,2">Area Select</Button>
             <Button Grid.Row="1" Grid.Column="5" Height="20" VerticalAlignment="Center">Root</Button>
             <Button Grid.Row="1" Grid.Column="6" Grid.ColumnSpan="2" Height="20" VerticalAlignment="Center">Desktop</Button>
@@ -163,10 +163,10 @@
               <ColumnDefinition Width="140"/>
               <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <CheckBox x:Name="showCursor" Height="15" VerticalAlignment="Center">Show Mouse Cursor</CheckBox>
-            <CheckBox x:Name="showLayeredWindow" Grid.Row="1" Height="15" VerticalAlignment="Center">Show Layered Window</CheckBox>
-            <CheckBox x:Name="keepAspectRatio" Grid.Row="2" Height="15" VerticalAlignment="Center">Keep Aspect Ratio</CheckBox>
-            <CheckBox x:Name="stretch" Grid.Row="3" Height="15" VerticalAlignment="Center">Enable Enlargement</CheckBox>
+            <CheckBox x:Name="showCursor" Height="15" VerticalAlignment="Center" Click="showCursor_Click">Show Mouse Cursor</CheckBox>
+            <CheckBox x:Name="showLayeredWindow" Grid.Row="1" Height="15" VerticalAlignment="Center" Click="showLayeredWindow_Click">Show Layered Window</CheckBox>
+            <CheckBox x:Name="keepAspectRatio" Grid.Row="2" Height="15" VerticalAlignment="Center" Click="keepAspectRatio_Click">Keep Aspect Ratio</CheckBox>
+            <CheckBox x:Name="stretch" Grid.Row="3" Height="15" VerticalAlignment="Center" Click="stretch_Click">Enable Enlargement</CheckBox>
             <CheckBox x:Name="overSampling" Grid.Column="1" Height="15" VerticalAlignment="Center" IsEnabled="False">Over-Sampling</CheckBox>
             <Label Grid.Column="1" Grid.Row="2" Height="12" VerticalAlignment="Center" HorizontalAlignment="Right" IsEnabled="False">Thread Num</Label>
             <ComboBox x:Name="threadCount" Grid.Column="1" Grid.Row="3" Height="20" VerticalAlignment="Center" IsEnabled="False"/>
@@ -189,10 +189,10 @@
               <RowDefinition Height="25"/>
               <RowDefinition Height="25"/>
             </Grid.RowDefinitions>
-            <ComboBox x:Name="resizeMethod" Grid.ColumnSpan="2" Height="20" VerticalAlignment="Center" />
-            <CheckBox x:Name="swscaleAccurateRnd" Grid.Column="2" Grid.ColumnSpan="2" Height="16" VerticalAlignment="Center">Accurate Rounding</CheckBox>
+            <ComboBox x:Name="swscaleFlags" Grid.ColumnSpan="2" Height="20" VerticalAlignment="Center"/>
+            <CheckBox x:Name="swscaleAccurateRnd" Grid.Column="2" Grid.ColumnSpan="2" Height="16" VerticalAlignment="Center" Click="swscaleAccurateRnd_Click">Accurate Rounding</CheckBox>
             <Separator Grid.Row="1" Grid.ColumnSpan="4" />
-            <CheckBox x:Name="swscaleIsFilterEnabled" Grid.Row="2" Grid.ColumnSpan="4" Height="16" VerticalAlignment="Center" Checked="enableFilter_Checked" Unchecked="enableFilter_Unchecked">Enable filter</CheckBox>
+            <CheckBox x:Name="swscaleIsFilterEnabled" Grid.Row="2" Grid.ColumnSpan="4" Height="16" VerticalAlignment="Center" Checked="swscaleIsFilterEnabled_Checked" Unchecked="swscaleIsFilterEnabled_Unchecked" Click="swscaleIsFilterEnabled_Click">Enable filter</CheckBox>
             <Label Grid.Row="3" Height="12" VerticalAlignment="Center" HorizontalAlignment="Right">L GBlur</Label>
             <Label Grid.Row="4" Height="12" VerticalAlignment="Center" HorizontalAlignment="Right">L Sharpen</Label>
             <Label Grid.Row="5" Height="12" VerticalAlignment="Center" HorizontalAlignment="Right">C HShift</Label>
@@ -208,7 +208,7 @@
           </Grid>
         </Expander>
         <!-- レイアウト番号 -->
-        <TabControl x:Name="layoutElementTab" TabStripPlacement="Bottom" FontSize="9" SelectionChanged="layoutElementTab_SelectionChanged">
+        <TabControl x:Name="layoutElementTab" TabStripPlacement="Bottom" FontSize="9">
           <TabItem Header="1" />
         </TabControl>
         <!-- Apply -->

@@ -21,7 +21,7 @@ using System.Windows;
 using System.Windows.Controls;
 using SCFF.Common;
 
-  public partial class MainWindow : Window {
+public partial class MainWindow : Window {
 
   //===================================================================
   // Options
@@ -29,40 +29,33 @@ using SCFF.Common;
 
   /// 最近使用したプロファイルメニューの更新
   private void UpdateRecentProfiles() {
-    if (App.Options.GetRecentProfile(0) == string.Empty) {
-      this.recentProfile1.Header = "1 (_1)";
-      this.recentProfile1.IsEnabled = false;
-    } else {
-      this.recentProfile1.Header = "1 " + App.Options.GetRecentProfile(0) + "(_1)";
-      this.recentProfile1.IsEnabled = true;
-    }
-    if (App.Options.GetRecentProfile(1) == string.Empty) {
-      this.recentProfile2.Header = "2 (_2)";
-      this.recentProfile2.IsEnabled = false;
-    } else {
-      this.recentProfile2.Header = "2 " + App.Options.GetRecentProfile(1) + "(_2)";
-      this.recentProfile2.IsEnabled = true;
-    }
-    if (App.Options.GetRecentProfile(2) == string.Empty) {
-      this.recentProfile3.Header = "3 (_3)";
-      this.recentProfile3.IsEnabled = false;
-    } else {
-      this.recentProfile3.Header = "3 " + App.Options.GetRecentProfile(2) + "(_3)";
-      this.recentProfile3.IsEnabled = true;
-    }
-    if (App.Options.GetRecentProfile(3) == string.Empty) {
-      this.recentProfile4.Header = "4 (_4)";
-      this.recentProfile4.IsEnabled = false;
-    } else {
-      this.recentProfile4.Header = "4 " + App.Options.GetRecentProfile(3) + "(_4)";
-      this.recentProfile4.IsEnabled = true;
-    }
-    if (App.Options.GetRecentProfile(4) == string.Empty) {
-      this.recentProfile5.Header = "5 (_5)";
-      this.recentProfile5.IsEnabled = false;
-    } else {
-      this.recentProfile5.Header = "5 " + App.Options.GetRecentProfile(4) + "(_5)";
-      this.recentProfile5.IsEnabled = true;
+    for (int i = 0; i < Constants.RecentProfilesLength; ++i ) {
+      var isEmpty = App.Options.GetRecentProfile(i) == string.Empty;
+      var header = (i+1) + " " + (isEmpty ? "" : App.Options.GetRecentProfile(i)) +
+        "(_" + (i+1) + ")";
+
+      switch (i) {
+        case 0:
+          this.recentProfile1.IsEnabled = !isEmpty;
+          this.recentProfile1.Header = header;
+          break;
+        case 1:
+          this.recentProfile2.IsEnabled = !isEmpty;
+          this.recentProfile2.Header = header;
+          break;
+        case 2:
+          this.recentProfile3.IsEnabled = !isEmpty;
+          this.recentProfile3.Header = header;
+          break;
+        case 3:
+          this.recentProfile4.IsEnabled = !isEmpty;
+          this.recentProfile4.Header = header;
+          break;
+        case 4:
+          this.recentProfile5.IsEnabled = !isEmpty;
+          this.recentProfile5.Header = header;
+          break;
+      }
     }
   }
 
@@ -120,44 +113,52 @@ using SCFF.Common;
   //===================================================================
   // Profile
   //===================================================================
-  
-  /// TabItemを一気に生成する
-  private void CreateLayoutElementTab() {
-    // Clear()するとSelectedIndexが変わることに注意
-    this.layoutElementTab.Items.Clear();
-    for (int i = 0; i < App.Profile.LayoutElementCount; ++i) {
-      var item = new TabItem();
-      item.Header = (i+1).ToString();
-      this.layoutElementTab.Items.Add(item);
-    }
-  }
 
-  /// TabItemを末尾にひとつ追加する
-  private void AddLayoutElementTab() {
-    var item = new TabItem();
-    item.Header = this.layoutElementTab.Items.Count + 1;
-    this.layoutElementTab.Items.Add(item);
+  private void AttachChangedEventHandlers() {
+    // CheckBoxはClickイベントとChecked/Uncheckedイベントの使い分けでいけるので除外
+    this.clippingX.TextChanged += clippingX_TextChanged;
+    this.clippingY.TextChanged += clippingY_TextChanged;
+    this.clippingWidth.TextChanged += clippingWidth_TextChanged;
+    this.clippingHeight.TextChanged += clippingHeight_TextChanged;
+    this.swscaleFlags.SelectionChanged += swscaleFlags_SelectionChanged;
+    this.swscaleLumaGBlur.TextChanged += swscaleLumaGBlur_TextChanged;
+    this.swscaleLumaSharpen.TextChanged += swscaleLumaSharpen_TextChanged;
+    this.swscaleChromaHshift.TextChanged += swscaleChromaHshift_TextChanged;
+    this.swscaleChromaGBlur.TextChanged += swscaleChromaGBlur_TextChanged;
+    this.swscaleChromaSharpen.TextChanged += swscaleChromaSharpen_TextChanged;
+    this.swscaleChromaVshift.TextChanged += swscaleChromaVshift_TextChanged;
+    this.boundRelativeLeft.TextChanged += boundRelativeLeft_TextChanged;
+    this.boundRelativeTop.TextChanged += boundRelativeTop_TextChanged;
+    this.boundRelativeRight.TextChanged += boundRelativeRight_TextChanged;
+    this.boundRelativeBottom.TextChanged += boundRelativeBottom_TextChanged;
   }
-
-  /// 現在のタブをひとつ削除して後ろのタブの名前を変える
-  private void RemoveLayoutElementTab() {
-    // 末尾を一個削除
-    // 末尾削除なら改名すらいらない
-    var last = this.layoutElementTab.Items.Count - 1;
-    this.layoutElementTab.Items.RemoveAt(last);
+  private void DetachChangedEventHandlers() {
+    // CheckBoxはClickイベントとChecked/Uncheckedイベントの使い分けでいけるので除外
+    this.clippingX.TextChanged -= clippingX_TextChanged;
+    this.clippingY.TextChanged -= clippingY_TextChanged;
+    this.clippingWidth.TextChanged -= clippingWidth_TextChanged;
+    this.clippingHeight.TextChanged -= clippingHeight_TextChanged;
+    this.swscaleFlags.SelectionChanged -= swscaleFlags_SelectionChanged;
+    this.swscaleLumaGBlur.TextChanged -= swscaleLumaGBlur_TextChanged;
+    this.swscaleLumaSharpen.TextChanged -= swscaleLumaSharpen_TextChanged;
+    this.swscaleChromaHshift.TextChanged -= swscaleChromaHshift_TextChanged;
+    this.swscaleChromaGBlur.TextChanged -= swscaleChromaGBlur_TextChanged;
+    this.swscaleChromaSharpen.TextChanged -= swscaleChromaSharpen_TextChanged;
+    this.swscaleChromaVshift.TextChanged -= swscaleChromaVshift_TextChanged;
+    this.boundRelativeLeft.TextChanged -= boundRelativeLeft_TextChanged;
+    this.boundRelativeTop.TextChanged -= boundRelativeTop_TextChanged;
+    this.boundRelativeRight.TextChanged -= boundRelativeRight_TextChanged;
+    this.boundRelativeBottom.TextChanged -= boundRelativeBottom_TextChanged;
   }
 
   /// プロファイルからUIを更新
   private void UpdateByProfile() {
-    // Window Caption
-    this.windowCaption.Text = App.Profile.CurrentLayoutElement.WindowCaption;
-    
+    //-----------------------------------------------------------------
+    // *Changedがあるコントロール以外の更新
+    //-----------------------------------------------------------------
+
     // Area
     this.fit.IsChecked = App.Profile.CurrentLayoutElement.Fit;
-    this.clippingX.Text = App.Profile.CurrentLayoutElement.ClippingX.ToString();
-    this.clippingY.Text = App.Profile.CurrentLayoutElement.ClippingY.ToString();
-    this.clippingWidth.Text = App.Profile.CurrentLayoutElement.ClippingWidth.ToString();
-    this.clippingHeight.Text = App.Profile.CurrentLayoutElement.ClippingHeight.ToString();
 
     // Options
     this.showCursor.IsChecked = App.Profile.CurrentLayoutElement.ShowCursor;
@@ -167,10 +168,28 @@ using SCFF.Common;
     // @todo(me) overSampingとthreadCountはまだDSFでも実装されていない
 
     // Resize Method
-    var index = Constants.ResizeMethodIndexes[App.Profile.CurrentLayoutElement.SWScaleFlags];
-    this.resizeMethod.SelectedIndex = index;
     this.swscaleAccurateRnd.IsChecked = App.Profile.CurrentLayoutElement.SWScaleAccurateRnd;
     this.swscaleIsFilterEnabled.IsChecked = App.Profile.CurrentLayoutElement.SWScaleIsFilterEnabled;
+
+    //-----------------------------------------------------------------
+    // *Changedがあるコントロールの更新
+    //-----------------------------------------------------------------
+
+    // 一時的にイベントハンドラを無効にして値だけ設定する
+    this.DetachChangedEventHandlers();
+
+    // Window Caption
+    this.windowCaption.Text = App.Profile.CurrentLayoutElement.WindowCaption;
+    
+    // Area
+    this.clippingX.Text = App.Profile.CurrentLayoutElement.ClippingX.ToString();
+    this.clippingY.Text = App.Profile.CurrentLayoutElement.ClippingY.ToString();
+    this.clippingWidth.Text = App.Profile.CurrentLayoutElement.ClippingWidth.ToString();
+    this.clippingHeight.Text = App.Profile.CurrentLayoutElement.ClippingHeight.ToString();
+
+    // Resize Method
+    var index = Constants.ResizeMethodIndexes[App.Profile.CurrentLayoutElement.SWScaleFlags];
+    this.swscaleFlags.SelectedIndex = index;
     this.swscaleLumaGBlur.Text = App.Profile.CurrentLayoutElement.SWScaleLumaGBlur.ToString("F2");
     this.swscaleLumaSharpen.Text = App.Profile.CurrentLayoutElement.SWScaleLumaSharpen.ToString("F2");
     this.swscaleChromaHshift.Text = App.Profile.CurrentLayoutElement.SWScaleChromaHshift.ToString("F2");
@@ -185,10 +204,66 @@ using SCFF.Common;
     this.boundRelativeBottom.Text = App.Profile.CurrentLayoutElement.BoundRelativeBottom.ToString("F3");
 
     /// @todo(me) プロセス情報はMainWindowから取ってこれるので、それを参照にしてBoundX/BoundYも更新
-    this.boundX.Text = App.Profile.CurrentLayoutElement.BoundLeft(640).ToString();
-    this.boundY.Text = App.Profile.CurrentLayoutElement.BoundTop(400).ToString();
-    this.boundWidth.Text = App.Profile.CurrentLayoutElement.BoundWidth(640).ToString();
-    this.boundHeight.Text = App.Profile.CurrentLayoutElement.BoundHeight(400).ToString();
+    this.boundX.Text = App.Profile.CurrentLayoutElement.BoundLeft(Constants.DefaultPreviewWidth).ToString();
+    this.boundY.Text = App.Profile.CurrentLayoutElement.BoundTop(Constants.DefaultPreviewHeight).ToString();
+    this.boundWidth.Text = App.Profile.CurrentLayoutElement.BoundWidth(Constants.DefaultPreviewWidth).ToString();
+    this.boundHeight.Text = App.Profile.CurrentLayoutElement.BoundHeight(Constants.DefaultPreviewHeight).ToString();
+
+    // イベントハンドラを戻す
+    this.AttachChangedEventHandlers();
+  }
+
+  //-------------------------------------------------------------------
+  // Tab
+  //-------------------------------------------------------------------
+
+  private void AttachTabSelectionChangedEventHandler() {
+    this.layoutElementTab.SelectionChanged += layoutElementTab_SelectionChanged;
+  }
+
+  private void DetachTabSelectionChangedEventHandler() {
+    this.layoutElementTab.SelectionChanged -= layoutElementTab_SelectionChanged;
+  }
+
+  /// TabItemを一気に生成する
+  private void CreateLayoutElementTab() {
+    this.DetachTabSelectionChangedEventHandler();
+
+    // Clear()するとSelectedIndexが変わることに注意
+    this.layoutElementTab.Items.Clear();
+    for (int i = 0; i < App.Profile.LayoutElementCount; ++i) {
+      var item = new TabItem();
+      item.Header = (i+1).ToString();
+      this.layoutElementTab.Items.Add(item);
+    }
+
+    this.AttachTabSelectionChangedEventHandler();
+  }
+
+  /// TabItemを末尾にひとつ追加する
+  private void AddLayoutElementTab() {
+    this.DetachTabSelectionChangedEventHandler();
+
+    var item = new TabItem();
+    // 1-basedなのでCount+1
+    item.Header = this.layoutElementTab.Items.Count + 1;
+    this.layoutElementTab.Items.Add(item);
+    // 最後に追加されたので末尾を選択
+    this.layoutElementTab.SelectedIndex = this.layoutElementTab.Items.Count - 1;
+
+    this.AttachTabSelectionChangedEventHandler();
+  }
+
+  /// 現在のタブをひとつ削除して後ろのタブの名前を変える
+  private void RemoveLayoutElementTab() {
+    this.DetachTabSelectionChangedEventHandler();
+
+    // 末尾を一個削除
+    // 末尾削除なら改名すらいらない
+    var last = this.layoutElementTab.Items.Count - 1;
+    this.layoutElementTab.Items.RemoveAt(last);
+
+    this.AttachTabSelectionChangedEventHandler();
   }
 }
 }

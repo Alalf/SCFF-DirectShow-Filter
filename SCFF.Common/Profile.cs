@@ -266,10 +266,6 @@ public partial class Profile {
     set { this.message.LayoutElementCount = value; }
   }
 
-  public bool IsInitialized {
-    get { return this.currentLayoutElement != null; }
-  }
-
   //===================================================================
   // イテレータ
   //===================================================================

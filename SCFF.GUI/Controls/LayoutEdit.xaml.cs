@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SCFF.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,7 +20,7 @@ namespace SCFF.GUI.Controls {
   public partial class LayoutEdit : UserControl {
     private void Draw(string text) {
       using (var dc = this.drawingGroup.Open()) {
-        dc.DrawRectangle(Brushes.Black, null, new Rect(0,0,640,400));
+        dc.DrawRectangle(Brushes.Black, null, new Rect(0,0,Constants.DefaultPreviewWidth,Constants.DefaultPreviewHeight));
         dc.DrawRectangle(Brushes.DarkGray, null, new Rect(10,10,100,100));
         if (text != string.Empty) {
           var formattedText = new FormattedText(text,

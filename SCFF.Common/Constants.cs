@@ -31,20 +31,38 @@ public static class Constants {
   public const double CompactMainWindowWidth = 280.0;
   public const double CompactMainWindowHeight = 280.0;
 
+  public const int DefaultPreviewWidth = 640;
+  public const int DefaultPreviewHeight = 400;
+
+  public const int RecentProfilesLength = 5;
+
   // ItemsSourceを使いたくないのでディクショナリを二つ用意しておく
-  public static Dictionary<Profile.SWScaleFlags, string> ResizeMethods =
-      new Dictionary<Profile.SWScaleFlags, string>() {
-    {Profile.SWScaleFlags.FastBilinear, "FastBilinear (fast bilinear)"},
-    {Profile.SWScaleFlags.Bilinear, "Bilinear (bilinear)"},
-    {Profile.SWScaleFlags.Bicubic, "Bicubic (bicubic)"},
-    {Profile.SWScaleFlags.X, "X (experimental)"},
-    {Profile.SWScaleFlags.Point, "Point (nearest neighbor)"},
-    {Profile.SWScaleFlags.Area, "Area (averaging area)"},
-    {Profile.SWScaleFlags.Bicublin, "Bicublin (luma bicubic, chroma bilinear)"},
-    {Profile.SWScaleFlags.Gauss, "Gauss (gaussian)"},
-    {Profile.SWScaleFlags.Sinc, "Sinc (sinc)"},
-    {Profile.SWScaleFlags.Lanczos, "Lanczos (lanczos)"},
-    {Profile.SWScaleFlags.Spline, "Spline (natural bicubic spline)"}
+  public static string[] ResizeMethodLabels = new string[] {
+    "FastBilinear (fast bilinear)",
+    "Bilinear (bilinear)",
+    "Bicubic (bicubic)",
+    "X (experimental)",
+    "Point (nearest neighbor)",
+    "Area (averaging area)",
+    "Bicublin (luma bicubic, chroma bilinear)",
+    "Gauss (gaussian)",
+    "Sinc (sinc)",
+    "Lanczos (lanczos)",
+    "Spline (natural bicubic spline)"
+  };
+
+  public static Profile.SWScaleFlags[] ResizeMethodArray = new Profile.SWScaleFlags[] {
+    Profile.SWScaleFlags.FastBilinear,
+    Profile.SWScaleFlags.Bilinear,
+    Profile.SWScaleFlags.Bicubic,
+    Profile.SWScaleFlags.X,
+    Profile.SWScaleFlags.Point,
+    Profile.SWScaleFlags.Area,
+    Profile.SWScaleFlags.Bicublin,
+    Profile.SWScaleFlags.Gauss,
+    Profile.SWScaleFlags.Sinc,
+    Profile.SWScaleFlags.Lanczos,
+    Profile.SWScaleFlags.Spline,
   };
 
   public static Dictionary<Profile.SWScaleFlags, int> ResizeMethodIndexes =

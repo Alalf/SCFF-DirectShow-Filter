@@ -34,8 +34,6 @@ public class Options {
   // 定数
   //===================================================================
 
-  private const int RecentProfilesLength = 5;
-
   /// Options用WindowState。System.Windows.WindowStateと相互に変換する。
   public enum WindowState {
     Normal,
@@ -48,7 +46,7 @@ public class Options {
   //===================================================================
 
   public Options() {
-    this.reverseRecentProfiles = new string[RecentProfilesLength] {
+    this.reverseRecentProfiles = new string[Constants.RecentProfilesLength] {
       string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, 
     };
     this.FFmpegPath = string.Empty;
@@ -79,8 +77,8 @@ public class Options {
 
   public string GetRecentProfile(int index) {
     // 上下逆に変換
-    int reverseIndex = RecentProfilesLength - index - 1;
-    Debug.Assert(0 <= reverseIndex && reverseIndex < RecentProfilesLength);
+    int reverseIndex = Constants.RecentProfilesLength - index - 1;
+    Debug.Assert(0 <= reverseIndex && reverseIndex < Constants.RecentProfilesLength);
     return this.reverseRecentProfiles[reverseIndex];
   }
   public void AddRecentProfile(string profile) {
@@ -100,15 +98,15 @@ public class Options {
       queue.Dequeue();
     }
     queue.Enqueue(profile);
-    Debug.Assert(queue.Count == RecentProfilesLength); 
+    Debug.Assert(queue.Count == Constants.RecentProfilesLength); 
 
     // 配列に書き戻して終了
     queue.CopyTo(this.reverseRecentProfiles, 0);
   }
   internal void SetRecentProfile(int index, string profile) {
     // 上下逆に変換
-    int reverseIndex = RecentProfilesLength - index - 1;
-    Debug.Assert(0 <= reverseIndex && reverseIndex < RecentProfilesLength);
+    int reverseIndex = Constants.RecentProfilesLength - index - 1;
+    Debug.Assert(0 <= reverseIndex && reverseIndex < Constants.RecentProfilesLength);
     this.reverseRecentProfiles[reverseIndex] = profile;
   }
 

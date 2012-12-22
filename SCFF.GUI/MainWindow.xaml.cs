@@ -156,7 +156,7 @@ public partial class MainWindow : Window {
   }
 
   private void swscaleIsFilterEnabled_Checked(object sender, RoutedEventArgs e) {
-   this.swscaleLumaGBlur.IsEnabled = true;
+    this.swscaleLumaGBlur.IsEnabled = true;
     this.swscaleLumaSharpen.IsEnabled = true;
     this.swscaleChromaGBlur.IsEnabled = true;
     this.swscaleChromaSharpen.IsEnabled = true;

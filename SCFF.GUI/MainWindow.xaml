@@ -37,7 +37,7 @@
   <shell:WindowChrome.WindowChrome>
     <shell:WindowChrome CaptionHeight="{x:Static SystemParameters.CaptionHeight}"
                         ResizeBorderThickness="8"
-                        GlassFrameThickness="0,0,0,1"
+                        GlassFrameThickness="0"
                         CornerRadius="0"/>
   </shell:WindowChrome.WindowChrome>
   <Border BorderBrush="{DynamicResource SolidBorderBrush}" BorderThickness="1">

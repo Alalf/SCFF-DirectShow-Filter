@@ -4,7 +4,16 @@
         xmlns:shell="http://schemas.microsoft.com/winfx/2006/xaml/presentation/shell"
         xmlns:uc="clr-namespace:SCFF.GUI.Controls"
         xmlns:local="clr-namespace:SCFF.GUI"
-        Title="SCFF DirectShow Filter Ver.0.1.7" SnapsToDevicePixels="True" Background="{DynamicResource WindowBackgroundBrush}" Icon="Images/app.ico" ResizeMode="CanResizeWithGrip" Name="mainWindow" Height="565" Width="772.437" MinHeight="280" MinWidth="280" Loaded="mainWindow_Loaded" Closing="mainWindow_Closing" >
+        Title="SCFF DirectShow Filter Ver.0.1.7"
+        SnapsToDevicePixels="True"
+        Background="{DynamicResource WindowBackgroundBrush}"
+        Icon="Images/app.ico"
+        ResizeMode="CanResizeWithGrip"
+        Name="mainWindow"
+        Height="565" Width="772.437"
+        MinHeight="280" MinWidth="280"
+        Loaded="mainWindow_Loaded"
+        Closing="mainWindow_Closing" >
   <Window.CommandBindings>
     <CommandBinding Command="{x:Static shell:SystemCommands.CloseWindowCommand}"
                     Executed="CloseWindow_Executed"/>
@@ -26,7 +35,10 @@
                     CanExecute="RemoveLayoutElement_CanExecute"/>
   </Window.CommandBindings>
   <shell:WindowChrome.WindowChrome>
-    <shell:WindowChrome CaptionHeight="{x:Static SystemParameters.CaptionHeight}" ResizeBorderThickness="8" GlassFrameThickness="0,0,0,1" />
+    <shell:WindowChrome CaptionHeight="{x:Static SystemParameters.CaptionHeight}"
+                        ResizeBorderThickness="8"
+                        GlassFrameThickness="0,0,0,1"
+                        CornerRadius="0"/>
   </shell:WindowChrome.WindowChrome>
   <Border BorderBrush="{DynamicResource SolidBorderBrush}" BorderThickness="1">
     <DockPanel LastChildFill="True" Margin="0,0,0,0">
@@ -49,10 +61,18 @@
         </Grid.Resources>
         <Rectangle Width="10" Height="10" Fill="#FF003B00" Margin="5,0" VerticalAlignment="Center"/>
         <Label x:Name="title" Grid.Column="1" FontSize="10" Content="SCFF DirectShow Filter Ver.0.1.7" VerticalAlignment="Center"/>
-        <Button Grid.Column="2" Height="12" VerticalAlignment="Center" Style="{DynamicResource CaptionButton}" Command="{x:Static shell:SystemCommands.MinimizeWindowCommand}" CommandParameter="{Binding ElementName=mainWindow}">0</Button>
-        <Button Grid.Column="3" Height="12" VerticalAlignment="Center" Style="{DynamicResource CaptionButton}" Command="{x:Static shell:SystemCommands.MaximizeWindowCommand}" CommandParameter="{Binding ElementName=mainWindow}">1</Button>
-        <Button Grid.Column="4" Height="12" VerticalAlignment="Center" Style="{DynamicResource CaptionButton}" Command="{x:Static shell:SystemCommands.RestoreWindowCommand}" CommandParameter="{Binding ElementName=mainWindow}">2</Button>
-        <Button Grid.Column="5" Height="12" VerticalAlignment="Center" Style="{DynamicResource CaptionButton}" Command="{x:Static shell:SystemCommands.CloseWindowCommand}" CommandParameter="{Binding ElementName=mainWindow}">r</Button>
+        <Button Grid.Column="2" Height="12" VerticalAlignment="Center" Style="{DynamicResource CaptionButton}"
+                Command="{x:Static shell:SystemCommands.MinimizeWindowCommand}"
+                CommandParameter="{Binding ElementName=mainWindow}">0</Button>
+        <Button Grid.Column="3" Height="12" VerticalAlignment="Center" Style="{DynamicResource CaptionButton}"
+                Command="{x:Static shell:SystemCommands.MaximizeWindowCommand}"
+                CommandParameter="{Binding ElementName=mainWindow}">1</Button>
+        <Button Grid.Column="4" Height="12" VerticalAlignment="Center" Style="{DynamicResource CaptionButton}"
+                Command="{x:Static shell:SystemCommands.RestoreWindowCommand}"
+                CommandParameter="{Binding ElementName=mainWindow}">2</Button>
+        <Button Grid.Column="5" Height="12" VerticalAlignment="Center" Style="{DynamicResource CaptionButton}"
+                Command="{x:Static shell:SystemCommands.CloseWindowCommand}"
+                CommandParameter="{Binding ElementName=mainWindow}">r</Button>
       </Grid>
       <!-- メニューバー -->
       <Menu DockPanel.Dock="Top" FontSize="9">
@@ -72,12 +92,15 @@
           <MenuItem x:Name="recentProfile4" Header="4 (_4)" IsEnabled="False"/>
           <MenuItem x:Name="recentProfile5" Header="5 (_5)" IsEnabled="False"/>
           <Separator/>
-          <MenuItem Header="Exit(_X)" Command="{x:Static shell:SystemCommands.CloseWindowCommand}" CommandParameter="{Binding ElementName=mainWindow}"/>
+          <MenuItem Header="Exit(_X)" Command="{x:Static shell:SystemCommands.CloseWindowCommand}"
+                    CommandParameter="{Binding ElementName=mainWindow}"/>
         </MenuItem>
         <MenuItem Header="Options(_O)">
-          <MenuItem x:Name="compactView" Header="Compact View(_C)" IsCheckable="True" Checked="compactView_Checked" Unchecked="compactView_Unchecked" />
+          <MenuItem x:Name="compactView" Header="Compact View(_C)" IsCheckable="True"
+                    Checked="compactView_Checked" Unchecked="compactView_Unchecked" />
           <Separator/>
-          <MenuItem x:Name="forceAeroOn" Header="Force Aero ON(_A)" IsCheckable="True" Click="forceAeroOn_Click"/>
+          <MenuItem x:Name="forceAeroOn" Header="Force Aero ON(_A)" IsCheckable="True"
+                    Click="forceAeroOn_Click"/>
           <MenuItem x:Name="restoreLastProfile" Header="Restore last profile(_R)" IsCheckable="True" />
         </MenuItem>
       </Menu>
@@ -113,7 +136,8 @@
               <ColumnDefinition Width="50"/>
             </Grid.ColumnDefinitions>
             <Label Height="15" Width="40" HorizontalAlignment="Right" VerticalAlignment="Center">Caption</Label>
-            <TextBox x:Name="windowCaption" Height="20" Grid.Column="1" Grid.ColumnSpan="3" VerticalAlignment="Center" IsEnabled="False">(Window Classname)</TextBox>
+            <TextBox x:Name="windowCaption" Height="20" Grid.Column="1" Grid.ColumnSpan="3"
+                     VerticalAlignment="Center" IsEnabled="False">(Window Classname)</TextBox>
             <Button Height="20" Grid.Row="1" Grid.ColumnSpan="2">Drag here.</Button>
             <Button Height="20" Grid.Row="1" Grid.Column="2">Root</Button>
             <Button Height="20" Grid.Row="1" Grid.Column="3">Desktop</Button>

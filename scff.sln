@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCFF.GUI", "SCFF.GUI\SCFF.G
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCFF.Common", "SCFF.Common\SCFF.Common.csproj", "{2E0258F9-F198-4B4C-9984-F949D26434CC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCFF.Interprocess", "SCFF.Interprocess\SCFF.Interprocess.csproj", "{B0EB2E38-D3D9-4A69-8C40-D41B9D5E43DB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug_MBCS|Win32 = Debug_MBCS|Win32
@@ -119,6 +121,18 @@ Global
 		{2E0258F9-F198-4B4C-9984-F949D26434CC}.Release|Win32.ActiveCfg = Release|x86
 		{2E0258F9-F198-4B4C-9984-F949D26434CC}.Release|Win32.Build.0 = Release|x86
 		{2E0258F9-F198-4B4C-9984-F949D26434CC}.Release|x64.ActiveCfg = Release|x86
+		{B0EB2E38-D3D9-4A69-8C40-D41B9D5E43DB}.Debug_MBCS|Win32.ActiveCfg = Debug|x86
+		{B0EB2E38-D3D9-4A69-8C40-D41B9D5E43DB}.Debug_MBCS|Win32.Build.0 = Debug|x86
+		{B0EB2E38-D3D9-4A69-8C40-D41B9D5E43DB}.Debug_MBCS|x64.ActiveCfg = Debug|x86
+		{B0EB2E38-D3D9-4A69-8C40-D41B9D5E43DB}.Debug|Win32.ActiveCfg = Debug|x86
+		{B0EB2E38-D3D9-4A69-8C40-D41B9D5E43DB}.Debug|Win32.Build.0 = Debug|x86
+		{B0EB2E38-D3D9-4A69-8C40-D41B9D5E43DB}.Debug|x64.ActiveCfg = Debug|x86
+		{B0EB2E38-D3D9-4A69-8C40-D41B9D5E43DB}.Release_MBCS|Win32.ActiveCfg = Release|x86
+		{B0EB2E38-D3D9-4A69-8C40-D41B9D5E43DB}.Release_MBCS|Win32.Build.0 = Release|x86
+		{B0EB2E38-D3D9-4A69-8C40-D41B9D5E43DB}.Release_MBCS|x64.ActiveCfg = Release|x86
+		{B0EB2E38-D3D9-4A69-8C40-D41B9D5E43DB}.Release|Win32.ActiveCfg = Release|x86
+		{B0EB2E38-D3D9-4A69-8C40-D41B9D5E43DB}.Release|Win32.Build.0 = Release|x86
+		{B0EB2E38-D3D9-4A69-8C40-D41B9D5E43DB}.Release|x64.ActiveCfg = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

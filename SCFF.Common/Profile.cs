@@ -112,8 +112,6 @@ public partial class Profile {
     layout.Stretch = true;
     layout.SWScaleFlags = SWScaleFlags.Area;
     layout.SWScaleIsFilterEnabled = false;
-    layout.SWScaleChromaHshift = 1.0F;
-    layout.SWScaleChromaVshift = 1.0F;
 
     // プライマリモニタを表示
     layout.WindowType = WindowTypes.Desktop;
@@ -124,8 +122,6 @@ public partial class Profile {
     layout.ClippingHeight = ExternalAPI.GetSystemMetrics(ExternalAPI.SM_CYSCREEN);
     
     layout.Fit = false;
-    layout.BoundRelativeLeft = 0.0;
-    layout.BoundRelativeTop = 0.0;
     layout.BoundRelativeRight = 1.0;
     layout.BoundRelativeBottom = 1.0;
   }

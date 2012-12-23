@@ -289,128 +289,234 @@ public partial class MainWindow : Window {
     App.Profile.CurrentLayoutElement.SWScaleFlags = flags;
   }
 
-  private void clippingX_TextChanged(object sender, TextChangedEventArgs e) {
+  //-------------------------------------------------------------------
+  // Clipping*
+  //-------------------------------------------------------------------
+
+  private bool TryParseClippingParameters(TextBox textBox, int lowerBound, int upperBound, out int parsedValue) {
     // Parse
-    int clippingX;
-    if (!int.TryParse(this.clippingX.Text, out clippingX)) {
-      this.clippingX.Text = "0";
-      return;
+    if (!int.TryParse(textBox.Text, out parsedValue)) {
+      parsedValue = lowerBound;
+      textBox.Text = lowerBound.ToString();
+      return false;
     }
 
     // Validation
-    if (clippingX < 0) {
-      this.clippingX.Text = "0";
-      return;
-    } else if (App.Profile.CurrentLayoutElement.WindowWidth < clippingX) {
-      this.clippingX.Text = App.Profile.CurrentLayoutElement.WindowWidth.ToString();
-      return;
+    if (parsedValue < lowerBound) {
+      parsedValue = lowerBound;
+      textBox.Text = lowerBound.ToString();
+      return false;
+    } else if (parsedValue > upperBound) {
+      parsedValue = upperBound;
+      textBox.Text = upperBound.ToString();
+      return false;
     }
 
-    // Profileに書き込み
-    App.Profile.CurrentLayoutElement.ClippingX = clippingX;
+    return true;
+  }
+
+  private void clippingX_TextChanged(object sender, TextChangedEventArgs e) {
+    var lowerBound = 0;
+    var upperBound = App.Profile.CurrentLayoutElement.WindowWidth;
+    int parsedValue;
+    if (this.TryParseClippingParameters(this.clippingX, lowerBound, upperBound, out parsedValue)) {
+      // Profileに書き込み
+      App.Profile.CurrentLayoutElement.ClippingX = parsedValue;
+    }
   }
 
   private void clippingY_TextChanged(object sender, TextChangedEventArgs e) {
-    // Parse
-    int clippingY;
-    if (!int.TryParse(this.clippingY.Text, out clippingY)) {
-      this.clippingY.Text = "0";
-      return;
+    var lowerBound = 0;
+    var upperBound = App.Profile.CurrentLayoutElement.WindowHeight;
+    int parsedValue;
+    if (this.TryParseClippingParameters(this.clippingY, lowerBound, upperBound, out parsedValue)) {
+      // Profileに書き込み
+      App.Profile.CurrentLayoutElement.ClippingY = parsedValue;
     }
-
-    // Validation
-    if (clippingY < 0) {
-      this.clippingY.Text = "0";
-      return;
-    } else if (App.Profile.CurrentLayoutElement.WindowHeight < clippingY) {
-      this.clippingY.Text = App.Profile.CurrentLayoutElement.WindowHeight.ToString();
-      return;
-    }
-
-    // Profileに書き込み
-    App.Profile.CurrentLayoutElement.ClippingY = clippingY;
   }
 
   private void clippingWidth_TextChanged(object sender, TextChangedEventArgs e) {
-    // Parse
-    int clippingWidth;
-    if (!int.TryParse(this.clippingWidth.Text, out clippingWidth)) {
-      this.clippingWidth.Text = "0";
-      return;
+    var lowerBound = 0;
+    var upperBound = App.Profile.CurrentLayoutElement.WindowWidth;
+    int parsedValue;
+    if (this.TryParseClippingParameters(this.clippingWidth, lowerBound, upperBound, out parsedValue)) {
+      // Profileに書き込み
+      App.Profile.CurrentLayoutElement.ClippingWidth = parsedValue;
     }
-
-    // Validation
-    if (clippingWidth < 0) {
-      this.clippingWidth.Text = "0";
-      return;
-    } else if (App.Profile.CurrentLayoutElement.WindowWidth < clippingWidth) {
-      this.clippingWidth.Text = App.Profile.CurrentLayoutElement.WindowWidth.ToString();
-      return;
-    }
-
-    // Profileに書き込み
-    App.Profile.CurrentLayoutElement.ClippingWidth = clippingWidth;
   }
 
   private void clippingHeight_TextChanged(object sender, TextChangedEventArgs e) {
+    var lowerBound = 0;
+    var upperBound = App.Profile.CurrentLayoutElement.WindowHeight;
+    int parsedValue;
+    if (this.TryParseClippingParameters(this.clippingHeight, lowerBound, upperBound, out parsedValue)) {
+      // Profileに書き込み
+      App.Profile.CurrentLayoutElement.ClippingHeight = parsedValue;
+    }
+  }
+
+  //-------------------------------------------------------------------
+  // SWScale*
+  //-------------------------------------------------------------------
+
+  private bool TryParseSWScaleFilterParameter(TextBox textBox, float lowerBound, float upperBound, out float parsedValue) {
     // Parse
-    int clippingHeight;
-    if (!int.TryParse(this.clippingHeight.Text, out clippingHeight)) {
-      this.clippingHeight.Text = "0";
-      return;
+    if (!float.TryParse(textBox.Text, out parsedValue)) {
+      parsedValue = lowerBound;
+      textBox.Text = lowerBound.ToString("F2");
+      return false;
     }
 
     // Validation
-    if (clippingHeight < 0) {
-      this.clippingHeight.Text = "0";
-      return;
-    } else if (App.Profile.CurrentLayoutElement.WindowHeight < clippingHeight) {
-      this.clippingHeight.Text = App.Profile.CurrentLayoutElement.WindowHeight.ToString();
-      return;
+    if (parsedValue < lowerBound) {
+      parsedValue = lowerBound;
+      textBox.Text = lowerBound.ToString("F2");
+      return false;
+    } else if (parsedValue > upperBound) {
+      parsedValue = upperBound;
+      textBox.Text = upperBound.ToString("F2");
+      return false;
     }
 
-    // Profileに書き込み
-    App.Profile.CurrentLayoutElement.ClippingHeight = clippingHeight;
+    return true;
   }
 
   private void swscaleLumaGBlur_TextChanged(object sender, TextChangedEventArgs e) {
-    //にたようなかんじでかけます
+    var lowerBound = 0.0F;
+    var upperBound = 2.0F;
+    float parsedValue;
+    if (this.TryParseSWScaleFilterParameter(this.swscaleLumaGBlur, lowerBound, upperBound, out parsedValue)) {
+      // Profileに書き込み
+      App.Profile.CurrentLayoutElement.SWScaleLumaGBlur = parsedValue;
+    }
   }
 
   private void swscaleChromaGBlur_TextChanged(object sender, TextChangedEventArgs e) {
-
+    var lowerBound = 0.0F;
+    var upperBound = 2.0F;
+    float parsedValue;
+    if (this.TryParseSWScaleFilterParameter(this.swscaleChromaGBlur, lowerBound, upperBound, out parsedValue)) {
+      // Profileに書き込み
+      App.Profile.CurrentLayoutElement.SWScaleChromaGBlur = parsedValue;
+    }
   }
 
   private void swscaleLumaSharpen_TextChanged(object sender, TextChangedEventArgs e) {
-
+    var lowerBound = 0.0F;
+    var upperBound = 4.0F;
+    float parsedValue;
+    if (this.TryParseSWScaleFilterParameter(this.swscaleLumaSharpen, lowerBound, upperBound, out parsedValue)) {
+      // Profileに書き込み
+      App.Profile.CurrentLayoutElement.SWScaleLumaSharpen = parsedValue;
+    }
   }
 
   private void swscaleChromaSharpen_TextChanged(object sender, TextChangedEventArgs e) {
-
+    var lowerBound = 0.0F;
+    var upperBound = 4.0F;
+    float parsedValue;
+    if (this.TryParseSWScaleFilterParameter(this.swscaleChromaSharpen, lowerBound, upperBound, out parsedValue)) {
+      // Profileに書き込み
+      App.Profile.CurrentLayoutElement.SWScaleChromaSharpen = parsedValue;
+    }
   }
 
   private void swscaleChromaHshift_TextChanged(object sender, TextChangedEventArgs e) {
-
+    var lowerBound = 0.0F;
+    var upperBound = 1.0F;
+    float parsedValue;
+    if (this.TryParseSWScaleFilterParameter(this.swscaleChromaHshift, lowerBound, upperBound, out parsedValue)) {
+      // Profileに書き込み
+      App.Profile.CurrentLayoutElement.SWScaleChromaHshift = parsedValue;
+    }
   }
 
   private void swscaleChromaVshift_TextChanged(object sender, TextChangedEventArgs e) {
+    var lowerBound = 0.0F;
+    var upperBound = 1.0F;
+    float parsedValue;
+    if (this.TryParseSWScaleFilterParameter(this.swscaleChromaVshift, lowerBound, upperBound, out parsedValue)) {
+      // Profileに書き込み
+      App.Profile.CurrentLayoutElement.SWScaleChromaVshift = parsedValue;
+    }
+  }
 
+  //-------------------------------------------------------------------
+  // BoundRelative*
+  //-------------------------------------------------------------------
+
+  private bool TryParseBoundRelativeParameter(TextBox textBox, double lowerBound, double upperBound, out double parsedValue) {
+    // Parse
+    if (!double.TryParse(textBox.Text, out parsedValue)) {
+      parsedValue = lowerBound;
+      textBox.Text = lowerBound.ToString("F3");
+      return false;
+    }
+
+    // Validation
+    if (parsedValue < lowerBound) {
+      parsedValue = lowerBound;
+      textBox.Text = lowerBound.ToString("F3");
+      return false;
+    } else if (parsedValue > upperBound) {
+      parsedValue = upperBound;
+      textBox.Text = upperBound.ToString("F3");
+      return false;
+    }
+
+    return true;
   }
 
   private void boundRelativeLeft_TextChanged(object sender, TextChangedEventArgs e) {
-
+    var lowerBound = 0.0;
+    var upperBound = 1.0;
+    double parsedValue;
+    if (this.TryParseBoundRelativeParameter(this.boundRelativeLeft, lowerBound, upperBound, out parsedValue)) {
+      // Profileに書き込み
+      App.Profile.CurrentLayoutElement.BoundRelativeLeft = parsedValue;
+      // Changedイベントで発動するものはないのでそのまま代入
+      /// @todo(me) ダミープレビューサイズ
+      this.boundX.Text = App.Profile.CurrentLayoutElement.BoundLeft(Constants.DummyPreviewWidth).ToString();
+    }
   }
 
   private void boundRelativeTop_TextChanged(object sender, TextChangedEventArgs e) {
-
+    var lowerBound = 0.0;
+    var upperBound = 1.0;
+    double parsedValue;
+    if (this.TryParseBoundRelativeParameter(this.boundRelativeTop, lowerBound, upperBound, out parsedValue)) {
+      // Profileに書き込み
+      App.Profile.CurrentLayoutElement.BoundRelativeTop = parsedValue;
+      // Changedイベントで発動するものはないのでそのまま代入
+      /// @todo(me) ダミープレビューサイズ
+      this.boundY.Text = App.Profile.CurrentLayoutElement.BoundTop(Constants.DummyPreviewHeight).ToString();
+    }
   }
 
   private void boundRelativeRight_TextChanged(object sender, TextChangedEventArgs e) {
-
+    var lowerBound = 0.0;
+    var upperBound = 1.0;
+    double parsedValue;
+    if (this.TryParseBoundRelativeParameter(this.boundRelativeRight, lowerBound, upperBound, out parsedValue)) {
+      // Profileに書き込み
+      App.Profile.CurrentLayoutElement.BoundRelativeRight = parsedValue;
+      // Changedイベントで発動するものはないのでそのまま代入
+      /// @todo(me) ダミープレビューサイズ
+      this.boundWidth.Text = App.Profile.CurrentLayoutElement.BoundWidth(Constants.DummyPreviewWidth).ToString();
+    }
   }
 
   private void boundRelativeBottom_TextChanged(object sender, TextChangedEventArgs e) {
-
+    var lowerBound = 0.0;
+    var upperBound = 1.0;
+    double parsedValue;
+    if (this.TryParseBoundRelativeParameter(this.boundRelativeBottom, lowerBound, upperBound, out parsedValue)) {
+      // Profileに書き込み
+      App.Profile.CurrentLayoutElement.BoundRelativeBottom = parsedValue;
+      // Changedイベントで発動するものはないのでそのまま代入
+      /// @todo(me) ダミープレビューサイズ
+      this.boundHeight.Text = App.Profile.CurrentLayoutElement.BoundHeight(Constants.DummyPreviewHeight).ToString();
+    }
   }
 }
 }

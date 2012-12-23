@@ -1,9 +1,8 @@
-
 /bin
 /obj
+*/obj
 /ipch
 /doc/html
-/scff_app/obj
 /tools/tmp
 *.opensdf
 *.suo
@@ -25,7 +24,4 @@
 /ext/ffmpeg/Win32/include
 /ext/ffmpeg/Win32/doc
 /ext/ffmpeg/Win32/bin
-/scff_app_wpf/obj
-/SCFF.Common/obj
-/SCFF.GUI/obj
 *.Cache

@@ -33,6 +33,10 @@ public static class Constants {
 
   public const int DefaultPreviewWidth = 640;
   public const int DefaultPreviewHeight = 400;
+  
+  /// @todo(me) ダミーなのであとで消す
+  public const int DummyPreviewWidth = DefaultPreviewWidth;
+  public const int DummyPreviewHeight = DefaultPreviewHeight;
 
   public const int RecentProfilesLength = 5;
 

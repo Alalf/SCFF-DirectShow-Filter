@@ -169,7 +169,8 @@
             <TextBox x:Name="clippingWidth" Grid.Column="5" Margin="0,0,5,0" Height="20" VerticalAlignment="Center">9999</TextBox>
             <TextBox x:Name="clippingHeight" Grid.Column="8" Margin="0,0,5,0" Height="20" VerticalAlignment="Center">9999</TextBox>
             <CheckBox x:Name="fit"  Grid.Row="1" Grid.ColumnSpan="2" Height="16" VerticalAlignment="Center" Margin="0,4" IsChecked="True" Checked="fit_Checked" Unchecked="fit_Unchecked" Click="fit_Click">Fit</CheckBox>
-            <Button Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="4" Height="20" VerticalAlignment="Center" Margin="0,2">Area Select</Button>
+            <Button Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="3" Height="20" VerticalAlignment="Center" Margin="0,2">Area Select</Button>
+            <Button Grid.Row="1" Grid.Column="5" Grid.ColumnSpan="1" Height="20" VerticalAlignment="Center">ListView</Button>
             <Button Grid.Row="1" Grid.Column="6" Grid.ColumnSpan="2" Height="20" VerticalAlignment="Center">Desktop</Button>
 
           </Grid>

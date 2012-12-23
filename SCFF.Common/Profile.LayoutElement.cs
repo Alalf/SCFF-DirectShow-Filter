@@ -254,7 +254,6 @@ public partial class Profile {
           case WindowTypes.Desktop: {
             return ExternalAPI.GetSystemMetrics(ExternalAPI.SM_CYVIRTUALSCREEN);
           }
-
           default: {
             Debug.Fail("WindowHeight: Invalid WindowType");
             return -1;
@@ -289,75 +288,6 @@ public partial class Profile {
         ExternalAPI.ClientToScreen(this.Window, ref windowPoint);
         return windowPoint.Y;
       }
-    }
-
-    // DesktopListViewWindow
-    //
-    // GetDesktopWindow()
-    //   - Progman (XP/Win7(No Aero)/Vista(No Aero))
-    //     - SHELLDLL_DefView (XP/Win7 No Aero/Vista No Aero?)
-    //       - Internet Exproler_Server (XP Active Desktop)
-    //       - SysListView32 (XP?/Win7 No Aero/Vista No Aero?)
-    //   - WorkerW[/WorkerW]* (Win7 Aero/Vista Aero?)
-    //     - SHELLDLL_DefView
-    //       - SysListView32
-    //   - EdgeUiInputWndClass (Win 8)
-    // パッと見る限り明らかに重いのはAero On時。EnumWindows必須。
-
-    private static UIntPtr enumerateWindowResult = UIntPtr.Zero;
-    private static bool EnumerateWindow(UIntPtr hWnd, UIntPtr lParam) {
-      StringBuilder className = new StringBuilder(256);
-      ExternalAPI.GetClassName(hWnd, className, 256);
-      if (className.ToString() == "WorkerW") {
-        UIntPtr shellDLLDefView = ExternalAPI.FindWindowEx(hWnd, UIntPtr.Zero, "SHELLDLL_DefView", null);
-        if (shellDLLDefView != UIntPtr.Zero) {
-          enumerateWindowResult = shellDLLDefView;
-          return false;
-        }
-      }
-      return true;
-    }
-
-    public UIntPtr DesktopListViewWindow {
-      get {
-        UIntPtr progman = ExternalAPI.FindWindowEx(UIntPtr.Zero, UIntPtr.Zero, "Progman", null);
-        if (progman != UIntPtr.Zero) {
-          // XP/Win7(No Aero)/Vista(No Aero)
-          UIntPtr shellDLLDefView = ExternalAPI.FindWindowEx(progman, UIntPtr.Zero, "SHELLDLL_DefView", null);
-          if (shellDLLDefView != UIntPtr.Zero) {
-            UIntPtr sysListView32 = ExternalAPI.FindWindowEx(shellDLLDefView, UIntPtr.Zero, "SysListView32", null);
-            if (sysListView32 != UIntPtr.Zero) {
-              // XP(No ActiveDesktop)/Win7(No Aero)/Vista(No Aero)
-              return sysListView32;
-            } 
-            UIntPtr internetExprolerServer = ExternalAPI.FindWindowEx(shellDLLDefView, UIntPtr.Zero, "Internet Exproler_Server", null);
-            if (internetExprolerServer != UIntPtr.Zero) {
-              // XP(ActiveDesktop)
-              return internetExprolerServer;
-            }
-          }
-        }
-        UIntPtr edgeUiInputWndClass = ExternalAPI.FindWindowEx(UIntPtr.Zero, UIntPtr.Zero, "EdgeUiInputWndClass", null);
-        if (edgeUiInputWndClass != UIntPtr.Zero) {
-          // Win8
-          return edgeUiInputWndClass;
-        }
-        enumerateWindowResult = UIntPtr.Zero;
-        ExternalAPI.EnumWindows(new ExternalAPI.WNDENUMProc(EnumerateWindow), UIntPtr.Zero);
-        if (enumerateWindowResult != UIntPtr.Zero) {
-          // Win7(Aero)/Vista(Aero)
-          UIntPtr sysListView32 = ExternalAPI.FindWindowEx(enumerateWindowResult, UIntPtr.Zero, "SysListView32", null);
-          if (sysListView32 != UIntPtr.Zero) {
-            return sysListView32;
-          }
-        }
-        return this.DesktopWindow;
-      }
-    }
-
-    // DesktopWindow
-    public UIntPtr DesktopWindow {
-      get { return ExternalAPI.GetDesktopWindow(); }
     }
 
     //=================================================================

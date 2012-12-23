@@ -15,12 +15,12 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file SCFF.Common/Interprocess/Interprocess.cs
+/// @file SCFF.Interprocess/Interprocess.cs
 /// SCFFのプロセス間通信に関するクラスの宣言
 /// @warning To me: このファイルの中から別のファイルへのusingは禁止！
 /// - 別の言語に移植する場合も最大2ファイルでお願いします
 
-namespace SCFF.Common.Interprocess {
+namespace SCFF.Interprocess {
 
 using System;
 using System.Diagnostics;
@@ -50,7 +50,7 @@ using System.Threading;
 // =====================================================================
 
 /// プロセス間通信を担当するクラス
-internal partial class Interprocess {
+public partial class Interprocess {
 
   /// Path文字列の長さ
   public const int MaxPath = 260;
@@ -161,19 +161,19 @@ public enum RotateDirections {
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public struct Entry {
   /// SCFF DSFのDLLが使われれているプロセスID
-  public UInt32 PrrocessID;
+  internal UInt32 PrrocessID;
   /// SCFF DSFのDLLが使われているプロセス名
   [MarshalAs(UnmanagedType.ByValTStr, SizeConst = Interprocess.MaxPath)]
-  public string ProcessName;
+  internal string ProcessName;
   /// サンプルの出力width
-  public Int32 SampleWidth;
+  internal Int32 SampleWidth;
   /// サンプルの出力height
-  public Int32 SampleHeight;
+  internal Int32 SampleHeight;
   /// サンプルの出力ピクセルフォーマット
   /// @attention ImagePixelFormatを操作に使うこと
-  public Int32 SamplePixelFormat;
+  internal Int32 SamplePixelFormat;
   /// 目標fps
-  public Double FPS;
+  internal Double FPS;
 }
 
 /// 共有メモリ(Directory)に格納する構造体
@@ -267,7 +267,7 @@ public struct Message {
   public LayoutParameter[] LayoutParameters;
 }
 
-internal partial class Interprocess {
+public partial class Interprocess {
   /// コンストラクタ
   public Interprocess() {
     this.directory = null;
@@ -651,4 +651,4 @@ internal partial class Interprocess {
   /// Mutex: Message
   private Mutex mutexMessage;
 }
-}   // namespace SCFF.Common.Interprocess
+}   // namespace SCFF.Interprocess

@@ -74,7 +74,7 @@ public partial class Profile {
   /// コンストラクタ
   public Profile() {
     // 配列の初期化
-    var length = Interprocess.Interprocess.MaxComplexLayoutElements;
+    var length = Constants.MaxLayoutElementCount;
     this.message.LayoutParameters = new Interprocess.LayoutParameter[length];
     this.additionalLayoutParameters = new AdditionalLayoutParameter[length];
   }
@@ -114,12 +114,13 @@ public partial class Profile {
     layout.SWScaleIsFilterEnabled = false;
 
     // プライマリモニタを表示
-    layout.WindowType = WindowTypes.Desktop;
-    layout.Window = UIntPtr.Zero;
-    layout.ClippingX = 0 - ExternalAPI.GetSystemMetrics(ExternalAPI.SM_XVIRTUALSCREEN);
-    layout.ClippingY = 0 - ExternalAPI.GetSystemMetrics(ExternalAPI.SM_YVIRTUALSCREEN);
-    layout.ClippingWidth = ExternalAPI.GetSystemMetrics(ExternalAPI.SM_CXSCREEN);
-    layout.ClippingHeight = ExternalAPI.GetSystemMetrics(ExternalAPI.SM_CYSCREEN);
+    layout.SetWindowToDesktop();
+    //layout.SetWindowToDesktopListView();
+    layout.ClippingXWithoutFit      = 0 - ExternalAPI.GetSystemMetrics(ExternalAPI.SM_XVIRTUALSCREEN);
+    layout.ClippingYWithoutFit      = 0 - ExternalAPI.GetSystemMetrics(ExternalAPI.SM_YVIRTUALSCREEN);
+    layout.ClippingWidthWithoutFit  = ExternalAPI.GetSystemMetrics(ExternalAPI.SM_CXSCREEN);
+    layout.ClippingHeightWithoutFit = ExternalAPI.GetSystemMetrics(ExternalAPI.SM_CYSCREEN);
+    layout.TryUpdateBackupDesktopClippingParameters();
     
     layout.Fit = false;
     layout.BoundRelativeRight = 1.0;
@@ -133,7 +134,7 @@ public partial class Profile {
   /// 配列をクリア
   /// @pre 配列自体は生成済み
   private void ClearLayoutParameters() {
-    var length = Interprocess.Interprocess.MaxComplexLayoutElements;
+    var length = Constants.MaxLayoutElementCount;
     Array.Clear(this.message.LayoutParameters, 0, length);
     Array.Clear(this.additionalLayoutParameters, 0, length);
   }
@@ -158,7 +159,7 @@ public partial class Profile {
   //===================================================================
 
   public bool CanAddLayoutElement() {
-    var length = Interprocess.Interprocess.MaxComplexLayoutElements;
+    var length = Constants.MaxLayoutElementCount;
     if (this.message.LayoutElementCount < length) {
       return true;
     } else {
@@ -290,6 +291,16 @@ public partial class Profile {
     public double BoundRelativeTop { get; set; }
     public double BoundRelativeRight { get; set; }
     public double BoundRelativeBottom { get; set; }
+
+    public int ClippingXWithoutFit { get; set; }
+    public int ClippingYWithoutFit { get; set; }
+    public int ClippingWidthWithoutFit { get; set; }
+    public int ClippingHeightWithoutFit { get; set; }
+
+    public int BackupDesktopClippingX { get; set; }
+    public int BackupDesktopClippingY { get; set; }
+    public int BackupDesktopClippingWidth { get; set; }
+    public int BackupDesktopClippingHeight { get; set; }
   }
 
   /// 追加レイアウトパラメータをまとめた配列

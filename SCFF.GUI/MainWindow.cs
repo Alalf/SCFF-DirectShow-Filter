@@ -164,17 +164,10 @@ public partial class MainWindow : Window {
 
   private void UpdateClippingByProfile() {
     this.DetachClippingChangedEventHandlers();
-    if (App.Profile.CurrentLayoutElement.Fit) {
-      this.clippingX.Text = 0.ToString();
-      this.clippingY.Text = 0.ToString();
-      this.clippingWidth.Text = App.Profile.CurrentLayoutElement.WindowWidth.ToString();
-      this.clippingHeight.Text = App.Profile.CurrentLayoutElement.WindowHeight.ToString();
-    } else {
-      this.clippingX.Text = App.Profile.CurrentLayoutElement.ClippingX.ToString();
-      this.clippingY.Text = App.Profile.CurrentLayoutElement.ClippingY.ToString();
-      this.clippingWidth.Text = App.Profile.CurrentLayoutElement.ClippingWidth.ToString();
-      this.clippingHeight.Text = App.Profile.CurrentLayoutElement.ClippingHeight.ToString();
-    }
+    this.clippingX.Text = App.Profile.CurrentLayoutElement.ClippingXWithFit.ToString();
+    this.clippingY.Text = App.Profile.CurrentLayoutElement.ClippingYWithFit.ToString();
+    this.clippingWidth.Text = App.Profile.CurrentLayoutElement.ClippingWidthWithFit.ToString();
+    this.clippingHeight.Text = App.Profile.CurrentLayoutElement.ClippingHeightWithFit.ToString();
     this.AttachClippingChangedEventHandlers();
   }
 
@@ -209,17 +202,10 @@ public partial class MainWindow : Window {
     this.windowCaption.Text = App.Profile.CurrentLayoutElement.WindowCaption;
     
     // Area
-    if (App.Profile.CurrentLayoutElement.Fit) {
-      this.clippingX.Text = 0.ToString();
-      this.clippingY.Text = 0.ToString();
-      this.clippingWidth.Text = App.Profile.CurrentLayoutElement.WindowWidth.ToString();
-      this.clippingHeight.Text = App.Profile.CurrentLayoutElement.WindowHeight.ToString();
-    } else {
-      this.clippingX.Text = App.Profile.CurrentLayoutElement.ClippingX.ToString();
-      this.clippingY.Text = App.Profile.CurrentLayoutElement.ClippingY.ToString();
-      this.clippingWidth.Text = App.Profile.CurrentLayoutElement.ClippingWidth.ToString();
-      this.clippingHeight.Text = App.Profile.CurrentLayoutElement.ClippingHeight.ToString();
-    }
+    this.clippingX.Text = App.Profile.CurrentLayoutElement.ClippingXWithFit.ToString();
+    this.clippingY.Text = App.Profile.CurrentLayoutElement.ClippingYWithFit.ToString();
+    this.clippingWidth.Text = App.Profile.CurrentLayoutElement.ClippingWidthWithFit.ToString();
+    this.clippingHeight.Text = App.Profile.CurrentLayoutElement.ClippingHeightWithFit.ToString();
 
     // Resize Method
     var index = Constants.ResizeMethodIndexes[App.Profile.CurrentLayoutElement.SWScaleFlags];
@@ -260,15 +246,33 @@ public partial class MainWindow : Window {
   }
 
   /// TabItemを一気に生成する
-  private void CreateLayoutElementTab() {
+  public void CreateLayoutElementTab() {
     this.DetachTabSelectionChangedEventHandler();
 
-    // Clear()するとSelectedIndexが変わることに注意
-    this.layoutElementTab.Items.Clear();
-    for (int i = 0; i < App.Profile.LayoutElementCount; ++i) {
+    // 最初の一個はそのまま残す
+    this.layoutElementTab.SelectedIndex = 0;
+    for (int i = this.layoutElementTab.Items.Count - 1; i >= 1; --i) {
+      this.layoutElementTab.Items.RemoveAt(i);
+    }
+
+    // 必要な分を追加する
+    for (int i = 1; i < App.Profile.LayoutElementCount; ++i) {
       var item = new TabItem();
       item.Header = (i+1).ToString();
       this.layoutElementTab.Items.Add(item);
+    }
+
+    this.AttachTabSelectionChangedEventHandler();
+  }
+
+  /// TabItemをリセットする
+  public void ResetLayoutElementTab() {
+    this.DetachTabSelectionChangedEventHandler();
+
+    // 最初の一個はそのまま残す
+    this.layoutElementTab.SelectedIndex = 0;
+    for (int i = this.layoutElementTab.Items.Count - 1; i >= 1; --i) {
+      this.layoutElementTab.Items.RemoveAt(i);
     }
 
     this.AttachTabSelectionChangedEventHandler();

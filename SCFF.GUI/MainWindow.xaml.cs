@@ -74,6 +74,9 @@ public partial class MainWindow : Window {
   }
 
   private void New_Executed(object sender, ExecutedRoutedEventArgs e) {
+    App.Profile.ResetProfile();
+    this.ResetLayoutElementTab();
+    this.UpdateByProfile();
   }
 
   private void Open_Executed(object sender, ExecutedRoutedEventArgs e) {
@@ -321,7 +324,7 @@ public partial class MainWindow : Window {
     int parsedValue;
     if (this.TryParseClippingParameters(this.clippingX, lowerBound, upperBound, out parsedValue)) {
       // Profileに書き込み
-      App.Profile.CurrentLayoutElement.ClippingX = parsedValue;
+      App.Profile.CurrentLayoutElement.ClippingXWithoutFit = parsedValue;
     }
   }
 
@@ -331,7 +334,7 @@ public partial class MainWindow : Window {
     int parsedValue;
     if (this.TryParseClippingParameters(this.clippingY, lowerBound, upperBound, out parsedValue)) {
       // Profileに書き込み
-      App.Profile.CurrentLayoutElement.ClippingY = parsedValue;
+      App.Profile.CurrentLayoutElement.ClippingYWithoutFit = parsedValue;
     }
   }
 
@@ -341,7 +344,7 @@ public partial class MainWindow : Window {
     int parsedValue;
     if (this.TryParseClippingParameters(this.clippingWidth, lowerBound, upperBound, out parsedValue)) {
       // Profileに書き込み
-      App.Profile.CurrentLayoutElement.ClippingWidth = parsedValue;
+      App.Profile.CurrentLayoutElement.ClippingWidthWithoutFit = parsedValue;
     }
   }
 
@@ -351,7 +354,7 @@ public partial class MainWindow : Window {
     int parsedValue;
     if (this.TryParseClippingParameters(this.clippingHeight, lowerBound, upperBound, out parsedValue)) {
       // Profileに書き込み
-      App.Profile.CurrentLayoutElement.ClippingHeight = parsedValue;
+      App.Profile.CurrentLayoutElement.ClippingHeightWithoutFit = parsedValue;
     }
   }
 

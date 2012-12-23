@@ -30,10 +30,7 @@ public static class ProfileINIFile {
   private const string ProfilePathPrefix = "SCFF.Common.Profile.";
   private const string ProfilePathSuffix = ".ini";
 
-  // ファイル入出力に用いるキー
-  public enum Key {
-    hoge,
-  }
+
 
 }
 }

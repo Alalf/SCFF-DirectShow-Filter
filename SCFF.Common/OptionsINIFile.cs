@@ -36,7 +36,7 @@ public static class OptionsINIFile {
   private const string OptionsHeader = "; SCFF-DirectShow-Filter Options Ver.0.1.7";
 
   //===================================================================
-  // internalメソッド
+  // ファイル出力
   //===================================================================
 
   /// ファイル出力
@@ -74,6 +74,10 @@ public static class OptionsINIFile {
       }
     }
   }
+
+  //===================================================================
+  // ファイル入力
+  //===================================================================
 
   /// ファイル入力
   /// アプリケーションの設定からUIに関連するものを読み込む
@@ -236,4 +240,4 @@ public static class OptionsINIFile {
     }
   }
 }
-}
+}   // namespace SCFF.Common

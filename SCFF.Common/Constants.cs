@@ -24,6 +24,8 @@ using System.Collections.Generic;
 
 /// SCFF.Commonモジュールで利用する定数・テーブル
 public static class Constants {
+  public const int MaxLayoutElementCount = Interprocess.Interprocess.MaxComplexLayoutElements;
+
   public const double MainWindowLeft = 32.0;
   public const double MainWindowTop = 32.0;
   public const double MainWindowWidth = 730.0;

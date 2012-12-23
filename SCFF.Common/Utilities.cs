@@ -26,6 +26,14 @@ using System.Text;
 /// ユーティリティを集めたもの
 public static class Utilities {
 
+  // DesktopToScreen
+  internal static void DesktopToScreen(int desktopX, int desktopY, out int screenX, out int screenY) {
+    // desktopPointは仮想画面上の座標(左上が(0,0)であることが保障されている)
+    // screenPointはプライマリモニタの左上の座標が(0,0)なので-になることもある
+    screenX = desktopX + ExternalAPI.GetSystemMetrics(ExternalAPI.SM_XVIRTUALSCREEN);
+    screenY = desktopY + ExternalAPI.GetSystemMetrics(ExternalAPI.SM_YVIRTUALSCREEN);
+  }
+
   // DesktopListViewWindow
   //
   // GetDesktopWindow()
@@ -91,7 +99,7 @@ public static class Utilities {
   }
 
   // DesktopWindow
-  static UIntPtr DesktopWindow {
+  static public UIntPtr DesktopWindow {
     get { return ExternalAPI.GetDesktopWindow(); }
   }
 }

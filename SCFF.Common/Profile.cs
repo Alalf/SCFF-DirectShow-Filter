@@ -33,8 +33,8 @@ public partial class Profile {
 
   public enum WindowTypes {
     Normal,
+    DesktopListView,
     Desktop,
-    Root,
   }
 
   /// @copydoc SCFF.Common.Interprocess.LayoutTypes
@@ -116,14 +116,14 @@ public partial class Profile {
     layout.SWScaleChromaVshift = 1.0F;
 
     // プライマリモニタを表示
-    layout.WindowType = WindowTypes.Normal;
-    layout.Window = layout.DesktopWindow;
-    layout.ClippingX = 0;
-    layout.ClippingY = 0;
-    layout.ClippingWidth = layout.WindowWidth;
-    layout.ClippingHeight = layout.WindowHeight;
+    layout.WindowType = WindowTypes.Desktop;
+    layout.Window = UIntPtr.Zero;
+    layout.ClippingX = 0 - ExternalAPI.GetSystemMetrics(ExternalAPI.SM_XVIRTUALSCREEN);
+    layout.ClippingY = 0 - ExternalAPI.GetSystemMetrics(ExternalAPI.SM_YVIRTUALSCREEN);
+    layout.ClippingWidth = ExternalAPI.GetSystemMetrics(ExternalAPI.SM_CXSCREEN);
+    layout.ClippingHeight = ExternalAPI.GetSystemMetrics(ExternalAPI.SM_CYSCREEN);
     
-    layout.Fit = true;
+    layout.Fit = false;
     layout.BoundRelativeLeft = 0.0;
     layout.BoundRelativeTop = 0.0;
     layout.BoundRelativeRight = 1.0;

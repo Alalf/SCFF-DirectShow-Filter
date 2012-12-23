@@ -221,7 +221,6 @@ public partial class MainWindow : Window {
 
   private void fit_Click(object sender, RoutedEventArgs e) {
     if (this.fit.IsChecked.HasValue) {
-      Debug.WriteLine("fit_Click");
       App.Profile.CurrentLayoutElement.Fit = (bool)this.fit.IsChecked;
 
       this.UpdateClippingByProfile();

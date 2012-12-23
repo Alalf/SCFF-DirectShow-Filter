@@ -32,10 +32,13 @@ internal class ExternalAPI {
   //-------------------------------------------------------------------
 
   // Constants: System Metric
+  internal const int SM_CXSCREEN = 0;
+  internal const int SM_CYSCREEN = 1;
   internal const int SM_XVIRTUALSCREEN  = 76;
   internal const int SM_YVIRTUALSCREEN  = 77;
   internal const int SM_CXVIRTUALSCREEN = 78;
   internal const int SM_CYVIRTUALSCREEN = 79;
+
 
   // Type
   [StructLayout(LayoutKind.Sequential)]

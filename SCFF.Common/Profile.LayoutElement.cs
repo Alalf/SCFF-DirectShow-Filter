@@ -195,11 +195,11 @@ public partial class Profile {
             ExternalAPI.GetClassName(this.Window, className, 256);
             return className.ToString();
           }
+          case WindowTypes.DesktopListView: {
+            return "(DesktopListView)";
+          }
           case WindowTypes.Desktop: {
             return "(Desktop)";
-          }
-          case WindowTypes.Root: {
-            return "(Root)";
           }
           default: {
             Debug.Fail("WindowCaption: Unknown Type");
@@ -227,13 +227,9 @@ public partial class Profile {
             ExternalAPI.GetClientRect(this.Window, out windowRect);
             return windowRect.Right - windowRect.Left;
           }
+          case WindowTypes.DesktopListView:
           case WindowTypes.Desktop: {
             return ExternalAPI.GetSystemMetrics(ExternalAPI.SM_CXVIRTUALSCREEN);
-          }
-          case WindowTypes.Root: {
-            ExternalAPI.RECT windowRect;
-            ExternalAPI.GetClientRect(ExternalAPI.GetDesktopWindow(), out windowRect);
-            return windowRect.Right - windowRect.Left;
           }
           default: {
             Debug.Fail("WindowWidth: Invalid WindowType");
@@ -254,14 +250,11 @@ public partial class Profile {
             ExternalAPI.GetClientRect(this.Window, out windowRect);
             return windowRect.Bottom - windowRect.Top;
           }
+          case WindowTypes.DesktopListView:
           case WindowTypes.Desktop: {
             return ExternalAPI.GetSystemMetrics(ExternalAPI.SM_CYVIRTUALSCREEN);
           }
-          case WindowTypes.Root: {
-            ExternalAPI.RECT windowRect;
-            ExternalAPI.GetClientRect(ExternalAPI.GetDesktopWindow(), out windowRect);
-            return windowRect.Bottom - windowRect.Top;
-          }
+
           default: {
             Debug.Fail("WindowHeight: Invalid WindowType");
             return -1;
@@ -270,35 +263,35 @@ public partial class Profile {
       }
     }
 
-    // Desktop Clipping X/Y
-    public int DesktopClippingX {
+    // DesktopListViewClipping X/Y
+    public int DesktopListViewClippingX {
       get {
-        return this.RootClippingX - ExternalAPI.GetSystemMetrics(ExternalAPI.SM_XVIRTUALSCREEN);
+        return this.ScreenClippingX - ExternalAPI.GetSystemMetrics(ExternalAPI.SM_XVIRTUALSCREEN);
       }
     }
-    public int DesktopClippingY {
+    public int DesktopListViewClippingY {
       get {
-        return this.RootClippingY - ExternalAPI.GetSystemMetrics(ExternalAPI.SM_YVIRTUALSCREEN);
+        return this.ScreenClippingY - ExternalAPI.GetSystemMetrics(ExternalAPI.SM_YVIRTUALSCREEN);
       }
     }
 
-    // Root Clipping X/Y
-    public int RootClippingX {
+    // ScreenClipping X/Y
+    public int ScreenClippingX {
       get {
-        ExternalAPI.POINT windowPoint = new ExternalAPI.POINT { X = 0, Y = 0 };
+        ExternalAPI.POINT windowPoint = new ExternalAPI.POINT { X = this.ClippingX, Y = this.ClippingY };
         ExternalAPI.ClientToScreen(this.Window, ref windowPoint);
         return windowPoint.X;
       }
     }
-    public int RootClippingY {
+    public int ScreenClippingY {
       get {
-        ExternalAPI.POINT windowPoint = new ExternalAPI.POINT { X = 0, Y = 0 };
+        ExternalAPI.POINT windowPoint = new ExternalAPI.POINT { X = this.ClippingX, Y = this.ClippingY };
         ExternalAPI.ClientToScreen(this.Window, ref windowPoint);
         return windowPoint.Y;
       }
     }
 
-    // Desktop Window
+    // DesktopListViewWindow
     //
     // GetDesktopWindow()
     //   - Progman (XP/Win7(No Aero)/Vista(No Aero))
@@ -325,7 +318,7 @@ public partial class Profile {
       return true;
     }
 
-    public UIntPtr DesktopWindow {
+    public UIntPtr DesktopListViewWindow {
       get {
         UIntPtr progman = ExternalAPI.FindWindowEx(UIntPtr.Zero, UIntPtr.Zero, "Progman", null);
         if (progman != UIntPtr.Zero) {
@@ -358,13 +351,12 @@ public partial class Profile {
             return sysListView32;
           }
         }
-        return this.RootWindow;
+        return this.DesktopWindow;
       }
     }
 
-    // Root Window = GetDesktopWindow()
-
-    public UIntPtr RootWindow {
+    // DesktopWindow
+    public UIntPtr DesktopWindow {
       get { return ExternalAPI.GetDesktopWindow(); }
     }
 

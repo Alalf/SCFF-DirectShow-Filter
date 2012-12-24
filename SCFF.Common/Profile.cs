@@ -57,6 +57,9 @@ public partial class Profile {
     var length = Constants.MaxLayoutElementCount;
     this.message.LayoutParameters = new Interprocess.LayoutParameter[length];
     this.additionalLayoutParameters = new AdditionalLayoutParameter[length];
+
+    this.inputLayoutElements = new InputLayoutElement[Constants.MaxLayoutElementCount];
+    this.outputLayoutElements = new OutputLayoutElement[Constants.MaxLayoutElementCount];
   }
 
   //===================================================================
@@ -244,16 +247,31 @@ public partial class Profile {
   //===================================================================
 
   public InputLayoutElement CurrentInputLayoutElement {
-    get { return new InputLayoutElement(this, this.currentIndex); }
+    get {  
+      if (this.inputLayoutElements[this.currentIndex] == null) {
+        this.inputLayoutElements[this.currentIndex] =
+            new InputLayoutElement(this, this.currentIndex);
+      }
+      return this.inputLayoutElements[this.currentIndex];
+    }
   }
 
   public OutputLayoutElement CurrentOutputLayoutElement {
-    get { return new OutputLayoutElement(this, this.currentIndex); }
+    get {  
+      if (this.outputLayoutElements[this.currentIndex] == null) {
+        this.outputLayoutElements[this.currentIndex] =
+            new OutputLayoutElement(this, this.currentIndex);
+      }
+      return this.outputLayoutElements[this.currentIndex];
+    }
   }
 
   public IEnumerator<InputLayoutElement> GetEnumerator() {
     for (int i = 0; i < this.message.LayoutElementCount; ++i) {
-      yield return new InputLayoutElement(this, i);
+      if (this.inputLayoutElements[i] == null) {
+        this.inputLayoutElements[i] = new InputLayoutElement(this, i);
+      }
+      yield return this.inputLayoutElements[i];
     }
   }
 
@@ -263,6 +281,12 @@ public partial class Profile {
 
   // 現在編集中のインデックス
   private int currentIndex = 0;
+
+  /// 参照用イテレータのキャッシュ
+  private InputLayoutElement[] inputLayoutElements;
+
+  /// 操作用イテレータのキャッシュ
+  private OutputLayoutElement[] outputLayoutElements;
 
   /// 大半の情報はこのmessage内部にあるが、messageの中身は実行時のみ有効な値が含まれている
   /// (UIntPtr windowなど)。このために、messageとは別にいくらかの情報を追加して保存しなければならない。

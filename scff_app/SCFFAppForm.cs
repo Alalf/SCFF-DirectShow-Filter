@@ -1,6 +1,6 @@
 ﻿// Copyright 2012 Progre <djyayutto_at_gmail.com>
 //
-// This file is part of SCFF-DirectShow-Filter.
+// This file is part of SCFF-DirectShow-Filter(SCFF DSF).
 //
 // SCFF DSF is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by

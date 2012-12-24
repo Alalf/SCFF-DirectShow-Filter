@@ -54,7 +54,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Controls\Area.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\LayoutEdit.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\TargetWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -67,8 +75,15 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Commands.cs" />
+    <Compile Include="Controls\Area.xaml.cs">
+      <DependentUpon>Area.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\IProfileEditor.cs" />
     <Compile Include="Controls\LayoutEdit.xaml.cs">
       <DependentUpon>LayoutEdit.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\TargetWindow.xaml.cs">
+      <DependentUpon>TargetWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainWindow.cs" />
     <Compile Include="MainWindow.xaml.cs">

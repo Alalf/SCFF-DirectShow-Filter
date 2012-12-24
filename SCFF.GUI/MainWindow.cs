@@ -114,17 +114,9 @@ public partial class MainWindow : Window {
   // Profile
   //===================================================================
 
-  private void AttachClippingChangedEventHandlers() {
-    this.clippingX.TextChanged += clippingX_TextChanged;
-    this.clippingY.TextChanged += clippingY_TextChanged;
-    this.clippingWidth.TextChanged += clippingWidth_TextChanged;
-    this.clippingHeight.TextChanged += clippingHeight_TextChanged;
-  }
 
   private void AttachChangedEventHandlers() {
     // CheckBoxはClickイベントとChecked/Uncheckedイベントの使い分けでいけるので除外
-    this.AttachClippingChangedEventHandlers();
-
     this.swscaleFlags.SelectionChanged += swscaleFlags_SelectionChanged;
     this.swscaleLumaGBlur.TextChanged += swscaleLumaGBlur_TextChanged;
     this.swscaleLumaSharpen.TextChanged += swscaleLumaSharpen_TextChanged;
@@ -138,17 +130,10 @@ public partial class MainWindow : Window {
     this.boundRelativeBottom.TextChanged += boundRelativeBottom_TextChanged;
   }
 
-  private void DetachClippingChangedEventHandlers() {
-    this.clippingX.TextChanged -= clippingX_TextChanged;
-    this.clippingY.TextChanged -= clippingY_TextChanged;
-    this.clippingWidth.TextChanged -= clippingWidth_TextChanged;
-    this.clippingHeight.TextChanged -= clippingHeight_TextChanged;
-  }
+
 
   private void DetachChangedEventHandlers() {
     // CheckBoxはClickイベントとChecked/Uncheckedイベントの使い分けでいけるので除外
-    this.DetachClippingChangedEventHandlers();
-
     this.swscaleFlags.SelectionChanged -= swscaleFlags_SelectionChanged;
     this.swscaleLumaGBlur.TextChanged -= swscaleLumaGBlur_TextChanged;
     this.swscaleLumaSharpen.TextChanged -= swscaleLumaSharpen_TextChanged;
@@ -162,23 +147,11 @@ public partial class MainWindow : Window {
     this.boundRelativeBottom.TextChanged -= boundRelativeBottom_TextChanged;
   }
 
-  private void UpdateClippingByProfile() {
-    this.DetachClippingChangedEventHandlers();
-    this.clippingX.Text = App.Profile.CurrentLayoutElement.ClippingXWithFit.ToString();
-    this.clippingY.Text = App.Profile.CurrentLayoutElement.ClippingYWithFit.ToString();
-    this.clippingWidth.Text = App.Profile.CurrentLayoutElement.ClippingWidthWithFit.ToString();
-    this.clippingHeight.Text = App.Profile.CurrentLayoutElement.ClippingHeightWithFit.ToString();
-    this.AttachClippingChangedEventHandlers();
-  }
-
   /// プロファイルからUIを更新
   private void UpdateByProfile() {
-    //-----------------------------------------------------------------
-    // *Changedがあるコントロール以外の更新
-    //-----------------------------------------------------------------
 
     // Area
-    this.fit.IsChecked = App.Profile.CurrentLayoutElement.Fit;
+    this.Area.UpdateByProfile();
 
     // Options
     this.showCursor.IsChecked = App.Profile.CurrentLayoutElement.ShowCursor;
@@ -199,14 +172,8 @@ public partial class MainWindow : Window {
     this.DetachChangedEventHandlers();
 
     // Window Caption
-    this.windowCaption.Text = App.Profile.CurrentLayoutElement.WindowCaption;
-    
-    // Area
-    this.clippingX.Text = App.Profile.CurrentLayoutElement.ClippingXWithFit.ToString();
-    this.clippingY.Text = App.Profile.CurrentLayoutElement.ClippingYWithFit.ToString();
-    this.clippingWidth.Text = App.Profile.CurrentLayoutElement.ClippingWidthWithFit.ToString();
-    this.clippingHeight.Text = App.Profile.CurrentLayoutElement.ClippingHeightWithFit.ToString();
-
+    this.TargetWindow.windowCaption.Text = App.Profile.CurrentLayoutElement.WindowCaption;
+   
     // Resize Method
     var index = Constants.ResizeMethodIndexes[App.Profile.CurrentLayoutElement.SWScaleFlags];
     this.swscaleFlags.SelectedIndex = index;

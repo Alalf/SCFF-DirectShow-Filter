@@ -36,7 +36,7 @@ public partial class TargetWindow : UserControl, IProfileToControl {
 
   public void UpdateByProfile() {
     // *Changedイベントハンドラがないのでそのまま代入するだけ
-    this.WindowCaption.Text = App.Profile.CurrentLayoutElement.WindowCaption;
+    this.WindowCaption.Text = App.Profile.CurrentInputLayoutElement.WindowCaption;
   }
 
   public void AttachChangedEventHandlers() {

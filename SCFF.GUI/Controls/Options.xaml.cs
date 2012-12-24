@@ -37,10 +37,10 @@ public partial class Options : UserControl, IProfileToControl {
 
   public void UpdateByProfile() {
     // checkboxはclickがあるのでeventハンドラをattach/detachする必要はない
-    this.ShowCursor.IsChecked = App.Profile.CurrentLayoutElement.ShowCursor;
-    this.ShowLayeredWindow.IsChecked = App.Profile.CurrentLayoutElement.ShowLayeredWindow;
-    this.KeepAspectRatio.IsChecked = App.Profile.CurrentLayoutElement.KeepAspectRatio;
-    this.Stretch.IsChecked = App.Profile.CurrentLayoutElement.Stretch;
+    this.ShowCursor.IsChecked = App.Profile.CurrentInputLayoutElement.ShowCursor;
+    this.ShowLayeredWindow.IsChecked = App.Profile.CurrentInputLayoutElement.ShowLayeredWindow;
+    this.KeepAspectRatio.IsChecked = App.Profile.CurrentInputLayoutElement.KeepAspectRatio;
+    this.Stretch.IsChecked = App.Profile.CurrentInputLayoutElement.Stretch;
     // @todo(me) overSampingとthreadCountはまだDSFでも実装されていない
   }
 
@@ -62,25 +62,25 @@ public partial class Options : UserControl, IProfileToControl {
 
   private void showCursor_Click(object sender, RoutedEventArgs e) {
     if (this.ShowCursor.IsChecked.HasValue) {
-      App.Profile.CurrentLayoutElement.ShowCursor = (bool)this.ShowCursor.IsChecked;
+      App.Profile.CurrentOutputLayoutElement.ShowCursor = (bool)this.ShowCursor.IsChecked;
     }
   }
 
   private void showLayeredWindow_Click(object sender, RoutedEventArgs e) {
     if (this.ShowLayeredWindow.IsChecked.HasValue) {
-      App.Profile.CurrentLayoutElement.ShowLayeredWindow = (bool)this.ShowLayeredWindow.IsChecked;
+      App.Profile.CurrentOutputLayoutElement.ShowLayeredWindow = (bool)this.ShowLayeredWindow.IsChecked;
     }
   }
 
   private void keepAspectRatio_Click(object sender, RoutedEventArgs e) {
     if (this.KeepAspectRatio.IsChecked.HasValue) {
-      App.Profile.CurrentLayoutElement.KeepAspectRatio = (bool)this.KeepAspectRatio.IsChecked;
+      App.Profile.CurrentOutputLayoutElement.KeepAspectRatio = (bool)this.KeepAspectRatio.IsChecked;
     }
   }
 
   private void stretch_Click(object sender, RoutedEventArgs e) {
     if (this.Stretch.IsChecked.HasValue) {
-      App.Profile.CurrentLayoutElement.Stretch = (bool)this.Stretch.IsChecked;
+      App.Profile.CurrentOutputLayoutElement.Stretch = (bool)this.Stretch.IsChecked;
     }
   }
 }

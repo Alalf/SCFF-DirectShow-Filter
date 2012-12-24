@@ -38,12 +38,12 @@ public partial class Area : UserControl, IProfileToControl {
   /// @copydoc IProfileToControl.UpdateByProfile
   public void UpdateByProfile() {
     // checkboxはclickがあるのでeventハンドラをattach/detachする必要はない
-    this.Fit.IsChecked = App.Profile.CurrentLayoutElement.Fit;
+    this.Fit.IsChecked = App.Profile.CurrentInputLayoutElement.Fit;
     this.DetachChangedEventHandlers();
-    this.ClippingX.Text = App.Profile.CurrentLayoutElement.ClippingXWithFit.ToString();
-    this.ClippingY.Text = App.Profile.CurrentLayoutElement.ClippingYWithFit.ToString();
-    this.ClippingWidth.Text = App.Profile.CurrentLayoutElement.ClippingWidthWithFit.ToString();
-    this.ClippingHeight.Text = App.Profile.CurrentLayoutElement.ClippingHeightWithFit.ToString();
+    this.ClippingX.Text = App.Profile.CurrentInputLayoutElement.ClippingXWithFit.ToString();
+    this.ClippingY.Text = App.Profile.CurrentInputLayoutElement.ClippingYWithFit.ToString();
+    this.ClippingWidth.Text = App.Profile.CurrentInputLayoutElement.ClippingWidthWithFit.ToString();
+    this.ClippingHeight.Text = App.Profile.CurrentInputLayoutElement.ClippingHeightWithFit.ToString();
     this.AttachChangedEventHandlers();
   }
 
@@ -73,7 +73,7 @@ public partial class Area : UserControl, IProfileToControl {
 
   private void fit_Click(object sender, RoutedEventArgs e) {
     if (this.Fit.IsChecked.HasValue) {
-      App.Profile.CurrentLayoutElement.Fit = (bool)this.Fit.IsChecked;
+      App.Profile.CurrentOutputLayoutElement.Fit = (bool)this.Fit.IsChecked;
 
       this.UpdateByProfile();
     }
@@ -125,41 +125,41 @@ public partial class Area : UserControl, IProfileToControl {
 
   private void clippingX_TextChanged(object sender, TextChangedEventArgs e) {
     var lowerBound = 0;
-    var upperBound = App.Profile.CurrentLayoutElement.WindowWidth;
+    var upperBound = App.Profile.CurrentInputLayoutElement.WindowWidth;
     int parsedValue;
     if (this.TryParseClippingParameters(this.ClippingX, lowerBound, upperBound, out parsedValue)) {
       // Profileに書き込み
-      App.Profile.CurrentLayoutElement.ClippingXWithoutFit = parsedValue;
+      App.Profile.CurrentOutputLayoutElement.ClippingXWithoutFit = parsedValue;
     }
   }
 
   private void clippingY_TextChanged(object sender, TextChangedEventArgs e) {
     var lowerBound = 0;
-    var upperBound = App.Profile.CurrentLayoutElement.WindowHeight;
+    var upperBound = App.Profile.CurrentInputLayoutElement.WindowHeight;
     int parsedValue;
     if (this.TryParseClippingParameters(this.ClippingY, lowerBound, upperBound, out parsedValue)) {
       // Profileに書き込み
-      App.Profile.CurrentLayoutElement.ClippingYWithoutFit = parsedValue;
+      App.Profile.CurrentOutputLayoutElement.ClippingYWithoutFit = parsedValue;
     }
   }
 
   private void clippingWidth_TextChanged(object sender, TextChangedEventArgs e) {
     var lowerBound = 0;
-    var upperBound = App.Profile.CurrentLayoutElement.WindowWidth;
+    var upperBound = App.Profile.CurrentInputLayoutElement.WindowWidth;
     int parsedValue;
     if (this.TryParseClippingParameters(this.ClippingWidth, lowerBound, upperBound, out parsedValue)) {
       // Profileに書き込み
-      App.Profile.CurrentLayoutElement.ClippingWidthWithoutFit = parsedValue;
+      App.Profile.CurrentOutputLayoutElement.ClippingWidthWithoutFit = parsedValue;
     }
   }
 
   private void clippingHeight_TextChanged(object sender, TextChangedEventArgs e) {
     var lowerBound = 0;
-    var upperBound = App.Profile.CurrentLayoutElement.WindowHeight;
+    var upperBound = App.Profile.CurrentInputLayoutElement.WindowHeight;
     int parsedValue;
     if (this.TryParseClippingParameters(this.ClippingHeight, lowerBound, upperBound, out parsedValue)) {
       // Profileに書き込み
-      App.Profile.CurrentLayoutElement.ClippingHeightWithoutFit = parsedValue;
+      App.Profile.CurrentOutputLayoutElement.ClippingHeightWithoutFit = parsedValue;
     }
   }
 }

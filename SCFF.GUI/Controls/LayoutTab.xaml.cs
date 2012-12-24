@@ -42,7 +42,7 @@ public partial class LayoutTab : UserControl, IProfileToControl {
       item.Header = (i+1).ToString();
       this.LayoutElementTab.Items.Add(item);
     }
-    this.LayoutElementTab.SelectedIndex = App.Profile.CurrentLayoutElement.Index;
+    this.LayoutElementTab.SelectedIndex = App.Profile.CurrentInputLayoutElement.Index;
     
     this.AttachChangedEventHandlers();
   }
@@ -71,9 +71,9 @@ public partial class LayoutTab : UserControl, IProfileToControl {
     // 最後に追加されたので末尾を選択
     this.LayoutElementTab.SelectedIndex = this.LayoutElementTab.Items.Count - 1;
 
-    Debug.Assert(this.LayoutElementTab.SelectedIndex == App.Profile.CurrentLayoutElement.Index);
+    Debug.Assert(this.LayoutElementTab.SelectedIndex == App.Profile.CurrentInputLayoutElement.Index);
     Debug.WriteLine("*****Add!*****");
-    Debug.WriteLine("Current Index: " + (App.Profile.CurrentLayoutElement.Index+1));
+    Debug.WriteLine("Current Index: " + (App.Profile.CurrentInputLayoutElement.Index+1));
 
     this.AttachChangedEventHandlers();
   }
@@ -87,9 +87,9 @@ public partial class LayoutTab : UserControl, IProfileToControl {
     var last = this.LayoutElementTab.Items.Count - 1;
     this.LayoutElementTab.Items.RemoveAt(last);
 
-    Debug.Assert(this.LayoutElementTab.SelectedIndex == App.Profile.CurrentLayoutElement.Index);
+    Debug.Assert(this.LayoutElementTab.SelectedIndex == App.Profile.CurrentInputLayoutElement.Index);
     Debug.WriteLine("=====Remove!=====");
-    Debug.WriteLine("Current Index: " + (App.Profile.CurrentLayoutElement.Index+1));
+    Debug.WriteLine("Current Index: " + (App.Profile.CurrentInputLayoutElement.Index+1));
 
     this.AttachChangedEventHandlers();
   }
@@ -131,13 +131,13 @@ public partial class LayoutTab : UserControl, IProfileToControl {
   //-------------------------------------------------------------------
 
   private void layoutElementTab_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-    var original = App.Profile.CurrentLayoutElement.Index;
+    var original = App.Profile.CurrentInputLayoutElement.Index;
     var next = this.LayoutElementTab.SelectedIndex;
-    App.Profile.ChangeCurrentLayoutElement(next);
+    App.Profile.ChangeCurrentIndex(next);
 
     Debug.WriteLine("-----Index Changed!-----");
     Debug.WriteLine("Current Index: " + (original+1) + "->" + (next+1));
-    Debug.Assert(this.LayoutElementTab.SelectedIndex == App.Profile.CurrentLayoutElement.Index);
+    Debug.Assert(this.LayoutElementTab.SelectedIndex == App.Profile.CurrentInputLayoutElement.Index);
 
     // 他のコントロールのデータの更新はWindowに任せる
     Commands.ChangeCurrentLayoutElementCommand.Execute(null, null);

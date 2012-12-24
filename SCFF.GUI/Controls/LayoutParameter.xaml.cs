@@ -37,21 +37,21 @@ public partial class LayoutParameter : UserControl, IProfileToControl {
 
   /// @copydoc IProfileToControl.UpdateByProfile
   public void UpdateByProfile() {
-    this.GroupBox.Header = "Layout " + (App.Profile.CurrentLayoutElement.Index+1) +
-        ": " + App.Profile.CurrentLayoutElement.WindowCaption;
+    this.GroupBox.Header = "Layout " + (App.Profile.CurrentInputLayoutElement.Index+1) +
+        ": " + App.Profile.CurrentInputLayoutElement.WindowCaption;
 
     /// @todo(me) プロセス情報はMainWindowから取ってこれるので、それを参照にしてBoundX/BoundYも更新
-    this.BoundX.Text = App.Profile.CurrentLayoutElement.BoundLeft(Constants.DefaultPreviewWidth).ToString();
-    this.BoundY.Text = App.Profile.CurrentLayoutElement.BoundTop(Constants.DefaultPreviewHeight).ToString();
-    this.BoundWidth.Text = App.Profile.CurrentLayoutElement.BoundWidth(Constants.DefaultPreviewWidth).ToString();
-    this.BoundHeight.Text = App.Profile.CurrentLayoutElement.BoundHeight(Constants.DefaultPreviewHeight).ToString();
+    this.BoundX.Text = App.Profile.CurrentInputLayoutElement.BoundLeft(Constants.DefaultPreviewWidth).ToString();
+    this.BoundY.Text = App.Profile.CurrentInputLayoutElement.BoundTop(Constants.DefaultPreviewHeight).ToString();
+    this.BoundWidth.Text = App.Profile.CurrentInputLayoutElement.BoundWidth(Constants.DefaultPreviewWidth).ToString();
+    this.BoundHeight.Text = App.Profile.CurrentInputLayoutElement.BoundHeight(Constants.DefaultPreviewHeight).ToString();
 
     this.DetachChangedEventHandlers();
 
-    this.BoundRelativeLeft.Text = App.Profile.CurrentLayoutElement.BoundRelativeLeft.ToString("F3");
-    this.BoundRelativeTop.Text = App.Profile.CurrentLayoutElement.BoundRelativeTop.ToString("F3");
-    this.BoundRelativeRight.Text = App.Profile.CurrentLayoutElement.BoundRelativeRight.ToString("F3");
-    this.BoundRelativeBottom.Text = App.Profile.CurrentLayoutElement.BoundRelativeBottom.ToString("F3");
+    this.BoundRelativeLeft.Text = App.Profile.CurrentInputLayoutElement.BoundRelativeLeft.ToString("F3");
+    this.BoundRelativeTop.Text = App.Profile.CurrentInputLayoutElement.BoundRelativeTop.ToString("F3");
+    this.BoundRelativeRight.Text = App.Profile.CurrentInputLayoutElement.BoundRelativeRight.ToString("F3");
+    this.BoundRelativeBottom.Text = App.Profile.CurrentInputLayoutElement.BoundRelativeBottom.ToString("F3");
 
     this.AttachChangedEventHandlers();
   }
@@ -116,10 +116,10 @@ public partial class LayoutParameter : UserControl, IProfileToControl {
     double parsedValue;
     if (this.TryParseBoundRelativeParameter(this.BoundRelativeLeft, lowerBound, upperBound, out parsedValue)) {
       // Profileに書き込み
-      App.Profile.CurrentLayoutElement.BoundRelativeLeft = parsedValue;
+      App.Profile.CurrentOutputLayoutElement.BoundRelativeLeft = parsedValue;
       // Changedイベントで発動するものはないのでそのまま代入
       /// @todo(me) ダミープレビューサイズ
-      this.BoundX.Text = App.Profile.CurrentLayoutElement.BoundLeft(Constants.DummyPreviewWidth).ToString();
+      this.BoundX.Text = App.Profile.CurrentInputLayoutElement.BoundLeft(Constants.DummyPreviewWidth).ToString();
     }
   }
 
@@ -129,10 +129,10 @@ public partial class LayoutParameter : UserControl, IProfileToControl {
     double parsedValue;
     if (this.TryParseBoundRelativeParameter(this.BoundRelativeTop, lowerBound, upperBound, out parsedValue)) {
       // Profileに書き込み
-      App.Profile.CurrentLayoutElement.BoundRelativeTop = parsedValue;
+      App.Profile.CurrentOutputLayoutElement.BoundRelativeTop = parsedValue;
       // Changedイベントで発動するものはないのでそのまま代入
       /// @todo(me) ダミープレビューサイズ
-      this.BoundY.Text = App.Profile.CurrentLayoutElement.BoundTop(Constants.DummyPreviewHeight).ToString();
+      this.BoundY.Text = App.Profile.CurrentInputLayoutElement.BoundTop(Constants.DummyPreviewHeight).ToString();
     }
   }
 
@@ -142,10 +142,10 @@ public partial class LayoutParameter : UserControl, IProfileToControl {
     double parsedValue;
     if (this.TryParseBoundRelativeParameter(this.BoundRelativeRight, lowerBound, upperBound, out parsedValue)) {
       // Profileに書き込み
-      App.Profile.CurrentLayoutElement.BoundRelativeRight = parsedValue;
+      App.Profile.CurrentOutputLayoutElement.BoundRelativeRight = parsedValue;
       // Changedイベントで発動するものはないのでそのまま代入
       /// @todo(me) ダミープレビューサイズ
-      this.BoundWidth.Text = App.Profile.CurrentLayoutElement.BoundWidth(Constants.DummyPreviewWidth).ToString();
+      this.BoundWidth.Text = App.Profile.CurrentInputLayoutElement.BoundWidth(Constants.DummyPreviewWidth).ToString();
     }
   }
 
@@ -155,10 +155,10 @@ public partial class LayoutParameter : UserControl, IProfileToControl {
     double parsedValue;
     if (this.TryParseBoundRelativeParameter(this.BoundRelativeBottom, lowerBound, upperBound, out parsedValue)) {
       // Profileに書き込み
-      App.Profile.CurrentLayoutElement.BoundRelativeBottom = parsedValue;
+      App.Profile.CurrentOutputLayoutElement.BoundRelativeBottom = parsedValue;
       // Changedイベントで発動するものはないのでそのまま代入
       /// @todo(me) ダミープレビューサイズ
-      this.BoundHeight.Text = App.Profile.CurrentLayoutElement.BoundHeight(Constants.DummyPreviewHeight).ToString();
+      this.BoundHeight.Text = App.Profile.CurrentInputLayoutElement.BoundHeight(Constants.DummyPreviewHeight).ToString();
     }
   }
 }

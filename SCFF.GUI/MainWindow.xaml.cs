@@ -23,6 +23,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using Microsoft.Windows.Shell;
 using SCFF.Common;
+using Microsoft.Win32;
 
 /// MainWindowのコードビハインド
 public partial class MainWindow : Window {
@@ -68,21 +69,69 @@ public partial class MainWindow : Window {
   //===================================================================
 
   private void Save_Executed(object sender, ExecutedRoutedEventArgs e) {
-    // @todo(me) 実装
-    App.Options.AddRecentProfile(System.DateTime.UtcNow.ToString());
-    this.UpdateRecentProfiles();
+    /// @todo(me) すでに保存されていない場合はダイアログをだす
+    if (false) {
+      var save = new SaveFileDialog();
+      save.Title = "SCFF.GUI";
+      save.Filter = "SCFF.GUI Profile|*.SCFF.GUI.profile";
+      var saveResult = save.ShowDialog();
+      if (saveResult.HasValue && (bool)saveResult) {
+        /// @todo(me) 実装
+        MessageBox.Show(save.FileName);
+        App.Options.AddRecentProfile(save.FileName);
+        this.UpdateRecentProfiles();
+      }
+    }
   }
 
   private void New_Executed(object sender, ExecutedRoutedEventArgs e) {
-    App.Profile.ResetProfile();
-    this.ResetLayoutElementTab();
-    this.UpdateByProfile();
+    var result = MessageBox.Show("Do you want to save changes?",
+                                 "SCFF.GUI",
+                                 MessageBoxButton.YesNoCancel,
+                                 MessageBoxImage.Warning,
+                                 MessageBoxResult.Yes);
+    switch (result) {
+      case MessageBoxResult.No: {
+        App.Profile.ResetProfile();
+        this.ResetLayoutElementTab();
+        this.UpdateByProfile();
+        break;
+      }
+      case MessageBoxResult.Yes: {
+        var save = new SaveFileDialog();
+        save.Title = "SCFF.GUI";
+        save.Filter = "SCFF.GUI Profile|*.SCFF.GUI.profile";
+        var saveResult = save.ShowDialog();
+        if (saveResult.HasValue && (bool)saveResult) {
+          /// @todo(me) 実装
+          MessageBox.Show(save.FileName);
+          App.Options.AddRecentProfile(save.FileName);
+          this.UpdateRecentProfiles();
+
+          App.Profile.ResetProfile();
+          this.ResetLayoutElementTab();
+          this.UpdateByProfile();
+        }
+        break;
+      }
+    }
   }
 
   private void Open_Executed(object sender, ExecutedRoutedEventArgs e) {
+    /// @todo(me) Newと似たコードが必要だがかなりめんどくさい。あとでかく
   }
 
   private void SaveAs_Executed(object sender, ExecutedRoutedEventArgs e) {
+    var save = new SaveFileDialog();
+    save.Title = "SCFF.GUI";
+    save.Filter = "SCFF.GUI Profile|*.SCFF.GUI.profile";
+    var saveResult = save.ShowDialog();
+    if (saveResult.HasValue && (bool)saveResult) {
+      /// @todo(me) 実装
+      MessageBox.Show(save.FileName);
+      App.Options.AddRecentProfile(save.FileName);
+      this.UpdateRecentProfiles();
+    }
   }
 
   //===================================================================

@@ -47,6 +47,36 @@ public class AdditionalLayoutParameter {
 /// レイアウト設定などをまとめたプロファイル
 public partial class Profile {
 
+
+  /// プロファイル内を参照・操作するためのカーソルクラス(仮想)
+  /// 
+  /// - C#のインナークラスはC++のフレンドクラスと似たようなことができる！
+  /// - プログラムから直接は利用してはいけないもの(this.profile.appendicesの内容で上書きされるため)
+  ///   - this.profile.message.layoutParameters[*].Bound*
+  ///   - this.profile.message.layoutParameters[*].Clipping*
+  /// - 以下の内容も最新のデータがあることは保障しない
+  ///   - this.profile.message.layoutParameters[*].Window
+  ///
+  /// - ProfileはProcessに関連した情報を知ることはできない
+  ///   - よってsampleWidth/sampleHeightの存在は仮定しないこと
+  public abstract class LayoutElement {
+
+    /// コンストラクタ
+    public LayoutElement(Profile profile, int index) {
+      this.profile = profile;
+      this.index = index;
+    }
+
+    // プロパティ
+    public int Index {
+      get { return this.index; }
+    }
+
+    // メンバ変数
+    private int index;
+    protected Profile profile;
+  }
+
   //===================================================================
   // コンストラクタ/デストラクタ
   //===================================================================

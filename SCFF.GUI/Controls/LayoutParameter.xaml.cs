@@ -54,6 +54,12 @@ public partial class LayoutParameter : UserControl, IProfileToControl {
     this.BoundRelativeBottom.Text = App.Profile.CurrentInputLayoutElement.BoundRelativeBottom.ToString("F3");
 
     this.AttachChangedEventHandlers();
+
+    var isComplexLayout = App.Profile.LayoutType == LayoutTypes.ComplexLayout;
+    this.BoundRelativeLeft.IsEnabled = isComplexLayout;
+    this.BoundRelativeTop.IsEnabled = isComplexLayout;
+    this.BoundRelativeRight.IsEnabled = isComplexLayout;
+    this.BoundRelativeBottom.IsEnabled = isComplexLayout;
   }
 
   /// @copydoc IProfileToControl.AttachChangedEventHandlers

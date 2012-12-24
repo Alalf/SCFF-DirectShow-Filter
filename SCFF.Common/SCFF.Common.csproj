@@ -48,7 +48,6 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Imaging\Utilities.cs" />
     <Compile Include="Options.cs" />
-    <Compile Include="Profile.LayoutElement.cs" />
     <Compile Include="Profile.OutputLayoutElement.cs" />
     <Compile Include="ProfileINIFile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

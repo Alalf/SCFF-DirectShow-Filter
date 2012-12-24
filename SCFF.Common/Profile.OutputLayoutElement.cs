@@ -33,10 +33,6 @@ public partial class Profile {
       // nop
     }
 
-    internal InputLayoutElement ToInput() {
-      return new InputLayoutElement(this.profile, this.Index);
-    }
-
     //=================================================================
     // アクセッサ(単純なもの)
     //=================================================================

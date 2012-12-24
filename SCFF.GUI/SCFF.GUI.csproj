@@ -131,7 +131,6 @@
     <Compile Include="Controls\TargetWindow.xaml.cs">
       <DependentUpon>TargetWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MainWindow.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

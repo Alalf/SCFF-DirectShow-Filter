@@ -92,6 +92,8 @@ public partial class Profile {
     }
 
     // Bound *
+    // - 相対比率→ピクセル値変換
+    //   - Left/Topは切り捨て、Right/Bottomは切り上げ
     public double BoundRelativeLeft {
       get { return this.profile.additionalLayoutParameters[this.Index].BoundRelativeLeft; }
     }

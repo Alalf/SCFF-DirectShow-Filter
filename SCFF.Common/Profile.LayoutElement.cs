@@ -116,42 +116,6 @@ public partial class Profile {
       set { this.profile.message.LayoutParameters[this.index].RotateDirection = Convert.ToInt32(value); }
     }
 
-    // Window
-    public UIntPtr Window {
-      get {
-        switch (this.WindowType) {
-          case WindowTypes.Normal: {
-            return (UIntPtr)this.profile.message.LayoutParameters[this.index].Window;
-          }
-          case WindowTypes.DesktopListView: {
-            return Utilities.DesktopListViewWindow;
-          }
-          case WindowTypes.Desktop: {
-            return Utilities.DesktopWindow;
-          }
-          default: {
-            Debug.Fail("Window: Invalid WindowTypes");
-            return UIntPtr.Zero;
-          }
-        }
-      }
-    }
-    public WindowTypes WindowType {
-      get { return this.profile.additionalLayoutParameters[this.index].WindowType; }
-    }
-    public void SetWindow(UIntPtr window) {
-      this.profile.additionalLayoutParameters[this.index].WindowType = WindowTypes.Normal;
-      this.profile.message.LayoutParameters[this.index].Window = window.ToUInt64();
-    }
-    public void SetWindowToDesktop() {
-      this.profile.additionalLayoutParameters[this.index].WindowType = WindowTypes.Desktop;
-      this.profile.message.LayoutParameters[this.index].Window = 0;
-    }
-    public void SetWindowToDesktopListView() {
-      this.profile.additionalLayoutParameters[this.index].WindowType = WindowTypes.DesktopListView;
-      this.profile.message.LayoutParameters[this.index].Window = 0;
-    }
-
     // Fit
     public bool Fit {
       get { return this.profile.additionalLayoutParameters[this.index].Fit; }
@@ -188,11 +152,65 @@ public partial class Profile {
       return (int)Math.Floor(this.profile.additionalLayoutParameters[this.index].BoundRelativeBottom * sampleHeight);
     }
 
+    // Clipping*WithoutFit
+    public int ClippingXWithoutFit {
+      get { return this.profile.additionalLayoutParameters[this.index].ClippingXWithoutFit; }
+      set { this.profile.additionalLayoutParameters[this.index].ClippingXWithoutFit = value; }
+    }
+    public int ClippingYWithoutFit {
+      get { return this.profile.additionalLayoutParameters[this.index].ClippingYWithoutFit; }
+      set { this.profile.additionalLayoutParameters[this.index].ClippingYWithoutFit = value; }
+    }
+    public int ClippingWidthWithoutFit {
+      get { return this.profile.additionalLayoutParameters[this.index].ClippingWidthWithoutFit; }
+      set { this.profile.additionalLayoutParameters[this.index].ClippingWidthWithoutFit = value; }
+    }
+    public int ClippingHeightWithoutFit {
+      get { return this.profile.additionalLayoutParameters[this.index].ClippingHeightWithoutFit; }
+      set { this.profile.additionalLayoutParameters[this.index].ClippingHeightWithoutFit = value; }
+    }
+
     //=================================================================
     // アクセッサ(他のアクセッサやWin32APIを必要とするもの)
     // あまり呼び出し回数が増えるようならキャッシングを考えること
     //=================================================================
     
+    // Window
+    internal UIntPtr Window {
+      get {
+        switch (this.WindowType) {
+          case WindowTypes.Normal: {
+            return (UIntPtr)this.profile.message.LayoutParameters[this.index].Window;
+          }
+          case WindowTypes.DesktopListView: {
+            return Utilities.DesktopListViewWindow;
+          }
+          case WindowTypes.Desktop: {
+            return Utilities.DesktopWindow;
+          }
+          default: {
+            Debug.Fail("Window: Invalid WindowTypes");
+            return UIntPtr.Zero;
+          }
+        }
+      }
+    }
+    public WindowTypes WindowType {
+      get { return this.profile.additionalLayoutParameters[this.index].WindowType; }
+    }
+    public void SetWindow(UIntPtr window) {
+      this.profile.additionalLayoutParameters[this.index].WindowType = WindowTypes.Normal;
+      this.profile.message.LayoutParameters[this.index].Window = window.ToUInt64();
+    }
+    public void SetWindowToDesktop() {
+      this.profile.additionalLayoutParameters[this.index].WindowType = WindowTypes.Desktop;
+      this.profile.message.LayoutParameters[this.index].Window = 0;
+    }
+    public void SetWindowToDesktopListView() {
+      this.profile.additionalLayoutParameters[this.index].WindowType = WindowTypes.DesktopListView;
+      this.profile.message.LayoutParameters[this.index].Window = 0;
+    }
+
     public int BoundWidth(int sampleWidth) {
       return this.BoundRight(sampleWidth) - this.BoundLeft(sampleWidth);
     }
@@ -308,24 +326,6 @@ public partial class Profile {
           return this.ClippingHeightWithoutFit;
         }
       }
-    }
-
-    // Clipping*WithoutFit
-    public int ClippingXWithoutFit {
-      get { return this.profile.additionalLayoutParameters[this.index].ClippingXWithoutFit; }
-      set { this.profile.additionalLayoutParameters[this.index].ClippingXWithoutFit = value; }
-    }
-    public int ClippingYWithoutFit {
-      get { return this.profile.additionalLayoutParameters[this.index].ClippingYWithoutFit; }
-      set { this.profile.additionalLayoutParameters[this.index].ClippingYWithoutFit = value; }
-    }
-    public int ClippingWidthWithoutFit {
-      get { return this.profile.additionalLayoutParameters[this.index].ClippingWidthWithoutFit; }
-      set { this.profile.additionalLayoutParameters[this.index].ClippingWidthWithoutFit = value; }
-    }
-    public int ClippingHeightWithoutFit {
-      get { return this.profile.additionalLayoutParameters[this.index].ClippingHeightWithoutFit; }
-      set { this.profile.additionalLayoutParameters[this.index].ClippingHeightWithoutFit = value; }
     }
 
     public void FixClippingParametersWithoutFit() {

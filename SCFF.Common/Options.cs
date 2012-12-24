@@ -23,23 +23,12 @@ namespace SCFF.Common {
 using System.Collections.Generic;
 using System.Diagnostics;
 
-  /// プロファイル以外のアプリケーション設定
+/// プロファイル以外のアプリケーション設定
 ///
 /// アプリケーションの起動中にプロパティが最新の状態になっている必要の無いものには
 /// Tmpという接頭辞をつけている。プログラム内部でそれらのプロパティを使うことは
 /// Loaded/Closingイベントハンドラ以外ではしてはいけない。
 public class Options {
-
-  //===================================================================
-  // 定数
-  //===================================================================
-
-  /// Options用WindowState。System.Windows.WindowStateと相互に変換する。
-  public enum WindowState {
-    Normal,
-    Minimized,
-    Maximized
-  }
 
   //===================================================================
   // コンストラクタ/デストラクタ

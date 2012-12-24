@@ -22,7 +22,59 @@ namespace SCFF.Common {
 
 using System.Collections.Generic;
 
-/// SCFF.Commonモジュールで利用する定数・テーブル
+//=====================================================================
+// Enum
+//=====================================================================
+
+/// Options用WindowState。System.Windows.WindowStateと相互に変換する。
+public enum WindowState {
+  Normal,
+  Minimized,
+  Maximized
+}
+
+/// Profile用Windowの種類
+public enum WindowTypes {
+  Normal,
+  DesktopListView,
+  Desktop,
+}
+
+/// @copydoc SCFF.Interprocess.LayoutTypes
+public enum LayoutTypes {
+  NullLayout    = Interprocess.LayoutTypes.NullLayout,
+  NativeLayout  = Interprocess.LayoutTypes.NativeLayout,
+  ComplexLayout = Interprocess.LayoutTypes.ComplexLayout
+}
+
+/// @copydoc SCFF.Interprocess.SWScaleFlags
+public enum SWScaleFlags {
+  FastBilinear  = Interprocess.SWScaleFlags.FastBilinear,
+  Bilinear      = Interprocess.SWScaleFlags.Bilinear,
+  Bicubic       = Interprocess.SWScaleFlags.Bicubic,
+  X             = Interprocess.SWScaleFlags.X,
+  Point         = Interprocess.SWScaleFlags.Point,
+  Area          = Interprocess.SWScaleFlags.Area,
+  Bicublin      = Interprocess.SWScaleFlags.Bicublin,
+  Gauss         = Interprocess.SWScaleFlags.Gauss,
+  Sinc          = Interprocess.SWScaleFlags.Sinc,
+  Lanczos       = Interprocess.SWScaleFlags.Lanczos,
+  Spline        = Interprocess.SWScaleFlags.Spline
+}
+
+/// @copydoc SCFF.Interprocess.RotateDirections
+public enum RotateDirections {
+  NoRotate      = Interprocess.RotateDirections.NoRotate,
+  Degrees90     = Interprocess.RotateDirections.Degrees90,
+  Degrees180    = Interprocess.RotateDirections.Degrees180,
+  Degrees270    = Interprocess.RotateDirections.Degrees270,
+}
+
+//=====================================================================
+// staticクラス
+//=====================================================================
+
+/// SCFF.Commonモジュールが外部に公開するテーブルと定数
 public static class Constants {
   public const int MaxLayoutElementCount = Interprocess.Interprocess.MaxComplexLayoutElements;
 
@@ -43,7 +95,7 @@ public static class Constants {
   public const int RecentProfilesLength = 5;
 
   // ItemsSourceを使いたくないのでディクショナリを二つ用意しておく
-  public static string[] ResizeMethodLabels = new string[] {
+  public static readonly string[] ResizeMethodLabels = new string[] {
     "FastBilinear (fast bilinear)",
     "Bilinear (bilinear)",
     "Bicubic (bicubic)",
@@ -57,33 +109,33 @@ public static class Constants {
     "Spline (natural bicubic spline)"
   };
 
-  public static Profile.SWScaleFlags[] ResizeMethodArray = new Profile.SWScaleFlags[] {
-    Profile.SWScaleFlags.FastBilinear,
-    Profile.SWScaleFlags.Bilinear,
-    Profile.SWScaleFlags.Bicubic,
-    Profile.SWScaleFlags.X,
-    Profile.SWScaleFlags.Point,
-    Profile.SWScaleFlags.Area,
-    Profile.SWScaleFlags.Bicublin,
-    Profile.SWScaleFlags.Gauss,
-    Profile.SWScaleFlags.Sinc,
-    Profile.SWScaleFlags.Lanczos,
-    Profile.SWScaleFlags.Spline,
+  public static readonly SWScaleFlags[] ResizeMethodArray = new SWScaleFlags[] {
+    SWScaleFlags.FastBilinear,
+    SWScaleFlags.Bilinear,
+    SWScaleFlags.Bicubic,
+    SWScaleFlags.X,
+    SWScaleFlags.Point,
+    SWScaleFlags.Area,
+    SWScaleFlags.Bicublin,
+    SWScaleFlags.Gauss,
+    SWScaleFlags.Sinc,
+    SWScaleFlags.Lanczos,
+    SWScaleFlags.Spline,
   };
 
-  public static Dictionary<Profile.SWScaleFlags, int> ResizeMethodIndexes =
-      new Dictionary<Profile.SWScaleFlags, int>() {
-    {Profile.SWScaleFlags.FastBilinear, 0},
-    {Profile.SWScaleFlags.Bilinear, 1},
-    {Profile.SWScaleFlags.Bicubic, 2},
-    {Profile.SWScaleFlags.X, 3},
-    {Profile.SWScaleFlags.Point, 4},
-    {Profile.SWScaleFlags.Area, 5},
-    {Profile.SWScaleFlags.Bicublin, 6},
-    {Profile.SWScaleFlags.Gauss, 7},
-    {Profile.SWScaleFlags.Sinc, 8},
-    {Profile.SWScaleFlags.Lanczos, 9},
-    {Profile.SWScaleFlags.Spline, 10}
+  public static readonly Dictionary<SWScaleFlags, int> ResizeMethodIndexes =
+      new Dictionary<SWScaleFlags, int>() {
+    {SWScaleFlags.FastBilinear, 0},
+    {SWScaleFlags.Bilinear, 1},
+    {SWScaleFlags.Bicubic, 2},
+    {SWScaleFlags.X, 3},
+    {SWScaleFlags.Point, 4},
+    {SWScaleFlags.Area, 5},
+    {SWScaleFlags.Bicublin, 6},
+    {SWScaleFlags.Gauss, 7},
+    {SWScaleFlags.Sinc, 8},
+    {SWScaleFlags.Lanczos, 9},
+    {SWScaleFlags.Spline, 10}
   };
 }
 }

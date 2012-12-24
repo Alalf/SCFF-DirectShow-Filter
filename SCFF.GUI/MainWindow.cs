@@ -69,7 +69,7 @@ public partial class MainWindow : Window {
     this.Top = App.Options.TmpMainWindowTop;
     this.Width = App.Options.TmpMainWindowWidth;
     this.Height = App.Options.TmpMainWindowHeight;
-    this.WindowState = (WindowState)App.Options.TmpMainWindowState;
+    this.WindowState = (System.Windows.WindowState)App.Options.TmpMainWindowState;
     
     // MainWindow Expanders
     this.areaExpander.IsExpanded = App.Options.TmpAreaIsExpanded;
@@ -92,12 +92,12 @@ public partial class MainWindow : Window {
   /// UIから設定にデータを保存
   private void SaveOptions() {
     // Tmp接頭辞のプロパティだけはここで更新する必要がある
-    var isNormal = this.WindowState == WindowState.Normal;
+    var isNormal = this.WindowState == System.Windows.WindowState.Normal;
     App.Options.TmpMainWindowLeft = isNormal ? this.Left : this.RestoreBounds.Left;
     App.Options.TmpMainWindowTop = isNormal ? this.Top : this.RestoreBounds.Top;
     App.Options.TmpMainWindowWidth = isNormal ? this.Width : this.RestoreBounds.Width;
     App.Options.TmpMainWindowHeight = isNormal ? this.Height : this.RestoreBounds.Height;
-    App.Options.TmpMainWindowState = (Options.WindowState)this.WindowState;
+    App.Options.TmpMainWindowState = (SCFF.Common.WindowState)this.WindowState;
 
     // MainWindow Expanders
     App.Options.TmpAreaIsExpanded = this.areaExpander.IsExpanded;

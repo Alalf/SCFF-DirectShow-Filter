@@ -39,7 +39,6 @@ internal class ExternalAPI {
   internal const int SM_CXVIRTUALSCREEN = 78;
   internal const int SM_CYVIRTUALSCREEN = 79;
 
-
   // Type
   [StructLayout(LayoutKind.Sequential)]
   internal struct RECT { public int Left, Top, Right, Bottom; }

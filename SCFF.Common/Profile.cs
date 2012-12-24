@@ -24,48 +24,41 @@ namespace SCFF.Common {
 using System;
 using System.Collections.Generic;
 
+//=====================================================================
+// 定数
+//=====================================================================
+
+
+//---------------------------------------------------------------------
+// AdditionalLayoutParameter
+//---------------------------------------------------------------------
+
+/// 追加レイアウトパラメータ型
+public class AdditionalLayoutParameter {
+  public WindowTypes WindowType { get; set; }
+  public bool Fit { get; set; }
+  public double BoundRelativeLeft { get; set; }
+  public double BoundRelativeTop { get; set; }
+  public double BoundRelativeRight { get; set; }
+  public double BoundRelativeBottom { get; set; }
+
+  public int ClippingXWithoutFit { get; set; }
+  public int ClippingYWithoutFit { get; set; }
+  public int ClippingWidthWithoutFit { get; set; }
+  public int ClippingHeightWithoutFit { get; set; }
+
+  public int BackupDesktopClippingX { get; set; }
+  public int BackupDesktopClippingY { get; set; }
+  public int BackupDesktopClippingWidth { get; set; }
+  public int BackupDesktopClippingHeight { get; set; }
+}
+
+//===================================================================
+// クラス宣言
+//===================================================================
+
 /// レイアウト設定などをまとめたプロファイル
 public partial class Profile {
-
-  //===================================================================
-  // 定数
-  //===================================================================
-
-  public enum WindowTypes {
-    Normal,
-    DesktopListView,
-    Desktop,
-  }
-
-  /// @copydoc SCFF.Common.Interprocess.LayoutTypes
-  public enum LayoutTypes {
-    NullLayout    = Interprocess.LayoutTypes.NullLayout,
-    NativeLayout  = Interprocess.LayoutTypes.NativeLayout,
-    ComplexLayout = Interprocess.LayoutTypes.ComplexLayout
-  }
-
-  /// @copydoc SCFF.Common.Interprocess.SWScaleFlags
-  public enum SWScaleFlags {
-    FastBilinear  = Interprocess.SWScaleFlags.FastBilinear,
-    Bilinear      = Interprocess.SWScaleFlags.Bilinear,
-    Bicubic       = Interprocess.SWScaleFlags.Bicubic,
-    X             = Interprocess.SWScaleFlags.X,
-    Point         = Interprocess.SWScaleFlags.Point,
-    Area          = Interprocess.SWScaleFlags.Area,
-    Bicublin      = Interprocess.SWScaleFlags.Bicublin,
-    Gauss         = Interprocess.SWScaleFlags.Gauss,
-    Sinc          = Interprocess.SWScaleFlags.Sinc,
-    Lanczos       = Interprocess.SWScaleFlags.Lanczos,
-    Spline        = Interprocess.SWScaleFlags.Spline
-  }
-
-  /// @copydoc SCFF.Common.Interprocess.RotateDirections
-  public enum RotateDirections {
-    NoRotate      = Interprocess.RotateDirections.NoRotate,
-    Degrees90     = Interprocess.RotateDirections.Degrees90,
-    Degrees180    = Interprocess.RotateDirections.Degrees180,
-    Degrees270    = Interprocess.RotateDirections.Degrees270,
-  }
 
   //===================================================================
   // コンストラクタ/デストラクタ
@@ -282,26 +275,6 @@ public partial class Profile {
   /// 大半の情報はこのmessage内部にあるが、messageの中身は実行時のみ有効な値が含まれている
   /// (UIntPtr windowなど)。このために、messageとは別にいくらかの情報を追加して保存しなければならない。
   private Interprocess.Message message = new Interprocess.Message();
-
-  /// 追加レイアウトパラメータ型
-  public class AdditionalLayoutParameter {
-    public WindowTypes WindowType { get; set; }
-    public bool Fit { get; set; }
-    public double BoundRelativeLeft { get; set; }
-    public double BoundRelativeTop { get; set; }
-    public double BoundRelativeRight { get; set; }
-    public double BoundRelativeBottom { get; set; }
-
-    public int ClippingXWithoutFit { get; set; }
-    public int ClippingYWithoutFit { get; set; }
-    public int ClippingWidthWithoutFit { get; set; }
-    public int ClippingHeightWithoutFit { get; set; }
-
-    public int BackupDesktopClippingX { get; set; }
-    public int BackupDesktopClippingY { get; set; }
-    public int BackupDesktopClippingWidth { get; set; }
-    public int BackupDesktopClippingHeight { get; set; }
-  }
 
   /// 追加レイアウトパラメータをまとめた配列
   /// messageLayoutParametersにあわせて非初期化済みにした

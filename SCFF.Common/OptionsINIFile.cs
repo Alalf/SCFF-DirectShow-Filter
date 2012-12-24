@@ -167,8 +167,8 @@ public static class OptionsINIFile {
       }
     }
     if (labelToRawData.TryGetValue("TmpMainWindowState", out rawData)) {
-      Options.WindowState parsedData;
-      if (Enum.TryParse<Options.WindowState>(rawData, out parsedData)) {
+      WindowState parsedData;
+      if (Enum.TryParse<WindowState>(rawData, out parsedData)) {
         options.TmpMainWindowState = parsedData;
       }
     }

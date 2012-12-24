@@ -70,7 +70,7 @@ public partial class MainWindow : Window {
 
   private void Save_Executed(object sender, ExecutedRoutedEventArgs e) {
     /// @todo(me) すでに保存されていない場合はダイアログをだす
-    if (false) {
+    if ((string)this.Tag == "") {
       var save = new SaveFileDialog();
       save.Title = "SCFF.GUI";
       save.Filter = "SCFF.GUI Profile|*.SCFF.GUI.profile";
@@ -337,7 +337,7 @@ public partial class MainWindow : Window {
   }
 
   private void swscaleFlags_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-    Profile.SWScaleFlags flags = Constants.ResizeMethodArray[this.swscaleFlags.SelectedIndex];
+    SWScaleFlags flags = Constants.ResizeMethodArray[this.swscaleFlags.SelectedIndex];
     App.Profile.CurrentLayoutElement.SWScaleFlags = flags;
   }
 

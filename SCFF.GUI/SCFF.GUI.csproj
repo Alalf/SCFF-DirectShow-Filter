@@ -58,7 +58,23 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\LayoutParameter.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\LayoutEdit.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\LayoutTab.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\Options.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ResizeMethod.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -78,9 +94,21 @@
     <Compile Include="Controls\Area.xaml.cs">
       <DependentUpon>Area.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\IProfileEditor.cs" />
+    <Compile Include="Controls\IProfileToControl.cs" />
+    <Compile Include="Controls\LayoutParameter.xaml.cs">
+      <DependentUpon>LayoutParameter.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\LayoutEdit.xaml.cs">
       <DependentUpon>LayoutEdit.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\LayoutTab.xaml.cs">
+      <DependentUpon>LayoutTab.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Options.xaml.cs">
+      <DependentUpon>Options.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ResizeMethod.xaml.cs">
+      <DependentUpon>ResizeMethod.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\TargetWindow.xaml.cs">
       <DependentUpon>TargetWindow.xaml</DependentUpon>

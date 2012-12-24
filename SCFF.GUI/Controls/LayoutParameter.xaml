@@ -1,0 +1,44 @@
+﻿<UserControl x:Class="SCFF.GUI.Controls.LayoutParameter"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="107" d:DesignWidth="367" FontSize="9">
+  <GroupBox x:Name="GroupBox" DockPanel.Dock="Bottom" Width="350" Header="Layout N: (Window Classname)">
+    <Grid>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="10*"/>
+        <ColumnDefinition Width="8*"/>
+        <ColumnDefinition Width="10*"/>
+        <ColumnDefinition Width="8*"/>
+        <ColumnDefinition Width="10*"/>
+        <ColumnDefinition Width="10*"/>
+        <ColumnDefinition Width="10*"/>
+        <ColumnDefinition Width="11*"/>
+        <ColumnDefinition Width="10*"/>
+      </Grid.ColumnDefinitions>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="25"/>
+        <RowDefinition Height="25"/>
+      </Grid.RowDefinitions>
+      <Button Grid.RowSpan="2" Height="20" VerticalAlignment="Center">Fit</Button>
+      <Label Grid.Column="1" Height="12" Margin="5,0" HorizontalAlignment="Right" VerticalAlignment="Center">Left</Label>
+      <TextBox x:Name="BoundRelativeLeft" Grid.Column="2" Height="20" VerticalAlignment="Center">1000</TextBox>
+      <Label Grid.Column="3" Height="12" Margin="5,0" HorizontalAlignment="Right" VerticalAlignment="Center">Top</Label>
+      <TextBox x:Name="BoundRelativeTop" Grid.Column="4" Height="20" VerticalAlignment="Center">1000</TextBox>
+      <Label Grid.Column="5" Height="12" Margin="5,0" HorizontalAlignment="Right" VerticalAlignment="Center">Right</Label>
+      <TextBox x:Name="BoundRelativeRight" Grid.Column="6" Height="20" VerticalAlignment="Center">1000</TextBox>
+      <Label Grid.Column="7" Height="12" Margin="5,0" HorizontalAlignment="Right" VerticalAlignment="Center">Bottom</Label>
+      <TextBox x:Name="BoundRelativeBottom" Grid.Column="8" Height="20" VerticalAlignment="Center">1000</TextBox>
+      <Label Grid.Row="1" Grid.Column="1"  Height="12" Margin="5,0" HorizontalAlignment="Right" VerticalAlignment="Center" Content="X"/>
+      <TextBox x:Name="BoundX" Grid.Row="1" Grid.Column="2" Height="20" VerticalAlignment="Center" IsEnabled="False">1000</TextBox>
+      <Label Grid.Row="1" Grid.Column="3" Margin="5,0" Height="12" HorizontalAlignment="Right" VerticalAlignment="Center" Content="Y"/>
+      <TextBox x:Name="BoundY" Grid.Row="1" Grid.Column="4" Height="20" VerticalAlignment="Center" IsEnabled="False">1000</TextBox>
+      <Label Grid.Row="1" Grid.Column="5" Margin="5,0" Height="12" HorizontalAlignment="Right" VerticalAlignment="Center" Content="Width"/>
+      <TextBox x:Name="BoundWidth" Grid.Row="1" Grid.Column="6" Height="20" VerticalAlignment="Center" IsEnabled="False">1000</TextBox>
+      <Label Grid.Row="1" Grid.Column="7" Margin="5,0" Height="12" HorizontalAlignment="Right" VerticalAlignment="Center" Content="Height"/>
+      <TextBox x:Name="BoundHeight" Grid.Row="1" Grid.Column="8" Height="20" VerticalAlignment="Center" IsEnabled="False">1000</TextBox>
+    </Grid>
+  </GroupBox>
+</UserControl>

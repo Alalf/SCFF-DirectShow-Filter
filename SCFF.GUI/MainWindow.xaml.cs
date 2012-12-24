@@ -1,6 +1,6 @@
 ﻿// Copyright 2012 Alalf <alalf.iQLc_at_gmail.com>
 //
-// This file is part of SCFF-DirectShow-Filter.
+// This file is part of SCFF-DirectShow-Filter(SCFF DSF).
 //
 // SCFF DSF is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -38,19 +38,6 @@ public partial class MainWindow : Window {
     // Controls
     //-----------------------------------------------------------------
     this.InitializeComponent();
-
-    // swscaleFlags
-    this.swscaleFlags.Items.Clear();
-    foreach (var method in Constants.ResizeMethodLabels) {
-      var item = new ComboBoxItem();
-      item.Content = method;
-      this.swscaleFlags.Items.Add(item);
-    }
-
-    //-----------------------------------------------------------------
-    // EventHandlers
-    //-----------------------------------------------------------------
-    this.AttachChangedEventHandlers();
   }
 
   /// 全ウィンドウ表示前に一度だけ起こるLoadedイベントハンドラ
@@ -93,7 +80,7 @@ public partial class MainWindow : Window {
     switch (result) {
       case MessageBoxResult.No: {
         App.Profile.ResetProfile();
-        this.ResetLayoutElementTab();
+        this.LayoutTab.ResetTabs();
         this.UpdateByProfile();
         break;
       }
@@ -109,7 +96,7 @@ public partial class MainWindow : Window {
           this.UpdateRecentProfiles();
 
           App.Profile.ResetProfile();
-          this.ResetLayoutElementTab();
+          this.LayoutTab.ResetTabs();
           this.UpdateByProfile();
         }
         break;
@@ -139,19 +126,19 @@ public partial class MainWindow : Window {
   //===================================================================
   
 	private void CloseWindow_Executed(object sender, ExecutedRoutedEventArgs e) {
-		SystemCommands.CloseWindow((Window)e.Parameter);
+		SystemCommands.CloseWindow(this);
 	}
 
 	private void MaximizeWindow_Executed(object sender, ExecutedRoutedEventArgs e) {
-		SystemCommands.MaximizeWindow((Window)e.Parameter);
+		SystemCommands.MaximizeWindow(this);
 	}
 
 	private void MinimizeWindow_Executed(object sender, ExecutedRoutedEventArgs e) {
-		SystemCommands.MinimizeWindow((Window)e.Parameter);
+		SystemCommands.MinimizeWindow(this);
 	}
 
 	private void RestoreWindow_Executed(object sender, ExecutedRoutedEventArgs e) {
-		SystemCommands.RestoreWindow((Window)e.Parameter);
+		SystemCommands.RestoreWindow(this);
 	}
 
   //===================================================================
@@ -160,11 +147,7 @@ public partial class MainWindow : Window {
 
   private void AddLayoutElement_Executed(object sender, ExecutedRoutedEventArgs e) {
     App.Profile.AddLayoutElement();
-    this.AddLayoutElementTab();
-
-    Debug.Assert(this.layoutElementTab.SelectedIndex == App.Profile.CurrentLayoutElement.Index);
-    Debug.WriteLine("*********Add!**********");
-    Debug.WriteLine("Current Index: " + (App.Profile.CurrentLayoutElement.Index+1));
+    this.LayoutTab.AddTab();
 
     this.UpdateByProfile();
   }
@@ -175,17 +158,17 @@ public partial class MainWindow : Window {
 
   private void RemoveLayoutElement_Executed(object sender, ExecutedRoutedEventArgs e) {
     App.Profile.RemoveCurrentLayoutElement();
-    this.RemoveLayoutElementTab();
-
-    Debug.Assert(this.layoutElementTab.SelectedIndex == App.Profile.CurrentLayoutElement.Index);
-    Debug.WriteLine("========Remove!=========");
-    Debug.WriteLine("Current Index: " + (App.Profile.CurrentLayoutElement.Index+1));
+    this.LayoutTab.RemoveCurrentTab();
     
     this.UpdateByProfile();
   }
 
   private void RemoveLayoutElement_CanExecute(object sender, CanExecuteRoutedEventArgs e) {
     e.CanExecute = App.Profile.CanRemoveLayoutElement();
+  }
+
+  private void ChangeCurrentLayoutElement_Executed(object sender, ExecutedRoutedEventArgs e) {
+    this.UpdateByProfile();
   }
 
   //===================================================================
@@ -195,32 +178,16 @@ public partial class MainWindow : Window {
   //===================================================================
 
   private void compactView_Checked(object sender, RoutedEventArgs e) {
-    this.optionsExpander.Visibility = Visibility.Collapsed;
-    this.resizeMethodExpander.Visibility = Visibility.Collapsed;
-    this.layoutExpander.IsExpanded = false;
+    this.OptionsExpander.Visibility = Visibility.Collapsed;
+    this.ResizeMethodExpander.Visibility = Visibility.Collapsed;
+    this.LayoutExpander.IsExpanded = false;
     this.Width = Constants.CompactMainWindowWidth;
     this.Height = Constants.CompactMainWindowHeight;
   }
 
   private void compactView_Unchecked(object sender, RoutedEventArgs e) {
-    this.optionsExpander.Visibility = Visibility.Visible;
-    this.resizeMethodExpander.Visibility = Visibility.Visible;
-  }
-
-  private void swscaleIsFilterEnabled_Checked(object sender, RoutedEventArgs e) {
-    this.swscaleLumaGBlur.IsEnabled = true;
-    this.swscaleLumaSharpen.IsEnabled = true;
-    this.swscaleChromaGBlur.IsEnabled = true;
-    this.swscaleChromaSharpen.IsEnabled = true;
-    /// @todo(me) HshiftおよびVshiftの使い方がわかるまで設定できないように
-  }
-
-  private void swscaleIsFilterEnabled_Unchecked(object sender, RoutedEventArgs e) {
-    this.swscaleLumaGBlur.IsEnabled = false;
-    this.swscaleLumaSharpen.IsEnabled = false;
-    this.swscaleChromaGBlur.IsEnabled = false;
-    this.swscaleChromaSharpen.IsEnabled = false;
-    /// @todo(me) HshiftおよびVshiftの使い方がわかるまで設定できないように
+    this.OptionsExpander.Visibility = Visibility.Visible;
+    this.ResizeMethodExpander.Visibility = Visibility.Visible;
   }
 
   //===================================================================
@@ -230,257 +197,32 @@ public partial class MainWindow : Window {
   //===================================================================
 
   private void forceAeroOn_Click(object sender, RoutedEventArgs e) {
-    App.Options.ForceAeroOn = this.forceAeroOn.IsChecked;
+    App.Options.ForceAeroOn = this.ForceAeroOn.IsChecked;
   }
 
   private void autoApply_Click(object sender, RoutedEventArgs e) {
-    if (this.autoApply.IsChecked.HasValue) {
-      App.Options.AutoApply = (bool)this.autoApply.IsChecked;
+    if (this.AutoApply.IsChecked.HasValue) {
+      App.Options.AutoApply = (bool)this.AutoApply.IsChecked;
     }
   }
 
   private void layoutPreview_Click(object sender, RoutedEventArgs e) {
-    if (this.layoutPreview.IsChecked.HasValue) {
-      App.Options.LayoutPreview = (bool)this.layoutPreview.IsChecked;
+    if (this.LayoutPreview.IsChecked.HasValue) {
+      App.Options.LayoutPreview = (bool)this.LayoutPreview.IsChecked;
     }
   }
 
   private void layoutSnap_Click(object sender, RoutedEventArgs e) {
-    if (this.layoutSnap.IsChecked.HasValue) {
-      App.Options.LayoutSnap = (bool)this.layoutSnap.IsChecked;
+    if (this.LayoutSnap.IsChecked.HasValue) {
+      App.Options.LayoutSnap = (bool)this.LayoutSnap.IsChecked;
     }
   }
 
   private void layoutBorder_Click(object sender, RoutedEventArgs e) {
-    if (this.layoutBorder.IsChecked.HasValue) {
-      App.Options.LayoutBorder = (bool)this.layoutBorder.IsChecked;
+    if (this.LayoutBorder.IsChecked.HasValue) {
+      App.Options.LayoutBorder = (bool)this.LayoutBorder.IsChecked;
     }
   }
 
-  private void showCursor_Click(object sender, RoutedEventArgs e) {
-    if (this.showCursor.IsChecked.HasValue) {
-      App.Profile.CurrentLayoutElement.ShowCursor = (bool)this.showCursor.IsChecked;
-    }
-  }
-
-  private void showLayeredWindow_Click(object sender, RoutedEventArgs e) {
-    if (this.showLayeredWindow.IsChecked.HasValue) {
-      App.Profile.CurrentLayoutElement.ShowLayeredWindow = (bool)this.showLayeredWindow.IsChecked;
-    }
-  }
-
-  private void keepAspectRatio_Click(object sender, RoutedEventArgs e) {
-    if (this.keepAspectRatio.IsChecked.HasValue) {
-      App.Profile.CurrentLayoutElement.KeepAspectRatio = (bool)this.keepAspectRatio.IsChecked;
-    }
-  }
-
-  private void stretch_Click(object sender, RoutedEventArgs e) {
-    if (this.stretch.IsChecked.HasValue) {
-      App.Profile.CurrentLayoutElement.Stretch = (bool)this.stretch.IsChecked;
-    }
-  }
-
-  private void swscaleAccurateRnd_Click(object sender, RoutedEventArgs e) {
-    if (this.swscaleAccurateRnd.IsChecked.HasValue) {
-      App.Profile.CurrentLayoutElement.SWScaleAccurateRnd = (bool)this.swscaleAccurateRnd.IsChecked;
-    }
-  }
-
-  private void swscaleIsFilterEnabled_Click(object sender, RoutedEventArgs e) {
-    if (this.swscaleIsFilterEnabled.IsChecked.HasValue) {
-      App.Profile.CurrentLayoutElement.SWScaleIsFilterEnabled = (bool)this.swscaleIsFilterEnabled.IsChecked;
-    }
-  }
-
-  //===================================================================
-  // *Changedイベントハンドラ
-  // プロパティへの代入で発生する
-  // App.Profileの変更も許可するが、これらのイベントハンドラが割り当てられた
-  // コントロールのプロパティへの代入はイベントハンドラの一時削除後に
-  // 行わなければならない
-  //
-  /// @todo(me) もうすこしリッチなバリデーションをしても良い
-  //===================================================================
-
-  private void layoutElementTab_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-    var original = App.Profile.CurrentLayoutElement.Index;
-    var next = this.layoutElementTab.SelectedIndex;
-    App.Profile.ChangeCurrentLayoutElement(next);
-
-    Debug.WriteLine("Index Changed: " + (original+1) + "->" + (next+1));
-    Debug.Assert(this.layoutElementTab.SelectedIndex == App.Profile.CurrentLayoutElement.Index);
-
-    this.UpdateByProfile();
-  }
-
-  private void swscaleFlags_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-    SWScaleFlags flags = Constants.ResizeMethodArray[this.swscaleFlags.SelectedIndex];
-    App.Profile.CurrentLayoutElement.SWScaleFlags = flags;
-  }
-
-  //-------------------------------------------------------------------
-  // SWScale*
-  //-------------------------------------------------------------------
-
-  private bool TryParseSWScaleFilterParameter(TextBox textBox, float lowerBound, float upperBound, out float parsedValue) {
-    // Parse
-    if (!float.TryParse(textBox.Text, out parsedValue)) {
-      parsedValue = lowerBound;
-      textBox.Text = lowerBound.ToString("F2");
-      return false;
-    }
-
-    // Validation
-    if (parsedValue < lowerBound) {
-      parsedValue = lowerBound;
-      textBox.Text = lowerBound.ToString("F2");
-      return false;
-    } else if (parsedValue > upperBound) {
-      parsedValue = upperBound;
-      textBox.Text = upperBound.ToString("F2");
-      return false;
-    }
-
-    return true;
-  }
-
-  private void swscaleLumaGBlur_TextChanged(object sender, TextChangedEventArgs e) {
-    var lowerBound = 0.0F;
-    var upperBound = 2.0F;
-    float parsedValue;
-    if (this.TryParseSWScaleFilterParameter(this.swscaleLumaGBlur, lowerBound, upperBound, out parsedValue)) {
-      // Profileに書き込み
-      App.Profile.CurrentLayoutElement.SWScaleLumaGBlur = parsedValue;
-    }
-  }
-
-  private void swscaleChromaGBlur_TextChanged(object sender, TextChangedEventArgs e) {
-    var lowerBound = 0.0F;
-    var upperBound = 2.0F;
-    float parsedValue;
-    if (this.TryParseSWScaleFilterParameter(this.swscaleChromaGBlur, lowerBound, upperBound, out parsedValue)) {
-      // Profileに書き込み
-      App.Profile.CurrentLayoutElement.SWScaleChromaGBlur = parsedValue;
-    }
-  }
-
-  private void swscaleLumaSharpen_TextChanged(object sender, TextChangedEventArgs e) {
-    var lowerBound = 0.0F;
-    var upperBound = 4.0F;
-    float parsedValue;
-    if (this.TryParseSWScaleFilterParameter(this.swscaleLumaSharpen, lowerBound, upperBound, out parsedValue)) {
-      // Profileに書き込み
-      App.Profile.CurrentLayoutElement.SWScaleLumaSharpen = parsedValue;
-    }
-  }
-
-  private void swscaleChromaSharpen_TextChanged(object sender, TextChangedEventArgs e) {
-    var lowerBound = 0.0F;
-    var upperBound = 4.0F;
-    float parsedValue;
-    if (this.TryParseSWScaleFilterParameter(this.swscaleChromaSharpen, lowerBound, upperBound, out parsedValue)) {
-      // Profileに書き込み
-      App.Profile.CurrentLayoutElement.SWScaleChromaSharpen = parsedValue;
-    }
-  }
-
-  private void swscaleChromaHshift_TextChanged(object sender, TextChangedEventArgs e) {
-    var lowerBound = 0.0F;
-    var upperBound = 1.0F;
-    float parsedValue;
-    if (this.TryParseSWScaleFilterParameter(this.swscaleChromaHshift, lowerBound, upperBound, out parsedValue)) {
-      // Profileに書き込み
-      App.Profile.CurrentLayoutElement.SWScaleChromaHshift = parsedValue;
-    }
-  }
-
-  private void swscaleChromaVshift_TextChanged(object sender, TextChangedEventArgs e) {
-    var lowerBound = 0.0F;
-    var upperBound = 1.0F;
-    float parsedValue;
-    if (this.TryParseSWScaleFilterParameter(this.swscaleChromaVshift, lowerBound, upperBound, out parsedValue)) {
-      // Profileに書き込み
-      App.Profile.CurrentLayoutElement.SWScaleChromaVshift = parsedValue;
-    }
-  }
-
-  //-------------------------------------------------------------------
-  // BoundRelative*
-  //-------------------------------------------------------------------
-
-  private bool TryParseBoundRelativeParameter(TextBox textBox, double lowerBound, double upperBound, out double parsedValue) {
-    // Parse
-    if (!double.TryParse(textBox.Text, out parsedValue)) {
-      parsedValue = lowerBound;
-      textBox.Text = lowerBound.ToString("F3");
-      return false;
-    }
-
-    // Validation
-    if (parsedValue < lowerBound) {
-      parsedValue = lowerBound;
-      textBox.Text = lowerBound.ToString("F3");
-      return false;
-    } else if (parsedValue > upperBound) {
-      parsedValue = upperBound;
-      textBox.Text = upperBound.ToString("F3");
-      return false;
-    }
-
-    return true;
-  }
-
-  private void boundRelativeLeft_TextChanged(object sender, TextChangedEventArgs e) {
-    var lowerBound = 0.0;
-    var upperBound = 1.0;
-    double parsedValue;
-    if (this.TryParseBoundRelativeParameter(this.boundRelativeLeft, lowerBound, upperBound, out parsedValue)) {
-      // Profileに書き込み
-      App.Profile.CurrentLayoutElement.BoundRelativeLeft = parsedValue;
-      // Changedイベントで発動するものはないのでそのまま代入
-      /// @todo(me) ダミープレビューサイズ
-      this.boundX.Text = App.Profile.CurrentLayoutElement.BoundLeft(Constants.DummyPreviewWidth).ToString();
-    }
-  }
-
-  private void boundRelativeTop_TextChanged(object sender, TextChangedEventArgs e) {
-    var lowerBound = 0.0;
-    var upperBound = 1.0;
-    double parsedValue;
-    if (this.TryParseBoundRelativeParameter(this.boundRelativeTop, lowerBound, upperBound, out parsedValue)) {
-      // Profileに書き込み
-      App.Profile.CurrentLayoutElement.BoundRelativeTop = parsedValue;
-      // Changedイベントで発動するものはないのでそのまま代入
-      /// @todo(me) ダミープレビューサイズ
-      this.boundY.Text = App.Profile.CurrentLayoutElement.BoundTop(Constants.DummyPreviewHeight).ToString();
-    }
-  }
-
-  private void boundRelativeRight_TextChanged(object sender, TextChangedEventArgs e) {
-    var lowerBound = 0.0;
-    var upperBound = 1.0;
-    double parsedValue;
-    if (this.TryParseBoundRelativeParameter(this.boundRelativeRight, lowerBound, upperBound, out parsedValue)) {
-      // Profileに書き込み
-      App.Profile.CurrentLayoutElement.BoundRelativeRight = parsedValue;
-      // Changedイベントで発動するものはないのでそのまま代入
-      /// @todo(me) ダミープレビューサイズ
-      this.boundWidth.Text = App.Profile.CurrentLayoutElement.BoundWidth(Constants.DummyPreviewWidth).ToString();
-    }
-  }
-
-  private void boundRelativeBottom_TextChanged(object sender, TextChangedEventArgs e) {
-    var lowerBound = 0.0;
-    var upperBound = 1.0;
-    double parsedValue;
-    if (this.TryParseBoundRelativeParameter(this.boundRelativeBottom, lowerBound, upperBound, out parsedValue)) {
-      // Profileに書き込み
-      App.Profile.CurrentLayoutElement.BoundRelativeBottom = parsedValue;
-      // Changedイベントで発動するものはないのでそのまま代入
-      /// @todo(me) ダミープレビューサイズ
-      this.boundHeight.Text = App.Profile.CurrentLayoutElement.BoundHeight(Constants.DummyPreviewHeight).ToString();
-    }
-  }
 }
 }

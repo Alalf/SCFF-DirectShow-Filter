@@ -14,7 +14,7 @@
     <Setter Property="Template">
       <Setter.Value>
         <ControlTemplate TargetType="{x:Type Button}">
-          <Border x:Name="border" Background="Transparent" SnapsToDevicePixels="True">
+          <Border x:Name="Border" Background="Transparent" SnapsToDevicePixels="True">
             <Border.Effect>
               <DropShadowEffect Opacity="0"/>
             </Border.Effect>
@@ -22,30 +22,30 @@
               <VisualStateGroup x:Name="CommonStates">
                 <VisualState x:Name="Normal">
                   <Storyboard>
-                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="border">
+                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="Border">
                       <EasingDoubleKeyFrame KeyTime="0" Value="0.6"/>
                     </DoubleAnimationUsingKeyFrames>
                   </Storyboard>
                 </VisualState>
                 <VisualState x:Name="MouseOver">
                   <Storyboard>
-                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="border">
+                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="Border">
                       <EasingDoubleKeyFrame KeyTime="0" Value="1"/>
                     </DoubleAnimationUsingKeyFrames>
                   </Storyboard>
                 </VisualState>
                 <VisualState x:Name="Pressed">
                   <Storyboard>
-                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="border">
+                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="Border">
                       <EasingDoubleKeyFrame KeyTime="0" Value="1"/>
                     </DoubleAnimationUsingKeyFrames>
-                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Effect).(DropShadowEffect.ShadowDepth)" Storyboard.TargetName="border">
+                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Effect).(DropShadowEffect.ShadowDepth)" Storyboard.TargetName="Border">
                       <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
                     </DoubleAnimationUsingKeyFrames>
-                    <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Effect).(DropShadowEffect.Color)" Storyboard.TargetName="border">
+                    <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Effect).(DropShadowEffect.Color)" Storyboard.TargetName="Border">
                       <EasingColorKeyFrame KeyTime="0" Value="White"/>
                     </ColorAnimationUsingKeyFrames>
-                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Effect).(DropShadowEffect.Opacity)" Storyboard.TargetName="border">
+                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Effect).(DropShadowEffect.Opacity)" Storyboard.TargetName="Border">
                       <EasingDoubleKeyFrame KeyTime="0" Value="0.6"/>
                     </DoubleAnimationUsingKeyFrames>
                   </Storyboard>
@@ -53,7 +53,7 @@
                 <VisualState x:Name="Disabled"/>
               </VisualStateGroup>
             </VisualStateManager.VisualStateGroups>
-            <ContentPresenter x:Name="contentPresenter" Focusable="False" Margin="{TemplateBinding Padding}"
+            <ContentPresenter x:Name="ContentPresenter" Focusable="False" Margin="{TemplateBinding Padding}"
                         HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                         VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
           </Border>

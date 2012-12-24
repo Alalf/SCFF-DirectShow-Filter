@@ -1,6 +1,6 @@
 ﻿// Copyright 2012 Alalf <alalf.iQLc_at_gmail.com>
 //
-// This file is part of SCFF-DirectShow-Filter.
+// This file is part of SCFF-DirectShow-Filter(SCFF DSF).
 //
 // SCFF DSF is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -24,16 +24,7 @@ namespace SCFF.Common {
 using System;
 using System.Collections.Generic;
 
-//=====================================================================
-// 定数
-//=====================================================================
-
-
-//---------------------------------------------------------------------
-// AdditionalLayoutParameter
-//---------------------------------------------------------------------
-
-/// 追加レイアウトパラメータ型
+/// 追加レイアウトパラメータ
 public class AdditionalLayoutParameter {
   public WindowTypes WindowType { get; set; }
   public bool Fit { get; set; }
@@ -52,10 +43,6 @@ public class AdditionalLayoutParameter {
   public int BackupDesktopClippingWidth { get; set; }
   public int BackupDesktopClippingHeight { get; set; }
 }
-
-//===================================================================
-// クラス宣言
-//===================================================================
 
 /// レイアウト設定などをまとめたプロファイル
 public partial class Profile {

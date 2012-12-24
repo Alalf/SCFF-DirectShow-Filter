@@ -1,6 +1,6 @@
 ﻿// Copyright 2012 Alalf <alalf.iQLc_at_gmail.com>
 //
-// This file is part of SCFF-DirectShow-Filter.
+// This file is part of SCFF-DirectShow-Filter(SCFF DSF).
 //
 // SCFF DSF is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,18 +16,18 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file SCFF.Common/Utilities.cs
-/// ユーティリティを集めたもの
+/// ユーティリティメソッドを集めたstaticクラス
 
 namespace SCFF.Common {
 
 using System;
 using System.Text;
 
-/// ユーティリティを集めたもの
+/// ユーティリティメソッドを集めたstaticクラス
 public static class Utilities {
 
-  // DesktopToScreen
-  internal static void DesktopToScreen(int desktopX, int desktopY, out int screenX, out int screenY) {
+  /// Desktop(VirtualScreen)座標からScreen座標へ変換する
+  private static void DesktopToScreen(int desktopX, int desktopY, out int screenX, out int screenY) {
     // desktopPointは仮想画面上の座標(左上が(0,0)であることが保障されている)
     // screenPointはプライマリモニタの左上の座標が(0,0)なので-になることもある
     screenX = desktopX + ExternalAPI.GetSystemMetrics(ExternalAPI.SM_XVIRTUALSCREEN);

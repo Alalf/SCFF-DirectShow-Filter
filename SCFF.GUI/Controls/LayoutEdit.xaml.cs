@@ -1,4 +1,22 @@
-﻿
+﻿// Copyright 2012 Alalf <alalf.iQLc_at_gmail.com>
+//
+// This file is part of SCFF-DirectShow-Filter(SCFF DSF).
+//
+// SCFF DSF is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// SCFF DSF is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
+
+/// @file SCFF.GUI/Controls/LayoutEdit.cs
+/// レイアウトエディタ
 
 namespace SCFF.GUI.Controls {
 
@@ -9,17 +27,19 @@ using System.Windows.Input;
 using System.Windows.Media;
 
 /// レイアウトエディタ
-public partial class LayoutEdit : UserControl, IProfileEditor {
+public partial class LayoutEdit : UserControl, IProfileToControl {
 
   /// コンストラクタ
   public LayoutEdit() {
     InitializeComponent();
-    RenderOptions.SetBitmapScalingMode(this.drawingGroup, BitmapScalingMode.LowQuality);
-    this.Draw(string.Empty);
+
+    RenderOptions.SetBitmapScalingMode(this.DrawingGroup, BitmapScalingMode.LowQuality);
+    this.DrawTest(string.Empty);
   }
 
-  private void Draw(string text) {
-    using (var dc = this.drawingGroup.Open()) {
+  /// 描画テスト用
+  private void DrawTest(string text) {
+    using (var dc = this.DrawingGroup.Open()) {
       dc.DrawRectangle(Brushes.Black, null, new Rect(0,0,Constants.DefaultPreviewWidth,Constants.DefaultPreviewHeight));
       dc.DrawRectangle(Brushes.DarkGray, null, new Rect(10,10,100,100));
       if (text != string.Empty) {
@@ -34,31 +54,35 @@ public partial class LayoutEdit : UserControl, IProfileEditor {
     }
   }
 
+  //===================================================================
+  // IProfileToControlの実装
+  //===================================================================
+
   public void UpdateByProfile() {
-    this.Draw("Update");
+    this.DrawTest("Update");
   }
 
-
   public void AttachChangedEventHandlers() {
-    throw new System.NotImplementedException();
+    // nop
   }
 
   public void DetachChangedEventHandlers() {
-    throw new System.NotImplementedException();
+    // nop
   }
 
+  //===================================================================
+  // イベントハンドラ
+  //===================================================================
 
   private void Image_MouseDown_1(object sender, MouseButtonEventArgs e) {
     var pt = e.GetPosition((IInputElement)sender);
     var x = (int)pt.X;
     var y = (int)pt.Y;
-    this.Draw(x + ", " + y);
+    this.DrawTest(x + ", " + y);
   }
 
   private void Image_MouseMove_1(object sender, MouseEventArgs e) {
-    // iroiro
+    // nop
   }
-
-
 }
 }

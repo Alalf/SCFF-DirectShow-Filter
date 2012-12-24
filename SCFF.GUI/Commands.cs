@@ -1,6 +1,6 @@
 ﻿// Copyright 2012 Alalf <alalf.iQLc_at_gmail.com>
 //
-// This file is part of SCFF-DirectShow-Filter.
+// This file is part of SCFF-DirectShow-Filter(SCFF DSF).
 //
 // SCFF DSF is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -22,5 +22,7 @@ using System.Windows.Input;
 public static class Commands {
   public readonly static RoutedCommand AddLayoutElementCommand = new RoutedCommand();
   public readonly static RoutedCommand RemoveLayoutElementCommand = new RoutedCommand();
+
+  public readonly static RoutedCommand ChangeCurrentLayoutElementCommand = new RoutedCommand();
 }
 }

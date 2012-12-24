@@ -16,7 +16,7 @@
       <ColumnDefinition Width="50"/>
     </Grid.ColumnDefinitions>
     <Label Height="15" Width="40" HorizontalAlignment="Right" VerticalAlignment="Center">Caption</Label>
-    <TextBox x:Name="windowCaption" Height="20" Grid.Column="1" Grid.ColumnSpan="3"
+    <TextBox x:Name="WindowCaption" Height="20" Grid.Column="1" Grid.ColumnSpan="3"
                      VerticalAlignment="Center" IsEnabled="False">(Window Classname)</TextBox>
     <Button Height="20" Grid.Row="1" Grid.ColumnSpan="2">Drag here.</Button>
     <Button Height="20" Grid.Row="1" Grid.Column="2">ListView</Button>

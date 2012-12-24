@@ -25,11 +25,11 @@
     <Label Grid.Column="2" Margin="3,0" Height="12" VerticalAlignment="Center">Y</Label>
     <Label Grid.Column="4" Margin="3,0" Height="12" VerticalAlignment="Center">Size</Label>
     <Label Grid.Column="6" Margin="3,0" Height="12" VerticalAlignment="Center">x</Label>
-    <TextBox x:Name="clippingX" Grid.Column="1" Margin="0,0,5,0" Height="20" VerticalAlignment="Center">9999</TextBox>
-    <TextBox x:Name="clippingY" Grid.Column="3" Margin="0,0,5,0" Height="20" VerticalAlignment="Center">9999</TextBox>
-    <TextBox x:Name="clippingWidth" Grid.Column="5" Margin="0,0,5,0" Height="20" VerticalAlignment="Center">9999</TextBox>
-    <TextBox x:Name="clippingHeight" Grid.Column="8" Margin="0,0,5,0" Height="20" VerticalAlignment="Center">9999</TextBox>
-    <CheckBox x:Name="fit"  Grid.Row="1" Grid.ColumnSpan="2" Height="16" VerticalAlignment="Center" Margin="0,4" IsChecked="True" Checked="fit_Checked" Unchecked="fit_Unchecked" Click="fit_Click">Fit</CheckBox>
+    <TextBox x:Name="ClippingX" Grid.Column="1" Margin="0,0,5,0" Height="20" VerticalAlignment="Center">9999</TextBox>
+    <TextBox x:Name="ClippingY" Grid.Column="3" Margin="0,0,5,0" Height="20" VerticalAlignment="Center">9999</TextBox>
+    <TextBox x:Name="ClippingWidth" Grid.Column="5" Margin="0,0,5,0" Height="20" VerticalAlignment="Center">9999</TextBox>
+    <TextBox x:Name="ClippingHeight" Grid.Column="8" Margin="0,0,5,0" Height="20" VerticalAlignment="Center">9999</TextBox>
+    <CheckBox x:Name="Fit"  Grid.Row="1" Grid.ColumnSpan="2" Height="16" VerticalAlignment="Center" Margin="0,4" IsChecked="True" Checked="fit_Checked" Unchecked="fit_Unchecked" Click="fit_Click">Fit</CheckBox>
     <Button Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="3" Height="20" VerticalAlignment="Center" Margin="0,2">Area Select</Button>
     <Button Grid.Row="1" Grid.Column="5" Grid.ColumnSpan="1" Height="20" VerticalAlignment="Center">ListView</Button>
     <Button Grid.Row="1" Grid.Column="6" Grid.ColumnSpan="2" Height="20" VerticalAlignment="Center">Desktop</Button>

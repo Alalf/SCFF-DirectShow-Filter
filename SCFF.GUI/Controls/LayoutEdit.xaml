@@ -5,11 +5,11 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
              d:DesignHeight="200" d:DesignWidth="320">
-  <Image x:Name="layoutEditImage" MouseDown="Image_MouseDown_1" MouseMove="Image_MouseMove_1">
+  <Image x:Name="LayoutEditImage" MouseDown="Image_MouseDown_1" MouseMove="Image_MouseMove_1">
     <Image.Source>
       <DrawingImage>
         <DrawingImage.Drawing>
-          <DrawingGroup x:Name="drawingGroup"/>
+          <DrawingGroup x:Name="DrawingGroup"/>
         </DrawingImage.Drawing>
       </DrawingImage>
     </Image.Source>

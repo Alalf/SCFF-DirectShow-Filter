@@ -1,6 +1,6 @@
 ﻿// Copyright 2012 Alalf <alalf.iQLc_at_gmail.com>
 //
-// This file is part of SCFF-DirectShow-Filter.
+// This file is part of SCFF-DirectShow-Filter(SCFF DSF).
 //
 // SCFF DSF is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -36,24 +36,24 @@ public partial class MainWindow : Window {
 
       switch (i) {
         case 0:
-          this.recentProfile1.IsEnabled = !isEmpty;
-          this.recentProfile1.Header = header;
+          this.RecentProfile1.IsEnabled = !isEmpty;
+          this.RecentProfile1.Header = header;
           break;
         case 1:
-          this.recentProfile2.IsEnabled = !isEmpty;
-          this.recentProfile2.Header = header;
+          this.RecentProfile2.IsEnabled = !isEmpty;
+          this.RecentProfile2.Header = header;
           break;
         case 2:
-          this.recentProfile3.IsEnabled = !isEmpty;
-          this.recentProfile3.Header = header;
+          this.RecentProfile3.IsEnabled = !isEmpty;
+          this.RecentProfile3.Header = header;
           break;
         case 3:
-          this.recentProfile4.IsEnabled = !isEmpty;
-          this.recentProfile4.Header = header;
+          this.RecentProfile4.IsEnabled = !isEmpty;
+          this.RecentProfile4.Header = header;
           break;
         case 4:
-          this.recentProfile5.IsEnabled = !isEmpty;
-          this.recentProfile5.Header = header;
+          this.RecentProfile5.IsEnabled = !isEmpty;
+          this.RecentProfile5.Header = header;
           break;
       }
     }
@@ -65,28 +65,28 @@ public partial class MainWindow : Window {
     this.UpdateRecentProfiles();
 
     // MainWindow
-    this.Left = App.Options.TmpMainWindowLeft;
-    this.Top = App.Options.TmpMainWindowTop;
-    this.Width = App.Options.TmpMainWindowWidth;
-    this.Height = App.Options.TmpMainWindowHeight;
-    this.WindowState = (System.Windows.WindowState)App.Options.TmpMainWindowState;
+    this.Left         = App.Options.TmpMainWindowLeft;
+    this.Top          = App.Options.TmpMainWindowTop;
+    this.Width        = App.Options.TmpMainWindowWidth;
+    this.Height       = App.Options.TmpMainWindowHeight;
+    this.WindowState  = (System.Windows.WindowState)App.Options.TmpMainWindowState;
     
     // MainWindow Expanders
-    this.areaExpander.IsExpanded = App.Options.TmpAreaIsExpanded;
-    this.optionsExpander.IsExpanded = App.Options.TmpOptionsIsExpanded;
-    this.resizeMethodExpander.IsExpanded = App.Options.TmpResizeMethodIsExpanded;
-    this.layoutExpander.IsExpanded = App.Options.TmpLayoutIsExpanded;
+    this.AreaExpander.IsExpanded          = App.Options.TmpAreaIsExpanded;
+    this.OptionsExpander.IsExpanded       = App.Options.TmpOptionsIsExpanded;
+    this.ResizeMethodExpander.IsExpanded  = App.Options.TmpResizeMethodIsExpanded;
+    this.LayoutExpander.IsExpanded        = App.Options.TmpLayoutIsExpanded;
 
     // SCFF Options
-    this.autoApply.IsChecked = App.Options.AutoApply;
-    this.layoutPreview.IsChecked = App.Options.LayoutPreview;
-    this.layoutBorder.IsChecked = App.Options.LayoutBorder;
-    this.layoutSnap.IsChecked = App.Options.LayoutSnap;
+    this.AutoApply.IsChecked = App.Options.AutoApply;
+    this.LayoutPreview.IsChecked = App.Options.LayoutPreview;
+    this.LayoutBorder.IsChecked = App.Options.LayoutBorder;
+    this.LayoutSnap.IsChecked = App.Options.LayoutSnap;
 
     // SCFF Menu Options
-    this.compactView.IsChecked = App.Options.TmpCompactView;
-    this.forceAeroOn.IsChecked = App.Options.ForceAeroOn;
-    this.restoreLastProfile.IsChecked = App.Options.TmpRestoreLastProfile;
+    this.CompactView.IsChecked = App.Options.TmpCompactView;
+    this.ForceAeroOn.IsChecked = App.Options.ForceAeroOn;
+    this.RestoreLastProfile.IsChecked = App.Options.TmpRestoreLastProfile;
   }
 
   /// UIから設定にデータを保存
@@ -100,175 +100,37 @@ public partial class MainWindow : Window {
     App.Options.TmpMainWindowState = (SCFF.Common.WindowState)this.WindowState;
 
     // MainWindow Expanders
-    App.Options.TmpAreaIsExpanded = this.areaExpander.IsExpanded;
-    App.Options.TmpOptionsIsExpanded = this.optionsExpander.IsExpanded;
-    App.Options.TmpResizeMethodIsExpanded = this.resizeMethodExpander.IsExpanded;
-    App.Options.TmpLayoutIsExpanded = this.layoutExpander.IsExpanded;
+    App.Options.TmpAreaIsExpanded = this.AreaExpander.IsExpanded;
+    App.Options.TmpOptionsIsExpanded = this.OptionsExpander.IsExpanded;
+    App.Options.TmpResizeMethodIsExpanded = this.ResizeMethodExpander.IsExpanded;
+    App.Options.TmpLayoutIsExpanded = this.LayoutExpander.IsExpanded;
 
     // SCFF Menu Options
-    App.Options.TmpCompactView = this.compactView.IsChecked;
-    App.Options.TmpRestoreLastProfile = this.restoreLastProfile.IsChecked;
+    App.Options.TmpCompactView = this.CompactView.IsChecked;
+    App.Options.TmpRestoreLastProfile = this.RestoreLastProfile.IsChecked;
   }
 
   //===================================================================
   // Profile
   //===================================================================
 
-
-  private void AttachChangedEventHandlers() {
-    // CheckBoxはClickイベントとChecked/Uncheckedイベントの使い分けでいけるので除外
-    this.swscaleFlags.SelectionChanged += swscaleFlags_SelectionChanged;
-    this.swscaleLumaGBlur.TextChanged += swscaleLumaGBlur_TextChanged;
-    this.swscaleLumaSharpen.TextChanged += swscaleLumaSharpen_TextChanged;
-    this.swscaleChromaHshift.TextChanged += swscaleChromaHshift_TextChanged;
-    this.swscaleChromaGBlur.TextChanged += swscaleChromaGBlur_TextChanged;
-    this.swscaleChromaSharpen.TextChanged += swscaleChromaSharpen_TextChanged;
-    this.swscaleChromaVshift.TextChanged += swscaleChromaVshift_TextChanged;
-    this.boundRelativeLeft.TextChanged += boundRelativeLeft_TextChanged;
-    this.boundRelativeTop.TextChanged += boundRelativeTop_TextChanged;
-    this.boundRelativeRight.TextChanged += boundRelativeRight_TextChanged;
-    this.boundRelativeBottom.TextChanged += boundRelativeBottom_TextChanged;
-  }
-
-
-
-  private void DetachChangedEventHandlers() {
-    // CheckBoxはClickイベントとChecked/Uncheckedイベントの使い分けでいけるので除外
-    this.swscaleFlags.SelectionChanged -= swscaleFlags_SelectionChanged;
-    this.swscaleLumaGBlur.TextChanged -= swscaleLumaGBlur_TextChanged;
-    this.swscaleLumaSharpen.TextChanged -= swscaleLumaSharpen_TextChanged;
-    this.swscaleChromaHshift.TextChanged -= swscaleChromaHshift_TextChanged;
-    this.swscaleChromaGBlur.TextChanged -= swscaleChromaGBlur_TextChanged;
-    this.swscaleChromaSharpen.TextChanged -= swscaleChromaSharpen_TextChanged;
-    this.swscaleChromaVshift.TextChanged -= swscaleChromaVshift_TextChanged;
-    this.boundRelativeLeft.TextChanged -= boundRelativeLeft_TextChanged;
-    this.boundRelativeTop.TextChanged -= boundRelativeTop_TextChanged;
-    this.boundRelativeRight.TextChanged -= boundRelativeRight_TextChanged;
-    this.boundRelativeBottom.TextChanged -= boundRelativeBottom_TextChanged;
-  }
-
   /// プロファイルからUIを更新
   private void UpdateByProfile() {
+
+    // TargetWindow
+    this.TargetWindow.UpdateByProfile();
 
     // Area
     this.Area.UpdateByProfile();
 
     // Options
-    this.showCursor.IsChecked = App.Profile.CurrentLayoutElement.ShowCursor;
-    this.showLayeredWindow.IsChecked = App.Profile.CurrentLayoutElement.ShowLayeredWindow;
-    this.keepAspectRatio.IsChecked = App.Profile.CurrentLayoutElement.KeepAspectRatio;
-    this.stretch.IsChecked = App.Profile.CurrentLayoutElement.Stretch;
-    // @todo(me) overSampingとthreadCountはまだDSFでも実装されていない
+    this.Options.UpdateByProfile();
 
     // Resize Method
-    this.swscaleAccurateRnd.IsChecked = App.Profile.CurrentLayoutElement.SWScaleAccurateRnd;
-    this.swscaleIsFilterEnabled.IsChecked = App.Profile.CurrentLayoutElement.SWScaleIsFilterEnabled;
+    this.ResizeMethod.UpdateByProfile();
 
-    //-----------------------------------------------------------------
-    // *Changedがあるコントロールの更新
-    //-----------------------------------------------------------------
-
-    // 一時的にイベントハンドラを無効にして値だけ設定する
-    this.DetachChangedEventHandlers();
-
-    // Window Caption
-    this.TargetWindow.windowCaption.Text = App.Profile.CurrentLayoutElement.WindowCaption;
-   
-    // Resize Method
-    var index = Constants.ResizeMethodIndexes[App.Profile.CurrentLayoutElement.SWScaleFlags];
-    this.swscaleFlags.SelectedIndex = index;
-    this.swscaleLumaGBlur.Text = App.Profile.CurrentLayoutElement.SWScaleLumaGBlur.ToString("F2");
-    this.swscaleLumaSharpen.Text = App.Profile.CurrentLayoutElement.SWScaleLumaSharpen.ToString("F2");
-    this.swscaleChromaHshift.Text = App.Profile.CurrentLayoutElement.SWScaleChromaHshift.ToString("F2");
-    this.swscaleChromaGBlur.Text = App.Profile.CurrentLayoutElement.SWScaleChromaGBlur.ToString("F2");
-    this.swscaleChromaSharpen.Text = App.Profile.CurrentLayoutElement.SWScaleChromaSharpen.ToString("F2");
-    this.swscaleChromaVshift.Text = App.Profile.CurrentLayoutElement.SWScaleChromaVshift.ToString("F2");
-
-    // Bound *
-    this.boundRelativeLeft.Text = App.Profile.CurrentLayoutElement.BoundRelativeLeft.ToString("F3");
-    this.boundRelativeTop.Text = App.Profile.CurrentLayoutElement.BoundRelativeTop.ToString("F3");
-    this.boundRelativeRight.Text = App.Profile.CurrentLayoutElement.BoundRelativeRight.ToString("F3");
-    this.boundRelativeBottom.Text = App.Profile.CurrentLayoutElement.BoundRelativeBottom.ToString("F3");
-
-    /// @todo(me) プロセス情報はMainWindowから取ってこれるので、それを参照にしてBoundX/BoundYも更新
-    this.boundX.Text = App.Profile.CurrentLayoutElement.BoundLeft(Constants.DefaultPreviewWidth).ToString();
-    this.boundY.Text = App.Profile.CurrentLayoutElement.BoundTop(Constants.DefaultPreviewHeight).ToString();
-    this.boundWidth.Text = App.Profile.CurrentLayoutElement.BoundWidth(Constants.DefaultPreviewWidth).ToString();
-    this.boundHeight.Text = App.Profile.CurrentLayoutElement.BoundHeight(Constants.DefaultPreviewHeight).ToString();
-
-    // イベントハンドラを戻す
-    this.AttachChangedEventHandlers();
-  }
-
-  //-------------------------------------------------------------------
-  // Tab
-  //-------------------------------------------------------------------
-
-  private void AttachTabSelectionChangedEventHandler() {
-    this.layoutElementTab.SelectionChanged += layoutElementTab_SelectionChanged;
-  }
-
-  private void DetachTabSelectionChangedEventHandler() {
-    this.layoutElementTab.SelectionChanged -= layoutElementTab_SelectionChanged;
-  }
-
-  /// TabItemを一気に生成する
-  public void CreateLayoutElementTab() {
-    this.DetachTabSelectionChangedEventHandler();
-
-    // 最初の一個はそのまま残す
-    this.layoutElementTab.SelectedIndex = 0;
-    for (int i = this.layoutElementTab.Items.Count - 1; i >= 1; --i) {
-      this.layoutElementTab.Items.RemoveAt(i);
-    }
-
-    // 必要な分を追加する
-    for (int i = 1; i < App.Profile.LayoutElementCount; ++i) {
-      var item = new TabItem();
-      item.Header = (i+1).ToString();
-      this.layoutElementTab.Items.Add(item);
-    }
-
-    this.AttachTabSelectionChangedEventHandler();
-  }
-
-  /// TabItemをリセットする
-  public void ResetLayoutElementTab() {
-    this.DetachTabSelectionChangedEventHandler();
-
-    // 最初の一個はそのまま残す
-    this.layoutElementTab.SelectedIndex = 0;
-    for (int i = this.layoutElementTab.Items.Count - 1; i >= 1; --i) {
-      this.layoutElementTab.Items.RemoveAt(i);
-    }
-
-    this.AttachTabSelectionChangedEventHandler();
-  }
-
-  /// TabItemを末尾にひとつ追加する
-  private void AddLayoutElementTab() {
-    this.DetachTabSelectionChangedEventHandler();
-
-    var item = new TabItem();
-    // 1-basedなのでCount+1
-    item.Header = this.layoutElementTab.Items.Count + 1;
-    this.layoutElementTab.Items.Add(item);
-    // 最後に追加されたので末尾を選択
-    this.layoutElementTab.SelectedIndex = this.layoutElementTab.Items.Count - 1;
-
-    this.AttachTabSelectionChangedEventHandler();
-  }
-
-  /// 現在のタブをひとつ削除して後ろのタブの名前を変える
-  private void RemoveLayoutElementTab() {
-    this.DetachTabSelectionChangedEventHandler();
-
-    // 末尾を一個削除
-    // 末尾削除なら改名すらいらない
-    var last = this.layoutElementTab.Items.Count - 1;
-    this.layoutElementTab.Items.RemoveAt(last);
-
-    this.AttachTabSelectionChangedEventHandler();
+    // Layout
+    this.LayoutParameter.UpdateByProfile();
   }
 }
 }

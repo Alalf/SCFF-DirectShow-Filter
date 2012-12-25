@@ -98,7 +98,8 @@ public static class Utilities {
     }
   }
 
-  // VirtualScreenRect
+  /// 仮想ディスプレイのデータをRECT化したプロパティ
+  /// @todo(me) 現在Desktop/DesktopListViewで使い回ししているが、問題が発生する可能性あり
   public static ExternalAPI.RECT VirtualScreenRect {
     get {
       return new ExternalAPI.RECT {

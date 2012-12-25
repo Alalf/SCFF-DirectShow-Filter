@@ -277,6 +277,19 @@ public partial class MainWindow : Window {
     this.UpdateByProfile();
   }
 
+  private void ChangeTargetWindow_Executed(object sender, ExecutedRoutedEventArgs e) {
+    /// @todo(me) ここでClippingWithoutFitの調整を行う。ついでにバックアップも？
+
+    // TargetWindow
+    this.TargetWindow.UpdateByProfile();
+
+    // Area
+    this.Area.UpdateByProfile();
+
+    // Layout
+    this.LayoutParameter.UpdateByProfile();
+  }
+
   //===================================================================
   // *Changedではないが、値が変更したときに発生するイベントハンドラ
   // プロパティへの代入で発生するので、App.Profileの変更は禁止

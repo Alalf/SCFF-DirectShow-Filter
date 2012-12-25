@@ -18,8 +18,11 @@
     <Label Height="15" Width="40" HorizontalAlignment="Right" VerticalAlignment="Center">Caption</Label>
     <TextBox x:Name="WindowCaption" Height="20" Grid.Column="1" Grid.ColumnSpan="3"
                      VerticalAlignment="Center" IsEnabled="False">(Window Classname)</TextBox>
-    <Button Height="20" Grid.Row="1" Grid.ColumnSpan="2">Drag here.</Button>
-    <Button Height="20" Grid.Row="1" Grid.Column="2">ListView</Button>
-    <Button Height="20" Grid.Row="1" Grid.Column="3">Desktop</Button>
+    <Button x:Name="DragHere" Height="20" Grid.Row="1" Grid.ColumnSpan="2"
+            PreviewMouseMove="DragHere_PreviewMouseMove"
+            PreviewMouseDown="DragHere_PreviewMouseDown"
+            PreviewMouseUp="DragHere_PreviewMouseUp">Drag here.</Button>
+    <Button x:Name="ListView" Height="20" Grid.Row="1" Grid.Column="2" Click="ListView_Click" >ListView</Button>
+    <Button x:Name="Desktop" Height="20" Grid.Row="1" Grid.Column="3" Click="Desktop_Click">Desktop</Button>
   </Grid>
 </UserControl>

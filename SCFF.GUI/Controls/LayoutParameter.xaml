@@ -4,8 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="107" d:DesignWidth="367" FontSize="9">
-  <GroupBox x:Name="GroupBox" DockPanel.Dock="Bottom" Width="350" Header="Layout N: (Window Classname)">
+             d:DesignHeight="104" d:DesignWidth="369" FontSize="9">
+  <GroupBox x:Name="GroupBox" DockPanel.Dock="Bottom" Header="Layout N: (Window Classname)">
     <Grid>
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="10*"/>

@@ -37,8 +37,13 @@ public partial class LayoutParameter : UserControl, IProfileToControl {
 
   /// @copydoc IProfileToControl.UpdateByProfile
   public void UpdateByProfile() {
-    this.GroupBox.Header = "Layout " + (App.Profile.CurrentInputLayoutElement.Index+1) +
+    var header = "Layout " + (App.Profile.CurrentInputLayoutElement.Index+1) +
         ": " + App.Profile.CurrentInputLayoutElement.WindowCaption;
+    if (header.Length > 60) {
+      this.GroupBox.Header = header.Substring(0, 60);
+    } else {
+      this.GroupBox.Header = header;
+    }
 
     /// @todo(me) プロセス情報はMainWindowから取ってこれるので、それを参照にしてBoundX/BoundYも更新
     this.BoundX.Text = App.Profile.CurrentInputLayoutElement.BoundLeft(Constants.DefaultPreviewWidth).ToString();

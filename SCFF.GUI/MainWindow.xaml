@@ -15,6 +15,7 @@
         Loaded="mainWindow_Loaded"
         Closing="mainWindow_Closing" >
   <Window.CommandBindings>
+    <!-- shell:SystemCommands -->
     <CommandBinding Command="{x:Static shell:SystemCommands.CloseWindowCommand}"
                     Executed="CloseWindow_Executed"/>
     <CommandBinding Command="{x:Static shell:SystemCommands.MaximizeWindowCommand}"
@@ -23,10 +24,12 @@
                     Executed="MinimizeWindow_Executed"/>
     <CommandBinding Command="{x:Static shell:SystemCommands.RestoreWindowCommand}"
                     Executed="RestoreWindow_Executed"/>
+    <!-- ApplicationCommands -->
     <CommandBinding Command="New" Executed="New_Executed"/>
     <CommandBinding Command="Open" Executed="Open_Executed"/>
     <CommandBinding Command="Save" Executed="Save_Executed"/>
     <CommandBinding Command="SaveAs" Executed="SaveAs_Executed"/>
+    <!-- SCFF.GUI.Commands -->
     <CommandBinding Command="{x:Static local:Commands.AddLayoutElementCommand}"
                     Executed="AddLayoutElement_Executed"
                     CanExecute="AddLayoutElement_CanExecute"/>
@@ -35,6 +38,8 @@
                     CanExecute="RemoveLayoutElement_CanExecute"/>
     <CommandBinding Command="{x:Static local:Commands.ChangeCurrentLayoutElementCommand}"
                     Executed="ChangeCurrentLayoutElement_Executed" />
+    <CommandBinding Command="{x:Static local:Commands.ChangeTargetWindowCommand}"
+                    Executed="ChangeTargetWindow_Executed" />
   </Window.CommandBindings>
   <shell:WindowChrome.WindowChrome>
     <shell:WindowChrome CaptionHeight="{x:Static SystemParameters.CaptionHeight}"

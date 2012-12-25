@@ -109,7 +109,7 @@ public static class Utilities {
         Right = ExternalAPI.GetSystemMetrics(ExternalAPI.SM_XVIRTUALSCREEN) +
                 ExternalAPI.GetSystemMetrics(ExternalAPI.SM_CXVIRTUALSCREEN),
         Bottom = ExternalAPI.GetSystemMetrics(ExternalAPI.SM_YVIRTUALSCREEN) +
-                 ExternalAPI.GetSystemMetrics(ExternalAPI.SM_CXVIRTUALSCREEN)
+                 ExternalAPI.GetSystemMetrics(ExternalAPI.SM_CYVIRTUALSCREEN)
       };
     }
   }

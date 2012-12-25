@@ -94,13 +94,22 @@ public static class Utilities {
           return sysListView32;
         }
       }
-      return DesktopWindow;
+      return ExternalAPI.GetDesktopWindow();
     }
   }
 
-  // DesktopWindow
-  static public UIntPtr DesktopWindow {
-    get { return ExternalAPI.GetDesktopWindow(); }
+  // VirtualScreenRect
+  public static ExternalAPI.RECT VirtualScreenRect {
+    get {
+      return new ExternalAPI.RECT {
+        Left = ExternalAPI.GetSystemMetrics(ExternalAPI.SM_XVIRTUALSCREEN),
+        Top = ExternalAPI.GetSystemMetrics(ExternalAPI.SM_YVIRTUALSCREEN),
+        Right = ExternalAPI.GetSystemMetrics(ExternalAPI.SM_XVIRTUALSCREEN) +
+                ExternalAPI.GetSystemMetrics(ExternalAPI.SM_CXVIRTUALSCREEN),
+        Bottom = ExternalAPI.GetSystemMetrics(ExternalAPI.SM_YVIRTUALSCREEN) +
+                 ExternalAPI.GetSystemMetrics(ExternalAPI.SM_CXVIRTUALSCREEN)
+      };
+    }
   }
 }
 }

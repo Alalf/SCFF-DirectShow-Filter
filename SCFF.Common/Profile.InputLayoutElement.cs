@@ -149,7 +149,7 @@ public partial class Profile {
             return Utilities.DesktopListViewWindow;
           }
           case WindowTypes.Desktop: {
-            return Utilities.DesktopWindow;
+            return ExternalAPI.GetDesktopWindow();
           }
           default: {
             Debug.Fail("Window: Invalid WindowTypes");
@@ -292,6 +292,81 @@ public partial class Profile {
     public int BackupDesktopClippingHeight {
       get { return this.profile.additionalLayoutParameters[this.Index].BackupDesktopClippingHeight; }
     }
+
+    // Screen...
+
+    private int GetScreenX(int clippingX) {
+      switch (this.WindowType) {
+        case WindowTypes.Normal: {
+          if (this.Window == UIntPtr.Zero || !ExternalAPI.IsWindow(this.Window)) {
+            Debug.Fail("GetScreenX: Invalid Window");
+            return -1;
+          }
+          ExternalAPI.POINT windowPoint = new ExternalAPI.POINT { X = clippingX, Y = 0 };
+          ExternalAPI.ClientToScreen(this.Window, ref windowPoint);
+          return windowPoint.X;
+        }
+        case WindowTypes.DesktopListView:
+        case WindowTypes.Desktop: {
+          //　仮想デスクトップ座標なので補正を戻す
+          return clippingX + ExternalAPI.GetSystemMetrics(ExternalAPI.SM_XVIRTUALSCREEN);
+        }
+        default: {
+          Debug.Fail("GetScreenX: Invalid WindowType");
+          return -1;
+        }
+      }
+    }
+
+    private int GetScreenY(int clippingY) {
+      switch (this.WindowType) {
+        case WindowTypes.Normal: {
+          if (this.Window == UIntPtr.Zero || !ExternalAPI.IsWindow(this.Window)) {
+            Debug.Fail("GetScreenY: Invalid Window");
+            return -1;
+          }
+          ExternalAPI.POINT windowPoint = new ExternalAPI.POINT { X = 0, Y = clippingY };
+          ExternalAPI.ClientToScreen(this.Window, ref windowPoint);
+          return windowPoint.Y;
+        }
+        case WindowTypes.DesktopListView:
+        case WindowTypes.Desktop: {
+          //　仮想デスクトップ座標なので補正を戻す
+          return clippingY + ExternalAPI.GetSystemMetrics(ExternalAPI.SM_YVIRTUALSCREEN);
+        }
+        default: {
+          Debug.Fail("GetScreenY: Invalid WindowType");
+          return -1;
+        }
+      }
+    }
+
+    public int ScreenWindowX {
+      get { return this.GetScreenX(0); }
+    }
+
+    public int ScreenWindowY {
+      get { return this.GetScreenY(0); }
+    }
+
+    public int ScreenClippingXWithFit {
+      get { return this.GetScreenX(this.ClippingXWithFit); }
+    }
+
+    public int ScreenClippingYWithFit {
+      get { return this.GetScreenY(this.ClippingYWithFit); }
+    }
+
+    public ExternalAPI.RECT ScreenWindowRect {
+      get {
+        return new ExternalAPI.RECT {
+          Left    = this.ScreenWindowX,
+          Top     = this.ScreenWindowY,
+          Right   = this.ScreenWindowX + this.WindowWidth,
+          Bottom  = this.ScreenWindowY + this.WindowHeight,
+        };
+      }
+    }
   }
 }
-}
+}   // namespace SCFF.Common

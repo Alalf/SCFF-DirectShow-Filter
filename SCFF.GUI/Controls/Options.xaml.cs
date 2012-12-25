@@ -61,27 +61,27 @@ public partial class Options : UserControl, IProfileToControl {
   //-------------------------------------------------------------------
 
   private void showCursor_Click(object sender, RoutedEventArgs e) {
-    if (this.ShowCursor.IsChecked.HasValue) {
-      App.Profile.CurrentOutputLayoutElement.ShowCursor = (bool)this.ShowCursor.IsChecked;
-    }
+    if (!this.ShowCursor.IsChecked.HasValue) return;
+
+    App.Profile.CurrentOutputLayoutElement.ShowCursor = (bool)this.ShowCursor.IsChecked;
   }
 
   private void showLayeredWindow_Click(object sender, RoutedEventArgs e) {
-    if (this.ShowLayeredWindow.IsChecked.HasValue) {
-      App.Profile.CurrentOutputLayoutElement.ShowLayeredWindow = (bool)this.ShowLayeredWindow.IsChecked;
-    }
+    if (!this.ShowLayeredWindow.IsChecked.HasValue) return;
+
+    App.Profile.CurrentOutputLayoutElement.ShowLayeredWindow = (bool)this.ShowLayeredWindow.IsChecked;
   }
 
   private void keepAspectRatio_Click(object sender, RoutedEventArgs e) {
-    if (this.KeepAspectRatio.IsChecked.HasValue) {
-      App.Profile.CurrentOutputLayoutElement.KeepAspectRatio = (bool)this.KeepAspectRatio.IsChecked;
-    }
+    if (!this.KeepAspectRatio.IsChecked.HasValue) return;
+
+    App.Profile.CurrentOutputLayoutElement.KeepAspectRatio = (bool)this.KeepAspectRatio.IsChecked;
   }
 
   private void stretch_Click(object sender, RoutedEventArgs e) {
-    if (this.Stretch.IsChecked.HasValue) {
-      App.Profile.CurrentOutputLayoutElement.Stretch = (bool)this.Stretch.IsChecked;
-    }
+    if (!this.Stretch.IsChecked.HasValue) return;
+ 
+    App.Profile.CurrentOutputLayoutElement.Stretch = (bool)this.Stretch.IsChecked;
   }
 }
 }

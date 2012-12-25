@@ -37,13 +37,13 @@ public partial class MainWindow : Window {
   }
 
   /// 全ウィンドウ表示前に一度だけ起こるLoadedイベントハンドラ
-  private void mainWindow_Loaded(object sender, RoutedEventArgs e) {
+  private void OnLoaded(object sender, RoutedEventArgs e) {
     this.UpdateByOptions();
     this.UpdateByProfile();
   }
 
   /// アプリケーション終了時に発生するClosingイベントハンドラ
-  private void mainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
+  private void OnClosing(object sender, System.ComponentModel.CancelEventArgs e) {
     this.SaveOptions();
   }
 
@@ -320,27 +320,27 @@ public partial class MainWindow : Window {
   }
 
   private void autoApply_Click(object sender, RoutedEventArgs e) {
-    if (this.AutoApply.IsChecked.HasValue) {
-      App.Options.AutoApply = (bool)this.AutoApply.IsChecked;
-    }
+    if (!this.AutoApply.IsChecked.HasValue) return;
+
+    App.Options.AutoApply = (bool)this.AutoApply.IsChecked;
   }
 
   private void layoutPreview_Click(object sender, RoutedEventArgs e) {
-    if (this.LayoutPreview.IsChecked.HasValue) {
-      App.Options.LayoutPreview = (bool)this.LayoutPreview.IsChecked;
-    }
+    if (!this.LayoutPreview.IsChecked.HasValue) return;
+
+    App.Options.LayoutPreview = (bool)this.LayoutPreview.IsChecked;
   }
 
   private void layoutSnap_Click(object sender, RoutedEventArgs e) {
-    if (this.LayoutSnap.IsChecked.HasValue) {
-      App.Options.LayoutSnap = (bool)this.LayoutSnap.IsChecked;
-    }
+    if (!this.LayoutSnap.IsChecked.HasValue) return;
+
+    App.Options.LayoutSnap = (bool)this.LayoutSnap.IsChecked;
   }
 
   private void layoutBorder_Click(object sender, RoutedEventArgs e) {
-    if (this.LayoutBorder.IsChecked.HasValue) {
-      App.Options.LayoutBorder = (bool)this.LayoutBorder.IsChecked;
-    }
+    if (this.LayoutBorder.IsChecked.HasValue) return;
+
+    App.Options.LayoutBorder = (bool)this.LayoutBorder.IsChecked;
   }
 }
 }

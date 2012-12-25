@@ -149,6 +149,19 @@ public partial class TargetWindow : UserControl, IProfileToControl {
 
     // Profileを更新
     App.Profile.CurrentOutputLayoutElement.SetWindow(nextTargetWindow);
+    App.Profile.CurrentOutputLayoutElement.Fit = true;
+
+    // Clipping*WithoutFitの補正
+    // とりあえず0,0を原点にもってくる(ウィンドウが変われば左上座標に意味はなくなるから)
+    App.Profile.CurrentOutputLayoutElement.ClippingXWithoutFit = 0;
+    App.Profile.CurrentOutputLayoutElement.ClippingYWithoutFit = 0;
+    // Width/HeightはFitした時の値をとりあえず上限とする
+    App.Profile.CurrentOutputLayoutElement.ClippingWidthWithoutFit = Math.Min(
+      App.Profile.CurrentInputLayoutElement.ClippingWidthWithoutFit,
+      App.Profile.CurrentInputLayoutElement.WindowWidth);
+    App.Profile.CurrentOutputLayoutElement.ClippingHeightWithoutFit = Math.Min(
+      App.Profile.CurrentInputLayoutElement.ClippingHeightWithoutFit,
+      App.Profile.CurrentInputLayoutElement.WindowHeight);
 
     // コマンドをMainWindowに送信して関連するコントロールを更新
     Commands.ChangeTargetWindowCommand.Execute(null, null);
@@ -158,6 +171,19 @@ public partial class TargetWindow : UserControl, IProfileToControl {
   private void Desktop_Click(object sender, System.Windows.RoutedEventArgs e) {
     // Profileを更新
     App.Profile.CurrentOutputLayoutElement.SetWindowToDesktop();
+    App.Profile.CurrentOutputLayoutElement.Fit = true;
+
+    // Clipping*WithoutFitの補正
+    // とりあえず0,0を原点にもってくる(ウィンドウが変われば左上座標に意味はなくなるから)
+    App.Profile.CurrentOutputLayoutElement.ClippingXWithoutFit = 0;
+    App.Profile.CurrentOutputLayoutElement.ClippingYWithoutFit = 0;
+    // Width/HeightはFitした時の値をとりあえず上限とする
+    App.Profile.CurrentOutputLayoutElement.ClippingWidthWithoutFit = Math.Min(
+      App.Profile.CurrentInputLayoutElement.ClippingWidthWithoutFit,
+      App.Profile.CurrentInputLayoutElement.WindowWidth);
+    App.Profile.CurrentOutputLayoutElement.ClippingHeightWithoutFit = Math.Min(
+      App.Profile.CurrentInputLayoutElement.ClippingHeightWithoutFit,
+      App.Profile.CurrentInputLayoutElement.WindowHeight);
 
     // コマンドをMainWindowに送信して関連するコントロールを更新
     Commands.ChangeTargetWindowCommand.Execute(null, null);
@@ -166,6 +192,19 @@ public partial class TargetWindow : UserControl, IProfileToControl {
   private void ListView_Click(object sender, System.Windows.RoutedEventArgs e) {
     // Profileを更新
     App.Profile.CurrentOutputLayoutElement.SetWindowToDesktopListView();
+    App.Profile.CurrentOutputLayoutElement.Fit = true;
+
+    // Clipping*WithoutFitの補正
+    // とりあえず0,0を原点にもってくる(ウィンドウが変われば左上座標に意味はなくなるから)
+    App.Profile.CurrentOutputLayoutElement.ClippingXWithoutFit = 0;
+    App.Profile.CurrentOutputLayoutElement.ClippingYWithoutFit = 0;
+    // Width/HeightはFitした時の値をとりあえず上限とする
+    App.Profile.CurrentOutputLayoutElement.ClippingWidthWithoutFit = Math.Min(
+      App.Profile.CurrentInputLayoutElement.ClippingWidthWithoutFit,
+      App.Profile.CurrentInputLayoutElement.WindowWidth);
+    App.Profile.CurrentOutputLayoutElement.ClippingHeightWithoutFit = Math.Min(
+      App.Profile.CurrentInputLayoutElement.ClippingHeightWithoutFit,
+      App.Profile.CurrentInputLayoutElement.WindowHeight);
 
     // コマンドをMainWindowに送信して関連するコントロールを更新
     Commands.ChangeTargetWindowCommand.Execute(null, null);

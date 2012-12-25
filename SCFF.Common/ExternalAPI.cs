@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file SCFF.Common/ExternalAPI.cs
-/// SCFF.Commonモジュールで利用する外部APIをまとめたクラスの定義
+/// SCFF.*モジュールで利用する外部APIをまとめたクラスの定義
 
 namespace SCFF.Common {
 
@@ -24,69 +24,71 @@ using System;
 using System.Runtime.InteropServices;
 using System.Text;
 
-/// scff_appモジュールで利用する外部APIをまとめたクラス
-internal class ExternalAPI {
+/// SCFF.*モジュールで利用する外部APIをまとめたクラス
+public class ExternalAPI {
 
   //-------------------------------------------------------------------
   // user32.dll
   //-------------------------------------------------------------------
 
   // Constants: System Metric
-  internal const int SM_CXSCREEN = 0;
-  internal const int SM_CYSCREEN = 1;
-  internal const int SM_XVIRTUALSCREEN  = 76;
-  internal const int SM_YVIRTUALSCREEN  = 77;
-  internal const int SM_CXVIRTUALSCREEN = 78;
-  internal const int SM_CYVIRTUALSCREEN = 79;
+  public const int SM_CXSCREEN = 0;
+  public const int SM_CYSCREEN = 1;
+  public const int SM_XVIRTUALSCREEN  = 76;
+  public const int SM_YVIRTUALSCREEN  = 77;
+  public const int SM_CXVIRTUALSCREEN = 78;
+  public const int SM_CYVIRTUALSCREEN = 79;
 
   // Type
   [StructLayout(LayoutKind.Sequential)]
-  internal struct RECT { public int Left, Top, Right, Bottom; }
+  public struct RECT { public int Left, Top, Right, Bottom; }
 
   [StructLayout(LayoutKind.Sequential)]
-  internal struct POINT { public int X, Y; }
+  public struct POINT { public int X, Y; }
 
   // Delegate
-  internal delegate bool WNDENUMProc(UIntPtr hWnd, UIntPtr lParam);
+  public delegate bool WNDENUMProc(UIntPtr hWnd, UIntPtr lParam);
 
   // API
   [DllImport("user32.dll")]
   [return: MarshalAs(UnmanagedType.Bool)]
-  internal static extern bool IsWindow(UIntPtr hWnd);
+  public static extern bool IsWindow(UIntPtr hWnd);
 
   [DllImport("user32.dll", SetLastError = false)]
-  internal static extern UIntPtr GetDesktopWindow();
+  public static extern UIntPtr GetDesktopWindow();
 
   [DllImport("user32.dll")]
-  internal static extern UIntPtr FindWindowEx(UIntPtr hWnd, UIntPtr hwndChildAfter, string lpszClass, string lpszWindow);
+  public static extern UIntPtr FindWindowEx(UIntPtr hWnd, UIntPtr hwndChildAfter, string lpszClass, string lpszWindow);
 
   [DllImport("user32.dll")]
-  internal static extern bool EnumWindows(WNDENUMProc lpEnumFunc, UIntPtr lParam);
+  public static extern bool EnumWindows(WNDENUMProc lpEnumFunc, UIntPtr lParam);
 
   [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-  internal static extern int GetClassName(UIntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
+  public static extern int GetClassName(UIntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
 
   [DllImport("user32.dll")]
-  internal static extern bool GetClientRect(UIntPtr hWnd, out RECT lpRect);
+  public static extern bool GetClientRect(UIntPtr hWnd, out RECT lpRect);
 
   [DllImport("user32.dll")]
-  internal static extern bool ClientToScreen(UIntPtr hWnd, ref POINT lpPoint);
+  public static extern bool ClientToScreen(UIntPtr hWnd, ref POINT lpPoint);
 
   [DllImport("user32.dll")]
-  internal static extern UIntPtr WindowFromPoint(int xPoint, int yPoint);
+  public static extern UIntPtr WindowFromPoint(int xPoint, int yPoint);
 
   [DllImport("user32.dll")]
-  internal static extern UIntPtr GetDC(UIntPtr hWnd);
+  public static extern UIntPtr GetDC(UIntPtr hWnd);
 
   [DllImport("user32.dll")]
-  internal static extern int ReleaseDC(UIntPtr hWnd, UIntPtr hDC);
+  public static extern int ReleaseDC(UIntPtr hWnd, UIntPtr hDC);
+
+  //[DllImport("user32.dll")]
+  //public static extern bool InvalidateRect(UIntPtr hWnd, ref RECT lpRect, bool bErase);
 
   [DllImport("user32.dll")]
-  internal static extern bool InvalidateRect(UIntPtr hWnd, ref RECT lpRect, bool bErase);
+  public static extern int GetSystemMetrics(int nIndex);
 
   [DllImport("user32.dll")]
-  internal static extern int GetSystemMetrics(int nIndex);
-
+  public static extern bool IntersectRect(out RECT lprcDst, ref RECT lprcSrc1, ref RECT lprcSrc2);
 
   //-------------------------------------------------------------------
   // gdi32.dll
@@ -94,30 +96,50 @@ internal class ExternalAPI {
 
   // Constants
 
-  internal const int SRCCOPY    = 0x00CC0020;
-  internal const int CAPTUREBLT = 0x40000000;
+  public const int SRCCOPY    = 0x00CC0020;
+  public const int CAPTUREBLT = 0x40000000;
+
+  // public const int PS_SOLID    = 0x00000000;
+  public const int PS_NULL       = 0x00000005;
+
+  public const int R2_XORPEN   = 7;
 
   // API
   [DllImport("gdi32.dll")]
-  internal static extern int BitBlt(UIntPtr hDestDC,
+  public static extern int BitBlt(UIntPtr hDestDC,
       int x, int y,
       int nWidth, int nHeight,
       UIntPtr hSrcDC,
       int xSrc, int ySrc,
       int dwRop);
 
+  [DllImport("gdi32.dll")]
+  public static extern UIntPtr CreatePen(int fnPenStyle, int nWidth, uint crColor);
+
+  [DllImport("gdi32.dll")]
+  public static extern int SetROP2(UIntPtr hdc, int fnDrawMode);
+
+  [DllImport("gdi32.dll")]
+  public static extern UIntPtr SelectObject(UIntPtr hdc, UIntPtr hgdiobj);
+
+  [DllImport("gdi32.dll")]
+  public static extern bool DeleteObject(UIntPtr hObject);
+
+  [DllImport("gdi32.dll")]
+  public static extern bool Rectangle(UIntPtr hdc, int nLeftRect, int nTopRect, int nRightRect, int nBottomRect);
+
   //-------------------------------------------------------------------
   // dwmapi.dll
   //-------------------------------------------------------------------
 
   // Constants
-  internal const int DWM_EC_DISABLECOMPOSITION = 0;
-  internal const int DWM_EC_ENABLECOMPOSITION = 1;
+  public const int DWM_EC_DISABLECOMPOSITION = 0;
+  public const int DWM_EC_ENABLECOMPOSITION = 1;
 
   // API
   [DllImport("dwmapi.dll")]
-  internal static extern int DwmIsCompositionEnabled(out bool enabled);
+  public static extern int DwmIsCompositionEnabled(out bool enabled);
   [DllImport("dwmapi.dll")]
-  internal static extern int DwmEnableComposition(uint uCompositionAction);
+  public static extern int DwmEnableComposition(uint uCompositionAction);
 }
 }

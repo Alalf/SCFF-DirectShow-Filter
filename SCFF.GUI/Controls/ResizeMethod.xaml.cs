@@ -94,15 +94,17 @@ public partial class ResizeMethod : UserControl, IProfileToControl {
   //-------------------------------------------------------------------
  
   private void swscaleAccurateRnd_Click(object sender, RoutedEventArgs e) {
-    if (this.SWScaleAccurateRnd.IsChecked.HasValue) {
-      App.Profile.CurrentOutputLayoutElement.SWScaleAccurateRnd = (bool)this.SWScaleAccurateRnd.IsChecked;
-    }
+    if (!this.SWScaleAccurateRnd.IsChecked.HasValue) return;
+    
+    App.Profile.CurrentOutputLayoutElement.SWScaleAccurateRnd =
+        (bool)this.SWScaleAccurateRnd.IsChecked;
   }
 
   private void swscaleIsFilterEnabled_Click(object sender, RoutedEventArgs e) {
-    if (this.SWScaleIsFilterEnabled.IsChecked.HasValue) {
-      App.Profile.CurrentOutputLayoutElement.SWScaleIsFilterEnabled = (bool)this.SWScaleIsFilterEnabled.IsChecked;
-    }
+    if (!this.SWScaleIsFilterEnabled.IsChecked.HasValue) return;
+
+    App.Profile.CurrentOutputLayoutElement.SWScaleIsFilterEnabled =
+        (bool)this.SWScaleIsFilterEnabled.IsChecked;
   }
 
   //-------------------------------------------------------------------

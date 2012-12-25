@@ -20,6 +20,7 @@
 
 namespace SCFF.GUI.Controls {
 
+using SCFF.Common;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -72,11 +73,150 @@ public partial class Area : UserControl, IProfileToControl {
   //-------------------------------------------------------------------
 
   private void fit_Click(object sender, RoutedEventArgs e) {
-    if (this.Fit.IsChecked.HasValue) {
-      App.Profile.CurrentOutputLayoutElement.Fit = (bool)this.Fit.IsChecked;
+    if (!this.Fit.IsChecked.HasValue) return;
 
-      this.UpdateByProfile();
-    }
+    App.Profile.CurrentOutputLayoutElement.Fit = (bool)this.Fit.IsChecked;
+    this.UpdateByProfile();
+  }
+
+  private void AreaSelect_Click(object sender, RoutedEventArgs e) {
+    // ダイアログの準備
+    var dialog = new AreaSelectWindow();
+    dialog.Left   = App.Profile.CurrentInputLayoutElement.ScreenClippingXWithFit;
+    dialog.Top    = App.Profile.CurrentInputLayoutElement.ScreenClippingYWithFit;
+    dialog.Width  = App.Profile.CurrentInputLayoutElement.ClippingWidthWithFit;
+    dialog.Height = App.Profile.CurrentInputLayoutElement.ClippingHeightWithFit;
+
+    // ダイアログの表示
+    var result = dialog.ShowDialog();
+    if (!result.HasValue || !(bool)result) return;
+
+    // 結果をRECTにまとめる
+    var nextScreenRect = new ExternalAPI.RECT {
+      Left    = (int)dialog.Left,
+      Top     = (int)dialog.Top,
+      Right   = (int)(dialog.Left + dialog.Width),
+      Bottom  = (int)(dialog.Top + dialog.Height)
+    };
+
+    // ウィンドウの領域とIntersectをとる
+    var windowScreenRect = App.Profile.CurrentInputLayoutElement.ScreenWindowRect;
+    ExternalAPI.RECT intersectScreenRect;
+    var intersectResult = ExternalAPI.IntersectRect(out intersectScreenRect,
+                                                    ref windowScreenRect,
+                                                    ref nextScreenRect);
+    if (!intersectResult) return;
+
+    // 結果をProfileに書き込み
+    var intersectWidth = intersectScreenRect.Right - intersectScreenRect.Left;
+    var intersectHeight = intersectScreenRect.Bottom - intersectScreenRect.Top;
+
+    App.Profile.CurrentOutputLayoutElement.Fit = false;
+    App.Profile.CurrentOutputLayoutElement.ClippingXWithoutFit =
+        intersectScreenRect.Left - windowScreenRect.Left;
+    App.Profile.CurrentOutputLayoutElement.ClippingYWithoutFit = 
+        intersectScreenRect.Top - windowScreenRect.Top;
+    App.Profile.CurrentOutputLayoutElement.ClippingWidthWithoutFit =
+        intersectWidth;
+    App.Profile.CurrentOutputLayoutElement.ClippingHeightWithoutFit =
+        intersectHeight;
+      
+    // 変更はAreaコントロールのみに収まるのでコマンドは発行しない
+    this.UpdateByProfile();
+  }
+
+  private void ListView_Click(object sender, RoutedEventArgs e) {
+    // ダイアログの準備
+    var dialog = new AreaSelectWindow();
+    dialog.Left   = App.Profile.CurrentInputLayoutElement.ScreenClippingXWithFit;
+    dialog.Top    = App.Profile.CurrentInputLayoutElement.ScreenClippingYWithFit;
+    dialog.Width  = App.Profile.CurrentInputLayoutElement.ClippingWidthWithFit;
+    dialog.Height = App.Profile.CurrentInputLayoutElement.ClippingHeightWithFit;
+
+    // ダイアログの表示
+    var result = dialog.ShowDialog();
+    if (!result.HasValue || !(bool)result) return;
+
+    // 結果をRECTにまとめる
+    var nextScreenRect = new ExternalAPI.RECT {
+      Left    = (int)dialog.Left,
+      Top     = (int)dialog.Top,
+      Right   = (int)(dialog.Left + dialog.Width),
+      Bottom  = (int)(dialog.Top + dialog.Height)
+    };
+
+    // 仮想画面全体とIntersectをとる
+    var virtualScreenRect = Utilities.VirtualScreenRect;
+    ExternalAPI.RECT intersectScreenRect;
+    var intersectResult = ExternalAPI.IntersectRect(out intersectScreenRect,
+                                                    ref virtualScreenRect,
+                                                    ref nextScreenRect);
+    if (!intersectResult) return;
+
+    // 結果をProfileに書き込み
+    var intersectWidth = intersectScreenRect.Right - intersectScreenRect.Left;
+    var intersectHeight = intersectScreenRect.Bottom - intersectScreenRect.Top;
+
+    App.Profile.CurrentOutputLayoutElement.SetWindowToDesktopListView();
+    App.Profile.CurrentOutputLayoutElement.Fit = false;
+    App.Profile.CurrentOutputLayoutElement.ClippingXWithoutFit =
+        intersectScreenRect.Left - virtualScreenRect.Left;
+    App.Profile.CurrentOutputLayoutElement.ClippingYWithoutFit = 
+        intersectScreenRect.Top - virtualScreenRect.Top;
+    App.Profile.CurrentOutputLayoutElement.ClippingWidthWithoutFit =
+        intersectWidth;
+    App.Profile.CurrentOutputLayoutElement.ClippingHeightWithoutFit =
+        intersectHeight;
+      
+    // コマンドをMainWindowに送信して関連するコントロールを更新
+    Commands.ChangeTargetWindowCommand.Execute(null, null);
+  }
+
+  private void Desktop_Click(object sender, RoutedEventArgs e) {
+    // ダイアログの準備
+    var dialog = new AreaSelectWindow();
+    dialog.Left   = App.Profile.CurrentInputLayoutElement.ScreenClippingXWithFit;
+    dialog.Top    = App.Profile.CurrentInputLayoutElement.ScreenClippingYWithFit;
+    dialog.Width  = App.Profile.CurrentInputLayoutElement.ClippingWidthWithFit;
+    dialog.Height = App.Profile.CurrentInputLayoutElement.ClippingHeightWithFit;
+
+    // ダイアログの表示
+    var result = dialog.ShowDialog();
+    if (!result.HasValue && !(bool)result) return;
+
+    // 結果をRECTにまとめる
+    var nextScreenRect = new ExternalAPI.RECT {
+      Left    = (int)dialog.Left,
+      Top     = (int)dialog.Top,
+      Right   = (int)(dialog.Left + dialog.Width),
+      Bottom  = (int)(dialog.Top + dialog.Height)
+    };
+
+    // 仮想画面全体とIntersectをとる
+    var virtualScreenRect = Utilities.VirtualScreenRect;
+    ExternalAPI.RECT intersectScreenRect;
+    var intersectResult = ExternalAPI.IntersectRect(out intersectScreenRect,
+                                                    ref virtualScreenRect,
+                                                    ref nextScreenRect);
+    if (!intersectResult) return;
+
+    // 結果をProfileに書き込み
+    var intersectWidth = intersectScreenRect.Right - intersectScreenRect.Left;
+    var intersectHeight = intersectScreenRect.Bottom - intersectScreenRect.Top;
+
+    App.Profile.CurrentOutputLayoutElement.SetWindowToDesktop();
+    App.Profile.CurrentOutputLayoutElement.Fit = false;
+    App.Profile.CurrentOutputLayoutElement.ClippingXWithoutFit =
+        intersectScreenRect.Left - virtualScreenRect.Left;
+    App.Profile.CurrentOutputLayoutElement.ClippingYWithoutFit = 
+        intersectScreenRect.Top - virtualScreenRect.Top;
+    App.Profile.CurrentOutputLayoutElement.ClippingWidthWithoutFit =
+        intersectWidth;
+    App.Profile.CurrentOutputLayoutElement.ClippingHeightWithoutFit =
+        intersectHeight;
+      
+    // コマンドをMainWindowに送信して関連するコントロールを更新
+    Commands.ChangeTargetWindowCommand.Execute(null, null);
   }
 
   //-------------------------------------------------------------------

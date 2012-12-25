@@ -9,11 +9,10 @@
         Background="{DynamicResource WindowBackgroundBrush}"
         Icon="Images/app.ico"
         ResizeMode="CanResizeWithGrip"
-        Name="SCFFMainWindow"
         Height="565" Width="772.437"
         MinHeight="280" MinWidth="280"
-        Loaded="mainWindow_Loaded"
-        Closing="mainWindow_Closing" >
+        Loaded="OnLoaded"
+        Closing="OnClosing" >
   <Window.CommandBindings>
     <!-- shell:SystemCommands -->
     <CommandBinding Command="{x:Static shell:SystemCommands.CloseWindowCommand}"

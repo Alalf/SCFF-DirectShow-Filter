@@ -10,42 +10,42 @@
         Icon="Images/app.ico"
         ResizeMode="CanResizeWithGrip"
         FontSize="9"
-        Title="AreaSelectWindow" Height="120" Width="120"
+        Title="AreaSelectWindow" Width="320" Height="240"
         MouseDown="AreaSelectWindow_MouseDown">
   <Window.CommandBindings>
+    <!-- ApplicationCommands -->
+    <CommandBinding Command="Save" Executed="Save_Executed"/>
     <!-- shell:SystemCommands -->
     <CommandBinding Command="{x:Static shell:SystemCommands.CloseWindowCommand}"
                     Executed="CloseWindow_Executed"/>
   </Window.CommandBindings>
+  <Window.InputBindings>
+    <KeyBinding Key="Return" Command="Save"/>
+  </Window.InputBindings>
   <shell:WindowChrome.WindowChrome>
     <shell:WindowChrome CaptionHeight="0"
                         ResizeBorderThickness="8"
                         GlassFrameThickness="0"
                         CornerRadius="0"/>
   </shell:WindowChrome.WindowChrome>
-  <Border BorderBrush="DarkOrange" BorderThickness="1">
-    <Grid Background="#99FF8000">
+  <Border x:Name="WindowBorder" BorderBrush="DarkOrange" BorderThickness="1">
+    <Grid x:Name="WindowGrid" Background="#99FF8000">
       <Grid.RowDefinitions>
         <RowDefinition Height="16" />
         <RowDefinition Height="9*"/>
         <RowDefinition Height="14"/>
         <RowDefinition Height="10*"/>
       </Grid.RowDefinitions>
-      <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="10*"/>
-        <ColumnDefinition Width="97"/>
-        <ColumnDefinition Width="10*"/>
-      </Grid.ColumnDefinitions>
       <Grid.Resources>
         <ResourceDictionary Source="Resources\CaptionButton.xaml"/>
       </Grid.Resources>
-      <Button FontSize="11" Grid.ColumnSpan="3" Content="r"
+      <Button FontSize="11" Content="r"
               Height="14" HorizontalAlignment="Right" VerticalAlignment="Center"
               Style="{DynamicResource CaptionButton}" IsCancel="True"
               Command="{x:Static shell:SystemCommands.CloseWindowCommand}"/>
-      <Label Grid.Column="1" Grid.Row="2" Content="Double-click to Apply"
+      <Label Grid.Row="2" Content="Double-click/Return to Apply"
              Height="12" HorizontalAlignment="Center" VerticalAlignment="Center"
-             Foreground="Black" Width="95" IsHitTestVisible="False"/>
+             Foreground="Black" IsHitTestVisible="False"/>
     </Grid>
   </Border>
 </Window>

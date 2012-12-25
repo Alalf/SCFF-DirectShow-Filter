@@ -48,7 +48,7 @@ public static class Utilities {
   // パッと見る限り明らかに重いのはAero On時。EnumWindows必須。
 
   private static UIntPtr enumerateWindowResult = UIntPtr.Zero;
-  private static bool EnumerateWindow(UIntPtr hWnd, UIntPtr lParam) {
+  private static bool EnumerateWindow(UIntPtr hWnd, IntPtr lParam) {
     StringBuilder className = new StringBuilder(256);
     ExternalAPI.GetClassName(hWnd, className, 256);
     // "WorkerW"以外はスキップ
@@ -87,7 +87,7 @@ public static class Utilities {
         return edgeUiInputWndClass;
       }
       enumerateWindowResult = UIntPtr.Zero;
-      ExternalAPI.EnumWindows(new ExternalAPI.WNDENUMProc(EnumerateWindow), UIntPtr.Zero);
+      ExternalAPI.EnumWindows(new ExternalAPI.WNDENUMProc(EnumerateWindow), IntPtr.Zero);
       if (enumerateWindowResult != UIntPtr.Zero) {
         // Win7(Aero)/Vista(Aero)
         UIntPtr sysListView32 = ExternalAPI.FindWindowEx(enumerateWindowResult, UIntPtr.Zero, "SysListView32", null);

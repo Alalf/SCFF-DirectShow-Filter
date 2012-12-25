@@ -25,6 +25,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 
 /// SCFF.*モジュールで利用する外部APIをまとめたクラス
+/// HWNDは特例としてUIntPtr、それ以外はIntPtrで取り扱うこと
 public class ExternalAPI {
 
   //-------------------------------------------------------------------
@@ -47,7 +48,7 @@ public class ExternalAPI {
   public struct POINT { public int X, Y; }
 
   // Delegate
-  public delegate bool WNDENUMProc(UIntPtr hWnd, UIntPtr lParam);
+  public delegate bool WNDENUMProc(UIntPtr hWnd, IntPtr lParam);
 
   // API
   [DllImport("user32.dll")]
@@ -61,7 +62,7 @@ public class ExternalAPI {
   public static extern UIntPtr FindWindowEx(UIntPtr hWnd, UIntPtr hwndChildAfter, string lpszClass, string lpszWindow);
 
   [DllImport("user32.dll")]
-  public static extern bool EnumWindows(WNDENUMProc lpEnumFunc, UIntPtr lParam);
+  public static extern bool EnumWindows(WNDENUMProc lpEnumFunc, IntPtr lParam);
 
   [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
   public static extern int GetClassName(UIntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
@@ -76,10 +77,10 @@ public class ExternalAPI {
   public static extern UIntPtr WindowFromPoint(int xPoint, int yPoint);
 
   [DllImport("user32.dll")]
-  public static extern UIntPtr GetDC(UIntPtr hWnd);
+  public static extern IntPtr GetDC(UIntPtr hWnd);
 
   [DllImport("user32.dll")]
-  public static extern int ReleaseDC(UIntPtr hWnd, UIntPtr hDC);
+  public static extern int ReleaseDC(UIntPtr hWnd, IntPtr hDC);
 
   //[DllImport("user32.dll")]
   //public static extern bool InvalidateRect(UIntPtr hWnd, ref RECT lpRect, bool bErase);
@@ -106,27 +107,27 @@ public class ExternalAPI {
 
   // API
   [DllImport("gdi32.dll")]
-  public static extern int BitBlt(UIntPtr hDestDC,
+  public static extern int BitBlt(IntPtr hDestDC,
       int x, int y,
       int nWidth, int nHeight,
-      UIntPtr hSrcDC,
+      IntPtr hSrcDC,
       int xSrc, int ySrc,
       int dwRop);
 
   [DllImport("gdi32.dll")]
-  public static extern UIntPtr CreatePen(int fnPenStyle, int nWidth, uint crColor);
+  public static extern IntPtr CreatePen(int fnPenStyle, int nWidth, uint crColor);
 
   [DllImport("gdi32.dll")]
-  public static extern int SetROP2(UIntPtr hdc, int fnDrawMode);
+  public static extern int SetROP2(IntPtr hdc, int fnDrawMode);
 
   [DllImport("gdi32.dll")]
-  public static extern UIntPtr SelectObject(UIntPtr hdc, UIntPtr hgdiobj);
+  public static extern IntPtr SelectObject(IntPtr hdc, IntPtr hgdiobj);
 
   [DllImport("gdi32.dll")]
-  public static extern bool DeleteObject(UIntPtr hObject);
+  public static extern bool DeleteObject(IntPtr hObject);
 
   [DllImport("gdi32.dll")]
-  public static extern bool Rectangle(UIntPtr hdc, int nLeftRect, int nTopRect, int nRightRect, int nBottomRect);
+  public static extern bool Rectangle(IntPtr hdc, int nLeftRect, int nTopRect, int nRightRect, int nBottomRect);
 
   //-------------------------------------------------------------------
   // dwmapi.dll

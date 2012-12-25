@@ -20,32 +20,50 @@
 
 namespace SCFF.GUI.Controls {
 
-using System;
-using System.Windows.Controls;
 using SCFF.Common;
-  using System.Windows.Media;
+using System;
+using System.Diagnostics;
+using System.Windows.Controls;
+using System.Windows.Media;
 
 /// ウィンドウ取り込み対象の設定用コントロール
 public partial class TargetWindow : UserControl, IProfileToControl {
 
+  private IntPtr dummyPen = IntPtr.Zero;
+
   /// コンストラクタ
   public TargetWindow() {
     InitializeComponent();
+
+    Debug.WriteLine("TargetWindow: Dummy Pen is created");
+    this.dummyPen = ExternalAPI.CreatePen(ExternalAPI.PS_NULL, 1, 0x00000000);
+    this.Dispatcher.ShutdownStarted += OnShutdownStarted;
+  }
+
+  private void OnShutdownStarted(object sender, EventArgs e) {
+    if (this.dummyPen != IntPtr.Zero) {
+      Debug.WriteLine("TargetWindow: Dummy Pen is deleted");
+      ExternalAPI.DeleteObject(this.dummyPen);
+      this.dummyPen = IntPtr.Zero;
+    }
   }
 
   //===================================================================
   // IProfileToControlの実装
   //===================================================================
 
+  /// @copydoc IProfileToControl.UpdateByProfile
   public void UpdateByProfile() {
     // *Changedイベントハンドラがないのでそのまま代入するだけ
     this.WindowCaption.Text = App.Profile.CurrentInputLayoutElement.WindowCaption;
   }
 
+  /// @copydoc IProfileToControl.AttachChangedEventHandlers
   public void AttachChangedEventHandlers() {
     // nop
   }
 
+  /// @copydoc IProfileToControl.DetachChangedEventHandlers
   public void DetachChangedEventHandlers() {
     // nop
   }
@@ -56,10 +74,10 @@ public partial class TargetWindow : UserControl, IProfileToControl {
 
   private bool dragHereMode = false;
   private UIntPtr currentTargetWindow = UIntPtr.Zero;
-  private UIntPtr currentTargetDC = UIntPtr.Zero;
-  private UIntPtr dummyPen = UIntPtr.Zero;
+  private IntPtr currentTargetDC = IntPtr.Zero;
   private Brush originalBorderBrush;
 
+  /// 現在のターゲットウィンドウをXORで塗りつぶす
   private void XorTargetRect() {
     ExternalAPI.RECT currentTargetRect;
     ExternalAPI.GetClientRect(this.currentTargetWindow, out currentTargetRect);
@@ -75,20 +93,16 @@ public partial class TargetWindow : UserControl, IProfileToControl {
     ExternalAPI.SetROP2(this.currentTargetDC, originalDrawMode);
   }
 
+  /// 
   private void ClearTargetRect() {
     if (this.currentTargetWindow != UIntPtr.Zero) {
       // 取り込み対象範囲のXOR描画(もともとXORされていたので元に戻る)
       this.XorTargetRect();
     }
     // DCを破棄
-    if (this.currentTargetDC != UIntPtr.Zero) {
+    if (this.currentTargetDC != IntPtr.Zero) {
       ExternalAPI.ReleaseDC(this.currentTargetWindow, this.currentTargetDC);
-      this.currentTargetDC = UIntPtr.Zero;
-    }
-    // Penを破棄
-    if (this.dummyPen != UIntPtr.Zero) {
-      ExternalAPI.DeleteObject(this.dummyPen);
-      this.dummyPen = UIntPtr.Zero;
+      this.currentTargetDC = IntPtr.Zero;
     }
   }
 
@@ -98,8 +112,7 @@ public partial class TargetWindow : UserControl, IProfileToControl {
 
     this.dragHereMode = true;
     this.currentTargetWindow = UIntPtr.Zero;
-    this.currentTargetDC = UIntPtr.Zero;
-    this.dummyPen = ExternalAPI.CreatePen(ExternalAPI.PS_NULL, 1, 0x00000000);
+    this.currentTargetDC = IntPtr.Zero;
   }
 
   private void DragHere_PreviewMouseMove(object sender, System.Windows.Input.MouseEventArgs e) {
@@ -136,6 +149,44 @@ public partial class TargetWindow : UserControl, IProfileToControl {
     this.XorTargetRect();
   }
 
+  private void UpdateProfile(WindowTypes nextWindowType, UIntPtr nextTargetWindow) {
+    // Window
+    switch (nextWindowType) {
+      case WindowTypes.Normal: {
+        App.Profile.CurrentOutputLayoutElement.SetWindow(nextTargetWindow);
+        break;
+      }
+      case WindowTypes.DesktopListView: {
+        App.Profile.CurrentOutputLayoutElement.SetWindowToDesktopListView();
+        break;
+      }
+      case WindowTypes.Desktop: {
+        App.Profile.CurrentOutputLayoutElement.SetWindowToDesktop();
+        break;
+      }
+      default: {
+        Debug.Fail("UpdateProfile: Invalid WindowType");
+        return;
+      }
+    }
+    App.Profile.CurrentOutputLayoutElement.Fit = true;
+
+    // Clipping*WithoutFitの補正
+    // とりあえず0,0を原点にもってくる(ウィンドウが変われば左上座標に意味はなくなるから)
+    App.Profile.CurrentOutputLayoutElement.ClippingXWithoutFit = 0;
+    App.Profile.CurrentOutputLayoutElement.ClippingYWithoutFit = 0;
+    // Width/HeightはFitした時の値をとりあえず上限とする
+    App.Profile.CurrentOutputLayoutElement.ClippingWidthWithoutFit = Math.Min(
+      App.Profile.CurrentInputLayoutElement.ClippingWidthWithoutFit,
+      App.Profile.CurrentInputLayoutElement.WindowWidth);
+    App.Profile.CurrentOutputLayoutElement.ClippingHeightWithoutFit = Math.Min(
+      App.Profile.CurrentInputLayoutElement.ClippingHeightWithoutFit,
+      App.Profile.CurrentInputLayoutElement.WindowHeight);
+
+    // コマンドをMainWindowに送信して関連するコントロールを更新
+    Commands.ChangeTargetWindowCommand.Execute(null, null);
+  }
+
   private void DragHere_PreviewMouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e) {
     this.DragHere.BorderBrush = this.originalBorderBrush;
 
@@ -148,68 +199,17 @@ public partial class TargetWindow : UserControl, IProfileToControl {
     UIntPtr nextTargetWindow = ExternalAPI.WindowFromPoint((int)screenPoint.X, (int)screenPoint.Y);
 
     // Profileを更新
-    App.Profile.CurrentOutputLayoutElement.SetWindow(nextTargetWindow);
-    App.Profile.CurrentOutputLayoutElement.Fit = true;
-
-    // Clipping*WithoutFitの補正
-    // とりあえず0,0を原点にもってくる(ウィンドウが変われば左上座標に意味はなくなるから)
-    App.Profile.CurrentOutputLayoutElement.ClippingXWithoutFit = 0;
-    App.Profile.CurrentOutputLayoutElement.ClippingYWithoutFit = 0;
-    // Width/HeightはFitした時の値をとりあえず上限とする
-    App.Profile.CurrentOutputLayoutElement.ClippingWidthWithoutFit = Math.Min(
-      App.Profile.CurrentInputLayoutElement.ClippingWidthWithoutFit,
-      App.Profile.CurrentInputLayoutElement.WindowWidth);
-    App.Profile.CurrentOutputLayoutElement.ClippingHeightWithoutFit = Math.Min(
-      App.Profile.CurrentInputLayoutElement.ClippingHeightWithoutFit,
-      App.Profile.CurrentInputLayoutElement.WindowHeight);
-
-    // コマンドをMainWindowに送信して関連するコントロールを更新
-    Commands.ChangeTargetWindowCommand.Execute(null, null);
-
+    this.UpdateProfile(WindowTypes.Normal, nextTargetWindow);
   }
 
   private void Desktop_Click(object sender, System.Windows.RoutedEventArgs e) {
     // Profileを更新
-    App.Profile.CurrentOutputLayoutElement.SetWindowToDesktop();
-    App.Profile.CurrentOutputLayoutElement.Fit = true;
-
-    // Clipping*WithoutFitの補正
-    // とりあえず0,0を原点にもってくる(ウィンドウが変われば左上座標に意味はなくなるから)
-    App.Profile.CurrentOutputLayoutElement.ClippingXWithoutFit = 0;
-    App.Profile.CurrentOutputLayoutElement.ClippingYWithoutFit = 0;
-    // Width/HeightはFitした時の値をとりあえず上限とする
-    App.Profile.CurrentOutputLayoutElement.ClippingWidthWithoutFit = Math.Min(
-      App.Profile.CurrentInputLayoutElement.ClippingWidthWithoutFit,
-      App.Profile.CurrentInputLayoutElement.WindowWidth);
-    App.Profile.CurrentOutputLayoutElement.ClippingHeightWithoutFit = Math.Min(
-      App.Profile.CurrentInputLayoutElement.ClippingHeightWithoutFit,
-      App.Profile.CurrentInputLayoutElement.WindowHeight);
-
-    // コマンドをMainWindowに送信して関連するコントロールを更新
-    Commands.ChangeTargetWindowCommand.Execute(null, null);
+    this.UpdateProfile(WindowTypes.Desktop, UIntPtr.Zero);
   }
 
   private void ListView_Click(object sender, System.Windows.RoutedEventArgs e) {
     // Profileを更新
-    App.Profile.CurrentOutputLayoutElement.SetWindowToDesktopListView();
-    App.Profile.CurrentOutputLayoutElement.Fit = true;
-
-    // Clipping*WithoutFitの補正
-    // とりあえず0,0を原点にもってくる(ウィンドウが変われば左上座標に意味はなくなるから)
-    App.Profile.CurrentOutputLayoutElement.ClippingXWithoutFit = 0;
-    App.Profile.CurrentOutputLayoutElement.ClippingYWithoutFit = 0;
-    // Width/HeightはFitした時の値をとりあえず上限とする
-    App.Profile.CurrentOutputLayoutElement.ClippingWidthWithoutFit = Math.Min(
-      App.Profile.CurrentInputLayoutElement.ClippingWidthWithoutFit,
-      App.Profile.CurrentInputLayoutElement.WindowWidth);
-    App.Profile.CurrentOutputLayoutElement.ClippingHeightWithoutFit = Math.Min(
-      App.Profile.CurrentInputLayoutElement.ClippingHeightWithoutFit,
-      App.Profile.CurrentInputLayoutElement.WindowHeight);
-
-    // コマンドをMainWindowに送信して関連するコントロールを更新
-    Commands.ChangeTargetWindowCommand.Execute(null, null);
+    this.UpdateProfile(WindowTypes.DesktopListView, UIntPtr.Zero);
   }
-
-
 }
 }

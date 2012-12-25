@@ -49,36 +49,6 @@ using System.Threading;
 ///   - 基本型、コンストラクタ、デストラクタ、仮想関数を持たない構造体のみ
 // =====================================================================
 
-/// プロセス間通信を担当するクラス
-public partial class Interprocess {
-
-  /// Path文字列の長さ
-  public const int MaxPath = 260;
-
-  /// Directoryに格納されるEntryの最大の数
-  public const int MaxEntry = 8;
-
-  /// ComplexLayout利用時の最大の要素数
-  /// @sa scff_imaging::kMaxProcessorSize
-  public const int MaxComplexLayoutElements = 8;
-
-  //-------------------------------------------------------------------
-
-  /// 共有メモリ名: SCFFエントリを格納するディレクトリ
-  private const string DirectoryName = "scff_v1_directory";
-
-  /// Directoryの保護用Mutex名
-  private const string DirectoryMutexName = "mutex_scff_v1_directory";
-
-  /// 共有メモリ名の接頭辞: SCFFで使うメッセージを格納する
-  private const string MessageNamePrefix = "scff_v1_message_";
-
-  /// Messageの保護用Mutex名の接頭辞
-  private const string MessageMutexNamePrefix = "mutex_scff_v1_message_";
-}
-
-//-------------------------------------------------------------------
-
 /// レイアウトの種類
 public enum LayoutTypes {
   /// 何も表示しない
@@ -267,7 +237,39 @@ public struct Message {
   public LayoutParameter[] LayoutParameters;
 }
 
-public partial class Interprocess {
+/// プロセス間通信を担当するクラス
+public class Interprocess {
+
+  //-------------------------------------------------------------------
+  // 定数
+  //-------------------------------------------------------------------
+
+  /// Path文字列の長さ
+  public const int MaxPath = 260;
+
+  /// Directoryに格納されるEntryの最大の数
+  public const int MaxEntry = 8;
+
+  /// ComplexLayout利用時の最大の要素数
+  /// @sa scff_imaging::kMaxProcessorSize
+  public const int MaxComplexLayoutElements = 8;
+
+  //-------------------------------------------------------------------
+
+  /// 共有メモリ名: SCFFエントリを格納するディレクトリ
+  private const string DirectoryName = "scff_v1_directory";
+
+  /// Directoryの保護用Mutex名
+  private const string DirectoryMutexName = "mutex_scff_v1_directory";
+
+  /// 共有メモリ名の接頭辞: SCFFで使うメッセージを格納する
+  private const string MessageNamePrefix = "scff_v1_message_";
+
+  /// Messageの保護用Mutex名の接頭辞
+  private const string MessageMutexNamePrefix = "mutex_scff_v1_message_";
+
+  //-------------------------------------------------------------------
+
   /// コンストラクタ
   public Interprocess() {
     this.directory = null;

@@ -15,15 +15,16 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
+/// @file SCFF.GUI/MainWindow.xaml.cs
+/// MainWindowのコードビハインド
+
 namespace SCFF.GUI {
 
-using System.Diagnostics;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
+using Microsoft.Win32;
 using Microsoft.Windows.Shell;
 using SCFF.Common;
-using Microsoft.Win32;
+using System.Windows;
+using System.Windows.Input;
 
 /// MainWindowのコードビハインド
 public partial class MainWindow : Window {

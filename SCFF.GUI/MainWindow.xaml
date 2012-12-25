@@ -94,8 +94,7 @@
           <MenuItem x:Name="RecentProfile4" Header="4 (_4)" IsEnabled="False"/>
           <MenuItem x:Name="RecentProfile5" Header="5 (_5)" IsEnabled="False"/>
           <Separator/>
-          <MenuItem Header="Exit(_X)" Command="{x:Static shell:SystemCommands.CloseWindowCommand}"
-                    CommandParameter="{Binding ElementName=SCFFMainWindow}"/>
+          <MenuItem Header="Exit(_X)" Command="{x:Static shell:SystemCommands.CloseWindowCommand}"/>
         </MenuItem>
         <MenuItem Header="Options(_O)">
           <MenuItem x:Name="CompactView" Header="Compact View(_C)" IsCheckable="True"

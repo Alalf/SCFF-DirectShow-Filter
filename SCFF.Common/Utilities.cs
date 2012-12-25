@@ -51,14 +51,15 @@ public static class Utilities {
   private static bool EnumerateWindow(UIntPtr hWnd, UIntPtr lParam) {
     StringBuilder className = new StringBuilder(256);
     ExternalAPI.GetClassName(hWnd, className, 256);
-    if (className.ToString() == "WorkerW") {
-      UIntPtr shellDLLDefView = ExternalAPI.FindWindowEx(hWnd, UIntPtr.Zero, "SHELLDLL_DefView", null);
-      if (shellDLLDefView != UIntPtr.Zero) {
-        enumerateWindowResult = shellDLLDefView;
-        return false;
-      }
-    }
-    return true;
+    // "WorkerW"以外はスキップ
+    if (className.ToString() != "WorkerW") return true;
+
+    // "WorkerW" > "SHELLDLL_DefView"になってなければスキップ
+    UIntPtr shellDLLDefView = ExternalAPI.FindWindowEx(hWnd, UIntPtr.Zero, "SHELLDLL_DefView", null);
+    if (shellDLLDefView == UIntPtr.Zero) return true;
+      
+    enumerateWindowResult = shellDLLDefView;
+    return false;
   }
 
   public static UIntPtr DesktopListViewWindow {

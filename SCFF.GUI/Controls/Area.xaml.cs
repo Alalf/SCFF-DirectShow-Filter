@@ -40,6 +40,24 @@ public partial class Area : UserControl, IProfileToControl {
   public void UpdateByProfile() {
     // checkboxはclickがあるのでeventハンドラをattach/detachする必要はない
     this.Fit.IsChecked = App.Profile.CurrentInputLayoutElement.Fit;
+    switch (App.Profile.CurrentInputLayoutElement.WindowType) {
+      case WindowTypes.Normal: {
+        this.ListView.IsEnabled = true;
+        this.Desktop.IsEnabled = true;
+        break;
+      }
+      case WindowTypes.Desktop: {
+        this.ListView.IsEnabled = true;
+        this.Desktop.IsEnabled = false;
+        break;
+      }
+      case WindowTypes.DesktopListView: {
+        this.ListView.IsEnabled = false;
+        this.Desktop.IsEnabled = true;
+        break;
+      }
+    }
+
     this.DetachChangedEventHandlers();
     this.ClippingX.Text = App.Profile.CurrentInputLayoutElement.ClippingXWithFit.ToString();
     this.ClippingY.Text = App.Profile.CurrentInputLayoutElement.ClippingYWithFit.ToString();

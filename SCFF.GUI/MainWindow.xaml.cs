@@ -339,7 +339,7 @@ public partial class MainWindow : Window {
   }
 
   private void layoutBorder_Click(object sender, RoutedEventArgs e) {
-    if (this.LayoutBorder.IsChecked.HasValue) return;
+    if (!this.LayoutBorder.IsChecked.HasValue) return;
 
     App.Options.LayoutBorder = (bool)this.LayoutBorder.IsChecked;
   }

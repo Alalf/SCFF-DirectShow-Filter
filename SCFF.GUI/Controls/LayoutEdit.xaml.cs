@@ -20,44 +20,78 @@
 
 namespace SCFF.GUI.Controls {
 
-using SCFF.Common;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Media;
+  using SCFF.Common;
+  using System.Diagnostics;
+  using System.Windows;
+  using System.Windows.Controls;
+  using System.Windows.Input;
+  using System.Windows.Media;
 
 /// レイアウトエディタ
+///
+/// LayoutEditImage内の座標系は([0-100],[0-100])で固定（プレビューのサイズに依存しない）
+/// 逆に言うと依存させてはいけない
 public partial class LayoutEdit : UserControl, IProfileToControl {
+
+  private const double MaxImageWidth = 100.0;
+  private const double MaxImageHeight = 100.0;
+  private const double PenThickness = 0.5;
+  private const double CaptionSize = 4.0;
+  private const double CaptionMargin = 0.5;
+
+  private Pen dummyPen = new Pen(Brushes.DarkOrange, PenThickness);
 
   /// コンストラクタ
   public LayoutEdit() {
     InitializeComponent();
 
+    this.LayoutEditViewBox.Width = Constants.DummyPreviewWidth;
+    this.LayoutEditViewBox.Height = Constants.DummyPreviewHeight;
     RenderOptions.SetBitmapScalingMode(this.DrawingGroup, BitmapScalingMode.LowQuality);
-    this.DrawTest(string.Empty);
+    this.DrawTest();
+  }
+
+  private Rect CreateLayoutElementRect(Profile.InputLayoutElement layoutElement) {
+    return new Rect() {
+      X = layoutElement.BoundRelativeLeft * MaxImageWidth,
+      Y = layoutElement.BoundRelativeTop * MaxImageHeight,
+      Width = (layoutElement.BoundRelativeRight - layoutElement.BoundRelativeLeft) * MaxImageWidth,
+      Height = (layoutElement.BoundRelativeBottom - layoutElement.BoundRelativeTop) * MaxImageHeight
+    };
+  }
+
+  private FormattedText CreateLayoutElementCaption(Profile.InputLayoutElement layoutElement) {
+    // 1: WindowCaption [(640x400) あれば]
+    /// @todo(me) ピクセル単位の幅と高さの出力
+    var layoutElementCaption = (layoutElement.Index+1).ToString() +
+        ": " + layoutElement.WindowCaption;
+
+    return new FormattedText(layoutElementCaption,
+      System.Globalization.CultureInfo.CurrentUICulture,
+      FlowDirection.LeftToRight,
+      new Typeface("Meiryo"),
+      CaptionSize,
+      Brushes.DarkOrange);
   }
 
   private void DrawLayout(DrawingContext dc, Profile.InputLayoutElement layoutElement) {
-    //dc.DrawRectangle(Brushes.Black, null, new Rect(0,0,Constants.DefaultPreviewWidth,Constants.DefaultPreviewHeight));
-    //dc.DrawRectangle(Brushes.DarkGray, null, new Rect(10,10,100,100));
-    //if (text != string.Empty) {
-    //  var formattedText = new FormattedText(text,
-    //      System.Globalization.CultureInfo.CurrentUICulture,
-    //      FlowDirection.LeftToRight,
-    //      new Typeface("Meiryo"),
-    //      10,
-    //      Brushes.White);
-    //  dc.DrawText(formattedText, new Point(10,200));
-    //}
+    if (App.Options.LayoutBorder) {
+      // フレームの描画
+      var layoutElementRect = this.CreateLayoutElementRect(layoutElement);
+      dc.DrawRectangle(Brushes.Transparent, dummyPen, layoutElementRect);
+
+      // キャプションの描画
+      var layoutElementCaption = this.CreateLayoutElementCaption(layoutElement);
+      var captionPoint = new Point(layoutElementRect.X + CaptionMargin, layoutElementRect.Y + CaptionMargin);
+      dc.DrawText(layoutElementCaption, captionPoint);
+    }
   }
 
   /// 描画テスト用
-  private void DrawTest(string text) {
-    
-
+  private void DrawTest() {
     using (var dc = this.DrawingGroup.Open()) {
       // 背景描画でサイズを決める
-      dc.DrawRectangle(Brushes.Black, null, new Rect(0,0,Constants.DefaultPreviewWidth,Constants.DefaultPreviewHeight));
+      dc.DrawRectangle(Brushes.Black, null, new Rect(0,0,MaxImageWidth,MaxImageHeight));
 
       foreach (var layoutElement in App.Profile) {
         DrawLayout(dc, layoutElement);
@@ -70,7 +104,7 @@ public partial class LayoutEdit : UserControl, IProfileToControl {
   //===================================================================
 
   public void UpdateByProfile() {
-    this.DrawTest("Update");
+    this.DrawTest();
   }
 
   public void AttachChangedEventHandlers() {
@@ -89,7 +123,8 @@ public partial class LayoutEdit : UserControl, IProfileToControl {
     var pt = e.GetPosition((IInputElement)sender);
     var x = (int)pt.X;
     var y = (int)pt.Y;
-    this.DrawTest(x + ", " + y);
+    Debug.WriteLine("MouseDown: " + x + ", " + y);
+    this.DrawTest();
   }
 
   private void LayoutEditImage_MouseMove(object sender, MouseEventArgs e) {

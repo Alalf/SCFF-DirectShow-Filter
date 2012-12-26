@@ -37,19 +37,30 @@ public partial class LayoutEdit : UserControl, IProfileToControl {
     this.DrawTest(string.Empty);
   }
 
+  private void DrawLayout(DrawingContext dc, Profile.InputLayoutElement layoutElement) {
+    //dc.DrawRectangle(Brushes.Black, null, new Rect(0,0,Constants.DefaultPreviewWidth,Constants.DefaultPreviewHeight));
+    //dc.DrawRectangle(Brushes.DarkGray, null, new Rect(10,10,100,100));
+    //if (text != string.Empty) {
+    //  var formattedText = new FormattedText(text,
+    //      System.Globalization.CultureInfo.CurrentUICulture,
+    //      FlowDirection.LeftToRight,
+    //      new Typeface("Meiryo"),
+    //      10,
+    //      Brushes.White);
+    //  dc.DrawText(formattedText, new Point(10,200));
+    //}
+  }
+
   /// 描画テスト用
   private void DrawTest(string text) {
+    
+
     using (var dc = this.DrawingGroup.Open()) {
+      // 背景描画でサイズを決める
       dc.DrawRectangle(Brushes.Black, null, new Rect(0,0,Constants.DefaultPreviewWidth,Constants.DefaultPreviewHeight));
-      dc.DrawRectangle(Brushes.DarkGray, null, new Rect(10,10,100,100));
-      if (text != string.Empty) {
-        var formattedText = new FormattedText(text,
-            System.Globalization.CultureInfo.CurrentUICulture,
-            FlowDirection.LeftToRight,
-            new Typeface("Meiryo"),
-            10,
-            Brushes.White);
-        dc.DrawText(formattedText, new Point(10,200));
+
+      foreach (var layoutElement in App.Profile) {
+        DrawLayout(dc, layoutElement);
       }
     }
   }
@@ -74,15 +85,19 @@ public partial class LayoutEdit : UserControl, IProfileToControl {
   // イベントハンドラ
   //===================================================================
 
-  private void Image_MouseDown_1(object sender, MouseButtonEventArgs e) {
+  private void LayoutEditImage_MouseDown(object sender, MouseButtonEventArgs e) {
     var pt = e.GetPosition((IInputElement)sender);
     var x = (int)pt.X;
     var y = (int)pt.Y;
     this.DrawTest(x + ", " + y);
   }
 
-  private void Image_MouseMove_1(object sender, MouseEventArgs e) {
-    // nop
+  private void LayoutEditImage_MouseMove(object sender, MouseEventArgs e) {
+      // nop
+  }
+
+  private void LayoutEditImage_MouseUp(object sender, MouseButtonEventArgs e) {
+
   }
 }
 }

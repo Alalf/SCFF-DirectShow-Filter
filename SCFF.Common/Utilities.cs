@@ -98,20 +98,5 @@ public static class Utilities {
       return ExternalAPI.GetDesktopWindow();
     }
   }
-
-  /// 仮想ディスプレイのデータをRECT化したプロパティ
-  /// @todo(me) 現在Desktop/DesktopListViewで使い回ししているが、問題が発生する可能性あり
-  public static ExternalAPI.RECT VirtualScreenRect {
-    get {
-      return new ExternalAPI.RECT {
-        Left = ExternalAPI.GetSystemMetrics(ExternalAPI.SM_XVIRTUALSCREEN),
-        Top = ExternalAPI.GetSystemMetrics(ExternalAPI.SM_YVIRTUALSCREEN),
-        Right = ExternalAPI.GetSystemMetrics(ExternalAPI.SM_XVIRTUALSCREEN) +
-                ExternalAPI.GetSystemMetrics(ExternalAPI.SM_CXVIRTUALSCREEN),
-        Bottom = ExternalAPI.GetSystemMetrics(ExternalAPI.SM_YVIRTUALSCREEN) +
-                 ExternalAPI.GetSystemMetrics(ExternalAPI.SM_CYVIRTUALSCREEN)
-      };
-    }
-  }
 }
 }

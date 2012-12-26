@@ -129,7 +129,7 @@ public partial class Area : UserControl, IProfileToControl {
     this.UpdateByProfile();
   }
 
-  private void CommonAreaSelect(ExternalAPI.RECT boundScreenRect, WindowTypes nextWindowType) {
+  private void CommonAreaSelect(Rect boundScreenRect, WindowTypes nextWindowType) {
     // ダイアログの準備
     var dialog = new AreaSelectWindow();
     dialog.Left   = App.Profile.CurrentInputLayoutElement.ScreenClippingXWithFit;
@@ -181,23 +181,13 @@ public partial class Area : UserControl, IProfileToControl {
     if (!result.HasValue || !(bool)result) return;
 
     // 結果をRECTにまとめる
-    var nextScreenRect = new ExternalAPI.RECT {
-      Left    = (int)dialog.Left,
-      Top     = (int)dialog.Top,
-      Right   = (int)(dialog.Left + dialog.Width),
-      Bottom  = (int)(dialog.Top + dialog.Height)
-    };
+    var nextScreenRect = new Rect(dialog.Left, dialog.Top, dialog.Width, dialog.Height);
 
     // ウィンドウの領域とIntersectをとる
-    ExternalAPI.RECT intersectScreenRect;
-    var intersectResult = ExternalAPI.IntersectRect(out intersectScreenRect,
-                                                    ref boundScreenRect,
-                                                    ref nextScreenRect);
-    if (!intersectResult) return;
+    if (!nextScreenRect.IntersectsWith(boundScreenRect)) return;
+    nextScreenRect.Intersect(boundScreenRect);
 
     // 結果をProfileに書き込み
-    var intersectWidth = intersectScreenRect.Right - intersectScreenRect.Left;
-    var intersectHeight = intersectScreenRect.Bottom - intersectScreenRect.Top;
 
     switch (nextWindowType) {
       case WindowTypes.Normal: {
@@ -219,13 +209,13 @@ public partial class Area : UserControl, IProfileToControl {
     }
     App.Profile.CurrentOutputLayoutElement.Fit = false;
     App.Profile.CurrentOutputLayoutElement.ClippingXWithoutFit =
-        intersectScreenRect.Left - boundScreenRect.Left;
+        (int)(nextScreenRect.X - boundScreenRect.Left);
     App.Profile.CurrentOutputLayoutElement.ClippingYWithoutFit = 
-        intersectScreenRect.Top - boundScreenRect.Top;
+        (int)(nextScreenRect.Y - boundScreenRect.Top);
     App.Profile.CurrentOutputLayoutElement.ClippingWidthWithoutFit =
-        intersectWidth;
+        (int)nextScreenRect.Width;
     App.Profile.CurrentOutputLayoutElement.ClippingHeightWithoutFit =
-        intersectHeight;
+        (int)nextScreenRect.Height;
     
     // 関連するコントロールの更新
     if (nextWindowType != WindowTypes.Normal) {
@@ -238,16 +228,30 @@ public partial class Area : UserControl, IProfileToControl {
   }
 
   private void AreaSelect_Click(object sender, RoutedEventArgs e) {
-    this.CommonAreaSelect(App.Profile.CurrentInputLayoutElement.ScreenWindowRect,
-                          WindowTypes.Normal);
+    var boundScreenRect = new Rect() {
+      X = App.Profile.CurrentInputLayoutElement.ScreenWindowX,
+      Y = App.Profile.CurrentInputLayoutElement.ScreenWindowY,
+      Width = App.Profile.CurrentInputLayoutElement.WindowWidth,
+      Height = App.Profile.CurrentInputLayoutElement.WindowHeight
+    };
+    this.CommonAreaSelect(boundScreenRect, WindowTypes.Normal);
   }
 
+  /// 仮想ディスプレイのデータをRECT化したプロパティ
+  /// @todo(me) 現在Desktop/DesktopListViewで使い回ししているが、問題が発生する可能性あり
+  private readonly Rect virtualScreenRect = new Rect() {
+    X = ExternalAPI.GetSystemMetrics(ExternalAPI.SM_XVIRTUALSCREEN),
+    Y = ExternalAPI.GetSystemMetrics(ExternalAPI.SM_YVIRTUALSCREEN),
+    Width = ExternalAPI.GetSystemMetrics(ExternalAPI.SM_CXVIRTUALSCREEN),
+    Height = ExternalAPI.GetSystemMetrics(ExternalAPI.SM_CYVIRTUALSCREEN)
+  };
+
   private void ListView_Click(object sender, RoutedEventArgs e) {
-    this.CommonAreaSelect(Utilities.VirtualScreenRect, WindowTypes.DesktopListView);
+    this.CommonAreaSelect(this.virtualScreenRect, WindowTypes.DesktopListView);
   }
 
   private void Desktop_Click(object sender, RoutedEventArgs e) {
-    this.CommonAreaSelect(Utilities.VirtualScreenRect, WindowTypes.Desktop);
+    this.CommonAreaSelect(this.virtualScreenRect, WindowTypes.Desktop);
   }
 
   //-------------------------------------------------------------------

@@ -88,8 +88,8 @@ public class ExternalAPI {
   [DllImport("user32.dll")]
   public static extern int GetSystemMetrics(int nIndex);
 
-  [DllImport("user32.dll")]
-  public static extern bool IntersectRect(out RECT lprcDst, ref RECT lprcSrc1, ref RECT lprcSrc2);
+  //[DllImport("user32.dll")]
+  //public static extern bool IntersectRect(out RECT lprcDst, ref RECT lprcSrc1, ref RECT lprcSrc2);
 
   //-------------------------------------------------------------------
   // gdi32.dll

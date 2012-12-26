@@ -356,17 +356,6 @@ public partial class Profile {
     public int ScreenClippingYWithFit {
       get { return this.GetScreenY(this.ClippingYWithFit); }
     }
-
-    public ExternalAPI.RECT ScreenWindowRect {
-      get {
-        return new ExternalAPI.RECT {
-          Left    = this.ScreenWindowX,
-          Top     = this.ScreenWindowY,
-          Right   = this.ScreenWindowX + this.WindowWidth,
-          Bottom  = this.ScreenWindowY + this.WindowHeight,
-        };
-      }
-    }
   }
 }
 }   // namespace SCFF.Common

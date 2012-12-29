@@ -40,6 +40,7 @@ public partial class LayoutEdit : UserControl, IProfileToControl {
   private const double CaptionMargin = 0.5;
 
   private Pen dummyPen = new Pen(Brushes.DarkOrange, PenThickness);
+  private Rect previewRect = new Rect(0.0, 0.0, MaxImageWidth, MaxImageHeight);
 
   /// コンストラクタ
   public LayoutEdit() {
@@ -48,6 +49,15 @@ public partial class LayoutEdit : UserControl, IProfileToControl {
     this.LayoutEditViewBox.Width = Constants.DummyPreviewWidth;
     this.LayoutEditViewBox.Height = Constants.DummyPreviewHeight;
     RenderOptions.SetBitmapScalingMode(this.DrawingGroup, BitmapScalingMode.LowQuality);
+
+    // Clipping
+    // 重くないか？
+    this.DrawingGroup.ClipGeometry = new RectangleGeometry(this.previewRect);
+    this.DrawingGroup.ClipGeometry.Freeze();
+
+    // 使いまわすリソースはFreezeしておくとパフォーマンスがあがる
+    this.dummyPen.Freeze();
+
     this.DrawTest();
   }
 
@@ -91,7 +101,7 @@ public partial class LayoutEdit : UserControl, IProfileToControl {
   private void DrawTest() {
     using (var dc = this.DrawingGroup.Open()) {
       // 背景描画でサイズを決める
-      dc.DrawRectangle(Brushes.Black, null, new Rect(0,0,MaxImageWidth,MaxImageHeight));
+      dc.DrawRectangle(Brushes.Black, null, this.previewRect);
 
       foreach (var layoutElement in App.Profile) {
         DrawLayout(dc, layoutElement);
@@ -119,12 +129,50 @@ public partial class LayoutEdit : UserControl, IProfileToControl {
   // イベントハンドラ
   //===================================================================
 
+  private const double ResizeHandle = 3;
+
+  private bool moving = false;
+
   private void LayoutEditImage_MouseDown(object sender, MouseButtonEventArgs e) {
     var pt = e.GetPosition((IInputElement)sender);
-    var x = (int)pt.X;
-    var y = (int)pt.Y;
-    Debug.WriteLine("MouseDown: " + x + ", " + y);
-    this.DrawTest();
+    var mousePoint = new Point() {
+      X = pt.X / MaxImageWidth,
+      Y = pt.Y / MaxImageHeight
+    };
+
+    /// @todo(me) 逆順検索のほうが早い
+    int hitIndex = -1;
+    foreach (var layoutElement in App.Profile) {
+      var boundRect = new Rect() {
+        X = layoutElement.BoundRelativeLeft,
+        Y = layoutElement.BoundRelativeTop,
+        Width = layoutElement.BoundRelativeRight - layoutElement.BoundRelativeLeft,
+        Height = layoutElement.BoundRelativeBottom - layoutElement.BoundRelativeTop
+      };
+      if (boundRect.Contains(mousePoint)) {
+        hitIndex = layoutElement.Index;
+      }
+    }
+
+    // 何にもヒットしなかったのでスキップ
+    if (hitIndex == -1) {
+      return;
+    }
+    e.Handled = true;
+
+    // 現在選択中のIndexではない場合はそれに変更して終了
+    if (hitIndex != App.Profile.CurrentInputLayoutElement.Index) {
+      Debug.WriteLine("Change Layout {0:D}: {1:F2}, {2:F2}", hitIndex, mousePoint.X, mousePoint.Y);
+
+      App.Profile.ChangeCurrentIndex(hitIndex);
+      Commands.ChangeCurrentLayoutElementCommand.Execute(null, null);
+
+      this.DrawTest();
+    } else {
+      // 現在選択中なら移動、サイズ変更可能
+      this.moving = true;
+      this.LayoutEditImage.CaptureMouse();
+    }
   }
 
   private void LayoutEditImage_MouseMove(object sender, MouseEventArgs e) {
@@ -132,7 +180,8 @@ public partial class LayoutEdit : UserControl, IProfileToControl {
   }
 
   private void LayoutEditImage_MouseUp(object sender, MouseButtonEventArgs e) {
-
+    e.Handled = true;
+    this.LayoutEditImage.ReleaseMouseCapture();
   }
 }
 }

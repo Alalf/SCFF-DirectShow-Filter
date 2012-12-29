@@ -94,6 +94,16 @@ public partial class LayoutTab : UserControl, IProfileToControl {
     this.AttachChangedEventHandlers();
   }
 
+  /// 現在のタブ選択を変更する(SelectionChangedと同じ動作)
+  /// @todo(me) エンバグしそうな場所。要注意。
+  public void ChangeCurrentTab() {
+    Debug.Assert(0 <= App.Profile.CurrentInputLayoutElement.Index);
+    Debug.Assert(App.Profile.CurrentInputLayoutElement.Index < this.LayoutElementTab.Items.Count);
+    this.DetachChangedEventHandlers();
+    this.LayoutElementTab.SelectedIndex = App.Profile.CurrentInputLayoutElement.Index;
+    this.AttachChangedEventHandlers();
+  }
+
   //===================================================================
   // IProfileToControlの実装
   //===================================================================

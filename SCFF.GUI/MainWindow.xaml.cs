@@ -20,11 +20,12 @@
 
 namespace SCFF.GUI {
 
-using Microsoft.Win32;
-using Microsoft.Windows.Shell;
-using SCFF.Common;
-using System.Windows;
-using System.Windows.Input;
+  using Microsoft.Win32;
+  using Microsoft.Windows.Shell;
+  using SCFF.Common;
+  using System.Diagnostics;
+  using System.Windows;
+  using System.Windows.Input;
 
 /// MainWindowのコードビハインド
 public partial class MainWindow : Window {
@@ -163,6 +164,8 @@ public partial class MainWindow : Window {
   //===================================================================
 
   private void Save_Executed(object sender, ExecutedRoutedEventArgs e) {
+    Debug.WriteLine("Command [Save]:");
+
     /// @todo(me) すでに保存されていない場合はダイアログをだす
     if ((string)this.Tag == "") {
       var save = new SaveFileDialog();
@@ -179,6 +182,8 @@ public partial class MainWindow : Window {
   }
 
   private void New_Executed(object sender, ExecutedRoutedEventArgs e) {
+    Debug.WriteLine("Command [New]:");
+
     var result = MessageBox.Show("Do you want to save changes?",
                                  "SCFF.GUI",
                                  MessageBoxButton.YesNoCancel,
@@ -212,10 +217,14 @@ public partial class MainWindow : Window {
   }
 
   private void Open_Executed(object sender, ExecutedRoutedEventArgs e) {
+    Debug.WriteLine("Command [Open]:");
+
     /// @todo(me) Newと似たコードが必要だがかなりめんどくさい。あとでかく
   }
 
   private void SaveAs_Executed(object sender, ExecutedRoutedEventArgs e) {
+    Debug.WriteLine("Command [SaveAs]:");
+
     var save = new SaveFileDialog();
     save.Title = "SCFF.GUI";
     save.Filter = "SCFF.GUI Profile|*.SCFF.GUI.profile";
@@ -233,18 +242,22 @@ public partial class MainWindow : Window {
   //===================================================================
   
 	private void CloseWindow_Executed(object sender, ExecutedRoutedEventArgs e) {
+    Debug.WriteLine("Command [CloseWindow]:");
 		SystemCommands.CloseWindow(this);
 	}
 
 	private void MaximizeWindow_Executed(object sender, ExecutedRoutedEventArgs e) {
+    Debug.WriteLine("Command [MaximizeWindow]:");
 		SystemCommands.MaximizeWindow(this);
 	}
 
 	private void MinimizeWindow_Executed(object sender, ExecutedRoutedEventArgs e) {
+    Debug.WriteLine("Command [MinimizeWindow]:");
 		SystemCommands.MinimizeWindow(this);
 	}
 
 	private void RestoreWindow_Executed(object sender, ExecutedRoutedEventArgs e) {
+    Debug.WriteLine("Command [RestoreWindow]:");
 		SystemCommands.RestoreWindow(this);
 	}
 
@@ -253,6 +266,7 @@ public partial class MainWindow : Window {
   //===================================================================
 
   private void AddLayoutElement_Executed(object sender, ExecutedRoutedEventArgs e) {
+    Debug.WriteLine("Command [AddLayoutElement]:");
     App.Profile.AddLayoutElement();
     this.LayoutTab.AddTab();
 
@@ -264,6 +278,7 @@ public partial class MainWindow : Window {
   }
 
   private void RemoveLayoutElement_Executed(object sender, ExecutedRoutedEventArgs e) {
+    Debug.WriteLine("Command [RemoveLayoutElement]:");
     App.Profile.RemoveCurrentLayoutElement();
     this.LayoutTab.RemoveCurrentTab();
     
@@ -275,6 +290,9 @@ public partial class MainWindow : Window {
   }
 
   private void ChangeCurrentLayoutElement_Executed(object sender, ExecutedRoutedEventArgs e) {
+    Debug.WriteLine("Command [ChangeCurrentLayoutElement]:");
+    /// @todo(me) 本来UpdateByProfileでやるべき動作が無駄に細分化している。統合するべき。
+    this.LayoutTab.ChangeCurrentTab();
     this.UpdateByProfile();
   }
 

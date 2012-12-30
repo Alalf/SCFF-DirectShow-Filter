@@ -20,14 +20,14 @@
 
 namespace SCFF.GUI.Controls {
 
-  using SCFF.Common;
-  using System;
-  using System.Collections.Generic;
-  using System.Diagnostics;
-  using System.Windows;
-  using System.Windows.Controls;
-  using System.Windows.Input;
-  using System.Windows.Media;
+using SCFF.Common;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media;
 
 /// レイアウトエディタ
 ///
@@ -135,22 +135,13 @@ public partial class LayoutEdit : UserControl, IProfileToControl {
   // イベントハンドラ
   //===================================================================
 
-  public const double MinimumWidth = HitTest.WEBorderThickness * 2;
-  public const double MinimumHeight = HitTest.NSBorderThickness * 2;
+  private Offset offset = null;
 
-  private Point relativeOrigin = new Point();
   private HitModes hitMode = HitModes.Neutral;
 
   private Point GetRelativeMousePoint(IInputElement image, MouseEventArgs e) {
     var mousePoint = e.GetPosition(image);
     return new Point(mousePoint.X / MaxImageWidth, mousePoint.Y / MaxImageHeight);
-  }
-
-  private Point GetRelativeOrigin(Point relativeMousePoint) {
-    return new Point {
-      X = relativeMousePoint.X - App.Profile.CurrentInputLayoutElement.BoundRelativeLeft,
-      Y = relativeMousePoint.Y - App.Profile.CurrentInputLayoutElement.BoundRelativeTop
-    };
   }
 
   /// MouseDownイベントハンドラ 
@@ -179,7 +170,7 @@ public partial class LayoutEdit : UserControl, IProfileToControl {
 
     // マウスを押した場所を記録してマウスキャプチャー開始
     this.hitMode = hitMode;
-    this.relativeOrigin = this.GetRelativeOrigin(relativeMousePoint);
+    this.offset = new Offset(App.Profile.CurrentInputLayoutElement, relativeMousePoint);
     image.CaptureMouse();
 
     this.DrawTest();
@@ -191,46 +182,69 @@ public partial class LayoutEdit : UserControl, IProfileToControl {
     var image = (IInputElement)sender;
     var relativeMousePoint = this.GetRelativeMousePoint(image, e);
 
-    switch (this.hitMode) {
-      case HitModes.Neutral: {
-        // カーソルかえるだけ
-        int hitIndex;
-        HitModes hitMode;
-        HitTest.TryHitTest(relativeMousePoint, out hitIndex, out hitMode);
-        this.Cursor = HitTest.HitModesToCursors[hitMode];
-        break;
-      }
-      case HitModes.Move: {
-        // 移動
-        var nextLeft = relativeMousePoint.X - relativeOrigin.X;
-        var nextTop = relativeMousePoint.Y - relativeOrigin.Y;
-
-        if (nextLeft < 0.0) nextLeft = 0.0;
-        if (nextTop < 0.0) nextTop = 0.0;
-
-        if (nextLeft + MinimumWidth <= App.Profile.CurrentInputLayoutElement.BoundRelativeRight) {
-          // ok
-          App.Profile.CurrentOutputLayoutElement.BoundRelativeLeft = nextLeft;
-        }
-        if (nextTop + MinimumHeight <= App.Profile.CurrentInputLayoutElement.BoundRelativeBottom) {
-          // ok
-          App.Profile.CurrentOutputLayoutElement.BoundRelativeTop = nextTop;
-        }
-      
-        /// @todo(me) 変更をMainWindowに通知
-        Commands.ChangeLayoutParameterCommand.Execute(null, null);
-
-        this.DrawTest();
-        break;
-      }
-    }
-
+    // Neutralのときだけはカーソルを帰るだけ
     if (this.hitMode == HitModes.Neutral) {
-
+      // カーソルかえるだけ
+      int hitIndex;
+      HitModes hitMode;
+      HitTest.TryHitTest(relativeMousePoint, out hitIndex, out hitMode);
+      this.Cursor = HitTest.HitModesToCursors[hitMode];
       return;
-    } else if (this.hitMode == HitModes.Move) {
-      
     }
+
+    // Move/Size*
+    double nextLeft = -1.0;
+    double nextTop = -1.0;
+    double nextRight = -1.0;
+    double nextBottom = -1.0;
+
+    switch (this.hitMode) {
+      case HitModes.Move: {
+        HitTest.Move(App.Profile.CurrentInputLayoutElement,
+                     relativeMousePoint, this.offset,
+                     out nextLeft, out nextTop, out nextRight, out nextBottom);
+        break;
+      }
+      case HitModes.SizeN: {
+        HitTest.SizeN(App.Profile.CurrentInputLayoutElement,
+                      relativeMousePoint, this.offset,
+                      out nextLeft, out nextTop, out nextRight, out nextBottom);
+        break;
+      }
+      case HitModes.SizeW: {
+        HitTest.SizeW(App.Profile.CurrentInputLayoutElement,
+                      relativeMousePoint, this.offset,
+                      out nextLeft, out nextTop, out nextRight, out nextBottom);
+        break;
+      }
+      case HitModes.SizeS: {
+        HitTest.SizeS(App.Profile.CurrentInputLayoutElement,
+                      relativeMousePoint, this.offset,
+                      out nextLeft, out nextTop, out nextRight, out nextBottom);
+        break;
+      }
+      case HitModes.SizeE: {
+        HitTest.SizeE(App.Profile.CurrentInputLayoutElement,
+                      relativeMousePoint, this.offset,
+                      out nextLeft, out nextTop, out nextRight, out nextBottom);
+        break;
+      }
+      default: {
+        //Debug.Fail("LayoutEditImage_MouseMove: Invalid HitModes");
+        return;
+      }
+    }
+
+    // Profileを更新
+    App.Profile.CurrentOutputLayoutElement.BoundRelativeLeft = nextLeft;
+    App.Profile.CurrentOutputLayoutElement.BoundRelativeTop = nextTop;
+    App.Profile.CurrentOutputLayoutElement.BoundRelativeRight = nextRight;
+    App.Profile.CurrentOutputLayoutElement.BoundRelativeBottom = nextBottom;
+      
+    /// @todo(me) 変更をMainWindowに通知
+    Commands.ChangeLayoutParameterCommand.Execute(null, null);
+
+    this.DrawTest();
   }
 
   private void LayoutEditImage_MouseUp(object sender, MouseButtonEventArgs e) {
@@ -238,6 +252,7 @@ public partial class LayoutEdit : UserControl, IProfileToControl {
     if (this.hitMode != HitModes.Neutral) {
       this.LayoutEditImage.ReleaseMouseCapture();
       this.hitMode = HitModes.Neutral;
+      this.DrawTest();
     }
   }
 }

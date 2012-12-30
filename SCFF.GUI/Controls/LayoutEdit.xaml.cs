@@ -21,6 +21,8 @@
 namespace SCFF.GUI.Controls {
 
   using SCFF.Common;
+  using System;
+  using System.Collections.Generic;
   using System.Diagnostics;
   using System.Windows;
   using System.Windows.Controls;
@@ -33,11 +35,14 @@ namespace SCFF.GUI.Controls {
 /// 逆に言うと依存させてはいけない
 public partial class LayoutEdit : UserControl, IProfileToControl {
 
-  private const double MaxImageWidth = 100.0;
-  private const double MaxImageHeight = 100.0;
-  private const double PenThickness = 0.5;
-  private const double CaptionSize = 4.0;
-  private const double CaptionMargin = 0.5;
+  // 1.0のままやると値が小さすぎてフォントがバグるので100倍
+  private const double Scale = 100.0;
+
+  private const double MaxImageWidth = 1.0 * Scale;
+  private const double MaxImageHeight = 1.0 * Scale;
+  private const double PenThickness = 0.005 * Scale;
+  private const double CaptionSize = 0.04 * Scale;
+  private const double CaptionMargin = PenThickness;
 
   private Pen dummyPen = new Pen(Brushes.DarkOrange, PenThickness);
   private Rect previewRect = new Rect(0.0, 0.0, MaxImageWidth, MaxImageHeight);
@@ -129,59 +134,99 @@ public partial class LayoutEdit : UserControl, IProfileToControl {
   // イベントハンドラ
   //===================================================================
 
-  private const double ResizeHandle = 3;
+  public const double MinimumWidth = HitTest.WEBorderThickness * 2;
+  public const double MinimumHeight = HitTest.NSBorderThickness * 2;
 
-  private bool moving = false;
 
+  private Point relativeOrigin = new Point();
+  private HitModes mode = HitModes.Neutral;
+
+  private Point GetRelativeMousePoint(IInputElement image, MouseEventArgs e) {
+    var mousePoint = e.GetPosition(image);
+    return new Point(mousePoint.X / MaxImageWidth, mousePoint.Y / MaxImageHeight);
+  }
+
+  /// MouseDownイベントハンドラ 
+  ///
+  /// セマンティクスがややこしいのでまとめておこう
   private void LayoutEditImage_MouseDown(object sender, MouseButtonEventArgs e) {
-    var pt = e.GetPosition((IInputElement)sender);
-    var mousePoint = new Point() {
-      X = pt.X / MaxImageWidth,
-      Y = pt.Y / MaxImageHeight
-    };
-
-    /// @todo(me) 逆順検索のほうが早い
-    int hitIndex = -1;
-    foreach (var layoutElement in App.Profile) {
-      var boundRect = new Rect() {
-        X = layoutElement.BoundRelativeLeft,
-        Y = layoutElement.BoundRelativeTop,
-        Width = layoutElement.BoundRelativeRight - layoutElement.BoundRelativeLeft,
-        Height = layoutElement.BoundRelativeBottom - layoutElement.BoundRelativeTop
-      };
-      if (boundRect.Contains(mousePoint)) {
-        hitIndex = layoutElement.Index;
-      }
-    }
-
-    // 何にもヒットしなかったのでスキップ
-    if (hitIndex == -1) {
-      return;
-    }
     e.Handled = true;
 
-    // 現在選択中のIndexではない場合はそれに変更して終了
+    // 前処理
+    var image = (IInputElement)sender;
+    var relativeMousePoint = this.GetRelativeMousePoint(image, e);
+
+    // HitTest
+    int hitIndex;
+    HitModes hitMode;
+    if (!HitTest.TryHitTest(relativeMousePoint, out hitIndex, out hitMode)) return;
+
+    // 現在選択中のIndexではない場合はそれに変更する
     if (hitIndex != App.Profile.CurrentInputLayoutElement.Index) {
-      Debug.WriteLine("Change Layout {0:D}: {1:F2}, {2:F2}", hitIndex, mousePoint.X, mousePoint.Y);
+      Debug.WriteLine("*****LayoutEdit: Change Current*****");
+      Debug.WriteLine("{0:D}->{1:D} ({2:F2}, {3:F2})",
+                      App.Profile.CurrentInputLayoutElement.Index,
+                      hitIndex,
+                      relativeMousePoint.X, relativeMousePoint.Y);
 
       App.Profile.ChangeCurrentIndex(hitIndex);
       Commands.ChangeCurrentLayoutElementCommand.Execute(null, null);
-
-      this.DrawTest();
-    } else {
-      // 現在選択中なら移動、サイズ変更可能
-      this.moving = true;
-      this.LayoutEditImage.CaptureMouse();
     }
+
+    // 現在選択中なら移動、サイズ変更可能
+    this.mode = hitMode;
+    this.relativeOrigin.X = relativeMousePoint.X - App.Profile.CurrentInputLayoutElement.BoundRelativeLeft;
+    this.relativeOrigin.Y = relativeMousePoint.Y - App.Profile.CurrentInputLayoutElement.BoundRelativeTop;
+    image.CaptureMouse();
+
+    this.DrawTest();
   }
 
   private void LayoutEditImage_MouseMove(object sender, MouseEventArgs e) {
-      // nop
+    e.Handled = true;
+    var image = (IInputElement)sender;
+    var relativeMousePoint = this.GetRelativeMousePoint(image, e);
+
+    if (this.mode == HitModes.Neutral) {
+      // カーソルかえるだけ
+      int hitIndex;
+      HitModes hitMode;
+      HitTest.TryHitTest(relativeMousePoint, out hitIndex, out hitMode);
+      this.Cursor = HitTest.HitModesToCursors[hitMode];
+      return;
+    } else if (this.mode == HitModes.Move) {
+      // 移動
+      var nextLeft = relativeMousePoint.X - relativeOrigin.X;
+      var nextTop = relativeMousePoint.Y - relativeOrigin.Y;
+
+      if (nextLeft < 0.0) {
+        nextLeft = 0.0;
+      }
+      if (nextTop < 0.0) {
+        nextTop = 0.0;
+      }
+
+      if (nextLeft + MinimumWidth <= App.Profile.CurrentInputLayoutElement.BoundRelativeRight) {
+        // ok
+        App.Profile.CurrentOutputLayoutElement.BoundRelativeLeft = nextLeft;
+      }
+      if (nextTop + MinimumHeight <= App.Profile.CurrentInputLayoutElement.BoundRelativeBottom) {
+        // ok
+        App.Profile.CurrentOutputLayoutElement.BoundRelativeTop = nextTop;
+      }
+      
+      /// @todo(me) 変更をMainWindowに通知
+
+      this.DrawTest();
+    }
   }
 
   private void LayoutEditImage_MouseUp(object sender, MouseButtonEventArgs e) {
     e.Handled = true;
-    this.LayoutEditImage.ReleaseMouseCapture();
+    if (this.mode != HitModes.Neutral) {
+      this.LayoutEditImage.ReleaseMouseCapture();
+      this.mode = HitModes.Neutral;
+    }
   }
 }
 }

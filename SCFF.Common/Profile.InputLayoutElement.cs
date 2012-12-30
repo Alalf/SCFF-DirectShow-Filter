@@ -162,13 +162,6 @@ public partial class Profile {
       get { return this.profile.additionalLayoutParameters[this.Index].WindowType; }
     }
 
-    public int BoundWidth(int sampleWidth) {
-      return this.BoundRight(sampleWidth) - this.BoundLeft(sampleWidth);
-    }
-    public int BoundHeight(int sampleHeight) {
-      return this.BoundBottom(sampleHeight) - this.BoundTop(sampleHeight);
-    }
-
     public string WindowCaption {
       get {
         switch (this.WindowType) {
@@ -239,6 +232,21 @@ public partial class Profile {
           }
         }
       }
+    }
+
+    // bound
+    public double BoundRelativeWidth {
+      get { return this.BoundRelativeRight - this.BoundRelativeLeft; }
+    }
+    public double BoundRelativeHeight {
+      get { return this.BoundRelativeBottom - this.BoundRelativeTop; }
+    }
+
+    public int BoundWidth(int sampleWidth) {
+      return this.BoundRight(sampleWidth) - this.BoundLeft(sampleWidth);
+    }
+    public int BoundHeight(int sampleHeight) {
+      return this.BoundBottom(sampleHeight) - this.BoundTop(sampleHeight);
     }
 
     // clipping*WithFit {

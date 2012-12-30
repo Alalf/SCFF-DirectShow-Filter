@@ -44,7 +44,7 @@ public partial class Area : UserControl, IProfileToControl {
     //<Grid x:Name="WindowGrid" Background="#99FF8000">
 
     // AreaSelectWindow用のブラシの生成
-    var normalGridColor = new Color() {
+    var normalGridColor = new Color {
       A = 0x99, R = 0xFF, G = 0x80, B = 0x00
     };
     this.normalGridBrush = new SolidColorBrush(normalGridColor);
@@ -228,7 +228,7 @@ public partial class Area : UserControl, IProfileToControl {
   }
 
   private void AreaSelect_Click(object sender, RoutedEventArgs e) {
-    var boundScreenRect = new Rect() {
+    var boundScreenRect = new Rect {
       X = App.Profile.CurrentInputLayoutElement.ScreenWindowX,
       Y = App.Profile.CurrentInputLayoutElement.ScreenWindowY,
       Width = App.Profile.CurrentInputLayoutElement.WindowWidth,
@@ -239,7 +239,7 @@ public partial class Area : UserControl, IProfileToControl {
 
   /// 仮想ディスプレイのデータをRECT化したプロパティ
   /// @todo(me) 現在Desktop/DesktopListViewで使い回ししているが、問題が発生する可能性あり
-  private readonly Rect virtualScreenRect = new Rect() {
+  private readonly Rect virtualScreenRect = new Rect {
     X = ExternalAPI.GetSystemMetrics(ExternalAPI.SM_XVIRTUALSCREEN),
     Y = ExternalAPI.GetSystemMetrics(ExternalAPI.SM_YVIRTUALSCREEN),
     Width = ExternalAPI.GetSystemMetrics(ExternalAPI.SM_CXVIRTUALSCREEN),

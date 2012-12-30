@@ -155,7 +155,7 @@ public static class HitTest {
 
   /// ヒットテスト
   public static bool TryHitTest(Point mouseRelativePoint, out int hitIndex, out HitModes hitMode) {
-    // 計算途中の結果をまとめるリスト
+    // 計算途中の結果をまとめるスタック
     var moveStack = new Stack<Profile.InputLayoutElement>();
     var resizeStack = new Stack<Profile.InputLayoutElement>();
 

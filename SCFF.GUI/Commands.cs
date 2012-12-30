@@ -26,5 +26,7 @@ public static class Commands {
   public readonly static RoutedCommand ChangeCurrentLayoutElementCommand = new RoutedCommand();
 
   public readonly static RoutedCommand ChangeTargetWindowCommand = new RoutedCommand();
+
+  public readonly static RoutedCommand ChangeLayoutParameterCommand = new RoutedCommand();
 }
 }

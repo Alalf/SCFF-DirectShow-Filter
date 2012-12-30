@@ -268,8 +268,9 @@ public partial class MainWindow : Window {
   private void AddLayoutElement_Executed(object sender, ExecutedRoutedEventArgs e) {
     Debug.WriteLine("Command [AddLayoutElement]:");
     App.Profile.AddLayoutElement();
+    
     this.LayoutTab.AddTab();
-
+    this.LayoutEdit.UpdateByProfile();
     this.UpdateByProfile();
   }
 
@@ -280,8 +281,9 @@ public partial class MainWindow : Window {
   private void RemoveLayoutElement_Executed(object sender, ExecutedRoutedEventArgs e) {
     Debug.WriteLine("Command [RemoveLayoutElement]:");
     App.Profile.RemoveCurrentLayoutElement();
+
     this.LayoutTab.RemoveCurrentTab();
-    
+    this.LayoutEdit.UpdateByProfile();
     this.UpdateByProfile();
   }
 
@@ -291,8 +293,10 @@ public partial class MainWindow : Window {
 
   private void ChangeCurrentLayoutElement_Executed(object sender, ExecutedRoutedEventArgs e) {
     Debug.WriteLine("Command [ChangeCurrentLayoutElement]:");
+
     /// @todo(me) 本来UpdateByProfileでやるべき動作が無駄に細分化している。統合するべき。
     this.LayoutTab.ChangeCurrentTab();
+    this.LayoutEdit.UpdateByProfile();
     this.UpdateByProfile();
   }
 
@@ -305,6 +309,11 @@ public partial class MainWindow : Window {
     // Area
     this.Area.UpdateByProfile();
 
+    // Layout
+    this.LayoutParameter.UpdateByProfile();
+  }
+
+  private void ChangeLayoutParameter_Executed(object sender, ExecutedRoutedEventArgs e) {
     // Layout
     this.LayoutParameter.UpdateByProfile();
   }
@@ -348,6 +357,7 @@ public partial class MainWindow : Window {
     if (!this.LayoutPreview.IsChecked.HasValue) return;
 
     App.Options.LayoutPreview = (bool)this.LayoutPreview.IsChecked;
+    this.LayoutEdit.UpdateByProfile();
   }
 
   private void layoutSnap_Click(object sender, RoutedEventArgs e) {
@@ -360,6 +370,7 @@ public partial class MainWindow : Window {
     if (!this.LayoutBorder.IsChecked.HasValue) return;
 
     App.Options.LayoutBorder = (bool)this.LayoutBorder.IsChecked;
+    this.LayoutEdit.UpdateByProfile();
   }
 }
 }

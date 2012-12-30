@@ -39,6 +39,8 @@
                     Executed="ChangeCurrentLayoutElement_Executed" />
     <CommandBinding Command="{x:Static local:Commands.ChangeTargetWindowCommand}"
                     Executed="ChangeTargetWindow_Executed" />
+    <CommandBinding Command="{x:Static local:Commands.ChangeLayoutParameterCommand}"
+                    Executed="ChangeLayoutParameter_Executed" />
   </Window.CommandBindings>
   <shell:WindowChrome.WindowChrome>
     <shell:WindowChrome CaptionHeight="{x:Static SystemParameters.CaptionHeight}"

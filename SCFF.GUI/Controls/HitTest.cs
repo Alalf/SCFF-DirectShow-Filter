@@ -20,11 +20,12 @@
 
 namespace SCFF.GUI.Controls {
 
-using SCFF.Common;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Windows;
-using System.Windows.Input;
+  using SCFF.Common;
+  using System;
+  using System.Collections.Generic;
+  using System.Diagnostics;
+  using System.Windows;
+  using System.Windows.Input;
 
 /// ヒットテストの結果をまとめた列挙型
 ///
@@ -109,8 +110,8 @@ public static class HitTest {
     return new Rect {
       X = layoutElement.BoundRelativeLeft + WEBorderThickness,
       Y = layoutElement.BoundRelativeTop + NSBorderThickness,
-      Width = layoutElement.BoundRelativeWidth - WEBorderThickness * 2,
-      Height = layoutElement.BoundRelativeHeight - NSBorderThickness * 2
+      Width = Math.Max(layoutElement.BoundRelativeWidth - WEBorderThickness * 2, 0.0),
+      Height = Math.Max(layoutElement.BoundRelativeHeight - NSBorderThickness * 2, 0.0)
     };
   }
 
@@ -242,84 +243,69 @@ public static class HitTest {
     nextBottom = tryNextBottom;
   }
 
-  /// SizeN
-  public static void SizeN(Profile.InputLayoutElement layoutElement,
+  /// Size
+  public static void Size(Profile.InputLayoutElement layoutElement,
+      HitModes hitMode,
       Point point, Offset offset,
       out double nextLeft, out double nextTop,
       out double nextRight, out double nextBottom) {
-    // Top以外は固定
+    // 初期値
     nextLeft = layoutElement.BoundRelativeLeft;
-    nextRight = layoutElement.BoundRelativeRight;
-    nextBottom = layoutElement.BoundRelativeBottom;
-
-    // Top
-    // 領域外に出ないように
-    var tryNextTop = point.Y - offset.Top;
-    if (tryNextTop < 0.0) tryNextTop = 0.0;
-    var upperBound = nextBottom - MinimumHeight;
-    if (tryNextTop > upperBound) tryNextTop = upperBound;
-
-    nextTop = tryNextTop;
-  }
-
-  /// SizeW
-  public static void SizeW(Profile.InputLayoutElement layoutElement,
-      Point point, Offset offset,
-      out double nextLeft, out double nextTop,
-      out double nextRight, out double nextBottom) {
-    // Left以外は固定
     nextTop = layoutElement.BoundRelativeTop;
     nextRight = layoutElement.BoundRelativeRight;
     nextBottom = layoutElement.BoundRelativeBottom;
 
-    // Left
-    // 領域外に出ないように
-    var tryNextLeft = point.X - offset.Left;
-    if (tryNextLeft < 0.0) tryNextLeft = 0.0;
-    var upperBound = nextRight - MinimumWidth;
-    if (tryNextLeft > upperBound) tryNextLeft = upperBound;
+    // Top/Bottom
+    switch (hitMode) {
+      case HitModes.SizeN:
+      case HitModes.SizeNW:
+      case HitModes.SizeNE: {
+        // Top
+        var tryNextTop = point.Y - offset.Top;
+        if (tryNextTop < 0.0) tryNextTop = 0.0;
+        var topUpperBound = nextBottom - MinimumHeight;
+        if (tryNextTop > topUpperBound) tryNextTop = topUpperBound;
+        nextTop = tryNextTop;
+        break;
+      }
+      case HitModes.SizeS:
+      case HitModes.SizeSW:
+      case HitModes.SizeSE: {
+        // Bottom
+        var tryNextBottom = point.Y - offset.Bottom;
+        if (tryNextBottom > 1.0) tryNextBottom = 1.0;
+        var bottomLowerBound = nextTop + MinimumHeight;
+        if (tryNextBottom < bottomLowerBound) tryNextBottom = bottomLowerBound;
+        nextBottom = tryNextBottom;
+        break;
+      }
+    }
 
-    nextLeft = tryNextLeft;
-  }
-
-  /// SizeS
-  public static void SizeS(Profile.InputLayoutElement layoutElement,
-      Point point, Offset offset,
-      out double nextLeft, out double nextTop,
-      out double nextRight, out double nextBottom) {
-    // Bottom以外は固定
-    nextTop = layoutElement.BoundRelativeTop;
-    nextLeft = layoutElement.BoundRelativeLeft;
-    nextRight = layoutElement.BoundRelativeRight;
-
-    // Bottom
-    // 領域外に出ないように
-    var tryNextBottom = point.Y - offset.Bottom;
-    if (tryNextBottom > 1.0) tryNextBottom = 1.0;
-    var lowerBound = nextTop + MinimumHeight;
-    if (tryNextBottom < lowerBound) tryNextBottom = lowerBound;
-
-    nextBottom = tryNextBottom;
-  }
-
-  /// SizeE
-  public static void SizeE(Profile.InputLayoutElement layoutElement,
-      Point point, Offset offset,
-      out double nextLeft, out double nextTop,
-      out double nextRight, out double nextBottom) {
-    // Right以外は固定
-    nextTop = layoutElement.BoundRelativeTop;
-    nextLeft = layoutElement.BoundRelativeLeft;
-    nextBottom = layoutElement.BoundRelativeBottom;
-
-    // Right
-    // 領域外に出ないように
-    var tryNextRight = point.X - offset.Right;
-    if (tryNextRight > 1.0) tryNextRight = 1.0;
-    var lowerBound = nextLeft + MinimumWidth;
-    if (tryNextRight < lowerBound) tryNextRight = lowerBound;
-
-    nextRight = tryNextRight;
+    // Left/Right
+    switch (hitMode) {
+      case HitModes.SizeNW:
+      case HitModes.SizeW:
+      case HitModes.SizeSW: {
+        // Left
+        var tryNextLeft = point.X - offset.Left;
+        if (tryNextLeft < 0.0) tryNextLeft = 0.0;
+        var leftUpperBound = nextRight - MinimumWidth;
+        if (tryNextLeft > leftUpperBound) tryNextLeft = leftUpperBound;
+        nextLeft = tryNextLeft;
+        break;
+      }
+      case HitModes.SizeNE:
+      case HitModes.SizeE:
+      case HitModes.SizeSE: {
+        // Right
+        var tryNextRight = point.X - offset.Right;
+        if (tryNextRight > 1.0) tryNextRight = 1.0;
+        var rightLowerBound = nextLeft + MinimumWidth;
+        if (tryNextRight < rightLowerBound) tryNextRight = rightLowerBound;
+        nextRight = tryNextRight;
+        break;
+      }
+    }
   }
 }
 }   // namespace SCFF.GUI.Controls

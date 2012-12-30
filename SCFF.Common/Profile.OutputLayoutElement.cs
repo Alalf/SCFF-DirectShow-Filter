@@ -127,14 +127,24 @@ public partial class Profile {
     public void SetWindow(UIntPtr window) {
       this.profile.additionalLayoutParameters[this.Index].WindowType = WindowTypes.Normal;
       this.profile.message.LayoutParameters[this.Index].Window = window.ToUInt64();
+
+      var windowCaption = "*** INVALID WINDOW ***";
+      if (window != UIntPtr.Zero && ExternalAPI.IsWindow(window)) {
+        StringBuilder className = new StringBuilder(256);
+        ExternalAPI.GetClassName(window, className, 256);
+        windowCaption = className.ToString();
+      }
+      this.profile.additionalLayoutParameters[this.Index].WindowCaption = windowCaption;
     }
     public void SetWindowToDesktop() {
       this.profile.additionalLayoutParameters[this.Index].WindowType = WindowTypes.Desktop;
       this.profile.message.LayoutParameters[this.Index].Window = 0;
+      this.profile.additionalLayoutParameters[this.Index].WindowCaption = "(Desktop)";
     }
     public void SetWindowToDesktopListView() {
       this.profile.additionalLayoutParameters[this.Index].WindowType = WindowTypes.DesktopListView;
       this.profile.message.LayoutParameters[this.Index].Window = 0;
+      this.profile.additionalLayoutParameters[this.Index].WindowCaption = "(DesktopListView)";
     }
   }
 }

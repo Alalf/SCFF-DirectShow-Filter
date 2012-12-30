@@ -80,7 +80,7 @@ public partial class LayoutEdit : UserControl, IProfileToControl {
     /// @todo(me) ピクセル単位の幅と高さの出力
     var layoutElementCaption = (layoutElement.Index+1).ToString() +
         ": " + layoutElement.WindowCaption;
-
+  
     return new FormattedText(layoutElementCaption,
       System.Globalization.CultureInfo.CurrentUICulture,
       FlowDirection.LeftToRight,
@@ -97,6 +97,8 @@ public partial class LayoutEdit : UserControl, IProfileToControl {
 
       // キャプションの描画
       var layoutElementCaption = this.CreateLayoutElementCaption(layoutElement);
+      layoutElementCaption.MaxTextWidth = layoutElement.BoundRelativeWidth * Scale;
+      layoutElementCaption.MaxLineCount = 1;
       var captionPoint = new Point(layoutElementRect.X + CaptionMargin, layoutElementRect.Y + CaptionMargin);
       dc.DrawText(layoutElementCaption, captionPoint);
     }
@@ -135,10 +137,14 @@ public partial class LayoutEdit : UserControl, IProfileToControl {
   // イベントハンドラ
   //===================================================================
 
-  private Offset offset = null;
+  // 状態変数
 
+  /// マウスポインタとLeft/Right/Top/BottomのOffset
+  private Offset offset = null;
+  /// ヒットテストの結果
   private HitModes hitMode = HitModes.Neutral;
 
+  /// マウスポインタを(0.0-1.0, 0.0-1.0)に変換
   private Point GetRelativeMousePoint(IInputElement image, MouseEventArgs e) {
     var mousePoint = e.GetPosition(image);
     return new Point(mousePoint.X / MaxImageWidth, mousePoint.Y / MaxImageHeight);
@@ -176,6 +182,7 @@ public partial class LayoutEdit : UserControl, IProfileToControl {
     this.DrawTest();
   }
 
+  /// MouseMoveイベントハンドラ
   private void LayoutEditImage_MouseMove(object sender, MouseEventArgs e) {
     // 前処理
     e.Handled = true;
@@ -198,41 +205,16 @@ public partial class LayoutEdit : UserControl, IProfileToControl {
     double nextRight = -1.0;
     double nextBottom = -1.0;
 
-    switch (this.hitMode) {
-      case HitModes.Move: {
-        HitTest.Move(App.Profile.CurrentInputLayoutElement,
-                     relativeMousePoint, this.offset,
-                     out nextLeft, out nextTop, out nextRight, out nextBottom);
-        break;
-      }
-      case HitModes.SizeN: {
-        HitTest.SizeN(App.Profile.CurrentInputLayoutElement,
-                      relativeMousePoint, this.offset,
-                      out nextLeft, out nextTop, out nextRight, out nextBottom);
-        break;
-      }
-      case HitModes.SizeW: {
-        HitTest.SizeW(App.Profile.CurrentInputLayoutElement,
-                      relativeMousePoint, this.offset,
-                      out nextLeft, out nextTop, out nextRight, out nextBottom);
-        break;
-      }
-      case HitModes.SizeS: {
-        HitTest.SizeS(App.Profile.CurrentInputLayoutElement,
-                      relativeMousePoint, this.offset,
-                      out nextLeft, out nextTop, out nextRight, out nextBottom);
-        break;
-      }
-      case HitModes.SizeE: {
-        HitTest.SizeE(App.Profile.CurrentInputLayoutElement,
-                      relativeMousePoint, this.offset,
-                      out nextLeft, out nextTop, out nextRight, out nextBottom);
-        break;
-      }
-      default: {
-        //Debug.Fail("LayoutEditImage_MouseMove: Invalid HitModes");
-        return;
-      }
+    if (this.hitMode == HitModes.Move) {
+      // Move
+      HitTest.Move(App.Profile.CurrentInputLayoutElement,
+                    relativeMousePoint, this.offset,
+                    out nextLeft, out nextTop, out nextRight, out nextBottom);
+    } else {
+      // Size*
+      HitTest.Size(App.Profile.CurrentInputLayoutElement,
+                   this.hitMode, relativeMousePoint, this.offset,
+                   out nextLeft, out nextTop, out nextRight, out nextBottom);
     }
 
     // Profileを更新
@@ -247,6 +229,7 @@ public partial class LayoutEdit : UserControl, IProfileToControl {
     this.DrawTest();
   }
 
+  /// MouseUpイベントハンドラ
   private void LayoutEditImage_MouseUp(object sender, MouseButtonEventArgs e) {
     e.Handled = true;
     if (this.hitMode != HitModes.Neutral) {

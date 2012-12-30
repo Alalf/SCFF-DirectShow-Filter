@@ -163,28 +163,7 @@ public partial class Profile {
     }
 
     public string WindowCaption {
-      get {
-        switch (this.WindowType) {
-          case WindowTypes.Normal: {
-            if (this.Window == UIntPtr.Zero || !ExternalAPI.IsWindow(this.Window)) {
-              return "*** INVALID WINDOW ***";
-            }
-            StringBuilder className = new StringBuilder(256);
-            ExternalAPI.GetClassName(this.Window, className, 256);
-            return className.ToString();
-          }
-          case WindowTypes.DesktopListView: {
-            return "(DesktopListView)";
-          }
-          case WindowTypes.Desktop: {
-            return "(Desktop)";
-          }
-          default: {
-            Debug.Fail("WindowCaption: Unknown Type");
-            return "*** UNKNOWN TYPE WINDOW ***";
-          }
-        }
-      }
+      get { return this.profile.additionalLayoutParameters[this.Index].WindowCaption; }
     }
 
     public int WindowWidth {

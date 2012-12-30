@@ -27,6 +27,8 @@ using System.Collections.Generic;
 /// 追加レイアウトパラメータ
 public class AdditionalLayoutParameter {
   public WindowTypes WindowType { get; set; }
+  public string WindowCaption { get; set; }
+
   public bool Fit { get; set; }
   public double BoundRelativeLeft { get; set; }
   public double BoundRelativeTop { get; set; }
@@ -42,6 +44,7 @@ public class AdditionalLayoutParameter {
   public int BackupDesktopClippingY { get; set; }
   public int BackupDesktopClippingWidth { get; set; }
   public int BackupDesktopClippingHeight { get; set; }
+
 }
 
 /// レイアウト設定などをまとめたプロファイル

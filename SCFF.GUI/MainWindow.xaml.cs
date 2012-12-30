@@ -265,9 +265,15 @@ public partial class MainWindow : Window {
   // SCFF.GUI.Commandsハンドラ
   //===================================================================
 
+  private const double boundOffset = 0.05;
+
   private void AddLayoutElement_Executed(object sender, ExecutedRoutedEventArgs e) {
     Debug.WriteLine("Command [AddLayoutElement]:");
     App.Profile.AddLayoutElement();
+    App.Profile.CurrentOutputLayoutElement.BoundRelativeLeft =
+      boundOffset * App.Profile.CurrentInputLayoutElement.Index;
+    App.Profile.CurrentOutputLayoutElement.BoundRelativeTop =
+      boundOffset * App.Profile.CurrentInputLayoutElement.Index;
     
     this.LayoutTab.AddTab();
     this.LayoutEdit.UpdateByProfile();

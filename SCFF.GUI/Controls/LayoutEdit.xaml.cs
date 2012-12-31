@@ -137,19 +137,36 @@ public partial class LayoutEdit : UserControl, IProfileToControl {
   // イベントハンドラ
   //===================================================================
 
+  // 定数
+
+  /// カーソルをまとめたディクショナリ
+  public readonly Dictionary<Common.GUI.HitModes, Cursor> hitModesToCursors =
+      new Dictionary<Common.GUI.HitModes,Cursor> {
+    {Common.GUI.HitModes.Neutral, null},
+    {Common.GUI.HitModes.Move, Cursors.SizeAll},
+    {Common.GUI.HitModes.SizeNW, Cursors.SizeNWSE},
+    {Common.GUI.HitModes.SizeNE, Cursors.SizeNESW},
+    {Common.GUI.HitModes.SizeSW, Cursors.SizeNESW},
+    {Common.GUI.HitModes.SizeSE, Cursors.SizeNWSE},
+    {Common.GUI.HitModes.SizeN, Cursors.SizeNS},
+    {Common.GUI.HitModes.SizeW, Cursors.SizeWE},
+    {Common.GUI.HitModes.SizeS, Cursors.SizeNS},
+    {Common.GUI.HitModes.SizeE, Cursors.SizeWE}
+  };
+
   // 状態変数
 
   /// マウスポインタとLeft/Right/Top/BottomのOffset
-  private Offset offset = null;
+  private Common.GUI.RelativeMouseOffset relativeMouseOffset = null;
   /// スナップガイド
-  private SnapGuide snapGuide = null;
+  private Common.GUI.SnapGuide snapGuide = null;
   /// ヒットテストの結果
-  private HitModes hitMode = HitModes.Neutral;
+  private Common.GUI.HitModes hitMode = Common.GUI.HitModes.Neutral;
 
-  /// マウスポインタを(0.0-1.0, 0.0-1.0)に変換
-  private Point GetRelativeMousePoint(IInputElement image, MouseEventArgs e) {
+  /// マウスポインタを(0.0-1.0, 0.0-1.0)のCommon.GUI.Pointに変換
+  private Common.GUI.Point GetRelativeMousePoint(IInputElement image, MouseEventArgs e) {
     var mousePoint = e.GetPosition(image);
-    return new Point(mousePoint.X / MaxImageWidth, mousePoint.Y / MaxImageHeight);
+    return new Common.GUI.Point(mousePoint.X / MaxImageWidth, mousePoint.Y / MaxImageHeight);
   }
 
   /// MouseDownイベントハンドラ 
@@ -161,8 +178,8 @@ public partial class LayoutEdit : UserControl, IProfileToControl {
 
     // HitTest
     int hitIndex;
-    HitModes hitMode;
-    if (!HitTest.TryHitTest(relativeMousePoint, out hitIndex, out hitMode)) return;
+    Common.GUI.HitModes hitMode;
+    if (!Common.GUI.HitTest.TryHitTest(App.Profile, relativeMousePoint, out hitIndex, out hitMode)) return;
 
     // 現在選択中のIndexではない場合はそれに変更する
     if (hitIndex != App.Profile.CurrentInputLayoutElement.Index) {
@@ -178,8 +195,8 @@ public partial class LayoutEdit : UserControl, IProfileToControl {
 
     // マウスを押した場所を記録してマウスキャプチャー開始
     this.hitMode = hitMode;
-    this.offset = new Offset(App.Profile.CurrentInputLayoutElement, relativeMousePoint);
-    this.snapGuide = new SnapGuide(App.Profile, App.Options.LayoutSnap);
+    this.relativeMouseOffset = new Common.GUI.RelativeMouseOffset(App.Profile.CurrentInputLayoutElement, relativeMousePoint);
+    this.snapGuide = new Common.GUI.SnapGuide(App.Profile, App.Options.LayoutSnap);
     image.CaptureMouse();
 
     this.DrawTest();
@@ -193,12 +210,12 @@ public partial class LayoutEdit : UserControl, IProfileToControl {
     var relativeMousePoint = this.GetRelativeMousePoint(image, e);
 
     // Neutralのときだけはカーソルを帰るだけ
-    if (this.hitMode == HitModes.Neutral) {
+    if (this.hitMode == Common.GUI.HitModes.Neutral) {
       // カーソルかえるだけ
       int hitIndex;
-      HitModes hitMode;
-      HitTest.TryHitTest(relativeMousePoint, out hitIndex, out hitMode);
-      this.Cursor = HitTest.HitModesToCursors[hitMode];
+      Common.GUI.HitModes hitMode;
+      Common.GUI.HitTest.TryHitTest(App.Profile, relativeMousePoint, out hitIndex, out hitMode);
+      this.Cursor = this.hitModesToCursors[hitMode];
       return;
     }
 
@@ -208,16 +225,16 @@ public partial class LayoutEdit : UserControl, IProfileToControl {
     double nextRight = -1.0;
     double nextBottom = -1.0;
 
-    if (this.hitMode == HitModes.Move) {
+    if (this.hitMode == Common.GUI.HitModes.Move) {
       // Move
-      HitTest.Move(App.Profile.CurrentInputLayoutElement,
-                    relativeMousePoint, this.offset, this.snapGuide,
-                    out nextLeft, out nextTop, out nextRight, out nextBottom);
+      Common.GUI.MoveAndSize.Move(App.Profile.CurrentInputLayoutElement,
+          relativeMousePoint, this.relativeMouseOffset, this.snapGuide,
+          out nextLeft, out nextTop, out nextRight, out nextBottom);
     } else {
       // Size*
-      HitTest.Size(App.Profile.CurrentInputLayoutElement,
-                   this.hitMode, relativeMousePoint, this.offset, this.snapGuide,
-                   out nextLeft, out nextTop, out nextRight, out nextBottom);
+      Common.GUI.MoveAndSize.Size(App.Profile.CurrentInputLayoutElement,
+          this.hitMode, relativeMousePoint, this.relativeMouseOffset, this.snapGuide,
+          out nextLeft, out nextTop, out nextRight, out nextBottom);
     }
 
     // Profileを更新
@@ -235,9 +252,9 @@ public partial class LayoutEdit : UserControl, IProfileToControl {
   /// MouseUpイベントハンドラ
   private void LayoutEditImage_MouseUp(object sender, MouseButtonEventArgs e) {
     e.Handled = true;
-    if (this.hitMode != HitModes.Neutral) {
+    if (this.hitMode != Common.GUI.HitModes.Neutral) {
       this.LayoutEditImage.ReleaseMouseCapture();
-      this.hitMode = HitModes.Neutral;
+      this.hitMode = Common.GUI.HitModes.Neutral;
       this.DrawTest();
     }
   }

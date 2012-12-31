@@ -16,65 +16,13 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file SCFF.Common/Constants.cs
-/// SCFF.Commonモジュールで利用する定数・テーブル
+/// SCFF.Commonモジュールで利用する定数
 
 namespace SCFF.Common {
 
 using System.Collections.Generic;
 
-//=====================================================================
-// Enum
-//=====================================================================
-
-/// Options用WindowState。System.Windows.WindowStateと相互に変換する。
-public enum WindowState {
-  Normal,
-  Minimized,
-  Maximized
-}
-
-/// Profile用Windowの種類
-public enum WindowTypes {
-  Normal,
-  DesktopListView,
-  Desktop,
-}
-
-/// @copydoc SCFF.Interprocess.LayoutTypes
-public enum LayoutTypes {
-  NullLayout    = Interprocess.LayoutTypes.NullLayout,
-  NativeLayout  = Interprocess.LayoutTypes.NativeLayout,
-  ComplexLayout = Interprocess.LayoutTypes.ComplexLayout
-}
-
-/// @copydoc SCFF.Interprocess.SWScaleFlags
-public enum SWScaleFlags {
-  FastBilinear  = Interprocess.SWScaleFlags.FastBilinear,
-  Bilinear      = Interprocess.SWScaleFlags.Bilinear,
-  Bicubic       = Interprocess.SWScaleFlags.Bicubic,
-  X             = Interprocess.SWScaleFlags.X,
-  Point         = Interprocess.SWScaleFlags.Point,
-  Area          = Interprocess.SWScaleFlags.Area,
-  Bicublin      = Interprocess.SWScaleFlags.Bicublin,
-  Gauss         = Interprocess.SWScaleFlags.Gauss,
-  Sinc          = Interprocess.SWScaleFlags.Sinc,
-  Lanczos       = Interprocess.SWScaleFlags.Lanczos,
-  Spline        = Interprocess.SWScaleFlags.Spline
-}
-
-/// @copydoc SCFF.Interprocess.RotateDirections
-public enum RotateDirections {
-  NoRotate      = Interprocess.RotateDirections.NoRotate,
-  Degrees90     = Interprocess.RotateDirections.Degrees90,
-  Degrees180    = Interprocess.RotateDirections.Degrees180,
-  Degrees270    = Interprocess.RotateDirections.Degrees270,
-}
-
-//=====================================================================
-// staticクラス
-//=====================================================================
-
-/// SCFF.Commonモジュールが外部に公開するテーブルと定数
+/// SCFF.Commonモジュールで利用する定数
 public static class Constants {
   public const int MaxLayoutElementCount = Interprocess.Interprocess.MaxComplexLayoutElements;
 

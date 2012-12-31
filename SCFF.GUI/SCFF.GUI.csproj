@@ -119,7 +119,6 @@
     <Compile Include="Controls\Area.xaml.cs">
       <DependentUpon>Area.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\HitTest.cs" />
     <Compile Include="Controls\IProfileToControl.cs" />
     <Compile Include="Controls\LayoutParameter.xaml.cs">
       <DependentUpon>LayoutParameter.xaml</DependentUpon>

@@ -177,8 +177,8 @@ public static class HitTest {
     return new Rect {
       X = layoutElement.BoundRelativeLeft - WEBorderThickness,
       Y = layoutElement.BoundRelativeTop - NSBorderThickness,
-      Width = layoutElement.BoundRelativeWidth + WEBorderThickness * 4,
-      Height = layoutElement.BoundRelativeHeight + NSBorderThickness * 4
+      Width = layoutElement.BoundRelativeWidth + WEBorderThickness * 2,
+      Height = layoutElement.BoundRelativeHeight + NSBorderThickness * 2
     };
   }
 
@@ -254,7 +254,7 @@ public static class HitTest {
   public static bool TryHitTest(Point point, out int hitIndex, out HitModes hitMode) {
     // 計算途中の結果をまとめるスタック
     var moveStack = new Stack<Profile.InputLayoutElement>();
-    var resizeStack = new Stack<Profile.InputLayoutElement>();
+    var sizeStack = new Stack<Profile.InputLayoutElement>();
 
     // レイアウト要素を線形探索
     foreach (var layoutElement in App.Profile) {
@@ -268,12 +268,12 @@ public static class HitTest {
         moveStack.Push(layoutElement);
       } else {
         // 最大外接矩形に入っていて、移動用領域でないということはサイズ変更用領域に入ってる
-        resizeStack.Push(layoutElement);
+        sizeStack.Push(layoutElement);
       }
     }
    
-    // resizeStack優先
-    foreach (var layoutElement in resizeStack) {
+    // sizeStack優先
+    foreach (var layoutElement in sizeStack) {
       // 見つかり次第終了
       hitMode = HitTest.GetHitMode(layoutElement, point);
       hitIndex = layoutElement.Index;
@@ -294,8 +294,6 @@ public static class HitTest {
   }
 
   /// Move
-  ///
-  /// @todo(me) MoveのSnapは結構難しいのであとでやろう
   public static void Move(Profile.InputLayoutElement layoutElement,
       Point point, Offset offset, SnapGuide snapGuide,
       out double nextLeft, out double nextTop,

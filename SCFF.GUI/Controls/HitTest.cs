@@ -58,6 +58,83 @@ public class Offset {
   public double Bottom { get; private set; }
 }
 
+/// レイアウト用スナップガイド
+public class SnapGuide {
+  private const double WESnapBorderThickness = 0.02;
+  private const double NSSnapBorderThickness = 0.02;
+
+  public SnapGuide(Profile profile, bool isEnabled) {
+    this.IsEnabled = isEnabled;
+    if (!this.IsEnabled) return;
+
+    var currentIndex = profile.CurrentInputLayoutElement.Index;
+    foreach (var layoutElement in profile) {
+      // currentにSnapさせる必要はない
+      if (layoutElement.Index == currentIndex) continue;
+
+      // Top/Leftは先に、Right/Bottomは後に
+      verticalSnapGuides.AddFirst(layoutElement.BoundRelativeTop);
+      verticalSnapGuides.AddLast(layoutElement.BoundRelativeBottom);
+      horizontalSnapGuides.AddFirst(layoutElement.BoundRelativeLeft);
+      horizontalSnapGuides.AddLast(layoutElement.BoundRelativeRight);
+    }
+  }
+
+  public bool TryVerticalSnap(ref double original) {
+    if (!this.IsEnabled) return false;
+    if (this.verticalSnapGuides.Count == 0) return false;
+
+    // キャッシュ付き線形探索
+    var guide = this.verticalSnapGuides.First;
+    do {
+      var lowerBound = guide.Value - NSSnapBorderThickness;
+      var upperBound = guide.Value + NSSnapBorderThickness;
+      if (lowerBound <= original && original <= upperBound) {
+        original = guide.Value;
+        if (guide != this.verticalSnapGuides.First) {
+          // キャッシング: ガイドを削除して先頭につめなおす
+          // こうすればキャッシュ効果でかなり早くなるはず
+          this.verticalSnapGuides.Remove(guide);
+          this.verticalSnapGuides.AddFirst(original);
+        }
+        return true;
+      }
+      guide = guide.Next;
+    } while (guide != null);
+
+    return false;
+  }
+
+  public bool TryHorizontalSnap(ref double original) {
+    if (!this.IsEnabled) return false;
+    if (this.horizontalSnapGuides.Count == 0) return false;
+
+    // キャッシュ付き線形探索
+    var guide = this.horizontalSnapGuides.First;
+    do {
+      var lowerBound = guide.Value - WESnapBorderThickness;
+      var upperBound = guide.Value + WESnapBorderThickness;
+      if (lowerBound <= original && original <= upperBound) {
+        original = guide.Value;
+        if (guide != this.horizontalSnapGuides.First) {
+          // キャッシング: ガイドを削除して先頭につめなおす
+          // こうすればキャッシュ効果でかなり早くなるはず
+          this.horizontalSnapGuides.Remove(guide);
+          this.horizontalSnapGuides.AddFirst(original);
+        }
+        return true;
+      }
+      guide = guide.Next;
+    } while (guide != null);
+
+    return false;
+  }
+
+  private bool IsEnabled { get; set; }
+  private LinkedList<double> verticalSnapGuides = new LinkedList<double>();
+  private LinkedList<double> horizontalSnapGuides = new LinkedList<double>();
+}
+
 /// 与えられたマウスポイント(0-1,0-1)からレイアウトIndexとModeを返す
 ///
 /// このクラスの中では座標系はすべて正規化された相対値(0.0-1.0)なので
@@ -217,21 +294,43 @@ public static class HitTest {
   }
 
   /// Move
+  ///
+  /// @todo(me) MoveのSnapは結構難しいのであとでやろう
   public static void Move(Profile.InputLayoutElement layoutElement,
-      Point point, Offset offset,
+      Point point, Offset offset, SnapGuide snapGuide,
       out double nextLeft, out double nextTop,
       out double nextRight, out double nextBottom) {
-    // まず領域外に行かないようにする
+    // Snapするのは軸あたり1回のみ
+    bool hasAlreadyHorizontalSnapped = false;
+    bool hasAlreadyVerticalSnapped = false;
+
+    // Left
     var tryNextLeft = point.X - offset.Left;
+    hasAlreadyHorizontalSnapped |= snapGuide.TryHorizontalSnap(ref tryNextLeft);
     if (tryNextLeft < 0.0) tryNextLeft = 0.0;
+
+    // Top
     var tryNextTop = point.Y - offset.Top;
+    hasAlreadyVerticalSnapped |= snapGuide.TryVerticalSnap(ref tryNextTop);
     if (tryNextTop < 0.0) tryNextTop = 0.0;
+
+    // Right
     var tryNextRight = tryNextLeft + layoutElement.BoundRelativeWidth;
+    if (!hasAlreadyHorizontalSnapped && snapGuide.TryHorizontalSnap(ref tryNextRight)) {
+      // スナップ補正がかかった場合
+      tryNextLeft = tryNextRight - layoutElement.BoundRelativeWidth;
+    }
     if (tryNextRight > 1.0) {
       tryNextRight = 1.0;
       tryNextLeft = tryNextRight - layoutElement.BoundRelativeWidth;
-    } 
+    }
+
+    // Bottom
     var tryNextBottom = tryNextTop + layoutElement.BoundRelativeHeight;
+    if (!hasAlreadyVerticalSnapped && snapGuide.TryVerticalSnap(ref tryNextBottom)) {
+      // スナップ補正がかかった場合
+      tryNextTop = tryNextBottom - layoutElement.BoundRelativeHeight;
+    }
     if (tryNextBottom > 1.0) {
       tryNextBottom = 1.0;
       tryNextTop = tryNextBottom - layoutElement.BoundRelativeHeight;
@@ -246,7 +345,7 @@ public static class HitTest {
   /// Size
   public static void Size(Profile.InputLayoutElement layoutElement,
       HitModes hitMode,
-      Point point, Offset offset,
+      Point point, Offset offset, SnapGuide snapGuide,
       out double nextLeft, out double nextTop,
       out double nextRight, out double nextBottom) {
     // 初期値
@@ -262,6 +361,7 @@ public static class HitTest {
       case HitModes.SizeNE: {
         // Top
         var tryNextTop = point.Y - offset.Top;
+        snapGuide.TryVerticalSnap(ref tryNextTop);
         if (tryNextTop < 0.0) tryNextTop = 0.0;
         var topUpperBound = nextBottom - MinimumHeight;
         if (tryNextTop > topUpperBound) tryNextTop = topUpperBound;
@@ -273,6 +373,7 @@ public static class HitTest {
       case HitModes.SizeSE: {
         // Bottom
         var tryNextBottom = point.Y - offset.Bottom;
+        snapGuide.TryVerticalSnap(ref tryNextBottom);
         if (tryNextBottom > 1.0) tryNextBottom = 1.0;
         var bottomLowerBound = nextTop + MinimumHeight;
         if (tryNextBottom < bottomLowerBound) tryNextBottom = bottomLowerBound;
@@ -288,6 +389,7 @@ public static class HitTest {
       case HitModes.SizeSW: {
         // Left
         var tryNextLeft = point.X - offset.Left;
+        snapGuide.TryHorizontalSnap(ref tryNextLeft);
         if (tryNextLeft < 0.0) tryNextLeft = 0.0;
         var leftUpperBound = nextRight - MinimumWidth;
         if (tryNextLeft > leftUpperBound) tryNextLeft = leftUpperBound;
@@ -299,6 +401,7 @@ public static class HitTest {
       case HitModes.SizeSE: {
         // Right
         var tryNextRight = point.X - offset.Right;
+        snapGuide.TryHorizontalSnap(ref tryNextRight);
         if (tryNextRight > 1.0) tryNextRight = 1.0;
         var rightLowerBound = nextLeft + MinimumWidth;
         if (tryNextRight < rightLowerBound) tryNextRight = rightLowerBound;

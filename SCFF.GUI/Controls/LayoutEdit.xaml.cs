@@ -141,6 +141,8 @@ public partial class LayoutEdit : UserControl, IProfileToControl {
 
   /// マウスポインタとLeft/Right/Top/BottomのOffset
   private Offset offset = null;
+  /// スナップガイド
+  private SnapGuide snapGuide = null;
   /// ヒットテストの結果
   private HitModes hitMode = HitModes.Neutral;
 
@@ -177,6 +179,7 @@ public partial class LayoutEdit : UserControl, IProfileToControl {
     // マウスを押した場所を記録してマウスキャプチャー開始
     this.hitMode = hitMode;
     this.offset = new Offset(App.Profile.CurrentInputLayoutElement, relativeMousePoint);
+    this.snapGuide = new SnapGuide(App.Profile, App.Options.LayoutSnap);
     image.CaptureMouse();
 
     this.DrawTest();
@@ -208,12 +211,12 @@ public partial class LayoutEdit : UserControl, IProfileToControl {
     if (this.hitMode == HitModes.Move) {
       // Move
       HitTest.Move(App.Profile.CurrentInputLayoutElement,
-                    relativeMousePoint, this.offset,
+                    relativeMousePoint, this.offset, this.snapGuide,
                     out nextLeft, out nextTop, out nextRight, out nextBottom);
     } else {
       // Size*
       HitTest.Size(App.Profile.CurrentInputLayoutElement,
-                   this.hitMode, relativeMousePoint, this.offset,
+                   this.hitMode, relativeMousePoint, this.offset, this.snapGuide,
                    out nextLeft, out nextTop, out nextRight, out nextBottom);
     }
 

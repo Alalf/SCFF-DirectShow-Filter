@@ -164,7 +164,8 @@ public partial class LayoutEdit : UserControl, IProfileToControl {
 
     /// @todo(me) 描画されない・・・どうやらDrawingVisualの限界が露呈した可能性が・・・
     if (App.Options.LayoutPreview && this.capturedBitmaps[layoutElement.Index] != null) {
-      dc.DrawImage(this.capturedBitmaps[layoutElement.Index], layoutElementRect);
+      var bitmap = this.capturedBitmaps[layoutElement.Index];
+      dc.DrawImage(bitmap, layoutElementRect);
     }
 
     if (App.Options.LayoutBorder) {

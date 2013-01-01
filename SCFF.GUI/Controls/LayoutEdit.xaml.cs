@@ -20,17 +20,18 @@
 
 namespace SCFF.GUI.Controls {
 
-  using SCFF.Common;
-  using System;
-  using System.Collections.Generic;
-  using System.Diagnostics;
-  using System.Windows;
-  using System.Windows.Controls;
-  using System.Windows.Input;
-  using System.Windows.Interop;
-  using System.Windows.Media;
-  using System.Windows.Media.Imaging;
-  using System.Windows.Threading;
+using SCFF.Common;
+using SCFF.Common.Ext;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Interop;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 
 /// レイアウトエディタ
 ///
@@ -84,27 +85,27 @@ public partial class LayoutEdit : UserControl, IProfileToControl {
     foreach (var layoutElement in App.Profile) {
       // Windowチェック
       var window = layoutElement.Window;
-      if (!ExternalAPI.IsWindow(window)) continue;
+      if (!User32.IsWindow(window)) continue;
 
       // キャプチャ用の情報をまとめる
       var x = layoutElement.ClippingXWithFit;
       var y = layoutElement.ClippingYWithFit;
       var width = layoutElement.ClippingWidthWithFit;
       var height = layoutElement.ClippingHeightWithFit;
-      var rasterOperation = ExternalAPI.SRCCOPY;
-      if (layoutElement.ShowLayeredWindow) rasterOperation |= ExternalAPI.CAPTUREBLT;
+      var rasterOperation = GDI32.SRCCOPY;
+      if (layoutElement.ShowLayeredWindow) rasterOperation |= GDI32.CAPTUREBLT;
 
       /// @todo(me) マウスカーソルの合成
 
       // BitBlt
-      var windowDC = ExternalAPI.GetDC(window);
-      var capturedBitmap = ExternalAPI.CreateCompatibleBitmap(windowDC, width, height);
-      var capturedDC = ExternalAPI.CreateCompatibleDC(windowDC);
-      var originalBitmap = ExternalAPI.SelectObject(capturedDC, capturedBitmap);
-      ExternalAPI.BitBlt(capturedBitmap, 0, 0, width, height, windowDC, x, y, rasterOperation);
-      ExternalAPI.SelectObject(capturedDC, originalBitmap);
-      ExternalAPI.DeleteDC(capturedDC);
-      ExternalAPI.ReleaseDC(window, windowDC);
+      var windowDC = User32.GetDC(window);
+      var capturedBitmap = GDI32.CreateCompatibleBitmap(windowDC, width, height);
+      var capturedDC = GDI32.CreateCompatibleDC(windowDC);
+      var originalBitmap = GDI32.SelectObject(capturedDC, capturedBitmap);
+      GDI32.BitBlt(capturedBitmap, 0, 0, width, height, windowDC, x, y, rasterOperation);
+      GDI32.SelectObject(capturedDC, originalBitmap);
+      GDI32.DeleteDC(capturedDC);
+      User32.ReleaseDC(window, windowDC);
 
       try {
         var bitmapSource = Imaging.CreateBitmapSourceFromHBitmap(capturedBitmap,
@@ -122,7 +123,7 @@ public partial class LayoutEdit : UserControl, IProfileToControl {
         continue;
       } finally {
         // 5秒に一回程度の更新なので、HDC/HBitmapは使いまわさないですぐに消す
-        ExternalAPI.DeleteObject(capturedBitmap);
+        GDI32.DeleteObject(capturedBitmap);
         GC.Collect();
       }
     }

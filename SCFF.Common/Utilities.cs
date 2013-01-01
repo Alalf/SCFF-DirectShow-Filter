@@ -20,6 +20,7 @@
 
 namespace SCFF.Common {
 
+using SCFF.Common.Ext;
 using System;
 using System.Text;
 
@@ -27,11 +28,12 @@ using System.Text;
 public static class Utilities {
 
   /// Desktop(VirtualScreen)座標からScreen座標へ変換する
-  private static void DesktopToScreen(int desktopX, int desktopY, out int screenX, out int screenY) {
+  private static void DesktopToScreen(int desktopX, int desktopY,
+                                      out int screenX, out int screenY) {
     // desktopPointは仮想画面上の座標(左上が(0,0)であることが保障されている)
     // screenPointはプライマリモニタの左上の座標が(0,0)なので-になることもある
-    screenX = desktopX + ExternalAPI.GetSystemMetrics(ExternalAPI.SM_XVIRTUALSCREEN);
-    screenY = desktopY + ExternalAPI.GetSystemMetrics(ExternalAPI.SM_YVIRTUALSCREEN);
+    screenX = desktopX + User32.GetSystemMetrics(User32.SM_XVIRTUALSCREEN);
+    screenY = desktopY + User32.GetSystemMetrics(User32.SM_YVIRTUALSCREEN);
   }
 
   /// 特定のOSに依存せずにDesktopListViewWindowを取得する
@@ -50,38 +52,44 @@ public static class Utilities {
   /// パッと見る限り明らかに重いのはAero On時。EnumWindows必須。
   public static UIntPtr DesktopListViewWindow {
     get {
-      UIntPtr progman = ExternalAPI.FindWindowEx(UIntPtr.Zero, UIntPtr.Zero, "Progman", null);
+      UIntPtr progman = User32.FindWindowEx(UIntPtr.Zero,
+          UIntPtr.Zero, "Progman", null);
       if (progman != UIntPtr.Zero) {
         // XP/Win7(No Aero)/Vista(No Aero)
-        UIntPtr shellDLLDefView = ExternalAPI.FindWindowEx(progman, UIntPtr.Zero, "SHELLDLL_DefView", null);
+        UIntPtr shellDLLDefView = User32.FindWindowEx(progman,
+            UIntPtr.Zero, "SHELLDLL_DefView", null);
         if (shellDLLDefView != UIntPtr.Zero) {
-          UIntPtr sysListView32 = ExternalAPI.FindWindowEx(shellDLLDefView, UIntPtr.Zero, "SysListView32", null);
+          UIntPtr sysListView32 = User32.FindWindowEx(shellDLLDefView,
+              UIntPtr.Zero, "SysListView32", null);
           if (sysListView32 != UIntPtr.Zero) {
             // XP(No ActiveDesktop)/Win7(No Aero)/Vista(No Aero)
             return sysListView32;
           } 
-          UIntPtr internetExprolerServer = ExternalAPI.FindWindowEx(shellDLLDefView, UIntPtr.Zero, "Internet Exproler_Server", null);
+          UIntPtr internetExprolerServer = User32.FindWindowEx(shellDLLDefView,
+              UIntPtr.Zero, "Internet Exproler_Server", null);
           if (internetExprolerServer != UIntPtr.Zero) {
             // XP(ActiveDesktop)
             return internetExprolerServer;
           }
         }
       }
-      UIntPtr edgeUiInputWndClass = ExternalAPI.FindWindowEx(UIntPtr.Zero, UIntPtr.Zero, "EdgeUiInputWndClass", null);
+      UIntPtr edgeUiInputWndClass = User32.FindWindowEx(UIntPtr.Zero,
+          UIntPtr.Zero, "EdgeUiInputWndClass", null);
       if (edgeUiInputWndClass != UIntPtr.Zero) {
         // Win8
         return edgeUiInputWndClass;
       }
       enumerateWindowResult = UIntPtr.Zero;
-      ExternalAPI.EnumWindows(new ExternalAPI.WNDENUMProc(EnumerateWindow), IntPtr.Zero);
+      User32.EnumWindows(new User32.WNDENUMProc(EnumerateWindow), IntPtr.Zero);
       if (enumerateWindowResult != UIntPtr.Zero) {
         // Win7(Aero)/Vista(Aero)
-        UIntPtr sysListView32 = ExternalAPI.FindWindowEx(enumerateWindowResult, UIntPtr.Zero, "SysListView32", null);
+        UIntPtr sysListView32 = User32.FindWindowEx(enumerateWindowResult,
+            UIntPtr.Zero, "SysListView32", null);
         if (sysListView32 != UIntPtr.Zero) {
           return sysListView32;
         }
       }
-      return ExternalAPI.GetDesktopWindow();
+      return User32.GetDesktopWindow();
     }
   }
 
@@ -94,12 +102,12 @@ public static class Utilities {
   /// FindWindowExに渡されるウィンドウ列挙関数
   private static bool EnumerateWindow(UIntPtr hWnd, IntPtr lParam) {
     StringBuilder className = new StringBuilder(256);
-    ExternalAPI.GetClassName(hWnd, className, 256);
+    User32.GetClassName(hWnd, className, 256);
     // "WorkerW"以外はスキップ
     if (className.ToString() != "WorkerW") return true;
 
     // "WorkerW" > "SHELLDLL_DefView"になってなければスキップ
-    UIntPtr shellDLLDefView = ExternalAPI.FindWindowEx(hWnd, UIntPtr.Zero, "SHELLDLL_DefView", null);
+    UIntPtr shellDLLDefView = User32.FindWindowEx(hWnd, UIntPtr.Zero, "SHELLDLL_DefView", null);
     if (shellDLLDefView == UIntPtr.Zero) return true;
       
     enumerateWindowResult = shellDLLDefView;

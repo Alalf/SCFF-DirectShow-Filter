@@ -16,22 +16,17 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file SCFF.Common/ExternalAPI.cs
-/// SCFF.*モジュールで利用する外部APIをまとめたクラスの定義
+/// SCFF.*モジュールで利用するUser32.dllのAPIをまとめたクラス
 
-namespace SCFF.Common {
+namespace SCFF.Common.Ext {
 
 using System;
 using System.Runtime.InteropServices;
 using System.Text;
 
 /// SCFF.*モジュールで利用する外部APIをまとめたクラス
-/// HWNDは特例としてUIntPtr、それ以外はIntPtrで取り扱うこと
-public class ExternalAPI {
-
-  //-------------------------------------------------------------------
-  // user32.dll
-  //-------------------------------------------------------------------
-
+/// SCFF.*モジュールで利用するUser32.dllのAPIをまとめたクラス
+public class User32 {
   // Constants: System Metric
   public const int SM_CXSCREEN = 0;
   public const int SM_CYSCREEN = 1;
@@ -84,66 +79,5 @@ public class ExternalAPI {
 
   [DllImport("user32.dll")]
   public static extern int GetSystemMetrics(int nIndex);
-
-  //-------------------------------------------------------------------
-  // gdi32.dll
-  //-------------------------------------------------------------------
-
-  // Constants
-
-  public const int SRCCOPY    = 0x00CC0020;
-  public const int CAPTUREBLT = 0x40000000;
-
-  // public const int PS_SOLID    = 0x00000000;
-  public const int PS_NULL       = 0x00000005;
-
-  public const int R2_XORPEN   = 7;
-
-  // API
-  [DllImport("gdi32.dll")]
-  public static extern int BitBlt(IntPtr hDestDC,
-      int x, int y,
-      int nWidth, int nHeight,
-      IntPtr hSrcDC,
-      int xSrc, int ySrc,
-      int dwRop);
-
-  [DllImport("gdi32.dll")]
-  public static extern IntPtr CreateCompatibleBitmap(IntPtr hdc, int nWidth, int nHeight);
-
-  [DllImport ("gdi32.dll")]
-	public static extern IntPtr CreateCompatibleDC(IntPtr hdc);
-
-  [DllImport("gdi32.dll")]
-  public static extern IntPtr CreatePen(int fnPenStyle, int nWidth, uint crColor);
-
-  [DllImport("gdi32.dll")]
-  public static extern int SetROP2(IntPtr hdc, int fnDrawMode);
-
-  [DllImport("gdi32.dll")]
-  public static extern IntPtr SelectObject(IntPtr hdc, IntPtr hgdiobj);
-
-  [DllImport("gdi32.dll")]
-  public static extern bool DeleteObject(IntPtr hObject);
-
-  [DllImport("gdi32.dll")]
-  public static extern int DeleteDC(IntPtr hDC);
-
-  [DllImport("gdi32.dll")]
-  public static extern bool Rectangle(IntPtr hdc, int nLeftRect, int nTopRect, int nRightRect, int nBottomRect);
-
-  //-------------------------------------------------------------------
-  // dwmapi.dll
-  //-------------------------------------------------------------------
-
-  // Constants
-  public const int DWM_EC_DISABLECOMPOSITION = 0;
-  public const int DWM_EC_ENABLECOMPOSITION = 1;
-
-  // API
-  [DllImport("dwmapi.dll")]
-  public static extern int DwmIsCompositionEnabled(out bool enabled);
-  [DllImport("dwmapi.dll")]
-  public static extern int DwmEnableComposition(uint uCompositionAction);
 }
 }

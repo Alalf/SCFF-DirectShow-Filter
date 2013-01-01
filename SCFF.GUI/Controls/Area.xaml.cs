@@ -21,10 +21,11 @@
 namespace SCFF.GUI.Controls {
 
 using SCFF.Common;
+using SCFF.Common.Ext;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
-  using System.Windows.Media;
+using System.Windows.Media;
 
 /// クリッピング領域設定用
 public partial class Area : UserControl, IProfileToControl {
@@ -240,10 +241,10 @@ public partial class Area : UserControl, IProfileToControl {
   /// 仮想ディスプレイのデータをRECT化したプロパティ
   /// @todo(me) 現在Desktop/DesktopListViewで使い回ししているが、問題が発生する可能性あり
   private readonly Rect virtualScreenRect = new Rect {
-    X = ExternalAPI.GetSystemMetrics(ExternalAPI.SM_XVIRTUALSCREEN),
-    Y = ExternalAPI.GetSystemMetrics(ExternalAPI.SM_YVIRTUALSCREEN),
-    Width = ExternalAPI.GetSystemMetrics(ExternalAPI.SM_CXVIRTUALSCREEN),
-    Height = ExternalAPI.GetSystemMetrics(ExternalAPI.SM_CYVIRTUALSCREEN)
+    X       = User32.GetSystemMetrics(User32.SM_XVIRTUALSCREEN),
+    Y       = User32.GetSystemMetrics(User32.SM_YVIRTUALSCREEN),
+    Width   = User32.GetSystemMetrics(User32.SM_CXVIRTUALSCREEN),
+    Height  = User32.GetSystemMetrics(User32.SM_CYVIRTUALSCREEN)
   };
 
   private void ListView_Click(object sender, RoutedEventArgs e) {

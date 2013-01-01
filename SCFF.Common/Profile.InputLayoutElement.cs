@@ -20,6 +20,7 @@
 
 namespace SCFF.Common {
 
+using SCFF.Common.Ext;
 using System;
 using System.Diagnostics;
 using System.Text;
@@ -149,7 +150,7 @@ public partial class Profile {
             return Utilities.DesktopListViewWindow;
           }
           case WindowTypes.Desktop: {
-            return ExternalAPI.GetDesktopWindow();
+            return User32.GetDesktopWindow();
           }
           default: {
             Debug.Fail("Window: Invalid WindowTypes");
@@ -170,17 +171,17 @@ public partial class Profile {
       get {
         switch (this.WindowType) {
           case WindowTypes.Normal: {
-            if (this.Window == UIntPtr.Zero || !ExternalAPI.IsWindow(this.Window)) {
+            if (this.Window == UIntPtr.Zero || !User32.IsWindow(this.Window)) {
               Debug.WriteLine("WindowWidth: Invalid Window");
               return -1;
             }
-            ExternalAPI.RECT windowRect;
-            ExternalAPI.GetClientRect(this.Window, out windowRect);
+            User32.RECT windowRect;
+            User32.GetClientRect(this.Window, out windowRect);
             return windowRect.Right - windowRect.Left;
           }
           case WindowTypes.DesktopListView:
           case WindowTypes.Desktop: {
-            return ExternalAPI.GetSystemMetrics(ExternalAPI.SM_CXVIRTUALSCREEN);
+            return User32.GetSystemMetrics(User32.SM_CXVIRTUALSCREEN);
           }
           default: {
             Debug.Fail("WindowWidth: Invalid WindowType");
@@ -193,17 +194,17 @@ public partial class Profile {
       get {
         switch (this.WindowType) {
           case WindowTypes.Normal: {
-            if (this.Window == UIntPtr.Zero || !ExternalAPI.IsWindow(this.Window)) {
+            if (this.Window == UIntPtr.Zero || !User32.IsWindow(this.Window)) {
               Debug.WriteLine("WindowHeight: Invalid Window");
               return -1;
             }
-            ExternalAPI.RECT windowRect;
-            ExternalAPI.GetClientRect(this.Window, out windowRect);
+            User32.RECT windowRect;
+            User32.GetClientRect(this.Window, out windowRect);
             return windowRect.Bottom - windowRect.Top;
           }
           case WindowTypes.DesktopListView:
           case WindowTypes.Desktop: {
-            return ExternalAPI.GetSystemMetrics(ExternalAPI.SM_CYVIRTUALSCREEN);
+            return User32.GetSystemMetrics(User32.SM_CYVIRTUALSCREEN);
           }
           default: {
             Debug.Fail("WindowHeight: Invalid WindowType");
@@ -285,18 +286,18 @@ public partial class Profile {
     private int GetScreenX(int clippingX) {
       switch (this.WindowType) {
         case WindowTypes.Normal: {
-          if (this.Window == UIntPtr.Zero || !ExternalAPI.IsWindow(this.Window)) {
+          if (this.Window == UIntPtr.Zero || !User32.IsWindow(this.Window)) {
             Debug.Fail("GetScreenX: Invalid Window");
             return -1;
           }
-          ExternalAPI.POINT windowPoint = new ExternalAPI.POINT { X = clippingX, Y = 0 };
-          ExternalAPI.ClientToScreen(this.Window, ref windowPoint);
+          User32.POINT windowPoint = new User32.POINT { X = clippingX, Y = 0 };
+          User32.ClientToScreen(this.Window, ref windowPoint);
           return windowPoint.X;
         }
         case WindowTypes.DesktopListView:
         case WindowTypes.Desktop: {
           //　仮想デスクトップ座標なので補正を戻す
-          return clippingX + ExternalAPI.GetSystemMetrics(ExternalAPI.SM_XVIRTUALSCREEN);
+          return clippingX + User32.GetSystemMetrics(User32.SM_XVIRTUALSCREEN);
         }
         default: {
           Debug.Fail("GetScreenX: Invalid WindowType");
@@ -308,18 +309,18 @@ public partial class Profile {
     private int GetScreenY(int clippingY) {
       switch (this.WindowType) {
         case WindowTypes.Normal: {
-          if (this.Window == UIntPtr.Zero || !ExternalAPI.IsWindow(this.Window)) {
+          if (this.Window == UIntPtr.Zero || !User32.IsWindow(this.Window)) {
             Debug.Fail("GetScreenY: Invalid Window");
             return -1;
           }
-          ExternalAPI.POINT windowPoint = new ExternalAPI.POINT { X = 0, Y = clippingY };
-          ExternalAPI.ClientToScreen(this.Window, ref windowPoint);
+          User32.POINT windowPoint = new User32.POINT { X = 0, Y = clippingY };
+          User32.ClientToScreen(this.Window, ref windowPoint);
           return windowPoint.Y;
         }
         case WindowTypes.DesktopListView:
         case WindowTypes.Desktop: {
           //　仮想デスクトップ座標なので補正を戻す
-          return clippingY + ExternalAPI.GetSystemMetrics(ExternalAPI.SM_YVIRTUALSCREEN);
+          return clippingY + User32.GetSystemMetrics(User32.SM_YVIRTUALSCREEN);
         }
         default: {
           Debug.Fail("GetScreenY: Invalid WindowType");

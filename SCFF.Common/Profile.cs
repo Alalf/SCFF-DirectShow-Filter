@@ -21,6 +21,7 @@
 /// SCFF.*で利用する共通クラスをまとめた名前空間
 namespace SCFF.Common {
 
+using SCFF.Common.Ext;
 using System;
 using System.Collections.Generic;
 
@@ -132,10 +133,10 @@ public partial class Profile {
     // プライマリモニタを表示
     layout.SetWindowToDesktop();
     //layout.SetWindowToDesktopListView();
-    layout.ClippingXWithoutFit      = 0 - ExternalAPI.GetSystemMetrics(ExternalAPI.SM_XVIRTUALSCREEN);
-    layout.ClippingYWithoutFit      = 0 - ExternalAPI.GetSystemMetrics(ExternalAPI.SM_YVIRTUALSCREEN);
-    layout.ClippingWidthWithoutFit  = ExternalAPI.GetSystemMetrics(ExternalAPI.SM_CXSCREEN);
-    layout.ClippingHeightWithoutFit = ExternalAPI.GetSystemMetrics(ExternalAPI.SM_CYSCREEN);
+    layout.ClippingXWithoutFit      = 0 - User32.GetSystemMetrics(User32.SM_XVIRTUALSCREEN);
+    layout.ClippingYWithoutFit      = 0 - User32.GetSystemMetrics(User32.SM_YVIRTUALSCREEN);
+    layout.ClippingWidthWithoutFit  = User32.GetSystemMetrics(User32.SM_CXSCREEN);
+    layout.ClippingHeightWithoutFit = User32.GetSystemMetrics(User32.SM_CYSCREEN);
     /// @todo(me) クリッピング座標のバックアップをどこで取ればいいのか迷い中
     //layout.TryUpdateBackupDesktopClippingParameters();
     

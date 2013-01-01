@@ -20,6 +20,7 @@
 
 namespace SCFF.Common {
 
+using SCFF.Common.Ext;
 using System;
 using System.Diagnostics;
 using System.Text;
@@ -129,9 +130,9 @@ public partial class Profile {
       this.profile.message.LayoutParameters[this.Index].Window = window.ToUInt64();
 
       var windowCaption = "*** INVALID WINDOW ***";
-      if (window != UIntPtr.Zero && ExternalAPI.IsWindow(window)) {
+      if (window != UIntPtr.Zero && User32.IsWindow(window)) {
         StringBuilder className = new StringBuilder(256);
-        ExternalAPI.GetClassName(window, className, 256);
+        User32.GetClassName(window, className, 256);
         windowCaption = className.ToString();
       }
       this.profile.additionalLayoutParameters[this.Index].WindowCaption = windowCaption;

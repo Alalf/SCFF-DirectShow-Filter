@@ -21,6 +21,7 @@
 namespace SCFF.GUI.Controls {
 
 using SCFF.Common;
+using SCFF.Common.Ext;
 using System;
 using System.Diagnostics;
 using System.Windows.Controls;
@@ -36,14 +37,14 @@ public partial class TargetWindow : UserControl, IProfileToControl {
     InitializeComponent();
 
     Debug.WriteLine("TargetWindow: Dummy Pen is created");
-    this.dummyPen = ExternalAPI.CreatePen(ExternalAPI.PS_NULL, 1, 0x00000000);
+    this.dummyPen = GDI32.CreatePen(GDI32.PS_NULL, 1, 0x00000000);
     this.Dispatcher.ShutdownStarted += OnShutdownStarted;
   }
 
   private void OnShutdownStarted(object sender, EventArgs e) {
     if (this.dummyPen != IntPtr.Zero) {
       Debug.WriteLine("TargetWindow: Dummy Pen is deleted");
-      ExternalAPI.DeleteObject(this.dummyPen);
+      GDI32.DeleteObject(this.dummyPen);
       this.dummyPen = IntPtr.Zero;
     }
   }
@@ -79,18 +80,18 @@ public partial class TargetWindow : UserControl, IProfileToControl {
 
   /// 現在のターゲットウィンドウをXORで塗りつぶす
   private void XorTargetRect() {
-    ExternalAPI.RECT currentTargetRect;
-    ExternalAPI.GetClientRect(this.currentTargetWindow, out currentTargetRect);
+    User32.RECT currentTargetRect;
+    User32.GetClientRect(this.currentTargetWindow, out currentTargetRect);
     
-    var originalDrawMode = ExternalAPI.SetROP2(this.currentTargetDC, ExternalAPI.R2_XORPEN);
-    var originalPen = ExternalAPI.SelectObject(this.currentTargetDC, this.dummyPen);
+    var originalDrawMode = GDI32.SetROP2(this.currentTargetDC, GDI32.R2_XORPEN);
+    var originalPen = GDI32.SelectObject(this.currentTargetDC, this.dummyPen);
 
-    ExternalAPI.Rectangle(this.currentTargetDC,
+    GDI32.Rectangle(this.currentTargetDC,
         currentTargetRect.Left, currentTargetRect.Top,
         currentTargetRect.Right, currentTargetRect.Bottom);
 
-    ExternalAPI.SelectObject(this.currentTargetDC, originalPen);
-    ExternalAPI.SetROP2(this.currentTargetDC, originalDrawMode);
+    GDI32.SelectObject(this.currentTargetDC, originalPen);
+    GDI32.SetROP2(this.currentTargetDC, originalDrawMode);
   }
 
   /// 
@@ -101,7 +102,7 @@ public partial class TargetWindow : UserControl, IProfileToControl {
     }
     // DCを破棄
     if (this.currentTargetDC != IntPtr.Zero) {
-      ExternalAPI.ReleaseDC(this.currentTargetWindow, this.currentTargetDC);
+      User32.ReleaseDC(this.currentTargetWindow, this.currentTargetDC);
       this.currentTargetDC = IntPtr.Zero;
     }
   }
@@ -122,7 +123,7 @@ public partial class TargetWindow : UserControl, IProfileToControl {
     }
 
     var screenPoint = this.DragHere.PointToScreen(e.GetPosition(this.DragHere));
-    UIntPtr nextTargetWindow = ExternalAPI.WindowFromPoint((int)screenPoint.X, (int)screenPoint.Y);
+    UIntPtr nextTargetWindow = User32.WindowFromPoint((int)screenPoint.X, (int)screenPoint.Y);
     if (nextTargetWindow == UIntPtr.Zero) {
       // nop
       return;
@@ -143,7 +144,7 @@ public partial class TargetWindow : UserControl, IProfileToControl {
 
     // 現在処理中のウィンドウを更新
     this.currentTargetWindow = nextTargetWindow;
-    this.currentTargetDC = ExternalAPI.GetDC(this.currentTargetWindow);
+    this.currentTargetDC = User32.GetDC(this.currentTargetWindow);
 
     // 取り込み対象範囲の描画
     this.XorTargetRect();
@@ -196,7 +197,7 @@ public partial class TargetWindow : UserControl, IProfileToControl {
 
     // マウスカーソルからウィンドウを取得
     var screenPoint = this.DragHere.PointToScreen(e.GetPosition(this.DragHere));
-    UIntPtr nextTargetWindow = ExternalAPI.WindowFromPoint((int)screenPoint.X, (int)screenPoint.Y);
+    UIntPtr nextTargetWindow = User32.WindowFromPoint((int)screenPoint.X, (int)screenPoint.Y);
 
     // Profileを更新
     this.UpdateProfile(WindowTypes.Normal, nextTargetWindow);

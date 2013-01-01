@@ -139,7 +139,7 @@ public partial class Profile {
     //=================================================================
     
     // Window
-    internal UIntPtr Window {
+    public UIntPtr Window {
       get {
         switch (this.WindowType) {
           case WindowTypes.Normal: {

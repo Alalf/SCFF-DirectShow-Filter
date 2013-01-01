@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file SCFF.Common/GUI/MoveAndResize.cs
+/// @file SCFF.Common/GUI/MoveAndSize.cs
 /// 与えられたマウスポイントを利用してレイアウト要素を移動・拡大縮小する
 
 namespace SCFF.Common.GUI {

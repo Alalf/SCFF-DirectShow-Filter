@@ -20,14 +20,17 @@
 
 namespace SCFF.GUI.Controls {
 
-using SCFF.Common;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Media;
+  using SCFF.Common;
+  using System;
+  using System.Collections.Generic;
+  using System.Diagnostics;
+  using System.Windows;
+  using System.Windows.Controls;
+  using System.Windows.Input;
+  using System.Windows.Interop;
+  using System.Windows.Media;
+  using System.Windows.Media.Imaging;
+  using System.Windows.Threading;
 
 /// レイアウトエディタ
 ///
@@ -47,6 +50,11 @@ public partial class LayoutEdit : UserControl, IProfileToControl {
   private Pen dummyPen = new Pen(Brushes.DarkOrange, PenThickness);
   private Rect previewRect = new Rect(0.0, 0.0, MaxImageWidth, MaxImageHeight);
 
+  // スクリーンキャプチャ用タイマー
+  private DispatcherTimer screenCaptureTimer = new DispatcherTimer();
+  // スクリーンキャプチャの結果をまとめた配列
+  private BitmapSource[] capturedBitmaps = new BitmapSource[Constants.MaxLayoutElementCount];
+
   /// コンストラクタ
   public LayoutEdit() {
     InitializeComponent();
@@ -63,6 +71,67 @@ public partial class LayoutEdit : UserControl, IProfileToControl {
     // 使いまわすリソースはFreezeしておくとパフォーマンスがあがる
     this.dummyPen.Freeze();
 
+    // スクリーンキャプチャタイマーの準備
+    // 5秒間隔でプレビュー更新
+    screenCaptureTimer.Interval = TimeSpan.FromSeconds(5.0);
+    screenCaptureTimer.Tick += screenCaptureTimer_Tick;
+    screenCaptureTimer.Start();
+    this.DrawTest();
+  }
+  
+  private void ScreenCapture() {
+    this.capturedBitmaps = new BitmapSource[Constants.MaxLayoutElementCount];
+    foreach (var layoutElement in App.Profile) {
+      // Windowチェック
+      var window = layoutElement.Window;
+      if (!ExternalAPI.IsWindow(window)) continue;
+
+      // キャプチャ用の情報をまとめる
+      var x = layoutElement.ClippingXWithFit;
+      var y = layoutElement.ClippingYWithFit;
+      var width = layoutElement.ClippingWidthWithFit;
+      var height = layoutElement.ClippingHeightWithFit;
+      var rasterOperation = ExternalAPI.SRCCOPY;
+      if (layoutElement.ShowLayeredWindow) rasterOperation |= ExternalAPI.CAPTUREBLT;
+
+      /// @todo(me) マウスカーソルの合成
+
+      // BitBlt
+      var windowDC = ExternalAPI.GetDC(window);
+      var capturedBitmap = ExternalAPI.CreateCompatibleBitmap(windowDC, width, height);
+      var capturedDC = ExternalAPI.CreateCompatibleDC(windowDC);
+      var originalBitmap = ExternalAPI.SelectObject(capturedDC, capturedBitmap);
+      ExternalAPI.BitBlt(capturedBitmap, 0, 0, width, height, windowDC, x, y, rasterOperation);
+      ExternalAPI.SelectObject(capturedDC, originalBitmap);
+      ExternalAPI.DeleteDC(capturedDC);
+      ExternalAPI.ReleaseDC(window, windowDC);
+
+      try {
+        var bitmapSource = Imaging.CreateBitmapSourceFromHBitmap(capturedBitmap,
+            IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+
+        this.capturedBitmaps[layoutElement.Index] = bitmapSource;    
+
+        //this.capturedBitmaps[layoutElement.Index].Freeze();
+        var data = new DataObject();
+        data.SetData(DataFormats.Dib, bitmapSource, false);
+        Clipboard.SetDataObject(data, false);
+
+      } catch (Exception ex) {
+        Debug.WriteLine("ScreenCapture: " + ex.Message);
+        continue;
+      } finally {
+        // 5秒に一回程度の更新なので、HDC/HBitmapは使いまわさないですぐに消す
+        ExternalAPI.DeleteObject(capturedBitmap);
+        GC.Collect();
+      }
+    }
+  }
+
+  private void screenCaptureTimer_Tick(object sender, EventArgs e) {
+    if (!App.Options.LayoutPreview) return;
+    Debug.WriteLine("Timer Test!!!!");
+    this.ScreenCapture();
     this.DrawTest();
   }
 
@@ -90,9 +159,15 @@ public partial class LayoutEdit : UserControl, IProfileToControl {
   }
 
   private void DrawLayout(DrawingContext dc, Profile.InputLayoutElement layoutElement) {
+    var layoutElementRect = this.CreateLayoutElementRect(layoutElement);
+
+    /// @todo(me) 描画されない・・・どうやらDrawingVisualの限界が露呈した可能性が・・・
+    if (App.Options.LayoutPreview && this.capturedBitmaps[layoutElement.Index] != null) {
+      dc.DrawImage(this.capturedBitmaps[layoutElement.Index], layoutElementRect);
+    }
+
     if (App.Options.LayoutBorder) {
       // フレームの描画
-      var layoutElementRect = this.CreateLayoutElementRect(layoutElement);
       dc.DrawRectangle(Brushes.Transparent, dummyPen, layoutElementRect);
 
       // キャプションの描画

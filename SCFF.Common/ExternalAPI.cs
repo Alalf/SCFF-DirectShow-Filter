@@ -82,14 +82,8 @@ public class ExternalAPI {
   [DllImport("user32.dll")]
   public static extern int ReleaseDC(UIntPtr hWnd, IntPtr hDC);
 
-  //[DllImport("user32.dll")]
-  //public static extern bool InvalidateRect(UIntPtr hWnd, ref RECT lpRect, bool bErase);
-
   [DllImport("user32.dll")]
   public static extern int GetSystemMetrics(int nIndex);
-
-  //[DllImport("user32.dll")]
-  //public static extern bool IntersectRect(out RECT lprcDst, ref RECT lprcSrc1, ref RECT lprcSrc2);
 
   //-------------------------------------------------------------------
   // gdi32.dll
@@ -115,6 +109,12 @@ public class ExternalAPI {
       int dwRop);
 
   [DllImport("gdi32.dll")]
+  public static extern IntPtr CreateCompatibleBitmap(IntPtr hdc, int nWidth, int nHeight);
+
+  [DllImport ("gdi32.dll")]
+	public static extern IntPtr CreateCompatibleDC(IntPtr hdc);
+
+  [DllImport("gdi32.dll")]
   public static extern IntPtr CreatePen(int fnPenStyle, int nWidth, uint crColor);
 
   [DllImport("gdi32.dll")]
@@ -125,6 +125,9 @@ public class ExternalAPI {
 
   [DllImport("gdi32.dll")]
   public static extern bool DeleteObject(IntPtr hObject);
+
+  [DllImport("gdi32.dll")]
+  public static extern int DeleteDC(IntPtr hDC);
 
   [DllImport("gdi32.dll")]
   public static extern bool Rectangle(IntPtr hdc, int nLeftRect, int nTopRect, int nRightRect, int nBottomRect);

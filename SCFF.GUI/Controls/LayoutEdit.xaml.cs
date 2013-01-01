@@ -79,60 +79,58 @@ public partial class LayoutEdit : UserControl, IProfileToControl {
     screenCaptureTimer.Start();
     this.DrawTest();
   }
+
+  void OnLoaded(object sender, RoutedEventArgs e) {
+    throw new NotImplementedException();
+  }
   
-  private void ScreenCapture() {
-    this.capturedBitmaps = new BitmapSource[Constants.MaxLayoutElementCount];
-    foreach (var layoutElement in App.Profile) {
-      // Windowチェック
-      var window = layoutElement.Window;
-      if (!User32.IsWindow(window)) continue;
+  private BitmapSource ScreenCapture(Profile.InputLayoutElement layoutElement) {
+    // 返り値
+    BitmapSource result = null;
 
-      // キャプチャ用の情報をまとめる
-      var x = layoutElement.ClippingXWithFit;
-      var y = layoutElement.ClippingYWithFit;
-      var width = layoutElement.ClippingWidthWithFit;
-      var height = layoutElement.ClippingHeightWithFit;
-      var rasterOperation = GDI32.SRCCOPY;
-      if (layoutElement.ShowLayeredWindow) rasterOperation |= GDI32.CAPTUREBLT;
+    // Windowチェック
+    var window = layoutElement.Window;
+    if (!User32.IsWindow(window)) return result;
 
-      /// @todo(me) マウスカーソルの合成
+    // キャプチャ用の情報をまとめる
+    var x = layoutElement.ClippingXWithFit;
+    var y = layoutElement.ClippingYWithFit;
+    var width = layoutElement.ClippingWidthWithFit;
+    var height = layoutElement.ClippingHeightWithFit;
+    var rasterOperation = GDI32.SRCCOPY;
+    if (layoutElement.ShowLayeredWindow) rasterOperation |= GDI32.CAPTUREBLT;
 
-      // BitBlt
-      var windowDC = User32.GetDC(window);
-      var capturedBitmap = GDI32.CreateCompatibleBitmap(windowDC, width, height);
-      var capturedDC = GDI32.CreateCompatibleDC(windowDC);
-      var originalBitmap = GDI32.SelectObject(capturedDC, capturedBitmap);
-      GDI32.BitBlt(capturedBitmap, 0, 0, width, height, windowDC, x, y, rasterOperation);
-      GDI32.SelectObject(capturedDC, originalBitmap);
-      GDI32.DeleteDC(capturedDC);
-      User32.ReleaseDC(window, windowDC);
+    /// @todo(me) マウスカーソルの合成
 
-      try {
-        var bitmapSource = Imaging.CreateBitmapSourceFromHBitmap(capturedBitmap,
-            IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+    // BitBlt
+    var windowDC = User32.GetDC(window);
+    var capturedBitmap = GDI32.CreateCompatibleBitmap(windowDC, width, height);
+    var capturedDC = GDI32.CreateCompatibleDC(windowDC);
+    var originalBitmap = GDI32.SelectObject(capturedDC, capturedBitmap);
+    GDI32.BitBlt(capturedBitmap, 0, 0, width, height, windowDC, x, y, rasterOperation);
+    GDI32.SelectObject(capturedDC, originalBitmap);
+    GDI32.DeleteDC(capturedDC);
+    User32.ReleaseDC(window, windowDC);
 
-        this.capturedBitmaps[layoutElement.Index] = bitmapSource;    
-
-        //this.capturedBitmaps[layoutElement.Index].Freeze();
-        var data = new DataObject();
-        data.SetData(DataFormats.Dib, bitmapSource, false);
-        Clipboard.SetDataObject(data, false);
-
-      } catch (Exception ex) {
-        Debug.WriteLine("ScreenCapture: " + ex.Message);
-        continue;
-      } finally {
-        // 5秒に一回程度の更新なので、HDC/HBitmapは使いまわさないですぐに消す
-        GDI32.DeleteObject(capturedBitmap);
-        GC.Collect();
-      }
+    try {
+      result = Imaging.CreateBitmapSourceFromHBitmap(capturedBitmap,
+          IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+    } catch (Exception ex) {
+      Debug.WriteLine("ScreenCapture: " + ex.Message);
+    } finally {
+      // 5秒に一回程度の更新なので、HDC/HBitmapは使いまわさないですぐに消す
+      GDI32.DeleteObject(capturedBitmap);
+      GC.Collect();
     }
+    return result;
   }
 
   private void screenCaptureTimer_Tick(object sender, EventArgs e) {
     if (!App.Options.LayoutPreview) return;
     Debug.WriteLine("Timer Test!!!!");
-    this.ScreenCapture();
+    foreach (var layoutElement in App.Profile) {
+      this.capturedBitmaps[layoutElement.Index] = this.ScreenCapture(layoutElement);
+    }
     this.DrawTest();
   }
 

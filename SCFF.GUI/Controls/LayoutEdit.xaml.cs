@@ -58,10 +58,7 @@ public partial class LayoutEdit : UserControl, IProfileToControl {
   private Pen dummyPen = new Pen(Brushes.DarkOrange, PenThickness);
   private Rect previewRect = new Rect(0.0, 0.0, MaxImageWidth, MaxImageHeight);
 
-  // スクリーンキャプチャ用タイマー
-  private DispatcherTimer screenCaptureTimer = new DispatcherTimer();
-  // スクリーンキャプチャの結果をまとめた配列
-  private BitmapSource[] capturedBitmaps = new BitmapSource[Constants.MaxLayoutElementCount];
+  private ScreenCaptureManager screenCaptureManager = null;
 
   //-------------------------------------------------------------------
   // コンストラクタ/Loadedイベントハンドラ
@@ -83,37 +80,16 @@ public partial class LayoutEdit : UserControl, IProfileToControl {
     // 使いまわすリソースはFreezeしておくとパフォーマンスがあがる
     this.dummyPen.Freeze();
 
-    // スクリーンキャプチャタイマーの準備
-    // 5秒間隔でプレビュー更新
-    screenCaptureTimer.Interval = TimeSpan.FromSeconds(5.0);
-    screenCaptureTimer.Tick += screenCaptureTimer_Tick;
-    screenCaptureTimer.Start();
+    // スクリーンキャプチャマネージャの準備
+    this.screenCaptureManager = new ScreenCaptureManager();
+    this.screenCaptureManager.Start();
 
     // 最初に更新
-    this.DrawProfile(true);
+    this.UpdateByProfile();
   }
 
   void OnLoaded(object sender, RoutedEventArgs e) {
     throw new NotImplementedException();
-  }
-
-  //===================================================================
-  // ScreenCaptureタイマー
-  //===================================================================
-
-  private void UpdateCapturedBitmaps() {
-    this.capturedBitmaps = new BitmapSource[Constants.MaxLayoutElementCount];
-    foreach (var layoutElement in App.Profile) {
-      this.capturedBitmaps[layoutElement.Index] = Utilities.ScreenCapture(layoutElement);
-    }
-  }
-
-  private void screenCaptureTimer_Tick(object sender, EventArgs e) {
-    if (!App.Options.LayoutPreview) return;
-    /// @todo(me) このタイマーはMainWindowがもっているべきではないか？
-    ///           GroupBoxが閉じられていたら何もしないでくれたほうがうれしい。
-
-    this.DrawProfile(true);
   }
 
   //===================================================================
@@ -147,10 +123,9 @@ public partial class LayoutEdit : UserControl, IProfileToControl {
   private void DrawLayout(DrawingContext dc, Profile.InputLayoutElement layoutElement) {
     var layoutElementRect = this.CreateLayoutElementRect(layoutElement);
 
-    /// @todo(me) 描画されない・・・どうやらDrawingVisualの限界が露呈した可能性が・・・
-    if (App.Options.LayoutPreview && this.capturedBitmaps[layoutElement.Index] != null) {
-      var bitmap = this.capturedBitmaps[layoutElement.Index];
-      dc.DrawImage(bitmap, layoutElementRect);
+    /// @todo(me) なんとかして別のスレッドが所有するデータを書きたいのだが・・・
+    if (App.Options.LayoutPreview) {
+      this.screenCaptureManager.DrawCapturedBitmap(layoutElement.Index, dc, layoutElementRect);
     }
 
     if (App.Options.LayoutBorder) {
@@ -168,11 +143,7 @@ public partial class LayoutEdit : UserControl, IProfileToControl {
 
   /// 描画テスト用
   /// @todo(me) FPS制限が必要かも？でもあんまりかわらないかも
-  private void DrawProfile(bool forceUpdatePreview = false) {
-    if (forceUpdatePreview) {
-      this.UpdateCapturedBitmaps();
-    }
-
+  private void DrawProfile() {
     using (var dc = this.DrawingGroup.Open()) {
       // 背景描画でサイズを決める
       dc.DrawRectangle(Brushes.Black, null, this.previewRect);
@@ -188,7 +159,28 @@ public partial class LayoutEdit : UserControl, IProfileToControl {
   //===================================================================
 
   public void UpdateByProfile() {
-    this.DrawProfile(true);
+    this.SendAllRequests();
+    this.DrawProfile();
+  }
+
+  private void SendAllRequests() {
+    foreach (var layoutElement in App.Profile) {
+      var request = new ScreenCaptureRequest {
+        Index = layoutElement.Index,
+        Window = layoutElement.Window,
+        ClippingX = layoutElement.WindowType == WindowTypes.Desktop ?
+                        layoutElement.ScreenClippingXWithFit :
+                        layoutElement.ClippingXWithFit,
+        ClippingY = layoutElement.WindowType == WindowTypes.Desktop ?
+                        layoutElement.ScreenClippingYWithFit :
+                        layoutElement.ClippingYWithFit,
+        ClippingWidth = layoutElement.ClippingWidthWithFit,
+        ClippingHeight = layoutElement.ClippingHeightWithFit,
+        ShowCursor = layoutElement.ShowCursor,
+        ShowLayeredWindow = layoutElement.ShowLayeredWindow
+      };
+      this.screenCaptureManager.SendRequest(request);
+    }
   }
 
   public void AttachChangedEventHandlers() {

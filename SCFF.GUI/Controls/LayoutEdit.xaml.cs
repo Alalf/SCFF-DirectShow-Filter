@@ -38,6 +38,9 @@ using System.Windows.Threading;
 /// LayoutEditImage内の座標系は([0-100],[0-100])で固定（プレビューのサイズに依存しない）
 /// 逆に言うと依存させてはいけない
 public partial class LayoutEdit : UserControl, IProfileToControl {
+  //-------------------------------------------------------------------
+  // 定数
+  //-------------------------------------------------------------------  
 
   // 1.0のままやると値が小さすぎてフォントがバグるので100倍
   private const double Scale = 100.0;
@@ -48,6 +51,10 @@ public partial class LayoutEdit : UserControl, IProfileToControl {
   private const double CaptionSize = 0.04 * Scale;
   private const double CaptionMargin = PenThickness;
 
+  //-------------------------------------------------------------------
+  // privateメンバ
+  //-------------------------------------------------------------------  
+
   private Pen dummyPen = new Pen(Brushes.DarkOrange, PenThickness);
   private Rect previewRect = new Rect(0.0, 0.0, MaxImageWidth, MaxImageHeight);
 
@@ -55,6 +62,10 @@ public partial class LayoutEdit : UserControl, IProfileToControl {
   private DispatcherTimer screenCaptureTimer = new DispatcherTimer();
   // スクリーンキャプチャの結果をまとめた配列
   private BitmapSource[] capturedBitmaps = new BitmapSource[Constants.MaxLayoutElementCount];
+
+  //-------------------------------------------------------------------
+  // コンストラクタ/Loadedイベントハンドラ
+  //-------------------------------------------------------------------  
 
   /// コンストラクタ
   public LayoutEdit() {
@@ -77,63 +88,39 @@ public partial class LayoutEdit : UserControl, IProfileToControl {
     screenCaptureTimer.Interval = TimeSpan.FromSeconds(5.0);
     screenCaptureTimer.Tick += screenCaptureTimer_Tick;
     screenCaptureTimer.Start();
-    this.DrawTest();
+
+    // 最初に更新
+    this.DrawProfile(true);
   }
 
   void OnLoaded(object sender, RoutedEventArgs e) {
     throw new NotImplementedException();
   }
-  
-  private BitmapSource ScreenCapture(Profile.InputLayoutElement layoutElement) {
-    // 返り値
-    BitmapSource result = null;
 
-    // Windowチェック
-    var window = layoutElement.Window;
-    if (!User32.IsWindow(window)) return result;
+  //===================================================================
+  // ScreenCaptureタイマー
+  //===================================================================
 
-    // キャプチャ用の情報をまとめる
-    var x = layoutElement.ClippingXWithFit;
-    var y = layoutElement.ClippingYWithFit;
-    var width = layoutElement.ClippingWidthWithFit;
-    var height = layoutElement.ClippingHeightWithFit;
-    var rasterOperation = GDI32.SRCCOPY;
-    if (layoutElement.ShowLayeredWindow) rasterOperation |= GDI32.CAPTUREBLT;
-
-    /// @todo(me) マウスカーソルの合成
-
-    // BitBlt
-    var windowDC = User32.GetDC(window);
-    var capturedBitmap = GDI32.CreateCompatibleBitmap(windowDC, width, height);
-    var capturedDC = GDI32.CreateCompatibleDC(windowDC);
-    var originalBitmap = GDI32.SelectObject(capturedDC, capturedBitmap);
-    GDI32.BitBlt(capturedBitmap, 0, 0, width, height, windowDC, x, y, rasterOperation);
-    GDI32.SelectObject(capturedDC, originalBitmap);
-    GDI32.DeleteDC(capturedDC);
-    User32.ReleaseDC(window, windowDC);
-
-    try {
-      result = Imaging.CreateBitmapSourceFromHBitmap(capturedBitmap,
-          IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
-    } catch (Exception ex) {
-      Debug.WriteLine("ScreenCapture: " + ex.Message);
-    } finally {
-      // 5秒に一回程度の更新なので、HDC/HBitmapは使いまわさないですぐに消す
-      GDI32.DeleteObject(capturedBitmap);
-      GC.Collect();
+  private void UpdateCapturedBitmaps() {
+    this.capturedBitmaps = new BitmapSource[Constants.MaxLayoutElementCount];
+    foreach (var layoutElement in App.Profile) {
+      this.capturedBitmaps[layoutElement.Index] = Utilities.ScreenCapture(layoutElement);
     }
-    return result;
   }
 
   private void screenCaptureTimer_Tick(object sender, EventArgs e) {
     if (!App.Options.LayoutPreview) return;
-    Debug.WriteLine("Timer Test!!!!");
-    foreach (var layoutElement in App.Profile) {
-      this.capturedBitmaps[layoutElement.Index] = this.ScreenCapture(layoutElement);
-    }
-    this.DrawTest();
+    /// @todo(me) このタイマーはMainWindowがもっているべきではないか？
+    ///           GroupBoxが閉じられていたら何もしないでくれたほうがうれしい。
+
+    this.DrawProfile(true);
   }
 
+  //===================================================================
+  // this.DrawingGroupへの描画
+  //===================================================================
+
+  /// レイアウト要素の描画範囲を求める
   private Rect CreateLayoutElementRect(Profile.InputLayoutElement layoutElement) {
     return new Rect() {
       X = layoutElement.BoundRelativeLeft * MaxImageWidth,
@@ -181,7 +168,11 @@ public partial class LayoutEdit : UserControl, IProfileToControl {
 
   /// 描画テスト用
   /// @todo(me) FPS制限が必要かも？でもあんまりかわらないかも
-  private void DrawTest() {
+  private void DrawProfile(bool forceUpdatePreview = false) {
+    if (forceUpdatePreview) {
+      this.UpdateCapturedBitmaps();
+    }
+
     using (var dc = this.DrawingGroup.Open()) {
       // 背景描画でサイズを決める
       dc.DrawRectangle(Brushes.Black, null, this.previewRect);
@@ -197,7 +188,7 @@ public partial class LayoutEdit : UserControl, IProfileToControl {
   //===================================================================
 
   public void UpdateByProfile() {
-    this.DrawTest();
+    this.DrawProfile(true);
   }
 
   public void AttachChangedEventHandlers() {
@@ -231,6 +222,7 @@ public partial class LayoutEdit : UserControl, IProfileToControl {
 
   // 状態変数
 
+  /// @todo(me) MoveAndSizeStateとしてまとめられないだろうか？
   /// マウスポインタとLeft/Right/Top/BottomのOffset
   private Common.GUI.RelativeMouseOffset relativeMouseOffset = null;
   /// スナップガイド
@@ -274,7 +266,7 @@ public partial class LayoutEdit : UserControl, IProfileToControl {
     this.snapGuide = new Common.GUI.SnapGuide(App.Profile, App.Options.LayoutSnap);
     image.CaptureMouse();
 
-    this.DrawTest();
+    this.DrawProfile();
   }
 
   /// MouseMoveイベントハンドラ
@@ -321,7 +313,7 @@ public partial class LayoutEdit : UserControl, IProfileToControl {
     /// @todo(me) 変更をMainWindowに通知
     Commands.ChangeLayoutParameterCommand.Execute(null, null);
 
-    this.DrawTest();
+    this.DrawProfile();
   }
 
   /// MouseUpイベントハンドラ
@@ -330,7 +322,7 @@ public partial class LayoutEdit : UserControl, IProfileToControl {
     if (this.hitMode != Common.GUI.HitModes.Neutral) {
       this.LayoutEditImage.ReleaseMouseCapture();
       this.hitMode = Common.GUI.HitModes.Neutral;
-      this.DrawTest();
+      this.DrawProfile();
     }
   }
 }

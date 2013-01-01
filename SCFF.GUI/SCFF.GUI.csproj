@@ -137,6 +137,7 @@
     <Compile Include="Controls\ResizeMethod.xaml.cs">
       <DependentUpon>ResizeMethod.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Utilities.cs" />
     <Compile Include="Controls\TargetWindow.xaml.cs">
       <DependentUpon>TargetWindow.xaml</DependentUpon>
     </Compile>

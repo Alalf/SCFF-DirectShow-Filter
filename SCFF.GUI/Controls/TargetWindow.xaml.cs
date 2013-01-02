@@ -1,4 +1,4 @@
-﻿// Copyright 2012 Alalf <alalf.iQLc_at_gmail.com>
+﻿// Copyright 2012-2013 Alalf <alalf.iQLc_at_gmail.com>
 //
 // This file is part of SCFF-DirectShow-Filter(SCFF DSF).
 //
@@ -28,9 +28,16 @@ using System.Windows.Controls;
 using System.Windows.Media;
 
 /// ウィンドウ取り込み対象の設定用コントロール
-public partial class TargetWindow : UserControl, IProfileToControl {
+public partial class TargetWindow : UserControl, IUpdateByProfile {
 
+  //===================================================================
+  // privateメンバ
+  //===================================================================
   private IntPtr dummyPen = IntPtr.Zero;
+
+  //===================================================================
+  // コンストラクタ/Loaded/ShutdownStartedイベントハンドラ
+  //===================================================================
 
   /// コンストラクタ
   public TargetWindow() {
@@ -41,6 +48,7 @@ public partial class TargetWindow : UserControl, IProfileToControl {
     this.Dispatcher.ShutdownStarted += OnShutdownStarted;
   }
 
+  /// Dispatcher.ShutdownStartedイベントハンドラ
   private void OnShutdownStarted(object sender, EventArgs e) {
     if (this.dummyPen != IntPtr.Zero) {
       Debug.WriteLine("TargetWindow: Dummy Pen is deleted");
@@ -50,29 +58,88 @@ public partial class TargetWindow : UserControl, IProfileToControl {
   }
 
   //===================================================================
-  // IProfileToControlの実装
+  // IUpdateByProfileの実装
   //===================================================================
 
-  /// @copydoc IProfileToControl.UpdateByProfile
-  public void UpdateByProfile() {
+  /// @copydoc IUpdateByProfile.UpdateByCurrentProfile
+  public void UpdateByCurrentProfile() {
     // *Changedイベントハンドラがないのでそのまま代入するだけ
     this.WindowCaption.Text = App.Profile.CurrentInputLayoutElement.WindowCaption;
   }
 
-  /// @copydoc IProfileToControl.AttachChangedEventHandlers
-  public void AttachChangedEventHandlers() {
+  /// @copydoc IUpdateByProfile.UpdateByEntireProfile
+  public void UpdateByEntireProfile() {
+    // 編集するのはCurrentのみ
+    this.UpdateByCurrentProfile();
+  }
+
+  /// @copydoc IUpdateByProfile.AttachProfileChangedEventHandlers
+  public void AttachProfileChangedEventHandlers() {
     // nop
   }
 
-  /// @copydoc IProfileToControl.DetachChangedEventHandlers
-  public void DetachChangedEventHandlers() {
+  /// @copydoc IUpdateByProfile.DetachProfileChangedEventHandlers
+  public void DetachProfileChangedEventHandlers() {
     // nop
   }
 
   //===================================================================
-  // イベントハンドラ
+  // (Button)Clickイベントハンドラ
   //===================================================================
 
+  private void UpdateProfile(WindowTypes nextWindowType, UIntPtr nextTargetWindow) {
+    // Window
+    switch (nextWindowType) {
+      case WindowTypes.Normal: {
+        App.Profile.CurrentOutputLayoutElement.SetWindow(nextTargetWindow);
+        break;
+      }
+      case WindowTypes.DesktopListView: {
+        App.Profile.CurrentOutputLayoutElement.SetWindowToDesktopListView();
+        break;
+      }
+      case WindowTypes.Desktop: {
+        App.Profile.CurrentOutputLayoutElement.SetWindowToDesktop();
+        break;
+      }
+      default: {
+        Debug.Fail("UpdateProfile: Invalid WindowType");
+        return;
+      }
+    }
+    App.Profile.CurrentOutputLayoutElement.Fit = true;
+
+    // Clipping*WithoutFitの補正
+    // とりあえず0,0を原点にもってくる(ウィンドウが変われば左上座標に意味はなくなるから)
+    App.Profile.CurrentOutputLayoutElement.ClippingXWithoutFit = 0;
+    App.Profile.CurrentOutputLayoutElement.ClippingYWithoutFit = 0;
+    // Width/HeightはFitした時の値をとりあえず上限とする
+    App.Profile.CurrentOutputLayoutElement.ClippingWidthWithoutFit = Math.Min(
+      App.Profile.CurrentInputLayoutElement.ClippingWidthWithoutFit,
+      App.Profile.CurrentInputLayoutElement.WindowWidth);
+    App.Profile.CurrentOutputLayoutElement.ClippingHeightWithoutFit = Math.Min(
+      App.Profile.CurrentInputLayoutElement.ClippingHeightWithoutFit,
+      App.Profile.CurrentInputLayoutElement.WindowHeight);
+
+    // コマンドをMainWindowに送信して関連するコントロールを更新
+    Commands.ChangeTargetWindowCommand.Execute(null, null);
+  }
+
+  private void Desktop_Click(object sender, System.Windows.RoutedEventArgs e) {
+    // Profileを更新
+    this.UpdateProfile(WindowTypes.Desktop, UIntPtr.Zero);
+  }
+
+  private void ListView_Click(object sender, System.Windows.RoutedEventArgs e) {
+    // Profileを更新
+    this.UpdateProfile(WindowTypes.DesktopListView, UIntPtr.Zero);
+  }
+
+  //===================================================================
+  // PreviewMouseDown/MouseMove/MouseUpイベントハンドラ
+  //===================================================================
+
+  // 状態変数
   private bool dragHereMode = false;
   private UIntPtr currentTargetWindow = UIntPtr.Zero;
   private IntPtr currentTargetDC = IntPtr.Zero;
@@ -94,7 +161,7 @@ public partial class TargetWindow : UserControl, IProfileToControl {
     GDI32.SetROP2(this.currentTargetDC, originalDrawMode);
   }
 
-  /// 
+  /// 現在のターゲットの塗りつぶしを解除する
   private void ClearTargetRect() {
     if (this.currentTargetWindow != UIntPtr.Zero) {
       // 取り込み対象範囲のXOR描画(もともとXORされていたので元に戻る)
@@ -150,43 +217,6 @@ public partial class TargetWindow : UserControl, IProfileToControl {
     this.XorTargetRect();
   }
 
-  private void UpdateProfile(WindowTypes nextWindowType, UIntPtr nextTargetWindow) {
-    // Window
-    switch (nextWindowType) {
-      case WindowTypes.Normal: {
-        App.Profile.CurrentOutputLayoutElement.SetWindow(nextTargetWindow);
-        break;
-      }
-      case WindowTypes.DesktopListView: {
-        App.Profile.CurrentOutputLayoutElement.SetWindowToDesktopListView();
-        break;
-      }
-      case WindowTypes.Desktop: {
-        App.Profile.CurrentOutputLayoutElement.SetWindowToDesktop();
-        break;
-      }
-      default: {
-        Debug.Fail("UpdateProfile: Invalid WindowType");
-        return;
-      }
-    }
-    App.Profile.CurrentOutputLayoutElement.Fit = true;
-
-    // Clipping*WithoutFitの補正
-    // とりあえず0,0を原点にもってくる(ウィンドウが変われば左上座標に意味はなくなるから)
-    App.Profile.CurrentOutputLayoutElement.ClippingXWithoutFit = 0;
-    App.Profile.CurrentOutputLayoutElement.ClippingYWithoutFit = 0;
-    // Width/HeightはFitした時の値をとりあえず上限とする
-    App.Profile.CurrentOutputLayoutElement.ClippingWidthWithoutFit = Math.Min(
-      App.Profile.CurrentInputLayoutElement.ClippingWidthWithoutFit,
-      App.Profile.CurrentInputLayoutElement.WindowWidth);
-    App.Profile.CurrentOutputLayoutElement.ClippingHeightWithoutFit = Math.Min(
-      App.Profile.CurrentInputLayoutElement.ClippingHeightWithoutFit,
-      App.Profile.CurrentInputLayoutElement.WindowHeight);
-
-    // コマンドをMainWindowに送信して関連するコントロールを更新
-    Commands.ChangeTargetWindowCommand.Execute(null, null);
-  }
 
   private void DragHere_PreviewMouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e) {
     this.DragHere.BorderBrush = this.originalBorderBrush;
@@ -201,16 +231,6 @@ public partial class TargetWindow : UserControl, IProfileToControl {
 
     // Profileを更新
     this.UpdateProfile(WindowTypes.Normal, nextTargetWindow);
-  }
-
-  private void Desktop_Click(object sender, System.Windows.RoutedEventArgs e) {
-    // Profileを更新
-    this.UpdateProfile(WindowTypes.Desktop, UIntPtr.Zero);
-  }
-
-  private void ListView_Click(object sender, System.Windows.RoutedEventArgs e) {
-    // Profileを更新
-    this.UpdateProfile(WindowTypes.DesktopListView, UIntPtr.Zero);
   }
 }
 }

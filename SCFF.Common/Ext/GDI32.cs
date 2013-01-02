@@ -1,4 +1,4 @@
-﻿// Copyright 2012 Alalf <alalf.iQLc_at_gmail.com>
+﻿// Copyright 2012-2013 Alalf <alalf.iQLc_at_gmail.com>
 //
 // This file is part of SCFF-DirectShow-Filter(SCFF DSF).
 //
@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file SCFF.Common/ExternalAPI.cs
+/// @file SCFF.Common/Ext/GDI32.cs
 /// SCFF.*モジュールで利用するGDI32.dllのAPIをまとめたクラス
 
 namespace SCFF.Common.Ext {
@@ -24,6 +24,7 @@ using System;
 using System.Runtime.InteropServices;
 
 /// SCFF.*モジュールで利用するGDI32.dllのAPIをまとめたクラス
+///
 /// HWNDは特例としてUIntPtr、それ以外はIntPtrで取り扱うこと
 public class GDI32 {
   // Constants

@@ -1,4 +1,4 @@
-﻿// Copyright 2012 Alalf <alalf.iQLc_at_gmail.com>
+﻿// Copyright 2012-2013 Alalf <alalf.iQLc_at_gmail.com>
 //
 // This file is part of SCFF-DirectShow-Filter(SCFF DSF).
 //
@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file SCFF.Common/ExternalAPI.cs
+/// @file SCFF.Common/Ext/User32.cs
 /// SCFF.*モジュールで利用するUser32.dllのAPIをまとめたクラス
 
 namespace SCFF.Common.Ext {
@@ -24,10 +24,9 @@ using System;
 using System.Runtime.InteropServices;
 using System.Text;
 
-/// SCFF.*モジュールで利用する外部APIをまとめたクラス
 /// SCFF.*モジュールで利用するUser32.dllのAPIをまとめたクラス
 public class User32 {
-  // Constants: System Metric
+  // Constants
   public const int SM_CXSCREEN = 0;
   public const int SM_CYSCREEN = 1;
   public const int SM_XVIRTUALSCREEN  = 76;
@@ -80,4 +79,4 @@ public class User32 {
   [DllImport("user32.dll")]
   public static extern int GetSystemMetrics(int nIndex);
 }
-}
+}   // namespace SCFF.Common.Ext

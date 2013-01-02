@@ -1,4 +1,4 @@
-﻿// Copyright 2012 Alalf <alalf.iQLc_at_gmail.com>
+﻿// Copyright 2012-2013 Alalf <alalf.iQLc_at_gmail.com>
 //
 // This file is part of SCFF-DirectShow-Filter(SCFF DSF).
 //
@@ -15,11 +15,16 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
+/// @file SCFF.GUI/Commands.cs
+/// コントロール共通で使えるRoutedComannd集
+
 namespace SCFF.GUI {
 
 using System.Windows.Input;
 
+/// コントロール共通で使えるRoutedComannd集
 public static class Commands {
+
   public readonly static RoutedCommand AddLayoutElementCommand = new RoutedCommand();
   public readonly static RoutedCommand RemoveLayoutElementCommand = new RoutedCommand();
 

@@ -121,7 +121,7 @@
     <Compile Include="Controls\Area.xaml.cs">
       <DependentUpon>Area.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\IProfileToControl.cs" />
+    <Compile Include="IUpdateByProfile.cs" />
     <Compile Include="Controls\LayoutParameter.xaml.cs">
       <DependentUpon>LayoutParameter.xaml</DependentUpon>
     </Compile>
@@ -137,11 +137,11 @@
     <Compile Include="Controls\ResizeMethod.xaml.cs">
       <DependentUpon>ResizeMethod.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ScreenCaptureManager.cs" />
     <Compile Include="Controls\Utilities.cs" />
     <Compile Include="Controls\TargetWindow.xaml.cs">
       <DependentUpon>TargetWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="IUpdateByOptions.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -181,6 +181,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <None Include="WPF.dox" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

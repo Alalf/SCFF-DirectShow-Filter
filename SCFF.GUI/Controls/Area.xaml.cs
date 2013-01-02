@@ -1,4 +1,4 @@
-﻿// Copyright 2012 Alalf <alalf.iQLc_at_gmail.com>
+﻿// Copyright 2012-2013 Alalf <alalf.iQLc_at_gmail.com>
 //
 // This file is part of SCFF-DirectShow-Filter(SCFF DSF).
 //
@@ -28,7 +28,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 
 /// クリッピング領域設定用
-public partial class Area : UserControl, IProfileToControl {
+public partial class Area : UserControl, IUpdateByProfile {
 
   private readonly Brush normalBorderBrush = Brushes.DarkOrange;
   private Brush normalGridBrush;
@@ -63,11 +63,11 @@ public partial class Area : UserControl, IProfileToControl {
   }
 
   //===================================================================
-  // IProfileToControlの実装
+  // IUpdateByProfileの実装
   //===================================================================
 
-  /// @copydoc IProfileToControl.UpdateByProfile
-  public void UpdateByProfile() {
+  /// @copydoc IUpdateByProfile.UpdateByCurrentProfile
+  public void UpdateByCurrentProfile() {
     // Enabled/Disabled
     switch (App.Profile.CurrentInputLayoutElement.WindowType) {
       case WindowTypes.Normal: {
@@ -91,24 +91,30 @@ public partial class Area : UserControl, IProfileToControl {
     this.Fit.IsChecked = App.Profile.CurrentInputLayoutElement.Fit;
 
     // *Changed
-    this.DetachChangedEventHandlers();
+    this.DetachProfileChangedEventHandlers();
     this.ClippingX.Text = App.Profile.CurrentInputLayoutElement.ClippingXWithFit.ToString();
     this.ClippingY.Text = App.Profile.CurrentInputLayoutElement.ClippingYWithFit.ToString();
     this.ClippingWidth.Text = App.Profile.CurrentInputLayoutElement.ClippingWidthWithFit.ToString();
     this.ClippingHeight.Text = App.Profile.CurrentInputLayoutElement.ClippingHeightWithFit.ToString();
-    this.AttachChangedEventHandlers();
+    this.AttachProfileChangedEventHandlers();
   }
 
-  /// @copydoc IProfileToControl.AttachChangedEventHandlers
-  public void AttachChangedEventHandlers() {
+  /// @copydoc IUpdateByProfile.UpdateByEntireProfile
+  public void UpdateByEntireProfile() {
+    // current以外のデータを表示する必要はない
+    this.UpdateByCurrentProfile();
+  }
+
+  /// @copydoc IUpdateByProfile.AttachProfileChangedEventHandlers
+  public void AttachProfileChangedEventHandlers() {
     this.ClippingX.TextChanged += clippingX_TextChanged;
     this.ClippingY.TextChanged += clippingY_TextChanged;
     this.ClippingWidth.TextChanged += clippingWidth_TextChanged;
     this.ClippingHeight.TextChanged += clippingHeight_TextChanged;
   }
 
-  /// @copydoc IProfileToControl.DetachChangedEventHandlers
-  public void DetachChangedEventHandlers() {
+  /// @copydoc IUpdateByProfile.DetachProfileChangedEventHandlers
+  public void DetachProfileChangedEventHandlers() {
     this.ClippingX.TextChanged -= clippingX_TextChanged;
     this.ClippingY.TextChanged -= clippingY_TextChanged;
     this.ClippingWidth.TextChanged -= clippingWidth_TextChanged;
@@ -127,7 +133,7 @@ public partial class Area : UserControl, IProfileToControl {
     if (!this.Fit.IsChecked.HasValue) return;
 
     App.Profile.CurrentOutputLayoutElement.Fit = (bool)this.Fit.IsChecked;
-    this.UpdateByProfile();
+    this.UpdateByCurrentProfile();
   }
 
   private void CommonAreaSelect(Rect boundScreenRect, WindowTypes nextWindowType) {
@@ -224,7 +230,7 @@ public partial class Area : UserControl, IProfileToControl {
       Commands.ChangeTargetWindowCommand.Execute(null, null);
     } else {
       // 変更はAreaコントロールのみに収まるのでコマンドは発行しない
-      this.UpdateByProfile();
+      this.UpdateByCurrentProfile();
     }
   }
 

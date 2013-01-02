@@ -1,4 +1,4 @@
-﻿// Copyright 2012 Alalf <alalf.iQLc_at_gmail.com>
+﻿// Copyright 2012-2013 Alalf <alalf.iQLc_at_gmail.com>
 //
 // This file is part of SCFF-DirectShow-Filter(SCFF DSF).
 //
@@ -25,7 +25,7 @@ using System.Windows;
 using System.Windows.Controls;
 
 /// 拡大縮小方式設定用
-public partial class ResizeMethod : UserControl, IProfileToControl {
+public partial class ResizeMethod : UserControl, IUpdateByProfile {
 
   /// コンストラクタ
   public ResizeMethod() {
@@ -41,15 +41,15 @@ public partial class ResizeMethod : UserControl, IProfileToControl {
   }
 
   //===================================================================
-  // IProfileToControlの実装
+  // IUpdateByProfileの実装
   //===================================================================
 
-  /// @copydoc IProfileToControl.UpdateByProfile
-  public void UpdateByProfile() {
+  /// @copydoc IUpdateByProfile.UpdateByCurrentProfile
+  public void UpdateByCurrentProfile() {
     this.SWScaleAccurateRnd.IsChecked = App.Profile.CurrentInputLayoutElement.SWScaleAccurateRnd;
     this.SWScaleIsFilterEnabled.IsChecked = App.Profile.CurrentInputLayoutElement.SWScaleIsFilterEnabled;
 
-    this.DetachChangedEventHandlers();
+    this.DetachProfileChangedEventHandlers();
 
     var index = Constants.ResizeMethodIndexes[App.Profile.CurrentInputLayoutElement.SWScaleFlags];
     this.SWScaleFlags.SelectedIndex = index;
@@ -60,11 +60,17 @@ public partial class ResizeMethod : UserControl, IProfileToControl {
     this.SWScaleChromaSharpen.Text = App.Profile.CurrentInputLayoutElement.SWScaleChromaSharpen.ToString("F2");
     this.SWScaleChromaVshift.Text = App.Profile.CurrentInputLayoutElement.SWScaleChromaVshift.ToString("F2");
 
-    this.AttachChangedEventHandlers();
+    this.AttachProfileChangedEventHandlers();
   }
 
-  /// @copydoc IProfileToControl.AttachChangedEventHandlers
-  public void AttachChangedEventHandlers() {
+  /// @copydoc IUpdateByProfile.UpdateByEntireProfile
+  public void UpdateByEntireProfile() {
+    // 編集するのはCurrentのみ
+    this.UpdateByCurrentProfile();
+  }
+
+  /// @copydoc IUpdateByProfile.AttachProfileChangedEventHandlers
+  public void AttachProfileChangedEventHandlers() {
     this.SWScaleFlags.SelectionChanged += swscaleFlags_SelectionChanged;
     this.SWScaleLumaGBlur.TextChanged += swscaleLumaGBlur_TextChanged;
     this.SWScaleLumaSharpen.TextChanged += swscaleLumaSharpen_TextChanged;
@@ -74,8 +80,8 @@ public partial class ResizeMethod : UserControl, IProfileToControl {
     this.SWScaleChromaVshift.TextChanged += swscaleChromaVshift_TextChanged;
   }
 
-  /// @copydoc IProfileToControl.DetachChangedEventHandlers
-  public void DetachChangedEventHandlers() {
+  /// @copydoc IUpdateByProfile.DetachChangedEventHandlers
+  public void DetachProfileChangedEventHandlers() {
     this.SWScaleFlags.SelectionChanged -= swscaleFlags_SelectionChanged;
     this.SWScaleLumaGBlur.TextChanged -= swscaleLumaGBlur_TextChanged;
     this.SWScaleLumaSharpen.TextChanged -= swscaleLumaSharpen_TextChanged;

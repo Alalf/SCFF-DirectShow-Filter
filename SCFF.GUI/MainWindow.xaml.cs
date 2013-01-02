@@ -1,4 +1,4 @@
-﻿// Copyright 2012 Alalf <alalf.iQLc_at_gmail.com>
+﻿// Copyright 2012-2013 Alalf <alalf.iQLc_at_gmail.com>
 //
 // This file is part of SCFF-DirectShow-Filter(SCFF DSF).
 //
@@ -20,28 +20,29 @@
 
 namespace SCFF.GUI {
 
-  using Microsoft.Win32;
-  using Microsoft.Windows.Shell;
-  using SCFF.Common;
-  using System.Diagnostics;
-  using System.Windows;
-  using System.Windows.Input;
+using Microsoft.Win32;
+using Microsoft.Windows.Shell;
+using SCFF.Common;
+using System.Diagnostics;
+using System.Windows;
+using System.Windows.Input;
 
 /// MainWindowのコードビハインド
-public partial class MainWindow : Window {
+public partial class MainWindow : Window, IUpdateByProfile, IUpdateByOptions {
+
+  //===================================================================
+  // コンストラクタ/Loaded/ShutdownStartedイベントハンドラ
+  //===================================================================
 
   /// コンストラクタ
   public MainWindow() {    
-    //-----------------------------------------------------------------
-    // Controls
-    //-----------------------------------------------------------------
     this.InitializeComponent();
   }
 
   /// 全ウィンドウ表示前に一度だけ起こるLoadedイベントハンドラ
   private void OnLoaded(object sender, RoutedEventArgs e) {
     this.UpdateByOptions();
-    this.UpdateByProfile();
+    this.UpdateByEntireProfile();
   }
 
   /// アプリケーション終了時に発生するClosingイベントハンドラ
@@ -50,7 +51,7 @@ public partial class MainWindow : Window {
   }
 
   //===================================================================
-  // Options
+  // IUpdateByOptionsの実装
   //===================================================================
 
   /// 最近使用したプロファイルメニューの更新
@@ -85,8 +86,8 @@ public partial class MainWindow : Window {
     }
   }
 
-  /// 設定からUIを更新
-  private void UpdateByOptions() {
+  /// @copydoc IUpdateByOptions.UpdateByOptions
+  public void UpdateByOptions() {
     // Recent Profiles
     this.UpdateRecentProfiles();
 
@@ -115,6 +116,16 @@ public partial class MainWindow : Window {
     this.RestoreLastProfile.IsChecked = App.Options.TmpRestoreLastProfile;
   }
 
+  /// @copydoc IUpdateByOptions.DetachOptionsChangedEventHandlers
+  public void DetachOptionsChangedEventHandlers() {
+    // nop
+  }
+
+  /// @copydoc IUpdateByOptions.AttachOptionsChangedEventHandlers
+  public void AttachOptionsChangedEventHandlers() {
+    // nop
+  }
+
   /// UIから設定にデータを保存
   private void SaveOptions() {
     // Tmp接頭辞のプロパティだけはここで更新する必要がある
@@ -137,26 +148,39 @@ public partial class MainWindow : Window {
   }
 
   //===================================================================
-  // Profile
+  // IUpdateByProfileの実装
   //===================================================================
 
-  /// プロファイルからUIを更新
-  private void UpdateByProfile() {
+  /// @copydoc IUpdateByProfile.UpdateByCurrentProfile
+  public void UpdateByCurrentProfile() {
+    this.TargetWindow.UpdateByCurrentProfile();
+    this.Area.UpdateByCurrentProfile();
+    this.Options.UpdateByCurrentProfile();
+    this.ResizeMethod.UpdateByCurrentProfile();
+    this.LayoutParameter.UpdateByCurrentProfile();
+    this.LayoutTab.UpdateByCurrentProfile();
+    this.LayoutEdit.UpdateByCurrentProfile();
+  }
 
-    // TargetWindow
-    this.TargetWindow.UpdateByProfile();
+  /// @copydoc IUpdateByProfile.UpdateByEntireProfile
+  public void UpdateByEntireProfile() {
+    this.TargetWindow.UpdateByEntireProfile();
+    this.Area.UpdateByEntireProfile();
+    this.Options.UpdateByEntireProfile();
+    this.ResizeMethod.UpdateByEntireProfile();
+    this.LayoutParameter.UpdateByEntireProfile();
+    this.LayoutTab.UpdateByEntireProfile();
+    this.LayoutEdit.UpdateByEntireProfile();
+  }
 
-    // Area
-    this.Area.UpdateByProfile();
+  /// @copydoc IUpdateByProfile.UpdateByEntireProfile
+  public void AttachProfileChangedEventHandlers() {
+    // nop
+  }
 
-    // Options
-    this.Options.UpdateByProfile();
-
-    // Resize Method
-    this.ResizeMethod.UpdateByProfile();
-
-    // Layout
-    this.LayoutParameter.UpdateByProfile();
+  /// @copydoc IUpdateByProfile.UpdateByEntireProfile
+  public void DetachProfileChangedEventHandlers() {
+    // nop
   }
 
   //===================================================================
@@ -192,8 +216,7 @@ public partial class MainWindow : Window {
     switch (result) {
       case MessageBoxResult.No: {
         App.Profile.ResetProfile();
-        this.LayoutTab.ResetTabs();
-        this.UpdateByProfile();
+        this.UpdateByEntireProfile();
         break;
       }
       case MessageBoxResult.Yes: {
@@ -208,8 +231,7 @@ public partial class MainWindow : Window {
           this.UpdateRecentProfiles();
 
           App.Profile.ResetProfile();
-          this.LayoutTab.ResetTabs();
-          this.UpdateByProfile();
+          this.UpdateByEntireProfile();
         }
         break;
       }
@@ -274,10 +296,7 @@ public partial class MainWindow : Window {
       boundOffset * App.Profile.CurrentInputLayoutElement.Index;
     App.Profile.CurrentOutputLayoutElement.BoundRelativeTop =
       boundOffset * App.Profile.CurrentInputLayoutElement.Index;
-    
-    this.LayoutTab.AddTab();
-    this.LayoutEdit.UpdateByProfile();
-    this.UpdateByProfile();
+    this.UpdateByEntireProfile();
   }
 
   private void AddLayoutElement_CanExecute(object sender, CanExecuteRoutedEventArgs e) {
@@ -287,10 +306,7 @@ public partial class MainWindow : Window {
   private void RemoveLayoutElement_Executed(object sender, ExecutedRoutedEventArgs e) {
     Debug.WriteLine("Command [RemoveLayoutElement]:");
     App.Profile.RemoveCurrentLayoutElement();
-
-    this.LayoutTab.RemoveCurrentTab();
-    this.LayoutEdit.UpdateByProfile();
-    this.UpdateByProfile();
+    this.UpdateByEntireProfile();
   }
 
   private void RemoveLayoutElement_CanExecute(object sender, CanExecuteRoutedEventArgs e) {
@@ -299,29 +315,20 @@ public partial class MainWindow : Window {
 
   private void ChangeCurrentLayoutElement_Executed(object sender, ExecutedRoutedEventArgs e) {
     Debug.WriteLine("Command [ChangeCurrentLayoutElement]:");
-
-    /// @todo(me) 本来UpdateByProfileでやるべき動作が無駄に細分化している。統合するべき。
-    this.LayoutTab.ChangeCurrentTab();
-    this.LayoutEdit.UpdateByProfile();
-    this.UpdateByProfile();
+    this.UpdateByEntireProfile();
   }
 
   private void ChangeTargetWindow_Executed(object sender, ExecutedRoutedEventArgs e) {
     /// @todo(me) ここでClippingWithoutFitの調整を行う。ついでにバックアップも？
+    this.TargetWindow.UpdateByCurrentProfile();
+    this.Area.UpdateByCurrentProfile();
 
-    // TargetWindow
-    this.TargetWindow.UpdateByProfile();
-
-    // Area
-    this.Area.UpdateByProfile();
-
-    // Layout
-    this.LayoutParameter.UpdateByProfile();
+    this.LayoutParameter.UpdateByCurrentProfile();
+    this.LayoutEdit.UpdateByCurrentProfile();
   }
 
   private void ChangeLayoutParameter_Executed(object sender, ExecutedRoutedEventArgs e) {
-    // Layout
-    this.LayoutParameter.UpdateByProfile();
+    this.LayoutParameter.UpdateByCurrentProfile();
   }
 
   //===================================================================
@@ -363,20 +370,21 @@ public partial class MainWindow : Window {
     if (!this.LayoutPreview.IsChecked.HasValue) return;
 
     App.Options.LayoutPreview = (bool)this.LayoutPreview.IsChecked;
-    this.LayoutEdit.UpdateByProfile();
+    this.LayoutEdit.UpdateByOptions();
   }
 
   private void layoutSnap_Click(object sender, RoutedEventArgs e) {
     if (!this.LayoutSnap.IsChecked.HasValue) return;
 
     App.Options.LayoutSnap = (bool)this.LayoutSnap.IsChecked;
+    // this.LayoutEdit.UpdateByOptions();
   }
 
   private void layoutBorder_Click(object sender, RoutedEventArgs e) {
     if (!this.LayoutBorder.IsChecked.HasValue) return;
 
     App.Options.LayoutBorder = (bool)this.LayoutBorder.IsChecked;
-    this.LayoutEdit.UpdateByProfile();
+    this.LayoutEdit.UpdateByOptions();
   }
 }
 }

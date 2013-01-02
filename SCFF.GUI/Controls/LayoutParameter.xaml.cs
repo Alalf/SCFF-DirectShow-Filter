@@ -1,4 +1,4 @@
-﻿// Copyright 2012 Alalf <alalf.iQLc_at_gmail.com>
+﻿// Copyright 2012-2013 Alalf <alalf.iQLc_at_gmail.com>
 //
 // This file is part of SCFF-DirectShow-Filter(SCFF DSF).
 //
@@ -24,7 +24,11 @@ using SCFF.Common;
 using System.Windows.Controls;
 
 /// レイアウト配置設定
-public partial class LayoutParameter : UserControl, IProfileToControl {
+public partial class LayoutParameter : UserControl, IUpdateByProfile {
+
+  //===================================================================
+  // コンストラクタ/Loaded/ShutdownStartedイベントハンドラ
+  //===================================================================
 
   /// コンストラクタ
   public LayoutParameter() {
@@ -32,11 +36,11 @@ public partial class LayoutParameter : UserControl, IProfileToControl {
   }
 
   //===================================================================
-  // IProfileToControlの実装
+  // IUpdateByProfileの実装
   //===================================================================
 
-  /// @copydoc IProfileToControl.UpdateByProfile
-  public void UpdateByProfile() {
+  /// @copydoc IUpdateByProfile.UpdateByCurrentProfile
+  public void UpdateByCurrentProfile() {
     var header = "Layout " + (App.Profile.CurrentInputLayoutElement.Index+1) +
         ": " + App.Profile.CurrentInputLayoutElement.WindowCaption;
     if (header.Length > 60) {
@@ -51,14 +55,14 @@ public partial class LayoutParameter : UserControl, IProfileToControl {
     this.BoundWidth.Text = App.Profile.CurrentInputLayoutElement.BoundWidth(Constants.DefaultPreviewWidth).ToString();
     this.BoundHeight.Text = App.Profile.CurrentInputLayoutElement.BoundHeight(Constants.DefaultPreviewHeight).ToString();
 
-    this.DetachChangedEventHandlers();
+    this.DetachProfileChangedEventHandlers();
 
     this.BoundRelativeLeft.Text = App.Profile.CurrentInputLayoutElement.BoundRelativeLeft.ToString("F3");
     this.BoundRelativeTop.Text = App.Profile.CurrentInputLayoutElement.BoundRelativeTop.ToString("F3");
     this.BoundRelativeRight.Text = App.Profile.CurrentInputLayoutElement.BoundRelativeRight.ToString("F3");
     this.BoundRelativeBottom.Text = App.Profile.CurrentInputLayoutElement.BoundRelativeBottom.ToString("F3");
 
-    this.AttachChangedEventHandlers();
+    this.AttachProfileChangedEventHandlers();
 
     var isComplexLayout = App.Profile.LayoutType == LayoutTypes.ComplexLayout;
     this.BoundRelativeLeft.IsEnabled = isComplexLayout;
@@ -67,16 +71,22 @@ public partial class LayoutParameter : UserControl, IProfileToControl {
     this.BoundRelativeBottom.IsEnabled = isComplexLayout;
   }
 
-  /// @copydoc IProfileToControl.AttachChangedEventHandlers
-  public void AttachChangedEventHandlers() {
+  /// @copydoc IUpdateByProfile.UpdateByEntireProfile
+  public void UpdateByEntireProfile() {
+    // 編集するのはCurrentのみ
+    this.UpdateByCurrentProfile();
+  }
+
+  /// @copydoc IUpdateByProfile.AttachProfileChangedEventHandlers
+  public void AttachProfileChangedEventHandlers() {
     this.BoundRelativeLeft.TextChanged += boundRelativeLeft_TextChanged;
     this.BoundRelativeTop.TextChanged += boundRelativeTop_TextChanged;
     this.BoundRelativeRight.TextChanged += boundRelativeRight_TextChanged;
     this.BoundRelativeBottom.TextChanged += boundRelativeBottom_TextChanged;
   }
 
-  /// @copydoc IProfileToControl.DetachChangedEventHandlers
-  public void DetachChangedEventHandlers() {
+  /// @copydoc IUpdateByProfile.DetachProfileChangedEventHandlers
+  public void DetachProfileChangedEventHandlers() {
     this.BoundRelativeLeft.TextChanged -= boundRelativeLeft_TextChanged;
     this.BoundRelativeTop.TextChanged -= boundRelativeTop_TextChanged;
     this.BoundRelativeRight.TextChanged -= boundRelativeRight_TextChanged;

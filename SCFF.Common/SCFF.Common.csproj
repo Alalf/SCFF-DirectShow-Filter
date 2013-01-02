@@ -48,6 +48,7 @@
     <Compile Include="GUI\HitTest.cs" />
     <Compile Include="GUI\MoveAndSize.cs" />
     <Compile Include="GUI\RelativeMouseOffset.cs" />
+    <Compile Include="GUI\ScreenCapturer.cs" />
     <Compile Include="GUI\SnapGuide.cs" />
     <Compile Include="OptionsINIFile.cs" />
     <Compile Include="Processes.cs" />

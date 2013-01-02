@@ -1,4 +1,4 @@
-﻿// Copyright 2012 Alalf <alalf.iQLc_at_gmail.com>
+﻿// Copyright 2012-2013 Alalf <alalf.iQLc_at_gmail.com>
 //
 // This file is part of SCFF-DirectShow-Filter(SCFF DSF).
 //
@@ -15,25 +15,25 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file SCFF.GUI/Controls/IProfileToControl.cs
-/// レイアウト設定などをまとめたプロファイル
+/// @file SCFF.GUI/IUpdateByOptions.cs
+/// 自前Options->Controlデータバインディング用インタフェース
 
-namespace SCFF.GUI.Controls {
+namespace SCFF.GUI {
 
-/// 自前Profile->Controlデータバインディング用インタフェース
+/// 自前Options->Controlデータバインディング用インタフェース
 ///
 /// どうしてもINotifyPropertyChangedなどのリフレクションを使いたくなかったため、
 /// やむなく用意した
-interface IProfileToControl {
-  /// Profile->Control書き換え
-  void UpdateByProfile();
+interface IUpdateByOptions {
+  /// Options->Control書き換え
+  void UpdateByOptions();
 
-  /// Profile->Controlと同時にControl->Profileされないように、
-  /// Profile->Control後にイベントハンドラを戻す
-  void AttachChangedEventHandlers();
+  /// Options->Controlと同時にControl->Optionsされないように、
+  /// Options->Control後にイベントハンドラを取り外す
+  void DetachOptionsChangedEventHandlers();
 
-  /// Profile->Controlと同時にControl->Profileされないように、
-  /// Profile->Control後にイベントハンドラを取り外す
-  void DetachChangedEventHandlers();
+  /// Options->Controlと同時にControl->Optionsされないように、
+  /// Options->Control後にイベントハンドラを戻す
+  void AttachOptionsChangedEventHandlers();
 }
-}
+}   // namespace SCFF.GUI

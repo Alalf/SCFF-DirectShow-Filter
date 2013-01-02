@@ -1,4 +1,4 @@
-﻿// Copyright 2012 Alalf <alalf.iQLc_at_gmail.com>
+﻿// Copyright 2012-2013 Alalf <alalf.iQLc_at_gmail.com>
 //
 // This file is part of SCFF-DirectShow-Filter(SCFF DSF).
 //
@@ -24,7 +24,11 @@ using System.Windows;
 using System.Windows.Controls;
 
 /// 拡大縮小時のオプション
-public partial class Options : UserControl, IProfileToControl {
+public partial class Options : UserControl, IUpdateByProfile {
+
+  //===================================================================
+  // コンストラクタ/Loaded/ShutdownStartedイベントハンドラ
+  //===================================================================
 
   /// コンストラクタ
   public Options() {
@@ -32,10 +36,11 @@ public partial class Options : UserControl, IProfileToControl {
   }
 
   //===================================================================
-  // IProfileToControlの実装
+  // IUpdateByProfileの実装
   //===================================================================
 
-  public void UpdateByProfile() {
+  /// @copydoc IUpdateByProfile.UpdateByCurrentProfile
+  public void UpdateByCurrentProfile() {
     // checkboxはclickがあるのでeventハンドラをattach/detachする必要はない
     this.ShowCursor.IsChecked = App.Profile.CurrentInputLayoutElement.ShowCursor;
     this.ShowLayeredWindow.IsChecked = App.Profile.CurrentInputLayoutElement.ShowLayeredWindow;
@@ -44,11 +49,19 @@ public partial class Options : UserControl, IProfileToControl {
     // @todo(me) overSampingとthreadCountはまだDSFでも実装されていない
   }
 
-  public void AttachChangedEventHandlers() {
+  /// @copydoc IUpdateByProfile.UpdateByEntireProfile
+  public void UpdateByEntireProfile() {
+    // 編集するのはCurrentのみ
+    this.UpdateByCurrentProfile();
+  }
+
+  /// @copydoc IUpdateByProfile.AttachProfileChangedEventHandlers
+  public void AttachProfileChangedEventHandlers() {
     // nop
   }
 
-  public void DetachChangedEventHandlers() {
+  /// @copydoc IUpdateByProfile.DetachProfileChangedEventHandlers
+  public void DetachProfileChangedEventHandlers() {
     // nop
   }
 

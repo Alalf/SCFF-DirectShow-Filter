@@ -1,4 +1,4 @@
-﻿// Copyright 2012 Alalf <alalf.iQLc_at_gmail.com>
+﻿// Copyright 2012-2013 Alalf <alalf.iQLc_at_gmail.com>
 //
 // This file is part of SCFF-DirectShow-Filter(SCFF DSF).
 //
@@ -24,103 +24,81 @@ using System.Diagnostics;
 using System.Windows.Controls;
 
 /// レイアウト要素の切り替えと個数の表示を行うタブ
-public partial class LayoutTab : UserControl, IProfileToControl {
+public partial class LayoutTab : UserControl, IUpdateByProfile {
+
+  //===================================================================
+  // コンストラクタ/Loaded/ShutdownStartedイベントハンドラ
+  //===================================================================
 
   /// コンストラクタ
   public LayoutTab() {
     InitializeComponent();
   }
 
-  /// TabItemを一気に生成する
-  public void CreateTabs() {
-    this.DetachChangedEventHandlers();
+  //===================================================================
+  // IUpdateByProfileの実装
+  //===================================================================
 
-    // 必要な分を追加する
-    this.LayoutElementTab.Items.Clear();
-    for (int i = 0; i < App.Profile.LayoutElementCount; ++i) {
-      var item = new TabItem();
-      item.Header = (i+1).ToString();
-      this.LayoutElementTab.Items.Add(item);
-    }
-    this.LayoutElementTab.SelectedIndex = App.Profile.CurrentInputLayoutElement.Index;
+  /// @copydoc IUpdateByProfile.UpdateByCurrentProfile
+  public void UpdateByCurrentProfile() {
+    // Current Profileの値が変わってもTabの内容は変わらない
+  }
+
+  /// Profileを見ながら必要な分を足し、必要な分を削る
+  private void UpdateLayoutElementTab() {
+    // コントロール編集開始
+    this.DetachProfileChangedEventHandlers();
+
+    var tabIndex = this.LayoutElementTab.SelectedIndex;
+    var tabCount = this.LayoutElementTab.Items.Count;
+    var profileIndex = App.Profile.CurrentInputLayoutElement.Index;
+    var profileCount = App.Profile.LayoutElementCount;
     
-    this.AttachChangedEventHandlers();
-  }
-
-  /// TabItemをリセットする
-  public void ResetTabs() {
-    this.DetachChangedEventHandlers();
-
-    // 最初の一個はそのまま残す
-    this.LayoutElementTab.SelectedIndex = 0;
-    for (int i = this.LayoutElementTab.Items.Count - 1; i >= 1; --i) {
-      this.LayoutElementTab.Items.RemoveAt(i);
+    // まず数を合わせる
+    if (tabCount == profileCount) {
+      // 特に増減なし
+    } else if (tabCount < profileCount) {
+      // profileCountのほうが多い
+      var delta = profileCount - tabCount;
+      // 足りない分を足す
+      for (int i = 0; i < delta; i++) {
+        var item = new TabItem();
+        // 1-basedなのでCount+1
+        item.Header = this.LayoutElementTab.Items.Count + 1;
+        this.LayoutElementTab.Items.Add(item);
+      }
+    } else {
+      // tabCountのほうが少ない
+      var delta = tabCount - profileCount;
+      // 多すぎる文は削る
+      for (int i = 0; i < delta; i++) {
+        // 末尾から差の文だけを削除
+        this.LayoutElementTab.Items.RemoveAt(tabCount - 1 - i);
+      }
     }
 
-    this.AttachChangedEventHandlers();
-  }
-
-  /// TabItemを末尾にひとつ追加する
-  public void AddTab() {
-    this.DetachChangedEventHandlers();
-
-    var item = new TabItem();
-    // 1-basedなのでCount+1
-    item.Header = this.LayoutElementTab.Items.Count + 1;
-    this.LayoutElementTab.Items.Add(item);
-    // 最後に追加されたので末尾を選択
-    this.LayoutElementTab.SelectedIndex = this.LayoutElementTab.Items.Count - 1;
-
-    Debug.Assert(this.LayoutElementTab.SelectedIndex == App.Profile.CurrentInputLayoutElement.Index);
-    Debug.WriteLine("*****Add!*****");
-    Debug.WriteLine("Current Index: " + (App.Profile.CurrentInputLayoutElement.Index+1));
-
-    this.AttachChangedEventHandlers();
-  }
-
-  /// 現在のタブをひとつ削除して後ろのタブの名前を変える
-  public void RemoveCurrentTab() {
-    this.DetachChangedEventHandlers();
-
-    // 末尾を一個削除
-    // 末尾削除なら改名すらいらない
-    var last = this.LayoutElementTab.Items.Count - 1;
-    this.LayoutElementTab.Items.RemoveAt(last);
-
-    Debug.Assert(this.LayoutElementTab.SelectedIndex == App.Profile.CurrentInputLayoutElement.Index);
-    Debug.WriteLine("=====Remove!=====");
-    Debug.WriteLine("Current Index: " + (App.Profile.CurrentInputLayoutElement.Index+1));
-
-    this.AttachChangedEventHandlers();
-  }
-
-  /// 現在のタブ選択を変更する(SelectionChangedと同じ動作)
-  /// @todo(me) エンバグしそうな場所。要注意。
-  public void ChangeCurrentTab() {
-    Debug.Assert(0 <= App.Profile.CurrentInputLayoutElement.Index);
-    Debug.Assert(App.Profile.CurrentInputLayoutElement.Index < this.LayoutElementTab.Items.Count);
-    this.DetachChangedEventHandlers();
+    // 次に選択しているところを同期させる
     this.LayoutElementTab.SelectedIndex = App.Profile.CurrentInputLayoutElement.Index;
-    this.AttachChangedEventHandlers();
+
+    // コントロール編集終了
+    this.AttachProfileChangedEventHandlers();
+
+    Debug.Assert(App.Profile.LayoutElementCount == this.LayoutElementTab.Items.Count);
+    Debug.Assert(App.Profile.CurrentInputLayoutElement.Index == this.LayoutElementTab.SelectedIndex);
   }
 
-  //===================================================================
-  // IProfileToControlの実装
-  //===================================================================
-
-  /// @copydoc IProfileToControl.UpdateByProfile
-  public void UpdateByProfile() {
-    /// @todo(me) 本当はこのメソッドはつかわないはず
-    /// this.CreateTabs();
+  /// @copydoc IUpdateByProfile.UpdateByEntireProfile
+  public void UpdateByEntireProfile() {
+    this.UpdateLayoutElementTab();
   }
 
-  /// @copydoc IProfileToControl.AttachChangedEventHandlers
-  public void AttachChangedEventHandlers() {
+  /// @copydoc IUpdateByProfile.AttachProfileChangedEventHandlers
+  public void AttachProfileChangedEventHandlers() {
     this.LayoutElementTab.SelectionChanged += layoutElementTab_SelectionChanged;
   }
 
-  /// @copydoc IProfileToControl.DetachChangedEventHandlers
-  public void DetachChangedEventHandlers() {
+  /// @copydoc IUpdateByProfile.DetachProfileChangedEventHandlers
+  public void DetachProfileChangedEventHandlers() {
     this.LayoutElementTab.SelectionChanged -= layoutElementTab_SelectionChanged;
   }
 
@@ -141,13 +119,8 @@ public partial class LayoutTab : UserControl, IProfileToControl {
   //-------------------------------------------------------------------
 
   private void layoutElementTab_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-    var original = App.Profile.CurrentInputLayoutElement.Index;
     var next = this.LayoutElementTab.SelectedIndex;
     App.Profile.ChangeCurrentIndex(next);
-
-    Debug.WriteLine("-----Index Changed!-----");
-    Debug.WriteLine("Current Index: " + (original+1) + "->" + (next+1));
-    Debug.Assert(this.LayoutElementTab.SelectedIndex == App.Profile.CurrentInputLayoutElement.Index);
 
     // 他のコントロールのデータの更新はWindowに任せる
     Commands.ChangeCurrentLayoutElementCommand.Execute(null, null);

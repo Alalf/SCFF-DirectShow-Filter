@@ -1,4 +1,4 @@
-﻿// Copyright 2012 Alalf <alalf.iQLc_at_gmail.com>
+﻿// Copyright 2012-2013 Alalf <alalf.iQLc_at_gmail.com>
 //
 // This file is part of SCFF-DirectShow-Filter(SCFF DSF).
 //
@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file SCFF.GUI/Controls/LayoutEdit.cs
-/// レイアウトエディタ
+/// レイアウトエディタコントロール
 
 namespace SCFF.GUI.Controls {
 
@@ -33,14 +33,15 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 
-/// レイアウトエディタ
+/// レイアウトエディタコントロール
 ///
 /// LayoutEditImage内の座標系は([0-100],[0-100])で固定（プレビューのサイズに依存しない）
 /// 逆に言うと依存させてはいけない
-public partial class LayoutEdit : UserControl, IProfileToControl {
-  //-------------------------------------------------------------------
+public partial class LayoutEdit : UserControl, IUpdateByProfile, IUpdateByOptions {
+
+  //===================================================================
   // 定数
-  //-------------------------------------------------------------------  
+  //===================================================================  
 
   // 1.0のままやると値が小さすぎてフォントがバグるので100倍
   private const double Scale = 100.0;
@@ -51,29 +52,24 @@ public partial class LayoutEdit : UserControl, IProfileToControl {
   private const double CaptionSize = 0.04 * Scale;
   private const double CaptionMargin = PenThickness;
 
-  //-------------------------------------------------------------------
+  //===================================================================
   // privateメンバ
-  //-------------------------------------------------------------------  
+  //===================================================================
 
   private Pen dummyPen = new Pen(Brushes.DarkOrange, PenThickness);
   private Rect previewRect = new Rect(0.0, 0.0, MaxImageWidth, MaxImageHeight);
 
-  private ScreenCaptureManager screenCaptureManager = null;
+  /// スクリーンキャプチャ用スレッド管理クラスのインスタンス
+  private Common.GUI.ScreenCapturer screenCapturer = null;
 
-  private BitmapSource[] capturedBitmaps = new BitmapSource[Constants.MaxLayoutElementCount];
-
-  //-------------------------------------------------------------------
-  // コンストラクタ/Loadedイベントハンドラ
-  //-------------------------------------------------------------------  
+  //===================================================================
+  // コンストラクタ/Loaded/ShutdownStartedイベントハンドラ
+  //===================================================================
 
   /// コンストラクタ
   public LayoutEdit() {
     InitializeComponent();
     this.Dispatcher.ShutdownStarted += OnShutdownStarted;
-  }
-
-  void OnLoaded(object sender, RoutedEventArgs e) {
-    Debug.WriteLine("LayoutEdit: OnLoaded");
 
     this.LayoutEditViewBox.Width = Constants.DummyPreviewWidth;
     this.LayoutEditViewBox.Height = Constants.DummyPreviewHeight;
@@ -88,16 +84,25 @@ public partial class LayoutEdit : UserControl, IProfileToControl {
     this.dummyPen.Freeze();
 
     // スクリーンキャプチャマネージャの準備
-    this.screenCaptureManager = new ScreenCaptureManager();
-    this.screenCaptureManager.Start();
+    this.screenCapturer = new Common.GUI.ScreenCapturer(bitmapsUpdateTimerPeriod);
+    this.screenCapturer.Start();
+
+    // BitmapSource更新用タイマーの準備
+    this.StartBitmapsUpdateTimer();
 
     // 最初に更新
-    this.UpdateByProfile();
+    this.UpdateByEntireProfile();
   }
 
+  /// Loadedイベントハンドラ
+  void OnLoaded(object sender, RoutedEventArgs e) {
+    Debug.WriteLine("LayoutEdit: OnLoaded");
+  }
+
+  /// Dispatcher.ShutdownStartedイベントハンドラ
   private void OnShutdownStarted(object sender, EventArgs e) {
     Debug.WriteLine("LayoutEdit: ShutdownStarted");
-    this.screenCaptureManager.End();
+    this.screenCapturer.End();
   }
 
   //===================================================================
@@ -131,12 +136,8 @@ public partial class LayoutEdit : UserControl, IProfileToControl {
   private void DrawLayout(DrawingContext dc, Profile.InputLayoutElement layoutElement) {
     var layoutElementRect = this.CreateLayoutElementRect(layoutElement);
 
-    /// @todo(me) なんとかして別のスレッドが所有するデータを書きたいのだが・・・
-    if (App.Options.LayoutPreview) {
-      BitmapSource bitmapSource = this.screenCaptureManager.CreateBitmapSource(layoutElement.Index);
-      if (bitmapSource != null) {
-        dc.DrawImage(bitmapSource, layoutElementRect);
-      }
+    if (App.Options.LayoutPreview && this.capturedBitmaps[layoutElement.Index] != null) {
+      dc.DrawImage(this.capturedBitmaps[layoutElement.Index], layoutElementRect);
     }
 
     if (App.Options.LayoutBorder) {
@@ -166,47 +167,116 @@ public partial class LayoutEdit : UserControl, IProfileToControl {
   }
 
   //===================================================================
-  // IProfileToControlの実装
+  // DispatcherTimerによるBitmapSourceの更新
   //===================================================================
 
-  public void UpdateByProfile() {
-    this.SendAllRequests();
+  /// BitmapSource更新間隔: 3000ミリ秒
+  private const double bitmapsUpdateTimerPeriod = 3000;
+  /// BitmapSourceを更新するためのDispatcherTimer
+  private DispatcherTimer bitmapsUpdateTimer = new DispatcherTimer();
+  /// ScreenCapturer から受け取ったデータを格納しておく
+  private BitmapSource[] capturedBitmaps = new BitmapSource[Constants.MaxLayoutElementCount];
+
+  private void StartBitmapsUpdateTimer() {
+    bitmapsUpdateTimer.Interval = TimeSpan.FromMilliseconds(bitmapsUpdateTimerPeriod);
+    bitmapsUpdateTimer.Tick += bitmapsUpdateTimer_Tick;
+    bitmapsUpdateTimer.Start();
+  }
+
+  private BitmapSource CreateBitmapSource(int index) {
+    var result = this.screenCapturer.GetResult(index);
+    if (result == null) return null;
+    return BitmapSource.Create(
+        result.PixelWidth, result.PixelHeight,
+        result.DpiX, result.DpiY,
+        PixelFormats.Bgr32, null,
+        result.Pixels, result.Stride);
+  }
+
+  void bitmapsUpdateTimer_Tick(object sender, EventArgs e) {
+    this.capturedBitmaps = new BitmapSource[Constants.MaxLayoutElementCount];
+    foreach (var layoutElement in App.Profile) {
+      this.capturedBitmaps[layoutElement.Index] =
+          this.CreateBitmapSource(layoutElement.Index);
+    }
+    // プレビュー更新
     this.DrawProfile();
   }
 
-  private void SendAllRequests() {
+  //===================================================================
+  // IUpdateByProfileの実装
+  //===================================================================
+
+  /// @copydoc IUpdateByProfile.UpdateByCurrentProfile
+  public void UpdateByCurrentProfile() {
+    this.SendRequestToScreenCapturer(App.Profile.CurrentInputLayoutElement);
+    this.DrawProfile();
+  }
+
+  /// @copydoc IUpdateByProfile.UpdateByEntireProfile
+  public void UpdateByEntireProfile() {
     foreach (var layoutElement in App.Profile) {
-      var request = new ScreenCaptureRequest {
-        Index = layoutElement.Index,
-        Window = layoutElement.Window,
-        ClippingX = layoutElement.WindowType == WindowTypes.Desktop ?
-                        layoutElement.ScreenClippingXWithFit :
-                        layoutElement.ClippingXWithFit,
-        ClippingY = layoutElement.WindowType == WindowTypes.Desktop ?
-                        layoutElement.ScreenClippingYWithFit :
-                        layoutElement.ClippingYWithFit,
-        ClippingWidth = layoutElement.ClippingWidthWithFit,
-        ClippingHeight = layoutElement.ClippingHeightWithFit,
-        ShowCursor = layoutElement.ShowCursor,
-        ShowLayeredWindow = layoutElement.ShowLayeredWindow
-      };
-      this.screenCaptureManager.SendRequest(request);
+      this.SendRequestToScreenCapturer(layoutElement);
+    }
+    this.DrawProfile();
+  }
+
+  /// @copydoc IUpdateByProfile.UpdateByEntireProfile
+  public void AttachProfileChangedEventHandlers() {
+    // nop
+  }
+
+  /// @copydoc IUpdateByProfile.UpdateByEntireProfile
+  public void DetachProfileChangedEventHandlers() {
+    // nop
+  }
+
+  /// LayoutElementの内容からRequestを生成してScreenCapturerに画像生成を依頼
+  private void SendRequestToScreenCapturer(Profile.InputLayoutElement layoutElement) {
+    var request = new Common.GUI.ScreenCaptureRequest {
+      Index = layoutElement.Index,
+      Window = layoutElement.Window,
+      ClippingX = layoutElement.WindowType == WindowTypes.Desktop ?
+                      layoutElement.ScreenClippingXWithFit :
+                      layoutElement.ClippingXWithFit,
+      ClippingY = layoutElement.WindowType == WindowTypes.Desktop ?
+                      layoutElement.ScreenClippingYWithFit :
+                      layoutElement.ClippingYWithFit,
+      ClippingWidth = layoutElement.ClippingWidthWithFit,
+      ClippingHeight = layoutElement.ClippingHeightWithFit,
+      ShowCursor = layoutElement.ShowCursor,
+      ShowLayeredWindow = layoutElement.ShowLayeredWindow
+    };
+    this.screenCapturer.SendRequest(request);
+  }
+
+  //===================================================================
+  // IUpdateByOptionsの実装
+  //===================================================================
+
+  /// @copydoc IUpdateByOptions.UpdateByOptions
+  public void UpdateByOptions() {
+    if (App.Options.TmpLayoutIsExpanded) {
+      this.screenCapturer.Resume();
+    } else {
+      this.screenCapturer.Suspend();
     }
   }
-
-  public void AttachChangedEventHandlers() {
+  
+  /// @copydoc IUpdateByOptions.DetachOptionsChangedEventHandlers
+  public void DetachOptionsChangedEventHandlers() {
     // nop
   }
 
-  public void DetachChangedEventHandlers() {
+  /// @copydoc IUpdateByOptions.AttachOptionsChangedEventHandlers
+  public void AttachOptionsChangedEventHandlers() {
     // nop
   }
+
 
   //===================================================================
   // イベントハンドラ
   //===================================================================
-
-  // 定数
 
   /// カーソルをまとめたディクショナリ
   public readonly Dictionary<Common.GUI.HitModes, Cursor> hitModesToCursors =
@@ -223,14 +293,14 @@ public partial class LayoutEdit : UserControl, IProfileToControl {
     {Common.GUI.HitModes.SizeE, Cursors.SizeWE}
   };
 
-  // 状態変数
-
-  /// @todo(me) MoveAndSizeStateとしてまとめられないだろうか？
   /// マウスポインタとLeft/Right/Top/BottomのOffset
+  /// @todo(me) MoveAndSizeStateとしてまとめられないだろうか？
   private Common.GUI.RelativeMouseOffset relativeMouseOffset = null;
   /// スナップガイド
+  /// @todo(me) MoveAndSizeStateとしてまとめられないだろうか？
   private Common.GUI.SnapGuide snapGuide = null;
   /// ヒットテストの結果
+  /// @todo(me) MoveAndSizeStateとしてまとめられないだろうか？
   private Common.GUI.HitModes hitMode = Common.GUI.HitModes.Neutral;
 
   /// マウスポインタを(0.0-1.0, 0.0-1.0)のCommon.GUI.Pointに変換

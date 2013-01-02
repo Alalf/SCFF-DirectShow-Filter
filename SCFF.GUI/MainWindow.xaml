@@ -29,6 +29,11 @@
     <CommandBinding Command="Save" Executed="Save_Executed"/>
     <CommandBinding Command="SaveAs" Executed="SaveAs_Executed"/>
     <!-- SCFF.GUI.Commands -->
+    <CommandBinding Command="{x:Static local:Commands.SetAeroCommand}"
+                    Executed="SetAero_Executed"
+                    CanExecute="SetAero_CanExecute"/>
+    <CommandBinding Command="{x:Static local:Commands.SetCompactViewCommand}"
+                    Executed="SetCompactView_Executed"/>
     <CommandBinding Command="{x:Static local:Commands.AddLayoutElementCommand}"
                     Executed="AddLayoutElement_Executed"
                     CanExecute="AddLayoutElement_CanExecute"/>
@@ -79,34 +84,7 @@
                 Command="{x:Static shell:SystemCommands.CloseWindowCommand}">r</Button>
       </Grid>
       <!-- メニューバー -->
-      <Menu DockPanel.Dock="Top" FontSize="9">
-        <MenuItem Header="File(_F)">
-          <MenuItem Header="New profile(_N)" Command="New"/>
-          <MenuItem Header="Open profile(_O)..." Command="Open"/>
-          <Separator/>
-          <MenuItem Header="Save profile(_S)" Command="Save"/>
-          <MenuItem Header="Save profile as(_a)..." Command="SaveAs"/>
-          <Separator/>
-          <MenuItem Header="Start FFmpeg(_F)..." IsEnabled="False"/>
-          <MenuItem Header="Stop FFmpeg(_f)" IsEnabled="False"/>
-          <Separator/>
-          <MenuItem x:Name="RecentProfile1" Header="1 (_1)" IsEnabled="False"/>
-          <MenuItem x:Name="RecentProfile2" Header="2 (_2)" IsEnabled="False"/>
-          <MenuItem x:Name="RecentProfile3" Header="3 (_3)" IsEnabled="False"/>
-          <MenuItem x:Name="RecentProfile4" Header="4 (_4)" IsEnabled="False"/>
-          <MenuItem x:Name="RecentProfile5" Header="5 (_5)" IsEnabled="False"/>
-          <Separator/>
-          <MenuItem Header="Exit(_X)" Command="{x:Static shell:SystemCommands.CloseWindowCommand}"/>
-        </MenuItem>
-        <MenuItem Header="Options(_O)">
-          <MenuItem x:Name="CompactView" Header="Compact View(_C)" IsCheckable="True"
-                    Checked="compactView_Checked" Unchecked="compactView_Unchecked" />
-          <Separator/>
-          <MenuItem x:Name="ForceAeroOn" Header="Force Aero ON(_A)" IsCheckable="True"
-                    Click="forceAeroOn_Click"/>
-          <MenuItem x:Name="RestoreLastProfile" Header="Restore last profile(_R)" IsCheckable="True" />
-        </MenuItem>
-      </Menu>
+      <localControls:MainMenu x:Name="MainMenu" DockPanel.Dock="Top"/>
       <!-- 各種設定 -->
       <StackPanel Width="250" DockPanel.Dock="Left">
         <!-- プロセス -->

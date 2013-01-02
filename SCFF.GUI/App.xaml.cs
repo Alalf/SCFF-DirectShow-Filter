@@ -46,7 +46,7 @@ public partial class App : Application {
     OptionsINIFile.Load(App.Options);
 
     // Profile
-    if (App.Options.TmpRestoreLastProfile) {
+    if (App.Options.RestoreLastProfile) {
       /// @todo(me) プロファイル読み込み
       App.Profile.ResetProfile();
     } else {

@@ -53,9 +53,9 @@ public class Options {
     this.LayoutPreview = false;
     this.LayoutBorder = true;
     this.LayoutSnap = true;
-    this.TmpCompactView = false;
+    this.CompactView = false;
     this.ForceAeroOn = false;
-    this.TmpRestoreLastProfile = true;
+    this.RestoreLastProfile = true;
   }
 
   //===================================================================
@@ -118,9 +118,9 @@ public class Options {
   public bool LayoutBorder { get; set; }
   public bool LayoutSnap { get; set; }
 
-  public bool TmpCompactView { get; set; }
+  public bool CompactView { get; set; }
   public bool ForceAeroOn { get; set; }
-  public bool TmpRestoreLastProfile { get; set; }
+  public bool RestoreLastProfile { get; set; }
 
   //===================================================================
   // メンバ変数

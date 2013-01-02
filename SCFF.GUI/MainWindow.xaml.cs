@@ -43,6 +43,10 @@ public partial class MainWindow : Window, IUpdateByProfile, IUpdateByOptions {
   private void OnLoaded(object sender, RoutedEventArgs e) {
     this.UpdateByOptions();
     this.UpdateByEntireProfile();
+
+    // 必要な機能の実行
+    this.SetAero();
+    this.SetCompactView();
   }
 
   /// アプリケーション終了時に発生するClosingイベントハンドラ
@@ -54,43 +58,8 @@ public partial class MainWindow : Window, IUpdateByProfile, IUpdateByOptions {
   // IUpdateByOptionsの実装
   //===================================================================
 
-  /// 最近使用したプロファイルメニューの更新
-  private void UpdateRecentProfiles() {
-    for (int i = 0; i < Constants.RecentProfilesLength; ++i ) {
-      var isEmpty = App.Options.GetRecentProfile(i) == string.Empty;
-      var header = (i+1) + " " + (isEmpty ? "" : App.Options.GetRecentProfile(i)) +
-        "(_" + (i+1) + ")";
-
-      switch (i) {
-        case 0:
-          this.RecentProfile1.IsEnabled = !isEmpty;
-          this.RecentProfile1.Header = header;
-          break;
-        case 1:
-          this.RecentProfile2.IsEnabled = !isEmpty;
-          this.RecentProfile2.Header = header;
-          break;
-        case 2:
-          this.RecentProfile3.IsEnabled = !isEmpty;
-          this.RecentProfile3.Header = header;
-          break;
-        case 3:
-          this.RecentProfile4.IsEnabled = !isEmpty;
-          this.RecentProfile4.Header = header;
-          break;
-        case 4:
-          this.RecentProfile5.IsEnabled = !isEmpty;
-          this.RecentProfile5.Header = header;
-          break;
-      }
-    }
-  }
-
   /// @copydoc IUpdateByOptions.UpdateByOptions
   public void UpdateByOptions() {
-    // Recent Profiles
-    this.UpdateRecentProfiles();
-
     // MainWindow
     this.Left         = App.Options.TmpMainWindowLeft;
     this.Top          = App.Options.TmpMainWindowTop;
@@ -111,9 +80,7 @@ public partial class MainWindow : Window, IUpdateByProfile, IUpdateByOptions {
     this.LayoutSnap.IsChecked = App.Options.LayoutSnap;
 
     // SCFF Menu Options
-    this.CompactView.IsChecked = App.Options.TmpCompactView;
-    this.ForceAeroOn.IsChecked = App.Options.ForceAeroOn;
-    this.RestoreLastProfile.IsChecked = App.Options.TmpRestoreLastProfile;
+    this.MainMenu.UpdateByOptions();
   }
 
   /// @copydoc IUpdateByOptions.DetachOptionsChangedEventHandlers
@@ -141,10 +108,6 @@ public partial class MainWindow : Window, IUpdateByProfile, IUpdateByOptions {
     App.Options.TmpOptionsIsExpanded = this.OptionsExpander.IsExpanded;
     App.Options.TmpResizeMethodIsExpanded = this.ResizeMethodExpander.IsExpanded;
     App.Options.TmpLayoutIsExpanded = this.LayoutExpander.IsExpanded;
-
-    // SCFF Menu Options
-    App.Options.TmpCompactView = this.CompactView.IsChecked;
-    App.Options.TmpRestoreLastProfile = this.RestoreLastProfile.IsChecked;
   }
 
   //===================================================================
@@ -200,7 +163,7 @@ public partial class MainWindow : Window, IUpdateByProfile, IUpdateByOptions {
         /// @todo(me) 実装
         MessageBox.Show(save.FileName);
         App.Options.AddRecentProfile(save.FileName);
-        this.UpdateRecentProfiles();
+        this.MainMenu.UpdateByOptions();
       }
     }
   }
@@ -228,7 +191,7 @@ public partial class MainWindow : Window, IUpdateByProfile, IUpdateByOptions {
           /// @todo(me) 実装
           MessageBox.Show(save.FileName);
           App.Options.AddRecentProfile(save.FileName);
-          this.UpdateRecentProfiles();
+          this.MainMenu.UpdateByOptions();
 
           App.Profile.ResetProfile();
           this.UpdateByEntireProfile();
@@ -255,7 +218,7 @@ public partial class MainWindow : Window, IUpdateByProfile, IUpdateByOptions {
       /// @todo(me) 実装
       MessageBox.Show(save.FileName);
       App.Options.AddRecentProfile(save.FileName);
-      this.UpdateRecentProfiles();
+      this.MainMenu.UpdateByOptions();
     }
   }
 
@@ -287,6 +250,46 @@ public partial class MainWindow : Window, IUpdateByProfile, IUpdateByOptions {
   // SCFF.GUI.Commandsハンドラ
   //===================================================================
 
+  private void SetAero() {
+    // @todo(me) 実装
+  }
+
+  private bool CanUseAero() {
+    // @todo(me) 実装
+    return true;
+  }
+
+  private void SetAero_Executed(object sender, ExecutedRoutedEventArgs e) {
+    Debug.WriteLine("Command [SetAero]:");
+    this.SetAero();
+  }
+
+  private void SetAero_CanExecute(object sender, CanExecuteRoutedEventArgs e) {
+    e.CanExecute = this.CanUseAero();
+  }
+
+  //-------------------------------------------------------------------
+
+  private void SetCompactView() {
+    if (App.Options.CompactView) {
+      this.OptionsExpander.Visibility = Visibility.Collapsed;
+      this.ResizeMethodExpander.Visibility = Visibility.Collapsed;
+      this.LayoutExpander.IsExpanded = false;
+      this.Width = Constants.CompactMainWindowWidth;
+      this.Height = Constants.CompactMainWindowHeight;
+    } else {
+      this.OptionsExpander.Visibility = Visibility.Visible;
+      this.ResizeMethodExpander.Visibility = Visibility.Visible;
+    }
+  }
+
+  private void SetCompactView_Executed(object sender, ExecutedRoutedEventArgs e) {
+    Debug.WriteLine("Command [SetCompactView]:");
+    this.SetCompactView();
+  }
+
+  //-------------------------------------------------------------------
+
   private const double boundOffset = 0.05;
 
   private void AddLayoutElement_Executed(object sender, ExecutedRoutedEventArgs e) {
@@ -303,6 +306,8 @@ public partial class MainWindow : Window, IUpdateByProfile, IUpdateByOptions {
     e.CanExecute = App.Profile.CanAddLayoutElement();
   }
 
+  //-------------------------------------------------------------------
+
   private void RemoveLayoutElement_Executed(object sender, ExecutedRoutedEventArgs e) {
     Debug.WriteLine("Command [RemoveLayoutElement]:");
     App.Profile.RemoveCurrentLayoutElement();
@@ -313,10 +318,14 @@ public partial class MainWindow : Window, IUpdateByProfile, IUpdateByOptions {
     e.CanExecute = App.Profile.CanRemoveLayoutElement();
   }
 
+  //-------------------------------------------------------------------
+
   private void ChangeCurrentLayoutElement_Executed(object sender, ExecutedRoutedEventArgs e) {
     Debug.WriteLine("Command [ChangeCurrentLayoutElement]:");
     this.UpdateByEntireProfile();
   }
+
+  //-------------------------------------------------------------------
 
   private void ChangeTargetWindow_Executed(object sender, ExecutedRoutedEventArgs e) {
     /// @todo(me) ここでClippingWithoutFitの調整を行う。ついでにバックアップも？
@@ -327,9 +336,12 @@ public partial class MainWindow : Window, IUpdateByProfile, IUpdateByOptions {
     this.LayoutEdit.UpdateByCurrentProfile();
   }
 
+  //-------------------------------------------------------------------
+
   private void ChangeLayoutParameter_Executed(object sender, ExecutedRoutedEventArgs e) {
     this.LayoutParameter.UpdateByCurrentProfile();
   }
+
 
   //===================================================================
   // *Changedではないが、値が変更したときに発生するイベントハンドラ
@@ -337,28 +349,11 @@ public partial class MainWindow : Window, IUpdateByProfile, IUpdateByOptions {
   // このためthis.UpdateByProfile()の必要はない(呼び出しても良い)
   //===================================================================
 
-  private void compactView_Checked(object sender, RoutedEventArgs e) {
-    this.OptionsExpander.Visibility = Visibility.Collapsed;
-    this.ResizeMethodExpander.Visibility = Visibility.Collapsed;
-    this.LayoutExpander.IsExpanded = false;
-    this.Width = Constants.CompactMainWindowWidth;
-    this.Height = Constants.CompactMainWindowHeight;
-  }
-
-  private void compactView_Unchecked(object sender, RoutedEventArgs e) {
-    this.OptionsExpander.Visibility = Visibility.Visible;
-    this.ResizeMethodExpander.Visibility = Visibility.Visible;
-  }
-
   //===================================================================
   // *Changed以外のイベントハンドラ
   // プロパティへの代入では発生しないので、
   // この中でのApp.Optionsの変更は許可
   //===================================================================
-
-  private void forceAeroOn_Click(object sender, RoutedEventArgs e) {
-    App.Options.ForceAeroOn = this.ForceAeroOn.IsChecked;
-  }
 
   private void autoApply_Click(object sender, RoutedEventArgs e) {
     if (!this.AutoApply.IsChecked.HasValue) return;

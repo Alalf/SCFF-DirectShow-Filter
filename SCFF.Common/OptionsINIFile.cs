@@ -63,9 +63,9 @@ public static class OptionsINIFile {
         writer.WriteLine("LayoutPreview=" + options.LayoutPreview);
         writer.WriteLine("LayoutBorder=" + options.LayoutBorder);
         writer.WriteLine("LayoutSnap=" + options.LayoutSnap);
-        writer.WriteLine("TmpCompactView=" + options.TmpCompactView);
+        writer.WriteLine("CompactView=" + options.CompactView);
         writer.WriteLine("ForceAeroOn=" + options.ForceAeroOn);
-        writer.WriteLine("TmpRestoreLastProfile=" + options.TmpRestoreLastProfile);
+        writer.WriteLine("RestoreLastProfile=" + options.RestoreLastProfile);
         return true;
       } catch (Exception ex) {
         // 特に何も警告はしない
@@ -220,10 +220,10 @@ public static class OptionsINIFile {
         options.LayoutSnap = parsedData;
       }
     }
-    if (labelToRawData.TryGetValue("TmpCompactView", out rawData)) {
+    if (labelToRawData.TryGetValue("CompactView", out rawData)) {
       bool parsedData;
       if (bool.TryParse(rawData, out parsedData)) {
-        options.TmpCompactView = parsedData;
+        options.CompactView = parsedData;
       }
     }
     if (labelToRawData.TryGetValue("ForceAeroOn", out rawData)) {
@@ -232,10 +232,10 @@ public static class OptionsINIFile {
         options.ForceAeroOn = parsedData;
       }
     }
-    if (labelToRawData.TryGetValue("TmpRestoreLastProfile", out rawData)) {
+    if (labelToRawData.TryGetValue("RestoreLastProfile", out rawData)) {
       bool parsedData;
       if (bool.TryParse(rawData, out parsedData)) {
-        options.TmpRestoreLastProfile = parsedData;
+        options.RestoreLastProfile = parsedData;
       }
     }
   }

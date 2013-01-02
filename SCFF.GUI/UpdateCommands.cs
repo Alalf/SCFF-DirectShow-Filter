@@ -15,25 +15,15 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file SCFF.GUI/Commands.cs
-/// 機能の実行を依頼するためのRoutedCommands
+/// @file SCFF.GUI/UpdateCommands.cs
+/// Profile/OptionsがUpdateされたことを他のコントロールに知らせるためのRoutedCommands
 
 namespace SCFF.GUI {
 
 using System.Windows.Input;
 
-/// 機能の実行を依頼するためのRoutedCommands
-public static class Commands {
-  public readonly static RoutedCommand SetAeroCommand = new RoutedCommand();
-  public readonly static RoutedCommand SetCompactViewCommand = new RoutedCommand();
-
-  public readonly static RoutedCommand AddLayoutElementCommand = new RoutedCommand();
-  public readonly static RoutedCommand RemoveLayoutElementCommand = new RoutedCommand();
-
-  public readonly static RoutedCommand ChangeCurrentLayoutElementCommand = new RoutedCommand();
-
-  public readonly static RoutedCommand ChangeTargetWindowCommand = new RoutedCommand();
-
-  public readonly static RoutedCommand ChangeLayoutParameterCommand = new RoutedCommand();
+/// Profile/OptionsがUpdateされたことを他のコントロールに知らせるためのRoutedCommands
+public static class UpdateCommands {
+  
 }
 }

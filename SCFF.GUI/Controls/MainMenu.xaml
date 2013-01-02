@@ -1,0 +1,40 @@
+﻿<UserControl x:Class="SCFF.GUI.Controls.MainMenu"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:shell="http://schemas.microsoft.com/winfx/2006/xaml/presentation/shell"
+             mc:Ignorable="d" 
+             d:DesignWidth="530"
+             d:DesignHeight="37"
+             FontSize="9">
+  <Menu FontSize="9">
+    <MenuItem Header="File(_F)">
+      <MenuItem Header="New profile(_N)" Command="New"/>
+      <MenuItem Header="Open profile(_O)..." Command="Open"/>
+      <Separator/>
+      <MenuItem Header="Save profile(_S)" Command="Save"/>
+      <MenuItem Header="Save profile as(_a)..." Command="SaveAs"/>
+      <Separator/>
+      <MenuItem Header="Start FFmpeg(_F)..." IsEnabled="False"/>
+      <MenuItem Header="Stop FFmpeg(_f)" IsEnabled="False"/>
+      <Separator/>
+      <MenuItem x:Name="RecentProfile1" Header="1 (_1)" IsEnabled="False" Click="RecentProfile1_Click"/>
+      <MenuItem x:Name="RecentProfile2" Header="2 (_2)" IsEnabled="False" Click="RecentProfile2_Click"/>
+      <MenuItem x:Name="RecentProfile3" Header="3 (_3)" IsEnabled="False" Click="RecentProfile3_Click"/>
+      <MenuItem x:Name="RecentProfile4" Header="4 (_4)" IsEnabled="False" Click="RecentProfile4_Click"/>
+      <MenuItem x:Name="RecentProfile5" Header="5 (_5)" IsEnabled="False" Click="RecentProfile5_Click"/>
+      <Separator/>
+      <MenuItem Header="Exit(_X)" Command="{x:Static shell:SystemCommands.CloseWindowCommand}"/>
+    </MenuItem>
+    <MenuItem Header="Options(_O)">
+      <MenuItem x:Name="CompactView" Header="Compact View(_C)"
+                IsCheckable="True" Click="CompactView_Click" />
+      <Separator/>
+      <MenuItem x:Name="ForceAeroOn" Header="Force Aero ON(_A)"
+                IsCheckable="True" Click="ForceAeroOn_Click"/>
+      <MenuItem x:Name="RestoreLastProfile" Header="Restore last profile(_R)"
+                IsCheckable="True" Click="RestoreLastProfile_Click" />
+    </MenuItem>
+  </Menu>
+</UserControl>

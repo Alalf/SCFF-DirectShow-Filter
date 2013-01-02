@@ -20,16 +20,16 @@
 
 namespace SCFF.GUI.Controls {
 
-using SCFF.Common;
-using SCFF.Common.Ext;
-using System;
-using System.Diagnostics;
-using System.Threading;
-using System.Windows;
-using System.Windows.Interop;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-  using System.Windows.Threading;
+  using SCFF.Common;
+  using SCFF.Common.Ext;
+  using System;
+  using System.Diagnostics;
+  using System.Runtime.InteropServices;
+  using System.Threading;
+  using System.Windows;
+  using System.Windows.Interop;
+  using System.Windows.Media;
+  using System.Windows.Media.Imaging;
 
 /// スクリーンキャプチャに必要なリクエスト(App.Profileを使いたくないので)
 public class ScreenCaptureRequest {
@@ -43,109 +43,144 @@ public class ScreenCaptureRequest {
   public bool ShowLayeredWindow { get; set; }
 }
 
+/// スクリーンキャプチャ結果
+/// @warning 32bit限定
+public class ScreenCaptureResult {
+  public ScreenCaptureResult (int pixelWidth, int pixelHeight) {
+    this.PixelWidth = pixelWidth;
+    this.PixelHeight = pixelHeight;
+    this.Pixels = new byte[this.Size];
+  }
+
+  public byte[] Pixels { get; private set; }
+  public int PixelWidth { get; private set; }
+  public int PixelHeight { get; private set; }
+  public double DpiX { get { return 96.0; } }
+  public double DpiY { get { return 96.0; } }
+  public PixelFormat Format { get { return PixelFormats.Bgr32; } }
+  public BitmapPalette Palette { get { return null; } }
+
+  public GDI32.BITMAPINFO CreateBitmapInfo() {
+    var info = new GDI32.BITMAPINFO();
+    info.bmiColors = new uint[1];
+    var header = new GDI32.BITMAPINFOHEADER();
+    header.biBitCount = 32;
+    // header.biBitCount = (ushort)this.Format.BitsPerPixel;
+    header.biWidth = this.PixelWidth;
+    header.biHeight = -1 * this.PixelHeight;
+    header.biSizeImage = (uint)this.Size;
+    header.biPlanes = 1;
+    header.biCompression = GDI32.BI_RGB;
+    header.biSize = (uint)Marshal.SizeOf(header);
+    info.bmih = header;
+    return info;
+  }
+
+  public int Stride {
+    get { return this.PixelWidth * 4; }
+  }
+  public int Size {
+    get { return this.Stride * this.PixelHeight; }
+  }
+}
+
 /// スクリーンキャプチャデータを取得するためのスレッド管理クラス
 public class ScreenCaptureManager {
   /// タイマーの間隔
-  private const int TimerPeriod = 1000;
+  private const int TimerPeriod = 3000;
 
   /// タイマー
-  private DispatcherTimer captureTimer = null;
+  private Timer captureTimer = null;
 
   //-------------------------------------------------------------------
   // 複数のスレッドで共有するデータ
   //-------------------------------------------------------------------
 
-  /// 共有データ用ロックオブジェクト
-  private readonly object sharedLock = new object();
+  /// 共有ロック
+  private readonly object sharedLock = new Object();
 
-  /// 共有(自R/他W): サスペンド中かどうか
-  private bool isSuspended = false;
+  /// 共有(自R/他W): 終了したかどうか
+  private bool isTerminated = false;
   
   /// 共有(自R/他W): スクリーンキャプチャのリクエストをまとめた配列
-  private ScreenCaptureRequest[] captureRequests =
+  private ScreenCaptureRequest[] requests =
       new ScreenCaptureRequest[Constants.MaxLayoutElementCount];
 
   /// 共有(自W/他R): スクリーンキャプチャの結果をまとめた配列
-  private BitmapSource[] capturedBitmaps =
-      new BitmapSource[Constants.MaxLayoutElementCount];
+  private ScreenCaptureResult[] results =
+      new ScreenCaptureResult[Constants.MaxLayoutElementCount];
 
   //-------------------------------------------------------------------
 
   /// コンストラクタ
   public ScreenCaptureManager() {
-    // nop  
+    // nop
   }
 
   //-------------------------------------------------------------------
   // タイマー関連
   //-------------------------------------------------------------------
 
-  /// スレッド開始
+  /// 開始
   public void Start() {
-    this.captureTimer = new DispatcherTimer();
-    this.captureTimer.Interval = TimeSpan.FromMilliseconds(TimerPeriod);
-    this.captureTimer.Tick += captureTimer_Tick;
-    this.captureTimer.Start();
+    Debug.WriteLine("ScreenCaptureManager: Start");
+    this.captureTimer = new Timer(TimerCallback, null, 0, TimerPeriod);
   }
 
-  /// タイマーはとめないがスクリーンキャプチャは止める
-  public void Suspend() {
-    lock (sharedLock) {
-      this.isSuspended = true;
-      // メモリがもったいないので開放しておく
-      this.capturedBitmaps = new BitmapSource[Constants.MaxLayoutElementCount];
-    }
-  }
-  
-  /// スクリーンキャプチャを再開する
-  public void Resume() {
-    lock (sharedLock) {
-      this.isSuspended = false;
+  /// タイマーコールバック
+  private void TimerCallback(object state) {
+    lock (this.sharedLock) {
+      if (this.isTerminated) return;
+      if (!App.Options.LayoutPreview) return;
+      /// @todo(me) メモリがもったいないので何かしたい
+      /// @todo(me) レイアウトタブが見えてなければキャプチャはしない
+      //if (!App.Options.TmpLayoutIsExpanded) return;
+
+      // キャプチャ
+      foreach (var request in this.requests) {
+        if (request == null) continue;
+        this.results[request.Index] = this.ScreenCapture(request);
+      }
     }
   }
 
   /// スレッド終了
   /// @warning DispatcherShutdownなどで必ず呼ぶこと
   public void End() {
-    if (this.captureTimer != null) {
-      this.captureTimer.Stop();
-      this.isSuspended = true;
-      this.captureTimer = null;
+    Debug.WriteLine("ScreenCaptureManager: End");
+    lock (this.sharedLock) {
+      this.isTerminated = true;
+      if (this.captureTimer != null) {
+        this.captureTimer.Change(Timeout.Infinite, Timeout.Infinite);
+        this.captureTimer.Dispose();
+        this.captureTimer = null;
+      }
     }
   }
 
   /// スクリーンキャプチャをこのマネージャに依頼
-  public void SendRequest(ScreenCaptureRequest request) {
-    lock (sharedLock) {
-      this.captureRequests[request.Index] = request;
-      /// @todo(me) リクエストした瞬間にImageを一回取り込む
-      // this.capturedBitmaps[request.Index] = this.ScreenCapture(request);
-    }
-  }
-
-  public delegate void DrawCapturedBitmapDelegate(int index, DrawingContext dc, Rect rect);
-
-  /// DrawingContextを利用して描画
-  public void DrawCapturedBitmap(int index, DrawingContext dc, Rect rect) {
-    lock (sharedLock) {
-      if (this.capturedBitmaps[index] == null) return;
-      dc.DrawImage(this.capturedBitmaps[index], rect);
-    }
-  }
-
-  //-------------------------------------------------------------------
-  // コールバックメソッド
-  //-------------------------------------------------------------------
-  void captureTimer_Tick(object sender, EventArgs e) {
-    // BitmapSourceを更新中なのでlock
-    lock (sharedLock) {
-      Debug.WriteLine("Timer Tick....");
-      if (this.isSuspended) return;
-      foreach (var request in this.captureRequests) {
-        if (request == null) continue;
-        this.capturedBitmaps[request.Index] = this.ScreenCapture(request);
+  /// @todo(me) デフォルトパラメータは使用しないように
+  public void SendRequest(ScreenCaptureRequest request, bool forceUpdate = false) {
+    Debug.WriteLine("ScreenCaptureManager: Request Arrived");
+    lock (this.sharedLock) {
+      this.requests[request.Index] = request;
+      if (forceUpdate) {
+       this.results[request.Index] = this.ScreenCapture(request);
       }
     }
+  }
+
+  /// BitmapSourceを更新
+  public BitmapSource CreateBitmapSource(int index) {
+    //　参照カウンタがあるのなら消えはしない（GCの悪用！）
+    var result = this.results[index];
+    if (result == null) return null;
+
+    return BitmapSource.Create(
+        result.PixelWidth, result.PixelHeight,
+        result.DpiX, result.DpiY,
+        result.Format, result.Palette,
+        result.Pixels, result.Stride);
   }
 
   //-------------------------------------------------------------------
@@ -174,9 +209,9 @@ public class ScreenCaptureManager {
     }
   }
 
-  private BitmapSource ScreenCapture(ScreenCaptureRequest request) {
+  private ScreenCaptureResult ScreenCapture(ScreenCaptureRequest request) {
     // 返り値
-    BitmapSource result = null;
+    ScreenCaptureResult result = null;
 
     // Windowチェック
     var window = request.Window;
@@ -185,7 +220,6 @@ public class ScreenCaptureManager {
     // キャプチャ用の情報をまとめる
     var x = request.ClippingX;
     var y = request.ClippingY;
-
     var width = request.ClippingWidth;
     var height = request.ClippingHeight;
     var rasterOperation = GDI32.SRCCOPY;
@@ -194,6 +228,10 @@ public class ScreenCaptureManager {
       /// @todo(me) マウスカーソルの合成・・・？いるか？
     }
 
+    // resultのメモリ領域を確保
+    result = new ScreenCaptureResult(width, height);
+    var bitmapInfo = result.CreateBitmapInfo();
+
     // BitBlt
     var windowDC = User32.GetDC(window);
     var capturedDC = GDI32.CreateCompatibleDC(windowDC);
@@ -201,30 +239,16 @@ public class ScreenCaptureManager {
     {
       var originalBitmap = GDI32.SelectObject(capturedDC, capturedBitmap);
       GDI32.BitBlt(capturedDC, 0, 0, width, height, windowDC, x, y, rasterOperation);
+      GDI32.GetDIBits(capturedDC, capturedBitmap, 0, (uint)result.PixelHeight, result.Pixels,
+                      ref bitmapInfo, GDI32.DIB_RGB_COLORS);
       GDI32.SelectObject(capturedDC, originalBitmap);
     }
-    GDI32.DeleteDC(capturedDC);
     User32.ReleaseDC(window, windowDC);
+    GDI32.DeleteDC(capturedDC);
+    GDI32.DeleteObject(capturedBitmap);
+    GC.Collect();
 
-    try {
-      // HBitmapからコピー
-      var rawBitmap = Imaging.CreateBitmapSourceFromHBitmap(capturedBitmap,
-          IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
-      // α情報を除去
-      var noAlphaBitmap = new FormatConvertedBitmap(rawBitmap, PixelFormats.Bgr24, null, 0.0);
-      // メモリ容量低減のために縮小
-      double scaleX;
-      double scaleY;
-      CalcScale(width, height, out scaleX, out scaleY);
-      Debug.WriteLine("scale: {0:F2}, {1:F2}", scaleX, scaleY);
-      result = new TransformedBitmap(noAlphaBitmap, new ScaleTransform(scaleX, scaleY)); 
-    } catch (Exception ex) {
-      Debug.WriteLine("ScreenCapture: " + ex.Message);
-    } finally {
-      // 5秒に一回程度の更新なので、HDC/HBitmapは使いまわさないですぐに消す
-      GDI32.DeleteObject(capturedBitmap);
-      GC.Collect();
-    }
+    Debug.WriteLine("ScreenCaptureManager: Captured(DataSize: "+result.Size +")");
     return result;
   }
 }

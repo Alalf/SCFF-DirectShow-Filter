@@ -60,6 +60,8 @@ public partial class LayoutEdit : UserControl, IProfileToControl {
 
   private ScreenCaptureManager screenCaptureManager = null;
 
+  private BitmapSource[] capturedBitmaps = new BitmapSource[Constants.MaxLayoutElementCount];
+
   //-------------------------------------------------------------------
   // コンストラクタ/Loadedイベントハンドラ
   //-------------------------------------------------------------------  
@@ -67,6 +69,11 @@ public partial class LayoutEdit : UserControl, IProfileToControl {
   /// コンストラクタ
   public LayoutEdit() {
     InitializeComponent();
+    this.Dispatcher.ShutdownStarted += OnShutdownStarted;
+  }
+
+  void OnLoaded(object sender, RoutedEventArgs e) {
+    Debug.WriteLine("LayoutEdit: OnLoaded");
 
     this.LayoutEditViewBox.Width = Constants.DummyPreviewWidth;
     this.LayoutEditViewBox.Height = Constants.DummyPreviewHeight;
@@ -88,8 +95,9 @@ public partial class LayoutEdit : UserControl, IProfileToControl {
     this.UpdateByProfile();
   }
 
-  void OnLoaded(object sender, RoutedEventArgs e) {
-    throw new NotImplementedException();
+  private void OnShutdownStarted(object sender, EventArgs e) {
+    Debug.WriteLine("LayoutEdit: ShutdownStarted");
+    this.screenCaptureManager.End();
   }
 
   //===================================================================
@@ -125,7 +133,10 @@ public partial class LayoutEdit : UserControl, IProfileToControl {
 
     /// @todo(me) なんとかして別のスレッドが所有するデータを書きたいのだが・・・
     if (App.Options.LayoutPreview) {
-      this.screenCaptureManager.DrawCapturedBitmap(layoutElement.Index, dc, layoutElementRect);
+      BitmapSource bitmapSource = this.screenCaptureManager.CreateBitmapSource(layoutElement.Index);
+      if (bitmapSource != null) {
+        dc.DrawImage(bitmapSource, layoutElementRect);
+      }
     }
 
     if (App.Options.LayoutBorder) {

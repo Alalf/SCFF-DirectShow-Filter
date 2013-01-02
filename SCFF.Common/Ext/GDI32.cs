@@ -33,6 +33,32 @@ public class GDI32 {
   // public const int PS_SOLID    = 0x00000000;
   public const int PS_NULL        = 0x00000005;
   public const int R2_XORPEN      = 7;
+  
+  public const uint BI_RGB        = 0;
+  public const uint DIB_RGB_COLORS  = 0;
+
+  // Types
+  [StructLayout(LayoutKind.Sequential, Pack = 1)]
+  public struct BITMAPINFOHEADER {
+    public uint biSize;
+    public int biWidth;
+    public int biHeight;
+    public ushort biPlanes;
+    public ushort biBitCount;
+    public uint biCompression;
+    public uint biSizeImage;
+    public int biXPelsPerMeter;
+    public int biYPelsPerMeter;
+    public uint biClrUsed;
+    public uint biClrImportant;
+  }
+
+  [StructLayout(LayoutKind.Sequential, Pack = 1)]
+  public struct BITMAPINFO {
+    public BITMAPINFOHEADER bmih;
+    [MarshalAs(UnmanagedType.ByValArray, SizeConst = 1)]
+    public uint[] bmiColors;
+  }
 
   // API
   [DllImport("gdi32.dll")]
@@ -42,6 +68,11 @@ public class GDI32 {
       IntPtr hSrcDC,
       int xSrc, int ySrc,
       int dwRop);
+
+  [DllImport("gdi32.dll")]
+  public static extern int GetDIBits(IntPtr hdc,
+      IntPtr hbmp, uint uStartScan, uint cScanLines,
+      [Out] byte [] lpvBits, ref BITMAPINFO lpbi, uint uUsage);
 
   [DllImport("gdi32.dll")]
   public static extern IntPtr CreateCompatibleBitmap(IntPtr hdc, int nWidth, int nHeight);

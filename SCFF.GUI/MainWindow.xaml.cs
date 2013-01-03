@@ -221,6 +221,7 @@ public partial class MainWindow : Window, IUpdateByProfile, IUpdateByOptions {
     this.TargetWindow.UpdateByCurrentProfile();
     this.Area.UpdateByCurrentProfile();
     this.LayoutEdit.UpdateByCurrentProfile();
+    this.LayoutParameter.UpdateByCurrentProfile();
   }
 
   private void UpdateCurrentLayoutParameter_Executed(object sender, ExecutedRoutedEventArgs e) {

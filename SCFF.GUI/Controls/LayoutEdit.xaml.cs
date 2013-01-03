@@ -399,7 +399,7 @@ public partial class LayoutEdit : UserControl, IUpdateByProfile, IUpdateByOption
                       relativeMousePoint.X, relativeMousePoint.Y);
 
       App.Profile.ChangeCurrentIndex(hitIndex);
-      UpdateCommands.UpdateMainWindowCommand.Execute(null, null);
+      UpdateCommands.UpdateMainWindowByEntireProfile.Execute(null, null);
     }
 
     // マウスを押した場所を記録してマウスキャプチャー開始
@@ -453,7 +453,7 @@ public partial class LayoutEdit : UserControl, IUpdateByProfile, IUpdateByOption
     App.Profile.CurrentOutputLayoutElement.BoundRelativeBottom = nextBottom;
       
     /// @todo(me) 変更をMainWindowに通知
-    UpdateCommands.UpdateCurrentLayoutParameterCommand.Execute(null, null);
+    UpdateCommands.UpdateLayoutParameterByCurrentProfile.Execute(null, null);
 
     this.DrawProfile();
   }

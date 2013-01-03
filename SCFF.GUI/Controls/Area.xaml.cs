@@ -198,7 +198,7 @@ public partial class Area : UserControl, IUpdateByProfile {
         (int)nextScreenRect.Height;
     
     // コマンドをMainWindowに送信して関連するコントロールを更新
-    UpdateCommands.UpdateCurrentTargetWindowCommand.Execute(null, null);
+    UpdateCommands.UpdateTargetWindowByCurrentProfile.Execute(null, null);
   }
 
   private void AreaSelect_Click(object sender, RoutedEventArgs e) {

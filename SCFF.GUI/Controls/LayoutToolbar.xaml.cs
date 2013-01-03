@@ -65,7 +65,8 @@ public partial class LayoutToolbar : UserControl, IUpdateByOptions {
     if (!this.LayoutPreview.IsChecked.HasValue) return;
     App.Options.LayoutPreview = (bool)this.LayoutPreview.IsChecked;
 
-    UpdateCommands.UpdateLayoutEditCommand.Execute(null, null);
+    UpdateCommands.UpdateLayoutEditByEntireProfile.Execute(null, null);
+    UpdateCommands.UpdateLayoutEditByOptions.Execute(null, null);
   }
 
   private void layoutSnap_Click(object sender, RoutedEventArgs e) {
@@ -79,7 +80,7 @@ public partial class LayoutToolbar : UserControl, IUpdateByOptions {
     if (!this.LayoutBorder.IsChecked.HasValue) return;
     App.Options.LayoutBorder = (bool)this.LayoutBorder.IsChecked;
 
-    UpdateCommands.UpdateLayoutEditCommand.Execute(null, null);
+    UpdateCommands.UpdateLayoutEditByEntireProfile.Execute(null, null);
   }
 
   private const double boundOffset = 0.05;
@@ -94,7 +95,7 @@ public partial class LayoutToolbar : UserControl, IUpdateByOptions {
     this.Add.IsEnabled = App.Profile.CanAddLayoutElement();
     this.Remove.IsEnabled = App.Profile.CanRemoveLayoutElement();
 
-    UpdateCommands.UpdateMainWindowCommand.Execute(null, null);
+    UpdateCommands.UpdateMainWindowByEntireProfile.Execute(null, null);
   }
 
   private void Remove_Click(object sender, RoutedEventArgs e) {
@@ -103,7 +104,7 @@ public partial class LayoutToolbar : UserControl, IUpdateByOptions {
     this.Add.IsEnabled = App.Profile.CanAddLayoutElement();
     this.Remove.IsEnabled = App.Profile.CanRemoveLayoutElement();
 
-    UpdateCommands.UpdateMainWindowCommand.Execute(null, null);
+    UpdateCommands.UpdateMainWindowByEntireProfile.Execute(null, null);
   }
 
   //-------------------------------------------------------------------

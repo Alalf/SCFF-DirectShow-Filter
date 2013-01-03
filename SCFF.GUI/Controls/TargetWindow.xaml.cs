@@ -87,7 +87,7 @@ public partial class TargetWindow : UserControl, IUpdateByProfile {
   // (Button)Clickイベントハンドラ
   //===================================================================
 
-  private void UpdateProfile(WindowTypes nextWindowType, UIntPtr nextTargetWindow) {
+  private void ModifyProfile(WindowTypes nextWindowType, UIntPtr nextTargetWindow) {
     // Window
     switch (nextWindowType) {
       case WindowTypes.Normal: {
@@ -103,7 +103,7 @@ public partial class TargetWindow : UserControl, IUpdateByProfile {
         break;
       }
       default: {
-        Debug.Fail("UpdateProfile: Invalid WindowType");
+        Debug.Fail("ModifyProfile: Invalid WindowType");
         return;
       }
     }
@@ -122,17 +122,17 @@ public partial class TargetWindow : UserControl, IUpdateByProfile {
       App.Profile.CurrentInputLayoutElement.WindowHeight);
 
     // コマンドをMainWindowに送信して関連するコントロールを更新
-    UpdateCommands.UpdateCurrentTargetWindowCommand.Execute(null, null);
+    UpdateCommands.UpdateTargetWindowByCurrentProfile.Execute(null, null);
   }
 
   private void Desktop_Click(object sender, System.Windows.RoutedEventArgs e) {
     // Profileを更新
-    this.UpdateProfile(WindowTypes.Desktop, UIntPtr.Zero);
+    this.ModifyProfile(WindowTypes.Desktop, UIntPtr.Zero);
   }
 
   private void ListView_Click(object sender, System.Windows.RoutedEventArgs e) {
     // Profileを更新
-    this.UpdateProfile(WindowTypes.DesktopListView, UIntPtr.Zero);
+    this.ModifyProfile(WindowTypes.DesktopListView, UIntPtr.Zero);
   }
 
   //===================================================================
@@ -230,7 +230,7 @@ public partial class TargetWindow : UserControl, IUpdateByProfile {
     UIntPtr nextTargetWindow = User32.WindowFromPoint((int)screenPoint.X, (int)screenPoint.Y);
 
     // Profileを更新
-    this.UpdateProfile(WindowTypes.Normal, nextTargetWindow);
+    this.ModifyProfile(WindowTypes.Normal, nextTargetWindow);
   }
 }
 }

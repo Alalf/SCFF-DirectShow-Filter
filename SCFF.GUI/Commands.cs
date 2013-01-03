@@ -24,7 +24,7 @@ using System.Windows.Input;
 
 /// 機能の実行を依頼するためのRoutedCommands
 public static class Commands {
-  public readonly static RoutedCommand SetAeroCommand = new RoutedCommand();
-  public readonly static RoutedCommand SetCompactViewCommand = new RoutedCommand();
+  public readonly static RoutedCommand SetAero = new RoutedCommand();
+  public readonly static RoutedCommand SetCompactView = new RoutedCommand();
 }
 }

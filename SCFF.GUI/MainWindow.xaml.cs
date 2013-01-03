@@ -163,12 +163,14 @@ public partial class MainWindow : Window, IUpdateByProfile, IUpdateByOptions {
 
   private void LayoutExpander_Collapsed(object sender, RoutedEventArgs e) {
     App.Options.LayoutIsExpanded = false;
-    this.LayoutEdit.UpdateByOptions();
+
+    UpdateCommands.UpdateLayoutEditByOptions.Execute(null, null);
   }
 
   private void LayoutExpander_Expanded(object sender, RoutedEventArgs e) {
     App.Options.LayoutIsExpanded = true;
-    this.LayoutEdit.UpdateByOptions();
+
+    UpdateCommands.UpdateLayoutEditByOptions.Execute(null, null);
   }
 
   //===================================================================
@@ -211,23 +213,27 @@ public partial class MainWindow : Window, IUpdateByProfile, IUpdateByOptions {
   // SCFF.GUI.UpdateCommandsハンドラ
   //===================================================================
 
-  private void UpdateMainWindow_Executed(object sender, ExecutedRoutedEventArgs e) {
+  private void UpdateMainWindowByEntireProfile_Executed(object sender, ExecutedRoutedEventArgs e) {
     this.UpdateByEntireProfile();
   }
 
-  private void UpdateLayoutEdit_Executed(object sender, ExecutedRoutedEventArgs e) {
+  private void UpdateLayoutEditByEntireProfile_Executed(object sender, ExecutedRoutedEventArgs e) {
     this.LayoutEdit.UpdateByEntireProfile();
   }
 
-  private void UpdateCurrentTargetWindow_Executed(object sender, ExecutedRoutedEventArgs e) {
+  private void UpdateTargetWindowByCurrentProfile_Executed(object sender, ExecutedRoutedEventArgs e) {
     this.TargetWindow.UpdateByCurrentProfile();
     this.Area.UpdateByCurrentProfile();
     this.LayoutEdit.UpdateByCurrentProfile();
     this.LayoutParameter.UpdateByCurrentProfile();
   }
 
-  private void UpdateCurrentLayoutParameter_Executed(object sender, ExecutedRoutedEventArgs e) {
+  private void UpdateLayoutParameterByCurrentProfile_Executed(object sender, ExecutedRoutedEventArgs e) {
     this.LayoutParameter.UpdateByCurrentProfile();
+  }
+
+  private void UpdateLayoutEditByOptions_Executed(object sender, ExecutedRoutedEventArgs e) {
+    this.LayoutEdit.UpdateByOptions();
   }
 
   //===================================================================

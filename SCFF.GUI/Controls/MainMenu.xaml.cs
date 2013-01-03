@@ -100,12 +100,12 @@ public partial class MainMenu : UserControl, IUpdateByOptions {
 
   private void ForceAeroOn_Click(object sender, RoutedEventArgs e) {
     App.Options.ForceAeroOn = this.ForceAeroOn.IsChecked;
-    Commands.SetAeroCommand.Execute(null, null);
+    Commands.SetAero.Execute(null, null);
   }
 
   private void CompactView_Click(object sender, RoutedEventArgs e) {
     App.Options.CompactView = this.CompactView.IsChecked;
-    Commands.SetCompactViewCommand.Execute(null, null);
+    Commands.SetCompactView.Execute(null, null);
   }
 
   private void RestoreLastProfile_Click(object sender, RoutedEventArgs e) {

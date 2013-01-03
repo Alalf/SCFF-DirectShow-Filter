@@ -13,6 +13,7 @@
         MinHeight="280" MinWidth="280"
         Loaded="OnLoaded"
         Closing="OnClosing" >
+  <!-- CommandBindings -->
   <Window.CommandBindings>
     <!-- shell:SystemCommands -->
     <CommandBinding Command="{x:Static shell:SystemCommands.CloseWindowCommand}"
@@ -29,20 +30,24 @@
     <CommandBinding Command="Save" Executed="Save_Executed"/>
     <CommandBinding Command="SaveAs" Executed="SaveAs_Executed"/>
     <!-- SCFF.GUI.Commands -->
-    <CommandBinding Command="{x:Static local:Commands.SetAeroCommand}"
+    <CommandBinding Command="{x:Static local:Commands.SetAero}"
                     Executed="SetAero_Executed"
                     CanExecute="SetAero_CanExecute"/>
-    <CommandBinding Command="{x:Static local:Commands.SetCompactViewCommand}"
+    <CommandBinding Command="{x:Static local:Commands.SetCompactView}"
                     Executed="SetCompactView_Executed"/>
     <!-- SCFF.GUI.UpdateCommands -->
-    <CommandBinding Command="{x:Static local:UpdateCommands.UpdateMainWindowCommand}"
-                    Executed="UpdateMainWindow_Executed" />
-    <CommandBinding Command="{x:Static local:UpdateCommands.UpdateLayoutEditCommand}"
-                    Executed="UpdateLayoutEdit_Executed" />
-    <CommandBinding Command="{x:Static local:UpdateCommands.UpdateCurrentTargetWindowCommand}"
-                    Executed="UpdateCurrentTargetWindow_Executed" />
-    <CommandBinding Command="{x:Static local:UpdateCommands.UpdateCurrentLayoutParameterCommand}"
-                    Executed="UpdateCurrentLayoutParameter_Executed" />
+    <!-- Profile -->
+    <CommandBinding Command="{x:Static local:UpdateCommands.UpdateMainWindowByEntireProfile}"
+                    Executed="UpdateMainWindowByEntireProfile_Executed" />
+    <CommandBinding Command="{x:Static local:UpdateCommands.UpdateLayoutEditByEntireProfile}"
+                    Executed="UpdateLayoutEditByEntireProfile_Executed" />
+    <CommandBinding Command="{x:Static local:UpdateCommands.UpdateTargetWindowByCurrentProfile}"
+                    Executed="UpdateTargetWindowByCurrentProfile_Executed" />
+    <CommandBinding Command="{x:Static local:UpdateCommands.UpdateLayoutParameterByCurrentProfile}"
+                    Executed="UpdateLayoutParameterByCurrentProfile_Executed" />
+    <!-- Options -->
+    <CommandBinding Command="{x:Static local:UpdateCommands.UpdateLayoutEditByOptions}"
+                    Executed="UpdateLayoutEditByOptions_Executed" />
   </Window.CommandBindings>
   <shell:WindowChrome.WindowChrome>
     <shell:WindowChrome CaptionHeight="{x:Static SystemParameters.CaptionHeight}"

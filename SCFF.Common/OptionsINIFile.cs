@@ -55,10 +55,10 @@ public static class OptionsINIFile {
         writer.WriteLine("TmpMainWindowWidth=" + options.TmpMainWindowWidth);
         writer.WriteLine("TmpMainWindowHeight=" + options.TmpMainWindowHeight);
         writer.WriteLine("TmpMainWindowState=" + options.TmpMainWindowState);
-        writer.WriteLine("TmpAreaIsExpanded=" + options.TmpAreaIsExpanded);
-        writer.WriteLine("TmpOptionsIsExpanded=" + options.TmpOptionsIsExpanded);
-        writer.WriteLine("TmpResizeMethodIsExpanded=" + options.TmpResizeMethodIsExpanded);
-        writer.WriteLine("TmpLayoutIsExpanded=" + options.TmpLayoutIsExpanded);
+        writer.WriteLine("AreaIsExpanded=" + options.AreaIsExpanded);
+        writer.WriteLine("OptionsIsExpanded=" + options.OptionsIsExpanded);
+        writer.WriteLine("ResizeMethodIsExpanded=" + options.ResizeMethodIsExpanded);
+        writer.WriteLine("LayoutIsExpanded=" + options.LayoutIsExpanded);
         writer.WriteLine("AutoApply=" + options.AutoApply);
         writer.WriteLine("LayoutPreview=" + options.LayoutPreview);
         writer.WriteLine("LayoutBorder=" + options.LayoutBorder);
@@ -172,28 +172,28 @@ public static class OptionsINIFile {
         options.TmpMainWindowState = parsedData;
       }
     }
-    if (labelToRawData.TryGetValue("TmpAreaIsExpanded", out rawData)) {
+    if (labelToRawData.TryGetValue("AreaIsExpanded", out rawData)) {
       bool parsedData;
       if (bool.TryParse(rawData, out parsedData)) {
-        options.TmpAreaIsExpanded = parsedData;
+        options.AreaIsExpanded = parsedData;
       }
     }
-    if (labelToRawData.TryGetValue("TmpOptionsIsExpanded", out rawData)) {
+    if (labelToRawData.TryGetValue("OptionsIsExpanded", out rawData)) {
       bool parsedData;
       if (bool.TryParse(rawData, out parsedData)) {
-        options.TmpOptionsIsExpanded = parsedData;
+        options.OptionsIsExpanded = parsedData;
       }
     }
-    if (labelToRawData.TryGetValue("TmpResizeMethodIsExpanded", out rawData)) {
+    if (labelToRawData.TryGetValue("ResizeMethodIsExpanded", out rawData)) {
       bool parsedData;
       if (bool.TryParse(rawData, out parsedData)) {
-        options.TmpResizeMethodIsExpanded = parsedData;
+        options.ResizeMethodIsExpanded = parsedData;
       }
     }
-    if (labelToRawData.TryGetValue("TmpLayoutIsExpanded", out rawData)) {
+    if (labelToRawData.TryGetValue("LayoutIsExpanded", out rawData)) {
       bool parsedData;
       if (bool.TryParse(rawData, out parsedData)) {
-        options.TmpLayoutIsExpanded = parsedData;
+        options.LayoutIsExpanded = parsedData;
       }
     }
     if (labelToRawData.TryGetValue("AutoApply", out rawData)) {

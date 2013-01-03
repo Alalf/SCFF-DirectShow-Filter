@@ -122,7 +122,7 @@ public partial class TargetWindow : UserControl, IUpdateByProfile {
       App.Profile.CurrentInputLayoutElement.WindowHeight);
 
     // コマンドをMainWindowに送信して関連するコントロールを更新
-    Commands.ChangeTargetWindowCommand.Execute(null, null);
+    UpdateCommands.UpdateCurrentTargetWindowCommand.Execute(null, null);
   }
 
   private void Desktop_Click(object sender, System.Windows.RoutedEventArgs e) {

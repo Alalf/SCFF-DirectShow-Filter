@@ -24,6 +24,9 @@ using System.Windows.Input;
 
 /// Profile/OptionsがUpdateされたことを他のコントロールに知らせるためのRoutedCommands
 public static class UpdateCommands {
-  
+  public readonly static RoutedCommand UpdateMainWindowCommand = new RoutedCommand();
+  public readonly static RoutedCommand UpdateLayoutEditCommand = new RoutedCommand();
+  public readonly static RoutedCommand UpdateCurrentTargetWindowCommand = new RoutedCommand();
+  public readonly static RoutedCommand UpdateCurrentLayoutParameterCommand = new RoutedCommand();
 }
 }

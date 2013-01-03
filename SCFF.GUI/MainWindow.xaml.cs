@@ -51,7 +51,7 @@ public partial class MainWindow : Window, IUpdateByProfile, IUpdateByOptions {
 
   /// アプリケーション終了時に発生するClosingイベントハンドラ
   private void OnClosing(object sender, System.ComponentModel.CancelEventArgs e) {
-    this.SaveOptions();
+    this.SaveTemporaryOptions();
   }
 
   //===================================================================
@@ -60,41 +60,53 @@ public partial class MainWindow : Window, IUpdateByProfile, IUpdateByOptions {
 
   /// @copydoc IUpdateByOptions.UpdateByOptions
   public void UpdateByOptions() {
-    // MainWindow
+    // Temporary
     this.Left         = App.Options.TmpMainWindowLeft;
     this.Top          = App.Options.TmpMainWindowTop;
     this.Width        = App.Options.TmpMainWindowWidth;
     this.Height       = App.Options.TmpMainWindowHeight;
     this.WindowState  = (System.Windows.WindowState)App.Options.TmpMainWindowState;
     
-    // MainWindow Expanders
-    this.AreaExpander.IsExpanded          = App.Options.TmpAreaIsExpanded;
-    this.OptionsExpander.IsExpanded       = App.Options.TmpOptionsIsExpanded;
-    this.ResizeMethodExpander.IsExpanded  = App.Options.TmpResizeMethodIsExpanded;
-    this.LayoutExpander.IsExpanded        = App.Options.TmpLayoutIsExpanded;
-
-    // SCFF Options
+    // MainWindow.Controls
     this.AutoApply.IsChecked = App.Options.AutoApply;
-    this.LayoutPreview.IsChecked = App.Options.LayoutPreview;
-    this.LayoutBorder.IsChecked = App.Options.LayoutBorder;
-    this.LayoutSnap.IsChecked = App.Options.LayoutSnap;
+    this.DetachOptionsChangedEventHandlers();
+    this.AreaExpander.IsExpanded          = App.Options.AreaIsExpanded;
+    this.OptionsExpander.IsExpanded       = App.Options.OptionsIsExpanded;
+    this.ResizeMethodExpander.IsExpanded  = App.Options.ResizeMethodIsExpanded;
+    this.LayoutExpander.IsExpanded        = App.Options.LayoutIsExpanded;
+    this.AttachOptionsChangedEventHandlers();
 
-    // SCFF Menu Options
+    // UserControls
+    this.LayoutToolbar.UpdateByOptions();
     this.MainMenu.UpdateByOptions();
   }
 
   /// @copydoc IUpdateByOptions.DetachOptionsChangedEventHandlers
   public void DetachOptionsChangedEventHandlers() {
-    // nop
+    this.AreaExpander.Collapsed += this.AreaExpander_Collapsed;
+    this.AreaExpander.Expanded += this.AreaExpander_Expanded;
+    this.OptionsExpander.Collapsed += this.OptionsExpander_Collapsed;
+    this.OptionsExpander.Expanded += this.OptionsExpander_Expanded;
+    this.ResizeMethodExpander.Collapsed += this.ResizeMethodExpander_Collapsed;
+    this.ResizeMethodExpander.Expanded += this.ResizeMethodExpander_Expanded;
+    this.LayoutExpander.Collapsed += this.LayoutExpander_Collapsed;
+    this.LayoutExpander.Expanded += this.LayoutExpander_Expanded;
   }
 
   /// @copydoc IUpdateByOptions.AttachOptionsChangedEventHandlers
   public void AttachOptionsChangedEventHandlers() {
-    // nop
+    this.AreaExpander.Collapsed -= this.AreaExpander_Collapsed;
+    this.AreaExpander.Expanded -= this.AreaExpander_Expanded;
+    this.OptionsExpander.Collapsed -= this.OptionsExpander_Collapsed;
+    this.OptionsExpander.Expanded -= this.OptionsExpander_Expanded;
+    this.ResizeMethodExpander.Collapsed -= this.ResizeMethodExpander_Collapsed;
+    this.ResizeMethodExpander.Expanded -= this.ResizeMethodExpander_Expanded;
+    this.LayoutExpander.Collapsed -= this.LayoutExpander_Collapsed;
+    this.LayoutExpander.Expanded -= this.LayoutExpander_Expanded;
   }
 
   /// UIから設定にデータを保存
-  private void SaveOptions() {
+  private void SaveTemporaryOptions() {
     // Tmp接頭辞のプロパティだけはここで更新する必要がある
     var isNormal = this.WindowState == System.Windows.WindowState.Normal;
     App.Options.TmpMainWindowLeft = isNormal ? this.Left : this.RestoreBounds.Left;
@@ -102,12 +114,59 @@ public partial class MainWindow : Window, IUpdateByProfile, IUpdateByOptions {
     App.Options.TmpMainWindowWidth = isNormal ? this.Width : this.RestoreBounds.Width;
     App.Options.TmpMainWindowHeight = isNormal ? this.Height : this.RestoreBounds.Height;
     App.Options.TmpMainWindowState = (SCFF.Common.WindowState)this.WindowState;
+  }
 
-    // MainWindow Expanders
-    App.Options.TmpAreaIsExpanded = this.AreaExpander.IsExpanded;
-    App.Options.TmpOptionsIsExpanded = this.OptionsExpander.IsExpanded;
-    App.Options.TmpResizeMethodIsExpanded = this.ResizeMethodExpander.IsExpanded;
-    App.Options.TmpLayoutIsExpanded = this.LayoutExpander.IsExpanded;
+  //===================================================================
+  // イベントハンドラ
+  //===================================================================
+
+  //-------------------------------------------------------------------
+  // *Changed/Checked/Unchecked以外
+  //-------------------------------------------------------------------
+
+  private void autoApply_Click(object sender, RoutedEventArgs e) {
+    if (!this.AutoApply.IsChecked.HasValue) return;
+    App.Options.AutoApply = (bool)this.AutoApply.IsChecked;
+  }
+
+  //-------------------------------------------------------------------
+  // Checked/Unchecked
+  //-------------------------------------------------------------------
+
+  //-------------------------------------------------------------------
+  // *Changed
+  //-------------------------------------------------------------------
+
+  private void AreaExpander_Collapsed(object sender, RoutedEventArgs e) {
+    App.Options.AreaIsExpanded = false;
+  }
+
+  private void AreaExpander_Expanded(object sender, RoutedEventArgs e) {
+    App.Options.AreaIsExpanded = true;
+  }
+
+  private void OptionsExpander_Collapsed(object sender, RoutedEventArgs e) {
+    App.Options.OptionsIsExpanded = false;
+  }
+
+  private void OptionsExpander_Expanded(object sender, RoutedEventArgs e) {
+    App.Options.OptionsIsExpanded = true;
+  }
+
+  private void ResizeMethodExpander_Collapsed(object sender, RoutedEventArgs e) {
+    App.Options.ResizeMethodIsExpanded = false;
+  }
+
+  private void ResizeMethodExpander_Expanded(object sender, RoutedEventArgs e) {
+    App.Options.ResizeMethodIsExpanded = true;
+  }
+
+  private void LayoutExpander_Collapsed(object sender, RoutedEventArgs e) {
+    App.Options.LayoutIsExpanded = false;
+  }
+
+  private void LayoutExpander_Expanded(object sender, RoutedEventArgs e) {
+    App.Options.LayoutIsExpanded = true;
   }
 
   //===================================================================
@@ -147,30 +206,46 @@ public partial class MainWindow : Window, IUpdateByProfile, IUpdateByOptions {
   }
 
   //===================================================================
+  // SCFF.GUI.UpdateCommandsハンドラ
+  //===================================================================
+
+  private void UpdateMainWindow_Executed(object sender, ExecutedRoutedEventArgs e) {
+    this.UpdateByEntireProfile();
+  }
+
+  private void UpdateLayoutEdit_Executed(object sender, ExecutedRoutedEventArgs e) {
+    this.LayoutEdit.UpdateByEntireProfile();
+  }
+
+  private void UpdateCurrentTargetWindow_Executed(object sender, ExecutedRoutedEventArgs e) {
+    this.TargetWindow.UpdateByCurrentProfile();
+    this.Area.UpdateByCurrentProfile();
+    this.LayoutEdit.UpdateByCurrentProfile();
+  }
+
+  private void UpdateCurrentLayoutParameter_Executed(object sender, ExecutedRoutedEventArgs e) {
+    this.LayoutParameter.UpdateByCurrentProfile();
+  }
+
+  //===================================================================
   // ApplicationCommandsハンドラ
   //===================================================================
 
   private void Save_Executed(object sender, ExecutedRoutedEventArgs e) {
-    Debug.WriteLine("Command [Save]:");
-
     /// @todo(me) すでに保存されていない場合はダイアログをだす
-    if ((string)this.Tag == "") {
-      var save = new SaveFileDialog();
-      save.Title = "SCFF.GUI";
-      save.Filter = "SCFF.GUI Profile|*.SCFF.GUI.profile";
-      var saveResult = save.ShowDialog();
-      if (saveResult.HasValue && (bool)saveResult) {
-        /// @todo(me) 実装
-        MessageBox.Show(save.FileName);
-        App.Options.AddRecentProfile(save.FileName);
-        this.MainMenu.UpdateByOptions();
-      }
+    var save = new SaveFileDialog();
+    save.Title = "SCFF.GUI";
+    save.Filter = "SCFF.GUI Profile|*.SCFF.GUI.profile";
+    var saveResult = save.ShowDialog();
+    if (saveResult.HasValue && (bool)saveResult) {
+      /// @todo(me) 実装
+      MessageBox.Show(save.FileName);
+      App.Options.AddRecentProfile(save.FileName);
+      this.MainMenu.UpdateByOptions();
     }
   }
 
   private void New_Executed(object sender, ExecutedRoutedEventArgs e) {
-    Debug.WriteLine("Command [New]:");
-
     var result = MessageBox.Show("Do you want to save changes?",
                                  "SCFF.GUI",
                                  MessageBoxButton.YesNoCancel,
@@ -202,14 +277,10 @@ public partial class MainWindow : Window, IUpdateByProfile, IUpdateByOptions {
   }
 
   private void Open_Executed(object sender, ExecutedRoutedEventArgs e) {
-    Debug.WriteLine("Command [Open]:");
-
     /// @todo(me) Newと似たコードが必要だがかなりめんどくさい。あとでかく
   }
 
   private void SaveAs_Executed(object sender, ExecutedRoutedEventArgs e) {
-    Debug.WriteLine("Command [SaveAs]:");
-
     var save = new SaveFileDialog();
     save.Title = "SCFF.GUI";
     save.Filter = "SCFF.GUI Profile|*.SCFF.GUI.profile";
@@ -227,22 +298,18 @@ public partial class MainWindow : Window, IUpdateByProfile, IUpdateByOptions {
   //===================================================================
   
 	private void CloseWindow_Executed(object sender, ExecutedRoutedEventArgs e) {
-    Debug.WriteLine("Command [CloseWindow]:");
 		SystemCommands.CloseWindow(this);
 	}
 
 	private void MaximizeWindow_Executed(object sender, ExecutedRoutedEventArgs e) {
-    Debug.WriteLine("Command [MaximizeWindow]:");
 		SystemCommands.MaximizeWindow(this);
 	}
 
 	private void MinimizeWindow_Executed(object sender, ExecutedRoutedEventArgs e) {
-    Debug.WriteLine("Command [MinimizeWindow]:");
 		SystemCommands.MinimizeWindow(this);
 	}
 
 	private void RestoreWindow_Executed(object sender, ExecutedRoutedEventArgs e) {
-    Debug.WriteLine("Command [RestoreWindow]:");
 		SystemCommands.RestoreWindow(this);
 	}
 
@@ -288,98 +355,5 @@ public partial class MainWindow : Window, IUpdateByProfile, IUpdateByOptions {
     this.SetCompactView();
   }
 
-  //-------------------------------------------------------------------
-
-  private const double boundOffset = 0.05;
-
-  private void AddLayoutElement_Executed(object sender, ExecutedRoutedEventArgs e) {
-    Debug.WriteLine("Command [AddLayoutElement]:");
-    App.Profile.AddLayoutElement();
-    App.Profile.CurrentOutputLayoutElement.BoundRelativeLeft =
-      boundOffset * App.Profile.CurrentInputLayoutElement.Index;
-    App.Profile.CurrentOutputLayoutElement.BoundRelativeTop =
-      boundOffset * App.Profile.CurrentInputLayoutElement.Index;
-    this.UpdateByEntireProfile();
-  }
-
-  private void AddLayoutElement_CanExecute(object sender, CanExecuteRoutedEventArgs e) {
-    e.CanExecute = App.Profile.CanAddLayoutElement();
-  }
-
-  //-------------------------------------------------------------------
-
-  private void RemoveLayoutElement_Executed(object sender, ExecutedRoutedEventArgs e) {
-    Debug.WriteLine("Command [RemoveLayoutElement]:");
-    App.Profile.RemoveCurrentLayoutElement();
-    this.UpdateByEntireProfile();
-  }
-
-  private void RemoveLayoutElement_CanExecute(object sender, CanExecuteRoutedEventArgs e) {
-    e.CanExecute = App.Profile.CanRemoveLayoutElement();
-  }
-
-  //-------------------------------------------------------------------
-
-  private void ChangeCurrentLayoutElement_Executed(object sender, ExecutedRoutedEventArgs e) {
-    Debug.WriteLine("Command [ChangeCurrentLayoutElement]:");
-    this.UpdateByEntireProfile();
-  }
-
-  //-------------------------------------------------------------------
-
-  private void ChangeTargetWindow_Executed(object sender, ExecutedRoutedEventArgs e) {
-    /// @todo(me) ここでClippingWithoutFitの調整を行う。ついでにバックアップも？
-    this.TargetWindow.UpdateByCurrentProfile();
-    this.Area.UpdateByCurrentProfile();
-
-    this.LayoutParameter.UpdateByCurrentProfile();
-    this.LayoutEdit.UpdateByCurrentProfile();
-  }
-
-  //-------------------------------------------------------------------
-
-  private void ChangeLayoutParameter_Executed(object sender, ExecutedRoutedEventArgs e) {
-    this.LayoutParameter.UpdateByCurrentProfile();
-  }
-
-
-  //===================================================================
-  // *Changedではないが、値が変更したときに発生するイベントハンドラ
-  // プロパティへの代入で発生するので、App.Profileの変更は禁止
-  // このためthis.UpdateByProfile()の必要はない(呼び出しても良い)
-  //===================================================================
-
-  //===================================================================
-  // *Changed以外のイベントハンドラ
-  // プロパティへの代入では発生しないので、
-  // この中でのApp.Optionsの変更は許可
-  //===================================================================
-
-  private void autoApply_Click(object sender, RoutedEventArgs e) {
-    if (!this.AutoApply.IsChecked.HasValue) return;
-
-    App.Options.AutoApply = (bool)this.AutoApply.IsChecked;
-  }
-
-  private void layoutPreview_Click(object sender, RoutedEventArgs e) {
-    if (!this.LayoutPreview.IsChecked.HasValue) return;
-
-    App.Options.LayoutPreview = (bool)this.LayoutPreview.IsChecked;
-    this.LayoutEdit.UpdateByOptions();
-  }
-
-  private void layoutSnap_Click(object sender, RoutedEventArgs e) {
-    if (!this.LayoutSnap.IsChecked.HasValue) return;
-
-    App.Options.LayoutSnap = (bool)this.LayoutSnap.IsChecked;
-    // this.LayoutEdit.UpdateByOptions();
-  }
-
-  private void layoutBorder_Click(object sender, RoutedEventArgs e) {
-    if (!this.LayoutBorder.IsChecked.HasValue) return;
-
-    App.Options.LayoutBorder = (bool)this.LayoutBorder.IsChecked;
-    this.LayoutEdit.UpdateByOptions();
-  }
 }
-}
+}   // namespace SCFF.GUI

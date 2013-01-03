@@ -26,14 +26,5 @@ using System.Windows.Input;
 public static class Commands {
   public readonly static RoutedCommand SetAeroCommand = new RoutedCommand();
   public readonly static RoutedCommand SetCompactViewCommand = new RoutedCommand();
-
-  public readonly static RoutedCommand AddLayoutElementCommand = new RoutedCommand();
-  public readonly static RoutedCommand RemoveLayoutElementCommand = new RoutedCommand();
-
-  public readonly static RoutedCommand ChangeCurrentLayoutElementCommand = new RoutedCommand();
-
-  public readonly static RoutedCommand ChangeTargetWindowCommand = new RoutedCommand();
-
-  public readonly static RoutedCommand ChangeLayoutParameterCommand = new RoutedCommand();
 }
 }

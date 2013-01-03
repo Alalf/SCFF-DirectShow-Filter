@@ -224,14 +224,8 @@ public partial class Area : UserControl, IUpdateByProfile {
     App.Profile.CurrentOutputLayoutElement.ClippingHeightWithoutFit =
         (int)nextScreenRect.Height;
     
-    // 関連するコントロールの更新
-    if (nextWindowType != WindowTypes.Normal) {
-      // コマンドをMainWindowに送信して関連するコントロールを更新
-      Commands.ChangeTargetWindowCommand.Execute(null, null);
-    } else {
-      // 変更はAreaコントロールのみに収まるのでコマンドは発行しない
-      this.UpdateByCurrentProfile();
-    }
+    // コマンドをMainWindowに送信して関連するコントロールを更新
+    UpdateCommands.UpdateCurrentTargetWindowCommand.Execute(null, null);
   }
 
   private void AreaSelect_Click(object sender, RoutedEventArgs e) {

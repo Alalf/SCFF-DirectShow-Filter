@@ -34,18 +34,15 @@
                     CanExecute="SetAero_CanExecute"/>
     <CommandBinding Command="{x:Static local:Commands.SetCompactViewCommand}"
                     Executed="SetCompactView_Executed"/>
-    <CommandBinding Command="{x:Static local:Commands.AddLayoutElementCommand}"
-                    Executed="AddLayoutElement_Executed"
-                    CanExecute="AddLayoutElement_CanExecute"/>
-    <CommandBinding Command="{x:Static local:Commands.RemoveLayoutElementCommand}"
-                    Executed="RemoveLayoutElement_Executed"
-                    CanExecute="RemoveLayoutElement_CanExecute"/>
-    <CommandBinding Command="{x:Static local:Commands.ChangeCurrentLayoutElementCommand}"
-                    Executed="ChangeCurrentLayoutElement_Executed" />
-    <CommandBinding Command="{x:Static local:Commands.ChangeTargetWindowCommand}"
-                    Executed="ChangeTargetWindow_Executed" />
-    <CommandBinding Command="{x:Static local:Commands.ChangeLayoutParameterCommand}"
-                    Executed="ChangeLayoutParameter_Executed" />
+    <!-- SCFF.GUI.UpdateCommands -->
+    <CommandBinding Command="{x:Static local:UpdateCommands.UpdateMainWindowCommand}"
+                    Executed="UpdateMainWindow_Executed" />
+    <CommandBinding Command="{x:Static local:UpdateCommands.UpdateLayoutEditCommand}"
+                    Executed="UpdateLayoutEdit_Executed" />
+    <CommandBinding Command="{x:Static local:UpdateCommands.UpdateCurrentTargetWindowCommand}"
+                    Executed="UpdateCurrentTargetWindow_Executed" />
+    <CommandBinding Command="{x:Static local:UpdateCommands.UpdateCurrentLayoutParameterCommand}"
+                    Executed="UpdateCurrentLayoutParameter_Executed" />
   </Window.CommandBindings>
   <shell:WindowChrome.WindowChrome>
     <shell:WindowChrome CaptionHeight="{x:Static SystemParameters.CaptionHeight}"
@@ -140,16 +137,7 @@
       <!-- レイアウト表示 -->
       <Expander x:Name="LayoutExpander" FontSize="9" ExpandDirection="Right" Header="Layout" IsExpanded="True">
         <DockPanel LastChildFill="True">
-          <ToolBarTray DockPanel.Dock="Top" Background="{x:Null}" IsLocked="True" HorizontalAlignment="Center">
-            <ToolBar Header="Layout " Height="25">
-              <Button Command="{x:Static local:Commands.AddLayoutElementCommand}" Margin="3,0,0,0">Add</Button>
-              <Button Command="{x:Static local:Commands.RemoveLayoutElementCommand}" Margin="3,0,0,0">Remove</Button>
-              <Separator/>
-              <CheckBox x:Name="LayoutPreview" Margin="3,0,0,0" Click="layoutPreview_Click">Preview</CheckBox>
-              <CheckBox x:Name="LayoutBorder" Margin="3,0,0,0" Click="layoutBorder_Click">Border</CheckBox>
-              <CheckBox x:Name="LayoutSnap" Margin="3,0,8,0" Click="layoutSnap_Click">Snap</CheckBox>
-            </ToolBar>
-          </ToolBarTray>
+          <localControls:LayoutToolbar x:Name="LayoutToolbar" DockPanel.Dock="Top" />
           <localControls:LayoutParameter x:Name="LayoutParameter"  DockPanel.Dock="Bottom" Width="350" />
           <Viewbox Stretch="Uniform">
             <localControls:LayoutEdit x:Name="LayoutEdit"/>

@@ -45,10 +45,10 @@ public class Options {
     this.TmpMainWindowWidth = Constants.MainWindowWidth;
     this.TmpMainWindowHeight = Constants.MainWindowHeight;
     this.TmpMainWindowState = WindowState.Normal;
-    this.TmpAreaIsExpanded = true;
-    this.TmpOptionsIsExpanded = true;
-    this.TmpResizeMethodIsExpanded = true;
-    this.TmpLayoutIsExpanded = true;
+    this.AreaIsExpanded = true;
+    this.OptionsIsExpanded = true;
+    this.ResizeMethodIsExpanded = true;
+    this.LayoutIsExpanded = true;
     this.AutoApply = false;
     this.LayoutPreview = false;
     this.LayoutBorder = true;
@@ -108,10 +108,10 @@ public class Options {
   public double TmpMainWindowHeight { get; set; }
   public WindowState TmpMainWindowState { get; set; }
 
-  public bool TmpAreaIsExpanded { get; set; }
-  public bool TmpOptionsIsExpanded { get; set; }
-  public bool TmpResizeMethodIsExpanded { get; set; }
-  public bool TmpLayoutIsExpanded { get; set; }
+  public bool AreaIsExpanded { get; set; }
+  public bool OptionsIsExpanded { get; set; }
+  public bool ResizeMethodIsExpanded { get; set; }
+  public bool LayoutIsExpanded { get; set; }
 
   public bool AutoApply { get; set; }
   public bool LayoutPreview { get; set; }

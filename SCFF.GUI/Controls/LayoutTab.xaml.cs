@@ -123,7 +123,7 @@ public partial class LayoutTab : UserControl, IUpdateByProfile {
     App.Profile.ChangeCurrentIndex(next);
 
     // 他のコントロールのデータの更新はWindowに任せる
-    Commands.ChangeCurrentLayoutElementCommand.Execute(null, null);
+    UpdateCommands.UpdateMainWindowCommand.Execute(null, null);
   }
 }
 }

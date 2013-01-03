@@ -89,9 +89,6 @@ public partial class LayoutEdit : UserControl, IUpdateByProfile, IUpdateByOption
 
     // BitmapSource更新用タイマーの準備
     this.StartBitmapsUpdateTimer();
-
-    // 最初に更新
-    this.UpdateByEntireProfile();
   }
 
   /// Loadedイベントハンドラ
@@ -186,11 +183,13 @@ public partial class LayoutEdit : UserControl, IUpdateByProfile, IUpdateByOption
   private BitmapSource CreateBitmapSource(int index) {
     var result = this.screenCapturer.GetResult(index);
     if (result == null) return null;
-    return BitmapSource.Create(
+    var bitmapSource = BitmapSource.Create(
         result.PixelWidth, result.PixelHeight,
         result.DpiX, result.DpiY,
         PixelFormats.Bgr32, null,
         result.Pixels, result.Stride);
+    /// @todo(me) result.Pixelsを開放する方法はないだろうか？
+    return bitmapSource;
   }
 
   void bitmapsUpdateTimer_Tick(object sender, EventArgs e) {
@@ -199,6 +198,7 @@ public partial class LayoutEdit : UserControl, IUpdateByProfile, IUpdateByOption
       this.capturedBitmaps[layoutElement.Index] =
           this.CreateBitmapSource(layoutElement.Index);
     }
+    GC.Collect();
     // プレビュー更新
     this.DrawProfile();
   }
@@ -215,6 +215,7 @@ public partial class LayoutEdit : UserControl, IUpdateByProfile, IUpdateByOption
 
   /// @copydoc IUpdateByProfile.UpdateByEntireProfile
   public void UpdateByEntireProfile() {
+    this.screenCapturer.ClearRequests();
     foreach (var layoutElement in App.Profile) {
       this.SendRequestToScreenCapturer(layoutElement);
     }
@@ -256,7 +257,7 @@ public partial class LayoutEdit : UserControl, IUpdateByProfile, IUpdateByOption
 
   /// @copydoc IUpdateByOptions.UpdateByOptions
   public void UpdateByOptions() {
-    if (App.Options.TmpLayoutIsExpanded) {
+    if (App.Options.LayoutIsExpanded) {
       this.screenCapturer.Resume();
     } else {
       this.screenCapturer.Suspend();
@@ -330,7 +331,7 @@ public partial class LayoutEdit : UserControl, IUpdateByProfile, IUpdateByOption
                       relativeMousePoint.X, relativeMousePoint.Y);
 
       App.Profile.ChangeCurrentIndex(hitIndex);
-      Commands.ChangeCurrentLayoutElementCommand.Execute(null, null);
+      UpdateCommands.UpdateMainWindowCommand.Execute(null, null);
     }
 
     // マウスを押した場所を記録してマウスキャプチャー開始
@@ -384,7 +385,7 @@ public partial class LayoutEdit : UserControl, IUpdateByProfile, IUpdateByOption
     App.Profile.CurrentOutputLayoutElement.BoundRelativeBottom = nextBottom;
       
     /// @todo(me) 変更をMainWindowに通知
-    Commands.ChangeLayoutParameterCommand.Execute(null, null);
+    UpdateCommands.UpdateCurrentLayoutParameterCommand.Execute(null, null);
 
     this.DrawProfile();
   }

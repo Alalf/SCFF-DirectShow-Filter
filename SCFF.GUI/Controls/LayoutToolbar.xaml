@@ -1,0 +1,21 @@
+﻿<UserControl x:Class="SCFF.GUI.Controls.LayoutToolbar"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:local="clr-namespace:SCFF.GUI"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d"
+             d:DesignWidth="411" 
+             d:DesignHeight="31"
+             FontSize="9">
+  <ToolBarTray Background="{x:Null}" IsLocked="True" HorizontalAlignment="Center">
+    <ToolBar Header="Layout " Height="25">
+      <Button x:Name="Add" Content="Add" Margin="3,0,0,0" Click="Add_Click" VerticalAlignment="Top"/>
+      <Button x:Name="Remove" Content="Remove" Margin="3,0,0,0" Click="Remove_Click" IsEnabled="False"/>
+      <Separator/>
+      <CheckBox x:Name="LayoutPreview" Content="Preview" Margin="3,0,0,0" Click="layoutPreview_Click"/>
+      <CheckBox x:Name="LayoutBorder" Content="Border" Margin="3,0,0,0" Click="layoutBorder_Click"/>
+      <CheckBox x:Name="LayoutSnap" Content="Snap" Margin="3,0,8,0" Click="layoutSnap_Click"/>
+    </ToolBar>
+  </ToolBarTray>
+</UserControl>

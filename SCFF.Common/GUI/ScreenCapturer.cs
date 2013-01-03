@@ -170,6 +170,7 @@ public class ScreenCapturer {
 
   /// スクリーンキャプチャをこのマネージャに依頼
   /// @todo(me) デフォルトパラメータは使用しないように
+  /// @todo(me) やばい。Requestを消す手段が無いから困った事になってる
   public void SendRequest(ScreenCaptureRequest request) {
     Debug.WriteLine("ScreenCapturer: Request Arrived");
     lock (this.sharedLock) {
@@ -177,16 +178,17 @@ public class ScreenCapturer {
     }
   }
 
+  public void ClearRequests() {
+    Debug.WriteLine("ScreenCapturer: Clear All Requests");
+    lock (this.sharedLock) {
+      this.requests = new ScreenCaptureRequest[Common.Constants.MaxLayoutElementCount];
+    }
+  }
+
   /// 結果を取得
   public ScreenCaptureResult GetResult(int index) {
     //　参照カウンタがあるのなら消えはしない（GCの悪用！）
     return this.results[index];
-  }
-
-  /// 結果を開放
-  public void ReleaseResult(int index) {
-    this.results[index] = null;
-    GC.Collect();
   }
 
   //-------------------------------------------------------------------
@@ -236,7 +238,7 @@ public class ScreenCapturer {
     GDI32.DeleteObject(capturedBitmap);
     GC.Collect();
 
-    Debug.WriteLine("ScreenCapturer: Captured(DataSize: "+result.Size +")");
+    Debug.WriteLine("ScreenCapturer: {0:D}-Captured(DataSize: {1:D})", request.Index, result.Size);
     return result;
   }
 }

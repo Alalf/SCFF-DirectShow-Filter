@@ -19,11 +19,16 @@
       <MenuItem Header="Start FFmpeg(_F)..." IsEnabled="False"/>
       <MenuItem Header="Stop FFmpeg(_f)" IsEnabled="False"/>
       <Separator/>
-      <MenuItem x:Name="RecentProfile1" Header="1 (_1)" IsEnabled="False" Click="RecentProfile1_Click"/>
-      <MenuItem x:Name="RecentProfile2" Header="2 (_2)" IsEnabled="False" Click="RecentProfile2_Click"/>
-      <MenuItem x:Name="RecentProfile3" Header="3 (_3)" IsEnabled="False" Click="RecentProfile3_Click"/>
-      <MenuItem x:Name="RecentProfile4" Header="4 (_4)" IsEnabled="False" Click="RecentProfile4_Click"/>
-      <MenuItem x:Name="RecentProfile5" Header="5 (_5)" IsEnabled="False" Click="RecentProfile5_Click"/>
+      <MenuItem x:Name="RecentProfile1" Header="1 (_1)"
+                IsEnabled="False" Click="RecentProfile1_Click"/>
+      <MenuItem x:Name="RecentProfile2" Header="2 (_2)"
+                IsEnabled="False" Click="RecentProfile2_Click"/>
+      <MenuItem x:Name="RecentProfile3" Header="3 (_3)"
+                IsEnabled="False" Click="RecentProfile3_Click"/>
+      <MenuItem x:Name="RecentProfile4" Header="4 (_4)"
+                IsEnabled="False" Click="RecentProfile4_Click"/>
+      <MenuItem x:Name="RecentProfile5" Header="5 (_5)"
+                IsEnabled="False" Click="RecentProfile5_Click"/>
       <Separator/>
       <MenuItem Header="Exit(_X)" Command="{x:Static shell:SystemCommands.CloseWindowCommand}"/>
     </MenuItem>

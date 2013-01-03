@@ -18,7 +18,7 @@
 /// @file SCFF.Common/Imaging/Utilities.cs
 /// scff_imaging/utilities.ccとhの移植版
 
-/// scff_imagingモジュールのC#版(オリジナルはC++)
+/// scff_imagingモジュールの C# 版(オリジナルは C++ )
 namespace SCFF.Common.Imaging {
 
 using System.Diagnostics;

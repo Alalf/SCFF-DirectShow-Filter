@@ -15,20 +15,20 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file SCFF.GUI/Controls/LayoutEdit.cs
+/// @file SCFF.GUI/Controls/LayoutEdit.xaml.cs
 /// レイアウトエディタコントロール
 
+/// SCFF.GUIのユーザコントロールをまとめた名前空間
 namespace SCFF.GUI.Controls {
 
 using SCFF.Common;
-using SCFF.Common.Ext;
+using SCFF.Common.GUI;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
@@ -49,18 +49,18 @@ public partial class LayoutEdit : UserControl, IUpdateByProfile, IUpdateByOption
   private const double MaxImageWidth = 1.0 * Scale;
   private const double MaxImageHeight = 1.0 * Scale;
   private const double PenThickness = 0.005 * Scale;
-  private const double CaptionSize = 0.04 * Scale;
+  private const double CaptionSize = 0.03 * Scale;
   private const double CaptionMargin = PenThickness;
 
   //===================================================================
   // privateメンバ
   //===================================================================
 
-  private Pen dummyPen = new Pen(Brushes.DarkOrange, PenThickness);
+  /// プレビューサイズを決めるRect
   private Rect previewRect = new Rect(0.0, 0.0, MaxImageWidth, MaxImageHeight);
 
   /// スクリーンキャプチャ用スレッド管理クラスのインスタンス
-  private Common.GUI.ScreenCapturer screenCapturer = null;
+  private ScreenCapturer screenCapturer = null;
 
   //===================================================================
   // コンストラクタ/Loaded/ShutdownStartedイベントハンドラ
@@ -71,6 +71,7 @@ public partial class LayoutEdit : UserControl, IUpdateByProfile, IUpdateByOption
     InitializeComponent();
     this.Dispatcher.ShutdownStarted += OnShutdownStarted;
 
+    /// @todo(me) App.RuntimeOptionsからの値の取得
     this.LayoutEditViewBox.Width = Constants.DummyPreviewWidth;
     this.LayoutEditViewBox.Height = Constants.DummyPreviewHeight;
     RenderOptions.SetBitmapScalingMode(this.DrawingGroup, BitmapScalingMode.LowQuality);
@@ -80,11 +81,8 @@ public partial class LayoutEdit : UserControl, IUpdateByProfile, IUpdateByOption
     this.DrawingGroup.ClipGeometry = new RectangleGeometry(this.previewRect);
     this.DrawingGroup.ClipGeometry.Freeze();
 
-    // 使いまわすリソースはFreezeしておくとパフォーマンスがあがる
-    this.dummyPen.Freeze();
-
     // スクリーンキャプチャマネージャの準備
-    this.screenCapturer = new Common.GUI.ScreenCapturer(bitmapsUpdateTimerPeriod);
+    this.screenCapturer = new ScreenCapturer(bitmapsUpdateTimerPeriod);
     this.screenCapturer.Start();
 
     // BitmapSource更新用タイマーの準備
@@ -117,37 +115,95 @@ public partial class LayoutEdit : UserControl, IUpdateByProfile, IUpdateByOption
   }
 
   private FormattedText CreateLayoutElementCaption(Profile.InputLayoutElement layoutElement) {
-    // 1: WindowCaption [(640x400) あれば]
-    /// @todo(me) ピクセル単位の幅と高さの出力
-    var layoutElementCaption = (layoutElement.Index+1).ToString() +
-        ": " + layoutElement.WindowCaption;
-  
-    return new FormattedText(layoutElementCaption,
-      System.Globalization.CultureInfo.CurrentUICulture,
-      FlowDirection.LeftToRight,
-      new Typeface("Meiryo"),
-      CaptionSize,
-      Brushes.DarkOrange);
+    var isCurrent = layoutElement.Index == App.Profile.CurrentInputLayoutElement.Index;
+
+    // Caption
+    // サンプル: [1] (640x480) WindowCaption
+    var layoutElementCaption = "[" + (layoutElement.Index+1) + "] "; 
+    if (isCurrent) {
+      /// @todo(me) ピクセル単位の幅と高さの出力
+      layoutElementCaption += layoutElement.WindowCaption;
+    } else {
+      // Currentでなければ[1]以外は表示する必要はない
+    }
+    
+    // Brush
+    Brush textBrush = null;
+    switch (layoutElement.WindowType) {
+      case WindowTypes.Normal: {
+        textBrush = isCurrent ? BrushesAndPens.CurrentNormalBrush
+                              : BrushesAndPens.NormalBrush;
+        break;
+      }
+      case WindowTypes.DesktopListView: {
+        textBrush = isCurrent ? BrushesAndPens.CurrentDesktopListViewBrush
+                              : BrushesAndPens.DesktopListViewBrush;
+        break;
+      }
+      case WindowTypes.Desktop: {
+        textBrush = isCurrent ? BrushesAndPens.CurrentDesktopBrush
+                              : BrushesAndPens.DesktopBrush;
+        break;
+      }
+    }
+
+    // FormattedText
+    var formattedText = new FormattedText(layoutElementCaption,
+        System.Globalization.CultureInfo.CurrentUICulture,
+        FlowDirection.LeftToRight,
+        new Typeface("Meiryo"),
+        CaptionSize,
+        textBrush);
+    formattedText.MaxTextWidth = layoutElement.BoundRelativeWidth * Scale;
+    formattedText.MaxLineCount = 1;
+    return formattedText;
   }
 
-  private void DrawLayout(DrawingContext dc, Profile.InputLayoutElement layoutElement) {
+  private void DrawPreview(DrawingContext dc, Profile.InputLayoutElement layoutElement) {
+    if (this.capturedBitmaps[layoutElement.Index] == null) return;
+
+    // プレビューの描画
     var layoutElementRect = this.CreateLayoutElementRect(layoutElement);
+    dc.DrawImage(this.capturedBitmaps[layoutElement.Index], layoutElementRect);
+  }
 
-    if (App.Options.LayoutPreview && this.capturedBitmaps[layoutElement.Index] != null) {
-      dc.DrawImage(this.capturedBitmaps[layoutElement.Index], layoutElementRect);
+  private void DrawBorder(DrawingContext dc, Profile.InputLayoutElement layoutElement) {
+    var isCurrent = layoutElement.Index == App.Profile.CurrentInputLayoutElement.Index;
+
+    // Pen
+    Pen framePen = null;
+    switch (layoutElement.WindowType) {
+      case WindowTypes.Normal: {
+        framePen = isCurrent ? BrushesAndPens.CurrentNormalPen
+                             : BrushesAndPens.NormalPen;
+        break;
+      }
+      case WindowTypes.DesktopListView: {
+        framePen = isCurrent ? BrushesAndPens.CurrentDesktopListViewPen
+                             : BrushesAndPens.DesktopListViewPen;
+        break;
+      }
+      case WindowTypes.Desktop: {
+        framePen = isCurrent ? BrushesAndPens.CurrentDesktopPen
+                             : BrushesAndPens.DesktopPen;
+        break;
+      }
     }
 
-    if (App.Options.LayoutBorder) {
-      // フレームの描画
-      dc.DrawRectangle(Brushes.Transparent, dummyPen, layoutElementRect);
+    // フレームの描画
+    var layoutElementRect = this.CreateLayoutElementRect(layoutElement);
+    dc.DrawRectangle(Brushes.Transparent, framePen, layoutElementRect);
 
-      // キャプションの描画
-      var layoutElementCaption = this.CreateLayoutElementCaption(layoutElement);
-      layoutElementCaption.MaxTextWidth = layoutElement.BoundRelativeWidth * Scale;
-      layoutElementCaption.MaxLineCount = 1;
-      var captionPoint = new Point(layoutElementRect.X + CaptionMargin, layoutElementRect.Y + CaptionMargin);
-      dc.DrawText(layoutElementCaption, captionPoint);
-    }
+    // キャプションの描画
+    var layoutElementCaption = this.CreateLayoutElementCaption(layoutElement);
+    var captionPoint = new Point(layoutElementRect.X + CaptionMargin, layoutElementRect.Y + CaptionMargin);
+
+    // キャプションから縁取りを取得
+    /// @todo(me) 若干重い？
+    var textGeometry = layoutElementCaption.BuildGeometry(captionPoint);
+    dc.DrawGeometry(null, BrushesAndPens.DropShadowPen, textGeometry);
+
+    dc.DrawText(layoutElementCaption, captionPoint);
   }
 
   /// 描画テスト用
@@ -157,8 +213,18 @@ public partial class LayoutEdit : UserControl, IUpdateByProfile, IUpdateByOption
       // 背景描画でサイズを決める
       dc.DrawRectangle(Brushes.Black, null, this.previewRect);
 
-      foreach (var layoutElement in App.Profile) {
-        DrawLayout(dc, layoutElement);
+      // プレビューを下に描画
+      if (App.Options.LayoutPreview) {
+        foreach (var layoutElement in App.Profile) {
+          this.DrawPreview(dc, layoutElement);
+        }
+      }
+
+      // 枠線とキャプションを描画
+      if (App.Options.LayoutBorder) {
+        foreach (var layoutElement in App.Profile) {
+          this.DrawBorder(dc, layoutElement);
+        }
       }
     }
   }
@@ -234,7 +300,7 @@ public partial class LayoutEdit : UserControl, IUpdateByProfile, IUpdateByOption
 
   /// LayoutElementの内容からRequestを生成してScreenCapturerに画像生成を依頼
   private void SendRequestToScreenCapturer(Profile.InputLayoutElement layoutElement) {
-    var request = new Common.GUI.ScreenCaptureRequest {
+    var request = new ScreenCaptureRequest {
       Index = layoutElement.Index,
       Window = layoutElement.Window,
       ClippingX = layoutElement.WindowType == WindowTypes.Desktop ?
@@ -257,7 +323,9 @@ public partial class LayoutEdit : UserControl, IUpdateByProfile, IUpdateByOption
 
   /// @copydoc IUpdateByOptions.UpdateByOptions
   public void UpdateByOptions() {
-    if (App.Options.LayoutIsExpanded) {
+    /// @todo(me) LayoutPreview変更時にこのUpdateByOptionsが呼ばれるように変更する
+    ///           具体的には新しいUpdateCommandsを作成する
+    if (App.Options.LayoutIsExpanded && App.Options.LayoutPreview) {
       this.screenCapturer.Resume();
     } else {
       this.screenCapturer.Suspend();
@@ -280,34 +348,34 @@ public partial class LayoutEdit : UserControl, IUpdateByProfile, IUpdateByOption
   //===================================================================
 
   /// カーソルをまとめたディクショナリ
-  public readonly Dictionary<Common.GUI.HitModes, Cursor> hitModesToCursors =
-      new Dictionary<Common.GUI.HitModes,Cursor> {
-    {Common.GUI.HitModes.Neutral, null},
-    {Common.GUI.HitModes.Move, Cursors.SizeAll},
-    {Common.GUI.HitModes.SizeNW, Cursors.SizeNWSE},
-    {Common.GUI.HitModes.SizeNE, Cursors.SizeNESW},
-    {Common.GUI.HitModes.SizeSW, Cursors.SizeNESW},
-    {Common.GUI.HitModes.SizeSE, Cursors.SizeNWSE},
-    {Common.GUI.HitModes.SizeN, Cursors.SizeNS},
-    {Common.GUI.HitModes.SizeW, Cursors.SizeWE},
-    {Common.GUI.HitModes.SizeS, Cursors.SizeNS},
-    {Common.GUI.HitModes.SizeE, Cursors.SizeWE}
+  public readonly Dictionary<HitModes, Cursor> hitModesToCursors =
+      new Dictionary<HitModes,Cursor> {
+    {HitModes.Neutral, null},
+    {HitModes.Move, Cursors.SizeAll},
+    {HitModes.SizeNW, Cursors.SizeNWSE},
+    {HitModes.SizeNE, Cursors.SizeNESW},
+    {HitModes.SizeSW, Cursors.SizeNESW},
+    {HitModes.SizeSE, Cursors.SizeNWSE},
+    {HitModes.SizeN, Cursors.SizeNS},
+    {HitModes.SizeW, Cursors.SizeWE},
+    {HitModes.SizeS, Cursors.SizeNS},
+    {HitModes.SizeE, Cursors.SizeWE}
   };
 
   /// マウスポインタとLeft/Right/Top/BottomのOffset
   /// @todo(me) MoveAndSizeStateとしてまとめられないだろうか？
-  private Common.GUI.RelativeMouseOffset relativeMouseOffset = null;
+  private RelativeMouseOffset relativeMouseOffset = null;
   /// スナップガイド
   /// @todo(me) MoveAndSizeStateとしてまとめられないだろうか？
-  private Common.GUI.SnapGuide snapGuide = null;
+  private SnapGuide snapGuide = null;
   /// ヒットテストの結果
   /// @todo(me) MoveAndSizeStateとしてまとめられないだろうか？
-  private Common.GUI.HitModes hitMode = Common.GUI.HitModes.Neutral;
+  private HitModes hitMode = HitModes.Neutral;
 
-  /// マウスポインタを(0.0-1.0, 0.0-1.0)のCommon.GUI.Pointに変換
-  private Common.GUI.Point GetRelativeMousePoint(IInputElement image, MouseEventArgs e) {
+  /// マウスポインタを(0.0-1.0, 0.0-1.0)のRelativePointに変換
+  private RelativePoint GetRelativeMousePoint(IInputElement image, MouseEventArgs e) {
     var mousePoint = e.GetPosition(image);
-    return new Common.GUI.Point(mousePoint.X / MaxImageWidth, mousePoint.Y / MaxImageHeight);
+    return new RelativePoint(mousePoint.X / MaxImageWidth, mousePoint.Y / MaxImageHeight);
   }
 
   /// MouseDownイベントハンドラ 
@@ -366,15 +434,15 @@ public partial class LayoutEdit : UserControl, IUpdateByProfile, IUpdateByOption
     double nextRight = -1.0;
     double nextBottom = -1.0;
 
-    if (this.hitMode == Common.GUI.HitModes.Move) {
+    if (this.hitMode == HitModes.Move) {
       // Move
-      Common.GUI.MoveAndSize.Move(App.Profile.CurrentInputLayoutElement,
+      MoveAndSize.Move(App.Profile.CurrentInputLayoutElement,
           relativeMousePoint, this.relativeMouseOffset, this.snapGuide,
           out nextLeft, out nextTop, out nextRight, out nextBottom);
     } else {
       // Size*
-      Common.GUI.MoveAndSize.Size(App.Profile.CurrentInputLayoutElement,
-          this.hitMode, relativeMousePoint, this.relativeMouseOffset, this.snapGuide,
+      MoveAndSize.Size(App.Profile.CurrentInputLayoutElement,
+          relativeMousePoint, this.relativeMouseOffset, this.snapGuide, this.hitMode,
           out nextLeft, out nextTop, out nextRight, out nextBottom);
     }
 
@@ -393,9 +461,9 @@ public partial class LayoutEdit : UserControl, IUpdateByProfile, IUpdateByOption
   /// MouseUpイベントハンドラ
   private void LayoutEditImage_MouseUp(object sender, MouseButtonEventArgs e) {
     e.Handled = true;
-    if (this.hitMode != Common.GUI.HitModes.Neutral) {
+    if (this.hitMode != HitModes.Neutral) {
       this.LayoutEditImage.ReleaseMouseCapture();
-      this.hitMode = Common.GUI.HitModes.Neutral;
+      this.hitMode = HitModes.Neutral;
       this.DrawProfile();
     }
   }

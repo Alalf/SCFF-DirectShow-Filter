@@ -18,6 +18,7 @@
 /// @file SCFF.Common/GUI/Types.cs
 /// SCFF.Common.GUIモジュールで利用する型
 
+/// GUIに関連したクラス(ただしGUIアセンブリ非依存)をまとめた名前空間
 namespace SCFF.Common.GUI {
 
 /// ヒットテストの結果をまとめた列挙型
@@ -37,8 +38,8 @@ public enum HitModes {
 }
 
 /// System.Windowsが使えないので代替用のPoint
-public class Point {
-  public Point(double X, double Y) {
+public class RelativePoint {
+  public RelativePoint(double X, double Y) {
     this.X = X;
     this.Y = Y;
   }
@@ -47,14 +48,14 @@ public class Point {
 }
 
 /// System.Windowsが使えないので代替用のRect
-public class Rect {
+public class RelativeRect {
   public double X { get; set; }
   public double Y { get; set; }
   public double Width { get; set; }
   public double Height { get; set; }
 
   /// 含有判定
-  public bool Contains(Point point) {
+  public bool Contains(RelativePoint point) {
     return this.X <= point.X && point.X <= this.X + this.Width &&
            this.Y <= point.Y && point.Y <= this.Y + this.Height;
   }

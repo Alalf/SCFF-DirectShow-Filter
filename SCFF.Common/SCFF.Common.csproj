@@ -44,7 +44,7 @@
     <Compile Include="Ext\DWMAPI.cs" />
     <Compile Include="Ext\GDI32.cs" />
     <Compile Include="Ext\User32.cs" />
-    <Compile Include="GUI\Constants.cs" />
+    <Compile Include="GUI\GUIConstants.cs" />
     <Compile Include="GUI\HitTest.cs" />
     <Compile Include="GUI\MoveAndSize.cs" />
     <Compile Include="GUI\RelativeMouseOffset.cs" />

@@ -18,7 +18,7 @@
 /// @file SCFF.Common/Profile.cs
 /// レイアウト設定などをまとめたプロファイル
 
-/// SCFF.*で利用する共通クラスをまとめた名前空間
+/// SCFF共有クラスライブラリ
 namespace SCFF.Common {
 
 using SCFF.Common.Ext;

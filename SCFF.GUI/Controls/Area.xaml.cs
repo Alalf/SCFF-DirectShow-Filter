@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file SCFF.GUI/Controls/Area.cs
+/// @file SCFF.GUI/Controls/Area.xaml.cs
 /// クリッピング領域設定用
 
 namespace SCFF.GUI.Controls {
@@ -30,36 +30,9 @@ using System.Windows.Media;
 /// クリッピング領域設定用
 public partial class Area : UserControl, IUpdateByProfile {
 
-  private readonly Brush normalBorderBrush = Brushes.DarkOrange;
-  private Brush normalGridBrush;
-  private readonly Brush desktopListViewBorderBrush = Brushes.DarkCyan;
-  private Brush desktopListViewGridBrush;
-  private readonly Brush desktopBorderBrush = Brushes.DarkGreen;
-  private Brush desktopGridBrush;
-
   /// コンストラクタ
   public Area() {
     InitializeComponent();
-
-    //<Border x:Name="WindowBorder" BorderBrush="DarkOrange" BorderThickness="1">
-    //<Grid x:Name="WindowGrid" Background="#99FF8000">
-
-    // AreaSelectWindow用のブラシの生成
-    var normalGridColor = new Color {
-      A = 0x99, R = 0xFF, G = 0x80, B = 0x00
-    };
-    this.normalGridBrush = new SolidColorBrush(normalGridColor);
-    this.normalGridBrush.Freeze();
-
-    var desktopListViewGridColor = Colors.DarkCyan;
-    desktopListViewGridColor.A = 0x99;
-    this.desktopListViewGridBrush = new SolidColorBrush(desktopListViewGridColor);
-    this.desktopListViewGridBrush.Freeze();
-
-    var desktpGridColor = Colors.DarkGreen;
-    desktpGridColor.A = 0x99;
-    this.desktopGridBrush = new SolidColorBrush(desktpGridColor);
-    this.desktopGridBrush.Freeze();
   }
 
   //===================================================================
@@ -150,31 +123,31 @@ public partial class Area : UserControl, IUpdateByProfile {
         // 更に現在のTypeによって色を分ける
         switch (App.Profile.CurrentInputLayoutElement.WindowType) {
           case WindowTypes.DesktopListView: {
-            dialog.WindowBorder.BorderBrush = desktopListViewBorderBrush;
-            dialog.WindowGrid.Background = desktopListViewGridBrush;
+            dialog.WindowBorder.BorderBrush = BrushesAndPens.CurrentDesktopListViewBrush;
+            dialog.WindowGrid.Background = BrushesAndPens.DesktopListViewBrush;
             break;
           }
           case WindowTypes.Desktop: {
-            dialog.WindowBorder.BorderBrush = desktopBorderBrush;
-            dialog.WindowGrid.Background = desktopGridBrush;
+            dialog.WindowBorder.BorderBrush = BrushesAndPens.CurrentDesktopBrush;
+            dialog.WindowGrid.Background = BrushesAndPens.DesktopBrush;
             break;
           }
           default: {
-            dialog.WindowBorder.BorderBrush = normalBorderBrush;
-            dialog.WindowGrid.Background = normalGridBrush;
+            dialog.WindowBorder.BorderBrush = BrushesAndPens.CurrentNormalBrush;
+            dialog.WindowGrid.Background = BrushesAndPens.NormalBrush;
             break;
           }
         }
         break;
       }
       case WindowTypes.DesktopListView: {
-        dialog.WindowBorder.BorderBrush = desktopListViewBorderBrush;
-        dialog.WindowGrid.Background = desktopListViewGridBrush;
+        dialog.WindowBorder.BorderBrush = BrushesAndPens.CurrentDesktopListViewBrush;
+        dialog.WindowGrid.Background = BrushesAndPens.DesktopListViewBrush;
         break;
       }
       case WindowTypes.Desktop: {
-        dialog.WindowBorder.BorderBrush = desktopBorderBrush;
-        dialog.WindowGrid.Background = desktopGridBrush;
+        dialog.WindowBorder.BorderBrush = BrushesAndPens.CurrentDesktopBrush;
+        dialog.WindowGrid.Background = BrushesAndPens.DesktopBrush;
         break;
       }
       default : {

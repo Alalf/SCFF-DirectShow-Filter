@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file SCFF.GUI/Controls/LayoutParameter.cs
+/// @file SCFF.GUI/Controls/LayoutParameter.xaml.cs
 /// レイアウト配置設定
 
 namespace SCFF.GUI.Controls {

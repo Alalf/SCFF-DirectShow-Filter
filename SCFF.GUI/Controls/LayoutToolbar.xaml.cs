@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file SCFF.GUI/Controls/LayoutToolbar.cs
+/// @file SCFF.GUI/Controls/LayoutToolbar.xaml.cs
 /// レイアウト追加・削除・プレビューオプション設定用ツールバー
 
 namespace SCFF.GUI.Controls {

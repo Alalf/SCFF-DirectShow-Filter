@@ -15,13 +15,13 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file SCFF.Common/GUI/Constants.cs
+/// @file SCFF.Common/GUI/GUIConstants.cs
 /// SCFF.Common.GUIモジュールで利用する定数
 
 namespace SCFF.Common.GUI {
 
 /// SCFF.Common.GUIモジュールで利用する定数
-public static class Constants {
+public static class GUIConstants {
   /// 左右方向の単位ボーダーサイズ(内側に1, 外側に1)
   public const double WEBorderThickness = 0.02;
   /// 上下方向の単位ボーダーサイズ(内側に1, 外側に1)

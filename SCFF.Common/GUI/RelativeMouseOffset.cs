@@ -22,11 +22,11 @@ namespace SCFF.Common.GUI {
 
 /// マウスポインタ座標がレイアウト要素の上下左右とどれだけ離れているか
 public class RelativeMouseOffset {
-  public RelativeMouseOffset(Profile.InputLayoutElement layoutElement, Point relativeMousePoint) {
-    this.Left = relativeMousePoint.X - layoutElement.BoundRelativeLeft;
-    this.Top = relativeMousePoint.Y - layoutElement.BoundRelativeTop;
-    this.Right = relativeMousePoint.X - layoutElement.BoundRelativeRight;
-    this.Bottom = relativeMousePoint.Y - layoutElement.BoundRelativeBottom;
+  public RelativeMouseOffset(Profile.InputLayoutElement layoutElement, RelativePoint mousePoint) {
+    this.Left = mousePoint.X - layoutElement.BoundRelativeLeft;
+    this.Top = mousePoint.Y - layoutElement.BoundRelativeTop;
+    this.Right = mousePoint.X - layoutElement.BoundRelativeRight;
+    this.Bottom = mousePoint.Y - layoutElement.BoundRelativeBottom;
   }
 
   public double Left { get; private set; }

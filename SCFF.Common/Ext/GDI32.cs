@@ -16,14 +16,14 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file SCFF.Common/Ext/GDI32.cs
-/// SCFF.*モジュールで利用するGDI32.dllのAPIをまとめたクラス
+/// SCFFで利用するGDI32.dllのAPIをまとめたクラス
 
 namespace SCFF.Common.Ext {
 
 using System;
 using System.Runtime.InteropServices;
 
-/// SCFF.*モジュールで利用するGDI32.dllのAPIをまとめたクラス
+/// SCFFで利用するGDI32.dllのAPIをまとめたクラス
 ///
 /// HWNDは特例としてUIntPtr、それ以外はIntPtrで取り扱うこと
 public class GDI32 {
@@ -39,6 +39,8 @@ public class GDI32 {
   public const uint DIB_RGB_COLORS  = 0;
 
   // Types
+
+  /// BITMAPINFOHEADER
   [StructLayout(LayoutKind.Sequential, Pack = 1)]
   public struct BITMAPINFOHEADER {
     public uint biSize;
@@ -54,6 +56,7 @@ public class GDI32 {
     public uint biClrImportant;
   }
 
+  /// BITMAPINFO
   [StructLayout(LayoutKind.Sequential, Pack = 1)]
   public struct BITMAPINFO {
     public BITMAPINFOHEADER bmih;

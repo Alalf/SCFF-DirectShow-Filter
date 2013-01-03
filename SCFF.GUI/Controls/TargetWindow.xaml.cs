@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file SCFF.GUI/Controls/TargetWindow.cs
+/// @file SCFF.GUI/Controls/TargetWindow.xaml.cs
 /// ウィンドウ取り込み対象の設定用コントロール
 
 namespace SCFF.GUI.Controls {

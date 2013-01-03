@@ -29,8 +29,8 @@ public static class MoveAndSize {
   //-------------------------------------------------------------------
   // 定数
   //-------------------------------------------------------------------
-  private const double MinimumWidth = Constants.WEBorderThickness * 2;
-  private const double MinimumHeight = Constants.NSBorderThickness * 2;
+  private const double MinimumWidth = GUIConstants.WEBorderThickness * 2;
+  private const double MinimumHeight = GUIConstants.NSBorderThickness * 2;
 
   //-------------------------------------------------------------------
   // staticメソッド
@@ -38,7 +38,8 @@ public static class MoveAndSize {
 
   /// Move
   public static void Move(Profile.InputLayoutElement layoutElement,
-      Point point, RelativeMouseOffset offset, SnapGuide snapGuide,
+      RelativePoint mousePoint, RelativeMouseOffset mouseOffset,
+      SnapGuide snapGuide,
       out double nextLeft, out double nextTop,
       out double nextRight, out double nextBottom) {
     // Snapするのは軸あたり1回のみ
@@ -46,12 +47,12 @@ public static class MoveAndSize {
     bool hasAlreadyVerticalSnapped = false;
 
     // Left
-    var tryNextLeft = point.X - offset.Left;
+    var tryNextLeft = mousePoint.X - mouseOffset.Left;
     hasAlreadyHorizontalSnapped |= snapGuide.TryHorizontalSnap(ref tryNextLeft);
     if (tryNextLeft < 0.0) tryNextLeft = 0.0;
 
     // Top
-    var tryNextTop = point.Y - offset.Top;
+    var tryNextTop = mousePoint.Y - mouseOffset.Top;
     hasAlreadyVerticalSnapped |= snapGuide.TryVerticalSnap(ref tryNextTop);
     if (tryNextTop < 0.0) tryNextTop = 0.0;
 
@@ -85,8 +86,8 @@ public static class MoveAndSize {
 
   /// Size
   public static void Size(Profile.InputLayoutElement layoutElement,
-      HitModes hitMode,
-      Point point, RelativeMouseOffset offset, SnapGuide snapGuide,
+      RelativePoint mousePoint, RelativeMouseOffset mouseOffset,
+      SnapGuide snapGuide, HitModes hitMode,
       out double nextLeft, out double nextTop,
       out double nextRight, out double nextBottom) {
     // 初期値
@@ -101,7 +102,7 @@ public static class MoveAndSize {
       case HitModes.SizeNW:
       case HitModes.SizeNE: {
         // Top
-        var tryNextTop = point.Y - offset.Top;
+        var tryNextTop = mousePoint.Y - mouseOffset.Top;
         snapGuide.TryVerticalSnap(ref tryNextTop);
         if (tryNextTop < 0.0) tryNextTop = 0.0;
         var topUpperBound = nextBottom - MinimumHeight;
@@ -113,7 +114,7 @@ public static class MoveAndSize {
       case HitModes.SizeSW:
       case HitModes.SizeSE: {
         // Bottom
-        var tryNextBottom = point.Y - offset.Bottom;
+        var tryNextBottom = mousePoint.Y - mouseOffset.Bottom;
         snapGuide.TryVerticalSnap(ref tryNextBottom);
         if (tryNextBottom > 1.0) tryNextBottom = 1.0;
         var bottomLowerBound = nextTop + MinimumHeight;
@@ -129,7 +130,7 @@ public static class MoveAndSize {
       case HitModes.SizeW:
       case HitModes.SizeSW: {
         // Left
-        var tryNextLeft = point.X - offset.Left;
+        var tryNextLeft = mousePoint.X - mouseOffset.Left;
         snapGuide.TryHorizontalSnap(ref tryNextLeft);
         if (tryNextLeft < 0.0) tryNextLeft = 0.0;
         var leftUpperBound = nextRight - MinimumWidth;
@@ -141,7 +142,7 @@ public static class MoveAndSize {
       case HitModes.SizeE:
       case HitModes.SizeSE: {
         // Right
-        var tryNextRight = point.X - offset.Right;
+        var tryNextRight = mousePoint.X - mouseOffset.Right;
         snapGuide.TryHorizontalSnap(ref tryNextRight);
         if (tryNextRight > 1.0) tryNextRight = 1.0;
         var rightLowerBound = nextLeft + MinimumWidth;

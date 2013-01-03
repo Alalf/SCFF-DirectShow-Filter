@@ -20,6 +20,7 @@
 /// @warning To me: このファイルの中から別のファイルへのusingは禁止！
 /// - 別の言語に移植する場合も最大2ファイルでお願いします
 
+/// scff_interprocessモジュールの C# 版(オリジナルは C++ )
 namespace SCFF.Interprocess {
 
 using System;

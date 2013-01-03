@@ -125,6 +125,7 @@ public class ScreenCapturer {
 
   /// 中断
   public void Suspend() {
+    Debug.WriteLine("ScreenCapturer: Suspend");
     lock (this.sharedLock) {
       this.isSuspended = true;
     }
@@ -132,6 +133,7 @@ public class ScreenCapturer {
 
   /// 再開
   public void Resume() {
+    Debug.WriteLine("ScreenCapturer: Resume");
     lock (this.sharedLock) {
       this.isSuspended = false;
     }
@@ -238,7 +240,7 @@ public class ScreenCapturer {
     GDI32.DeleteObject(capturedBitmap);
     GC.Collect();
 
-    Debug.WriteLine("ScreenCapturer: {0:D}-Captured(DataSize: {1:D})", request.Index, result.Size);
+    Debug.WriteLine("ScreenCapturer: {0:D}-Captured(DataSize: {1:D})", request.Index+1, result.Size);
     return result;
   }
 }

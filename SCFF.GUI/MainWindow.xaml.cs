@@ -83,18 +83,6 @@ public partial class MainWindow : Window, IUpdateByProfile, IUpdateByOptions {
 
   /// @copydoc IUpdateByOptions.DetachOptionsChangedEventHandlers
   public void DetachOptionsChangedEventHandlers() {
-    this.AreaExpander.Collapsed += this.AreaExpander_Collapsed;
-    this.AreaExpander.Expanded += this.AreaExpander_Expanded;
-    this.OptionsExpander.Collapsed += this.OptionsExpander_Collapsed;
-    this.OptionsExpander.Expanded += this.OptionsExpander_Expanded;
-    this.ResizeMethodExpander.Collapsed += this.ResizeMethodExpander_Collapsed;
-    this.ResizeMethodExpander.Expanded += this.ResizeMethodExpander_Expanded;
-    this.LayoutExpander.Collapsed += this.LayoutExpander_Collapsed;
-    this.LayoutExpander.Expanded += this.LayoutExpander_Expanded;
-  }
-
-  /// @copydoc IUpdateByOptions.AttachOptionsChangedEventHandlers
-  public void AttachOptionsChangedEventHandlers() {
     this.AreaExpander.Collapsed -= this.AreaExpander_Collapsed;
     this.AreaExpander.Expanded -= this.AreaExpander_Expanded;
     this.OptionsExpander.Collapsed -= this.OptionsExpander_Collapsed;
@@ -103,6 +91,18 @@ public partial class MainWindow : Window, IUpdateByProfile, IUpdateByOptions {
     this.ResizeMethodExpander.Expanded -= this.ResizeMethodExpander_Expanded;
     this.LayoutExpander.Collapsed -= this.LayoutExpander_Collapsed;
     this.LayoutExpander.Expanded -= this.LayoutExpander_Expanded;
+  }
+
+  /// @copydoc IUpdateByOptions.AttachOptionsChangedEventHandlers
+  public void AttachOptionsChangedEventHandlers() {
+    this.AreaExpander.Collapsed += this.AreaExpander_Collapsed;
+    this.AreaExpander.Expanded += this.AreaExpander_Expanded;
+    this.OptionsExpander.Collapsed += this.OptionsExpander_Collapsed;
+    this.OptionsExpander.Expanded += this.OptionsExpander_Expanded;
+    this.ResizeMethodExpander.Collapsed += this.ResizeMethodExpander_Collapsed;
+    this.ResizeMethodExpander.Expanded += this.ResizeMethodExpander_Expanded;
+    this.LayoutExpander.Collapsed += this.LayoutExpander_Collapsed;
+    this.LayoutExpander.Expanded += this.LayoutExpander_Expanded;
   }
 
   /// UIから設定にデータを保存
@@ -163,10 +163,12 @@ public partial class MainWindow : Window, IUpdateByProfile, IUpdateByOptions {
 
   private void LayoutExpander_Collapsed(object sender, RoutedEventArgs e) {
     App.Options.LayoutIsExpanded = false;
+    this.LayoutEdit.UpdateByOptions();
   }
 
   private void LayoutExpander_Expanded(object sender, RoutedEventArgs e) {
     App.Options.LayoutIsExpanded = true;
+    this.LayoutEdit.UpdateByOptions();
   }
 
   //===================================================================

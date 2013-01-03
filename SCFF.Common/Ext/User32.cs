@@ -16,15 +16,16 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file SCFF.Common/Ext/User32.cs
-/// SCFF.*モジュールで利用するUser32.dllのAPIをまとめたクラス
+/// SCFFで利用するUser32.dllのAPIをまとめたクラス
 
+/// 外部APIをまとめた名前空間
 namespace SCFF.Common.Ext {
 
 using System;
 using System.Runtime.InteropServices;
 using System.Text;
 
-/// SCFF.*モジュールで利用するUser32.dllのAPIをまとめたクラス
+/// SCFFで利用するUser32.dllのAPIをまとめたクラス
 public class User32 {
   // Constants
   public const int SM_CXSCREEN = 0;
@@ -35,9 +36,12 @@ public class User32 {
   public const int SM_CYVIRTUALSCREEN = 79;
 
   // Type
+
+  /// RECT
   [StructLayout(LayoutKind.Sequential)]
   public struct RECT { public int Left, Top, Right, Bottom; }
 
+  /// POINT
   [StructLayout(LayoutKind.Sequential)]
   public struct POINT { public int X, Y; }
 

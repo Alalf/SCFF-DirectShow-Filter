@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file SCFF.GUI/Controls/LayoutTab.cs
+/// @file SCFF.GUI/Controls/LayoutTab.xaml.cs
 /// レイアウト要素の切り替えと個数の表示を行うタブ
 
 namespace SCFF.GUI.Controls {

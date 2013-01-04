@@ -82,7 +82,7 @@ public partial class LayoutEdit : UserControl, IUpdateByProfile, IUpdateByOption
     this.DrawingGroup.ClipGeometry.Freeze();
 
     // スクリーンキャプチャマネージャの準備
-    this.screenCapturer = new ScreenCapturer(bitmapsUpdateTimerPeriod);
+    this.screenCapturer = new ScreenCapturer(redrawTimerPeriod);
     this.screenCapturer.Start();
 
     // BitmapSource更新用タイマーの準備
@@ -160,11 +160,12 @@ public partial class LayoutEdit : UserControl, IUpdateByProfile, IUpdateByOption
   }
 
   private void DrawPreview(DrawingContext dc, Profile.InputLayoutElement layoutElement) {
-    if (this.capturedBitmaps[layoutElement.Index] == null) return;
+    var bitmap = this.screenCapturer.GetBitmapSource(layoutElement.Index);
+    if (bitmap == null) return;
 
     // プレビューの描画
     var layoutElementRect = this.CreateLayoutElementRect(layoutElement);
-    dc.DrawImage(this.capturedBitmaps[layoutElement.Index], layoutElementRect);
+    dc.DrawImage(bitmap, layoutElementRect);
   }
 
   private void DrawBorder(DrawingContext dc, Profile.InputLayoutElement layoutElement) {
@@ -230,42 +231,31 @@ public partial class LayoutEdit : UserControl, IUpdateByProfile, IUpdateByOption
   }
 
   //===================================================================
-  // DispatcherTimerによるBitmapSourceの更新
+  // DispatcherTimerによる再描画
   //===================================================================
 
-  /// BitmapSource更新間隔: 3000ミリ秒
-  private const double bitmapsUpdateTimerPeriod = 3000;
-  /// BitmapSourceを更新するためのDispatcherTimer
-  private DispatcherTimer bitmapsUpdateTimer = new DispatcherTimer();
-  /// ScreenCapturer から受け取ったデータを格納しておく
-  private BitmapSource[] capturedBitmaps = new BitmapSource[Constants.MaxLayoutElementCount];
+  /// 再描画間隔: 5000ミリ秒
+  private const double redrawTimerPeriod = 5000;
+  /// 再描画用DispatcherTimer
+  private DispatcherTimer redrawTimer = new DispatcherTimer();
 
+  /// 再描画タイマー起動
   private void StartBitmapsUpdateTimer() {
-    bitmapsUpdateTimer.Interval = TimeSpan.FromMilliseconds(bitmapsUpdateTimerPeriod);
-    bitmapsUpdateTimer.Tick += bitmapsUpdateTimer_Tick;
-    bitmapsUpdateTimer.Start();
+    redrawTimer.Interval = TimeSpan.FromMilliseconds(redrawTimerPeriod);
+    redrawTimer.Tick += redrawTimer_Tick;
+    redrawTimer.Start();
   }
 
-  private BitmapSource CreateBitmapSource(int index) {
-    var result = this.screenCapturer.GetResult(index);
-    if (result == null) return null;
-    var bitmapSource = BitmapSource.Create(
-        result.PixelWidth, result.PixelHeight,
-        result.DpiX, result.DpiY,
-        PixelFormats.Bgr32, null,
-        result.Pixels, result.Stride);
-    /// @todo(me) result.Pixelsを開放する方法はないだろうか？
-    return bitmapSource;
-  }
+  /// 再描画タイマーコールバック
+  void redrawTimer_Tick(object sender, EventArgs e) {
+    // プレビューが必要なければ更新しない
+    if (!App.Options.LayoutIsExpanded) return;
+    if (!App.Options.LayoutPreview) return;
+    
+    // マウス操作中は更新しない
+    if (this.hitMode != HitModes.Neutral) return;
 
-  void bitmapsUpdateTimer_Tick(object sender, EventArgs e) {
-    this.capturedBitmaps = new BitmapSource[Constants.MaxLayoutElementCount];
-    foreach (var layoutElement in App.Profile) {
-      this.capturedBitmaps[layoutElement.Index] =
-          this.CreateBitmapSource(layoutElement.Index);
-    }
-    GC.Collect();
-    // プレビュー更新
+    // プレビュー更新のために再描画
     this.DrawProfile();
   }
 
@@ -275,7 +265,7 @@ public partial class LayoutEdit : UserControl, IUpdateByProfile, IUpdateByOption
 
   /// @copydoc IUpdateByProfile.UpdateByCurrentProfile
   public void UpdateByCurrentProfile() {
-    this.SendRequestToScreenCapturer(App.Profile.CurrentInputLayoutElement);
+    this.SendRequestToScreenCapturer(App.Profile.CurrentInputLayoutElement, true);
     this.DrawProfile();
   }
 
@@ -283,7 +273,7 @@ public partial class LayoutEdit : UserControl, IUpdateByProfile, IUpdateByOption
   public void UpdateByEntireProfile() {
     this.screenCapturer.ClearRequests();
     foreach (var layoutElement in App.Profile) {
-      this.SendRequestToScreenCapturer(layoutElement);
+      this.SendRequestToScreenCapturer(layoutElement, true);
     }
     this.DrawProfile();
   }
@@ -299,22 +289,21 @@ public partial class LayoutEdit : UserControl, IUpdateByProfile, IUpdateByOption
   }
 
   /// LayoutElementの内容からRequestを生成してScreenCapturerに画像生成を依頼
-  private void SendRequestToScreenCapturer(Profile.InputLayoutElement layoutElement) {
-    var request = new ScreenCaptureRequest {
-      Index = layoutElement.Index,
-      Window = layoutElement.Window,
-      ClippingX = layoutElement.WindowType == WindowTypes.Desktop ?
-                      layoutElement.ScreenClippingXWithFit :
-                      layoutElement.ClippingXWithFit,
-      ClippingY = layoutElement.WindowType == WindowTypes.Desktop ?
-                      layoutElement.ScreenClippingYWithFit :
-                      layoutElement.ClippingYWithFit,
-      ClippingWidth = layoutElement.ClippingWidthWithFit,
-      ClippingHeight = layoutElement.ClippingHeightWithFit,
-      ShowCursor = layoutElement.ShowCursor,
-      ShowLayeredWindow = layoutElement.ShowLayeredWindow
-    };
-    this.screenCapturer.SendRequest(request);
+  private void SendRequestToScreenCapturer(Profile.InputLayoutElement layoutElement, bool forceUpdate) {
+    var request = new ScreenCaptureRequest(
+        layoutElement.Index,
+        layoutElement.Window,
+        layoutElement.WindowType == WindowTypes.Desktop ?
+                        layoutElement.ScreenClippingXWithFit :
+                        layoutElement.ClippingXWithFit,
+        layoutElement.WindowType == WindowTypes.Desktop ?
+                        layoutElement.ScreenClippingYWithFit :
+                        layoutElement.ClippingYWithFit,
+        layoutElement.ClippingWidthWithFit,
+        layoutElement.ClippingHeightWithFit,
+        layoutElement.ShowCursor,
+        layoutElement.ShowLayeredWindow);
+    this.screenCapturer.SendRequest(request, forceUpdate);
   }
 
   //===================================================================

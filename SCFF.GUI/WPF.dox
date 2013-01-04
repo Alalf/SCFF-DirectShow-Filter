@@ -144,12 +144,11 @@ WPFはUIスレッドひとつでどうにか何とかするというコンセプ
 
 このため、たとえば他のスレッドでBitmapSource(DispatcherObjectを継承している)を生成し、
 UIスレッドでそのオブジェクトをDrawingContext.DrawImage(bitmap, rect)する、
-といったようなことができません。
+といった場合、BitmapSource.Freeze()を呼び出して変更不可能にしてから渡す必要があります。
 
-そこで、自分は以下のようなガイドラインを作成しました:
 - 重い処理には独立したスレッドであるSystem.Threading.Timerを使う
 - 軽い処理にはUIスレッドで動作するDispatcherTimerを使う
-- スレッド間でやり取りされるデータはPOD(Plain Old Data)に制限する
+- スレッド間でやり取りされるデータはPOD(Plain Old Data)か、Freezableなオブジェクトに制限
 
 
 ### パフォーマンスに関連した注意点

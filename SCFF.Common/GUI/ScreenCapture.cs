@@ -61,7 +61,6 @@ public class ScreenCaptureResult : IDisposable {
     if (this.Bitmap != IntPtr.Zero) {
       GDI32.DeleteObject(this.Bitmap);
       this.Bitmap = IntPtr.Zero;
-      GC.Collect();
     }
   }
 
@@ -74,12 +73,9 @@ public static class ScreenCapture {
   /// スクリーンキャプチャした結果をHBitmapに格納する
   /// @warning 返り値はかならずDisposeするか、usingと一緒に使うこと
   public static ScreenCaptureResult Open(ScreenCaptureRequest request) {
-    // 返り値
-    ScreenCaptureResult result = new ScreenCaptureResult(IntPtr.Zero);
-
     // Windowチェック
     var window = request.Window;
-    if (!User32.IsWindow(window)) return result;
+    if (!User32.IsWindow(window)) return null;
 
     // キャプチャ用の情報をまとめる
     var x = request.ClippingX;

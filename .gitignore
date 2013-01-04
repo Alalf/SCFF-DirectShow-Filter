@@ -15,3 +15,5 @@
 /ext/ffmpeg/Win32/*
 !/ext/ffmpeg/Win32/dummy.txt
 *.Cache
+/doxysearch.db
+/doxygen_warnings.log

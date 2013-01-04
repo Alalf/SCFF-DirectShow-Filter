@@ -39,7 +39,7 @@ public partial class Area : UserControl, IUpdateByProfile {
   // IUpdateByProfileの実装
   //===================================================================
 
-  /// @copydoc IUpdateByProfile.UpdateByCurrentProfile
+  /// @copydoc IUpdateByProfile::UpdateByCurrentProfile
   public void UpdateByCurrentProfile() {
     // Enabled/Disabled
     switch (App.Profile.CurrentInputLayoutElement.WindowType) {
@@ -72,13 +72,13 @@ public partial class Area : UserControl, IUpdateByProfile {
     this.AttachProfileChangedEventHandlers();
   }
 
-  /// @copydoc IUpdateByProfile.UpdateByEntireProfile
+  /// @copydoc IUpdateByProfile::UpdateByEntireProfile
   public void UpdateByEntireProfile() {
     // current以外のデータを表示する必要はない
     this.UpdateByCurrentProfile();
   }
 
-  /// @copydoc IUpdateByProfile.AttachProfileChangedEventHandlers
+  /// @copydoc IUpdateByProfile::AttachProfileChangedEventHandlers
   public void AttachProfileChangedEventHandlers() {
     this.ClippingX.TextChanged += clippingX_TextChanged;
     this.ClippingY.TextChanged += clippingY_TextChanged;
@@ -86,7 +86,7 @@ public partial class Area : UserControl, IUpdateByProfile {
     this.ClippingHeight.TextChanged += clippingHeight_TextChanged;
   }
 
-  /// @copydoc IUpdateByProfile.DetachProfileChangedEventHandlers
+  /// @copydoc IUpdateByProfile::DetachProfileChangedEventHandlers
   public void DetachProfileChangedEventHandlers() {
     this.ClippingX.TextChanged -= clippingX_TextChanged;
     this.ClippingY.TextChanged -= clippingY_TextChanged;

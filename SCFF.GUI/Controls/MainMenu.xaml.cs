@@ -72,7 +72,7 @@ public partial class MainMenu : UserControl, IUpdateByOptions {
     }
   }
 
-  /// @copydoc IUpdateByOptions.UpdateByOptions
+  /// @copydoc IUpdateByOptions::UpdateByOptions
   public void UpdateByOptions() {
     this.UpdateRecentProfiles();
     this.CompactView.IsChecked = App.Options.CompactView;
@@ -80,12 +80,12 @@ public partial class MainMenu : UserControl, IUpdateByOptions {
     this.RestoreLastProfile.IsChecked = App.Options.RestoreLastProfile;
   }
 
-  /// @copydoc IUpdateByOptions.DetachOptionsChangedEventHandlers
+  /// @copydoc IUpdateByOptions::DetachOptionsChangedEventHandlers
   public void DetachOptionsChangedEventHandlers() {
     // nop
   }
 
-  /// @copydoc IUpdateByOptions.AttachOptionsChangedEventHandlers
+  /// @copydoc IUpdateByOptions::AttachOptionsChangedEventHandlers
   public void AttachOptionsChangedEventHandlers() {
     // nop
   }

@@ -1,7 +1,7 @@
 ﻿/*!
 @mainpage SCFF DirectShow Filter
 
-## 概要  {#intro_sec}
+# 概要  {#intro_sec}
 
 SCFF DirectShow Filter(以下SCFF DSF)は、
 大画面を高画質で快適に取り込む事を目的としたスクリーンキャプチャプログラムです。

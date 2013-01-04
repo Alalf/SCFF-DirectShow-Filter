@@ -39,7 +39,7 @@ public partial class LayoutParameter : UserControl, IUpdateByProfile {
   // IUpdateByProfileの実装
   //===================================================================
 
-  /// @copydoc IUpdateByProfile.UpdateByCurrentProfile
+  /// @copydoc IUpdateByProfile::UpdateByCurrentProfile
   public void UpdateByCurrentProfile() {
     var header = "Layout " + (App.Profile.CurrentInputLayoutElement.Index+1) +
         ": " + App.Profile.CurrentInputLayoutElement.WindowCaption;
@@ -71,13 +71,13 @@ public partial class LayoutParameter : UserControl, IUpdateByProfile {
     this.BoundRelativeBottom.IsEnabled = isComplexLayout;
   }
 
-  /// @copydoc IUpdateByProfile.UpdateByEntireProfile
+  /// @copydoc IUpdateByProfile::UpdateByEntireProfile
   public void UpdateByEntireProfile() {
     // 編集するのはCurrentのみ
     this.UpdateByCurrentProfile();
   }
 
-  /// @copydoc IUpdateByProfile.AttachProfileChangedEventHandlers
+  /// @copydoc IUpdateByProfile::AttachProfileChangedEventHandlers
   public void AttachProfileChangedEventHandlers() {
     this.BoundRelativeLeft.TextChanged += boundRelativeLeft_TextChanged;
     this.BoundRelativeTop.TextChanged += boundRelativeTop_TextChanged;
@@ -85,7 +85,7 @@ public partial class LayoutParameter : UserControl, IUpdateByProfile {
     this.BoundRelativeBottom.TextChanged += boundRelativeBottom_TextChanged;
   }
 
-  /// @copydoc IUpdateByProfile.DetachProfileChangedEventHandlers
+  /// @copydoc IUpdateByProfile::DetachProfileChangedEventHandlers
   public void DetachProfileChangedEventHandlers() {
     this.BoundRelativeLeft.TextChanged -= boundRelativeLeft_TextChanged;
     this.BoundRelativeTop.TextChanged -= boundRelativeTop_TextChanged;

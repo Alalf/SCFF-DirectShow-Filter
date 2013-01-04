@@ -24,25 +24,48 @@ using System.Collections.Generic;
 
 /// SCFF.Commonモジュールで利用する定数
 public static class Constants {
-  public const int MaxLayoutElementCount = Interprocess.Interprocess.MaxComplexLayoutElements;
 
+  //===================================================================
+  // 定数
+  //===================================================================
+
+  /// 最大レイアウト要素数
+  public const int MaxLayoutElementCount =
+      Interprocess.Interprocess.MaxComplexLayoutElements;
+
+  /// メインウィンドウの初期位置(x)
   public const double MainWindowLeft = 32.0;
+  /// メインウィンドウの初期位置(y)            
   public const double MainWindowTop = 32.0;
+  /// メインウィンドウの初期幅
   public const double MainWindowWidth = 730.0;
+  /// メインウィンドウの初期高さ
   public const double MainWindowHeight = 545.0;
+  /// コンパクト表示時の幅
   public const double CompactMainWindowWidth = 280.0;
+  /// コンパクト表示時の高さ
   public const double CompactMainWindowHeight = 280.0;
 
+  /// プロセスエントリが見つからないときのプレビューの幅
   public const int DefaultPreviewWidth = 640;
+  /// プロセスエントリが見つからないときのプレビューの高さ
   public const int DefaultPreviewHeight = 400;
   
+  /// ダミープレビュー幅
   /// @todo(me) ダミーなのであとで消す
   public const int DummyPreviewWidth = DefaultPreviewWidth;
+  /// ダミープレビュー高さ
+  /// @todo(me) ダミーなのであとで消す
   public const int DummyPreviewHeight = DefaultPreviewHeight;
 
+  /// 「最近使ったプロファイル」に表示される数
   public const int RecentProfilesLength = 5;
 
-  // ItemsSourceを使いたくないのでディクショナリを二つ用意しておく
+  //===================================================================
+  // 読み込み専用辞書
+  //===================================================================
+
+  /// Index->ResizeMethodの名前
   public static readonly string[] ResizeMethodLabels = new string[] {
     "FastBilinear (fast bilinear)",
     "Bilinear (bilinear)",
@@ -57,6 +80,7 @@ public static class Constants {
     "Spline (natural bicubic spline)"
   };
 
+  /// Index->SWScaleFlags
   public static readonly SWScaleFlags[] ResizeMethodArray = new SWScaleFlags[] {
     SWScaleFlags.FastBilinear,
     SWScaleFlags.Bilinear,
@@ -71,6 +95,7 @@ public static class Constants {
     SWScaleFlags.Spline,
   };
 
+  /// SWScaleFlags->Index
   public static readonly Dictionary<SWScaleFlags, int> ResizeMethodIndexes =
       new Dictionary<SWScaleFlags, int> {
     {SWScaleFlags.FastBilinear, 0},

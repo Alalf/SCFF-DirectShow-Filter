@@ -122,7 +122,7 @@ class Engine : public CAMThread, public Layout {
 
   /// レイアウトパラメータの要素数
   int element_count_;
-  /// @biref レイアウトパラメータ
+  /// レイアウトパラメータ
   LayoutParameter parameters_[kMaxProcessorSize];
   /// レイアウトのエラーコード
   ErrorCodes layout_error_code_;

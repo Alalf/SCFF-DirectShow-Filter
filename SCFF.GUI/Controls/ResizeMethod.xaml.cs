@@ -44,7 +44,7 @@ public partial class ResizeMethod : UserControl, IUpdateByProfile {
   // IUpdateByProfileの実装
   //===================================================================
 
-  /// @copydoc IUpdateByProfile.UpdateByCurrentProfile
+  /// @copydoc IUpdateByProfile::UpdateByCurrentProfile
   public void UpdateByCurrentProfile() {
     this.SWScaleAccurateRnd.IsChecked = App.Profile.CurrentInputLayoutElement.SWScaleAccurateRnd;
     this.SWScaleIsFilterEnabled.IsChecked = App.Profile.CurrentInputLayoutElement.SWScaleIsFilterEnabled;
@@ -63,13 +63,13 @@ public partial class ResizeMethod : UserControl, IUpdateByProfile {
     this.AttachProfileChangedEventHandlers();
   }
 
-  /// @copydoc IUpdateByProfile.UpdateByEntireProfile
+  /// @copydoc IUpdateByProfile::UpdateByEntireProfile
   public void UpdateByEntireProfile() {
     // 編集するのはCurrentのみ
     this.UpdateByCurrentProfile();
   }
 
-  /// @copydoc IUpdateByProfile.AttachProfileChangedEventHandlers
+  /// @copydoc IUpdateByProfile::AttachProfileChangedEventHandlers
   public void AttachProfileChangedEventHandlers() {
     this.SWScaleFlags.SelectionChanged += swscaleFlags_SelectionChanged;
     this.SWScaleLumaGBlur.TextChanged += swscaleLumaGBlur_TextChanged;
@@ -80,7 +80,7 @@ public partial class ResizeMethod : UserControl, IUpdateByProfile {
     this.SWScaleChromaVshift.TextChanged += swscaleChromaVshift_TextChanged;
   }
 
-  /// @copydoc IUpdateByProfile.DetachChangedEventHandlers
+  /// @copydoc IUpdateByProfile::DetachProfileChangedEventHandlers
   public void DetachProfileChangedEventHandlers() {
     this.SWScaleFlags.SelectionChanged -= swscaleFlags_SelectionChanged;
     this.SWScaleLumaGBlur.TextChanged -= swscaleLumaGBlur_TextChanged;

@@ -34,14 +34,14 @@ public enum WindowTypes {
   Desktop,
 }
 
-/// @copydoc SCFF.Interprocess.LayoutTypes
+/// @copydoc SCFF::Interprocess::LayoutTypes
 public enum LayoutTypes {
   NullLayout    = Interprocess.LayoutTypes.NullLayout,
   NativeLayout  = Interprocess.LayoutTypes.NativeLayout,
   ComplexLayout = Interprocess.LayoutTypes.ComplexLayout
 }
 
-/// @copydoc SCFF.Interprocess.SWScaleFlags
+/// @copydoc SCFF::Interprocess::SWScaleFlags
 public enum SWScaleFlags {
   FastBilinear  = Interprocess.SWScaleFlags.FastBilinear,
   Bilinear      = Interprocess.SWScaleFlags.Bilinear,
@@ -56,7 +56,7 @@ public enum SWScaleFlags {
   Spline        = Interprocess.SWScaleFlags.Spline
 }
 
-/// @copydoc SCFF.Interprocess.RotateDirections
+/// @copydoc SCFF::Interprocess::RotateDirections
 public enum RotateDirections {
   NoRotate      = Interprocess.RotateDirections.NoRotate,
   Degrees90     = Interprocess.RotateDirections.Degrees90,

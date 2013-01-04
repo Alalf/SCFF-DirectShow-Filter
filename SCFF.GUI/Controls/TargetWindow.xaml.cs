@@ -61,24 +61,24 @@ public partial class TargetWindow : UserControl, IUpdateByProfile {
   // IUpdateByProfileの実装
   //===================================================================
 
-  /// @copydoc IUpdateByProfile.UpdateByCurrentProfile
+  /// @copydoc IUpdateByProfile::UpdateByCurrentProfile
   public void UpdateByCurrentProfile() {
     // *Changedイベントハンドラがないのでそのまま代入するだけ
     this.WindowCaption.Text = App.Profile.CurrentInputLayoutElement.WindowCaption;
   }
 
-  /// @copydoc IUpdateByProfile.UpdateByEntireProfile
+  /// @copydoc IUpdateByProfile::UpdateByEntireProfile
   public void UpdateByEntireProfile() {
     // 編集するのはCurrentのみ
     this.UpdateByCurrentProfile();
   }
 
-  /// @copydoc IUpdateByProfile.AttachProfileChangedEventHandlers
+  /// @copydoc IUpdateByProfile::AttachProfileChangedEventHandlers
   public void AttachProfileChangedEventHandlers() {
     // nop
   }
 
-  /// @copydoc IUpdateByProfile.DetachProfileChangedEventHandlers
+  /// @copydoc IUpdateByProfile::DetachProfileChangedEventHandlers
   public void DetachProfileChangedEventHandlers() {
     // nop
   }

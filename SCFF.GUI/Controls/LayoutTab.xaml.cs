@@ -39,7 +39,7 @@ public partial class LayoutTab : UserControl, IUpdateByProfile {
   // IUpdateByProfileの実装
   //===================================================================
 
-  /// @copydoc IUpdateByProfile.UpdateByCurrentProfile
+  /// @copydoc IUpdateByProfile::UpdateByCurrentProfile
   public void UpdateByCurrentProfile() {
     // Current Profileの値が変わってもTabの内容は変わらない
   }
@@ -87,17 +87,17 @@ public partial class LayoutTab : UserControl, IUpdateByProfile {
     Debug.Assert(App.Profile.CurrentInputLayoutElement.Index == this.LayoutElementTab.SelectedIndex);
   }
 
-  /// @copydoc IUpdateByProfile.UpdateByEntireProfile
+  /// @copydoc IUpdateByProfile::UpdateByEntireProfile
   public void UpdateByEntireProfile() {
     this.UpdateLayoutElementTab();
   }
 
-  /// @copydoc IUpdateByProfile.AttachProfileChangedEventHandlers
+  /// @copydoc IUpdateByProfile::AttachProfileChangedEventHandlers
   public void AttachProfileChangedEventHandlers() {
     this.LayoutElementTab.SelectionChanged += layoutElementTab_SelectionChanged;
   }
 
-  /// @copydoc IUpdateByProfile.DetachProfileChangedEventHandlers
+  /// @copydoc IUpdateByProfile::DetachProfileChangedEventHandlers
   public void DetachProfileChangedEventHandlers() {
     this.LayoutElementTab.SelectionChanged -= layoutElementTab_SelectionChanged;
   }

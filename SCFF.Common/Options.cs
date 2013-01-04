@@ -126,7 +126,7 @@ public class Options {
   // メンバ変数
   //===================================================================
 
-  /// @caution 先頭から古く、末尾が一番新しい
+  /// @warning 先頭から古く、末尾が一番新しい
   private string[] reverseRecentProfiles;
 }
 }

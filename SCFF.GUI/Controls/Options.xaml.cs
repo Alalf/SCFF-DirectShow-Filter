@@ -39,7 +39,7 @@ public partial class Options : UserControl, IUpdateByProfile {
   // IUpdateByProfileの実装
   //===================================================================
 
-  /// @copydoc IUpdateByProfile.UpdateByCurrentProfile
+  /// @copydoc IUpdateByProfile::UpdateByCurrentProfile
   public void UpdateByCurrentProfile() {
     // checkboxはclickがあるのでeventハンドラをattach/detachする必要はない
     this.ShowCursor.IsChecked = App.Profile.CurrentInputLayoutElement.ShowCursor;
@@ -49,18 +49,18 @@ public partial class Options : UserControl, IUpdateByProfile {
     // @todo(me) overSampingとthreadCountはまだDSFでも実装されていない
   }
 
-  /// @copydoc IUpdateByProfile.UpdateByEntireProfile
+  /// @copydoc IUpdateByProfile::UpdateByEntireProfile
   public void UpdateByEntireProfile() {
     // 編集するのはCurrentのみ
     this.UpdateByCurrentProfile();
   }
 
-  /// @copydoc IUpdateByProfile.AttachProfileChangedEventHandlers
+  /// @copydoc IUpdateByProfile::AttachProfileChangedEventHandlers
   public void AttachProfileChangedEventHandlers() {
     // nop
   }
 
-  /// @copydoc IUpdateByProfile.DetachProfileChangedEventHandlers
+  /// @copydoc IUpdateByProfile::DetachProfileChangedEventHandlers
   public void DetachProfileChangedEventHandlers() {
     // nop
   }

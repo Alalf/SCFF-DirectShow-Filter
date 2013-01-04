@@ -60,7 +60,7 @@ public partial class LayoutEdit : UserControl, IUpdateByProfile, IUpdateByOption
   private Rect previewRect = new Rect(0.0, 0.0, MaxImageWidth, MaxImageHeight);
 
   /// スクリーンキャプチャ用スレッド管理クラスのインスタンス
-  private ScreenCapturer screenCapturer = null;
+  private ScreenCaptureTimer screenCaptureTimer = null;
 
   //===================================================================
   // コンストラクタ/Loaded/ShutdownStartedイベントハンドラ
@@ -82,8 +82,8 @@ public partial class LayoutEdit : UserControl, IUpdateByProfile, IUpdateByOption
     this.DrawingGroup.ClipGeometry.Freeze();
 
     // スクリーンキャプチャマネージャの準備
-    this.screenCapturer = new ScreenCapturer(redrawTimerPeriod);
-    this.screenCapturer.Start();
+    this.screenCaptureTimer = new ScreenCaptureTimer(redrawTimerPeriod);
+    this.screenCaptureTimer.Start();
 
     // BitmapSource更新用タイマーの準備
     this.StartBitmapsUpdateTimer();
@@ -97,7 +97,7 @@ public partial class LayoutEdit : UserControl, IUpdateByProfile, IUpdateByOption
   /// Dispatcher.ShutdownStartedイベントハンドラ
   private void OnShutdownStarted(object sender, EventArgs e) {
     Debug.WriteLine("LayoutEdit: ShutdownStarted");
-    this.screenCapturer.End();
+    this.screenCaptureTimer.End();
   }
 
   //===================================================================
@@ -160,7 +160,7 @@ public partial class LayoutEdit : UserControl, IUpdateByProfile, IUpdateByOption
   }
 
   private void DrawPreview(DrawingContext dc, Profile.InputLayoutElement layoutElement) {
-    var bitmap = this.screenCapturer.GetBitmapSource(layoutElement.Index);
+    var bitmap = this.screenCaptureTimer.GetBitmapSource(layoutElement.Index);
     if (bitmap == null) return;
 
     // プレビューの描画
@@ -263,27 +263,27 @@ public partial class LayoutEdit : UserControl, IUpdateByProfile, IUpdateByOption
   // IUpdateByProfileの実装
   //===================================================================
 
-  /// @copydoc IUpdateByProfile.UpdateByCurrentProfile
+  /// @copydoc IUpdateByProfile::UpdateByCurrentProfile
   public void UpdateByCurrentProfile() {
     this.SendRequestToScreenCapturer(App.Profile.CurrentInputLayoutElement, true);
     this.DrawProfile();
   }
 
-  /// @copydoc IUpdateByProfile.UpdateByEntireProfile
+  /// @copydoc IUpdateByProfile::UpdateByEntireProfile
   public void UpdateByEntireProfile() {
-    this.screenCapturer.ClearRequests();
+    this.screenCaptureTimer.ClearRequests();
     foreach (var layoutElement in App.Profile) {
       this.SendRequestToScreenCapturer(layoutElement, true);
     }
     this.DrawProfile();
   }
 
-  /// @copydoc IUpdateByProfile.UpdateByEntireProfile
+  /// @copydoc IUpdateByProfile::UpdateByEntireProfile
   public void AttachProfileChangedEventHandlers() {
     // nop
   }
 
-  /// @copydoc IUpdateByProfile.UpdateByEntireProfile
+  /// @copydoc IUpdateByProfile::UpdateByEntireProfile
   public void DetachProfileChangedEventHandlers() {
     // nop
   }
@@ -303,30 +303,33 @@ public partial class LayoutEdit : UserControl, IUpdateByProfile, IUpdateByOption
         layoutElement.ClippingHeightWithFit,
         layoutElement.ShowCursor,
         layoutElement.ShowLayeredWindow);
-    this.screenCapturer.SendRequest(request, forceUpdate);
+    this.screenCaptureTimer.SendRequest(request, forceUpdate);
   }
 
   //===================================================================
   // IUpdateByOptionsの実装
   //===================================================================
 
-  /// @copydoc IUpdateByOptions.UpdateByOptions
+  /// @copydoc IUpdateByOptions::UpdateByOptions
   public void UpdateByOptions() {
-    /// @todo(me) LayoutPreview変更時にこのUpdateByOptionsが呼ばれるように変更する
-    ///           具体的には新しいUpdateCommandsを作成する
     if (App.Options.LayoutIsExpanded && App.Options.LayoutPreview) {
-      this.screenCapturer.Resume();
+      this.screenCaptureTimer.Resume();
+      // DrawingGroupを再構築
+      this.DrawProfile();
     } else {
-      this.screenCapturer.Suspend();
+      this.screenCaptureTimer.Suspend();
+      // DrawingGroupの描画命令をクリア
+      this.DrawingGroup.Children.Clear();
+      GC.Collect();
     }
   }
   
-  /// @copydoc IUpdateByOptions.DetachOptionsChangedEventHandlers
+  /// @copydoc IUpdateByOptions::DetachOptionsChangedEventHandlers
   public void DetachOptionsChangedEventHandlers() {
     // nop
   }
 
-  /// @copydoc IUpdateByOptions.AttachOptionsChangedEventHandlers
+  /// @copydoc IUpdateByOptions::AttachOptionsChangedEventHandlers
   public void AttachOptionsChangedEventHandlers() {
     // nop
   }

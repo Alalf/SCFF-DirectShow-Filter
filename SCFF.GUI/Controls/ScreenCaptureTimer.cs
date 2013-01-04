@@ -15,8 +15,8 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file SCFF.GUI/Controls/ScreenCapturer.cs
-/// スクリーンキャプチャデータを取得するためのスレッド管理クラス
+/// @file SCFF.GUI/Controls/ScreenCaptureTimer.cs
+/// スクリーンキャプチャデータを取得するためのタイマー管理クラス
 
 namespace SCFF.GUI.Controls {
 
@@ -24,13 +24,10 @@ using SCFF.Common.GUI;
 using System;
 using System.Diagnostics;
 using System.Threading;
-using System.Windows;
-using System.Windows.Interop;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 /// スクリーンキャプチャデータを取得するためのスレッド管理クラス
-public class ScreenCapturer {
+public class ScreenCaptureTimer {
 
   /// タイマー
   private Timer captureTimer = null;
@@ -52,14 +49,14 @@ public class ScreenCapturer {
   private ScreenCaptureRequest[] requests =
       new ScreenCaptureRequest[Common.Constants.MaxLayoutElementCount];
 
-  /// 共有(自W/他R): スクリーンキャプチャの結果をまとめた配列
-  private BitmapSource[] capturedBitmaps =
+  /// 共有(自W/他R): スクリーンキャプチャのキャッシュ
+  private BitmapSource[] cachedBitmaps =
       new BitmapSource[Common.Constants.MaxLayoutElementCount];
 
   //-------------------------------------------------------------------
 
   /// コンストラクタ
-  public ScreenCapturer(double timerPeriod) {
+  public ScreenCaptureTimer(double timerPeriod) {
     this.timerPeriod = timerPeriod;
   }
 
@@ -67,57 +64,7 @@ public class ScreenCapturer {
   // タイマーコールバック
   //-------------------------------------------------------------------
 
-  private const int MaxBitmapWidth = 640;
-  private const int MaxBitmapHeight = 480;
 
-  private void CalcScale(int width, int height, out double scaleX, out double scaleY) {
-    if (width <= MaxBitmapWidth && height <= MaxBitmapHeight) {
-      // scaleの必要なし
-      scaleX = 1.0;
-      scaleY = 1.0;
-      return;
-    }
-    // アスペクトを計算
-    if (width < height) {
-      // 縦長なのでまず縦を小さくしなければならない
-      scaleY = (double)MaxBitmapHeight / height;
-      scaleX = scaleY;
-    } else {
-      // 横長
-      scaleX = (double)MaxBitmapWidth / width;
-      scaleY = scaleX;
-    }
-  }
-
-  private void Capture(ScreenCaptureRequest request) {
-    if (request == null) return;
-    using (var result = ScreenCapture.Open(request)) {
-      if (result.Bitmap == IntPtr.Zero) return;
-
-      // HBitmapからBitmapSourceに変換
-      var original = Imaging.CreateBitmapSourceFromHBitmap(
-          result.Bitmap, IntPtr.Zero, Int32Rect.Empty,
-          BitmapSizeOptions.FromEmptyOptions());
-
-      // Alphaチャンネル情報を削除
-      var noAlpha = new FormatConvertedBitmap(original, PixelFormats.Bgr32, null, 0.0);
-
-      // あまり大きな画像をメモリにおいておきたくないので縮小
-      /// @todo(me) TransformedBitmapはちょっと重過ぎる。何かないか考え中。
-      // double scaleX, scaleY;
-      // this.CalcScale(noAlpha.PixelWidth, noAlpha.PixelHeight, out scaleX, out scaleY);
-      // var resized = new TransformedBitmap(noAlpha, new ScaleTransform(scaleX, scaleY));
-      
-      // スレッド越しにアクセスされるためFreeze
-      noAlpha.Freeze();
-
-      // 結果をリストに格納
-      this.capturedBitmaps[request.Index] = noAlpha;
-      Debug.WriteLine("Capture: [{0:D}] size:{1:D}x{2:D} -> {3:D}x{4:D}", request.Index+1,
-                      original.PixelWidth, original.PixelHeight,
-                      noAlpha.PixelWidth, noAlpha.PixelHeight);
-    }
-  }
 
   /// タイマーコールバック
   private void TimerCallback(object state) {
@@ -126,7 +73,7 @@ public class ScreenCapturer {
 
       // キャプチャ
       foreach (var request in this.requests) {
-        this.Capture(request);
+        this.cachedBitmaps[request.Index] = this.Capture(request);
       }
     }
   }
@@ -151,8 +98,7 @@ public class ScreenCapturer {
     lock (this.sharedLock) {
       this.isSuspended = true;
       // すべての格納されたBitmapを削除する
-      this.capturedBitmaps = new BitmapSource[Common.Constants.MaxLayoutElementCount];
-      GC.Collect();
+      this.cachedBitmaps = new BitmapSource[Common.Constants.MaxLayoutElementCount];
     }
   }
 
@@ -207,7 +153,7 @@ public class ScreenCapturer {
   /// 結果を取得
   public BitmapSource GetBitmapSource(int index) {
     //　参照の代入はアトミックなので問題がない
-    return this.capturedBitmaps[index];
+    return this.cachedBitmaps[index];
   }
 }
 }   // namespace SCFF.GUI.Controls

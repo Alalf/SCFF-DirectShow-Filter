@@ -70,7 +70,7 @@ public partial class MainWindow : Window, IUpdateByProfile, IUpdateByOptions {
   // IUpdateByOptionsの実装
   //===================================================================
 
-  /// @copydoc IUpdateByOptions.UpdateByOptions
+  /// @copydoc IUpdateByOptions::UpdateByOptions
   public void UpdateByOptions() {
     // Temporary
     this.Left         = App.Options.TmpMainWindowLeft;
@@ -93,7 +93,7 @@ public partial class MainWindow : Window, IUpdateByProfile, IUpdateByOptions {
     this.MainMenu.UpdateByOptions();
   }
 
-  /// @copydoc IUpdateByOptions.DetachOptionsChangedEventHandlers
+  /// @copydoc IUpdateByOptions::DetachOptionsChangedEventHandlers
   public void DetachOptionsChangedEventHandlers() {
     this.AreaExpander.Collapsed -= this.AreaExpander_Collapsed;
     this.AreaExpander.Expanded -= this.AreaExpander_Expanded;
@@ -105,7 +105,7 @@ public partial class MainWindow : Window, IUpdateByProfile, IUpdateByOptions {
     this.LayoutExpander.Expanded -= this.LayoutExpander_Expanded;
   }
 
-  /// @copydoc IUpdateByOptions.AttachOptionsChangedEventHandlers
+  /// @copydoc IUpdateByOptions::AttachOptionsChangedEventHandlers
   public void AttachOptionsChangedEventHandlers() {
     this.AreaExpander.Collapsed += this.AreaExpander_Collapsed;
     this.AreaExpander.Expanded += this.AreaExpander_Expanded;
@@ -189,7 +189,7 @@ public partial class MainWindow : Window, IUpdateByProfile, IUpdateByOptions {
   // IUpdateByProfileの実装
   //===================================================================
 
-  /// @copydoc IUpdateByProfile.UpdateByCurrentProfile
+  /// @copydoc IUpdateByProfile::UpdateByCurrentProfile
   public void UpdateByCurrentProfile() {
     this.TargetWindow.UpdateByCurrentProfile();
     this.Area.UpdateByCurrentProfile();
@@ -200,7 +200,7 @@ public partial class MainWindow : Window, IUpdateByProfile, IUpdateByOptions {
     this.LayoutEdit.UpdateByCurrentProfile();
   }
 
-  /// @copydoc IUpdateByProfile.UpdateByEntireProfile
+  /// @copydoc IUpdateByProfile::UpdateByEntireProfile
   public void UpdateByEntireProfile() {
     this.TargetWindow.UpdateByEntireProfile();
     this.Area.UpdateByEntireProfile();
@@ -211,12 +211,12 @@ public partial class MainWindow : Window, IUpdateByProfile, IUpdateByOptions {
     this.LayoutEdit.UpdateByEntireProfile();
   }
 
-  /// @copydoc IUpdateByProfile.UpdateByEntireProfile
+  /// @copydoc IUpdateByProfile::UpdateByEntireProfile
   public void AttachProfileChangedEventHandlers() {
     // nop
   }
 
-  /// @copydoc IUpdateByProfile.UpdateByEntireProfile
+  /// @copydoc IUpdateByProfile::UpdateByEntireProfile
   public void DetachProfileChangedEventHandlers() {
     // nop
   }

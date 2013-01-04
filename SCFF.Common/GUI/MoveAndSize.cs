@@ -16,11 +16,11 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file SCFF.Common/GUI/MoveAndSize.cs
-/// 与えられたマウスポイントを利用してレイアウト要素を移動・拡大縮小する
+/// 現在のマウス座標とオフセットを指定してレイアウト要素を移動・拡大縮小
 
 namespace SCFF.Common.GUI {
 
-/// 与えられたマウスポイントを利用してレイアウト要素を移動・拡大縮小する
+/// 現在のマウス座標とオフセットを指定してレイアウト要素を移動・拡大縮小
 public static class MoveAndSize {
   //===================================================================
   // 移動

@@ -34,7 +34,7 @@ using SCFF.Common.GUI;
 
 /// レイアウトエディタコントロール
 ///
-/// LayoutEditImage内の座標系は([0-100],[0-100])で固定（プレビューのサイズに依存しない）
+/// LayoutEditImage内の座標系は([0-1]*Scale,[0-1]*Scale)で固定（プレビューのサイズに依存しない）
 /// 逆に言うと依存させてはいけない
 public partial class LayoutEdit : UserControl, IUpdateByProfile, IUpdateByOptions {
 
@@ -353,7 +353,7 @@ public partial class LayoutEdit : UserControl, IUpdateByProfile, IUpdateByOption
     {HitModes.SizeE, Cursors.SizeWE}
   };
 
-  /// マウスポインタとLeft/Right/Top/BottomのOffset
+  /// マウス座標とLeft/Right/Top/BottomのOffset
   /// @todo(me) MoveAndSizeStateとしてまとめられないだろうか？
   private RelativeMouseOffset relativeMouseOffset = null;
   /// スナップガイド
@@ -363,7 +363,7 @@ public partial class LayoutEdit : UserControl, IUpdateByProfile, IUpdateByOption
   /// @todo(me) MoveAndSizeStateとしてまとめられないだろうか？
   private HitModes hitMode = HitModes.Neutral;
 
-  /// マウスポインタを(0.0-1.0, 0.0-1.0)のRelativePointに変換
+  /// マウス座標(image座標系)を(0.0-1.0, 0.0-1.0)のRelativePointに変換
   private RelativePoint GetRelativeMousePoint(IInputElement image, MouseEventArgs e) {
     var mousePoint = e.GetPosition(image);
     return new RelativePoint(mousePoint.X / MaxImageWidth, mousePoint.Y / MaxImageHeight);

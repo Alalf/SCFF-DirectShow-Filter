@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file SCFF.Common/GUI/HitTest.cs
-/// 与えられたマウス座標([0-1],[0-1])からレイアウト要素のIndexとHitModesを取得
+/// 与えられたマウス座標([0-1], [0-1])からレイアウト要素のIndexとHitModesを取得
 
 namespace SCFF.Common.GUI {
 
@@ -24,7 +24,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-/// 与えられたマウス座標([0-1],[0-1])からレイアウト要素のIndexとHitModesを取得
+/// 与えられたマウス座標([0-1], [0-1])からレイアウト要素のIndexとHitModesを取得
 public static class HitTest {
   //===================================================================
   // 定数

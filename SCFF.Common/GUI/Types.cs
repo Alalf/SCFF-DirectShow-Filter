@@ -21,37 +21,50 @@
 /// GUIに関連したクラス(ただしGUIアセンブリ非依存)をまとめた名前空間
 namespace SCFF.Common.GUI {
 
+//=====================================================================
+// 列挙型
+//=====================================================================
+
 /// ヒットテストの結果をまとめた列挙型
-///
-/// N,W,S,Eは場合によっては消える場合もある
 public enum HitModes {
-  Neutral,
-  Move,
-  SizeNW,
-  SizeNE,
-  SizeSW,
-  SizeSE,
-  SizeN,
-  SizeW,
-  SizeS,
-  SizeE
+  Neutral,  ///< 移動中でも拡大縮小中でもない
+  Move,     ///< 移動中
+  SizeNW,   ///< 左と上を拡大縮小中
+  SizeNE,   ///< 右と上を拡大縮小中
+  SizeSW,   ///< 左と下を拡大縮小中
+  SizeSE,   ///< 右と下を拡大縮小中
+  SizeN,    ///< 上を拡大縮小中
+  SizeW,    ///< 左を拡大縮小中
+  SizeS,    ///< 下を拡大縮小中
+  SizeE     ///< 右を拡大縮小中
 }
 
-/// System.Windowsが使えないので代替用のPoint
+//=====================================================================
+// クラス・構造体
+//=====================================================================
+
+/// ([0-1], [0-1])の相対座標系のPoint
 public class RelativePoint {
+  /// コンストラクタ
   public RelativePoint(double X, double Y) {
     this.X = X;
     this.Y = Y;
   }
+  /// x座標
   public double X { get; set; }
+  /// y座標
   public double Y { get; set; }
 }
 
-/// System.Windowsが使えないので代替用のRect
+/// ([0-1], [0-1])の相対座標系に収まるRect
 public class RelativeRect {
+  /// 左上端のx座標
   public double X { get; set; }
+  /// 左上端のy座標
   public double Y { get; set; }
+  /// 幅
   public double Width { get; set; }
+  /// 高さ
   public double Height { get; set; }
 
   /// 含有判定
@@ -60,4 +73,24 @@ public class RelativeRect {
            this.Y <= point.Y && point.Y <= this.Y + this.Height;
   }
 }
-}   // namespace SCFF.Common
+
+/// 相対マウス座標([0-1], [0-1])がレイアウト要素の上下左右とどれだけ離れているか
+public class RelativeMouseOffset {
+  /// コンストラクタ
+  public RelativeMouseOffset(Profile.InputLayoutElement layoutElement, RelativePoint mousePoint) {
+    this.Left = mousePoint.X - layoutElement.BoundRelativeLeft;
+    this.Top = mousePoint.Y - layoutElement.BoundRelativeTop;
+    this.Right = mousePoint.X - layoutElement.BoundRelativeRight;
+    this.Bottom = mousePoint.Y - layoutElement.BoundRelativeBottom;
+  }
+
+  /// レイアウト要素の左端を原点とした相対マウス座標(x)
+  public double Left { get; private set; }
+  /// レイアウト要素の上端を原点とした相対マウス座標(y)
+  public double Top { get; private set; }
+  /// レイアウト要素の右端を原点とした相対マウス座標(x)
+  public double Right { get; private set; }
+  /// レイアウト要素の下端を原点とした相対マウス座標(y)
+  public double Bottom { get; private set; }
+}
+}   // namespace SCFF.Common.GUI

@@ -20,8 +20,8 @@
 
 namespace SCFF.Common.GUI {
 
-using SCFF.Common.Ext;
 using System;
+using SCFF.Common.Ext;
 
 /// スクリーンキャプチャに必要なリクエスト(App.Profileを使いたくないので)
 public class ScreenCaptureRequest {

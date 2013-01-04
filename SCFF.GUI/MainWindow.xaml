@@ -12,7 +12,9 @@
         Height="565" Width="772.437"
         MinHeight="280" MinWidth="280"
         Loaded="OnLoaded"
-        Closing="OnClosing" >
+        Closing="OnClosing"
+        Activated="OnActivated"
+        Deactivated="OnDeactivated">
   <!-- CommandBindings -->
   <Window.CommandBindings>
     <!-- shell:SystemCommands -->

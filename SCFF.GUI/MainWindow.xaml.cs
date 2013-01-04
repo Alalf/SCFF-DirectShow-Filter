@@ -49,6 +49,18 @@ public partial class MainWindow : Window, IUpdateByProfile, IUpdateByOptions {
     this.SetCompactView();
   }
 
+  /// ウィンドウがアクティブになったとき
+  private void OnActivated(object sender, System.EventArgs e) {
+    /// @todo(me) スクリーンキャプチャを再開する・・・？まだ考慮の余地あり
+    ///           App.RuntimeOptionsに該当するデータを保存しておく感じかな？
+  }
+
+  /// ウィンドウがアクティブでなくなったとき
+  private void OnDeactivated(object sender, System.EventArgs e) {
+    /// @todo(me) スクリーンキャプチャを停止する
+    ///           App.RuntimeOptionsに該当するデータを保存しておく感じかな？
+  }
+
   /// アプリケーション終了時に発生するClosingイベントハンドラ
   private void OnClosing(object sender, System.ComponentModel.CancelEventArgs e) {
     this.SaveTemporaryOptions();
@@ -363,6 +375,5 @@ public partial class MainWindow : Window, IUpdateByProfile, IUpdateByOptions {
     Debug.WriteLine("Command [SetCompactView]:");
     this.SetCompactView();
   }
-
 }
 }   // namespace SCFF.GUI

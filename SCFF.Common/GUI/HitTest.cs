@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file SCFF.Common/GUI/HitTest.cs
-/// 与えられたマウスポイント(0-1,0-1)からレイアウトIndexとModeを返す
+/// 与えられたマウス座標([0-1],[0-1])からレイアウト要素のIndexとHitModesを取得
 
 namespace SCFF.Common.GUI {
 
@@ -24,35 +24,46 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-/// 与えられたマウスポイント(0-1,0-1)からレイアウトIndexとModeを返す
-///
-/// このクラスの中では座標系はすべて正規化された相対値(0.0-1.0)なので
-/// わざわざ変数名などにRelativeをつける必要はない
-///
-/// Borderは内側だけでなく外側にもあることに注意
-///
-/// ややこしいことになるのでこのクラスの中からApp.Profileの変更は禁止
+/// 与えられたマウス座標([0-1],[0-1])からレイアウト要素のIndexとHitModesを取得
 public static class HitTest {
+  //===================================================================
+  // 定数
+  //===================================================================
 
-  /// 最大外接矩形を返す
+  /// 左右方向の単位ボーダーサイズ(内側に1, 外側に1)
+  /// @attention ボーダーは外にもあることに注意
+  private const double WEBorderThickness = Constants.MinimumBoundRelativeWidth / 2;
+  /// 上下方向の単位ボーダーサイズ(内側に1, 外側に1)
+  /// @attention ボーダーは外にもあることに注意
+  private const double NSBorderThickness = Constants.MinimumBoundRelativeHeight / 2;
+
+  //===================================================================
+  // ヒットテスト用RelativeRectの生成
+  //===================================================================
+
+  /// レイアウト要素のうちボーダーを含めたRectを取得
   private static RelativeRect GetMaximumBoundRect(Profile.InputLayoutElement layoutElement) {
     return new RelativeRect {
-      X = layoutElement.BoundRelativeLeft - GUIConstants.WEBorderThickness,
-      Y = layoutElement.BoundRelativeTop - GUIConstants.NSBorderThickness,
-      Width = layoutElement.BoundRelativeWidth + GUIConstants.WEBorderThickness * 2,
-      Height = layoutElement.BoundRelativeHeight + GUIConstants.NSBorderThickness * 2
+      X = layoutElement.BoundRelativeLeft - WEBorderThickness,
+      Y = layoutElement.BoundRelativeTop - NSBorderThickness,
+      Width = layoutElement.BoundRelativeWidth + WEBorderThickness * 2,
+      Height = layoutElement.BoundRelativeHeight + NSBorderThickness * 2
     };
   }
 
-  /// 移動用領域を返す
+  /// レイアウト要素のうちボーダーを含まないRectを取得
   private static RelativeRect GetMoveRect(Profile.InputLayoutElement layoutElement) {
     return new RelativeRect {
-      X = layoutElement.BoundRelativeLeft + GUIConstants.WEBorderThickness,
-      Y = layoutElement.BoundRelativeTop + GUIConstants.NSBorderThickness,
-      Width = Math.Max(layoutElement.BoundRelativeWidth - GUIConstants.WEBorderThickness * 2, 0.0),
-      Height = Math.Max(layoutElement.BoundRelativeHeight - GUIConstants.NSBorderThickness * 2, 0.0)
+      X = layoutElement.BoundRelativeLeft + WEBorderThickness,
+      Y = layoutElement.BoundRelativeTop + NSBorderThickness,
+      Width = Math.Max(layoutElement.BoundRelativeWidth - WEBorderThickness * 2, 0.0),
+      Height = Math.Max(layoutElement.BoundRelativeHeight - NSBorderThickness * 2, 0.0)
     };
   }
+
+  //===================================================================
+  // ヒットモード計算
+  //===================================================================
 
   /// 指定した座標からHitModesを返す
   /// @pre 必ずHitModes.Resize*を返すことが可能なlayoutElement
@@ -63,55 +74,47 @@ public static class HitTest {
     // ---------------
 
     // H1
-    var borderWRight = layoutElement.BoundRelativeLeft + GUIConstants.WEBorderThickness;
+    var borderWRight = layoutElement.BoundRelativeLeft + WEBorderThickness;
     // H2
-    var borderELeft = layoutElement.BoundRelativeRight - GUIConstants.WEBorderThickness;
+    var borderELeft = layoutElement.BoundRelativeRight - WEBorderThickness;
 
     // V1
-    var borderNBottom = layoutElement.BoundRelativeTop + GUIConstants.NSBorderThickness;
+    var borderNBottom = layoutElement.BoundRelativeTop + NSBorderThickness;
     // v2
-    var borderSTop = layoutElement.BoundRelativeBottom - GUIConstants.NSBorderThickness;
+    var borderSTop = layoutElement.BoundRelativeBottom - NSBorderThickness;
     
     // x座標→Y座標
-    if (mousePoint.X <= borderWRight) {
-      // W
-      if (mousePoint.Y <= borderNBottom) {
-        // N
+    if (mousePoint.X <= borderWRight) {         // W
+      if (mousePoint.Y <= borderNBottom) {      // N
         return HitModes.SizeNW;
-      } else if (mousePoint.Y <= borderSTop) {
-        // (N)-(S)
+      } else if (mousePoint.Y <= borderSTop) {  // (N)-(S)
         return HitModes.SizeW;
-      } else {
-        // S
+      } else {                                  // S
         return HitModes.SizeSW;
       }
-    } else if (mousePoint.X <= borderELeft) {
-      // (W)-(E)
-      if (mousePoint.Y <= borderNBottom) {
-        // N
+    } else if (mousePoint.X <= borderELeft) {   // (W)-(E)
+      if (mousePoint.Y <= borderNBottom) {      // N
         return HitModes.SizeN;
-      } else if (mousePoint.Y <= borderSTop) {
-        // (N)-(S)
+      } else if (mousePoint.Y <= borderSTop) {  // (N)-(S)
         Debug.Fail("GetHitMode: Move??");
         return HitModes.Move;
-      } else {
-        // S
+      } else {                                  // S
         return HitModes.SizeS;
       }
-    } else {
-      // E
-      if (mousePoint.Y <= borderNBottom) {
-        // N
+    } else {                                    // E
+      if (mousePoint.Y <= borderNBottom) {      // N
         return HitModes.SizeNE;
-      } else if (mousePoint.Y <= borderSTop) {
-        // (N)-(S)
+      } else if (mousePoint.Y <= borderSTop) {  // (N)-(S)
         return HitModes.SizeE;
-      } else {
-        // S
+      } else {                                  // S
         return HitModes.SizeSE;
       }
     }
   }
+
+  //===================================================================
+  // ヒットテスト
+  //===================================================================
 
   /// ヒットテスト
   public static bool TryHitTest(Profile profile, RelativePoint mousePoint,

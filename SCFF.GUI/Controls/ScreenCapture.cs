@@ -20,17 +20,16 @@
 
 namespace SCFF.GUI.Controls {
 
-using SCFF.Common.GUI;
 using System;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using SCFF.Common.GUI;
 
 /// スクリーンキャプチャデータをBitmapSource化
 public static class ScreenCapture {
-
   //===================================================================
   // 定数
   //===================================================================
@@ -39,7 +38,7 @@ public static class ScreenCapture {
   private const int MaxBitmapHeight = 480;  ///< BitmapSourceの最大高さ
 
   //===================================================================
-  // staticメソッド
+  // 拡大縮小
   //===================================================================
 
   /// 最大幅に調整する

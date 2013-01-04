@@ -21,8 +21,6 @@
 /// SCFF.GUIのユーザコントロールをまとめた名前空間
 namespace SCFF.GUI.Controls {
 
-using SCFF.Common;
-using SCFF.Common.GUI;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -30,8 +28,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Threading;
+using SCFF.Common;
+using SCFF.Common.GUI;
 
 /// レイアウトエディタコントロール
 ///
@@ -420,23 +419,11 @@ public partial class LayoutEdit : UserControl, IUpdateByProfile, IUpdateByOption
       return;
     }
 
-    // Move/Size*
-    double nextLeft = -1.0;
-    double nextTop = -1.0;
-    double nextRight = -1.0;
-    double nextBottom = -1.0;
-
-    if (this.hitMode == HitModes.Move) {
-      // Move
-      MoveAndSize.Move(App.Profile.CurrentInputLayoutElement,
-          relativeMousePoint, this.relativeMouseOffset, this.snapGuide,
-          out nextLeft, out nextTop, out nextRight, out nextBottom);
-    } else {
-      // Size*
-      MoveAndSize.Size(App.Profile.CurrentInputLayoutElement,
-          relativeMousePoint, this.relativeMouseOffset, this.snapGuide, this.hitMode,
-          out nextLeft, out nextTop, out nextRight, out nextBottom);
-    }
+    // Move or Size
+    double nextLeft, nextTop, nextRight, nextBottom;
+    MoveAndSize.MoveOrSize(App.Profile.CurrentInputLayoutElement, this.hitMode,
+        relativeMousePoint, this.relativeMouseOffset, this.snapGuide, 
+        out nextLeft, out nextTop, out nextRight, out nextBottom);
 
     // Profileを更新
     App.Profile.CurrentOutputLayoutElement.BoundRelativeLeft = nextLeft;

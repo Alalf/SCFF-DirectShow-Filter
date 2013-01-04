@@ -24,7 +24,6 @@ using System.Collections.Generic;
 
 /// SCFF.Commonモジュールで利用する定数
 public static class Constants {
-
   //===================================================================
   // 定数
   //===================================================================
@@ -32,6 +31,10 @@ public static class Constants {
   /// 最大レイアウト要素数
   public const int MaxLayoutElementCount =
       Interprocess.Interprocess.MaxComplexLayoutElements;
+
+  //-------------------------------------------------------------------
+  // MainWindow
+  //-------------------------------------------------------------------
 
   /// メインウィンドウの初期位置(x)
   public const double MainWindowLeft = 32.0;
@@ -46,6 +49,10 @@ public static class Constants {
   /// コンパクト表示時の高さ
   public const double CompactMainWindowHeight = 280.0;
 
+  //-------------------------------------------------------------------
+  // Preview
+  //-------------------------------------------------------------------
+
   /// プロセスエントリが見つからないときのプレビューの幅
   public const int DefaultPreviewWidth = 640;
   /// プロセスエントリが見つからないときのプレビューの高さ
@@ -58,12 +65,29 @@ public static class Constants {
   /// @todo(me) ダミーなのであとで消す
   public const int DummyPreviewHeight = DefaultPreviewHeight;
 
+  //-------------------------------------------------------------------
+  // Options
+  //-------------------------------------------------------------------
+
   /// 「最近使ったプロファイル」に表示される数
   public const int RecentProfilesLength = 5;
+
+  //-------------------------------------------------------------------
+  // LayoutElement
+  //-------------------------------------------------------------------
+
+  /// レイアウト要素の最小幅
+  public const double MinimumBoundRelativeWidth = 0.04;
+  /// レイアウト要素の最小高さ
+  public const double MinimumBoundRelativeHeight = 0.04;
 
   //===================================================================
   // 読み込み専用辞書
   //===================================================================
+
+  //-------------------------------------------------------------------
+  // ResizeMethod
+  //-------------------------------------------------------------------
 
   /// Index->ResizeMethodの名前
   public static readonly string[] ResizeMethodLabels = new string[] {

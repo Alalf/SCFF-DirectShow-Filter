@@ -20,24 +20,15 @@
 
 namespace SCFF.Common.GUI {
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-
 /// 与えられたマウスポイントを利用してレイアウト要素を移動・拡大縮小する
 public static class MoveAndSize {
-  //-------------------------------------------------------------------
-  // 定数
-  //-------------------------------------------------------------------
-  private const double MinimumWidth = GUIConstants.WEBorderThickness * 2;
-  private const double MinimumHeight = GUIConstants.NSBorderThickness * 2;
+  //===================================================================
+  // 移動
+  //===================================================================
 
-  //-------------------------------------------------------------------
-  // staticメソッド
-  //-------------------------------------------------------------------
-
-  /// Move
-  public static void Move(Profile.InputLayoutElement layoutElement,
+  /// レイアウト要素を移動する
+  private static void Move(Profile.InputLayoutElement layoutElement,
+      HitModes hitMode,
       RelativePoint mousePoint, RelativeMouseOffset mouseOffset,
       SnapGuide snapGuide,
       out double nextLeft, out double nextTop,
@@ -84,10 +75,15 @@ public static class MoveAndSize {
     nextBottom = tryNextBottom;
   }
 
-  /// Size
-  public static void Size(Profile.InputLayoutElement layoutElement,
+  //===================================================================
+  // 拡大縮小
+  //===================================================================
+
+  /// レイアウト要素を拡大縮小する
+  private static void Size(Profile.InputLayoutElement layoutElement,
+      HitModes hitMode,
       RelativePoint mousePoint, RelativeMouseOffset mouseOffset,
-      SnapGuide snapGuide, HitModes hitMode,
+      SnapGuide snapGuide,
       out double nextLeft, out double nextTop,
       out double nextRight, out double nextBottom) {
     // 初期値
@@ -105,7 +101,7 @@ public static class MoveAndSize {
         var tryNextTop = mousePoint.Y - mouseOffset.Top;
         snapGuide.TryVerticalSnap(ref tryNextTop);
         if (tryNextTop < 0.0) tryNextTop = 0.0;
-        var topUpperBound = nextBottom - MinimumHeight;
+        var topUpperBound = nextBottom - Constants.MinimumBoundRelativeHeight;
         if (tryNextTop > topUpperBound) tryNextTop = topUpperBound;
         nextTop = tryNextTop;
         break;
@@ -117,7 +113,7 @@ public static class MoveAndSize {
         var tryNextBottom = mousePoint.Y - mouseOffset.Bottom;
         snapGuide.TryVerticalSnap(ref tryNextBottom);
         if (tryNextBottom > 1.0) tryNextBottom = 1.0;
-        var bottomLowerBound = nextTop + MinimumHeight;
+        var bottomLowerBound = nextTop + Constants.MinimumBoundRelativeHeight;
         if (tryNextBottom < bottomLowerBound) tryNextBottom = bottomLowerBound;
         nextBottom = tryNextBottom;
         break;
@@ -133,7 +129,7 @@ public static class MoveAndSize {
         var tryNextLeft = mousePoint.X - mouseOffset.Left;
         snapGuide.TryHorizontalSnap(ref tryNextLeft);
         if (tryNextLeft < 0.0) tryNextLeft = 0.0;
-        var leftUpperBound = nextRight - MinimumWidth;
+        var leftUpperBound = nextRight - Constants.MinimumBoundRelativeWidth;
         if (tryNextLeft > leftUpperBound) tryNextLeft = leftUpperBound;
         nextLeft = tryNextLeft;
         break;
@@ -145,11 +141,31 @@ public static class MoveAndSize {
         var tryNextRight = mousePoint.X - mouseOffset.Right;
         snapGuide.TryHorizontalSnap(ref tryNextRight);
         if (tryNextRight > 1.0) tryNextRight = 1.0;
-        var rightLowerBound = nextLeft + MinimumWidth;
+        var rightLowerBound = nextLeft + Constants.MinimumBoundRelativeWidth;
         if (tryNextRight < rightLowerBound) tryNextRight = rightLowerBound;
         nextRight = tryNextRight;
         break;
       }
+    }
+  }
+
+  //===================================================================
+  // 移動 or 拡大縮小
+  //===================================================================
+
+  /// hitModeにあわせてレイアウト要素を移動 or 拡大縮小する
+  public static void MoveOrSize(Profile.InputLayoutElement layoutElement,
+      HitModes hitMode,
+      RelativePoint mousePoint, RelativeMouseOffset mouseOffset,
+      SnapGuide snapGuide,
+      out double nextLeft, out double nextTop,
+      out double nextRight, out double nextBottom) {
+    if (hitMode == HitModes.Move) {
+      Move(layoutElement, hitMode, mousePoint, mouseOffset, snapGuide,
+           out nextLeft, out nextTop, out nextRight, out nextBottom);
+    } else {
+      Size(layoutElement, hitMode, mousePoint, mouseOffset, snapGuide,
+           out nextLeft, out nextTop, out nextRight, out nextBottom);
     }
   }
 }

@@ -66,12 +66,12 @@ public static class ScreenCapture {
 
   /// キャプチャしたHBitmapをBitmapSource(Freezed)にして返す
   public static BitmapSource Capture(ScreenCaptureRequest request) {
-    if (request == null) return null;
+    Debug.Assert(request != null);
 
     // HBitmapからBitmapSourceを作成
     BitmapSource bitmap = null;
     using (var result = Common.GUI.ScreenCapture.Open(request)) {
-      if (result == null) return null;
+      if (result == null) return bitmap;
 
       // HBitmapからBitmapSourceに変換
       bitmap = Imaging.CreateBitmapSourceFromHBitmap(

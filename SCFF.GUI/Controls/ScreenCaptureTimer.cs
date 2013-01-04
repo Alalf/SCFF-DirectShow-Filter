@@ -64,8 +64,6 @@ public class ScreenCaptureTimer {
   // タイマーコールバック
   //-------------------------------------------------------------------
 
-
-
   /// タイマーコールバック
   private void TimerCallback(object state) {
     lock (this.sharedLock) {
@@ -73,7 +71,8 @@ public class ScreenCaptureTimer {
 
       // キャプチャ
       foreach (var request in this.requests) {
-        this.cachedBitmaps[request.Index] = this.Capture(request);
+        if (request == null) continue;
+        this.cachedBitmaps[request.Index] = ScreenCapture.Capture(request);
       }
     }
   }
@@ -138,7 +137,7 @@ public class ScreenCaptureTimer {
       // forceUpdate時はUIスレッドで一回処理を行う
       if (!forceUpdate) return;
       if (this.isSuspended) return;
-      this.Capture(request);
+      this.cachedBitmaps[request.Index] = ScreenCapture.Capture(request);
     }
   }
 

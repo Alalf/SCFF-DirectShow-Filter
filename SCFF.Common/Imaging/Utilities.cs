@@ -134,4 +134,4 @@ public static class Utilities {
     return true;
   }
 }
-}
+}   // namespace SCFF.Common.Imaging

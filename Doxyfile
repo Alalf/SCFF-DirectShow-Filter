@@ -95,7 +95,8 @@ WARN_LOGFILE           = doxygen_warnings.log
 
 # configuration options related to the input files
 # INPUT                  = scff_dsf scff_app scff_sandbox SCFF.Interprocess SCFF.Common SCFF.GUI
-INPUT                  = scff_dsf SCFF.Interprocess SCFF.Common SCFF.GUI
+# INPUT                  = scff_dsf SCFF.Interprocess SCFF.Common SCFF.GUI
+INPUT                  = SCFF.Interprocess SCFF.Common SCFF.GUI
 INPUT_ENCODING         = UTF-8
 FILE_PATTERNS          =
 RECURSIVE              = YES
@@ -250,10 +251,10 @@ PERL_PATH              = /usr/bin/perl
 CLASS_DIAGRAMS         = YES
 MSCGEN_PATH            =
 HIDE_UNDOC_RELATIONS   = YES
-HAVE_DOT               = YES
+HAVE_DOT               = NO
 DOT_NUM_THREADS        = 0
 DOT_FONTNAME           = Segoe UI
-DOT_FONTSIZE           = 10
+DOT_FONTSIZE           = 9
 DOT_FONTPATH           =
 CLASS_GRAPH            = YES
 COLLABORATION_GRAPH    = YES

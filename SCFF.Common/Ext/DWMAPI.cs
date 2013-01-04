@@ -24,13 +24,23 @@ using System.Runtime.InteropServices;
 
 /// SCFFで利用するDWMAPI.dllのAPIをまとめたクラス
 public class DWMAPI {
-  // Constants
+  //===================================================================
+  // 定数
+  //===================================================================
+
+  /// AeroをOFFにするAction
   public const int DWM_EC_DISABLECOMPOSITION = 0;
+  /// AeroをOnにするAction
   public const int DWM_EC_ENABLECOMPOSITION = 1;
 
+  //===================================================================
   // API
+  //===================================================================
+
+  /// AeroがOnかどうか
   [DllImport("dwmapi.dll")]
   public static extern int DwmIsCompositionEnabled(out bool enabled);
+  /// Aeroの状態を変更する
   [DllImport("dwmapi.dll")]
   public static extern int DwmEnableComposition(uint uCompositionAction);
 }

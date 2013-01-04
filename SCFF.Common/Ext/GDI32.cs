@@ -25,46 +25,27 @@ using System.Runtime.InteropServices;
 
 /// SCFFで利用するGDI32.dllのAPIをまとめたクラス
 ///
-/// HWNDは特例としてUIntPtr、それ以外はIntPtrで取り扱うこと
+/// @warning HWNDはUIntPtr、それ以外のHandleはIntPtrで取り扱うこと
 public class GDI32 {
-  // Constants
+  //===================================================================
+  // 定数
+  //===================================================================
+
+  /// ラスタオペレーションコード: 単純なコピー
   public const int SRCCOPY    = 0x00CC0020;
+  /// ラスタオペレーションコード: レイヤードウィンドウ含めコピー
   public const int CAPTUREBLT = 0x40000000;
 
-  // public const int PS_SOLID    = 0x00000000;
+  /// Pen Style: 描画されない
   public const int PS_NULL        = 0x00000005;
+  /// 描画モード: XOR
   public const int R2_XORPEN      = 7;
-  
-  public const uint BI_RGB        = 0;
-  public const uint DIB_RGB_COLORS  = 0;
 
-  // Types
-
-  /// BITMAPINFOHEADER
-  [StructLayout(LayoutKind.Sequential, Pack = 1)]
-  public struct BITMAPINFOHEADER {
-    public uint biSize;
-    public int biWidth;
-    public int biHeight;
-    public ushort biPlanes;
-    public ushort biBitCount;
-    public uint biCompression;
-    public uint biSizeImage;
-    public int biXPelsPerMeter;
-    public int biYPelsPerMeter;
-    public uint biClrUsed;
-    public uint biClrImportant;
-  }
-
-  /// BITMAPINFO
-  [StructLayout(LayoutKind.Sequential, Pack = 1)]
-  public struct BITMAPINFO {
-    public BITMAPINFOHEADER bmih;
-    [MarshalAs(UnmanagedType.ByValArray, SizeConst = 1)]
-    public uint[] bmiColors;
-  }
-
+  //===================================================================
   // API
+  //===================================================================
+
+  /// BitBlt(XP,NoAero Vista/7ではハードウェア支援付き)
   [DllImport("gdi32.dll")]
   public static extern int BitBlt(IntPtr hDestDC,
       int x, int y,
@@ -73,32 +54,35 @@ public class GDI32 {
       int xSrc, int ySrc,
       int dwRop);
 
-  [DllImport("gdi32.dll")]
-  public static extern int GetDIBits(IntPtr hdc,
-      IntPtr hbmp, uint uStartScan, uint cScanLines,
-      [Out] byte [] lpvBits, ref BITMAPINFO lpbi, uint uUsage);
-
-  [DllImport("gdi32.dll")]
-  public static extern IntPtr CreateCompatibleBitmap(IntPtr hdc, int nWidth, int nHeight);
-
+  /// 互換DCを作成
   [DllImport("gdi32.dll")]
 	public static extern IntPtr CreateCompatibleDC(IntPtr hdc);
 
-  [DllImport("gdi32.dll")]
-  public static extern IntPtr CreatePen(int fnPenStyle, int nWidth, uint crColor);
-
-  [DllImport("gdi32.dll")]
-  public static extern int SetROP2(IntPtr hdc, int fnDrawMode);
-
-  [DllImport("gdi32.dll")]
-  public static extern IntPtr SelectObject(IntPtr hdc, IntPtr hgdiobj);
-
-  [DllImport("gdi32.dll")]
-  public static extern bool DeleteObject(IntPtr hObject);
-
+  /// DCを削除
   [DllImport("gdi32.dll")]
   public static extern int DeleteDC(IntPtr hDC);
 
+  /// VRAM上にビットマップ格納領域を生成(XP,NoAero Vista/7)
+  [DllImport("gdi32.dll")]
+  public static extern IntPtr CreateCompatibleBitmap(IntPtr hdc, int nWidth, int nHeight);
+
+  /// DCとビットマップハンドルを関連付け
+  [DllImport("gdi32.dll")]
+  public static extern IntPtr SelectObject(IntPtr hdc, IntPtr hgdiobj);
+
+  /// ビットマップを解放
+  [DllImport("gdi32.dll")]
+  public static extern bool DeleteObject(IntPtr hObject);
+
+  /// ペンを生成
+  [DllImport("gdi32.dll")]
+  public static extern IntPtr CreatePen(int fnPenStyle, int nWidth, uint crColor);
+
+  /// 描画モードを設定
+  [DllImport("gdi32.dll")]
+  public static extern int SetROP2(IntPtr hdc, int fnDrawMode);
+
+  /// 矩形を塗りつぶし
   [DllImport("gdi32.dll")]
   public static extern bool Rectangle(IntPtr hdc, int nLeftRect, int nTopRect, int nRightRect, int nBottomRect);
 }

@@ -1,7 +1,6 @@
 ﻿/*!
 @page wpf C# / WPFプログラミングメモ (by 2013/01/02 Alalf)
-WPFはMVVM/DataBinding/BeginInvoke/...がなくても普通に使えそう！
-
+@brief WPFはMVVM/DataBinding/BeginInvoke/...がなくても普通に使えそう！
 
 ## C#/WPFプログラムの基本的な作り方
 C# は C++ に比べるととてもDLL（アセンブリ）が作りやすくデバッグしやすく統合しやすいので、

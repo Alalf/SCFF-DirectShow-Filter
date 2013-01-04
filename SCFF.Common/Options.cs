@@ -31,9 +31,10 @@ using System.Diagnostics;
 public class Options {
 
   //===================================================================
-  // コンストラクタ/デストラクタ
+  // コンストラクタ
   //===================================================================
 
+  /// コンストラクタ
   public Options() {
     this.reverseRecentProfiles = new string[Constants.RecentProfilesLength] {
       string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, 

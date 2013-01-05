@@ -31,22 +31,32 @@ public static class HitTest {
   //===================================================================
 
   /// レイアウト要素のうちボーダーを含めたRectを取得
-  private static RelativeRect GetMaximumBoundRect(Profile.InputLayoutElement layoutElement) {
+  private static RelativeRect GetMaximumBoundRect(
+      Profile.InputLayoutElement layoutElement) {
     return new RelativeRect {
-      X = layoutElement.BoundRelativeLeft - Constants.BorderRelativeThickness,
-      Y = layoutElement.BoundRelativeTop - Constants.BorderRelativeThickness,
-      Width = layoutElement.BoundRelativeWidth + Constants.BorderRelativeThickness * 2,
-      Height = layoutElement.BoundRelativeHeight + Constants.BorderRelativeThickness * 2
+      X = layoutElement.BoundRelativeLeft -
+          Constants.BorderRelativeThickness,
+      Y = layoutElement.BoundRelativeTop -
+          Constants.BorderRelativeThickness,
+      Width = layoutElement.BoundRelativeWidth +
+          Constants.BorderRelativeThickness * 2,
+      Height = layoutElement.BoundRelativeHeight +
+          Constants.BorderRelativeThickness * 2
     };
   }
 
   /// レイアウト要素のうちボーダーを含まないRectを取得
-  private static RelativeRect GetMoveRect(Profile.InputLayoutElement layoutElement) {
+  private static RelativeRect GetMoveRect(
+      Profile.InputLayoutElement layoutElement) {
     return new RelativeRect {
-      X = layoutElement.BoundRelativeLeft + Constants.BorderRelativeThickness,
-      Y = layoutElement.BoundRelativeTop + Constants.BorderRelativeThickness,
-      Width = Math.Max(layoutElement.BoundRelativeWidth - Constants.BorderRelativeThickness * 2, 0.0),
-      Height = Math.Max(layoutElement.BoundRelativeHeight - Constants.BorderRelativeThickness * 2, 0.0)
+      X = layoutElement.BoundRelativeLeft +
+          Constants.BorderRelativeThickness,
+      Y = layoutElement.BoundRelativeTop +
+          Constants.BorderRelativeThickness,
+      Width = Math.Max(layoutElement.BoundRelativeWidth -
+          Constants.BorderRelativeThickness * 2, 0.0),
+      Height = Math.Max(layoutElement.BoundRelativeHeight -
+          Constants.BorderRelativeThickness * 2, 0.0)
     };
   }
 
@@ -120,16 +130,16 @@ public static class HitTest {
 
     // レイアウト要素を線形探索
     foreach (var layoutElement in profile) {
-      // 最大外接矩形に入っていなければヒットテスト対象外
+      // ヒットテスト対象外判定
       var maximumBoundRect = HitTest.GetMaximumBoundRect(layoutElement);
       if (!maximumBoundRect.Contains(mousePoint)) continue;
 
       var moveRect = HitTest.GetMoveRect(layoutElement);
       if (moveRect.Contains(mousePoint)) {
-        // 移動用領域に入ってればStackに積む
+        // 移動用領域
         moveStack.Push(layoutElement);
       } else {
-        // 最大外接矩形に入っていて、移動用領域でないということはサイズ変更用領域に入ってる
+        // 移動用領域でない＝サイズ変更用領域
         sizeStack.Push(layoutElement);
       }
     }

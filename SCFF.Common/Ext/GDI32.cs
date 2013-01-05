@@ -64,7 +64,8 @@ public class GDI32 {
 
   /// VRAM上にビットマップ格納領域を生成(XP,NoAero Vista/7)
   [DllImport("gdi32.dll")]
-  public static extern IntPtr CreateCompatibleBitmap(IntPtr hdc, int nWidth, int nHeight);
+  public static extern IntPtr CreateCompatibleBitmap(IntPtr hdc,
+                                                     int nWidth, int nHeight);
 
   /// DCとビットマップハンドルを関連付け
   [DllImport("gdi32.dll")]
@@ -76,7 +77,8 @@ public class GDI32 {
 
   /// ペンを生成
   [DllImport("gdi32.dll")]
-  public static extern IntPtr CreatePen(int fnPenStyle, int nWidth, uint crColor);
+  public static extern IntPtr CreatePen(int fnPenStyle, int nWidth,
+                                        uint crColor);
 
   /// 描画モードを設定
   [DllImport("gdi32.dll")]
@@ -84,6 +86,8 @@ public class GDI32 {
 
   /// 矩形を塗りつぶし
   [DllImport("gdi32.dll")]
-  public static extern bool Rectangle(IntPtr hdc, int nLeftRect, int nTopRect, int nRightRect, int nBottomRect);
+  public static extern bool Rectangle(IntPtr hdc, int nLeftRect,
+                                      int nTopRect, int nRightRect,
+                                      int nBottomRect);
 }
 }

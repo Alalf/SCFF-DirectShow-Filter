@@ -84,7 +84,8 @@ public class RelativeRect {
 /// 相対マウス座標([0-1], [0-1])がレイアウト要素の上下左右とどれだけ離れているか
 public class RelativeMouseOffset {
   /// コンストラクタ
-  public RelativeMouseOffset(Profile.InputLayoutElement layoutElement, RelativePoint mousePoint) {
+  public RelativeMouseOffset(Profile.InputLayoutElement layoutElement,
+                             RelativePoint mousePoint) {
     this.Left = mousePoint.X - layoutElement.BoundRelativeLeft;
     this.Top = mousePoint.Y - layoutElement.BoundRelativeTop;
     this.Right = mousePoint.X - layoutElement.BoundRelativeRight;

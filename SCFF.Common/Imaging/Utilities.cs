@@ -23,7 +23,8 @@ namespace SCFF.Common.Imaging {
 
 using System.Diagnostics;
 
-/// 画像の操作に便利な関数をまとめたクラス(C#では関数をまとめる為に名前空間は使えない)
+/// 画像の操作に便利な関数をまとめたクラス
+/// @attention C#では関数をまとめる為に名前空間は使えない
 public static class Utilities {
   /// 境界の座標系と同じ座標系の新しい配置を計算する
   public static bool CalculateLayout(int boundX, int boundY,

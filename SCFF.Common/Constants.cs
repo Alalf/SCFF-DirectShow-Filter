@@ -107,7 +107,8 @@ public static class Constants {
   };
 
   /// Index->SWScaleFlags
-  public static readonly SWScaleFlags[] ResizeMethodArray = new SWScaleFlags[] {
+  public static readonly SWScaleFlags[] ResizeMethodArray =
+      new SWScaleFlags[] {
     SWScaleFlags.FastBilinear,
     SWScaleFlags.Bilinear,
     SWScaleFlags.Bicubic,

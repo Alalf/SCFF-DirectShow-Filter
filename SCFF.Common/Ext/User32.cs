@@ -78,7 +78,8 @@ public class User32 {
 
   /// 指定されたクラス名、ウィンドウ名のWindowハンドルを探す
   [DllImport("user32.dll")]
-  public static extern UIntPtr FindWindowEx(UIntPtr hWnd, UIntPtr hwndChildAfter, string lpszClass, string lpszWindow);
+  public static extern UIntPtr FindWindowEx(UIntPtr hWnd,
+      UIntPtr hwndChildAfter, string lpszClass, string lpszWindow);
 
   ///画面上のトップレベルWindowハンドルを列挙し、Windowハンドルをコールバック関数に渡す
   [DllImport("user32.dll")]
@@ -86,7 +87,8 @@ public class User32 {
 
   /// Windowハンドルからクラス名を取得する
   [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-  public static extern int GetClassName(UIntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
+  public static extern int GetClassName(UIntPtr hWnd,
+      StringBuilder lpClassName, int nMaxCount);
 
   /// Windowハンドルのクライアント領域を表すRECTを取得
   [DllImport("user32.dll")]

@@ -118,7 +118,7 @@ public static class Utilities {
       out int paddingLeft, out int paddingRight) {
     int newX, newY, newWidth, newHeight;
     // 座標系はbound領域内
-    bool error = CalculateLayout(0, 0, boundWidth, boundHeight,
+    bool error = Utilities.CalculateLayout(0, 0, boundWidth, boundHeight,
         inputWidth, inputHeight,
         stretch, keepAspectRatio,
         out newX,  out newY, out newWidth, out newHeight);

@@ -27,24 +27,28 @@ using SCFF.Common;
 /// Applicationクラス
 public partial class App : Application {
   //===================================================================
-  // staticプロパティ
+  // シングルトン
   //===================================================================
 
-  /// アプリケーションの設定を格納するインスタンス
+  /// アプリケーションの設定を格納するシングルトン
+  private static Options options = new Options();
+  /// アプリケーションの設定を格納するシングルトンを取得
   public static Options Options {
     get { return options; }
   }
-  /// 現在編集中のプロファイルを格納するインスタンス
+
+  /// 現在編集中のプロファイルを格納するシングルトン
+  private static Profile profile = new Profile();
+  /// 現在編集中のプロファイルを格納するシングルトンを取得
   public static Profile Profile {
     get { return profile; }
   }
-  private static Options options = new Options();
-  private static Profile profile = new Profile();
 
   //===================================================================
   // イベントハンドラ
   //===================================================================
 
+  /// アプリケーション起動時
   private void App_Startup(object sender, StartupEventArgs e) {
     // Options
     OptionsINIFile.Load(App.Options);
@@ -58,6 +62,7 @@ public partial class App : Application {
     }
   }
 
+  /// アプリケーション終了時
   private void App_Exit(object sender, ExitEventArgs e) {
     // Profileの保存は明示的にMainWindow上で行うのでここでは何もしない
 

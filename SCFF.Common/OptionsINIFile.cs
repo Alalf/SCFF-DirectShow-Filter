@@ -31,8 +31,11 @@ public static class OptionsINIFile {
   // 定数
   //===================================================================
 
+  /// INIファイル名
   private const string OptionsFilePath = "SCFF.Common.Options.ini";
-  private const string OptionsHeader = "; SCFF-DirectShow-Filter Options Ver.0.1.7";
+  /// INIファイルの先頭に付加するヘッダー
+  private const string OptionsHeader =
+      "; SCFF-DirectShow-Filter Options Ver.0.1.7";
 
   //===================================================================
   // ファイル出力
@@ -40,31 +43,33 @@ public static class OptionsINIFile {
 
   /// ファイル出力
   public static bool Save(Options options) {
-    using (var writer = new StreamWriter(OptionsFilePath)) {
+    using (var writer = new StreamWriter(OptionsINIFile.OptionsFilePath)) {
       try {
-        writer.WriteLine(OptionsHeader);
-        string prefix = "RecentProfile";
+        writer.WriteLine(OptionsINIFile.OptionsHeader);
         for (int i = 0; i < 5; ++i) {
-          writer.WriteLine(prefix + i + "=" + options.GetRecentProfile(i));
+          writer.WriteLine("RecentProfile{0}={1}", i,
+                           options.GetRecentProfile(i));
         }
-        writer.WriteLine("FFmpegPath=" + options.FFmpegPath);
-        writer.WriteLine("FFmpegArguments=" + options.FFmpegArguments);
-        writer.WriteLine("TmpMainWindowLeft=" + options.TmpMainWindowLeft);
-        writer.WriteLine("TmpMainWindowTop=" + options.TmpMainWindowTop);
-        writer.WriteLine("TmpMainWindowWidth=" + options.TmpMainWindowWidth);
-        writer.WriteLine("TmpMainWindowHeight=" + options.TmpMainWindowHeight);
-        writer.WriteLine("TmpMainWindowState=" + options.TmpMainWindowState);
-        writer.WriteLine("AreaIsExpanded=" + options.AreaIsExpanded);
-        writer.WriteLine("OptionsIsExpanded=" + options.OptionsIsExpanded);
-        writer.WriteLine("ResizeMethodIsExpanded=" + options.ResizeMethodIsExpanded);
-        writer.WriteLine("LayoutIsExpanded=" + options.LayoutIsExpanded);
-        writer.WriteLine("AutoApply=" + options.AutoApply);
-        writer.WriteLine("LayoutPreview=" + options.LayoutPreview);
-        writer.WriteLine("LayoutBorder=" + options.LayoutBorder);
-        writer.WriteLine("LayoutSnap=" + options.LayoutSnap);
-        writer.WriteLine("CompactView=" + options.CompactView);
-        writer.WriteLine("ForceAeroOn=" + options.ForceAeroOn);
-        writer.WriteLine("RestoreLastProfile=" + options.RestoreLastProfile);
+        writer.WriteLine("FFmpegPath={0}", options.FFmpegPath);
+        writer.WriteLine("FFmpegArguments={0}", options.FFmpegArguments);
+        writer.WriteLine("TmpMainWindowLeft={0}", options.TmpMainWindowLeft);
+        writer.WriteLine("TmpMainWindowTop={0}", options.TmpMainWindowTop);
+        writer.WriteLine("TmpMainWindowWidth={0}", options.TmpMainWindowWidth);
+        writer.WriteLine("TmpMainWindowHeight={0}",
+                         options.TmpMainWindowHeight);
+        writer.WriteLine("TmpMainWindowState={0}", options.TmpMainWindowState);
+        writer.WriteLine("AreaIsExpanded={0}", options.AreaIsExpanded);
+        writer.WriteLine("OptionsIsExpanded={0}", options.OptionsIsExpanded);
+        writer.WriteLine("ResizeMethodIsExpanded={0}",
+                         options.ResizeMethodIsExpanded);
+        writer.WriteLine("LayoutIsExpanded={0}", options.LayoutIsExpanded);
+        writer.WriteLine("AutoApply={0}", options.AutoApply);
+        writer.WriteLine("LayoutPreview={0}", options.LayoutPreview);
+        writer.WriteLine("LayoutBorder={0}", options.LayoutBorder);
+        writer.WriteLine("LayoutSnap={0}", options.LayoutSnap);
+        writer.WriteLine("CompactView={0}", options.CompactView);
+        writer.WriteLine("ForceAeroOn={0}", options.ForceAeroOn);
+        writer.WriteLine("RestoreLastProfile={0}", options.RestoreLastProfile);
         return true;
       } catch (Exception ex) {
         // 特に何も警告はしない
@@ -118,13 +123,14 @@ public static class OptionsINIFile {
     }
 
     // ディクショナリを参考にしながらデータを設定
-    LoadFromDictionary(labelToRawData, options);
+    OptionsINIFile.LoadFromDictionary(labelToRawData, options);
 
     return true;
   }
 
-  private static void LoadFromDictionary(Dictionary<string, string> labelToRawData,
-                                         Options options) {
+  /// 辞書から読み込む
+  private static void LoadFromDictionary(
+      Dictionary<string, string> labelToRawData, Options options) {
     // 使いまわすので注意
     string rawData;
 

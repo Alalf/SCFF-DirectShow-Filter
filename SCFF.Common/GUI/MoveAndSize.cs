@@ -167,11 +167,11 @@ public static class MoveAndSize {
       out double nextLeft, out double nextTop,
       out double nextRight, out double nextBottom) {
     if (hitMode == HitModes.Move) {
-      Move(layoutElement, hitMode, mousePoint, mouseOffset, snapGuide,
-           out nextLeft, out nextTop, out nextRight, out nextBottom);
+      MoveAndSize.Move(layoutElement, hitMode, mousePoint, mouseOffset,
+          snapGuide, out nextLeft, out nextTop, out nextRight, out nextBottom);
     } else {
-      Size(layoutElement, hitMode, mousePoint, mouseOffset, snapGuide,
-           out nextLeft, out nextTop, out nextRight, out nextBottom);
+      MoveAndSize.Size(layoutElement, hitMode, mousePoint, mouseOffset,
+          snapGuide, out nextLeft, out nextTop, out nextRight, out nextBottom);
     }
   }
 }

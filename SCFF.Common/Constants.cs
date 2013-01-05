@@ -76,10 +76,12 @@ public static class Constants {
   // LayoutElement
   //-------------------------------------------------------------------
 
-  /// レイアウト要素の最小幅
-  public const double MinimumBoundRelativeWidth = 0.04;
-  /// レイアウト要素の最小高さ
-  public const double MinimumBoundRelativeHeight = 0.04;
+  /// レイアウト要素の最小幅＆高さ
+  public const double MinimumBoundRelativeSize = 0.04;
+
+  /// 単位ボーダーサイズ(内側に1, 外側に1)
+  /// @attention ボーダーは外にもあることに注意
+  public const double BorderRelativeThickness = MinimumBoundRelativeSize / 2;
 
   //===================================================================
   // 読み込み専用辞書

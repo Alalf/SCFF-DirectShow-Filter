@@ -379,8 +379,8 @@ public partial class LayoutEdit : UserControl, IUpdateByProfile, IUpdateByOption
 
     // HitTest
     int hitIndex;
-    Common.GUI.HitModes hitMode;
-    if (!Common.GUI.HitTest.TryHitTest(App.Profile, relativeMousePoint, out hitIndex, out hitMode)) return;
+    HitModes hitMode;
+    if (!HitTest.TryHitTest(App.Profile, relativeMousePoint, out hitIndex, out hitMode)) return;
 
     // 現在選択中のIndexではない場合はそれに変更する
     if (hitIndex != App.Profile.CurrentInputLayoutElement.Index) {
@@ -396,8 +396,12 @@ public partial class LayoutEdit : UserControl, IUpdateByProfile, IUpdateByOption
 
     // マウスを押した場所を記録してマウスキャプチャー開始
     this.hitMode = hitMode;
-    this.relativeMouseOffset = new Common.GUI.RelativeMouseOffset(App.Profile.CurrentInputLayoutElement, relativeMousePoint);
-    this.snapGuide = new Common.GUI.SnapGuide(App.Profile, App.Options.LayoutSnap);
+    this.relativeMouseOffset = new RelativeMouseOffset(App.Profile.CurrentInputLayoutElement, relativeMousePoint);
+    if (App.Options.LayoutSnap) {
+      this.snapGuide = new SnapGuide(App.Profile);
+    } else {
+      this.snapGuide = null;
+    }
     image.CaptureMouse();
 
     this.DrawProfile();
@@ -411,11 +415,11 @@ public partial class LayoutEdit : UserControl, IUpdateByProfile, IUpdateByOption
     var relativeMousePoint = this.GetRelativeMousePoint(image, e);
 
     // Neutralのときだけはカーソルを帰るだけ
-    if (this.hitMode == Common.GUI.HitModes.Neutral) {
+    if (this.hitMode == HitModes.Neutral) {
       // カーソルかえるだけ
       int hitIndex;
-      Common.GUI.HitModes hitMode;
-      Common.GUI.HitTest.TryHitTest(App.Profile, relativeMousePoint, out hitIndex, out hitMode);
+      HitModes hitMode;
+      HitTest.TryHitTest(App.Profile, relativeMousePoint, out hitIndex, out hitMode);
       this.Cursor = this.hitModesToCursors[hitMode];
       return;
     }

@@ -23,22 +23,13 @@ namespace SCFF.Common.GUI {
 using System.Collections.Generic;
 
 /// レイアウト用スナップガイド
-public class SnapGuide {
-  //-------------------------------------------------------------------
-  // 定数
-  //-------------------------------------------------------------------
-  private const double WESnapBorderThickness = 0.02;
-  private const double NSSnapBorderThickness = 0.02;
-  
-  //-------------------------------------------------------------------
-  // メソッド
-  //-------------------------------------------------------------------
+public class SnapGuide {  
+  //===================================================================
+  // コンストラクタ
+  //===================================================================
 
   /// コンストラクタ
-  public SnapGuide(Profile profile, bool isEnabled) {
-    this.IsEnabled = isEnabled;
-    if (!this.IsEnabled) return;
-
+  public SnapGuide(Profile profile) {
     var currentIndex = profile.CurrentInputLayoutElement.Index;
     foreach (var layoutElement in profile) {
       // currentにSnapさせる必要はない
@@ -52,16 +43,19 @@ public class SnapGuide {
     }
   }
 
+  //===================================================================
+  // スナップ補正
+  //===================================================================
+
   /// 縦方向のスナップ補正
   public bool TryVerticalSnap(ref double original) {
-    if (!this.IsEnabled) return false;
     if (this.verticalSnapGuides.Count == 0) return false;
 
     // キャッシュ付き線形探索
     var guide = this.verticalSnapGuides.First;
     do {
-      var lowerBound = guide.Value - NSSnapBorderThickness;
-      var upperBound = guide.Value + NSSnapBorderThickness;
+      var lowerBound = guide.Value - Constants.BorderRelativeThickness;
+      var upperBound = guide.Value + Constants.BorderRelativeThickness;
       if (lowerBound <= original && original <= upperBound) {
         original = guide.Value;
         if (guide != this.verticalSnapGuides.First) {
@@ -80,14 +74,13 @@ public class SnapGuide {
 
   /// 水平方向のスナップ補正
   public bool TryHorizontalSnap(ref double original) {
-    if (!this.IsEnabled) return false;
     if (this.horizontalSnapGuides.Count == 0) return false;
 
     // キャッシュ付き線形探索
     var guide = this.horizontalSnapGuides.First;
     do {
-      var lowerBound = guide.Value - WESnapBorderThickness;
-      var upperBound = guide.Value + WESnapBorderThickness;
+      var lowerBound = guide.Value - Constants.BorderRelativeThickness;
+      var upperBound = guide.Value + Constants.BorderRelativeThickness;
       if (lowerBound <= original && original <= upperBound) {
         original = guide.Value;
         if (guide != this.horizontalSnapGuides.First) {
@@ -104,11 +97,13 @@ public class SnapGuide {
     return false;
   }
 
-  //-------------------------------------------------------------------
-  // メンバ変数
-  //-------------------------------------------------------------------
-  private bool IsEnabled { get; set; }
+  //===================================================================
+  // フィールド
+  //===================================================================
+
+  /// 横方向のスナップガイドリスト
   private LinkedList<double> verticalSnapGuides = new LinkedList<double>();
+  /// 縦方向のスナップガイドリスト
   private LinkedList<double> horizontalSnapGuides = new LinkedList<double>();
 }
 }   // namespace SCFF.Common.GUI

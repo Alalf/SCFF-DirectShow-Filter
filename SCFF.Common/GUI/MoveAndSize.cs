@@ -39,17 +39,22 @@ public static class MoveAndSize {
 
     // Left
     var tryNextLeft = mousePoint.X - mouseOffset.Left;
-    hasAlreadyHorizontalSnapped |= snapGuide.TryHorizontalSnap(ref tryNextLeft);
+    if (snapGuide != null) {
+      hasAlreadyHorizontalSnapped |= snapGuide.TryHorizontalSnap(ref tryNextLeft);
+    }
     if (tryNextLeft < 0.0) tryNextLeft = 0.0;
 
     // Top
     var tryNextTop = mousePoint.Y - mouseOffset.Top;
-    hasAlreadyVerticalSnapped |= snapGuide.TryVerticalSnap(ref tryNextTop);
+    if (snapGuide != null) {
+      hasAlreadyVerticalSnapped |= snapGuide.TryVerticalSnap(ref tryNextTop);
+    }
     if (tryNextTop < 0.0) tryNextTop = 0.0;
 
     // Right
     var tryNextRight = tryNextLeft + layoutElement.BoundRelativeWidth;
-    if (!hasAlreadyHorizontalSnapped && snapGuide.TryHorizontalSnap(ref tryNextRight)) {
+    if (snapGuide != null && !hasAlreadyHorizontalSnapped &&
+        snapGuide.TryHorizontalSnap(ref tryNextRight)) {
       // スナップ補正がかかった場合
       tryNextLeft = tryNextRight - layoutElement.BoundRelativeWidth;
     }
@@ -60,7 +65,8 @@ public static class MoveAndSize {
 
     // Bottom
     var tryNextBottom = tryNextTop + layoutElement.BoundRelativeHeight;
-    if (!hasAlreadyVerticalSnapped && snapGuide.TryVerticalSnap(ref tryNextBottom)) {
+    if (snapGuide != null && !hasAlreadyVerticalSnapped &&
+        snapGuide.TryVerticalSnap(ref tryNextBottom)) {
       // スナップ補正がかかった場合
       tryNextTop = tryNextBottom - layoutElement.BoundRelativeHeight;
     }
@@ -99,9 +105,9 @@ public static class MoveAndSize {
       case HitModes.SizeNE: {
         // Top
         var tryNextTop = mousePoint.Y - mouseOffset.Top;
-        snapGuide.TryVerticalSnap(ref tryNextTop);
+        if (snapGuide != null) snapGuide.TryVerticalSnap(ref tryNextTop);
         if (tryNextTop < 0.0) tryNextTop = 0.0;
-        var topUpperBound = nextBottom - Constants.MinimumBoundRelativeHeight;
+        var topUpperBound = nextBottom - Constants.MinimumBoundRelativeSize;
         if (tryNextTop > topUpperBound) tryNextTop = topUpperBound;
         nextTop = tryNextTop;
         break;
@@ -111,9 +117,9 @@ public static class MoveAndSize {
       case HitModes.SizeSE: {
         // Bottom
         var tryNextBottom = mousePoint.Y - mouseOffset.Bottom;
-        snapGuide.TryVerticalSnap(ref tryNextBottom);
+        if (snapGuide != null) snapGuide.TryVerticalSnap(ref tryNextBottom);
         if (tryNextBottom > 1.0) tryNextBottom = 1.0;
-        var bottomLowerBound = nextTop + Constants.MinimumBoundRelativeHeight;
+        var bottomLowerBound = nextTop + Constants.MinimumBoundRelativeSize;
         if (tryNextBottom < bottomLowerBound) tryNextBottom = bottomLowerBound;
         nextBottom = tryNextBottom;
         break;
@@ -127,9 +133,9 @@ public static class MoveAndSize {
       case HitModes.SizeSW: {
         // Left
         var tryNextLeft = mousePoint.X - mouseOffset.Left;
-        snapGuide.TryHorizontalSnap(ref tryNextLeft);
+        if (snapGuide != null) snapGuide.TryHorizontalSnap(ref tryNextLeft);
         if (tryNextLeft < 0.0) tryNextLeft = 0.0;
-        var leftUpperBound = nextRight - Constants.MinimumBoundRelativeWidth;
+        var leftUpperBound = nextRight - Constants.MinimumBoundRelativeSize;
         if (tryNextLeft > leftUpperBound) tryNextLeft = leftUpperBound;
         nextLeft = tryNextLeft;
         break;
@@ -139,9 +145,9 @@ public static class MoveAndSize {
       case HitModes.SizeSE: {
         // Right
         var tryNextRight = mousePoint.X - mouseOffset.Right;
-        snapGuide.TryHorizontalSnap(ref tryNextRight);
+        if (snapGuide != null) snapGuide.TryHorizontalSnap(ref tryNextRight);
         if (tryNextRight > 1.0) tryNextRight = 1.0;
-        var rightLowerBound = nextLeft + Constants.MinimumBoundRelativeWidth;
+        var rightLowerBound = nextLeft + Constants.MinimumBoundRelativeSize;
         if (tryNextRight < rightLowerBound) tryNextRight = rightLowerBound;
         nextRight = tryNextRight;
         break;

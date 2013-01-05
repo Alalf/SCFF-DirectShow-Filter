@@ -27,37 +27,26 @@ using System.Diagnostics;
 /// 与えられたマウス座標([0-1], [0-1])からレイアウト要素のIndexとHitModesを取得
 public static class HitTest {
   //===================================================================
-  // 定数
-  //===================================================================
-
-  /// 左右方向の単位ボーダーサイズ(内側に1, 外側に1)
-  /// @attention ボーダーは外にもあることに注意
-  private const double WEBorderThickness = Constants.MinimumBoundRelativeWidth / 2;
-  /// 上下方向の単位ボーダーサイズ(内側に1, 外側に1)
-  /// @attention ボーダーは外にもあることに注意
-  private const double NSBorderThickness = Constants.MinimumBoundRelativeHeight / 2;
-
-  //===================================================================
   // ヒットテスト用RelativeRectの生成
   //===================================================================
 
   /// レイアウト要素のうちボーダーを含めたRectを取得
   private static RelativeRect GetMaximumBoundRect(Profile.InputLayoutElement layoutElement) {
     return new RelativeRect {
-      X = layoutElement.BoundRelativeLeft - WEBorderThickness,
-      Y = layoutElement.BoundRelativeTop - NSBorderThickness,
-      Width = layoutElement.BoundRelativeWidth + WEBorderThickness * 2,
-      Height = layoutElement.BoundRelativeHeight + NSBorderThickness * 2
+      X = layoutElement.BoundRelativeLeft - Constants.BorderRelativeThickness,
+      Y = layoutElement.BoundRelativeTop - Constants.BorderRelativeThickness,
+      Width = layoutElement.BoundRelativeWidth + Constants.BorderRelativeThickness * 2,
+      Height = layoutElement.BoundRelativeHeight + Constants.BorderRelativeThickness * 2
     };
   }
 
   /// レイアウト要素のうちボーダーを含まないRectを取得
   private static RelativeRect GetMoveRect(Profile.InputLayoutElement layoutElement) {
     return new RelativeRect {
-      X = layoutElement.BoundRelativeLeft + WEBorderThickness,
-      Y = layoutElement.BoundRelativeTop + NSBorderThickness,
-      Width = Math.Max(layoutElement.BoundRelativeWidth - WEBorderThickness * 2, 0.0),
-      Height = Math.Max(layoutElement.BoundRelativeHeight - NSBorderThickness * 2, 0.0)
+      X = layoutElement.BoundRelativeLeft + Constants.BorderRelativeThickness,
+      Y = layoutElement.BoundRelativeTop + Constants.BorderRelativeThickness,
+      Width = Math.Max(layoutElement.BoundRelativeWidth - Constants.BorderRelativeThickness * 2, 0.0),
+      Height = Math.Max(layoutElement.BoundRelativeHeight - Constants.BorderRelativeThickness * 2, 0.0)
     };
   }
 
@@ -74,14 +63,18 @@ public static class HitTest {
     // ---------------
 
     // H1
-    var borderWRight = layoutElement.BoundRelativeLeft + WEBorderThickness;
+    var borderWRight = layoutElement.BoundRelativeLeft +
+                       Constants.BorderRelativeThickness;
     // H2
-    var borderELeft = layoutElement.BoundRelativeRight - WEBorderThickness;
+    var borderELeft = layoutElement.BoundRelativeRight -
+                      Constants.BorderRelativeThickness;
 
     // V1
-    var borderNBottom = layoutElement.BoundRelativeTop + NSBorderThickness;
+    var borderNBottom = layoutElement.BoundRelativeTop +
+                        Constants.BorderRelativeThickness;
     // v2
-    var borderSTop = layoutElement.BoundRelativeBottom - NSBorderThickness;
+    var borderSTop = layoutElement.BoundRelativeBottom -
+                     Constants.BorderRelativeThickness;
     
     // x座標→Y座標
     if (mousePoint.X <= borderWRight) {         // W

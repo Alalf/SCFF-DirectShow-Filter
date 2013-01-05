@@ -25,11 +25,10 @@ using System.Diagnostics;
 
 /// プロファイル以外のアプリケーション設定
 ///
-/// アプリケーションの起動中にプロパティが最新の状態になっている必要の無いものには
-/// Tmpという接頭辞をつけている。プログラム内部でそれらのプロパティを使うことは
-/// Loaded/Closingイベントハンドラ以外ではしてはいけない。
+/// @warning 接頭辞Tmpがついたプロパティの使用はApp起動時・終了時以外禁止
+/// @warning DataBindingの使用は禁止
+/// @attention 配列はプロパティにしなくてよい
 public class Options {
-
   //===================================================================
   // コンストラクタ
   //===================================================================
@@ -60,17 +59,63 @@ public class Options {
   }
 
   //===================================================================
-  // アクセッサ
-  // プロパティ形式ではあるがDataBindingには使わないように！
-  // なお、配列のメンバ変数へのアクセスはプロパティにはこだわらなくても良い
+  // プロパティ
   //===================================================================
 
+  /// FFmpeg.exeのフルパス
+  public string FFmpegPath { get; set; }
+  /// FFmpeg.exeに渡す引数
+  public string FFmpegArguments { get; set; }
+
+  /// MainWindowの左上座標(x)
+  public double TmpMainWindowLeft { get; set; }
+  /// MainWindowの左上座標(y)
+  public double TmpMainWindowTop { get; set; }
+  /// MainWindowの幅
+  public double TmpMainWindowWidth { get; set; }
+  /// MainWindowの高さ
+  public double TmpMainWindowHeight { get; set; }
+  /// MainWindowのウィンドウ状態
+  public WindowState TmpMainWindowState { get; set; }
+
+  /// AreaExpanderが開いている
+  public bool AreaIsExpanded { get; set; }
+  /// OptionsExpanderが開いている
+  public bool OptionsIsExpanded { get; set; }
+  /// ResizeMethodExpanderが開いている
+  public bool ResizeMethodIsExpanded { get; set; }
+  /// LayoutExpanderが開いている
+  public bool LayoutIsExpanded { get; set; }
+
+  /// プロファイル更新時に自動的に仮想メモリに書き込む
+  public bool AutoApply { get; set; }
+  /// LayoutEditでプレビュー表示を行う
+  public bool LayoutPreview { get; set; }
+  /// LayoutEditで枠線とキャプション描画を行う
+  public bool LayoutBorder { get; set; }
+  /// LayoutEditで移動・拡大縮小時にスナップ機能を使う
+  public bool LayoutSnap { get; set; }
+
+  /// コンパクト表示にする
+  public bool CompactView { get; set; }
+  /// 強制的にAeroをOnにする
+  public bool ForceAeroOn { get; set; }
+  /// 最後に使用したプロファイルを起動時に読み込む
+  public bool RestoreLastProfile { get; set; }
+
+  //===================================================================
+  // アクセサ
+  //===================================================================
+
+  /// プロファイルパスリストのindex番目を取得する
   public string GetRecentProfile(int index) {
     // 上下逆に変換
     int reverseIndex = Constants.RecentProfilesLength - index - 1;
     Debug.Assert(0 <= reverseIndex && reverseIndex < Constants.RecentProfilesLength);
     return this.reverseRecentProfiles[reverseIndex];
   }
+
+  /// プロファイルパスリストにパスを追加する
   public void AddRecentProfile(string profile) {
     // Queueに再構成してから配列に書き戻す
     var queue = new Queue<string>();
@@ -93,6 +138,8 @@ public class Options {
     // 配列に書き戻して終了
     queue.CopyTo(this.reverseRecentProfiles, 0);
   }
+  
+  /// プロファイルパスリストに直接indexを指定してパスを設定する
   internal void SetRecentProfile(int index, string profile) {
     // 上下逆に変換
     int reverseIndex = Constants.RecentProfilesLength - index - 1;
@@ -100,33 +147,11 @@ public class Options {
     this.reverseRecentProfiles[reverseIndex] = profile;
   }
 
-  public string FFmpegPath { get; set; }
-  public string FFmpegArguments { get; set; }
-
-  public double TmpMainWindowLeft { get; set; }
-  public double TmpMainWindowTop { get; set; }
-  public double TmpMainWindowWidth { get; set; }
-  public double TmpMainWindowHeight { get; set; }
-  public WindowState TmpMainWindowState { get; set; }
-
-  public bool AreaIsExpanded { get; set; }
-  public bool OptionsIsExpanded { get; set; }
-  public bool ResizeMethodIsExpanded { get; set; }
-  public bool LayoutIsExpanded { get; set; }
-
-  public bool AutoApply { get; set; }
-  public bool LayoutPreview { get; set; }
-  public bool LayoutBorder { get; set; }
-  public bool LayoutSnap { get; set; }
-
-  public bool CompactView { get; set; }
-  public bool ForceAeroOn { get; set; }
-  public bool RestoreLastProfile { get; set; }
-
   //===================================================================
-  // メンバ変数
+  // フィールド
   //===================================================================
 
+  /// 最近使用したプロファイルのパスのリスト
   /// @warning 先頭から古く、末尾が一番新しい
   private string[] reverseRecentProfiles;
 }

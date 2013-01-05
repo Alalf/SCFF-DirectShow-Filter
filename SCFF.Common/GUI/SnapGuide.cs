@@ -49,11 +49,10 @@ public class SnapGuide {
   //===================================================================
 
   /// 縦方向のスナップ補正
-  /// @pre 縦方向のスナップガイドは必ず1個以上
   /// @param[in,out] original 補正対象
   /// @return 補正されたかどうか
   public bool TryVerticalSnap(ref double original) {
-    Debug.Assert(this.verticalSnapGuides.Count > 0);
+    if (this.verticalSnapGuides.Count == 0) return false;
 
     // キャッシュ付き線形探索
     var guide = this.verticalSnapGuides.First;
@@ -77,11 +76,10 @@ public class SnapGuide {
   }
 
   /// 水平方向のスナップ補正
-  /// @pre 横方向のスナップガイドは必ず1個以上
   /// @param[in,out] original 補正対象
   /// @return 補正されたかどうか
   public bool TryHorizontalSnap(ref double original) {
-    Debug.Assert(this.horizontalSnapGuides.Count > 0);
+    if (this.horizontalSnapGuides.Count == 0) return false;
 
     // キャッシュ付き線形探索
     var guide = this.horizontalSnapGuides.First;

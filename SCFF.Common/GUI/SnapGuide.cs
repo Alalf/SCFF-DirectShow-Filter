@@ -21,6 +21,7 @@
 namespace SCFF.Common.GUI {
 
 using System.Collections.Generic;
+using System.Diagnostics;
 
 /// レイアウト用スナップガイド
 public class SnapGuide {  
@@ -48,8 +49,9 @@ public class SnapGuide {
   //===================================================================
 
   /// 縦方向のスナップ補正
+  /// @pre 縦方向のスナップガイドは必ず1個以上
   public bool TryVerticalSnap(ref double original) {
-    if (this.verticalSnapGuides.Count == 0) return false;
+    Debug.Assert(this.verticalSnapGuides.Count > 0);
 
     // キャッシュ付き線形探索
     var guide = this.verticalSnapGuides.First;
@@ -73,8 +75,9 @@ public class SnapGuide {
   }
 
   /// 水平方向のスナップ補正
+  /// @pre 横方向のスナップガイドは必ず1個以上
   public bool TryHorizontalSnap(ref double original) {
-    if (this.horizontalSnapGuides.Count == 0) return false;
+    Debug.Assert(this.horizontalSnapGuides.Count > 0);
 
     // キャッシュ付き線形探索
     var guide = this.horizontalSnapGuides.First;

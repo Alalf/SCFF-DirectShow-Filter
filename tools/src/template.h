@@ -1,4 +1,4 @@
-﻿// Copyright 2012 Alalf <alalf.iQLc_at_gmail.com>
+﻿// Copyright 2012-2013 Alalf <alalf.iQLc_at_gmail.com>
 //
 // This file is part of SCFF-DirectShow-Filter(SCFF DSF).
 //
@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file scff_imaging/splash_screen.h
-/// @brief scff_imaging::SplashScreenの宣言
+/// scff_imaging::SplashScreenの宣言
 
 #ifndef SCFF_DSF_SCFF_IMAGING_SPLASH_SCREEN_H_
 #define SCFF_DSF_SCFF_IMAGING_SPLASH_SCREEN_H_

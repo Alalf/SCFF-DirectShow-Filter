@@ -246,4 +246,4 @@
 -----------------------------------------------------------------------
 
 - https://github.com/Alalf/SCFF-DirectShow-Filter
-- Copyright (C) 2012 Alalf
+- Copyright (C) 2012-2013 Alalf

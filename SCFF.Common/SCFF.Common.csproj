@@ -46,7 +46,7 @@
     <Compile Include="Ext\User32.cs" />
     <Compile Include="GUI\HitTest.cs" />
     <Compile Include="GUI\MoveAndSize.cs" />
-    <Compile Include="GUI\ScreenCapture.cs" />
+    <Compile Include="GUI\ScreenCaptureRequest.cs" />
     <Compile Include="GUI\SnapGuide.cs" />
     <Compile Include="OptionsINIFile.cs" />
     <Compile Include="Processes.cs" />

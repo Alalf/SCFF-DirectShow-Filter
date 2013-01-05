@@ -69,7 +69,7 @@ public static class ScreenCapture {
 
     // HBitmapからBitmapSourceを作成
     BitmapSource bitmap = null;
-    using (var result = Common.GUI.ScreenCapture.Open(request)) {
+    using (var result = request.Execute()) {
       if (result == null) return bitmap;
 
       // HBitmapからBitmapSourceに変換

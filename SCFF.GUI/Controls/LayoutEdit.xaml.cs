@@ -66,6 +66,7 @@ public partial class LayoutEdit : UserControl, IUpdateByProfile, IUpdateByOption
   //===================================================================
 
   /// コンストラクタ
+  /// @todo(me) CompactViewで起動したときになぜかバックグラウンドでスレッドが実行されている
   public LayoutEdit() {
     InitializeComponent();
     this.Dispatcher.ShutdownStarted += OnShutdownStarted;
@@ -85,7 +86,7 @@ public partial class LayoutEdit : UserControl, IUpdateByProfile, IUpdateByOption
     this.screenCaptureTimer.Start();
 
     // BitmapSource更新用タイマーの準備
-    this.StartBitmapsUpdateTimer();
+    this.StartRedrawTimer();
   }
 
   /// Loadedイベントハンドラ
@@ -239,7 +240,7 @@ public partial class LayoutEdit : UserControl, IUpdateByProfile, IUpdateByOption
   private DispatcherTimer redrawTimer = new DispatcherTimer();
 
   /// 再描画タイマー起動
-  private void StartBitmapsUpdateTimer() {
+  private void StartRedrawTimer() {
     redrawTimer.Interval = TimeSpan.FromMilliseconds(redrawTimerPeriod);
     redrawTimer.Tick += redrawTimer_Tick;
     redrawTimer.Start();

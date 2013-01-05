@@ -21,6 +21,9 @@
 /// GUIに関連したクラス(ただしGUIアセンブリ非依存)をまとめた名前空間
 namespace SCFF.Common.GUI {
 
+using System;
+using SCFF.Common.Ext;
+
 //=====================================================================
 // 列挙型
 //=====================================================================
@@ -42,6 +45,10 @@ public enum HitModes {
 //=====================================================================
 // クラス・構造体
 //=====================================================================
+
+//---------------------------------------------------------------------
+// 相対座標系([0-1], [0-1])のPoint/Rect etc.
+//---------------------------------------------------------------------
 
 /// ([0-1], [0-1])の相対座標系のPoint
 public class RelativePoint {
@@ -92,5 +99,29 @@ public class RelativeMouseOffset {
   public double Right { get; private set; }
   /// レイアウト要素の下端を原点とした相対マウス座標(y)
   public double Bottom { get; private set; }
+}
+
+//---------------------------------------------------------------------
+// Win32 Handleのラッパークラス
+//---------------------------------------------------------------------
+
+/// Bitmapハンドルのラッパークラス
+/// @todo(me) SafeHandleで実装したほうがいいのか考える
+public class BitmapHandle : IDisposable {
+  /// コンストラクタ
+  public BitmapHandle (IntPtr bitmap) {
+    this.Bitmap = bitmap;
+  }
+
+  /// デストラクタ
+  public void Dispose() {
+    if (this.Bitmap != IntPtr.Zero) {
+      GDI32.DeleteObject(this.Bitmap);
+      this.Bitmap = IntPtr.Zero;
+    }
+  }
+
+  /// ラップしているHBitmap
+  public IntPtr Bitmap { get; private set; }
 }
 }   // namespace SCFF.Common.GUI

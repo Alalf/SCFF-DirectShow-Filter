@@ -54,8 +54,10 @@ public static class HitTest {
   // ヒットモード計算
   //===================================================================
 
-  /// 指定した座標からHitModesを返す
-  /// @pre 必ずHitModes.Resize*を返すことが可能なlayoutElement
+  /// レイアウト要素とマウス相対座標からHitModesを調べる
+  /// @param layoutElement レイアウト要素
+  /// @param mousePoint layoutElement内のマウス相対座標
+  /// @return HitModes.SizeXXXのいずれか
   private static HitModes GetHitMode(Profile.InputLayoutElement layoutElement,
       RelativePoint mousePoint) {
     // ---------------

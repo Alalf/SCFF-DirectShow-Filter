@@ -94,15 +94,15 @@ WARN_FORMAT            = "$file:$line: $text"
 WARN_LOGFILE           = doxygen_warnings.log
 
 # configuration options related to the input files
-# INPUT                  = scff_dsf scff_app scff_sandbox SCFF.Interprocess SCFF.Common SCFF.GUI
-# INPUT                  = scff_dsf SCFF.Interprocess SCFF.Common SCFF.GUI
+#INPUT                  = scff_dsf scff_app scff_sandbox SCFF.Interprocess SCFF.Common SCFF.GUI
+#INPUT                  = scff_dsf SCFF.Interprocess SCFF.Common SCFF.GUI
 INPUT                  = SCFF.Interprocess SCFF.Common SCFF.GUI
 INPUT_ENCODING         = UTF-8
 FILE_PATTERNS          =
 RECURSIVE              = YES
 EXCLUDE                =
 EXCLUDE_SYMLINKS       = NO
-EXCLUDE_PATTERNS       = */obj/*
+EXCLUDE_PATTERNS       = */obj/* */*.Designer.cs
 EXCLUDE_SYMBOLS        =
 EXAMPLE_PATH           =
 EXAMPLE_PATTERNS       =

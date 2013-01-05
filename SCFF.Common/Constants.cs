@@ -137,4 +137,4 @@ public static class Constants {
     {SWScaleFlags.Spline, 10}
   };
 }
-}
+}   // namespace SCFF.Common

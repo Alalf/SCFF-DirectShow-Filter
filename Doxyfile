@@ -48,7 +48,7 @@ SYMBOL_CACHE_SIZE      = 0
 LOOKUP_CACHE_SIZE      = 0
 
 # Build related configuration options
-EXTRACT_ALL            = YES
+EXTRACT_ALL            = NO
 EXTRACT_PRIVATE        = YES
 EXTRACT_PACKAGE        = YES
 EXTRACT_STATIC         = YES

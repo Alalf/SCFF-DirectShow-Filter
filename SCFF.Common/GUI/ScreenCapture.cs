@@ -16,17 +16,23 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file SCFF.Common/GUI/ScreenCapture.cs
-/// スクリーンキャプチャを取得するためのクラス
+/// スクリーンキャプチャクラス
 
 namespace SCFF.Common.GUI {
 
 using System;
 using SCFF.Common.Ext;
 
-/// スクリーンキャプチャに必要なリクエスト(App.Profileを使いたくないので)
+//=====================================================================
+// ScreenCaptureRequest
+//=====================================================================
+
+/// スクリーンキャプチャに必要なデータをまとめたリクエストクラス
 public class ScreenCaptureRequest {
+  /// コンストラクタ
   public ScreenCaptureRequest(int index, UIntPtr window,
-      int clippingX, int clippingY, int clippingWidth, int clippingHeight,
+      int clippingX, int clippingY,
+      int clippingWidth, int clippingHeight,
       bool showCursor, bool showLayeredWindow) {
     this.Index = index;
     this.Window = window;
@@ -38,18 +44,29 @@ public class ScreenCaptureRequest {
     this.ShowLayeredWindow = showLayeredWindow;
   }
 
+  /// レイアウト要素のIndex
   public int Index { get; private set; }
+  /// Windowハンドル
   public UIntPtr Window { get; private set; }
+  /// クリッピング領域の原点(x)
   public int ClippingX { get; private set; }
+  /// クリッピング領域の原点(y)
   public int ClippingY { get; private set; }
+  /// クリッピング領域の幅
   public int ClippingWidth { get; private set; }
+  /// クリッピング領域の高さ
   public int ClippingHeight { get; private set; }
+  /// マウスカーソルを取り込むか
   public bool ShowCursor { get; private set; }
+  /// レイヤードウィンドウまで取り込むか
   public bool ShowLayeredWindow { get; private set; }
 }
 
-/// スクリーンキャプチャ結果(単なるHBitmapラッパー)
-/// @warning 32bit限定
+//=====================================================================
+// ScreenCaptureResult
+//=====================================================================
+
+/// スクリーンキャプチャ結果を格納するHBitmapラッパークラス
 public class ScreenCaptureResult : IDisposable {
   /// コンストラクタ
   public ScreenCaptureResult (IntPtr bitmap) {
@@ -68,7 +85,11 @@ public class ScreenCaptureResult : IDisposable {
   public IntPtr Bitmap { get; private set; }
 }
 
-/// スクリーンキャプチャを取得するためのクラス
+//=====================================================================
+// ScreenCapture
+//=====================================================================
+
+/// スクリーンキャプチャクラス
 public static class ScreenCapture {
   /// スクリーンキャプチャした結果をHBitmapに格納する
   /// @warning 返り値はかならずDisposeするか、usingと一緒に使うこと

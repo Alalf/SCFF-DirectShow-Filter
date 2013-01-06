@@ -174,4 +174,4 @@ public partial class Profile {
     }
   }
 }
-}
+}   // namespace SCFF.Common

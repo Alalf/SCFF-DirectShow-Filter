@@ -16,12 +16,12 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file SCFF.Common/Profile.LayoutElement.cs
-/// プロファイル内を参照・操作するためのカーソルクラス(仮想)
+/// プロファイル内を参照・操作するための仮想カーソルクラス
 
 namespace SCFF.Common {
 
 public partial class Profile {
-  /// プロファイル内を参照・操作するためのカーソルクラス(仮想)
+  /// プロファイル内を参照・操作するための仮想カーソルクラス
   /// 
   /// - C#のインナークラスはC++のフレンドクラスと似たようなことができる！
   /// - プログラムから直接は利用してはいけないもの(this.profile.appendicesの内容で上書きされるため)
@@ -33,6 +33,9 @@ public partial class Profile {
   /// - ProfileはProcessに関連した情報を知ることはできない
   ///   - よってsampleWidth/sampleHeightの存在は仮定しないこと
   public abstract class LayoutElement {
+    //=================================================================
+    // コンストラクタ
+    //=================================================================
 
     /// コンストラクタ
     public LayoutElement(Profile profile, int index) {
@@ -40,14 +43,19 @@ public partial class Profile {
       this.index = index;
     }
 
+    //=================================================================
     // プロパティ
+    //=================================================================
 
     /// Index
     public int Index {
       get { return this.index; }
     }
 
+    //=================================================================
     // フィールド
+    //=================================================================
+
     private int index;          ///< Index
     protected Profile profile;  ///< 捜査対象のProfile
   }

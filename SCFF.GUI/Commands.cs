@@ -24,7 +24,9 @@ using System.Windows.Input;
 
 /// 機能の実行を依頼するためのRoutedCommands
 public static class Commands {
+  /// AeroのON/OFF
   public readonly static RoutedCommand SetAero = new RoutedCommand();
+  /// コンパクト表示の切り替え
   public readonly static RoutedCommand SetCompactView = new RoutedCommand();
 }
-}
+}   // namespace SCFF.GUI

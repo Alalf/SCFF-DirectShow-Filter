@@ -16,82 +16,38 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file SCFF.GUI/Controls/Area.xaml.cs
-/// クリッピング領域設定用
+/// クリッピング領域設定用UserControl
 
 namespace SCFF.GUI.Controls {
 
-using SCFF.Common;
-using SCFF.Common.Ext;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
+using SCFF.Common;
+using SCFF.Common.Ext;
 
-/// クリッピング領域設定用
+/// クリッピング領域設定用UserControl
 public partial class Area : UserControl, IUpdateByProfile {
+  //===================================================================
+  // 定数
+  //===================================================================
+
+  /// 仮想画面をスクリーン座標系で表したRect
+  /// @todo(me) 現在Desktop/DesktopListViewで使い回ししているが、問題が発生する可能性あり
+  private static readonly Rect VirtualScreenRect = new Rect {
+    X       = User32.GetSystemMetrics(User32.SM_XVIRTUALSCREEN),
+    Y       = User32.GetSystemMetrics(User32.SM_YVIRTUALSCREEN),
+    Width   = User32.GetSystemMetrics(User32.SM_CXVIRTUALSCREEN),
+    Height  = User32.GetSystemMetrics(User32.SM_CYVIRTUALSCREEN)
+  };
+
+  //===================================================================
+  // コンストラクタ/Loaded/Closing/ShutdownStartedイベントハンドラ
+  //===================================================================
 
   /// コンストラクタ
   public Area() {
     InitializeComponent();
-  }
-
-  //===================================================================
-  // IUpdateByProfileの実装
-  //===================================================================
-
-  /// @copydoc IUpdateByProfile::UpdateByCurrentProfile
-  public void UpdateByCurrentProfile() {
-    // Enabled/Disabled
-    switch (App.Profile.CurrentInputLayoutElement.WindowType) {
-      case WindowTypes.Normal: {
-        this.ListView.IsEnabled = true;
-        this.Desktop.IsEnabled = true;
-        break;
-      }
-      case WindowTypes.Desktop: {
-        this.ListView.IsEnabled = true;
-        this.Desktop.IsEnabled = false;
-        break;
-      }
-      case WindowTypes.DesktopListView: {
-        this.ListView.IsEnabled = false;
-        this.Desktop.IsEnabled = true;
-        break;
-      }
-    }
-
-    // checkboxはclickがあるのでeventハンドラをattach/detachする必要はない
-    this.Fit.IsChecked = App.Profile.CurrentInputLayoutElement.Fit;
-
-    // *Changed
-    this.DetachProfileChangedEventHandlers();
-    this.ClippingX.Text = App.Profile.CurrentInputLayoutElement.ClippingXWithFit.ToString();
-    this.ClippingY.Text = App.Profile.CurrentInputLayoutElement.ClippingYWithFit.ToString();
-    this.ClippingWidth.Text = App.Profile.CurrentInputLayoutElement.ClippingWidthWithFit.ToString();
-    this.ClippingHeight.Text = App.Profile.CurrentInputLayoutElement.ClippingHeightWithFit.ToString();
-    this.AttachProfileChangedEventHandlers();
-  }
-
-  /// @copydoc IUpdateByProfile::UpdateByEntireProfile
-  public void UpdateByEntireProfile() {
-    // current以外のデータを表示する必要はない
-    this.UpdateByCurrentProfile();
-  }
-
-  /// @copydoc IUpdateByProfile::AttachProfileChangedEventHandlers
-  public void AttachProfileChangedEventHandlers() {
-    this.ClippingX.TextChanged += clippingX_TextChanged;
-    this.ClippingY.TextChanged += clippingY_TextChanged;
-    this.ClippingWidth.TextChanged += clippingWidth_TextChanged;
-    this.ClippingHeight.TextChanged += clippingHeight_TextChanged;
-  }
-
-  /// @copydoc IUpdateByProfile::DetachProfileChangedEventHandlers
-  public void DetachProfileChangedEventHandlers() {
-    this.ClippingX.TextChanged -= clippingX_TextChanged;
-    this.ClippingY.TextChanged -= clippingY_TextChanged;
-    this.ClippingWidth.TextChanged -= clippingWidth_TextChanged;
-    this.ClippingHeight.TextChanged -= clippingHeight_TextChanged;
   }
 
   //===================================================================
@@ -102,13 +58,17 @@ public partial class Area : UserControl, IUpdateByProfile {
   // *Changed/Checked/Unchecked以外
   //-------------------------------------------------------------------
 
-  private void fit_Click(object sender, RoutedEventArgs e) {
+  /// Fit: Click
+  private void Fit_Click(object sender, RoutedEventArgs e) {
     if (!this.Fit.IsChecked.HasValue) return;
 
     App.Profile.CurrentOutputLayoutElement.Fit = (bool)this.Fit.IsChecked;
     this.UpdateByCurrentProfile();
   }
 
+  //-------------------------------------------------------------------
+
+  /// 現在編集中のレイアウト要素のクリッピング領域/Fitオプションを変更する
   private void CommonAreaSelect(Rect boundScreenRect, WindowTypes nextWindowType) {
     // ダイアログの準備
     var dialog = new AreaSelectWindow();
@@ -201,6 +161,7 @@ public partial class Area : UserControl, IUpdateByProfile {
     UpdateCommands.UpdateTargetWindowByCurrentProfile.Execute(null, null);
   }
 
+  /// AreaSelect: Click
   private void AreaSelect_Click(object sender, RoutedEventArgs e) {
     var boundScreenRect = new Rect {
       X = App.Profile.CurrentInputLayoutElement.ScreenWindowX,
@@ -211,35 +172,30 @@ public partial class Area : UserControl, IUpdateByProfile {
     this.CommonAreaSelect(boundScreenRect, WindowTypes.Normal);
   }
 
-  /// 仮想ディスプレイのデータをRECT化したプロパティ
-  /// @todo(me) 現在Desktop/DesktopListViewで使い回ししているが、問題が発生する可能性あり
-  private readonly Rect virtualScreenRect = new Rect {
-    X       = User32.GetSystemMetrics(User32.SM_XVIRTUALSCREEN),
-    Y       = User32.GetSystemMetrics(User32.SM_YVIRTUALSCREEN),
-    Width   = User32.GetSystemMetrics(User32.SM_CXVIRTUALSCREEN),
-    Height  = User32.GetSystemMetrics(User32.SM_CYVIRTUALSCREEN)
-  };
-
+  /// ListView: Click
   private void ListView_Click(object sender, RoutedEventArgs e) {
-    this.CommonAreaSelect(this.virtualScreenRect, WindowTypes.DesktopListView);
+    this.CommonAreaSelect(Area.VirtualScreenRect, WindowTypes.DesktopListView);
   }
 
+  /// Desktop: Click
   private void Desktop_Click(object sender, RoutedEventArgs e) {
-    this.CommonAreaSelect(this.virtualScreenRect, WindowTypes.Desktop);
+    this.CommonAreaSelect(Area.VirtualScreenRect, WindowTypes.Desktop);
   }
 
   //-------------------------------------------------------------------
   // Checked/Unchecked
   //-------------------------------------------------------------------
 
-  private void fit_Checked(object sender, RoutedEventArgs e) {
+  /// Fit: Checked
+  private void Fit_Checked(object sender, RoutedEventArgs e) {
     this.ClippingX.IsEnabled = false;
     this.ClippingY.IsEnabled = false;
     this.ClippingWidth.IsEnabled = false;
     this.ClippingHeight.IsEnabled = false;
   }
 
-  private void fit_Unchecked(object sender, RoutedEventArgs e) {
+  /// Fit: Unchecked
+  private void Fit_Unchecked(object sender, RoutedEventArgs e) {
     this.ClippingX.IsEnabled = true;
     this.ClippingY.IsEnabled = true;
     this.ClippingWidth.IsEnabled = true;
@@ -247,10 +203,12 @@ public partial class Area : UserControl, IUpdateByProfile {
   }
 
   //-------------------------------------------------------------------
-  // *Changed
+  // *Changed/Collapsed/Expanded
   //-------------------------------------------------------------------
 
-  private bool TryParseClippingParameters(TextBox textBox, int lowerBound, int upperBound, out int parsedValue) {
+  /// 下限・上限つきでテキストボックスから値を取得する
+  private bool TryParseClippingParameters(TextBox textBox,
+      int lowerBound, int upperBound, out int parsedValue) {
     // Parse
     if (!int.TryParse(textBox.Text, out parsedValue)) {
       parsedValue = lowerBound;
@@ -272,7 +230,8 @@ public partial class Area : UserControl, IUpdateByProfile {
     return true;
   }
 
-  private void clippingX_TextChanged(object sender, TextChangedEventArgs e) {
+  /// ClippingX: TextChanged
+  private void ClippingX_TextChanged(object sender, TextChangedEventArgs e) {
     var lowerBound = 0;
     var upperBound = App.Profile.CurrentInputLayoutElement.WindowWidth;
     int parsedValue;
@@ -282,7 +241,8 @@ public partial class Area : UserControl, IUpdateByProfile {
     }
   }
 
-  private void clippingY_TextChanged(object sender, TextChangedEventArgs e) {
+  /// ClippingY: TextChanged
+  private void ClippingY_TextChanged(object sender, TextChangedEventArgs e) {
     var lowerBound = 0;
     var upperBound = App.Profile.CurrentInputLayoutElement.WindowHeight;
     int parsedValue;
@@ -292,7 +252,8 @@ public partial class Area : UserControl, IUpdateByProfile {
     }
   }
 
-  private void clippingWidth_TextChanged(object sender, TextChangedEventArgs e) {
+  /// ClippingWidth: TextChanged
+  private void ClippingWidth_TextChanged(object sender, TextChangedEventArgs e) {
     var lowerBound = 0;
     var upperBound = App.Profile.CurrentInputLayoutElement.WindowWidth;
     int parsedValue;
@@ -302,7 +263,8 @@ public partial class Area : UserControl, IUpdateByProfile {
     }
   }
 
-  private void clippingHeight_TextChanged(object sender, TextChangedEventArgs e) {
+  /// ClippingHeight: TextChanged
+  private void ClippingHeight_TextChanged(object sender, TextChangedEventArgs e) {
     var lowerBound = 0;
     var upperBound = App.Profile.CurrentInputLayoutElement.WindowHeight;
     int parsedValue;
@@ -310,6 +272,65 @@ public partial class Area : UserControl, IUpdateByProfile {
       // Profileに書き込み
       App.Profile.CurrentOutputLayoutElement.ClippingHeightWithoutFit = parsedValue;
     }
+  }
+
+  //===================================================================
+  // IUpdateByProfileの実装
+  //===================================================================
+
+  /// @copydoc IUpdateByProfile::UpdateByCurrentProfile
+  public void UpdateByCurrentProfile() {
+    // Enabled/Disabled
+    switch (App.Profile.CurrentInputLayoutElement.WindowType) {
+      case WindowTypes.Normal: {
+        this.ListView.IsEnabled = true;
+        this.Desktop.IsEnabled = true;
+        break;
+      }
+      case WindowTypes.Desktop: {
+        this.ListView.IsEnabled = true;
+        this.Desktop.IsEnabled = false;
+        break;
+      }
+      case WindowTypes.DesktopListView: {
+        this.ListView.IsEnabled = false;
+        this.Desktop.IsEnabled = true;
+        break;
+      }
+    }
+
+    // checkboxはclickがあるのでeventハンドラをattach/detachする必要はない
+    this.Fit.IsChecked = App.Profile.CurrentInputLayoutElement.Fit;
+
+    // *Changed
+    this.DetachProfileChangedEventHandlers();
+    this.ClippingX.Text = App.Profile.CurrentInputLayoutElement.ClippingXWithFit.ToString();
+    this.ClippingY.Text = App.Profile.CurrentInputLayoutElement.ClippingYWithFit.ToString();
+    this.ClippingWidth.Text = App.Profile.CurrentInputLayoutElement.ClippingWidthWithFit.ToString();
+    this.ClippingHeight.Text = App.Profile.CurrentInputLayoutElement.ClippingHeightWithFit.ToString();
+    this.AttachProfileChangedEventHandlers();
+  }
+
+  /// @copydoc IUpdateByProfile::UpdateByEntireProfile
+  public void UpdateByEntireProfile() {
+    // current以外のデータを表示する必要はない
+    this.UpdateByCurrentProfile();
+  }
+
+  /// @copydoc IUpdateByProfile::AttachProfileChangedEventHandlers
+  public void AttachProfileChangedEventHandlers() {
+    this.ClippingX.TextChanged += ClippingX_TextChanged;
+    this.ClippingY.TextChanged += ClippingY_TextChanged;
+    this.ClippingWidth.TextChanged += ClippingWidth_TextChanged;
+    this.ClippingHeight.TextChanged += ClippingHeight_TextChanged;
+  }
+
+  /// @copydoc IUpdateByProfile::DetachProfileChangedEventHandlers
+  public void DetachProfileChangedEventHandlers() {
+    this.ClippingX.TextChanged -= ClippingX_TextChanged;
+    this.ClippingY.TextChanged -= ClippingY_TextChanged;
+    this.ClippingWidth.TextChanged -= ClippingWidth_TextChanged;
+    this.ClippingHeight.TextChanged -= ClippingHeight_TextChanged;
   }
 }
 }   // namespace SCFF.GUI.Controls

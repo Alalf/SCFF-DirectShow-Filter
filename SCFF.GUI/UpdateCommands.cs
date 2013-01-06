@@ -24,13 +24,28 @@ using System.Windows.Input;
 
 /// Profile/OptionsがUpdateされたことを他のコントロールに知らせるためのRoutedCommands
 public static class UpdateCommands {
+  //===================================================================
   // Profile
+  //===================================================================
+
+  /// MainWindowのUpdateByEntireProfileを呼び出す
   public readonly static RoutedCommand UpdateMainWindowByEntireProfile = new RoutedCommand();
+  /// LayoutEditのUpdateByEntireProfileを呼び出す
   public readonly static RoutedCommand UpdateLayoutEditByEntireProfile = new RoutedCommand();
+  /// TargetWindowと更新が必要なUserControlのUpdateByCurrentProfileを呼び出す
   public readonly static RoutedCommand UpdateTargetWindowByCurrentProfile = new RoutedCommand();
+  /// LayoutParameterのUpdateByCurrentProfileを呼び出す
   public readonly static RoutedCommand UpdateLayoutParameterByCurrentProfile = new RoutedCommand();
 
+  //===================================================================
   // Options
+  //===================================================================
+
+  /// LayoutEditのUpdateByOptionsを呼び出す
   public readonly static RoutedCommand UpdateLayoutEditByOptions = new RoutedCommand();
+
+  //===================================================================
+  // RuntimeOptions
+  //===================================================================
 }
-}
+}   // namespace SCFF.GUI

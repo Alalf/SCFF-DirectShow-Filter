@@ -137,7 +137,7 @@
             <RowDefinition Height="30"/>
           </Grid.RowDefinitions>
           <Button Margin="5,0" Height="20" VerticalAlignment="Center" FontSize="10">Splash</Button>
-          <CheckBox x:Name="AutoApply" Grid.Column="2" Margin="5,0" Height="16" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="9" Click="autoApply_Click">Auto</CheckBox>
+          <CheckBox x:Name="AutoApply" Grid.Column="2" Margin="5,0" Height="16" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="9" Click="AutoApply_Click">Auto</CheckBox>
           <Button Margin="5,0" Grid.Column="3" Height="20" VerticalAlignment="Center"  FontSize="10">Apply</Button>
         </Grid>
       </StackPanel>

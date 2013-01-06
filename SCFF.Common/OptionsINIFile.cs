@@ -84,8 +84,11 @@ public static class OptionsINIFile {
   //===================================================================
 
   /// ファイル入力
+  ///
   /// アプリケーションの設定からUIに関連するものを読み込む
   /// 存在しない場合は勝手にデフォルト値が読み込まれる・・・はず
+  /// @param[out] options ファイルから入力したデータの設定先
+  /// @return 正常終了
   public static bool Load(Options options) {
     // ファイル読み込み
     var lines = new List<string>();

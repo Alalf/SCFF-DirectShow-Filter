@@ -49,7 +49,6 @@
     <Compile Include="GUI\ScreenCaptureRequest.cs" />
     <Compile Include="GUI\SnapGuide.cs" />
     <Compile Include="OptionsINIFile.cs" />
-    <Compile Include="Processes.cs" />
     <Compile Include="Profile.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Imaging\Utilities.cs" />

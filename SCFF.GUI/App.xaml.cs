@@ -30,18 +30,25 @@ public partial class App : Application {
   // シングルトン
   //===================================================================
 
-  /// アプリケーションの設定を格納するシングルトン
+  /// Singleton: アプリケーション設定
   private static Options options = new Options();
-  /// アプリケーションの設定を格納するシングルトンを取得
+  /// アプリケーション設定を取得
   public static Options Options {
-    get { return options; }
+    get { return App.options; }
   }
 
-  /// 現在編集中のプロファイルを格納するシングルトン
+  /// Singleton: アプリケーション実行時設定
+  private static RuntimeOptions runtimeOptions = new RuntimeOptions();
+  /// アプリケーション実行時設定を取得
+  public static RuntimeOptions RuntimeOptions {
+    get { return App.runtimeOptions; }
+  }
+
+  /// Singleton: 現在編集中のプロファイル
   private static Profile profile = new Profile();
-  /// 現在編集中のプロファイルを格納するシングルトンを取得
+  /// 現在編集中のプロファイルを取得
   public static Profile Profile {
-    get { return profile; }
+    get { return App.profile; }
   }
 
   //===================================================================
@@ -49,7 +56,9 @@ public partial class App : Application {
   //===================================================================
 
   /// アプリケーション起動時
-  private void App_Startup(object sender, StartupEventArgs e) {
+  /// @param sender 使用しない
+  /// @param e コマンドライン引数(Args)を参照可能
+  private void OnStartup(object sender, StartupEventArgs e) {
     // Options
     OptionsINIFile.Load(App.Options);
 
@@ -63,11 +72,13 @@ public partial class App : Application {
   }
 
   /// アプリケーション終了時
-  private void App_Exit(object sender, ExitEventArgs e) {
+  /// @param sender 使用しない
+  /// @param e 終了コード(ApplicationExitCode)の参照・設定が可能
+  private void OnExit(object sender, ExitEventArgs e) {
     // Profileの保存は明示的にMainWindow上で行うのでここでは何もしない
 
     // Options
     OptionsINIFile.Save(App.Options);
   }
 }
-}
+}   // namespace SCFF.GUI

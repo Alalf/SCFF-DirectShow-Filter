@@ -22,15 +22,13 @@ namespace SCFF.Common {
 
 /// プロファイルのINIファイル入出力機能
 public static class ProfileINIFile {
-
   //===================================================================
   // 定数
   //===================================================================
 
+  /// プロファイル保存時のファイル名のPrefix
   private const string ProfilePathPrefix = "SCFF.Common.Profile.";
+  /// プロファイル保存時のファイル名のSuffix(=拡張子)
   private const string ProfilePathSuffix = ".ini";
-
-
-
 }
-}
+}   // namespace SCFF.Common

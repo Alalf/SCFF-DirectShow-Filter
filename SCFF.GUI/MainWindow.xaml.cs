@@ -20,18 +20,17 @@
 
 namespace SCFF.GUI {
 
-using Microsoft.Win32;
-using Microsoft.Windows.Shell;
-using SCFF.Common;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
+using Microsoft.Win32;
+using Microsoft.Windows.Shell;
+using SCFF.Common;
 
 /// MainWindowのコードビハインド
 public partial class MainWindow : Window, IUpdateByProfile, IUpdateByOptions {
-
   //===================================================================
-  // コンストラクタ/Loaded/ShutdownStartedイベントハンドラ
+  // コンストラクタ/Loaded/Closing/ShutdownStartedイベントハンドラ
   //===================================================================
 
   /// コンストラクタ
@@ -49,21 +48,84 @@ public partial class MainWindow : Window, IUpdateByProfile, IUpdateByOptions {
     this.SetCompactView();
   }
 
-  /// ウィンドウがアクティブになったとき
-  private void OnActivated(object sender, System.EventArgs e) {
-    /// @todo(me) スクリーンキャプチャを再開する・・・？まだ考慮の余地あり
-    ///           App.RuntimeOptionsに該当するデータを保存しておく感じかな？
-  }
-
-  /// ウィンドウがアクティブでなくなったとき
-  private void OnDeactivated(object sender, System.EventArgs e) {
-    /// @todo(me) スクリーンキャプチャを停止する
-    ///           App.RuntimeOptionsに該当するデータを保存しておく感じかな？
-  }
-
   /// アプリケーション終了時に発生するClosingイベントハンドラ
   private void OnClosing(object sender, System.ComponentModel.CancelEventArgs e) {
     this.SaveTemporaryOptions();
+  }
+
+  //===================================================================
+  // イベントハンドラ
+  //===================================================================
+
+  /// Deactivated
+  /// @param sender 使用しない
+  /// @param e 使用しない
+  private void OnDeactivated(object sender, System.EventArgs e) {
+    /// @todo(me) スクリーンキャプチャをの更新頻度を下げる
+    ///           App.RuntimeOptionsに該当するデータを保存しておく感じかな？
+  }
+
+  /// Activated
+  /// @param sender 使用しない
+  /// @param e 使用しない
+  private void OnActivated(object sender, System.EventArgs e) {
+    /// @todo(me) スクリーンキャプチャを更新頻度を元に戻す
+    ///           App.RuntimeOptionsに該当するデータを保存しておく感じかな？
+  }
+
+  //-------------------------------------------------------------------
+  // *Changed/Checked/Unchecked以外
+  //-------------------------------------------------------------------
+
+  /// AutoApply: Click
+  private void AutoApply_Click(object sender, RoutedEventArgs e) {
+    if (!this.AutoApply.IsChecked.HasValue) return;
+    App.Options.AutoApply = (bool)this.AutoApply.IsChecked;
+  }
+
+  //-------------------------------------------------------------------
+  // Checked/Unchecked
+  //-------------------------------------------------------------------
+
+  //-------------------------------------------------------------------
+  // *Changed/Collapsed/Expanded
+  //-------------------------------------------------------------------
+
+  /// AreaExpander: Collapsed
+  private void AreaExpander_Collapsed(object sender, RoutedEventArgs e) {
+    App.Options.AreaIsExpanded = false;
+  }
+  /// AreaExpander: Expanded
+  private void AreaExpander_Expanded(object sender, RoutedEventArgs e) {
+    App.Options.AreaIsExpanded = true;
+  }
+  /// OptionsExpander: Collapsed
+  private void OptionsExpander_Collapsed(object sender, RoutedEventArgs e) {
+    App.Options.OptionsIsExpanded = false;
+  }
+  /// OptionsExpander: Expanded
+  private void OptionsExpander_Expanded(object sender, RoutedEventArgs e) {
+    App.Options.OptionsIsExpanded = true;
+  }
+  /// ResizeMethodExpander: Collapsed
+  private void ResizeMethodExpander_Collapsed(object sender, RoutedEventArgs e) {
+    App.Options.ResizeMethodIsExpanded = false;
+  }
+  /// ResizeMethodExpander: Expanded
+  private void ResizeMethodExpander_Expanded(object sender, RoutedEventArgs e) {
+    App.Options.ResizeMethodIsExpanded = true;
+  }
+  /// LayoutExpander: Collapsed
+  private void LayoutExpander_Collapsed(object sender, RoutedEventArgs e) {
+    App.Options.LayoutIsExpanded = false;
+
+    UpdateCommands.UpdateLayoutEditByOptions.Execute(null, null);
+  }
+  /// LayoutExpander: Expanded
+  private void LayoutExpander_Expanded(object sender, RoutedEventArgs e) {
+    App.Options.LayoutIsExpanded = true;
+
+    UpdateCommands.UpdateLayoutEditByOptions.Execute(null, null);
   }
 
   //===================================================================
@@ -129,63 +191,6 @@ public partial class MainWindow : Window, IUpdateByProfile, IUpdateByOptions {
   }
 
   //===================================================================
-  // イベントハンドラ
-  //===================================================================
-
-  //-------------------------------------------------------------------
-  // *Changed/Checked/Unchecked以外
-  //-------------------------------------------------------------------
-
-  private void autoApply_Click(object sender, RoutedEventArgs e) {
-    if (!this.AutoApply.IsChecked.HasValue) return;
-    App.Options.AutoApply = (bool)this.AutoApply.IsChecked;
-  }
-
-  //-------------------------------------------------------------------
-  // Checked/Unchecked
-  //-------------------------------------------------------------------
-
-  //-------------------------------------------------------------------
-  // *Changed
-  //-------------------------------------------------------------------
-
-  private void AreaExpander_Collapsed(object sender, RoutedEventArgs e) {
-    App.Options.AreaIsExpanded = false;
-  }
-
-  private void AreaExpander_Expanded(object sender, RoutedEventArgs e) {
-    App.Options.AreaIsExpanded = true;
-  }
-
-  private void OptionsExpander_Collapsed(object sender, RoutedEventArgs e) {
-    App.Options.OptionsIsExpanded = false;
-  }
-
-  private void OptionsExpander_Expanded(object sender, RoutedEventArgs e) {
-    App.Options.OptionsIsExpanded = true;
-  }
-
-  private void ResizeMethodExpander_Collapsed(object sender, RoutedEventArgs e) {
-    App.Options.ResizeMethodIsExpanded = false;
-  }
-
-  private void ResizeMethodExpander_Expanded(object sender, RoutedEventArgs e) {
-    App.Options.ResizeMethodIsExpanded = true;
-  }
-
-  private void LayoutExpander_Collapsed(object sender, RoutedEventArgs e) {
-    App.Options.LayoutIsExpanded = false;
-
-    UpdateCommands.UpdateLayoutEditByOptions.Execute(null, null);
-  }
-
-  private void LayoutExpander_Expanded(object sender, RoutedEventArgs e) {
-    App.Options.LayoutIsExpanded = true;
-
-    UpdateCommands.UpdateLayoutEditByOptions.Execute(null, null);
-  }
-
-  //===================================================================
   // IUpdateByProfileの実装
   //===================================================================
 
@@ -222,50 +227,16 @@ public partial class MainWindow : Window, IUpdateByProfile, IUpdateByOptions {
   }
 
   //===================================================================
-  // SCFF.GUI.UpdateCommandsハンドラ
+  // コマンドイベントハンドラ
   //===================================================================
 
-  private void UpdateMainWindowByEntireProfile_Executed(object sender, ExecutedRoutedEventArgs e) {
-    this.UpdateByEntireProfile();
-  }
+  //-------------------------------------------------------------------
+  // ApplicationCommands
+  //-------------------------------------------------------------------
 
-  private void UpdateLayoutEditByEntireProfile_Executed(object sender, ExecutedRoutedEventArgs e) {
-    this.LayoutEdit.UpdateByEntireProfile();
-  }
-
-  private void UpdateTargetWindowByCurrentProfile_Executed(object sender, ExecutedRoutedEventArgs e) {
-    this.TargetWindow.UpdateByCurrentProfile();
-    this.Area.UpdateByCurrentProfile();
-    this.LayoutEdit.UpdateByCurrentProfile();
-    this.LayoutParameter.UpdateByCurrentProfile();
-  }
-
-  private void UpdateLayoutParameterByCurrentProfile_Executed(object sender, ExecutedRoutedEventArgs e) {
-    this.LayoutParameter.UpdateByCurrentProfile();
-  }
-
-  private void UpdateLayoutEditByOptions_Executed(object sender, ExecutedRoutedEventArgs e) {
-    this.LayoutEdit.UpdateByOptions();
-  }
-
-  //===================================================================
-  // ApplicationCommandsハンドラ
-  //===================================================================
-
-  private void Save_Executed(object sender, ExecutedRoutedEventArgs e) {
-    /// @todo(me) すでに保存されていない場合はダイアログをだす
-    var save = new SaveFileDialog();
-    save.Title = "SCFF.GUI";
-    save.Filter = "SCFF.GUI Profile|*.SCFF.GUI.profile";
-    var saveResult = save.ShowDialog();
-    if (saveResult.HasValue && (bool)saveResult) {
-      /// @todo(me) 実装
-      MessageBox.Show(save.FileName);
-      App.Options.AddRecentProfile(save.FileName);
-      this.MainMenu.UpdateByOptions();
-    }
-  }
-
+  /// New
+  /// @param sender 使用しない
+  /// @param e 使用しない
   private void New_Executed(object sender, ExecutedRoutedEventArgs e) {
     var result = MessageBox.Show("Do you want to save changes?",
                                  "SCFF.GUI",
@@ -297,10 +268,33 @@ public partial class MainWindow : Window, IUpdateByProfile, IUpdateByOptions {
     }
   }
 
+  /// Open
+  /// @param sender 使用しない
+  /// @param e 使用しない
   private void Open_Executed(object sender, ExecutedRoutedEventArgs e) {
     /// @todo(me) Newと似たコードが必要だがかなりめんどくさい。あとでかく
   }
 
+  /// Save
+  /// @param sender 使用しない
+  /// @param e 使用しない
+  private void Save_Executed(object sender, ExecutedRoutedEventArgs e) {
+    /// @todo(me) すでに保存されていない場合はダイアログをだす
+    var save = new SaveFileDialog();
+    save.Title = "SCFF.GUI";
+    save.Filter = "SCFF.GUI Profile|*.SCFF.GUI.profile";
+    var saveResult = save.ShowDialog();
+    if (saveResult.HasValue && (bool)saveResult) {
+      /// @todo(me) 実装
+      MessageBox.Show(save.FileName);
+      App.Options.AddRecentProfile(save.FileName);
+      this.MainMenu.UpdateByOptions();
+    }
+  }
+
+  /// SaveAs
+  /// @param sender 使用しない
+  /// @param e 使用しない
   private void SaveAs_Executed(object sender, ExecutedRoutedEventArgs e) {
     var save = new SaveFileDialog();
     save.Title = "SCFF.GUI";
@@ -314,50 +308,98 @@ public partial class MainWindow : Window, IUpdateByProfile, IUpdateByOptions {
     }
   }
 
-  //===================================================================
-  // Windows.Shell.SystemCommandsハンドラ
-  //===================================================================
+  //-------------------------------------------------------------------
+  // Windows.Shell.SystemCommands
+  //-------------------------------------------------------------------
   
+  /// CloseWindow
 	private void CloseWindow_Executed(object sender, ExecutedRoutedEventArgs e) {
 		SystemCommands.CloseWindow(this);
 	}
-
+  /// MaximizeWindow
 	private void MaximizeWindow_Executed(object sender, ExecutedRoutedEventArgs e) {
 		SystemCommands.MaximizeWindow(this);
 	}
-
+  /// MinimizeWindow
 	private void MinimizeWindow_Executed(object sender, ExecutedRoutedEventArgs e) {
 		SystemCommands.MinimizeWindow(this);
 	}
-
+  /// RestoreWindow
 	private void RestoreWindow_Executed(object sender, ExecutedRoutedEventArgs e) {
 		SystemCommands.RestoreWindow(this);
 	}
 
-  //===================================================================
-  // SCFF.GUI.Commandsハンドラ
-  //===================================================================
+  //-------------------------------------------------------------------
+  // SCFF.GUI.UpdateCommands
+  //-------------------------------------------------------------------
 
+  /// @copydoc SCFF::GUI::UpdateCommands::UpdateMainWindowByEntireProfile
+  /// @param sender 使用しない
+  /// @param e 使用しない
+  private void UpdateMainWindowByEntireProfile_Executed(object sender, ExecutedRoutedEventArgs e) {
+    this.UpdateByEntireProfile();
+  }
+  /// @copydoc SCFF::GUI::UpdateCommands::UpdateLayoutEditByEntireProfile
+  /// @param sender 使用しない
+  /// @param e 使用しない
+  private void UpdateLayoutEditByEntireProfile_Executed(object sender, ExecutedRoutedEventArgs e) {
+    this.LayoutEdit.UpdateByEntireProfile();
+  }
+  /// @copydoc SCFF::GUI::UpdateCommands::UpdateTargetWindowByCurrentProfile
+  /// @param sender 使用しない
+  /// @param e 使用しない
+  private void UpdateTargetWindowByCurrentProfile_Executed(object sender, ExecutedRoutedEventArgs e) {
+    this.TargetWindow.UpdateByCurrentProfile();
+    this.Area.UpdateByCurrentProfile();
+    this.LayoutEdit.UpdateByCurrentProfile();
+    this.LayoutParameter.UpdateByCurrentProfile();
+  }
+  /// @copydoc SCFF::GUI::UpdateCommands::UpdateLayoutParameterByCurrentProfile
+  /// @param sender 使用しない
+  /// @param e 使用しない
+  private void UpdateLayoutParameterByCurrentProfile_Executed(object sender, ExecutedRoutedEventArgs e) {
+    this.LayoutParameter.UpdateByCurrentProfile();
+  }
+  /// @copydoc SCFF::GUI::UpdateCommands::UpdateLayoutEditByOptions
+  /// @param sender 使用しない
+  /// @param e 使用しない
+  private void UpdateLayoutEditByOptions_Executed(object sender, ExecutedRoutedEventArgs e) {
+    this.LayoutEdit.UpdateByOptions();
+  }
+
+  //-------------------------------------------------------------------
+  // SCFF.GUI.Commands
+  //-------------------------------------------------------------------
+
+  /// AeroをON/OFF
   private void SetAero() {
     // @todo(me) 実装
   }
 
+  /// AeroのON/OFFが可能か
   private bool CanUseAero() {
     // @todo(me) 実装
     return true;
   }
 
+  /// @copydoc SetAero
+  /// @param sender 使用しない
+  /// @param e 使用しない
   private void SetAero_Executed(object sender, ExecutedRoutedEventArgs e) {
     Debug.WriteLine("Command [SetAero]:");
     this.SetAero();
   }
 
+  /// @copydoc CanUseAero
+  /// @param sender 使用しない
+  /// @param[out] e 実行可能か(CanExecute)を設定可能
   private void SetAero_CanExecute(object sender, CanExecuteRoutedEventArgs e) {
     e.CanExecute = this.CanUseAero();
   }
 
   //-------------------------------------------------------------------
 
+  /// コンパクト表示切替
   private void SetCompactView() {
     if (App.Options.CompactView) {
       this.OptionsExpander.Visibility = Visibility.Collapsed;
@@ -371,6 +413,9 @@ public partial class MainWindow : Window, IUpdateByProfile, IUpdateByOptions {
     }
   }
 
+  /// @copydoc SetCompactView
+  /// @param sender 使用しない
+  /// @param e 使用しない
   private void SetCompactView_Executed(object sender, ExecutedRoutedEventArgs e) {
     Debug.WriteLine("Command [SetCompactView]:");
     this.SetCompactView();

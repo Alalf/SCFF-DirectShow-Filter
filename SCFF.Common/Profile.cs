@@ -94,7 +94,7 @@ public partial class Profile {
   }
 
   //===================================================================
-  // ResetProfile
+  // Profile全体のリセット
   //===================================================================
 
   /// 配列をクリア
@@ -122,7 +122,7 @@ public partial class Profile {
   }
 
   //===================================================================
-  // Add/Remove LayoutElement
+  // LayoutElementの追加と削除
   //===================================================================
 
   /// レイアウト要素が追加可能か
@@ -197,7 +197,7 @@ public partial class Profile {
   }
 
   //===================================================================
-  // Change Current
+  // 現在選択中のIndexを変更する
   //===================================================================
 
   /// 現在選択中のIndexを変更する
@@ -206,24 +206,24 @@ public partial class Profile {
   }
 
   //===================================================================
-  // Update Message
+  // Messageを更新
   //===================================================================
 
   /// サンプルの幅と高さを指定してthis.messageを更新する
-  public void UpdateMessage(int sampleWidth, int sampleHeight) {}
+  /// @param sampleWidth サンプルの幅
+  /// @param sampleHeight サンプルの高さ
+  public void UpdateMessage(int sampleWidth, int sampleHeight) {
+  /// @todo(me) 実装する。ただしこれは仮想メモリ出力用イテレータの機能な気がする
+  }
 
   //===================================================================
-  // アクセサ
+  // プロパティ
   //===================================================================
 
   /// タイムスタンプ
   public Int64 Timestamp {
     get { return this.message.Timestamp; }
   } 
-  /// タイムスタンプを現在自国で更新する
-  public void UpdateTimestamp() {
-    this.message.Timestamp = DateTime.UtcNow.Ticks;
-  }
   /// レイアウトの種類
   public LayoutTypes LayoutType {
     get { return (LayoutTypes)this.message.LayoutType; }
@@ -233,6 +233,15 @@ public partial class Profile {
   public int LayoutElementCount {
     get { return this.message.LayoutElementCount; }
     set { this.message.LayoutElementCount = value; }
+  }
+
+  //===================================================================
+  // アクセサ
+  //===================================================================
+
+  /// タイムスタンプを現在時刻で更新する
+  public void UpdateTimestamp() {
+    this.message.Timestamp = DateTime.UtcNow.Ticks;
   }
 
   //===================================================================
@@ -294,4 +303,4 @@ public partial class Profile {
   /// @attention messageLayoutParametersにあわせて非初期化済みにした
   private AdditionalLayoutParameter[] additionalLayoutParameters;
 }
-}
+}   // namespace SCFF.Common

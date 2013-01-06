@@ -64,7 +64,7 @@ public enum RotateDirections {
   Degrees270    = Interprocess.RotateDirections.Degrees270,
 }
 
-/// 追加レイアウトパラメータ
+/// SCFF.Interprocess.LayoutParameter以外のレイアウト要素に必要なデータ
 public class AdditionalLayoutParameter {
   /// Windowタイプ: 標準状態 or 最小化 or 最大化
   public WindowTypes WindowType { get; set; }

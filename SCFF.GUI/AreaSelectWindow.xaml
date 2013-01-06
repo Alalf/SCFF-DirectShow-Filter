@@ -11,7 +11,7 @@
         ResizeMode="CanResizeWithGrip"
         FontSize="9"
         Title="AreaSelectWindow" Width="320" Height="240"
-        MouseDown="AreaSelectWindow_MouseDown">
+        MouseDown="OnMouseDown">
   <Window.CommandBindings>
     <!-- ApplicationCommands -->
     <CommandBinding Command="Save" Executed="Save_Executed"/>

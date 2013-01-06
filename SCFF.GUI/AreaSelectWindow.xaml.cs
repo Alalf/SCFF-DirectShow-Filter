@@ -20,35 +20,61 @@
 
 namespace SCFF.GUI {
 
-using SCFF.Common;
 using System.Windows;
 using System.Windows.Input;
 
 /// AreaSelectWindowのコードビハインド
 public partial class AreaSelectWindow : Window {
+  //===================================================================
+  // コンストラクタ/Loaded/Closing/ShutdownStartedイベントハンドラ
+  //===================================================================
+
+  /// コンストラクタ
   public AreaSelectWindow() {
     InitializeComponent();
 
     this.MouseLeftButtonDown += (sender, e) => this.DragMove();
   }
 
+  //===================================================================
+  // イベントハンドラ
+  //===================================================================
+
+  /// MouseDown
+  private void OnMouseDown(object sender, MouseButtonEventArgs e) {
+    if (e.ClickCount != 2) return;
+
+    // Double Click
+    this.DialogResult = true;
+    this.Close();
+  }
+
+  //===================================================================
+  // コマンドイベントハンドラ
+  //===================================================================
+
+  //-------------------------------------------------------------------
+  // ApplicationCommands
+  //-------------------------------------------------------------------
+
+  /// Save
+  private void Save_Executed(object sender, ExecutedRoutedEventArgs e) {
+    e.Handled = true;
+
+    this.DialogResult = true;
+    this.Close();
+  } 
+
+  //-------------------------------------------------------------------
+  // Windows.Shell.SystemCommands
+  //-------------------------------------------------------------------
+
+  /// CloseWindow
   private void CloseWindow_Executed(object sender, ExecutedRoutedEventArgs e) {
+    e.Handled = true;
+
     this.DialogResult = false;
     this.Close();
   }
-
-  private void AreaSelectWindow_MouseDown(object sender, MouseButtonEventArgs e) {
-    if (e.ClickCount == 2) {
-      // Double Click
-      this.DialogResult = true;
-      this.Close();
-    }
-  }
-
-  private void Save_Executed(object sender, ExecutedRoutedEventArgs e) {
-    this.DialogResult = true;
-    this.Close();
-    e.Handled = true;
-  } 
 }
 }   // namespace SCFF.GUI

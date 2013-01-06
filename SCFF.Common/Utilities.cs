@@ -26,17 +26,11 @@ using SCFF.Common.Ext;
 
 /// SCFF.Commonモジュール共通で利用する機能
 public static class Utilities {
+  //===================================================================
+  // 特定のOSに依存しないDesktopListViewWindowの取得
+  //===================================================================
 
-  /// Desktop(VirtualScreen)座標からScreen座標へ変換する
-  private static void DesktopToScreen(int desktopX, int desktopY,
-                                      out int screenX, out int screenY) {
-    // desktopPointは仮想画面上の座標(左上が(0,0)であることが保障されている)
-    // screenPointはプライマリモニタの左上の座標が(0,0)なので-になることもある
-    screenX = desktopX + User32.GetSystemMetrics(User32.SM_XVIRTUALSCREEN);
-    screenY = desktopY + User32.GetSystemMetrics(User32.SM_YVIRTUALSCREEN);
-  }
-
-  /// 特定のOSに依存せずにDesktopListViewWindowを取得する
+  /// 特定のOSに依存しないDesktopListViewWindowの取得
   ///
   /// デスクトップのHWNDの階層関係は以下のとおり:
   /// - GetDesktopWindow()
@@ -93,10 +87,6 @@ public static class Utilities {
     }
   }
 
-  //-------------------------------------------------------------------
-  // private staticメソッド
-  //-------------------------------------------------------------------
-
   /// EnumerateWindowの結果を格納するポインタ
   private static UIntPtr enumerateWindowResult = UIntPtr.Zero;
   /// FindWindowExに渡されるWindow列挙関数
@@ -114,4 +104,4 @@ public static class Utilities {
     return false;
   }
 }
-}
+}   // namespace SCFF.Common

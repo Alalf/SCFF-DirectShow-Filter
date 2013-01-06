@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file SCFF.Common/Ext/User32.cs
-/// SCFFで利用するUser32.dllのAPIをまとめたクラス
+/// @copydoc SCFF::Common::Ext::User32
 
 /// 外部APIをまとめた名前空間
 namespace SCFF.Common.Ext {

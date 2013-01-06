@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file SCFF.GUI/App.xaml.cs
-/// Applicationクラス
+/// @copydoc SCFF::GUI::App
 
 /// SCFF DSFのGUIクライアント
 namespace SCFF.GUI {

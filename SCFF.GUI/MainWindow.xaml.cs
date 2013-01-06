@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file SCFF.GUI/MainWindow.xaml.cs
-/// MainWindowのコードビハインド
+/// @copydoc SCFF::GUI::MainWindow
 
 namespace SCFF.GUI {
 

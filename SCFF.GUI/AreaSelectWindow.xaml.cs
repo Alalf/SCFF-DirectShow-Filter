@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file SCFF.GUI/AreaSelectWindow.xaml.cs
-/// AreaSelectWindowのコードビハインド
+/// @copydoc SCFF::GUI::AreaSelectWindow
 
 namespace SCFF.GUI {
 

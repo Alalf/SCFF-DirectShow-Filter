@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file SCFF.Common/Ext/GDI32.cs
-/// SCFFで利用するGDI32.dllのAPIをまとめたクラス
+/// @copydoc SCFF::Common::Ext::GDI32
 
 namespace SCFF.Common.Ext {
 

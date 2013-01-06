@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file SCFF.Common/Imaging/Utilities.cs
-/// scff_imaging/utilities.ccとhの移植版
+/// @copydoc SCFF::Common::Imaging::Utilities
 
 /// scff_imagingモジュールの C# 版(オリジナルは C++ )
 namespace SCFF.Common.Imaging {
@@ -24,6 +24,7 @@ namespace SCFF.Common.Imaging {
 using System.Diagnostics;
 
 /// 画像の操作に便利な関数をまとめたクラス
+/// (scff_imaging/utilities.ccとhの移植版)
 /// @attention C#では関数をまとめる為に名前空間は使えない
 /// @warning WPFでは座標のほとんどが整数型ではなく浮動小数点型
 public static class Utilities {

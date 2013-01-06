@@ -13,9 +13,9 @@
       <Button x:Name="Add" Content="Add" Margin="3,0,0,0" Click="Add_Click" VerticalAlignment="Top"/>
       <Button x:Name="Remove" Content="Remove" Margin="3,0,0,0" Click="Remove_Click" IsEnabled="False"/>
       <Separator/>
-      <CheckBox x:Name="LayoutPreview" Content="Preview" Margin="3,0,0,0" Click="layoutPreview_Click"/>
-      <CheckBox x:Name="LayoutBorder" Content="Border" Margin="3,0,0,0" Click="layoutBorder_Click"/>
-      <CheckBox x:Name="LayoutSnap" Content="Snap" Margin="3,0,8,0" Click="layoutSnap_Click"/>
+      <CheckBox x:Name="LayoutPreview" Content="Preview" Margin="3,0,0,0" Click="LayoutPreview_Click"/>
+      <CheckBox x:Name="LayoutBorder" Content="Border" Margin="3,0,0,0" Click="LayoutBorder_Click"/>
+      <CheckBox x:Name="LayoutSnap" Content="Snap" Margin="3,0,8,0" Click="LayoutSnap_Click"/>
     </ToolBar>
   </ToolBarTray>
 </UserControl>

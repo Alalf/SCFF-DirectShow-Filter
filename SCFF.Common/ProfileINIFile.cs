@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file SCFF.Common/ProfileINIFile.cs
-/// プロファイルのINIファイル入出力機能
+/// @copydoc SCFF::Common::ProfileINIFile
 
 namespace SCFF.Common {
 

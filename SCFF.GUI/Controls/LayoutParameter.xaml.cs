@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file SCFF.GUI/Controls/LayoutParameter.xaml.cs
-/// 数値を指定してレイアウト配置を調整するためのUserControl
+/// @copydoc SCFF::GUI::Controls::LayoutParameter
 
 namespace SCFF.GUI.Controls {
 
@@ -27,7 +27,7 @@ using SCFF.Common;
 /// 数値を指定してレイアウト配置を調整するためのUserControl
 public partial class LayoutParameter : UserControl, IUpdateByProfile {
   //===================================================================
-  // コンストラクタ/Loaded/ShutdownStartedイベントハンドラ
+  // コンストラクタ/Loaded/Closing/ShutdownStartedイベントハンドラ
   //===================================================================
 
   /// コンストラクタ
@@ -144,14 +144,15 @@ public partial class LayoutParameter : UserControl, IUpdateByProfile {
   //===================================================================
 
   /// GroupBox.Headerの最大文字数
-  private const int MaxHeaderLength = 60;
+  private const int maxHeaderLength = 60;
 
   /// @copydoc IUpdateByProfile::UpdateByCurrentProfile
   public void UpdateByCurrentProfile() {
     var header = string.Format("Layout {0:D}: {1}",
         App.Profile.CurrentInputLayoutElement.Index + 1,
         App.Profile.CurrentInputLayoutElement.WindowCaption);
-    this.GroupBox.Header = header.Substring(0, Math.Min(header.Length, MaxHeaderLength));
+    this.GroupBox.Header = header.Substring(0,
+        Math.Min(header.Length, LayoutParameter.maxHeaderLength));
 
     /// @todo(me) プロセス情報はMainWindowから取ってこれるので、それを参照にしてBoundX/BoundYも更新
     this.BoundX.Text = App.Profile.CurrentInputLayoutElement.BoundLeft(Constants.DefaultPreviewWidth).ToString();

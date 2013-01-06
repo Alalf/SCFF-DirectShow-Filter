@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file SCFF.Common/RuntimeOptions.cs
-/// アプリケーションの実行時設定
+/// @copydoc SCFF::Common::RuntimeOptions
 
 namespace SCFF.Common {
 

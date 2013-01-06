@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file SCFF.Common/Ext/DWMAPI.cs
-/// SCFFで利用するDWMAPI.dllのAPIをまとめたクラス
+/// @copydoc SCFF::Common::Ext::DWMAPI
 
 namespace SCFF.Common.Ext {
 

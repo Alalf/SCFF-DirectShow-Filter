@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file SCFF.GUI/Controls/LayoutTab.xaml.cs
-/// レイアウト要素の切り替えと個数の表示を行うTabControl管理用UserControl
+/// @copydoc SCFF::GUI::Controls::LayoutTab
 
 namespace SCFF.GUI.Controls {
 
@@ -26,7 +26,7 @@ using System.Windows.Controls;
 /// レイアウト要素の切り替えと個数の表示を行うTabControl管理用UserControl
 public partial class LayoutTab : UserControl, IUpdateByProfile {
   //===================================================================
-  // コンストラクタ/Loaded/ShutdownStartedイベントハンドラ
+  // コンストラクタ/Loaded/Closing/ShutdownStartedイベントハンドラ
   //===================================================================
 
   /// コンストラクタ

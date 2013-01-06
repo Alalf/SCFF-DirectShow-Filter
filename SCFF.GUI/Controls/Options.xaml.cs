@@ -16,24 +16,75 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file SCFF.GUI/Controls/Options.xaml.cs
-/// 拡大縮小時のオプション
+/// @copydoc SCFF::GUI::Controls::Options
 
 namespace SCFF.GUI.Controls {
 
 using System.Windows;
 using System.Windows.Controls;
 
-/// 拡大縮小時のオプション
+/// SWScale以外の設定用UserControl
 public partial class Options : UserControl, IUpdateByProfile {
-
   //===================================================================
-  // コンストラクタ/Loaded/ShutdownStartedイベントハンドラ
+  // コンストラクタ/Loaded/Closing/ShutdownStartedイベントハンドラ
   //===================================================================
 
   /// コンストラクタ
   public Options() {
     InitializeComponent();
   }
+
+  //===================================================================
+  // イベントハンドラ
+  //===================================================================
+
+  //-------------------------------------------------------------------
+  // *Changed/Checked/Unchecked以外
+  //-------------------------------------------------------------------
+
+  /// ShowCursor: Click
+  /// @param sender 使用しない
+  /// @param e 使用しない
+  private void ShowCursor_Click(object sender, RoutedEventArgs e) {
+    if (!this.ShowCursor.IsChecked.HasValue) return;
+
+    App.Profile.CurrentOutputLayoutElement.ShowCursor = (bool)this.ShowCursor.IsChecked;
+  }
+
+  /// ShowLayeredWindow: Click
+  /// @param sender 使用しない
+  /// @param e 使用しない
+  private void ShowLayeredWindow_Click(object sender, RoutedEventArgs e) {
+    if (!this.ShowLayeredWindow.IsChecked.HasValue) return;
+
+    App.Profile.CurrentOutputLayoutElement.ShowLayeredWindow = (bool)this.ShowLayeredWindow.IsChecked;
+  }
+
+  /// KeepAspectRatio: Click
+  /// @param sender 使用しない
+  /// @param e 使用しない
+  private void KeepAspectRatio_Click(object sender, RoutedEventArgs e) {
+    if (!this.KeepAspectRatio.IsChecked.HasValue) return;
+
+    App.Profile.CurrentOutputLayoutElement.KeepAspectRatio = (bool)this.KeepAspectRatio.IsChecked;
+  }
+
+  /// Stretch: Click
+  /// @param sender 使用しない
+  /// @param e 使用しない
+  private void Stretch_Click(object sender, RoutedEventArgs e) {
+    if (!this.Stretch.IsChecked.HasValue) return;
+ 
+    App.Profile.CurrentOutputLayoutElement.Stretch = (bool)this.Stretch.IsChecked;
+  }
+
+  //-------------------------------------------------------------------
+  // Checked/Unchecked
+  //-------------------------------------------------------------------
+
+  //-------------------------------------------------------------------
+  // *Changed/Collapsed/Expanded
+  //-------------------------------------------------------------------
 
   //===================================================================
   // IUpdateByProfileの実装
@@ -64,37 +115,5 @@ public partial class Options : UserControl, IUpdateByProfile {
   public void DetachProfileChangedEventHandlers() {
     // nop
   }
-
-  //===================================================================
-  // イベントハンドラ
-  //===================================================================
-
-  //-------------------------------------------------------------------
-  // *Changed/Checked/Unchecked以外
-  //-------------------------------------------------------------------
-
-  private void showCursor_Click(object sender, RoutedEventArgs e) {
-    if (!this.ShowCursor.IsChecked.HasValue) return;
-
-    App.Profile.CurrentOutputLayoutElement.ShowCursor = (bool)this.ShowCursor.IsChecked;
-  }
-
-  private void showLayeredWindow_Click(object sender, RoutedEventArgs e) {
-    if (!this.ShowLayeredWindow.IsChecked.HasValue) return;
-
-    App.Profile.CurrentOutputLayoutElement.ShowLayeredWindow = (bool)this.ShowLayeredWindow.IsChecked;
-  }
-
-  private void keepAspectRatio_Click(object sender, RoutedEventArgs e) {
-    if (!this.KeepAspectRatio.IsChecked.HasValue) return;
-
-    App.Profile.CurrentOutputLayoutElement.KeepAspectRatio = (bool)this.KeepAspectRatio.IsChecked;
-  }
-
-  private void stretch_Click(object sender, RoutedEventArgs e) {
-    if (!this.Stretch.IsChecked.HasValue) return;
- 
-    App.Profile.CurrentOutputLayoutElement.Stretch = (bool)this.Stretch.IsChecked;
-  }
 }
-}
+}   // namespace SCFF.GUI.Controls

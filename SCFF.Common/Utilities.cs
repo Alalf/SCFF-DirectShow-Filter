@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file SCFF.Common/Utilities.cs
-/// SCFF.Commonモジュール共通で利用する機能
+/// @copydoc SCFF::Common::Utilities
 
 namespace SCFF.Common {
 

@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file SCFF.GUI/Controls/ScreenCapture.cs
-/// スクリーンキャプチャデータをBitmapSource化
+/// @copydoc SCFF::GUI::Controls::ScreenCapture
 
 namespace SCFF.GUI.Controls {
 
@@ -46,17 +46,17 @@ public static class ScreenCapture {
     // scale計算
     double scaleX = 1.0;
     double scaleY = 1.0;
-    if (original.PixelWidth <= MaxBitmapWidth &&
-        original.PixelHeight <= MaxBitmapHeight) {
+    if (original.PixelWidth <= ScreenCapture.MaxBitmapWidth &&
+        original.PixelHeight <= ScreenCapture.MaxBitmapHeight) {
       // 最大サイズよりちいさい
       // nop
     } else if (original.PixelWidth < original.PixelHeight) {
       // 最大サイズオーバー＋縦長＝縦を短く
-      scaleY = (double)MaxBitmapHeight / original.PixelHeight;
+      scaleY = (double)ScreenCapture.MaxBitmapHeight / original.PixelHeight;
       scaleX = scaleY;
     } else {
       // 最大サイズオーバー＋横長＝横を短く
-      scaleX = (double)MaxBitmapWidth / original.PixelWidth;
+      scaleX = (double)ScreenCapture.MaxBitmapWidth / original.PixelWidth;
       scaleY = scaleX;
     }
     
@@ -64,6 +64,8 @@ public static class ScreenCapture {
   }
 
   /// キャプチャしたHBitmapをBitmapSource(Freezed)にして返す
+  /// @param request スクリーンキャプチャ設定をまとめたリクエスト
+  /// @return スクリーンキャプチャ結果が格納されたBitmapSource
   public static BitmapSource Capture(ScreenCaptureRequest request) {
     Debug.Assert(request != null);
 

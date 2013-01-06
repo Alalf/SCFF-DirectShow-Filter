@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file SCFF.Common/Profile.cs
-/// レイアウト設定などをまとめたプロファイル
+/// @copydoc SCFF::Common::Profile
 
 /// SCFF共有クラスライブラリ
 namespace SCFF.Common {

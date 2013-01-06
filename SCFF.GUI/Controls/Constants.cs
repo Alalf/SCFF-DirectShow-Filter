@@ -61,35 +61,45 @@ public static class BrushesAndPens {
   /// staticコンストラクタ
   static BrushesAndPens() {
     // Brushes
-    CurrentNormalBrush = Brushes.DarkOrange;
-    CurrentNormalBrush.Freeze();
-    NormalBrush = new SolidColorBrush(Color.FromArgb(0x99, 0xFF, 0x8C, 0x00));
-    NormalBrush.Freeze();
-    CurrentDesktopListViewBrush = Brushes.DarkCyan;
-    CurrentDesktopListViewBrush.Freeze();
-    DesktopListViewBrush = new SolidColorBrush(Color.FromArgb(0x99, 0x00, 0x8B, 0x8B));
-    DesktopListViewBrush.Freeze();
-    CurrentDesktopBrush = Brushes.DarkGreen;
-    CurrentDesktopBrush.Freeze();
-    DesktopBrush = new SolidColorBrush(Color.FromArgb(0x99, 0x00, 0x64, 0x00));
-    DesktopBrush.Freeze();
+    BrushesAndPens.CurrentNormalBrush = Brushes.DarkOrange;
+    BrushesAndPens.CurrentNormalBrush.Freeze();
+    BrushesAndPens.NormalBrush =
+        new SolidColorBrush(Color.FromArgb(0x99, 0xFF, 0x8C, 0x00));
+    BrushesAndPens.NormalBrush.Freeze();
+    BrushesAndPens.CurrentDesktopListViewBrush = Brushes.DarkCyan;
+    BrushesAndPens.CurrentDesktopListViewBrush.Freeze();
+    BrushesAndPens.DesktopListViewBrush =
+        new SolidColorBrush(Color.FromArgb(0x99, 0x00, 0x8B, 0x8B));
+    BrushesAndPens.DesktopListViewBrush.Freeze();
+    BrushesAndPens.CurrentDesktopBrush = Brushes.DarkGreen;
+    BrushesAndPens.CurrentDesktopBrush.Freeze();
+    BrushesAndPens.DesktopBrush =
+        new SolidColorBrush(Color.FromArgb(0x99, 0x00, 0x64, 0x00));
+    BrushesAndPens.DesktopBrush.Freeze();
 
     // Pens
-    CurrentNormalPen = new Pen(CurrentNormalBrush, penThickness);
-    CurrentNormalPen.Freeze();
-    NormalPen = new Pen(NormalBrush, penThickness);
-    NormalPen.Freeze();
-    CurrentDesktopListViewPen = new Pen(CurrentDesktopListViewBrush, penThickness);
-    CurrentDesktopListViewPen.Freeze();
-    DesktopListViewPen = new Pen(DesktopListViewBrush, penThickness);
-    DesktopListViewPen.Freeze();
-    CurrentDesktopPen = new Pen(CurrentDesktopBrush, penThickness);
-    CurrentDesktopPen.Freeze();
-    DesktopPen = new Pen(DesktopBrush, penThickness);
-    DesktopPen.Freeze();
+    BrushesAndPens.CurrentNormalPen =
+        new Pen(BrushesAndPens.CurrentNormalBrush, BrushesAndPens.penThickness);
+    BrushesAndPens.CurrentNormalPen.Freeze();
+    BrushesAndPens.NormalPen =
+        new Pen(BrushesAndPens.NormalBrush, BrushesAndPens.penThickness);
+    BrushesAndPens.NormalPen.Freeze();
+    BrushesAndPens.CurrentDesktopListViewPen =
+        new Pen(BrushesAndPens.CurrentDesktopListViewBrush, BrushesAndPens.penThickness);
+    BrushesAndPens.CurrentDesktopListViewPen.Freeze();
+    BrushesAndPens.DesktopListViewPen =
+        new Pen(BrushesAndPens.DesktopListViewBrush, BrushesAndPens.penThickness);
+    BrushesAndPens.DesktopListViewPen.Freeze();
+    BrushesAndPens.CurrentDesktopPen =
+        new Pen(BrushesAndPens.CurrentDesktopBrush, BrushesAndPens.penThickness);
+    BrushesAndPens.CurrentDesktopPen.Freeze();
+    BrushesAndPens.DesktopPen =
+        new Pen(BrushesAndPens.DesktopBrush, BrushesAndPens.penThickness);
+    BrushesAndPens.DesktopPen.Freeze();
 
-    DropShadowPen = new Pen(Brushes.Black, penThickness);
-    DropShadowPen.Freeze();
+    BrushesAndPens.DropShadowPen =
+        new Pen(Brushes.Black, BrushesAndPens.penThickness);
+    BrushesAndPens.DropShadowPen.Freeze();
   }
 }
 }   // SCFF.GUI.Controls

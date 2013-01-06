@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file SCFF.Common/Profile.LayoutElement.cs
-/// プロファイル内を参照・操作するための仮想カーソルクラス
+/// @copydoc SCFF::Common::Profile::LayoutElement
 
 namespace SCFF.Common {
 

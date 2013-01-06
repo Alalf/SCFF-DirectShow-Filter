@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file SCFF.GUI/UpdateCommands.cs
-/// Profile/OptionsがUpdateされたことを他のコントロールに知らせるためのRoutedCommands
+/// @copydoc SCFF::GUI::UpdateCommands
 
 namespace SCFF.GUI {
 

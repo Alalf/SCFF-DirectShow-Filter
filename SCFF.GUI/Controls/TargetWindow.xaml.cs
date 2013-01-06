@@ -16,25 +16,20 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file SCFF.GUI/Controls/TargetWindow.xaml.cs
-/// Window取り込み対象の設定用UserControl
+/// @copydoc SCFF::GUI::Controls::TargetWindow
 
 namespace SCFF.GUI.Controls {
 
-using SCFF.Common;
-using SCFF.Common.Ext;
 using System;
 using System.Diagnostics;
 using System.Windows.Controls;
 using System.Windows.Media;
+using SCFF.Common;
+using SCFF.Common.Ext;
+using SCFF.Common.GUI;
 
 /// Window取り込み対象の設定用UserControl
 public partial class TargetWindow : UserControl, IUpdateByProfile {
-
-  //===================================================================
-  // privateメンバ
-  //===================================================================
-  private IntPtr dummyPen = IntPtr.Zero;
-
   //===================================================================
   // コンストラクタ/Loaded/ShutdownStartedイベントハンドラ
   //===================================================================
@@ -42,51 +37,23 @@ public partial class TargetWindow : UserControl, IUpdateByProfile {
   /// コンストラクタ
   public TargetWindow() {
     InitializeComponent();
-
-    Debug.WriteLine("TargetWindow: Dummy Pen is created");
-    this.dummyPen = GDI32.CreatePen(GDI32.PS_NULL, 1, 0x00000000);
     this.Dispatcher.ShutdownStarted += OnShutdownStarted;
   }
 
   /// Dispatcher.ShutdownStartedイベントハンドラ
   private void OnShutdownStarted(object sender, EventArgs e) {
-    if (this.dummyPen != IntPtr.Zero) {
-      Debug.WriteLine("TargetWindow: Dummy Pen is deleted");
-      GDI32.DeleteObject(this.dummyPen);
-      this.dummyPen = IntPtr.Zero;
-    }
+    this.nullPen.Dispose();
   }
 
   //===================================================================
-  // IUpdateByProfileの実装
+  // イベントハンドラ
   //===================================================================
 
-  /// @copydoc IUpdateByProfile::UpdateByCurrentProfile
-  public void UpdateByCurrentProfile() {
-    // *Changedイベントハンドラがないのでそのまま代入するだけ
-    this.WindowCaption.Text = App.Profile.CurrentInputLayoutElement.WindowCaption;
-  }
+  //-------------------------------------------------------------------
+  // *Changed/Checked/Unchecked以外
+  //-------------------------------------------------------------------
 
-  /// @copydoc IUpdateByProfile::UpdateByEntireProfile
-  public void UpdateByEntireProfile() {
-    // 編集するのはCurrentのみ
-    this.UpdateByCurrentProfile();
-  }
-
-  /// @copydoc IUpdateByProfile::AttachProfileChangedEventHandlers
-  public void AttachProfileChangedEventHandlers() {
-    // nop
-  }
-
-  /// @copydoc IUpdateByProfile::DetachProfileChangedEventHandlers
-  public void DetachProfileChangedEventHandlers() {
-    // nop
-  }
-
-  //===================================================================
-  // (Button)Clickイベントハンドラ
-  //===================================================================
-
+  /// プロファイルを更新
   private void ModifyProfile(WindowTypes nextWindowType, UIntPtr nextTargetWindow) {
     // Window
     switch (nextWindowType) {
@@ -125,25 +92,23 @@ public partial class TargetWindow : UserControl, IUpdateByProfile {
     UpdateCommands.UpdateTargetWindowByCurrentProfile.Execute(null, null);
   }
 
+  /// Desktop: Click
+  /// @param sender 使用しない
+  /// @param e 使用しない
   private void Desktop_Click(object sender, System.Windows.RoutedEventArgs e) {
     // Profileを更新
     this.ModifyProfile(WindowTypes.Desktop, UIntPtr.Zero);
   }
 
+  /// ListView: Click
+  /// @param sender 使用しない
+  /// @param e 使用しない
   private void ListView_Click(object sender, System.Windows.RoutedEventArgs e) {
     // Profileを更新
     this.ModifyProfile(WindowTypes.DesktopListView, UIntPtr.Zero);
   }
 
-  //===================================================================
-  // PreviewMouseDown/MouseMove/MouseUpイベントハンドラ
-  //===================================================================
-
-  // 状態変数
-  private bool dragHereMode = false;
-  private UIntPtr currentTargetWindow = UIntPtr.Zero;
-  private IntPtr currentTargetDC = IntPtr.Zero;
-  private Brush originalBorderBrush;
+  //-------------------------------------------------------------------
 
   /// 現在のターゲットウィンドウをXORで塗りつぶす
   private void XorTargetRect() {
@@ -151,7 +116,7 @@ public partial class TargetWindow : UserControl, IUpdateByProfile {
     User32.GetClientRect(this.currentTargetWindow, out currentTargetRect);
     
     var originalDrawMode = GDI32.SetROP2(this.currentTargetDC, GDI32.R2_XORPEN);
-    var originalPen = GDI32.SelectObject(this.currentTargetDC, this.dummyPen);
+    var originalPen = GDI32.SelectObject(this.currentTargetDC, this.nullPen.Pen);
 
     GDI32.Rectangle(this.currentTargetDC,
         currentTargetRect.Left, currentTargetRect.Top,
@@ -174,6 +139,9 @@ public partial class TargetWindow : UserControl, IUpdateByProfile {
     }
   }
 
+  /// DragHere: PreviewMouseDown
+  /// @param sender 使用しない
+  /// @param e 使用しない
   private void DragHere_PreviewMouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e) {
     this.originalBorderBrush = this.DragHere.BorderBrush;
     this.DragHere.BorderBrush = Brushes.DarkOrange;
@@ -183,6 +151,9 @@ public partial class TargetWindow : UserControl, IUpdateByProfile {
     this.currentTargetDC = IntPtr.Zero;
   }
 
+  /// DragHere: PreviewMouseMove
+  /// @param sender 使用しない
+  /// @param e Client座標系でのマウス座標(GetPosition(...))の取得が可能
   private void DragHere_PreviewMouseMove(object sender, System.Windows.Input.MouseEventArgs e) {
    if (!this.dragHereMode) {
       // nop
@@ -217,7 +188,9 @@ public partial class TargetWindow : UserControl, IUpdateByProfile {
     this.XorTargetRect();
   }
 
-
+  /// DragHere: PreviewMouseUp
+  /// @param sender 使用しない
+  /// @param e Client座標系でのマウス座標(GetPosition(...))の取得が可能
   private void DragHere_PreviewMouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e) {
     this.DragHere.BorderBrush = this.originalBorderBrush;
 
@@ -232,5 +205,59 @@ public partial class TargetWindow : UserControl, IUpdateByProfile {
     // Profileを更新
     this.ModifyProfile(WindowTypes.Normal, nextTargetWindow);
   }
+
+  //-------------------------------------------------------------------
+  // Checked/Unchecked
+  //-------------------------------------------------------------------
+
+  //-------------------------------------------------------------------
+  // *Changed/Collapsed/Expanded
+  //-------------------------------------------------------------------
+
+  //===================================================================
+  // IUpdateByProfileの実装
+  //===================================================================
+
+  /// @copydoc IUpdateByProfile::UpdateByCurrentProfile
+  public void UpdateByCurrentProfile() {
+    // *Changedイベントハンドラがないのでそのまま代入するだけ
+    this.WindowCaption.Text = App.Profile.CurrentInputLayoutElement.WindowCaption;
+  }
+
+  /// @copydoc IUpdateByProfile::UpdateByEntireProfile
+  public void UpdateByEntireProfile() {
+    // 編集するのはCurrentのみ
+    this.UpdateByCurrentProfile();
+  }
+
+  /// @copydoc IUpdateByProfile::AttachProfileChangedEventHandlers
+  public void AttachProfileChangedEventHandlers() {
+    // nop
+  }
+
+  /// @copydoc IUpdateByProfile::DetachProfileChangedEventHandlers
+  public void DetachProfileChangedEventHandlers() {
+    // nop
+  }
+
+  //===================================================================
+  // フィールド
+  //===================================================================
+
+  /// AreaSelectのXORによる塗りつぶし時に枠線を描画しない用のペン
+  private NullPen nullPen = new NullPen();
+
+  //-------------------------------------------------------------------
+  // DragHere_PreviewMouseDown/Move/Up時の状態変数
+  //-------------------------------------------------------------------
+
+  /// DragHereボタンが押されたか
+  private bool dragHereMode = false;
+  /// 現在のマウスカーソル上のWindowハンドル
+  private UIntPtr currentTargetWindow = UIntPtr.Zero;
+  /// 現在のマウスカーソル上のWindowハンドルのDC
+  private IntPtr currentTargetDC = IntPtr.Zero;
+  /// DragHere中に枠線をオレンジ色で塗りつぶしているのでその復帰用
+  private Brush originalBorderBrush;
 }
-}
+}   // namespace SCFF.GUI.Controls

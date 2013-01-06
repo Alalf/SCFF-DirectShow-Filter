@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file SCFF.Common/Options.cs
-/// プロファイル以外のアプリケーション設定
+/// @copydoc SCFF::Common::Options
 
 namespace SCFF.Common {
 

@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file SCFF.Common/GUI/SnapGuide.cs
-/// レイアウト用スナップガイド
+/// @copydoc SCFF::Common::GUI::SnapGuide
 
 namespace SCFF.Common.GUI {
 

@@ -16,53 +16,30 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file SCFF.GUI/Controls/ScreenCaptureTimer.cs
-/// スクリーンキャプチャデータを取得するためのタイマー管理クラス
+/// @copydoc SCFF::GUI::Controls::ScreenCaptureTimer
 
 namespace SCFF.GUI.Controls {
 
-using SCFF.Common.GUI;
 using System;
 using System.Diagnostics;
 using System.Threading;
 using System.Windows.Media.Imaging;
+using SCFF.Common.GUI;
 
 /// スクリーンキャプチャデータを取得するためのスレッド管理クラス
 public class ScreenCaptureTimer {
-
-  /// タイマー
-  private Timer captureTimer = null;
-
-  /// タイマーの間隔
-  private double timerPeriod;
-
-  //-------------------------------------------------------------------
-  // 複数のスレッドで共有するデータ
-  //-------------------------------------------------------------------
-
-  /// 共有ロック
-  private readonly object sharedLock = new Object();
-
-  /// 共有(自R/他W): プレビュー表示中かどうか
-  private bool isSuspended = false;
-  
-  /// 共有(自R/他W): スクリーンキャプチャのリクエストをまとめた配列
-  private ScreenCaptureRequest[] requests =
-      new ScreenCaptureRequest[Common.Constants.MaxLayoutElementCount];
-
-  /// 共有(自W/他R): スクリーンキャプチャのキャッシュ
-  private BitmapSource[] cachedBitmaps =
-      new BitmapSource[Common.Constants.MaxLayoutElementCount];
-
-  //-------------------------------------------------------------------
+  //===================================================================
+  // コンストラクタ
+  //===================================================================
 
   /// コンストラクタ
   public ScreenCaptureTimer(double timerPeriod) {
     this.timerPeriod = timerPeriod;
   }
 
-  //-------------------------------------------------------------------
+  //===================================================================
   // タイマーコールバック
-  //-------------------------------------------------------------------
+  //===================================================================
 
   /// タイマーコールバック
   private void TimerCallback(object state) {
@@ -154,5 +131,33 @@ public class ScreenCaptureTimer {
     //　参照の代入はアトミックなので問題がない
     return this.cachedBitmaps[index];
   }
+
+  //===================================================================
+  // フィールド
+  //===================================================================
+
+  /// タイマー
+  private Timer captureTimer = null;
+
+  /// タイマーの間隔
+  private double timerPeriod;
+
+  //-------------------------------------------------------------------
+  // 複数のスレッドで共有するデータ
+  //-------------------------------------------------------------------
+
+  /// 共有ロック
+  private readonly object sharedLock = new Object();
+
+  /// 共有(自R/他W): プレビュー表示中かどうか
+  private bool isSuspended = false;
+  
+  /// 共有(自R/他W): スクリーンキャプチャのリクエストをまとめた配列
+  private ScreenCaptureRequest[] requests =
+      new ScreenCaptureRequest[Common.Constants.MaxLayoutElementCount];
+
+  /// 共有(自W/他R): スクリーンキャプチャのキャッシュ
+  private BitmapSource[] cachedBitmaps =
+      new BitmapSource[Common.Constants.MaxLayoutElementCount];
 }
 }   // namespace SCFF.GUI.Controls

@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file SCFF.GUI/Commands.cs
-/// 機能の実行を依頼するためのRoutedCommands
+/// @copydoc SCFF::GUI::Commands
 
 namespace SCFF.GUI {
 

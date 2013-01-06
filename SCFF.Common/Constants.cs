@@ -21,6 +21,7 @@
 namespace SCFF.Common {
 
 using System.Collections.Generic;
+using SCFF.Interprocess;
 
 /// SCFF.Commonモジュールで利用する定数
 public static class Constants {
@@ -30,7 +31,7 @@ public static class Constants {
 
   /// 最大レイアウト要素数
   public const int MaxLayoutElementCount =
-      Interprocess.Interprocess.MaxComplexLayoutElements;
+      Interprocess.MaxComplexLayoutElements;
 
   //-------------------------------------------------------------------
   // MainWindow
@@ -60,10 +61,10 @@ public static class Constants {
   
   /// ダミープレビュー幅
   /// @todo(me) ダミーなのであとで消す
-  public const int DummyPreviewWidth = DefaultPreviewWidth;
+  public const int DummyPreviewWidth = Constants.DefaultPreviewWidth;
   /// ダミープレビュー高さ
   /// @todo(me) ダミーなのであとで消す
-  public const int DummyPreviewHeight = DefaultPreviewHeight;
+  public const int DummyPreviewHeight = Constants.DefaultPreviewHeight;
 
   //-------------------------------------------------------------------
   // Options
@@ -81,7 +82,8 @@ public static class Constants {
 
   /// 単位ボーダーサイズ(内側に1, 外側に1)
   /// @attention ボーダーは外にもあることに注意
-  public const double BorderRelativeThickness = MinimumBoundRelativeSize / 2;
+  public const double BorderRelativeThickness =
+      Constants.MinimumBoundRelativeSize / 2;
 
   //===================================================================
   // 読み込み専用辞書

@@ -16,41 +16,22 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file SCFF.GUI/Controls/LayoutToolbar.xaml.cs
-/// レイアウト追加・削除・プレビューオプション設定用ツールバー
+/// @copydoc SCFF::GUI::Controls::LayoutToolbar
 
 namespace SCFF.GUI.Controls {
 
 using System.Windows;
 using System.Windows.Controls;
 
-/// レイアウト追加・削除・プレビューオプション設定用ツールバー
+/// レイアウト編集用ツールバーを管理するUserControl
 public partial class LayoutToolbar : UserControl, IUpdateByOptions {
-
   //===================================================================
-  // コンストラクタ/Loaded/ShutdownStartedイベントハンドラ
+  // コンストラクタ/Loaded/Closing/ShutdownStartedイベントハンドラ
   //===================================================================
 
   /// コンストラクタ
   public LayoutToolbar() {
     InitializeComponent();
-  }
-
-  //===================================================================
-  // IUpdateByOptionsの実装
-  //===================================================================
-
-  public void UpdateByOptions() {
-    this.LayoutPreview.IsChecked = App.Options.LayoutPreview;
-    this.LayoutBorder.IsChecked = App.Options.LayoutBorder;
-    this.LayoutSnap.IsChecked = App.Options.LayoutSnap;
-  }
-
-  public void DetachOptionsChangedEventHandlers() {
-    // nop
-  }
-
-  public void AttachOptionsChangedEventHandlers() {
-    // nop
   }
 
   //===================================================================
@@ -61,7 +42,10 @@ public partial class LayoutToolbar : UserControl, IUpdateByOptions {
   // *Changed/Checked/Unchecked以外
   //-------------------------------------------------------------------
 
-  private void layoutPreview_Click(object sender, RoutedEventArgs e) {
+  /// LayoutPreview: Click
+  /// @param sender 使用しない
+  /// @param e 使用しない
+  private void LayoutPreview_Click(object sender, RoutedEventArgs e) {
     if (!this.LayoutPreview.IsChecked.HasValue) return;
     App.Options.LayoutPreview = (bool)this.LayoutPreview.IsChecked;
 
@@ -69,28 +53,38 @@ public partial class LayoutToolbar : UserControl, IUpdateByOptions {
     UpdateCommands.UpdateLayoutEditByOptions.Execute(null, null);
   }
 
-  private void layoutSnap_Click(object sender, RoutedEventArgs e) {
+  /// LayoutSnap: Click
+  /// @param sender 使用しない
+  /// @param e 使用しない
+  private void LayoutSnap_Click(object sender, RoutedEventArgs e) {
     if (!this.LayoutSnap.IsChecked.HasValue) return;
     App.Options.LayoutSnap = (bool)this.LayoutSnap.IsChecked;
 
     // LayoutEditの能動的な更新は必要ない
   }
 
-  private void layoutBorder_Click(object sender, RoutedEventArgs e) {
+  /// LayoutBorder: Click
+  /// @param sender 使用しない
+  /// @param e 使用しない
+  private void LayoutBorder_Click(object sender, RoutedEventArgs e) {
     if (!this.LayoutBorder.IsChecked.HasValue) return;
     App.Options.LayoutBorder = (bool)this.LayoutBorder.IsChecked;
 
     UpdateCommands.UpdateLayoutEditByEntireProfile.Execute(null, null);
   }
 
-  private const double boundOffset = 0.05;
+  /// レイアウト要素追加時に重なっていると醜いので少しずらす用のオフセット
+  private const double BoundOffset = 0.05;
 
+  /// Add: Click
+  /// @param sender 使用しない
+  /// @param e 使用しない
   private void Add_Click(object sender, RoutedEventArgs e) {
     App.Profile.AddLayoutElement();
     App.Profile.CurrentOutputLayoutElement.BoundRelativeLeft =
-      boundOffset * App.Profile.CurrentInputLayoutElement.Index;
+      LayoutToolbar.BoundOffset * App.Profile.CurrentInputLayoutElement.Index;
     App.Profile.CurrentOutputLayoutElement.BoundRelativeTop =
-      boundOffset * App.Profile.CurrentInputLayoutElement.Index;
+      LayoutToolbar.BoundOffset * App.Profile.CurrentInputLayoutElement.Index;
 
     this.Add.IsEnabled = App.Profile.CanAddLayoutElement();
     this.Remove.IsEnabled = App.Profile.CanRemoveLayoutElement();
@@ -98,6 +92,9 @@ public partial class LayoutToolbar : UserControl, IUpdateByOptions {
     UpdateCommands.UpdateMainWindowByEntireProfile.Execute(null, null);
   }
 
+  /// Remove: Click
+  /// @param sender 使用しない
+  /// @param e 使用しない
   private void Remove_Click(object sender, RoutedEventArgs e) {
     App.Profile.RemoveCurrentLayoutElement();
 
@@ -112,7 +109,28 @@ public partial class LayoutToolbar : UserControl, IUpdateByOptions {
   //-------------------------------------------------------------------
 
   //-------------------------------------------------------------------
-  // *Changed
+  // *Changed/Collapsed/Expanded
   //-------------------------------------------------------------------
+
+  //===================================================================
+  // IUpdateByOptionsの実装
+  //===================================================================
+
+  /// @copydoc IUpdateByOptions::UpdateByOptions
+  public void UpdateByOptions() {
+    this.LayoutPreview.IsChecked = App.Options.LayoutPreview;
+    this.LayoutBorder.IsChecked = App.Options.LayoutBorder;
+    this.LayoutSnap.IsChecked = App.Options.LayoutSnap;
+  }
+
+  /// @copydoc IUpdateByOptions::DetachOptionsChangedEventHandlers
+  public void DetachOptionsChangedEventHandlers() {
+    // nop
+  }
+
+  /// @copydoc IUpdateByOptions::AttachOptionsChangedEventHandlers
+  public void AttachOptionsChangedEventHandlers() {
+    // nop
+  }
 }
 }   // namespace SCFF.GUI.Controls

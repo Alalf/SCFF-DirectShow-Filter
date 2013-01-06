@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file SCFF.Common/GUI/ScreenCaptureRequest.cs
-/// スクリーンキャプチャリクエスト(+スクリーンキャプチャ機能)
+/// @copydoc SCFF::Common::GUI::ScreenCaptureRequest
 
 namespace SCFF.Common.GUI {
 

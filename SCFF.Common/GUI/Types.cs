@@ -22,6 +22,7 @@
 namespace SCFF.Common.GUI {
 
 using System;
+using System.Diagnostics;
 using SCFF.Common.Ext;
 
 //=====================================================================
@@ -124,5 +125,25 @@ public class BitmapHandle : IDisposable {
 
   /// ラップしているHBitmap
   public IntPtr Bitmap { get; private set; }
+}
+
+/// スタイルNULLのPenハンドルのラッパークラス
+/// @todo(me) SafeHandleで実装したほうがいいのか考える
+public class NullPen : IDisposable {
+  /// コンストラクタ
+  public NullPen() {
+    this.Pen = GDI32.CreatePen(GDI32.PS_NULL, 1, 0x00000000);
+  }
+
+  /// デストラクタ
+  public void Dispose() {
+    if (this.Pen != IntPtr.Zero) {
+      GDI32.DeleteObject(this.Pen);
+      this.Pen = IntPtr.Zero;
+    }
+  }
+
+  /// ラップしているHPen
+  public IntPtr Pen { get; private set; }
 }
 }   // namespace SCFF.Common.GUI

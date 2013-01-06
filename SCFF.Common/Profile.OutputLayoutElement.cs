@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file SCFF.Common/Profile.OutputLayoutElement.cs
-/// プロファイル内を操作するためのカーソルクラス
+/// @copydoc SCFF::Common::Profile::OutputLayoutElement
 
 namespace SCFF.Common {
 

@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file SCFF.Common/GUI/MoveAndSize.cs
-/// 現在のマウス座標とオフセットを指定してレイアウト要素を移動・拡大縮小
+/// @copydoc SCFF::Common::GUI::MoveAndSize
 
 namespace SCFF.Common.GUI {
 

@@ -16,25 +16,98 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file SCFF.GUI/Controls/MainMenu.xaml.cs
-/// メインメニュー
+/// @copydoc SCFF::GUI::Controls::MainMenu
 
 namespace SCFF.GUI.Controls {
 
-using SCFF.Common;
 using System.Windows;
 using System.Windows.Controls;
+using SCFF.Common;
 
-/// メインメニュー
+/// メインメニュー管理用UserControl
 public partial class MainMenu : UserControl, IUpdateByOptions {
-
   //===================================================================
-  // コンストラクタ/Loaded/ShutdownStartedイベントハンドラ
+  // コンストラクタ/Loaded/Closing/ShutdownStartedイベントハンドラ
   //===================================================================
 
   /// コンストラクタ
   public MainMenu() {
     InitializeComponent();
   }
+
+  //===================================================================
+  // イベントハンドラ
+  //===================================================================
+
+  //-------------------------------------------------------------------
+  // *Changed/Checked/Unchecked以外
+  //-------------------------------------------------------------------
+
+  /// ForceAeroOn: Click
+  /// @param sender 使用しない
+  /// @param e 使用しない
+  private void ForceAeroOn_Click(object sender, RoutedEventArgs e) {
+    App.Options.ForceAeroOn = this.ForceAeroOn.IsChecked;
+    Commands.SetAero.Execute(null, null);
+  }
+
+  /// CompactView: Click
+  /// @param sender 使用しない
+  /// @param e 使用しない
+  private void CompactView_Click(object sender, RoutedEventArgs e) {
+    App.Options.CompactView = this.CompactView.IsChecked;
+    Commands.SetCompactView.Execute(null, null);
+  }
+
+  /// RestoreLastProfile: Click
+  /// @param sender 使用しない
+  /// @param e 使用しない
+  private void RestoreLastProfile_Click(object sender, RoutedEventArgs e) {
+    App.Options.RestoreLastProfile = this.CompactView.IsChecked;
+  }
+
+  /// RecentProfile1: Click
+  /// @param sender 使用しない
+  /// @param e 使用しない
+  private void RecentProfile1_Click(object sender, RoutedEventArgs e) {
+    /// @todo(me) 実装
+  }
+
+  /// RecentProfile2: Click
+  /// @param sender 使用しない
+  /// @param e 使用しない
+  private void RecentProfile2_Click(object sender, RoutedEventArgs e) {
+    /// @todo(me) 実装
+  }
+
+  /// RecentProfile3: Click
+  /// @param sender 使用しない
+  /// @param e 使用しない
+  private void RecentProfile3_Click(object sender, RoutedEventArgs e) {
+    /// @todo(me) 実装
+  }
+
+  /// RecentProfile4: Click
+  /// @param sender 使用しない
+  /// @param e 使用しない
+  private void RecentProfile4_Click(object sender, RoutedEventArgs e) {
+    /// @todo(me) 実装 
+  }
+
+  /// RecentProfile5: Click
+  /// @param sender 使用しない
+  /// @param e 使用しない
+  private void RecentProfile5_Click(object sender, RoutedEventArgs e) {
+    /// @todo(me) 実装 
+  }
+
+  //-------------------------------------------------------------------
+  // Checked/Unchecked
+  //-------------------------------------------------------------------
+
+  //-------------------------------------------------------------------
+  // *Changed/Collapsed/Expanded
+  //-------------------------------------------------------------------
 
   //===================================================================
   // IUpdateByOptionsの実装
@@ -89,55 +162,5 @@ public partial class MainMenu : UserControl, IUpdateByOptions {
   public void AttachOptionsChangedEventHandlers() {
     // nop
   }
-
-  //===================================================================
-  // イベントハンドラ
-  //===================================================================
-
-  //-------------------------------------------------------------------
-  // *Changed/Checked/Unchecked以外
-  //-------------------------------------------------------------------
-
-  private void ForceAeroOn_Click(object sender, RoutedEventArgs e) {
-    App.Options.ForceAeroOn = this.ForceAeroOn.IsChecked;
-    Commands.SetAero.Execute(null, null);
-  }
-
-  private void CompactView_Click(object sender, RoutedEventArgs e) {
-    App.Options.CompactView = this.CompactView.IsChecked;
-    Commands.SetCompactView.Execute(null, null);
-  }
-
-  private void RestoreLastProfile_Click(object sender, RoutedEventArgs e) {
-    App.Options.RestoreLastProfile = this.CompactView.IsChecked;
-  }
-
-  private void RecentProfile1_Click(object sender, RoutedEventArgs e) {
-    /// @todo(me) 実装
-  }
-
-  private void RecentProfile2_Click(object sender, RoutedEventArgs e) {
-    /// @todo(me) 実装
-  }
-
-  private void RecentProfile3_Click(object sender, RoutedEventArgs e) {
-    /// @todo(me) 実装
-  }
-
-  private void RecentProfile4_Click(object sender, RoutedEventArgs e) {
-    /// @todo(me) 実装 
-  }
-
-  private void RecentProfile5_Click(object sender, RoutedEventArgs e) {
-    /// @todo(me) 実装 
-  }
-
-  //-------------------------------------------------------------------
-  // Checked/Unchecked
-  //-------------------------------------------------------------------
-
-  //-------------------------------------------------------------------
-  // *Changed
-  //-------------------------------------------------------------------
 }
 }   // namespace SCFF.GUI.Controls

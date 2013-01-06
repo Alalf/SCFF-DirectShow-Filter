@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file SCFF.GUI/IUpdateByOptions.cs
-/// 自前Options->Controlデータバインディング用インタフェース
+/// @copydoc SCFF::GUI::IUpdateByOptions
 
 namespace SCFF.GUI {
 

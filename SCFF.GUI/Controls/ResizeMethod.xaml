@@ -22,9 +22,9 @@
       <RowDefinition Height="25"/>
     </Grid.RowDefinitions>
     <ComboBox x:Name="SWScaleFlags" Grid.ColumnSpan="2" Height="20" VerticalAlignment="Center"/>
-    <CheckBox x:Name="SWScaleAccurateRnd" Grid.Column="2" Grid.ColumnSpan="2" Height="16" VerticalAlignment="Center" Click="swscaleAccurateRnd_Click">Accurate Rounding</CheckBox>
+    <CheckBox x:Name="SWScaleAccurateRnd" Grid.Column="2" Grid.ColumnSpan="2" Height="16" VerticalAlignment="Center" Click="SWScaleAccurateRnd_Click">Accurate Rounding</CheckBox>
     <Separator Grid.Row="1" Grid.ColumnSpan="4" />
-    <CheckBox x:Name="SWScaleIsFilterEnabled" Grid.Row="2" Grid.ColumnSpan="4" Height="16" VerticalAlignment="Center" Checked="swscaleIsFilterEnabled_Checked" Unchecked="swscaleIsFilterEnabled_Unchecked" Click="swscaleIsFilterEnabled_Click">Enable filter</CheckBox>
+    <CheckBox x:Name="SWScaleIsFilterEnabled" Grid.Row="2" Grid.ColumnSpan="4" Height="16" VerticalAlignment="Center" Checked="SWScaleIsFilterEnabled_Checked" Unchecked="SWScaleIsFilterEnabled_Unchecked" Click="SWScaleIsFilterEnabled_Click">Enable filter</CheckBox>
     <Label Grid.Row="3" Height="12" VerticalAlignment="Center" HorizontalAlignment="Right">L GBlur</Label>
     <Label Grid.Row="4" Height="12" VerticalAlignment="Center" HorizontalAlignment="Right">L Sharpen</Label>
     <Label Grid.Row="5" Height="12" VerticalAlignment="Center" HorizontalAlignment="Right">C HShift</Label>

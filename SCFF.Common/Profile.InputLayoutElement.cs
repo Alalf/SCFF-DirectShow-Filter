@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file SCFF.Common/Profile.InputLayoutElement.cs
-/// プロファイル内を参照するためのカーソルクラス
+/// @copydoc SCFF::Common::Profile::InputLayoutElement
 
 namespace SCFF.Common {
 

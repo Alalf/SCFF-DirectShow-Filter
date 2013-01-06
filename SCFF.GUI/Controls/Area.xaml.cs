@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file SCFF.GUI/Controls/Area.xaml.cs
-/// クリッピング領域設定用UserControl
+/// @copydoc SCFF::GUI::Controls::Area
 
 namespace SCFF.GUI.Controls {
 

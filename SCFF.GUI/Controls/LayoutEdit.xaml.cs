@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file SCFF.GUI/Controls/LayoutEdit.xaml.cs
-/// レイアウト編集用UserControl
+/// @copydoc SCFF::GUI::Controls::LayoutEdit
 
 namespace SCFF.GUI.Controls {
 
@@ -36,29 +36,39 @@ using SCFF.Common.GUI;
 /// LayoutEditImage内の座標系は([0-1]*Scale,[0-1]*Scale)で固定（プレビューのサイズに依存しない）
 /// 逆に言うと依存させてはいけない
 public partial class LayoutEdit : UserControl, IUpdateByProfile, IUpdateByOptions {
-
   //===================================================================
   // 定数
   //===================================================================  
 
+  /// 相対座標→Image座標の倍率
   /// @warning 1.0のままやると値が小さすぎてフォントがバグるので100倍
   private const double Scale = 100.0;
 
+  /// Imageの幅
   private const double MaxImageWidth = 1.0 * Scale;
+  /// Imageの高さ
   private const double MaxImageHeight = 1.0 * Scale;
+  /// Image座標系でのペンの太さ
   private const double PenThickness = 0.005 * Scale;
+  /// Image座標系でのフォントサイズ
   private const double CaptionSize = 0.03 * Scale;
+  /// Image座標系でのキャプションと枠線のマージン
   private const double CaptionMargin = PenThickness;
 
-  //===================================================================
-  // privateメンバ
-  //===================================================================
-
-  /// プレビューサイズを決めるRect
-  private Rect previewRect = new Rect(0.0, 0.0, MaxImageWidth, MaxImageHeight);
-
-  /// スクリーンキャプチャ用スレッド管理クラスのインスタンス
-  private ScreenCaptureTimer screenCaptureTimer = null;
+  /// カーソルをまとめたディクショナリ
+  private static readonly Dictionary<HitModes, Cursor> HitModesToCursors =
+      new Dictionary<HitModes,Cursor> {
+    {HitModes.Neutral, null},
+    {HitModes.Move, Cursors.SizeAll},
+    {HitModes.SizeNW, Cursors.SizeNWSE},
+    {HitModes.SizeNE, Cursors.SizeNESW},
+    {HitModes.SizeSW, Cursors.SizeNESW},
+    {HitModes.SizeSE, Cursors.SizeNWSE},
+    {HitModes.SizeN, Cursors.SizeNS},
+    {HitModes.SizeW, Cursors.SizeWE},
+    {HitModes.SizeS, Cursors.SizeNS},
+    {HitModes.SizeE, Cursors.SizeWE}
+  };
 
   //===================================================================
   // コンストラクタ/Loaded/Closing/ShutdownStartedイベントハンドラ
@@ -113,6 +123,9 @@ public partial class LayoutEdit : UserControl, IUpdateByProfile, IUpdateByOption
     };
   }
 
+  /// レイアウト要素のキャプションの生成
+  /// @param layoutElement 対象のレイアウト要素
+  /// @return DrawingContext.DrawTextで描画可能なDrawingVisualオブジェクト
   private FormattedText CreateLayoutElementCaption(Profile.InputLayoutElement layoutElement) {
     var isCurrent = layoutElement.Index == App.Profile.CurrentInputLayoutElement.Index;
 
@@ -158,6 +171,9 @@ public partial class LayoutEdit : UserControl, IUpdateByProfile, IUpdateByOption
     return formattedText;
   }
 
+  /// プレビュー画像の描画
+  /// @param dc 描画先
+  /// @param layoutElement 描画対象
   private void DrawPreview(DrawingContext dc, Profile.InputLayoutElement layoutElement) {
     var bitmap = this.screenCaptureTimer.GetBitmapSource(layoutElement.Index);
     if (bitmap == null) return;
@@ -178,6 +194,9 @@ public partial class LayoutEdit : UserControl, IUpdateByProfile, IUpdateByOption
     dc.DrawImage(bitmap, actualLayoutElementRect);
   }
 
+  /// 枠線とキャプションの描画
+  /// @param dc 描画先
+  /// @param layoutElement 描画対象
   private void DrawBorder(DrawingContext dc, Profile.InputLayoutElement layoutElement) {
     var isCurrent = layoutElement.Index == App.Profile.CurrentInputLayoutElement.Index;
 
@@ -217,7 +236,7 @@ public partial class LayoutEdit : UserControl, IUpdateByProfile, IUpdateByOption
     dc.DrawText(layoutElementCaption, captionPoint);
   }
 
-  /// 描画テスト用
+  /// プロファイル全体の描画
   /// @todo(me) FPS制限が必要かも？でもあんまりかわらないかも
   private void DrawProfile() {
     using (var dc = this.DrawingGroup.Open()) {
@@ -270,6 +289,144 @@ public partial class LayoutEdit : UserControl, IUpdateByProfile, IUpdateByOption
   }
 
   //===================================================================
+  // イベントハンドラ
+  //===================================================================
+
+  //-------------------------------------------------------------------
+  // *Changed/Checked/Unchecked以外
+  //-------------------------------------------------------------------
+
+  /// マウス座標(image座標系)を(0.0-1.0, 0.0-1.0)のRelativePointに変換
+  private RelativePoint GetRelativeMousePoint(IInputElement image, MouseEventArgs e) {
+    var mousePoint = e.GetPosition(image);
+    return new RelativePoint(mousePoint.X / MaxImageWidth, mousePoint.Y / MaxImageHeight);
+  }
+
+  /// LayoutEditImage: MouseDown
+  /// @param sender 使用しない
+  /// @param e Client座標系でのマウス座標(GetPosition(...))の取得が可能
+  private void LayoutEditImage_MouseDown(object sender, MouseButtonEventArgs e) {
+    // 前処理
+    e.Handled = true;
+    var image = (IInputElement)sender;
+    var relativeMousePoint = this.GetRelativeMousePoint(image, e);
+
+    // HitTest
+    int hitIndex;
+    HitModes hitMode;
+    if (!HitTest.TryHitTest(App.Profile, relativeMousePoint, out hitIndex, out hitMode)) return;
+
+    // 現在選択中のIndexではない場合はそれに変更する
+    if (hitIndex != App.Profile.CurrentInputLayoutElement.Index) {
+      Debug.WriteLine("*****LayoutEdit: Change Current*****");
+      Debug.WriteLine("{0:D}->{1:D} ({2:F2}, {3:F2})",
+                      App.Profile.CurrentInputLayoutElement.Index,
+                      hitIndex,
+                      relativeMousePoint.X, relativeMousePoint.Y);
+
+      App.Profile.ChangeCurrentIndex(hitIndex);
+      UpdateCommands.UpdateMainWindowByEntireProfile.Execute(null, null);
+    }
+
+    // マウスを押した場所を記録してマウスキャプチャー開始
+    this.hitMode = hitMode;
+    this.relativeMouseOffset = new RelativeMouseOffset(App.Profile.CurrentInputLayoutElement, relativeMousePoint);
+    if (App.Options.LayoutSnap) {
+      this.snapGuide = new SnapGuide(App.Profile);
+    } else {
+      this.snapGuide = null;
+    }
+    image.CaptureMouse();
+
+    this.DrawProfile();
+  }
+
+  /// LayoutEditImage: MouseMove
+  /// @param sender 使用しない
+  /// @param e Client座標系でのマウス座標(GetPosition(...))の取得が可能
+  private void LayoutEditImage_MouseMove(object sender, MouseEventArgs e) {
+    // 前処理
+    e.Handled = true;
+    var image = (IInputElement)sender;
+    var relativeMousePoint = this.GetRelativeMousePoint(image, e);
+
+    // Neutralのときだけはカーソルを帰るだけ
+    if (this.hitMode == HitModes.Neutral) {
+      // カーソルかえるだけ
+      int hitIndex;
+      HitModes hitMode;
+      HitTest.TryHitTest(App.Profile, relativeMousePoint, out hitIndex, out hitMode);
+      this.Cursor = LayoutEdit.HitModesToCursors[hitMode];
+      return;
+    }
+
+    // Move or Size
+    double nextLeft, nextTop, nextRight, nextBottom;
+    MoveAndSize.MoveOrSize(App.Profile.CurrentInputLayoutElement, this.hitMode,
+        relativeMousePoint, this.relativeMouseOffset, this.snapGuide, 
+        out nextLeft, out nextTop, out nextRight, out nextBottom);
+
+    // Profileを更新
+    App.Profile.CurrentOutputLayoutElement.BoundRelativeLeft = nextLeft;
+    App.Profile.CurrentOutputLayoutElement.BoundRelativeTop = nextTop;
+    App.Profile.CurrentOutputLayoutElement.BoundRelativeRight = nextRight;
+    App.Profile.CurrentOutputLayoutElement.BoundRelativeBottom = nextBottom;
+      
+    /// @todo(me) 変更をMainWindowに通知
+    UpdateCommands.UpdateLayoutParameterByCurrentProfile.Execute(null, null);
+
+    this.DrawProfile();
+  }
+
+  /// LayoutEditImage: MouseUp
+  /// @param sender 使用しない
+  /// @param e Client座標系でのマウス座標(GetPosition(...))の取得が可能
+  private void LayoutEditImage_MouseUp(object sender, MouseButtonEventArgs e) {
+    e.Handled = true;
+    if (this.hitMode != HitModes.Neutral) {
+      this.LayoutEditImage.ReleaseMouseCapture();
+      this.hitMode = HitModes.Neutral;
+      this.DrawProfile();
+    }
+  }
+
+  //-------------------------------------------------------------------
+  // Checked/Unchecked
+  //-------------------------------------------------------------------
+
+  //-------------------------------------------------------------------
+  // *Changed/Collapsed/Expanded
+  //-------------------------------------------------------------------
+
+  //===================================================================
+  // IUpdateByOptionsの実装
+  //===================================================================
+
+  /// @copydoc IUpdateByOptions::UpdateByOptions
+  public void UpdateByOptions() {
+    if (App.Options.LayoutIsExpanded && App.Options.LayoutPreview) {
+      this.screenCaptureTimer.Resume();
+      // DrawingGroupを再構築
+      this.DrawProfile();
+    } else {
+      this.screenCaptureTimer.Suspend();
+      // DrawingGroupの描画命令をクリア
+      this.DrawingGroup.Children.Clear();
+      GC.Collect();
+    }
+  }
+  
+  /// @copydoc IUpdateByOptions::DetachOptionsChangedEventHandlers
+  public void DetachOptionsChangedEventHandlers() {
+    // nop
+  }
+
+  /// @copydoc IUpdateByOptions::AttachOptionsChangedEventHandlers
+  public void AttachOptionsChangedEventHandlers() {
+    // nop
+  }
+
+  //===================================================================
   // IUpdateByProfileの実装
   //===================================================================
 
@@ -317,52 +474,18 @@ public partial class LayoutEdit : UserControl, IUpdateByProfile, IUpdateByOption
   }
 
   //===================================================================
-  // IUpdateByOptionsの実装
+  // フィールド
   //===================================================================
 
-  /// @copydoc IUpdateByOptions::UpdateByOptions
-  public void UpdateByOptions() {
-    if (App.Options.LayoutIsExpanded && App.Options.LayoutPreview) {
-      this.screenCaptureTimer.Resume();
-      // DrawingGroupを再構築
-      this.DrawProfile();
-    } else {
-      this.screenCaptureTimer.Suspend();
-      // DrawingGroupの描画命令をクリア
-      this.DrawingGroup.Children.Clear();
-      GC.Collect();
-    }
-  }
-  
-  /// @copydoc IUpdateByOptions::DetachOptionsChangedEventHandlers
-  public void DetachOptionsChangedEventHandlers() {
-    // nop
-  }
+  /// プレビューサイズを決めるRect
+  private Rect previewRect = new Rect(0.0, 0.0, MaxImageWidth, MaxImageHeight);
 
-  /// @copydoc IUpdateByOptions::AttachOptionsChangedEventHandlers
-  public void AttachOptionsChangedEventHandlers() {
-    // nop
-  }
+  /// スクリーンキャプチャ用スレッド管理クラスのインスタンス
+  private ScreenCaptureTimer screenCaptureTimer = null;
 
-
-  //===================================================================
-  // イベントハンドラ
-  //===================================================================
-
-  /// カーソルをまとめたディクショナリ
-  public readonly Dictionary<HitModes, Cursor> hitModesToCursors =
-      new Dictionary<HitModes,Cursor> {
-    {HitModes.Neutral, null},
-    {HitModes.Move, Cursors.SizeAll},
-    {HitModes.SizeNW, Cursors.SizeNWSE},
-    {HitModes.SizeNE, Cursors.SizeNESW},
-    {HitModes.SizeSW, Cursors.SizeNESW},
-    {HitModes.SizeSE, Cursors.SizeNWSE},
-    {HitModes.SizeN, Cursors.SizeNS},
-    {HitModes.SizeW, Cursors.SizeWE},
-    {HitModes.SizeS, Cursors.SizeNS},
-    {HitModes.SizeE, Cursors.SizeWE}
-  };
+  //-------------------------------------------------------------------
+  // LayoutEditImage_MouseDown/Move/Up時の状態変数
+  //-------------------------------------------------------------------
 
   /// マウス座標とLeft/Right/Top/BottomのOffset
   /// @todo(me) MoveAndSizeStateとしてまとめられないだろうか？
@@ -373,93 +496,5 @@ public partial class LayoutEdit : UserControl, IUpdateByProfile, IUpdateByOption
   /// ヒットテストの結果
   /// @todo(me) MoveAndSizeStateとしてまとめられないだろうか？
   private HitModes hitMode = HitModes.Neutral;
-
-  /// マウス座標(image座標系)を(0.0-1.0, 0.0-1.0)のRelativePointに変換
-  private RelativePoint GetRelativeMousePoint(IInputElement image, MouseEventArgs e) {
-    var mousePoint = e.GetPosition(image);
-    return new RelativePoint(mousePoint.X / MaxImageWidth, mousePoint.Y / MaxImageHeight);
-  }
-
-  /// MouseDownイベントハンドラ 
-  private void LayoutEditImage_MouseDown(object sender, MouseButtonEventArgs e) {
-    // 前処理
-    e.Handled = true;
-    var image = (IInputElement)sender;
-    var relativeMousePoint = this.GetRelativeMousePoint(image, e);
-
-    // HitTest
-    int hitIndex;
-    HitModes hitMode;
-    if (!HitTest.TryHitTest(App.Profile, relativeMousePoint, out hitIndex, out hitMode)) return;
-
-    // 現在選択中のIndexではない場合はそれに変更する
-    if (hitIndex != App.Profile.CurrentInputLayoutElement.Index) {
-      Debug.WriteLine("*****LayoutEdit: Change Current*****");
-      Debug.WriteLine("{0:D}->{1:D} ({2:F2}, {3:F2})",
-                      App.Profile.CurrentInputLayoutElement.Index,
-                      hitIndex,
-                      relativeMousePoint.X, relativeMousePoint.Y);
-
-      App.Profile.ChangeCurrentIndex(hitIndex);
-      UpdateCommands.UpdateMainWindowByEntireProfile.Execute(null, null);
-    }
-
-    // マウスを押した場所を記録してマウスキャプチャー開始
-    this.hitMode = hitMode;
-    this.relativeMouseOffset = new RelativeMouseOffset(App.Profile.CurrentInputLayoutElement, relativeMousePoint);
-    if (App.Options.LayoutSnap) {
-      this.snapGuide = new SnapGuide(App.Profile);
-    } else {
-      this.snapGuide = null;
-    }
-    image.CaptureMouse();
-
-    this.DrawProfile();
-  }
-
-  /// MouseMoveイベントハンドラ
-  private void LayoutEditImage_MouseMove(object sender, MouseEventArgs e) {
-    // 前処理
-    e.Handled = true;
-    var image = (IInputElement)sender;
-    var relativeMousePoint = this.GetRelativeMousePoint(image, e);
-
-    // Neutralのときだけはカーソルを帰るだけ
-    if (this.hitMode == HitModes.Neutral) {
-      // カーソルかえるだけ
-      int hitIndex;
-      HitModes hitMode;
-      HitTest.TryHitTest(App.Profile, relativeMousePoint, out hitIndex, out hitMode);
-      this.Cursor = this.hitModesToCursors[hitMode];
-      return;
-    }
-
-    // Move or Size
-    double nextLeft, nextTop, nextRight, nextBottom;
-    MoveAndSize.MoveOrSize(App.Profile.CurrentInputLayoutElement, this.hitMode,
-        relativeMousePoint, this.relativeMouseOffset, this.snapGuide, 
-        out nextLeft, out nextTop, out nextRight, out nextBottom);
-
-    // Profileを更新
-    App.Profile.CurrentOutputLayoutElement.BoundRelativeLeft = nextLeft;
-    App.Profile.CurrentOutputLayoutElement.BoundRelativeTop = nextTop;
-    App.Profile.CurrentOutputLayoutElement.BoundRelativeRight = nextRight;
-    App.Profile.CurrentOutputLayoutElement.BoundRelativeBottom = nextBottom;
-      
-    /// @todo(me) 変更をMainWindowに通知
-    UpdateCommands.UpdateLayoutParameterByCurrentProfile.Execute(null, null);
-
-    this.DrawProfile();
-  }
-
-  /// MouseUpイベントハンドラ
-  private void LayoutEditImage_MouseUp(object sender, MouseButtonEventArgs e) {
-    e.Handled = true;
-    if (this.hitMode != HitModes.Neutral) {
-      this.LayoutEditImage.ReleaseMouseCapture();
-      this.hitMode = HitModes.Neutral;
-      this.DrawProfile();
-    }
-  }
 }
-}
+}   // namespace SCFF.GUI.Controls

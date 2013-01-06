@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file SCFF.GUI/IUpdateByProfile.cs
-/// 自前Profile->Controlデータバインディング用インタフェース
+/// @copydoc SCFF::GUI::IUpdateByProfile
 
 namespace SCFF.GUI {
 

@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file SCFF.Common/OptionsINIFile.cs
-/// プロファイル以外のアプリケーション設定のINIファイル入出力機能
+/// @copydoc SCFF::Common::OptionsINIFile
 
 namespace SCFF.Common {
 
@@ -93,7 +93,7 @@ public static class OptionsINIFile {
     // ファイル読み込み
     var lines = new List<string>();
     try {
-      using (var reader = new StreamReader(OptionsFilePath)) {
+      using (var reader = new StreamReader(OptionsINIFile.OptionsFilePath)) {
         while (!reader.EndOfStream) {
           lines.Add(reader.ReadLine());
         }

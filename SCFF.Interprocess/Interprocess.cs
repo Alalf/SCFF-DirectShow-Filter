@@ -17,8 +17,8 @@
 
 /// @file SCFF.Interprocess/Interprocess.cs
 /// SCFFのプロセス間通信に関するクラスの宣言
-/// @warning To me: このファイルの中から別のファイルへのusingは禁止！
-/// - 別の言語に移植する場合も最大2ファイルでお願いします
+/// @warning このファイルの中から別のファイルへのusingは禁止!
+///          (別の言語に移植する場合も最大2ファイルでお願いします)
 
 /// scff_interprocessモジュールの C# 版(オリジナルは C++ )
 namespace SCFF.Interprocess {
@@ -51,12 +51,9 @@ using System.Threading;
 
 /// レイアウトの種類
 public enum LayoutTypes {
-  /// 何も表示しない
-  NullLayout = 0,
-  /// 取り込み範囲1個で、境界は出力に強制的に合わせられる
-  NativeLayout,
-  /// 取り込み範囲が複数ある
-  ComplexLayout
+  NullLayout = 0,   ///< 何も表示しない
+  NativeLayout,     ///< 取り込み範囲1個で、境界は出力に強制的に合わせられる
+  ComplexLayout     ///< 取り込み範囲が複数ある
 }
 
 //-------------------------------------------------------------------
@@ -65,22 +62,14 @@ public enum LayoutTypes {
 /// @sa scff_imaging/imaging_types.h
 /// @sa scff_imaging::ImagePixelFormats
 public enum ImagePixelFormats {
-  /// 不正なピクセルフォーマット
-  InvalidPixelFormat = -1,
-  /// I420(12bit)
-  I420 = 0,
-  /// IYUV(12bit)
-  IYUV,
-  /// YV12(12bit)
-  YV12,
-  /// UYVY(16bit)
-  UYVY,
-  /// YUY2(16bit)
-  YUY2,
-  /// RGB0(32bit)
-  RGB0,
-  /// 対応ピクセルフォーマット数
-  SupportedPixelFormatsCount
+  InvalidPixelFormat = -1,    ///< 不正なピクセルフォーマット
+  I420 = 0,                   ///< I420(12bit)
+  IYUV,                       ///< IYUV(12bit)
+  YV12,                       ///< YV12(12bit)
+  UYVY,                       ///< UYVY(16bit)
+  YUY2,                       ///< YUY2(16bit)
+  RGB0,                       ///< RGB0(32bit)
+  SupportedPixelFormatsCount  ///< 対応ピクセルフォーマット数
 }
 
 //-------------------------------------------------------------------
@@ -89,42 +78,27 @@ public enum ImagePixelFormats {
 /// @sa scff_imaging/imaging_types.h
 /// @sa scff_imaging::SWScaleFlags
 public enum SWScaleFlags {
-  /// fast bilinear
-  FastBilinear = 1,
-  /// bilinear
-  Bilinear = 2,
-  /// bicubic
-  Bicubic = 4,
-  /// experimental
-  X = 8,
-  /// nearest neighbor
-  Point = 0x10,
-  /// averaging area
-  Area = 0x20,
-  /// luma bicubic, chroma bilinear
-  Bicublin = 0x40,
-  /// gaussian
-  Gauss = 0x80,
-  /// sinc
-  Sinc = 0x100,
-  /// lanczos
-  Lanczos = 0x200,
-  /// natural bicubic spline
-  Spline = 0x400
+  FastBilinear = 1, ///< fast bilinear
+  Bilinear = 2,     ///< bilinear
+  Bicubic = 4,      ///< bicubic
+  X = 8,            ///< experimental
+  Point = 0x10,     ///< nearest neighbor
+  Area = 0x20,      ///< averaging area
+  Bicublin = 0x40,  ///< luma bicubic, chroma bilinear
+  Gauss = 0x80,     ///< gaussian
+  Sinc = 0x100,     ///< sinc
+  Lanczos = 0x200,  ///< lanczos
+  Spline = 0x400    ///< natural bicubic spline
 }
 
 /// 回転方向を表す定数
 /// @sa scff_imaging/imaging_types.h
 /// @sa scff_imaging::RotateDirections
 public enum RotateDirections {
-  /// 回転なし
-  NoRotate = 0,
-  /// 時計回り90度
-  Degrees90,
-  /// 時計回り180度
-  Degrees180,
-  /// 時計回り270度
-  Degrees270
+  NoRotate = 0, ///< 回転なし
+  Degrees90,    ///< 時計回り90度
+  Degrees180,   ///< 時計回り180度
+  Degrees270    ///< 時計回り270度
 }
 
 /// 共有メモリ(Directory)に格納する構造体のエントリ
@@ -239,10 +213,9 @@ public struct Message {
 
 /// プロセス間通信を担当するクラス
 public class Interprocess {
-
-  //-------------------------------------------------------------------
+  //===================================================================
   // 定数
-  //-------------------------------------------------------------------
+  //===================================================================
 
   /// Path文字列の長さ
   public const int MaxPath = 260;
@@ -268,7 +241,9 @@ public class Interprocess {
   /// Messageの保護用Mutex名の接頭辞
   private const string MessageMutexNamePrefix = "mutex_scff_v1_message_";
 
-  //-------------------------------------------------------------------
+  //===================================================================
+  // コンストラクタ/デストラクタ
+  //===================================================================
 
   /// コンストラクタ
   public Interprocess() {
@@ -293,12 +268,13 @@ public class Interprocess {
     Trace.WriteLine("****Interprocess: DELETE");
   }
 
-  //-------------------------------------------------------------------
+  //===================================================================
   // Directory
-  //-------------------------------------------------------------------
+  //===================================================================
 
   /// Directory初期化
   /// @todo(me) 全体的に例外処理を考慮していないコード。要注意。
+  /// @return 初期化が成功したか
   public bool InitDirectory() {
     // 念のため解放
     this.ReleaseDirectory();
@@ -346,9 +322,43 @@ public class Interprocess {
            this.mutexDirectory != null;
   }
 
-  //-------------------------------------------------------------------
+  /// Directory解放
+  private void ReleaseDirectory() {
+    if (this.mutexDirectory != null) {
+      this.mutexDirectory.Dispose();
+      this.mutexDirectory = null;
+    }
+    if (this.viewOfDirectory != null) {
+      this.viewOfDirectory.Dispose();
+      this.viewOfDirectory = null;
+    }
+    if (this.directory != null) {
+      this.directory.Dispose();
+      this.directory = null;
+    }
+  }
+
+  /// Directoryを読み込む
+  private Directory ReadDirectory() {
+    byte[] buffer = new byte[this.sizeOfDirectory];
+    this.viewOfDirectory.Read(buffer, 0, this.sizeOfDirectory);
+    GCHandle gch = GCHandle.Alloc(buffer, GCHandleType.Pinned);
+    return (Directory)Marshal.PtrToStructure(gch.AddrOfPinnedObject(), typeof(Directory));
+  }
+
+  /// Directoryを書き込む
+  private void WriteDirectory(Directory directory) {
+    byte[] buffer = new byte[this.sizeOfDirectory];
+    IntPtr ptr = Marshal.AllocHGlobal(this.sizeOfDirectory);
+    Marshal.StructureToPtr(directory, ptr, false);
+    Marshal.Copy(ptr, buffer, 0, this.sizeOfDirectory);
+    Marshal.FreeHGlobal(ptr);
+    this.viewOfDirectory.Write(buffer, 0, this.sizeOfDirectory);
+  }
+
+  //===================================================================
   // Message
-  //-------------------------------------------------------------------
+  //===================================================================
 
   /// Message初期化
   public bool InitMessage(UInt32 processID) {
@@ -403,10 +413,48 @@ public class Interprocess {
            this.mutexMessage != null;
   }
 
-  //-------------------------------------------------------------------
+
+  /// Message解放
+  private void ReleaseMessage() {
+    if (this.mutexMessage != null) {
+      this.mutexMessage.Dispose();
+      this.mutexMessage = null;
+    }
+    if (this.viewOfMessage != null) {
+      this.viewOfMessage.Dispose();
+      this.viewOfMessage = null;
+    }
+    if (this.message != null) {
+      this.message.Dispose();
+      this.message = null;
+    }
+  }
+
+  /// Messageを読み込む
+  private Message ReadMessage() {
+    byte[] buffer = new byte[this.sizeOfMessage];
+    this.viewOfMessage.Read(buffer, 0, this.sizeOfMessage);
+    GCHandle gch = GCHandle.Alloc(buffer, GCHandleType.Pinned);
+    return (Message)Marshal.PtrToStructure(gch.AddrOfPinnedObject(), typeof(Message));
+  }
+
+  /// Messageを書き込む
+  private void WriteMessage(Message message) {
+    byte[] buffer = new byte[this.sizeOfMessage];
+    IntPtr ptr = Marshal.AllocHGlobal(this.sizeOfMessage);
+    Marshal.StructureToPtr(message, ptr, false);
+    Marshal.Copy(ptr, buffer, 0, this.sizeOfMessage);
+    Marshal.FreeHGlobal(ptr);
+    this.viewOfMessage.Write(buffer, 0, this.sizeOfMessage);
+  }
+
+  //===================================================================
   // for SCFF DirectShow Filter
-  //-------------------------------------------------------------------
-  /// エントリを作成する
+  //===================================================================
+
+  /// エントリを追加する
+  /// @param entry 追加されるエントリ
+  /// @return 追加が成功したか
   public bool AddEntry(Entry entry) {
     // 初期化されていなければ失敗
     if (!this.IsDirectoryInitialized()) {
@@ -487,6 +535,8 @@ public class Interprocess {
 
   /// メッセージを受け取る
   /// @pre 事前にInitMessageが実行されている必要がある
+  /// @param[out] message 受けとったメッセージ
+  /// @return メッセージ受け取りに成功
   public bool ReceiveMessage(out Message message) {
     // 初期化されていなければ失敗
     if (!this.IsMessageInitialized()) {
@@ -509,9 +559,9 @@ public class Interprocess {
     return true;
   }
 
-  //-------------------------------------------------------------------
+  //===================================================================
   // for SCFF GUI Client
-  //-------------------------------------------------------------------
+  //===================================================================
   /// ディレクトリを取得する
   public bool GetDirectory(out Directory directory) {
     // 初期化されていなければ失敗
@@ -537,6 +587,8 @@ public class Interprocess {
 
   /// メッセージを作成する
   /// @pre 事前にInitMessageが実行されている必要がある
+  /// @param message 作成されるmessage
+  /// @return 作成が成功したか
   public bool SendMessage(Message message) {
     // 初期化されていなければ失敗
     if (!this.IsMessageInitialized()) {
@@ -558,81 +610,9 @@ public class Interprocess {
     return true;
   }
 
-  //-------------------------------------------------------------------
-  // Private
-  //-------------------------------------------------------------------
-
-  /// Directory解放
-  private void ReleaseDirectory() {
-    if (this.mutexDirectory != null) {
-      this.mutexDirectory.Dispose();
-      this.mutexDirectory = null;
-    }
-    if (this.viewOfDirectory != null) {
-      this.viewOfDirectory.Dispose();
-      this.viewOfDirectory = null;
-    }
-    if (this.directory != null) {
-      this.directory.Dispose();
-      this.directory = null;
-    }
-  }
-
-  /// Message解放
-  private void ReleaseMessage() {
-    if (this.mutexMessage != null) {
-      this.mutexMessage.Dispose();
-      this.mutexMessage = null;
-    }
-    if (this.viewOfMessage != null) {
-      this.viewOfMessage.Dispose();
-      this.viewOfMessage = null;
-    }
-    if (this.message != null) {
-      this.message.Dispose();
-      this.message = null;
-    }
-  }
-
-  /// Messageを読み込む
-  private Message ReadMessage() {
-    byte[] buffer = new byte[this.sizeOfMessage];
-    this.viewOfMessage.Read(buffer, 0, this.sizeOfMessage);
-    GCHandle gch = GCHandle.Alloc(buffer, GCHandleType.Pinned);
-    return (Message)Marshal.PtrToStructure(gch.AddrOfPinnedObject(), typeof(Message));
-  }
-
-  /// Messageを書き込む
-  private void WriteMessage(Message message) {
-    byte[] buffer = new byte[this.sizeOfMessage];
-    IntPtr ptr = Marshal.AllocHGlobal(this.sizeOfMessage);
-    Marshal.StructureToPtr(message, ptr, false);
-    Marshal.Copy(ptr, buffer, 0, this.sizeOfMessage);
-    Marshal.FreeHGlobal(ptr);
-    this.viewOfMessage.Write(buffer, 0, this.sizeOfMessage);
-  }
-
-  /// Directoryを読み込む
-  private Directory ReadDirectory() {
-    byte[] buffer = new byte[this.sizeOfDirectory];
-    this.viewOfDirectory.Read(buffer, 0, this.sizeOfDirectory);
-    GCHandle gch = GCHandle.Alloc(buffer, GCHandleType.Pinned);
-    return (Directory)Marshal.PtrToStructure(gch.AddrOfPinnedObject(), typeof(Directory));
-  }
-
-  /// Directoryを書き込む
-  private void WriteDirectory(Directory directory) {
-    byte[] buffer = new byte[this.sizeOfDirectory];
-    IntPtr ptr = Marshal.AllocHGlobal(this.sizeOfDirectory);
-    Marshal.StructureToPtr(directory, ptr, false);
-    Marshal.Copy(ptr, buffer, 0, this.sizeOfDirectory);
-    Marshal.FreeHGlobal(ptr);
-    this.viewOfDirectory.Write(buffer, 0, this.sizeOfDirectory);
-  }
-
-  //-------------------------------------------------------------------
+  //===================================================================
   // フィールド
-  //-------------------------------------------------------------------
+  //===================================================================
 
   /// Directoryのサイズ
   private int sizeOfDirectory;

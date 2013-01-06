@@ -105,22 +105,14 @@ enum class ErrorCodes {
 
 /// イメージのピクセルフォーマット
 enum class ImagePixelFormats {
-  /// 不正なピクセルフォーマット
-  kInvalidPixelFormat = -1,
-  /// I420(12bit)
-  kI420 = 0,
-  /// IYUV(12bit)
-  kIYUV,
-  /// YV12(12bit)
-  kYV12,
-  /// UYVY(16bit)
-  kUYVY,
-  /// YUY2(16bit)
-  kYUY2,
-  /// RGB0(32bit)
-  kRGB0,
-  /// 対応ピクセルフォーマット数
-  kSupportedPixelFormatsCount
+  kInvalidPixelFormat = -1,   ///< 不正なピクセルフォーマット
+  kI420 = 0,                  ///< I420(12bit)
+  kIYUV,                      ///< IYUV(12bit)
+  kYV12,                      ///< YV12(12bit)
+  kUYVY,                      ///< UYVY(16bit)
+  kYUY2,                      ///< YUY2(16bit)
+  kRGB0,                      ///< RGB0(32bit)
+  kSupportedPixelFormatsCount ///< 対応ピクセルフォーマット数
 };
 
 //---------------------------------------------------------------------
@@ -128,42 +120,27 @@ enum class ImagePixelFormats {
 /// 拡大縮小メソッドをあらわす定数
 /// @sa libswscale/swscale.h
 enum class SWScaleFlags {
-  /// fast bilinear
-  kFastBilinear = SWS_FAST_BILINEAR,
-  /// bilinear
-  kBilinear     = SWS_BILINEAR,
-  /// bicubic
-  kBicubic      = SWS_BICUBIC,
-  /// experimental
-  kX            = SWS_X,
-  /// nearest neighbor
-  kPoint        = SWS_POINT,
-  /// averaging area
-  kArea         = SWS_AREA,
-  /// luma bicubic, chroma bilinear
-  kBicublin     = SWS_BICUBLIN,
-  /// gaussian
-  kGauss        = SWS_GAUSS,
-  /// sinc
-  kSinc         = SWS_SINC,
-  /// lanczos
-  kLanczos      = SWS_LANCZOS,
-  /// natural bicubic spline
-  kSpline       = SWS_SPLINE
+  kFastBilinear = SWS_FAST_BILINEAR,  ///< fast bilinear
+  kBilinear     = SWS_BILINEAR,       ///< bilinear
+  kBicubic      = SWS_BICUBIC,        ///< bicubic
+  kX            = SWS_X,              ///< experimental
+  kPoint        = SWS_POINT,          ///< nearest neighbor
+  kArea         = SWS_AREA,           ///< averaging area
+  kBicublin     = SWS_BICUBLIN,       ///< luma bicubic, chroma bilinear
+  kGauss        = SWS_GAUSS,          ///< gaussian
+  kSinc         = SWS_SINC,           ///< sinc
+  kLanczos      = SWS_LANCZOS,        ///< lanczos
+  kSpline       = SWS_SPLINE          ///< natural bicubic spline
 };
 
 //---------------------------------------------------------------------
 
 /// 回転方向を表す定数
 enum class RotateDirections {
-  /// 回転なし
-  kNoRotate = 0,
-  /// 時計回り90度
-  kDegrees90,
-  /// 時計回り180度
-  kDegrees180,
-  /// 時計回り270度
-  kDegrees270
+  kNoRotate = 0,  ///< 回転なし
+  kDegrees90,     ///< 時計回り90度
+  kDegrees180,    ///< 時計回り180度
+  kDegrees270     ///< 時計回り270度
 };
 
 //=====================================================================

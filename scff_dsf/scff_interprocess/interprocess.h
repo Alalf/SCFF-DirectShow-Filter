@@ -76,12 +76,9 @@ static const char kMessageMutexNamePrefix[] = "mutex_scff_v1_message_";
 
 /// レイアウトの種類
 enum class LayoutTypes {
-  /// 何も表示しない
-  kNullLayout = 0,
-  /// 取り込み範囲1個で、境界は出力に強制的に合わせられる
-  kNativeLayout,
-  /// 取り込み範囲が複数ある
-  kComplexLayout
+  kNullLayout = 0,  ///< 何も表示しない
+  kNativeLayout,    ///< 取り込み範囲1個で、境界は出力に強制的に合わせられる
+  kComplexLayout    ///< 取り込み範囲が複数ある
 };
 
 //---------------------------------------------------------------------
@@ -90,64 +87,41 @@ enum class LayoutTypes {
 /// @sa scff_imaging/imaging_types.h
 /// @sa scff_imaging::ImagePixelFormats
 enum class ImagePixelFormats {
-  /// 不正なピクセルフォーマット
-  kInvalidPixelFormat = -1,
-  /// I420(12bit)
-  kI420 = 0,
-  /// IYUV(12bit)
-  kIYUV,
-  /// YV12(12bit)
-  kYV12,
-  /// UYVY(16bit)
-  kUYVY,
-  /// YUY2(16bit)
-  kYUY2,
-  /// RGB0(32bit)
-  kRGB0,
-  /// 対応ピクセルフォーマット数
-  kSupportedPixelFormatsCount
+  kInvalidPixelFormat = -1,   ///< 不正なピクセルフォーマット
+  kI420 = 0,                  ///< I420(12bit)
+  kIYUV,                      ///< IYUV(12bit)
+  kYV12,                      ///< YV12(12bit)
+  kUYVY,                      ///< UYVY(16bit)
+  kYUY2,                      ///< YUY2(16bit)
+  kRGB0,                      ///< RGB0(32bit)
+  kSupportedPixelFormatsCount ///</// 対応ピクセルフォーマット数
 };
 
 /// 拡大縮小メソッドをあらわす定数
 /// @sa scff_imaging/imaging_types.h
 /// @sa scff_imaging::SWScaleFlags
 enum class SWScaleFlags {
-  /// fast bilinear
-  kFastBilinear = 1,
-  /// bilinear
-  kBilinear     = 2,
-  /// bicubic
-  kBicubic      = 4,
-  /// experimental
-  kX            = 8,
-  /// nearest neighbor
-  kPoint        = 0x10,
-  /// averaging area
-  kArea         = 0x20,
-  /// luma bicubic, chroma bilinear
-  kBicublin     = 0x40,
-  /// gaussian
-  kGauss        = 0x80,
-  /// sinc
-  kSinc         = 0x100,
-  /// lanczos
-  kLanczos      = 0x200,
-  /// natural bicubic spline
-  kSpline       = 0x400
+  kFastBilinear = 1,      ///< fast bilinear
+  kBilinear     = 2,      ///< bilinear
+  kBicubic      = 4,      ///< bicubic
+  kX            = 8,      ///< experimental
+  kPoint        = 0x10,   ///< nearest neighbor
+  kArea         = 0x20,   ///< averaging area
+  kBicublin     = 0x40,   ///< luma bicubic, chroma bilinear
+  kGauss        = 0x80,   ///< gaussian
+  kSinc         = 0x100,  ///< sinc
+  kLanczos      = 0x200,  ///< lanczos
+  kSpline       = 0x400   ///< natural bicubic spline
 };
 
 /// 回転方向を表す定数
 /// @sa scff_imaging/imaging_types.h
 /// @sa scff_imaging::RotateDirections
 enum class RotateDirections {
-  /// 回転なし
-  kNoRotate = 0,
-  /// 時計回り90度
-  kDegrees90,
-  /// 時計回り180度
-  kDegrees180,
-  /// 時計回り270度
-  kDegrees270
+  kNoRotate = 0,    ///< 回転なし
+  kDegrees90,       ///< 時計回り90度
+  kDegrees180,      ///< 時計回り180度
+  kDegrees270       ///< 時計回り270度
 };
 
 //---------------------------------------------------------------------
@@ -280,7 +254,7 @@ class Interprocess {
   //-------------------------------------------------------------------
   // for SCFF DirectShow Filter
   //-------------------------------------------------------------------
-  /// エントリを作成する
+  /// エントリを追加する
   bool AddEntry(const Entry &entry);
   /// エントリを削除する
   bool RemoveEntry(uint32_t process_id);

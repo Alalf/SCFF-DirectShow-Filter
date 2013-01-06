@@ -30,12 +30,9 @@ class WindowsDDBImage: public Image {
  public:
   /// Windowsビットマップの生成方法
   enum class Sources {
-    /// ありえない値
-    kInvalidSource,
-    /// WindowハンドルからCreateCompatibleBitmapで生成
-    kFromWindow,
-    /// DLLリソースから生成
-    kFromResource
+    kInvalidSource, ///< ありえない値
+    kFromWindow,    ///< WindowハンドルからCreateCompatibleBitmapで生成
+    kFromResource   ///< DLLリソースから生成
   };
 
   /// コンストラクタ

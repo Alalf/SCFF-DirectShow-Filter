@@ -29,20 +29,20 @@ public static class UpdateCommands {
   //===================================================================
 
   /// MainWindowのUpdateByEntireProfileを呼び出す
-  public readonly static RoutedCommand UpdateMainWindowByEntireProfile = new RoutedCommand();
+  public static readonly RoutedCommand UpdateMainWindowByEntireProfile = new RoutedCommand();
   /// LayoutEditのUpdateByEntireProfileを呼び出す
-  public readonly static RoutedCommand UpdateLayoutEditByEntireProfile = new RoutedCommand();
+  public static readonly RoutedCommand UpdateLayoutEditByEntireProfile = new RoutedCommand();
   /// TargetWindowと更新が必要なUserControlのUpdateByCurrentProfileを呼び出す
-  public readonly static RoutedCommand UpdateTargetWindowByCurrentProfile = new RoutedCommand();
+  public static readonly RoutedCommand UpdateTargetWindowByCurrentProfile = new RoutedCommand();
   /// LayoutParameterのUpdateByCurrentProfileを呼び出す
-  public readonly static RoutedCommand UpdateLayoutParameterByCurrentProfile = new RoutedCommand();
+  public static readonly RoutedCommand UpdateLayoutParameterByCurrentProfile = new RoutedCommand();
 
   //===================================================================
   // Options
   //===================================================================
 
   /// LayoutEditのUpdateByOptionsを呼び出す
-  public readonly static RoutedCommand UpdateLayoutEditByOptions = new RoutedCommand();
+  public static readonly RoutedCommand UpdateLayoutEditByOptions = new RoutedCommand();
 
   //===================================================================
   // RuntimeOptions

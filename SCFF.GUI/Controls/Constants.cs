@@ -25,37 +25,37 @@ using System.Windows.Media;
 /// ブラシとペン
 public static class BrushesAndPens {
   /// WindowTypes.NormalでCurrent時のブラシ
-  public readonly static Brush CurrentNormalBrush;
+  public static readonly Brush CurrentNormalBrush;
   /// WindowTypes.Normalのブラシ
-  public readonly static Brush NormalBrush;
+  public static readonly Brush NormalBrush;
   /// WindowTypes.DesktopListViewでCurrent時のブラシ
-  public readonly static Brush CurrentDesktopListViewBrush;
+  public static readonly Brush CurrentDesktopListViewBrush;
   /// WindowTypes.DesktopListViewのブラシ
-  public readonly static Brush DesktopListViewBrush;
+  public static readonly Brush DesktopListViewBrush;
   /// WindowTypes.DesktopでCurrent時のブラシ
-  public readonly static Brush CurrentDesktopBrush;
+  public static readonly Brush CurrentDesktopBrush;
   /// WindowTypes.Desktopのブラシ
-  public readonly static Brush DesktopBrush;
+  public static readonly Brush DesktopBrush;
 
   /// ペンの太さ
   /// @todo(me) 本当はここにあってはいけないのだが・・・
   private const double penThickness = 0.005 * 100.0;
 
   /// WindowTypes.NormalでCurrent時のペン
-  public readonly static Pen CurrentNormalPen;
+  public static readonly Pen CurrentNormalPen;
   /// WindowTypes.Normalのペン
-  public readonly static Pen NormalPen;
+  public static readonly Pen NormalPen;
   /// WindowTypes.DesktopListViewでCurrent時のペン
-  public readonly static Pen CurrentDesktopListViewPen;
+  public static readonly Pen CurrentDesktopListViewPen;
   /// WindowTypes.DesktopListViewのペン
-  public readonly static Pen DesktopListViewPen;
+  public static readonly Pen DesktopListViewPen;
   /// WindowTypes.DesktopでCurrent時のペン
-  public readonly static Pen CurrentDesktopPen;
+  public static readonly Pen CurrentDesktopPen;
   /// WindowTypes.Desktopのペン
-  public readonly static Pen DesktopPen;
+  public static readonly Pen DesktopPen;
 
   /// ドロップシャドウ描画用ペン（正確には黒色の縁取りだが・・・）
-  public readonly static Pen DropShadowPen;
+  public static readonly Pen DropShadowPen;
 
   /// staticコンストラクタ
   static BrushesAndPens() {

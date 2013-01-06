@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file SCFF.GUI/Controls/LayoutParameter.xaml.cs
-/// レイアウト配置設定
+/// 数値を指定してレイアウト配置を調整するためのUserControl
 
 namespace SCFF.GUI.Controls {
 
@@ -24,9 +24,8 @@ using System;
 using System.Windows.Controls;
 using SCFF.Common;
 
-/// レイアウト配置設定
+/// 数値を指定してレイアウト配置を調整するためのUserControl
 public partial class LayoutParameter : UserControl, IUpdateByProfile {
-
   //===================================================================
   // コンストラクタ/Loaded/ShutdownStartedイベントハンドラ
   //===================================================================
@@ -34,6 +33,110 @@ public partial class LayoutParameter : UserControl, IUpdateByProfile {
   /// コンストラクタ
   public LayoutParameter() {
     InitializeComponent();
+  }
+
+  //===================================================================
+  // イベントハンドラ
+  //===================================================================
+
+  //-------------------------------------------------------------------
+  // *Changed/Checked/Unchecked以外
+  //-------------------------------------------------------------------
+
+  //-------------------------------------------------------------------
+  // Checked/Unchecked
+  //-------------------------------------------------------------------
+
+  //-------------------------------------------------------------------
+  // *Changed
+  //-------------------------------------------------------------------
+
+  /// 下限・上限つきでテキストボックスから値を取得する
+  private bool TryParseBoundRelativeParameter(TextBox textBox,
+      double lowerBound, double upperBound, out double parsedValue) {
+    // Parse
+    if (!double.TryParse(textBox.Text, out parsedValue)) {
+      parsedValue = lowerBound;
+      textBox.Text = lowerBound.ToString("F3");
+      return false;
+    }
+
+    // Validation
+    if (parsedValue < lowerBound) {
+      parsedValue = lowerBound;
+      textBox.Text = lowerBound.ToString("F3");
+      return false;
+    } else if (parsedValue > upperBound) {
+      parsedValue = upperBound;
+      textBox.Text = upperBound.ToString("F3");
+      return false;
+    }
+
+    return true;
+  }
+
+  /// BoundRelativeLeft: TextChanged
+  /// @param sender 使用しない
+  /// @param e 使用しない
+  private void BoundRelativeLeft_TextChanged(object sender, TextChangedEventArgs e) {
+    var lowerBound = 0.0;
+    var upperBound = 1.0;
+    double parsedValue;
+    if (this.TryParseBoundRelativeParameter(this.BoundRelativeLeft, lowerBound, upperBound, out parsedValue)) {
+      // Profileに書き込み
+      App.Profile.CurrentOutputLayoutElement.BoundRelativeLeft = parsedValue;
+      // Changedイベントで発動するものはないのでそのまま代入
+      /// @todo(me) ダミープレビューサイズ
+      this.BoundX.Text = App.Profile.CurrentInputLayoutElement.BoundLeft(Constants.DummyPreviewWidth).ToString();
+    }
+  }
+
+  /// BoundRelativeTop: TextChanged
+  /// @param sender 使用しない
+  /// @param e 使用しない
+  private void BoundRelativeTop_TextChanged(object sender, TextChangedEventArgs e) {
+    var lowerBound = 0.0;
+    var upperBound = 1.0;
+    double parsedValue;
+    if (this.TryParseBoundRelativeParameter(this.BoundRelativeTop, lowerBound, upperBound, out parsedValue)) {
+      // Profileに書き込み
+      App.Profile.CurrentOutputLayoutElement.BoundRelativeTop = parsedValue;
+      // Changedイベントで発動するものはないのでそのまま代入
+      /// @todo(me) ダミープレビューサイズ
+      this.BoundY.Text = App.Profile.CurrentInputLayoutElement.BoundTop(Constants.DummyPreviewHeight).ToString();
+    }
+  }
+
+  /// BoundRelativeRight: TextChanged
+  /// @param sender 使用しない
+  /// @param e 使用しない
+  private void BoundRelativeRight_TextChanged(object sender, TextChangedEventArgs e) {
+    var lowerBound = 0.0;
+    var upperBound = 1.0;
+    double parsedValue;
+    if (this.TryParseBoundRelativeParameter(this.BoundRelativeRight, lowerBound, upperBound, out parsedValue)) {
+      // Profileに書き込み
+      App.Profile.CurrentOutputLayoutElement.BoundRelativeRight = parsedValue;
+      // Changedイベントで発動するものはないのでそのまま代入
+      /// @todo(me) ダミープレビューサイズ
+      this.BoundWidth.Text = App.Profile.CurrentInputLayoutElement.BoundWidth(Constants.DummyPreviewWidth).ToString();
+    }
+  }
+
+  /// BoundRelativeBottom: TextChanged
+  /// @param sender 使用しない
+  /// @param e 使用しない
+  private void BoundRelativeBottom_TextChanged(object sender, TextChangedEventArgs e) {
+    var lowerBound = 0.0;
+    var upperBound = 1.0;
+    double parsedValue;
+    if (this.TryParseBoundRelativeParameter(this.BoundRelativeBottom, lowerBound, upperBound, out parsedValue)) {
+      // Profileに書き込み
+      App.Profile.CurrentOutputLayoutElement.BoundRelativeBottom = parsedValue;
+      // Changedイベントで発動するものはないのでそのまま代入
+      /// @todo(me) ダミープレビューサイズ
+      this.BoundHeight.Text = App.Profile.CurrentInputLayoutElement.BoundHeight(Constants.DummyPreviewHeight).ToString();
+    }
   }
 
   //===================================================================
@@ -80,108 +183,18 @@ public partial class LayoutParameter : UserControl, IUpdateByProfile {
 
   /// @copydoc IUpdateByProfile::AttachProfileChangedEventHandlers
   public void AttachProfileChangedEventHandlers() {
-    this.BoundRelativeLeft.TextChanged += boundRelativeLeft_TextChanged;
-    this.BoundRelativeTop.TextChanged += boundRelativeTop_TextChanged;
-    this.BoundRelativeRight.TextChanged += boundRelativeRight_TextChanged;
-    this.BoundRelativeBottom.TextChanged += boundRelativeBottom_TextChanged;
+    this.BoundRelativeLeft.TextChanged += BoundRelativeLeft_TextChanged;
+    this.BoundRelativeTop.TextChanged += BoundRelativeTop_TextChanged;
+    this.BoundRelativeRight.TextChanged += BoundRelativeRight_TextChanged;
+    this.BoundRelativeBottom.TextChanged += BoundRelativeBottom_TextChanged;
   }
 
   /// @copydoc IUpdateByProfile::DetachProfileChangedEventHandlers
   public void DetachProfileChangedEventHandlers() {
-    this.BoundRelativeLeft.TextChanged -= boundRelativeLeft_TextChanged;
-    this.BoundRelativeTop.TextChanged -= boundRelativeTop_TextChanged;
-    this.BoundRelativeRight.TextChanged -= boundRelativeRight_TextChanged;
-    this.BoundRelativeBottom.TextChanged -= boundRelativeBottom_TextChanged;
-  }
-
-  //===================================================================
-  // イベントハンドラ
-  //===================================================================
-
-  //-------------------------------------------------------------------
-  // *Changed/Checked/Unchecked以外
-  //-------------------------------------------------------------------
-
-  //-------------------------------------------------------------------
-  // Checked/Unchecked
-  //-------------------------------------------------------------------
-
-  //-------------------------------------------------------------------
-  // *Changed
-  //-------------------------------------------------------------------
-
-  private bool TryParseBoundRelativeParameter(TextBox textBox, double lowerBound, double upperBound, out double parsedValue) {
-    // Parse
-    if (!double.TryParse(textBox.Text, out parsedValue)) {
-      parsedValue = lowerBound;
-      textBox.Text = lowerBound.ToString("F3");
-      return false;
-    }
-
-    // Validation
-    if (parsedValue < lowerBound) {
-      parsedValue = lowerBound;
-      textBox.Text = lowerBound.ToString("F3");
-      return false;
-    } else if (parsedValue > upperBound) {
-      parsedValue = upperBound;
-      textBox.Text = upperBound.ToString("F3");
-      return false;
-    }
-
-    return true;
-  }
-
-  private void boundRelativeLeft_TextChanged(object sender, TextChangedEventArgs e) {
-    var lowerBound = 0.0;
-    var upperBound = 1.0;
-    double parsedValue;
-    if (this.TryParseBoundRelativeParameter(this.BoundRelativeLeft, lowerBound, upperBound, out parsedValue)) {
-      // Profileに書き込み
-      App.Profile.CurrentOutputLayoutElement.BoundRelativeLeft = parsedValue;
-      // Changedイベントで発動するものはないのでそのまま代入
-      /// @todo(me) ダミープレビューサイズ
-      this.BoundX.Text = App.Profile.CurrentInputLayoutElement.BoundLeft(Constants.DummyPreviewWidth).ToString();
-    }
-  }
-
-  private void boundRelativeTop_TextChanged(object sender, TextChangedEventArgs e) {
-    var lowerBound = 0.0;
-    var upperBound = 1.0;
-    double parsedValue;
-    if (this.TryParseBoundRelativeParameter(this.BoundRelativeTop, lowerBound, upperBound, out parsedValue)) {
-      // Profileに書き込み
-      App.Profile.CurrentOutputLayoutElement.BoundRelativeTop = parsedValue;
-      // Changedイベントで発動するものはないのでそのまま代入
-      /// @todo(me) ダミープレビューサイズ
-      this.BoundY.Text = App.Profile.CurrentInputLayoutElement.BoundTop(Constants.DummyPreviewHeight).ToString();
-    }
-  }
-
-  private void boundRelativeRight_TextChanged(object sender, TextChangedEventArgs e) {
-    var lowerBound = 0.0;
-    var upperBound = 1.0;
-    double parsedValue;
-    if (this.TryParseBoundRelativeParameter(this.BoundRelativeRight, lowerBound, upperBound, out parsedValue)) {
-      // Profileに書き込み
-      App.Profile.CurrentOutputLayoutElement.BoundRelativeRight = parsedValue;
-      // Changedイベントで発動するものはないのでそのまま代入
-      /// @todo(me) ダミープレビューサイズ
-      this.BoundWidth.Text = App.Profile.CurrentInputLayoutElement.BoundWidth(Constants.DummyPreviewWidth).ToString();
-    }
-  }
-
-  private void boundRelativeBottom_TextChanged(object sender, TextChangedEventArgs e) {
-    var lowerBound = 0.0;
-    var upperBound = 1.0;
-    double parsedValue;
-    if (this.TryParseBoundRelativeParameter(this.BoundRelativeBottom, lowerBound, upperBound, out parsedValue)) {
-      // Profileに書き込み
-      App.Profile.CurrentOutputLayoutElement.BoundRelativeBottom = parsedValue;
-      // Changedイベントで発動するものはないのでそのまま代入
-      /// @todo(me) ダミープレビューサイズ
-      this.BoundHeight.Text = App.Profile.CurrentInputLayoutElement.BoundHeight(Constants.DummyPreviewHeight).ToString();
-    }
+    this.BoundRelativeLeft.TextChanged -= BoundRelativeLeft_TextChanged;
+    this.BoundRelativeTop.TextChanged -= BoundRelativeTop_TextChanged;
+    this.BoundRelativeRight.TextChanged -= BoundRelativeRight_TextChanged;
+    this.BoundRelativeBottom.TextChanged -= BoundRelativeBottom_TextChanged;
   }
 }
-}
+}   // namespace SCFF.GUI.Controls

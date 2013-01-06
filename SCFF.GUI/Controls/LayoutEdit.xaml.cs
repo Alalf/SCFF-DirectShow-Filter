@@ -41,7 +41,7 @@ public partial class LayoutEdit : UserControl, IUpdateByProfile, IUpdateByOption
   // 定数
   //===================================================================  
 
-  // 1.0のままやると値が小さすぎてフォントがバグるので100倍
+  /// @warning 1.0のままやると値が小さすぎてフォントがバグるので100倍
   private const double Scale = 100.0;
 
   private const double MaxImageWidth = 1.0 * Scale;
@@ -61,7 +61,7 @@ public partial class LayoutEdit : UserControl, IUpdateByProfile, IUpdateByOption
   private ScreenCaptureTimer screenCaptureTimer = null;
 
   //===================================================================
-  // コンストラクタ/Loaded/ShutdownStartedイベントハンドラ
+  // コンストラクタ/Loaded/Closing/ShutdownStartedイベントハンドラ
   //===================================================================
 
   /// コンストラクタ
@@ -88,12 +88,12 @@ public partial class LayoutEdit : UserControl, IUpdateByProfile, IUpdateByOption
     this.StartRedrawTimer();
   }
 
-  /// Loadedイベントハンドラ
+  /// Loaded
   void OnLoaded(object sender, RoutedEventArgs e) {
     Debug.WriteLine("LayoutEdit: OnLoaded");
   }
 
-  /// Dispatcher.ShutdownStartedイベントハンドラ
+  /// Dispatcher.ShutdownStarted
   private void OnShutdownStarted(object sender, EventArgs e) {
     Debug.WriteLine("LayoutEdit: ShutdownStarted");
     this.screenCaptureTimer.End();

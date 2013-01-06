@@ -55,7 +55,7 @@ public partial class App : Application {
   // イベントハンドラ
   //===================================================================
 
-  /// アプリケーション起動時
+  /// Startup: アプリケーション開始時
   /// @param sender 使用しない
   /// @param e コマンドライン引数(Args)を参照可能
   private void OnStartup(object sender, StartupEventArgs e) {
@@ -71,7 +71,7 @@ public partial class App : Application {
     }
   }
 
-  /// アプリケーション終了時
+  /// Exit: アプリケーション終了時
   /// @param sender 使用しない
   /// @param e 終了コード(ApplicationExitCode)の参照・設定が可能
   private void OnExit(object sender, ExitEventArgs e) {

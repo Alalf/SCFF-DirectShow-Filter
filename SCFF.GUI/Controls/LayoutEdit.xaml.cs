@@ -16,9 +16,8 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file SCFF.GUI/Controls/LayoutEdit.xaml.cs
-/// レイアウトエディタコントロール
+/// レイアウト編集用UserControl
 
-/// SCFF.GUIのユーザコントロールをまとめた名前空間
 namespace SCFF.GUI.Controls {
 
 using System;

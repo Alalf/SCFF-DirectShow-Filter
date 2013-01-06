@@ -16,8 +16,9 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file SCFF.GUI/Controls/Constants.cs
-/// ユーザコントロール共通の定数
+/// UserControl共通の定数
 
+/// SCFF.GUIで利用するUserControls
 namespace SCFF.GUI.Controls {
 
 using System.Windows.Media;

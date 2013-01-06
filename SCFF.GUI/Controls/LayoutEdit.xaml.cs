@@ -165,7 +165,19 @@ public partial class LayoutEdit : UserControl, IUpdateByProfile, IUpdateByOption
 
     // プレビューの描画
     var layoutElementRect = this.CreateLayoutElementRect(layoutElement);
-    dc.DrawImage(bitmap, layoutElementRect);
+    /// @todo(me) スーパー論理エラー発生中！アスペクト比がおかしいからおかしなことになってるwwww
+    ///           現状座標系が([0-1*scale], [0-1*scale])だからなあ・・・
+    ///           移植ではなく独自の計算が必要かもしれない。まあdoubleの時点で必要性は感じていた・・・
+    var aspect = this.LayoutEditViewBox.Width / this.LayoutEditViewBox.Height;
+    double x, y, width, height;
+    Common.Imaging.Utilities.CalculateLayout(
+        layoutElementRect.Left, layoutElementRect.Top,
+        layoutElementRect.Width, layoutElementRect.Height,
+        layoutElement.ClippingWidthWithFit, layoutElement.ClippingHeightWithFit * aspect,
+        layoutElement.Stretch, layoutElement.KeepAspectRatio,
+        out x, out y, out width, out height);
+    var actualLayoutElementRect = new Rect(x, y, width, height);
+    dc.DrawImage(bitmap, actualLayoutElementRect);
   }
 
   private void DrawBorder(DrawingContext dc, Profile.InputLayoutElement layoutElement) {

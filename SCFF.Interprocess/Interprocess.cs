@@ -330,7 +330,7 @@ public class Interprocess {
     // Mutexの作成
     Mutex tmpMutexDirectory = new Mutex(false, DirectoryMutexName);
 
-    // メンバ変数に設定
+    // フィールドに設定
     this.directory = tmpDirectory;
     this.viewOfDirectory = tmpViewOfDirectory;
     this.mutexDirectory = tmpMutexDirectory;
@@ -387,7 +387,7 @@ public class Interprocess {
     // Mutexの作成
     Mutex tmpMutexMessage = new Mutex(false, messageMutexName);
 
-    // メンバ変数に設定
+    // フィールドに設定
     this.message = tmpMessage;
     this.viewOfMessage = tmpViewOfMessage;
     this.mutexMessage = tmpMutexMessage;
@@ -631,7 +631,7 @@ public class Interprocess {
   }
 
   //-------------------------------------------------------------------
-  // メンバ変数
+  // フィールド
   //-------------------------------------------------------------------
 
   /// Directoryのサイズ

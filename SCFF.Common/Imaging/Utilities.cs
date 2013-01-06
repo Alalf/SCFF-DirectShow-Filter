@@ -25,14 +25,15 @@ using System.Diagnostics;
 
 /// 画像の操作に便利な関数をまとめたクラス
 /// @attention C#では関数をまとめる為に名前空間は使えない
+/// @warning WPFでは座標のほとんどが整数型ではなく浮動小数点型
 public static class Utilities {
   /// 境界の座標系と同じ座標系の新しい配置を計算する
-  public static bool CalculateLayout(int boundX, int boundY,
-      int boundWidth, int boundHeight,
-      int inputWidth, int inputHeight,
+  public static bool CalculateLayout(double boundX, double boundY,
+      double boundWidth, double boundHeight,
+      double inputWidth, double inputHeight,
       bool stretch, bool keepAspectRatio,
-      out int newX, out int newY,
-      out int newWidth, out int newHeight) {
+      out double newX, out double newY,
+      out double newWidth, out double newHeight) {
     // 高さと幅はかならず0より上
     Debug.Assert(inputWidth > 0 && inputHeight > 0 &&
                  boundWidth > 0 && boundHeight > 0,
@@ -76,7 +77,7 @@ public static class Utilities {
         Debug.Assert(newHeight <= boundHeight,
                      "Cannot expand over bound-height");
         newX = boundX;
-        int paddingHeight = (boundHeight - newHeight) / 2;
+        double paddingHeight = (boundHeight - newHeight) / 2;
         newY = boundY + paddingHeight;
       } else {
         // 出力のほうが横長
@@ -87,13 +88,13 @@ public static class Utilities {
         Debug.Assert(newHeight <= boundHeight,
                      "Cannot expand over bound-height");
         newY = boundY;
-        int paddingWidth = (boundWidth - newWidth) / 2;
+        double paddingWidth = (boundWidth - newWidth) / 2;
         newX = boundX + paddingWidth;
       }
     } else if (needExpand && !stretch) {
       // パディングを入れる
-      int paddingWidth = (boundWidth - inputWidth) / 2;
-      int paddingHeight = (boundHeight - inputHeight) / 2;
+      double paddingWidth = (boundWidth - inputWidth) / 2;
+      double paddingHeight = (boundHeight - inputHeight) / 2;
       newX = boundX + paddingWidth;
       newY = boundY + paddingHeight;
       newWidth = inputWidth;
@@ -111,12 +112,12 @@ public static class Utilities {
   }
 
   /// 幅と高さから拡大縮小した場合のパディングサイズを求める
-  public static bool CalculatePaddingSize(int boundWidth, int boundHeight,
-      int inputWidth, int inputHeight,
+  public static bool CalculatePaddingSize(double boundWidth, double boundHeight,
+      double inputWidth, double inputHeight,
       bool stretch, bool keepAspectRatio,
-      out int paddingTop, out int paddingBottom,
-      out int paddingLeft, out int paddingRight) {
-    int newX, newY, newWidth, newHeight;
+      out double paddingTop, out double paddingBottom,
+      out double paddingLeft, out double paddingRight) {
+    double newX, newY, newWidth, newHeight;
     // 座標系はbound領域内
     bool error = Utilities.CalculateLayout(0, 0, boundWidth, boundHeight,
         inputWidth, inputHeight,

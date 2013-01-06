@@ -63,4 +63,41 @@ public enum RotateDirections {
   Degrees180    = Interprocess.RotateDirections.Degrees180,
   Degrees270    = Interprocess.RotateDirections.Degrees270,
 }
+
+/// 追加レイアウトパラメータ
+public class AdditionalLayoutParameter {
+  /// ウィンドウタイプ: 標準状態 or 最小化 or 最大化
+  public WindowTypes WindowType { get; set; }
+  /// ウィンドウ内容を示す文字列(クラス名)
+  public string WindowCaption { get; set; }
+
+  /// クリッピング領域を自動的にウィンドウサイズに合わせるか
+  public bool Fit { get; set; }
+  /// レイアウト要素が配置される左上端の相対座標(x)
+  public double BoundRelativeLeft { get; set; }
+  /// レイアウト要素が配置される左上端の相対座標(y)
+  public double BoundRelativeTop { get; set; }
+  /// レイアウト要素が配置される右下端の相対座標(x)
+  public double BoundRelativeRight { get; set; }
+  /// レイアウト要素が配置される右下端の相対座標(y)
+  public double BoundRelativeBottom { get; set; }
+
+  /// Fitオプションを考慮したクリッピング領域の左上端の座標(x)
+  public int ClippingXWithoutFit { get; set; }
+  /// Fitオプションを考慮したクリッピング領域の左上端の座標(y)
+  public int ClippingYWithoutFit { get; set; }
+  /// Fitオプションを考慮したクリッピング領域の幅
+  public int ClippingWidthWithoutFit { get; set; }
+  /// Fitオプションを考慮したクリッピング領域の高さ
+  public int ClippingHeightWithoutFit { get; set; }
+
+  /// 保存用: クリッピング領域の左上端のスクリーン座標(x)
+  public int BackupDesktopClippingX { get; set; }
+  /// 保存用: クリッピング領域の左上端のスクリーン座標(y)
+  public int BackupDesktopClippingY { get; set; }
+  /// 保存用: クリッピング領域の幅
+  public int BackupDesktopClippingWidth { get; set; }
+  /// 保存用: クリッピング領域の高さ
+  public int BackupDesktopClippingHeight { get; set; }
+}
 }   // namespace SCFF.Common

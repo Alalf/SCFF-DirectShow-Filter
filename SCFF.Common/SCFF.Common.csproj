@@ -60,6 +60,7 @@
     <Compile Include="GUI\Types.cs" />
     <Compile Include="Types.cs" />
     <Compile Include="Utilities.cs" />
+    <Compile Include="Profile.LayoutElement.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SCFF.Interprocess\SCFF.Interprocess.csproj">

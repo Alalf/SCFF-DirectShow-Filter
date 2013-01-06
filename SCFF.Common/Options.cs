@@ -67,9 +67,9 @@ public class Options {
   /// FFmpeg.exeに渡す引数
   public string FFmpegArguments { get; set; }
 
-  /// MainWindowの左上座標(x)
+  /// MainWindowの左上端のX座標
   public double TmpMainWindowLeft { get; set; }
-  /// MainWindowの左上座標(y)
+  /// MainWindowの左上端のY座標
   public double TmpMainWindowTop { get; set; }
   /// MainWindowの幅
   public double TmpMainWindowWidth { get; set; }

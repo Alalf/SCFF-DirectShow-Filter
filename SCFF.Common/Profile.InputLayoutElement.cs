@@ -20,34 +20,38 @@
 
 namespace SCFF.Common {
 
-using SCFF.Common.Ext;
 using System;
 using System.Diagnostics;
-using System.Text;
+using SCFF.Common.Ext;
 
 public partial class Profile {
 
   /// プロファイル内を参照するためのカーソルクラス
   public class InputLayoutElement : LayoutElement {
+    //=================================================================
+    // コンストラクタ
+    //=================================================================
 
     /// コンストラクタ
-    public InputLayoutElement(Profile profile, int index) : base(profile, index) {
+    public InputLayoutElement(Profile profile, int index)
+        : base(profile, index) {
       // nop
     }
 
     //=================================================================
-    // アクセッサ(単純なもの)
+    // プロパティ
     //=================================================================
 
-    // Show *
+    /// @copydoc SCFF::Interprocess::LayoutParameter::ShowCursor
     public bool ShowCursor {
       get { return Convert.ToBoolean(this.profile.message.LayoutParameters[this.Index].ShowCursor); }
     }
+    /// @copydoc SCFF::Interprocess::LayoutParameter::ShowLayeredWindow
     public bool ShowLayeredWindow {
       get { return Convert.ToBoolean(this.profile.message.LayoutParameters[this.Index].ShowLayeredWindow); }
     }
 
-    // SWScale *
+    // 拡大縮小方式
     public SWScaleFlags SWScaleFlags {
       get { return (SWScaleFlags)this.profile.message.LayoutParameters[this.Index].SWScaleConfig.Flags; }
     }
@@ -135,9 +139,11 @@ public partial class Profile {
     }
 
     //=================================================================
-    // アクセッサ(他のアクセッサやWin32APIを必要とするもの)
-    // あまり呼び出し回数が増えるようならキャッシングを考えること
+    // 二次プロパティ
     //=================================================================
+
+    // 他のプロパティやWin32APIを必要とするプロパティ
+    // あまり呼び出し回数が増えるようならキャッシングを考えること
     
     // Window
     public UIntPtr Window {

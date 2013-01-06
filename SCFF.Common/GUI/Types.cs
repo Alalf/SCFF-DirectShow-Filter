@@ -92,13 +92,13 @@ public class RelativeMouseOffset {
     this.Bottom = mousePoint.Y - layoutElement.BoundRelativeBottom;
   }
 
-  /// レイアウト要素の左端を原点とした相対マウス座標(x)
+  /// レイアウト要素の左端を原点としたマウスの相対X座標
   public double Left { get; private set; }
-  /// レイアウト要素の上端を原点とした相対マウス座標(y)
+  /// レイアウト要素の上端を原点としたマウスの相対Y座標
   public double Top { get; private set; }
-  /// レイアウト要素の右端を原点とした相対マウス座標(x)
+  /// レイアウト要素の右端を原点としたマウスの相対X座標
   public double Right { get; private set; }
-  /// レイアウト要素の下端を原点とした相対マウス座標(y)
+  /// レイアウト要素の下端を原点としたマウスの相対Y座標
   public double Bottom { get; private set; }
 }
 

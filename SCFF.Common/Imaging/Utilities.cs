@@ -74,8 +74,7 @@ public static class Utilities {
         //    = heightの倍率はwidthの引き伸ばし比率で求められる
         newWidth = boundWidth;
         newHeight = inputHeight * boundWidth / inputWidth;
-        Debug.Assert(newHeight <= boundHeight,
-                     "Cannot expand over bound-height");
+        if (boundHeight < newHeight) newHeight = boundHeight;
         newX = boundX;
         double paddingHeight = (boundHeight - newHeight) / 2;
         newY = boundY + paddingHeight;
@@ -85,8 +84,7 @@ public static class Utilities {
         //    = widthの倍率はheightの引き伸ばし比率で求められる
         newHeight = boundHeight;
         newWidth = inputWidth * boundHeight / inputHeight;
-        Debug.Assert(newHeight <= boundHeight,
-                     "Cannot expand over bound-height");
+        if (boundWidth < newWidth) newWidth = boundWidth;
         newY = boundY;
         double paddingWidth = (boundWidth - newWidth) / 2;
         newX = boundX + paddingWidth;

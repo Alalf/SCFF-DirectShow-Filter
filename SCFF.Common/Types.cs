@@ -73,27 +73,27 @@ public class AdditionalLayoutParameter {
 
   /// クリッピング領域を自動的にウィンドウサイズに合わせるか
   public bool Fit { get; set; }
-  /// レイアウト要素が配置される左上端の相対座標(x)
+  /// レイアウト要素が配置される左上端の相対X座標
   public double BoundRelativeLeft { get; set; }
-  /// レイアウト要素が配置される左上端の相対座標(y)
+  /// レイアウト要素が配置される左上端の相対Y座標
   public double BoundRelativeTop { get; set; }
-  /// レイアウト要素が配置される右下端の相対座標(x)
+  /// レイアウト要素が配置される右下端の相対X座標
   public double BoundRelativeRight { get; set; }
-  /// レイアウト要素が配置される右下端の相対座標(y)
+  /// レイアウト要素が配置される右下端の相対Y座標
   public double BoundRelativeBottom { get; set; }
 
-  /// Fitオプションを考慮したクリッピング領域の左上端の座標(x)
+  /// Fitオプションを考慮したクリッピング領域の左上端のX座標
   public int ClippingXWithoutFit { get; set; }
-  /// Fitオプションを考慮したクリッピング領域の左上端の座標(y)
+  /// Fitオプションを考慮したクリッピング領域の左上端のY座標
   public int ClippingYWithoutFit { get; set; }
   /// Fitオプションを考慮したクリッピング領域の幅
   public int ClippingWidthWithoutFit { get; set; }
   /// Fitオプションを考慮したクリッピング領域の高さ
   public int ClippingHeightWithoutFit { get; set; }
 
-  /// 保存用: クリッピング領域の左上端のスクリーン座標(x)
+  /// 保存用: クリッピング領域の左上端のスクリーンX座標
   public int BackupDesktopClippingX { get; set; }
-  /// 保存用: クリッピング領域の左上端のスクリーン座標(y)
+  /// 保存用: クリッピング領域の左上端のスクリーンY座標
   public int BackupDesktopClippingY { get; set; }
   /// 保存用: クリッピング領域の幅
   public int BackupDesktopClippingWidth { get; set; }

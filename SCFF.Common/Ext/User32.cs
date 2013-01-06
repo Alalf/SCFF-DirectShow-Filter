@@ -35,9 +35,9 @@ public class User32 {
   public const int SM_CXSCREEN = 0;
   /// System Metric: プライマリディスプレイの高さ
   public const int SM_CYSCREEN = 1;
-  /// System Metric: 仮想画面の左端のスクリーン座標(x)
+  /// System Metric: 仮想画面の左端のスクリーンX座標
   public const int SM_XVIRTUALSCREEN  = 76;
-  /// System Metric: 仮想画面の上端のスクリーン座標(y)
+  /// System Metric: 仮想画面の上端のスクリーンY座標
   public const int SM_YVIRTUALSCREEN  = 77;
   /// System Metric: 仮想画面の幅
   public const int SM_CXVIRTUALSCREEN = 78;
@@ -50,11 +50,19 @@ public class User32 {
 
   /// RECT
   [StructLayout(LayoutKind.Sequential)]
-  public struct RECT { public int Left, Top, Right, Bottom; }
+  public struct RECT {
+    public int Left;    ///< 左端のX座標
+    public int Top;     ///< 上端のY座標
+    public int Right;   ///< 右端のX座標
+    public int Bottom;  ///< 下端のY座標
+  }
 
   /// POINT
   [StructLayout(LayoutKind.Sequential)]
-  public struct POINT { public int X, Y; }
+  public struct POINT {
+    public int X;   ///< X座標
+    public int Y;   ///< Y座標
+  }
 
   //===================================================================
   // コールバック関数

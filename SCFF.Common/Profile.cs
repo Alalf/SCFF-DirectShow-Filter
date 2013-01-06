@@ -57,40 +57,40 @@ public partial class Profile {
   }
 
   /// レイアウトのゼロクリア
-  /// @param[in, out] layout ゼロクリアされるレイアウト要素
-  private void ClearLayoutElement(OutputLayoutElement layout) {
+  /// @param[in, out] layoutElement ゼロクリアされるレイアウト要素
+  private void ClearLayoutElement(OutputLayoutElement layoutElement) {
     /// @todo(me) インスタンスを生成する形でゼロクリアしているが非効率的？
     var layoutParameter = new Interprocess.LayoutParameter();
     layoutParameter.SWScaleConfig = new Interprocess.SWScaleConfig();
-    this.message.LayoutParameters[layout.Index] = layoutParameter;
-    this.additionalLayoutParameters[layout.Index] = new AdditionalLayoutParameter();
+    this.message.LayoutParameters[layoutElement.Index] = layoutParameter;
+    this.additionalLayoutParameters[layoutElement.Index] = new AdditionalLayoutParameter();
   }
 
   /// レイアウトの初期値への設定
   /// @pre layoutはゼロクリア済み
-  /// @param[in, out] layout 初期値設定されるレイアウト要素
-  private void ResetLayoutElement(OutputLayoutElement layout) {
-    this.ClearLayoutElement(layout);
+  /// @param[in, out] layoutElement 初期値設定されるレイアウト要素
+  private void ResetLayoutElement(OutputLayoutElement layoutElement) {
+    this.ClearLayoutElement(layoutElement);
 
-    layout.KeepAspectRatio = true;
-    layout.RotateDirection = RotateDirections.NoRotate;
-    layout.Stretch = true;
-    layout.SWScaleFlags = SWScaleFlags.Area;
-    layout.SWScaleIsFilterEnabled = false;
+    layoutElement.KeepAspectRatio = true;
+    layoutElement.RotateDirection = RotateDirections.NoRotate;
+    layoutElement.Stretch = true;
+    layoutElement.SWScaleFlags = SWScaleFlags.Area;
+    layoutElement.SWScaleIsFilterEnabled = false;
 
     // プライマリモニタを表示
-    layout.SetWindowToDesktop();
-    //layout.SetWindowToDesktopListView();
-    layout.ClippingXWithoutFit      = 0 - User32.GetSystemMetrics(User32.SM_XVIRTUALSCREEN);
-    layout.ClippingYWithoutFit      = 0 - User32.GetSystemMetrics(User32.SM_YVIRTUALSCREEN);
-    layout.ClippingWidthWithoutFit  = User32.GetSystemMetrics(User32.SM_CXSCREEN);
-    layout.ClippingHeightWithoutFit = User32.GetSystemMetrics(User32.SM_CYSCREEN);
+    layoutElement.SetWindowToDesktop();
+    //layoutElement.SetWindowToDesktopListView();
+    layoutElement.ClippingXWithoutFit      = 0 - User32.GetSystemMetrics(User32.SM_XVIRTUALSCREEN);
+    layoutElement.ClippingYWithoutFit      = 0 - User32.GetSystemMetrics(User32.SM_YVIRTUALSCREEN);
+    layoutElement.ClippingWidthWithoutFit  = User32.GetSystemMetrics(User32.SM_CXSCREEN);
+    layoutElement.ClippingHeightWithoutFit = User32.GetSystemMetrics(User32.SM_CYSCREEN);
     /// @todo(me) クリッピング座標のバックアップをどこで取ればいいのか迷い中
-    //layout.TryUpdateBackupDesktopClippingParameters();
+    //layoutElement.TryUpdateBackupDesktopClippingParameters();
     
-    layout.Fit = false;
-    layout.BoundRelativeRight = 1.0;
-    layout.BoundRelativeBottom = 1.0;
+    layoutElement.Fit = false;
+    layoutElement.BoundRelativeRight = 1.0;
+    layoutElement.BoundRelativeBottom = 1.0;
   }
 
   //===================================================================

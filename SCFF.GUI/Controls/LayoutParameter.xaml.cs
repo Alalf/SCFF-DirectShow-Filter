@@ -20,8 +20,9 @@
 
 namespace SCFF.GUI.Controls {
 
-using SCFF.Common;
+using System;
 using System.Windows.Controls;
+using SCFF.Common;
 
 /// レイアウト配置設定
 public partial class LayoutParameter : UserControl, IUpdateByProfile {
@@ -39,15 +40,15 @@ public partial class LayoutParameter : UserControl, IUpdateByProfile {
   // IUpdateByProfileの実装
   //===================================================================
 
+  /// GroupBox.Headerの最大文字数
+  private const int MaxHeaderLength = 60;
+
   /// @copydoc IUpdateByProfile::UpdateByCurrentProfile
   public void UpdateByCurrentProfile() {
-    var header = "Layout " + (App.Profile.CurrentInputLayoutElement.Index+1) +
-        ": " + App.Profile.CurrentInputLayoutElement.WindowCaption;
-    if (header.Length > 60) {
-      this.GroupBox.Header = header.Substring(0, 60);
-    } else {
-      this.GroupBox.Header = header;
-    }
+    var header = string.Format("Layout {0:D}: {1}",
+        App.Profile.CurrentInputLayoutElement.Index + 1,
+        App.Profile.CurrentInputLayoutElement.WindowCaption);
+    this.GroupBox.Header = header.Substring(0, Math.Min(header.Length, MaxHeaderLength));
 
     /// @todo(me) プロセス情報はMainWindowから取ってこれるので、それを参照にしてBoundX/BoundYも更新
     this.BoundX.Text = App.Profile.CurrentInputLayoutElement.BoundLeft(Constants.DefaultPreviewWidth).ToString();

@@ -91,4 +91,4 @@ public static class BrushesAndPens {
     DropShadowPen.Freeze();
   }
 }
-}
+}   // SCFF.GUI.Controls

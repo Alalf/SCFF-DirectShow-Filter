@@ -20,9 +20,9 @@
 
 namespace SCFF.Common {
 
-using SCFF.Common.Ext;
 using System;
 using System.Text;
+using SCFF.Common.Ext;
 
 /// SCFF.Commonモジュール共通で利用する機能
 public static class Utilities {
@@ -99,7 +99,7 @@ public static class Utilities {
 
   /// EnumerateWindowの結果を格納するポインタ
   private static UIntPtr enumerateWindowResult = UIntPtr.Zero;
-  /// FindWindowExに渡されるウィンドウ列挙関数
+  /// FindWindowExに渡されるWindow列挙関数
   private static bool EnumerateWindow(UIntPtr hWnd, IntPtr lParam) {
     StringBuilder className = new StringBuilder(256);
     User32.GetClassName(hWnd, className, 256);

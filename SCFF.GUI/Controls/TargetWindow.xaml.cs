@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file SCFF.GUI/Controls/TargetWindow.xaml.cs
-/// ウィンドウ取り込み対象の設定用コントロール
+/// Window取り込み対象の設定用UserControl
 
 namespace SCFF.GUI.Controls {
 
@@ -27,7 +27,7 @@ using System.Diagnostics;
 using System.Windows.Controls;
 using System.Windows.Media;
 
-/// ウィンドウ取り込み対象の設定用コントロール
+/// Window取り込み対象の設定用UserControl
 public partial class TargetWindow : UserControl, IUpdateByProfile {
 
   //===================================================================

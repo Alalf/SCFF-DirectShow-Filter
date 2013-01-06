@@ -50,8 +50,8 @@ public static class Utilities {
     }
 
     // 高さと幅の比率を求めておく
-    double boundAspect = (double)boundWidth / boundHeight;
-    double inputAspect = (double)inputWidth / inputHeight;
+    var boundAspect = boundWidth / boundHeight;
+    var inputAspect = inputWidth / inputHeight;
 
     // inputのサイズがboundより完全に小さいかどうか
     bool needExpand = inputWidth <= boundWidth &&
@@ -76,7 +76,7 @@ public static class Utilities {
         newHeight = inputHeight * boundWidth / inputWidth;
         if (boundHeight < newHeight) newHeight = boundHeight;
         newX = boundX;
-        double paddingHeight = (boundHeight - newHeight) / 2;
+        var paddingHeight = (boundHeight - newHeight) / 2;
         newY = boundY + paddingHeight;
       } else {
         // 出力のほうが横長
@@ -86,13 +86,13 @@ public static class Utilities {
         newWidth = inputWidth * boundHeight / inputHeight;
         if (boundWidth < newWidth) newWidth = boundWidth;
         newY = boundY;
-        double paddingWidth = (boundWidth - newWidth) / 2;
+        var paddingWidth = (boundWidth - newWidth) / 2;
         newX = boundX + paddingWidth;
       }
     } else if (needExpand && !stretch) {
       // パディングを入れる
-      double paddingWidth = (boundWidth - inputWidth) / 2;
-      double paddingHeight = (boundHeight - inputHeight) / 2;
+      var paddingWidth = (boundWidth - inputWidth) / 2;
+      var paddingHeight = (boundHeight - inputHeight) / 2;
       newX = boundX + paddingWidth;
       newY = boundY + paddingHeight;
       newWidth = inputWidth;

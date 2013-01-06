@@ -165,9 +165,8 @@ public partial class LayoutEdit : UserControl, IUpdateByProfile, IUpdateByOption
 
     // プレビューの描画
     var layoutElementRect = this.CreateLayoutElementRect(layoutElement);
-    /// @todo(me) スーパー論理エラー発生中！アスペクト比がおかしいからおかしなことになってるwwww
-    ///           現状座標系が([0-1*scale], [0-1*scale])だからなあ・・・
-    ///           移植ではなく独自の計算が必要かもしれない。まあdoubleの時点で必要性は感じていた・・・
+    /// @todo(me) ピクセルベース計算じゃないと根本的におかしい！
+    ///           なぜならばStretchの意味がなくなるから
     var aspect = this.LayoutEditViewBox.Width / this.LayoutEditViewBox.Height;
     double x, y, width, height;
     Common.Imaging.Utilities.CalculateLayout(

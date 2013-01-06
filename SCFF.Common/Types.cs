@@ -22,16 +22,16 @@ namespace SCFF.Common {
 
 /// Options用WindowState。System.Windows.WindowStateと相互に変換する。
 public enum WindowState {
-  Normal,
-  Minimized,
-  Maximized
+  Normal,     ///< 標準状態
+  Minimized,  ///< 最小化
+  Maximized   ///< 最大化
 }
 
 /// Profile用Windowの種類
 public enum WindowTypes {
-  Normal,
-  DesktopListView,
-  Desktop,
+  Normal,           ///< 標準のWindow
+  DesktopListView,  ///< OS別デスクトップWindow
+  Desktop,          ///< ルートWindow
 }
 
 /// @copydoc SCFF::Interprocess::LayoutTypes
@@ -66,38 +66,38 @@ public enum RotateDirections {
 
 /// 追加レイアウトパラメータ
 public class AdditionalLayoutParameter {
-  /// ウィンドウタイプ: 標準状態 or 最小化 or 最大化
+  /// Windowタイプ: 標準状態 or 最小化 or 最大化
   public WindowTypes WindowType { get; set; }
-  /// ウィンドウ内容を示す文字列(クラス名)
+  /// Window内容を示す文字列(≒Class名)
   public string WindowCaption { get; set; }
 
   /// クリッピング領域を自動的にウィンドウサイズに合わせるか
   public bool Fit { get; set; }
-  /// レイアウト要素が配置される左上端の相対X座標
+  /// 相対座標系でのレイアウト要素左上端のX座標
   public double BoundRelativeLeft { get; set; }
-  /// レイアウト要素が配置される左上端の相対Y座標
+  /// 相対座標系でのレイアウト要素左上端のY座標
   public double BoundRelativeTop { get; set; }
-  /// レイアウト要素が配置される右下端の相対X座標
+  /// 相対座標系でのレイアウト要素右下端のX座標
   public double BoundRelativeRight { get; set; }
-  /// レイアウト要素が配置される右下端の相対Y座標
+  /// 相対座標系でのレイアウト要素右下端のY座標
   public double BoundRelativeBottom { get; set; }
 
-  /// Fitオプションを考慮したクリッピング領域の左上端のX座標
+  /// Fit=Falseの時のクリッピング領域左上端のX座標
   public int ClippingXWithoutFit { get; set; }
-  /// Fitオプションを考慮したクリッピング領域の左上端のY座標
+  /// Fit=Falseの時のクリッピング領域左上端のY座標
   public int ClippingYWithoutFit { get; set; }
-  /// Fitオプションを考慮したクリッピング領域の幅
+  /// Fit=Falseの時のクリッピング領域の幅
   public int ClippingWidthWithoutFit { get; set; }
-  /// Fitオプションを考慮したクリッピング領域の高さ
+  /// Fit=Falseの時のクリッピング領域の高さ
   public int ClippingHeightWithoutFit { get; set; }
 
-  /// 保存用: クリッピング領域の左上端のスクリーンX座標
+  /// 保存用: Desktop座標系でのクリッピング領域左上端のX座標
   public int BackupDesktopClippingX { get; set; }
-  /// 保存用: クリッピング領域の左上端のスクリーンY座標
+  /// 保存用: Desktop座標系でのクリッピング領域左上端のY座標
   public int BackupDesktopClippingY { get; set; }
   /// 保存用: クリッピング領域の幅
-  public int BackupDesktopClippingWidth { get; set; }
+  public int BackupClippingWidth { get; set; }
   /// 保存用: クリッピング領域の高さ
-  public int BackupDesktopClippingHeight { get; set; }
+  public int BackupClippingHeight { get; set; }
 }
 }   // namespace SCFF.Common

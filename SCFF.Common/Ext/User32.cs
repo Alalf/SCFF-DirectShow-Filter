@@ -35,9 +35,9 @@ public class User32 {
   public const int SM_CXSCREEN = 0;
   /// System Metric: プライマリディスプレイの高さ
   public const int SM_CYSCREEN = 1;
-  /// System Metric: 仮想画面の左端のスクリーンX座標
+  /// System Metric: Screen座標系での仮想画面左上端のX座標
   public const int SM_XVIRTUALSCREEN  = 76;
-  /// System Metric: 仮想画面の上端のスクリーンY座標
+  /// System Metric: Screen座標系での仮想画面左上端のY座標
   public const int SM_YVIRTUALSCREEN  = 77;
   /// System Metric: 仮想画面の幅
   public const int SM_CXVIRTUALSCREEN = 78;
@@ -84,7 +84,7 @@ public class User32 {
   [DllImport("user32.dll", SetLastError = false)]
   public static extern UIntPtr GetDesktopWindow();
 
-  /// 指定されたクラス名、ウィンドウ名のWindowハンドルを探す
+  /// 指定されたClass名、Window名のWindowハンドルを探す
   [DllImport("user32.dll")]
   public static extern UIntPtr FindWindowEx(UIntPtr hWnd,
       UIntPtr hwndChildAfter, string lpszClass, string lpszWindow);
@@ -93,20 +93,20 @@ public class User32 {
   [DllImport("user32.dll")]
   public static extern bool EnumWindows(WNDENUMProc lpEnumFunc, IntPtr lParam);
 
-  /// Windowハンドルからクラス名を取得する
+  /// WindowハンドルからClass名を取得する
   [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
   public static extern int GetClassName(UIntPtr hWnd,
       StringBuilder lpClassName, int nMaxCount);
 
-  /// Windowハンドルのクライアント領域を表すRECTを取得
+  /// WindowハンドルのClient領域を表すRECTを取得
   [DllImport("user32.dll")]
   public static extern bool GetClientRect(UIntPtr hWnd, out RECT lpRect);
 
-  /// 指定したWindowハンドルのクライアント座標をスクリーン座標に変換する
+  /// 指定したWindowハンドルのClient座標をScreen座標に変換する
   [DllImport("user32.dll")]
   public static extern bool ClientToScreen(UIntPtr hWnd, ref POINT lpPoint);
 
-  /// 指定したスクリーン座標からWindowハンドルを得る
+  /// 指定したScreen座標からWindowハンドルを得る
   [DllImport("user32.dll")]
   public static extern UIntPtr WindowFromPoint(int xPoint, int yPoint);
 

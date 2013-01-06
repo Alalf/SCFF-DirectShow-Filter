@@ -75,7 +75,7 @@ public class Options {
   public double TmpMainWindowWidth { get; set; }
   /// MainWindowの高さ
   public double TmpMainWindowHeight { get; set; }
-  /// MainWindowのウィンドウ状態
+  /// MainWindowのWindow状態
   public WindowState TmpMainWindowState { get; set; }
 
   /// AreaExpanderが開いている

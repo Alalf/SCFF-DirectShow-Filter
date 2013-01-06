@@ -195,7 +195,7 @@ public struct LayoutParameter {
   /// サンプル内の高さ
   /// @warning NullLayout,NativeLayoutでは無視される
   public Int32 BoundHeight;
-  /// キャプチャを行う対象となるウィンドウ
+  /// キャプチャを行う対象となるWindow
   public UInt64 Window;
   /// 取り込み範囲の開始X座標
   public Int32 ClippingX;

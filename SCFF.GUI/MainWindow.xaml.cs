@@ -39,7 +39,7 @@ public partial class MainWindow : Window, IUpdateByProfile, IUpdateByOptions {
     this.InitializeComponent();
   }
 
-  /// 全ウィンドウ表示前に一度だけ起こるLoadedイベントハンドラ
+  /// 全Window表示前に一度だけ起こる
   private void OnLoaded(object sender, RoutedEventArgs e) {
     this.UpdateByOptions();
     this.UpdateByEntireProfile();

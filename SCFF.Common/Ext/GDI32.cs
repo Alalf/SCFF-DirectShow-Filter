@@ -90,4 +90,4 @@ public class GDI32 {
                                       int nTopRect, int nRightRect,
                                       int nBottomRect);
 }
-}
+}   // namespace SCFF.Common.Ext

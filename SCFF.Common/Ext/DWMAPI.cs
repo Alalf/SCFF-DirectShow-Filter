@@ -44,4 +44,4 @@ public class DWMAPI {
   [DllImport("dwmapi.dll")]
   public static extern int DwmEnableComposition(uint uCompositionAction);
 }
-}
+}   // namespace SCFF.Common.Ext

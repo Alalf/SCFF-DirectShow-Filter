@@ -16,16 +16,15 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file SCFF.GUI/Controls/LayoutTab.xaml.cs
-/// レイアウト要素の切り替えと個数の表示を行うタブ
+/// レイアウト要素の切り替えと個数の表示を行うTabControl管理用UserControl
 
 namespace SCFF.GUI.Controls {
 
 using System.Diagnostics;
 using System.Windows.Controls;
 
-/// レイアウト要素の切り替えと個数の表示を行うタブ
+/// レイアウト要素の切り替えと個数の表示を行うTabControl管理用UserControl
 public partial class LayoutTab : UserControl, IUpdateByProfile {
-
   //===================================================================
   // コンストラクタ/Loaded/ShutdownStartedイベントハンドラ
   //===================================================================
@@ -33,6 +32,33 @@ public partial class LayoutTab : UserControl, IUpdateByProfile {
   /// コンストラクタ
   public LayoutTab() {
     InitializeComponent();
+  }
+
+  //===================================================================
+  // イベントハンドラ
+  //===================================================================
+
+  //-------------------------------------------------------------------
+  // *Changed/Checked/Unchecked以外
+  //-------------------------------------------------------------------
+
+  //-------------------------------------------------------------------
+  // Checked/Unchecked
+  //-------------------------------------------------------------------
+
+  //-------------------------------------------------------------------
+  // *Changed/Collapsed/Expanded
+  //-------------------------------------------------------------------
+
+  /// LayoutElementTab: SelectionChanged
+  /// @param sender 使用しない
+  /// @param e 使用しない
+  private void LayoutElementTab_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+    var next = this.LayoutElementTab.SelectedIndex;
+    App.Profile.ChangeCurrentIndex(next);
+
+    // 他のコントロールのデータの更新はWindowに任せる
+    UpdateCommands.UpdateMainWindowByEntireProfile.Execute(null, null);
   }
 
   //===================================================================
@@ -94,36 +120,12 @@ public partial class LayoutTab : UserControl, IUpdateByProfile {
 
   /// @copydoc IUpdateByProfile::AttachProfileChangedEventHandlers
   public void AttachProfileChangedEventHandlers() {
-    this.LayoutElementTab.SelectionChanged += layoutElementTab_SelectionChanged;
+    this.LayoutElementTab.SelectionChanged += LayoutElementTab_SelectionChanged;
   }
 
   /// @copydoc IUpdateByProfile::DetachProfileChangedEventHandlers
   public void DetachProfileChangedEventHandlers() {
-    this.LayoutElementTab.SelectionChanged -= layoutElementTab_SelectionChanged;
-  }
-
-  //===================================================================
-  // イベントハンドラ
-  //===================================================================
-
-  //-------------------------------------------------------------------
-  // *Changed/Checked/Unchecked以外
-  //-------------------------------------------------------------------
-
-  //-------------------------------------------------------------------
-  // Checked/Unchecked
-  //-------------------------------------------------------------------
-
-  //-------------------------------------------------------------------
-  // *Changed
-  //-------------------------------------------------------------------
-
-  private void layoutElementTab_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-    var next = this.LayoutElementTab.SelectedIndex;
-    App.Profile.ChangeCurrentIndex(next);
-
-    // 他のコントロールのデータの更新はWindowに任せる
-    UpdateCommands.UpdateMainWindowByEntireProfile.Execute(null, null);
+    this.LayoutElementTab.SelectionChanged -= LayoutElementTab_SelectionChanged;
   }
 }
-}
+}   // namespace SCFF.GUI.Controls

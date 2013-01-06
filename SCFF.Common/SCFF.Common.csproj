@@ -58,6 +58,7 @@
     <Compile Include="ProfileINIFile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GUI\Types.cs" />
+    <Compile Include="RuntimeOptions.cs" />
     <Compile Include="Types.cs" />
     <Compile Include="Utilities.cs" />
     <Compile Include="Profile.LayoutElement.cs" />

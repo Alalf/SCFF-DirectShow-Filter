@@ -31,7 +31,7 @@ using System.Windows.Threading;
 using SCFF.Common;
 using SCFF.Common.GUI;
 
-/// レイアウトエディタコントロール
+/// WYSIWYGレイアウト編集用UserControl
 ///
 /// LayoutEditImage内の座標系は([0-1]*Scale,[0-1]*Scale)で固定（プレビューのサイズに依存しない）
 /// 逆に言うと依存させてはいけない

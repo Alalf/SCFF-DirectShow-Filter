@@ -8,7 +8,7 @@
              d:DesignWidth="530"
              d:DesignHeight="37"
              FontSize="9">
-  <Menu FontSize="9">
+  <Menu FontSize="9"> <!-- なぜかMenuだけFontSize指定が必要 -->
     <MenuItem Header="File(_F)">
       <MenuItem Header="New profile(_N)" Command="New"/>
       <MenuItem Header="Open profile(_O)..." Command="Open"/>

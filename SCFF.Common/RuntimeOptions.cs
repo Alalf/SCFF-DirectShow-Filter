@@ -20,9 +20,9 @@
 
 namespace SCFF.Common {
 
-  using System;
-  using System.Diagnostics;
-  using SCFF.Interprocess;
+using System;
+using System.Diagnostics;
+using SCFF.Interprocess;
 
 /// アプリケーションの実行時設定
 ///
@@ -73,6 +73,28 @@ public class RuntimeOptions {
     get {
       if (this.SelectedEntryIndex < 0) return Constants.DummySampleHeight;
       return this.directory.Entries[this.SelectedEntryIndex].SampleHeight;
+    }
+  }
+
+  //===================================================================
+  // アクセサ
+  //===================================================================
+
+  public void Refresh() {
+    /// @todo(me) テスト中なのであとで仮想メモリに書き換える
+    if (this.SelectedEntryIndex == -1) {
+      this.directory.Entries[0] = new Entry() {
+        ProcessName = "DUMMY",
+        ProcessID = 0,
+        FPS = 30,
+        SampleWidth = 640,
+        SampleHeight = 480,
+        SamplePixelFormat = (int)ImagePixelFormats.RGB0
+      };
+      this.SelectedEntryIndex = 0;
+    } else {
+      this.directory.Entries[0] = new Entry();
+      this.SelectedEntryIndex = -1;
     }
   }
 

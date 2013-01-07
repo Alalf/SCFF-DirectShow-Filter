@@ -25,7 +25,8 @@ using System.Windows.Controls;
 using SCFF.Common;
 
 /// 数値を指定してレイアウト配置を調整するためのUserControl
-public partial class LayoutParameter : UserControl, IUpdateByProfile {
+public partial class LayoutParameter
+    : UserControl, IUpdateByProfile, IUpdateByRuntimeOptions {
   //===================================================================
   // コンストラクタ/Loaded/Closing/ShutdownStartedイベントハンドラ
   //===================================================================
@@ -42,6 +43,16 @@ public partial class LayoutParameter : UserControl, IUpdateByProfile {
   //-------------------------------------------------------------------
   // *Changed/Checked/Unchecked以外
   //-------------------------------------------------------------------
+
+  /// Fit: Click
+  /// @param sender 使用しない
+  /// @param e
+  private void Fit_Click(object sender, System.Windows.RoutedEventArgs e) {
+    /// 現在選択中のレイアウト要素のアスペクト比をあわせ、黒帯を消す
+    /// @todo(me) コンテキストメニューにも実装したいのでCommand化したい。
+    ///           というか結構めんどくさくないか？これ。むしろAdobeっぽく
+    //            Shiftドラッグで比率維持とかやったほうがいいと思うんだけど
+  }
 
   //-------------------------------------------------------------------
   // Checked/Unchecked
@@ -151,6 +162,25 @@ public partial class LayoutParameter : UserControl, IUpdateByProfile {
       App.Profile.CurrentOutputLayoutElement.BoundRelativeBottom = parsedValue;
       this.UpdateDisabledTextboxes();
     }
+  }
+
+  //===================================================================
+  // IUpdateByRuntimeOptionsの実装
+  //===================================================================
+
+  /// @copydoc IUpdateByRuntimeOptions::UpdateByRuntimeOptions
+  public void UpdateByRuntimeOptions() {
+    this.UpdateDisabledTextboxes();
+  }
+
+  /// @copydoc IUpdateByRuntimeOptions::DetachRuntimeOptionsChangedEventHandlers
+  public void DetachRuntimeOptionsChangedEventHandlers() {
+    // nop
+  }
+
+  /// @copydoc IUpdateByRuntimeOptions::AttachRuntimeOptionsChangedEventHandlers
+  public void AttachRuntimeOptionsChangedEventHandlers() {
+    // nop
   }
 
   //===================================================================

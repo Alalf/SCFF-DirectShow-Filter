@@ -35,7 +35,8 @@ using SCFF.Common.GUI;
 ///
 /// LayoutEditImage内の座標系は([0-1]*Scale,[0-1]*Scale)で固定（プレビューのサイズに依存しない）
 /// 逆に言うと依存させてはいけない
-public partial class LayoutEdit : UserControl, IUpdateByProfile, IUpdateByOptions {
+public partial class LayoutEdit
+    : UserControl, IUpdateByProfile, IUpdateByOptions, IUpdateByRuntimeOptions {
   //===================================================================
   // 定数
   //===================================================================  
@@ -426,6 +427,25 @@ public partial class LayoutEdit : UserControl, IUpdateByProfile, IUpdateByOption
 
   /// @copydoc IUpdateByOptions::AttachOptionsChangedEventHandlers
   public void AttachOptionsChangedEventHandlers() {
+    // nop
+  }
+
+  //===================================================================
+  // IUpdateByRuntimeOptionsの実装
+  //===================================================================
+
+  /// @copydoc IUpdateByRuntimeOptions::UpdateByRuntimeOptions
+  public void UpdateByRuntimeOptions() {
+    // nop
+  }
+
+  /// @copydoc IUpdateByRuntimeOptions::DetachRuntimeOptionsChangedEventHandlers
+  public void DetachRuntimeOptionsChangedEventHandlers() {
+    // nop
+  }
+
+  /// @copydoc IUpdateByRuntimeOptions::AttachRuntimeOptionsChangedEventHandlers
+  public void AttachRuntimeOptionsChangedEventHandlers() {
     // nop
   }
 

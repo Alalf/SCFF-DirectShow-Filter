@@ -14,7 +14,8 @@
         Loaded="OnLoaded"
         Closing="OnClosing"
         Activated="OnActivated"
-        Deactivated="OnDeactivated">
+        Deactivated="OnDeactivated"
+        FontSize="9">
   <!-- CommandBindings -->
   <Window.CommandBindings>
     <!-- shell:SystemCommands -->
@@ -79,7 +80,7 @@
           <ResourceDictionary Source="Resources\CaptionButton.xaml"/>
         </Grid.Resources>
         <Rectangle Width="10" Height="10" Fill="#FF003B00" Margin="5,0" VerticalAlignment="Center"/>
-        <Label x:Name="WindowTitle" Grid.Column="1" FontSize="10" Content="SCFF DirectShow Filter Ver.0.1.7" VerticalAlignment="Center"/>
+        <Label x:Name="WindowTitle" Grid.Column="1" FontSize="10" Content="SCFF DirectShow Filter Ver.*.*.*" VerticalAlignment="Center"/>
         <Button Grid.Column="2" Height="12" VerticalAlignment="Center" Style="{DynamicResource CaptionButton}"
                 Command="{x:Static shell:SystemCommands.MinimizeWindowCommand}">0</Button>
         <Button Grid.Column="3" Height="12" VerticalAlignment="Center" Style="{DynamicResource CaptionButton}"
@@ -94,21 +95,7 @@
       <!-- 各種設定 -->
       <StackPanel Width="250" DockPanel.Dock="Left">
         <!-- プロセス -->
-        <Grid>
-          <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition Width="55"/>
-          </Grid.ColumnDefinitions>
-          <Grid.RowDefinitions>
-            <RowDefinition Height="25"/>
-          </Grid.RowDefinitions>
-          <ComboBox x:Name="Processes" FontSize="9" Height="20" VerticalAlignment="Center" Margin="5,0" IsEnabled="False">
-            <ComboBoxItem>Process1</ComboBoxItem>
-            <ComboBoxItem>Process2</ComboBoxItem>
-            <ComboBoxItem>Process3</ComboBoxItem>
-          </ComboBox>
-          <Button Margin="0,0,5,0" FontSize="9" Grid.Column="1" VerticalAlignment="Center" Content="Refresh" Height="20"/>
-        </Grid>
+        <localControls:SCFFDSFEntries x:Name="SCFFEntries"/>
         <!-- 取り込みウィンドウ -->
         <GroupBox FontSize="9" Header="Target Window">
           <localControls:TargetWindow x:Name="TargetWindow" />
@@ -128,20 +115,7 @@
         <!-- レイアウト番号 -->
         <localControls:LayoutTab x:Name="LayoutTab" />
         <!-- Apply -->
-        <Grid>
-          <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition/>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="1*"/>
-          </Grid.ColumnDefinitions>
-          <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
-          </Grid.RowDefinitions>
-          <Button Margin="5,0" Height="20" VerticalAlignment="Center" FontSize="10">Splash</Button>
-          <CheckBox x:Name="AutoApply" Grid.Column="2" Margin="5,0" Height="16" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="9" Click="AutoApply_Click">Auto</CheckBox>
-          <Button Margin="5,0" Grid.Column="3" Height="20" VerticalAlignment="Center"  FontSize="10">Apply</Button>
-        </Grid>
+        <localControls:Apply x:Name="Apply" />
       </StackPanel>
       <!-- レイアウト表示 -->
       <Expander x:Name="LayoutExpander" FontSize="9" ExpandDirection="Right" Header="Layout" IsExpanded="True">

@@ -4,7 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="104" d:DesignWidth="369" FontSize="9">
+             d:DesignWidth="369" 
+             d:DesignHeight="104"
+             FontSize="9">
   <GroupBox x:Name="GroupBox" DockPanel.Dock="Bottom" Header="Layout N: (Window Classname)">
     <Grid>
       <Grid.ColumnDefinitions>
@@ -22,7 +24,7 @@
         <RowDefinition Height="25"/>
         <RowDefinition Height="25"/>
       </Grid.RowDefinitions>
-      <Button Grid.RowSpan="2" Height="20" VerticalAlignment="Center">Fit</Button>
+      <Button Grid.RowSpan="2" x:Name="Fit" Height="20" VerticalAlignment="Center" Click="Fit_Click">Fit</Button>
       <Label Grid.Column="1" Height="12" Margin="5,0" HorizontalAlignment="Right" VerticalAlignment="Center">Left</Label>
       <TextBox x:Name="BoundRelativeLeft" Grid.Column="2" Height="20" VerticalAlignment="Center">1000</TextBox>
       <Label Grid.Column="3" Height="12" Margin="5,0" HorizontalAlignment="Right" VerticalAlignment="Center">Top</Label>

@@ -21,6 +21,7 @@
 namespace SCFF.GUI {
 
 using System.Diagnostics;
+using System.IO;
 using System.Windows;
 using System.Windows.Input;
 using Microsoft.Win32;
@@ -28,7 +29,8 @@ using Microsoft.Windows.Shell;
 using SCFF.Common;
 
 /// MainWindowのコードビハインド
-public partial class MainWindow : Window, IUpdateByProfile, IUpdateByOptions {
+public partial class MainWindow
+    : Window, IUpdateByProfile, IUpdateByOptions, IUpdateByRuntimeOptions {
   //===================================================================
   // コンストラクタ/Loaded/Closing/ShutdownStartedイベントハンドラ
   //===================================================================
@@ -41,6 +43,7 @@ public partial class MainWindow : Window, IUpdateByProfile, IUpdateByOptions {
   /// 全Window表示前に一度だけ起こる
   private void OnLoaded(object sender, RoutedEventArgs e) {
     this.UpdateByOptions();
+    this.UpdateByRuntimeOptions();
     this.UpdateByEntireProfile();
 
     // 必要な機能の実行
@@ -76,12 +79,6 @@ public partial class MainWindow : Window, IUpdateByProfile, IUpdateByOptions {
   //-------------------------------------------------------------------
   // *Changed/Checked/Unchecked以外
   //-------------------------------------------------------------------
-
-  /// AutoApply: Click
-  private void AutoApply_Click(object sender, RoutedEventArgs e) {
-    if (!this.AutoApply.IsChecked.HasValue) return;
-    App.Options.AutoApply = (bool)this.AutoApply.IsChecked;
-  }
 
   //-------------------------------------------------------------------
   // Checked/Unchecked
@@ -142,7 +139,6 @@ public partial class MainWindow : Window, IUpdateByProfile, IUpdateByOptions {
     this.WindowState  = (System.Windows.WindowState)App.Options.TmpMainWindowState;
     
     // MainWindow.Controls
-    this.AutoApply.IsChecked = App.Options.AutoApply;
     this.DetachOptionsChangedEventHandlers();
     this.AreaExpander.IsExpanded          = App.Options.AreaIsExpanded;
     this.OptionsExpander.IsExpanded       = App.Options.OptionsIsExpanded;
@@ -151,6 +147,7 @@ public partial class MainWindow : Window, IUpdateByProfile, IUpdateByOptions {
     this.AttachOptionsChangedEventHandlers();
 
     // UserControls
+    this.Apply.UpdateByOptions();
     this.LayoutToolbar.UpdateByOptions();
     this.LayoutEdit.UpdateByOptions();
     this.MainMenu.UpdateByOptions();
@@ -189,6 +186,34 @@ public partial class MainWindow : Window, IUpdateByProfile, IUpdateByOptions {
     App.Options.TmpMainWindowWidth = isNormal ? this.Width : this.RestoreBounds.Width;
     App.Options.TmpMainWindowHeight = isNormal ? this.Height : this.RestoreBounds.Height;
     App.Options.TmpMainWindowState = (SCFF.Common.WindowState)this.WindowState;
+  }
+
+  //===================================================================
+  // IUpdateByRuntimeOptionsの実装
+  //===================================================================
+
+  /// @copydoc IUpdateByRuntimeOptions::UpdateByRuntimeOptions
+  public void UpdateByRuntimeOptions() {
+    /// @todo System.Reflection.Assembly.GetExecutingAssembly().GetName().Versionを使うか？
+    ///       しかしどう見てもこれ実行時に決まる値で気持ち悪いな・・・
+    var commonTitle = "SCFF DirectShow Filter Ver.0.1.7";
+    if (App.RuntimeOptions.ProfilePath != string.Empty) {
+      var profileName = Path.GetFileNameWithoutExtension(App.RuntimeOptions.ProfilePath);
+      this.WindowTitle.Content = string.Format("{0} - {1}", profileName, commonTitle);
+    } else {
+      this.WindowTitle.Content = commonTitle;
+    }
+
+    this.LayoutEdit.UpdateByRuntimeOptions();
+    this.LayoutParameter.UpdateByRuntimeOptions();
+  }
+  /// @copydoc IUpdateByRuntimeOptions::DetachRuntimeOptionsChangedEventHandlers
+  public void DetachRuntimeOptionsChangedEventHandlers() {
+    // nop
+  }
+  /// @copydoc IUpdateByRuntimeOptions::AttachRuntimeOptionsChangedEventHandlers
+  public void AttachRuntimeOptionsChangedEventHandlers() {
+    // nop
   }
 
   //===================================================================

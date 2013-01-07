@@ -4,7 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="25" d:DesignWidth="231" FontSize="9">
+             d:DesignWidth="231" 
+             d:DesignHeight="25"
+             FontSize="9">
   <TabControl x:Name="LayoutElementTab" TabStripPlacement="Bottom">
     <TabItem Header="1" />
   </TabControl>

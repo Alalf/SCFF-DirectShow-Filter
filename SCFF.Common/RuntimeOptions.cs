@@ -20,14 +20,67 @@
 
 namespace SCFF.Common {
 
+  using System;
+  using System.Diagnostics;
+  using SCFF.Interprocess;
+
 /// アプリケーションの実行時設定
 ///
 /// プロセスリストの管理や現在編集中のプレビューのサイズなどはこれで保持すること
 public class RuntimeOptions {
+  //===================================================================
+  // コンストラクタ
+  //===================================================================
+
+  /// コンストラクタ
   public RuntimeOptions() {
-    // nop
+    this.ProfilePath = string.Empty;
+    this.LastModifiedTimestamp = -1L;
+    this.SelectedEntryIndex = -1;
+
+    // directoryはentriesの初期化がされていないのでここでやる
+    this.directory.Entries = new Entry[Interprocess.MaxEntry];
   }
 
+  //===================================================================
+  // プロパティ
+  //===================================================================
 
+  /// 現在編集中のプロパティのフルパス
+  public string ProfilePath { get; set; }
+  /// 最後の保存した時のタイムスタンプ
+  public Int64 LastModifiedTimestamp { get; set; }
+
+  /// 現在選択中のエントリ(選択なしは-1)
+  public int SelectedEntryIndex { get; set; }
+
+  /// 現在選択中のプロセスID
+  public UInt32 CurrentProcessID {
+    get {
+      Debug.Assert(this.SelectedEntryIndex >= 0);
+      return this.directory.Entries[this.SelectedEntryIndex].ProcessID;
+    }
+  }
+  /// 現在選択中のプロセスが要求するサンプル幅
+  public int CurrentSampleWidth {
+    get {
+      if (this.SelectedEntryIndex < 0) return Constants.DummySampleWidth;
+      return this.directory.Entries[this.SelectedEntryIndex].SampleWidth;
+    }
+  }
+  /// 現在選択中のプロセスが要求するサンプル高さ
+  public int CurrentSampleHeight {
+    get {
+      if (this.SelectedEntryIndex < 0) return Constants.DummySampleHeight;
+      return this.directory.Entries[this.SelectedEntryIndex].SampleHeight;
+    }
+  }
+
+  //===================================================================
+  // フィールド
+  //===================================================================
+
+  /// 共有メモリから読み込んだディレクトリ
+  Directory directory = new Directory();
 }
 }   // namespace SCFF.Common

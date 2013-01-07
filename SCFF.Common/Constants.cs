@@ -54,17 +54,10 @@ public static class Constants {
   // Preview
   //-------------------------------------------------------------------
 
-  /// プロセスエントリが見つからないときのプレビューの幅
-  public const int DefaultPreviewWidth = 640;
-  /// プロセスエントリが見つからないときのプレビューの高さ
-  public const int DefaultPreviewHeight = 400;
-  
-  /// ダミープレビュー幅
-  /// @todo(me) ダミーなのであとで消す
-  public const int DummyPreviewWidth = Constants.DefaultPreviewWidth;
-  /// ダミープレビュー高さ
-  /// @todo(me) ダミーなのであとで消す
-  public const int DummyPreviewHeight = Constants.DefaultPreviewHeight;
+  /// プロセスエントリが見つからないときのサンプルの幅
+  public const int DummySampleWidth = 640;
+  /// プロセスエントリが見つからないときのサンプルの高さ
+  public const int DummySampleHeight = 400;
 
   //-------------------------------------------------------------------
   // Options

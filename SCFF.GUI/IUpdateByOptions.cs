@@ -22,14 +22,14 @@ namespace SCFF.GUI {
 
 /// 自前Options->Controlデータバインディング用インタフェース
 ///
-/// どうしてもINotifyPropertyChangedなどのリフレクションを使いたくなかったため、
-/// やむなく用意した
+/// @attention どうしてもINotifyPropertyChangedなどの
+///            リフレクションを使いたくなかったためやむなく用意した
 interface IUpdateByOptions {
   /// Options->Control書き換え
   void UpdateByOptions();
 
   /// Options->Controlと同時にControl->Optionsされないように、
-  /// Options->Control後にイベントハンドラを取り外す
+  /// Options->Control前にイベントハンドラを取り外す
   void DetachOptionsChangedEventHandlers();
 
   /// Options->Controlと同時にControl->Optionsされないように、

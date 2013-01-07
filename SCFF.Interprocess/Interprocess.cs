@@ -105,19 +105,19 @@ public enum RotateDirections {
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public struct Entry {
   /// SCFF DSFのDLLが使われれているプロセスID
-  internal UInt32 PrrocessID;
+  public UInt32 ProcessID;
   /// SCFF DSFのDLLが使われているプロセス名
   [MarshalAs(UnmanagedType.ByValTStr, SizeConst = Interprocess.MaxPath)]
-  internal string ProcessName;
+  public string ProcessName;
   /// サンプルの出力width
-  internal Int32 SampleWidth;
+  public Int32 SampleWidth;
   /// サンプルの出力height
-  internal Int32 SampleHeight;
+  public Int32 SampleHeight;
   /// サンプルの出力ピクセルフォーマット
   /// @attention ImagePixelFormatを操作に使うこと
-  internal Int32 SamplePixelFormat;
+  public Int32 SamplePixelFormat;
   /// 目標fps
-  internal Double FPS;
+  public Double FPS;
 }
 
 /// 共有メモリ(Directory)に格納する構造体
@@ -368,7 +368,7 @@ public class Interprocess {
     // 仮想メモリの名前
     string messageName = MessageNamePrefix + processID;
 
-    // 仮想メモリ(Message<PrrocessID>)の作成
+    // 仮想メモリ(Message<ProcessID>)の作成
     MemoryMappedFile tmpMessage;
     bool alreadyExists = true;
     try {
@@ -473,7 +473,7 @@ public class Interprocess {
     bool success = false;
     for (int i = 0; i < MaxEntry; i++) {
       /// @warning 重複する場合がある？
-      if (directory.Entries[i].PrrocessID == 0) {
+      if (directory.Entries[i].ProcessID == 0) {
         // PODなのでコピー可能（のはず）
         directory.Entries[i] = entry;
         success = true;
@@ -511,9 +511,9 @@ public class Interprocess {
     Directory directory = this.ReadDirectory();
 
     for (int i = 0; i < MaxEntry; i++) {
-      if (directory.Entries[i].PrrocessID == processID) {
+      if (directory.Entries[i].ProcessID == processID) {
         // zero clear
-        directory.Entries[i].PrrocessID = 0;
+        directory.Entries[i].ProcessID = 0;
         directory.Entries[i].ProcessName = String.Empty;
         directory.Entries[i].SamplePixelFormat = 0;
         directory.Entries[i].SampleWidth = 0;

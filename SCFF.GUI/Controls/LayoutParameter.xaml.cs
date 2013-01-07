@@ -51,6 +51,28 @@ public partial class LayoutParameter : UserControl, IUpdateByProfile {
   // *Changed/Collapsed/Expanded
   //-------------------------------------------------------------------
 
+  /// BoundX/BoundY/BoundWidth/BoundHeightを更新する
+  /// @attention *Changedイベントハンドラが無いのでそのまま代入してOK
+  private void UpdateDisabledTextboxes() {
+    if (App.RuntimeOptions.SelectedEntryIndex >= 0) {
+      // プロセス選択中
+      this.BoundX.Text = App.Profile.CurrentInputLayoutElement.BoundLeft(
+          App.RuntimeOptions.CurrentSampleWidth).ToString();
+      this.BoundY.Text = App.Profile.CurrentInputLayoutElement.BoundTop(
+          App.RuntimeOptions.CurrentSampleHeight).ToString();
+      this.BoundWidth.Text = App.Profile.CurrentInputLayoutElement.BoundWidth(
+          App.RuntimeOptions.CurrentSampleWidth).ToString();
+      this.BoundHeight.Text = App.Profile.CurrentInputLayoutElement.BoundHeight(
+          App.RuntimeOptions.CurrentSampleHeight).ToString();
+    } else {
+      // プロセス選択なし
+      this.BoundX.Text = "n/a";
+      this.BoundY.Text = "n/a";
+      this.BoundWidth.Text = "n/a";
+      this.BoundHeight.Text = "n/a";
+    }
+  }
+
   /// 下限・上限つきでテキストボックスから値を取得する
   private bool TryParseBoundRelativeParameter(TextBox textBox,
       double lowerBound, double upperBound, out double parsedValue) {
@@ -85,9 +107,7 @@ public partial class LayoutParameter : UserControl, IUpdateByProfile {
     if (this.TryParseBoundRelativeParameter(this.BoundRelativeLeft, lowerBound, upperBound, out parsedValue)) {
       // Profileに書き込み
       App.Profile.CurrentOutputLayoutElement.BoundRelativeLeft = parsedValue;
-      // Changedイベントで発動するものはないのでそのまま代入
-      /// @todo(me) ダミープレビューサイズ
-      this.BoundX.Text = App.Profile.CurrentInputLayoutElement.BoundLeft(Constants.DummyPreviewWidth).ToString();
+      this.UpdateDisabledTextboxes();
     }
   }
 
@@ -101,9 +121,7 @@ public partial class LayoutParameter : UserControl, IUpdateByProfile {
     if (this.TryParseBoundRelativeParameter(this.BoundRelativeTop, lowerBound, upperBound, out parsedValue)) {
       // Profileに書き込み
       App.Profile.CurrentOutputLayoutElement.BoundRelativeTop = parsedValue;
-      // Changedイベントで発動するものはないのでそのまま代入
-      /// @todo(me) ダミープレビューサイズ
-      this.BoundY.Text = App.Profile.CurrentInputLayoutElement.BoundTop(Constants.DummyPreviewHeight).ToString();
+      this.UpdateDisabledTextboxes();
     }
   }
 
@@ -117,9 +135,7 @@ public partial class LayoutParameter : UserControl, IUpdateByProfile {
     if (this.TryParseBoundRelativeParameter(this.BoundRelativeRight, lowerBound, upperBound, out parsedValue)) {
       // Profileに書き込み
       App.Profile.CurrentOutputLayoutElement.BoundRelativeRight = parsedValue;
-      // Changedイベントで発動するものはないのでそのまま代入
-      /// @todo(me) ダミープレビューサイズ
-      this.BoundWidth.Text = App.Profile.CurrentInputLayoutElement.BoundWidth(Constants.DummyPreviewWidth).ToString();
+      this.UpdateDisabledTextboxes();
     }
   }
 
@@ -133,9 +149,7 @@ public partial class LayoutParameter : UserControl, IUpdateByProfile {
     if (this.TryParseBoundRelativeParameter(this.BoundRelativeBottom, lowerBound, upperBound, out parsedValue)) {
       // Profileに書き込み
       App.Profile.CurrentOutputLayoutElement.BoundRelativeBottom = parsedValue;
-      // Changedイベントで発動するものはないのでそのまま代入
-      /// @todo(me) ダミープレビューサイズ
-      this.BoundHeight.Text = App.Profile.CurrentInputLayoutElement.BoundHeight(Constants.DummyPreviewHeight).ToString();
+      this.UpdateDisabledTextboxes();
     }
   }
 
@@ -154,11 +168,7 @@ public partial class LayoutParameter : UserControl, IUpdateByProfile {
     this.GroupBox.Header = header.Substring(0,
         Math.Min(header.Length, LayoutParameter.maxHeaderLength));
 
-    /// @todo(me) プロセス情報はMainWindowから取ってこれるので、それを参照にしてBoundX/BoundYも更新
-    this.BoundX.Text = App.Profile.CurrentInputLayoutElement.BoundLeft(Constants.DefaultPreviewWidth).ToString();
-    this.BoundY.Text = App.Profile.CurrentInputLayoutElement.BoundTop(Constants.DefaultPreviewHeight).ToString();
-    this.BoundWidth.Text = App.Profile.CurrentInputLayoutElement.BoundWidth(Constants.DefaultPreviewWidth).ToString();
-    this.BoundHeight.Text = App.Profile.CurrentInputLayoutElement.BoundHeight(Constants.DefaultPreviewHeight).ToString();
+    this.UpdateDisabledTextboxes();
 
     this.DetachProfileChangedEventHandlers();
 

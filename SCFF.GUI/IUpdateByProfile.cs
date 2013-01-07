@@ -22,8 +22,8 @@ namespace SCFF.GUI {
 
 /// 自前Profile->Controlデータバインディング用インタフェース
 ///
-/// どうしてもINotifyPropertyChangedなどのリフレクションを使いたくなかったため、
-/// やむなく用意した
+/// @attention どうしてもINotifyPropertyChangedなどの
+///            リフレクションを使いたくなかったためやむなく用意した
 interface IUpdateByProfile {
   /// Profile(Currentのみ)->Control書き換え
   void UpdateByCurrentProfile();
@@ -32,7 +32,7 @@ interface IUpdateByProfile {
   void UpdateByEntireProfile();
 
   /// Profile->Controlと同時にControl->Profileされないように、
-  /// Profile->Control後にイベントハンドラを取り外す
+  /// Profile->Control前にイベントハンドラを取り外す
   void DetachProfileChangedEventHandlers();
 
   /// Profile->Controlと同時にControl->Profileされないように、

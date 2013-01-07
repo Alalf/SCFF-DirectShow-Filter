@@ -49,6 +49,7 @@ public partial class Options : UserControl, IUpdateByProfile {
     if (!this.ShowCursor.IsChecked.HasValue) return;
 
     App.Profile.CurrentOutputLayoutElement.ShowCursor = (bool)this.ShowCursor.IsChecked;
+    UpdateCommands.UpdateLayoutEditByCurrentProfile.Execute(null, null);
   }
 
   /// ShowLayeredWindow: Click
@@ -58,6 +59,7 @@ public partial class Options : UserControl, IUpdateByProfile {
     if (!this.ShowLayeredWindow.IsChecked.HasValue) return;
 
     App.Profile.CurrentOutputLayoutElement.ShowLayeredWindow = (bool)this.ShowLayeredWindow.IsChecked;
+    UpdateCommands.UpdateLayoutEditByCurrentProfile.Execute(null, null);
   }
 
   /// KeepAspectRatio: Click
@@ -67,6 +69,7 @@ public partial class Options : UserControl, IUpdateByProfile {
     if (!this.KeepAspectRatio.IsChecked.HasValue) return;
 
     App.Profile.CurrentOutputLayoutElement.KeepAspectRatio = (bool)this.KeepAspectRatio.IsChecked;
+    UpdateCommands.UpdateLayoutEditByCurrentProfile.Execute(null, null);
   }
 
   /// Stretch: Click
@@ -76,6 +79,7 @@ public partial class Options : UserControl, IUpdateByProfile {
     if (!this.Stretch.IsChecked.HasValue) return;
  
     App.Profile.CurrentOutputLayoutElement.Stretch = (bool)this.Stretch.IsChecked;
+    UpdateCommands.UpdateLayoutEditByCurrentProfile.Execute(null, null);
   }
 
   //-------------------------------------------------------------------

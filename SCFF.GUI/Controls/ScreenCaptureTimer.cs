@@ -63,9 +63,17 @@ public class ScreenCaptureTimer {
   //-------------------------------------------------------------------
 
   /// 開始
+  public void Init() {
+    Debug.WriteLine("ScreenCapturer: Init");
+    this.captureTimer = new Timer(TimerCallback, null, 0, (int)this.timerPeriod);
+  }
+
+  /// 開始
   public void Start() {
     Debug.WriteLine("ScreenCapturer: Start");
-    this.captureTimer = new Timer(TimerCallback, null, 0, (int)this.timerPeriod);
+    lock (this.sharedLock) {
+      this.isSuspended = false;
+    }
   }
 
   /// 中断
@@ -75,15 +83,6 @@ public class ScreenCaptureTimer {
       this.isSuspended = true;
       // すべての格納されたBitmapを削除する
       this.cachedBitmaps = new BitmapSource[Common.Constants.MaxLayoutElementCount];
-    }
-  }
-
-  /// 再開
-  public void Resume() {
-    Debug.WriteLine("ScreenCapturer: Resume");
-    lock (this.sharedLock) {
-      this.isSuspended = false;
-      /// @todo(me) すべてのBitmapを一回UIスレッドで書き直す
     }
   }
 
@@ -150,7 +149,7 @@ public class ScreenCaptureTimer {
   private readonly object sharedLock = new Object();
 
   /// 共有(自R/他W): プレビュー表示中かどうか
-  private bool isSuspended = false;
+  private bool isSuspended = true;
   
   /// 共有(自R/他W): スクリーンキャプチャのリクエストをまとめた配列
   private ScreenCaptureRequest[] requests =

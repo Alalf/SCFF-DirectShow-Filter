@@ -81,8 +81,8 @@ public partial class LayoutEdit : UserControl, IUpdateByProfile, IUpdateByOption
     this.Dispatcher.ShutdownStarted += OnShutdownStarted;
 
     /// @todo(me) App.RuntimeOptionsからの値の取得
-    this.LayoutEditViewBox.Width = Constants.DummyPreviewWidth;
-    this.LayoutEditViewBox.Height = Constants.DummyPreviewHeight;
+    this.LayoutEditViewBox.Width = App.RuntimeOptions.CurrentSampleWidth;
+    this.LayoutEditViewBox.Height = App.RuntimeOptions.CurrentSampleHeight;
     RenderOptions.SetBitmapScalingMode(this.DrawingGroup, BitmapScalingMode.LowQuality);
 
     // Clipping
@@ -92,7 +92,7 @@ public partial class LayoutEdit : UserControl, IUpdateByProfile, IUpdateByOption
 
     // スクリーンキャプチャマネージャの準備
     this.screenCaptureTimer = new ScreenCaptureTimer(redrawTimerPeriod);
-    this.screenCaptureTimer.Start();
+    this.screenCaptureTimer.Init();
 
     // BitmapSource更新用タイマーの準備
     this.StartRedrawTimer();
@@ -405,13 +405,16 @@ public partial class LayoutEdit : UserControl, IUpdateByProfile, IUpdateByOption
   /// @copydoc IUpdateByOptions::UpdateByOptions
   public void UpdateByOptions() {
     if (App.Options.LayoutIsExpanded && App.Options.LayoutPreview) {
-      this.screenCaptureTimer.Resume();
-      // DrawingGroupを再構築
-      this.DrawProfile();
+      this.screenCaptureTimer.Start();      // タイマー再開
+      this.UpdateByEntireProfile();         // プレビュー強制更新
     } else {
-      this.screenCaptureTimer.Suspend();
-      // DrawingGroupの描画命令をクリア
-      this.DrawingGroup.Children.Clear();
+      this.screenCaptureTimer.Suspend();    // タイマー停止
+      if (App.Options.LayoutIsExpanded) {
+        this.DrawProfile();                 // 再描画
+      } else {
+        this.DrawingGroup.Children.Clear(); // DrawingGroupもクリア
+      }
+      Debug.WriteLine("[GARBAGE COLLECT!]");
       GC.Collect();
     }
   }
@@ -432,17 +435,21 @@ public partial class LayoutEdit : UserControl, IUpdateByProfile, IUpdateByOption
 
   /// @copydoc IUpdateByProfile::UpdateByCurrentProfile
   public void UpdateByCurrentProfile() {
-    this.SendRequestToScreenCapturer(App.Profile.CurrentInputLayoutElement, true);
+    this.SendRequest(App.Profile.CurrentInputLayoutElement, true);
     this.DrawProfile();
+    Debug.WriteLine("[GARBAGE COLLECT!]");
+    GC.Collect();
   }
 
   /// @copydoc IUpdateByProfile::UpdateByEntireProfile
   public void UpdateByEntireProfile() {
     this.screenCaptureTimer.ClearRequests();
     foreach (var layoutElement in App.Profile) {
-      this.SendRequestToScreenCapturer(layoutElement, true);
+      this.SendRequest(layoutElement, true);
     }
     this.DrawProfile();
+    Debug.WriteLine("[GARBAGE COLLECT!]");
+    GC.Collect();
   }
 
   /// @copydoc IUpdateByProfile::UpdateByEntireProfile
@@ -456,7 +463,7 @@ public partial class LayoutEdit : UserControl, IUpdateByProfile, IUpdateByOption
   }
 
   /// LayoutElementの内容からRequestを生成してScreenCapturerに画像生成を依頼
-  private void SendRequestToScreenCapturer(Profile.InputLayoutElement layoutElement, bool forceUpdate) {
+  private void SendRequest(Profile.InputLayoutElement layoutElement, bool forceUpdate) {
     var request = new ScreenCaptureRequest(
         layoutElement.Index,
         layoutElement.Window,

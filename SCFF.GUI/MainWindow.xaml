@@ -43,6 +43,8 @@
                     Executed="UpdateMainWindowByEntireProfile_Executed" />
     <CommandBinding Command="{x:Static local:UpdateCommands.UpdateLayoutEditByEntireProfile}"
                     Executed="UpdateLayoutEditByEntireProfile_Executed" />
+    <CommandBinding Command="{x:Static local:UpdateCommands.UpdateLayoutEditByCurrentProfile}"
+                    Executed="UpdateLayoutEditByCurrentProfile_Executed" />
     <CommandBinding Command="{x:Static local:UpdateCommands.UpdateTargetWindowByCurrentProfile}"
                     Executed="UpdateTargetWindowByCurrentProfile_Executed" />
     <CommandBinding Command="{x:Static local:UpdateCommands.UpdateLayoutParameterByCurrentProfile}"

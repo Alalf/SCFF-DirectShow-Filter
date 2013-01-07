@@ -49,7 +49,6 @@ public partial class LayoutToolbar : UserControl, IUpdateByOptions {
     if (!this.LayoutPreview.IsChecked.HasValue) return;
     App.Options.LayoutPreview = (bool)this.LayoutPreview.IsChecked;
 
-    UpdateCommands.UpdateLayoutEditByEntireProfile.Execute(null, null);
     UpdateCommands.UpdateLayoutEditByOptions.Execute(null, null);
   }
 
@@ -61,6 +60,7 @@ public partial class LayoutToolbar : UserControl, IUpdateByOptions {
     App.Options.LayoutSnap = (bool)this.LayoutSnap.IsChecked;
 
     // LayoutEditの能動的な更新は必要ない
+    // UpdateCommands.UpdateLayoutEditByOptions.Execute(null, null);
   }
 
   /// LayoutBorder: Click
@@ -70,7 +70,7 @@ public partial class LayoutToolbar : UserControl, IUpdateByOptions {
     if (!this.LayoutBorder.IsChecked.HasValue) return;
     App.Options.LayoutBorder = (bool)this.LayoutBorder.IsChecked;
 
-    UpdateCommands.UpdateLayoutEditByEntireProfile.Execute(null, null);
+    UpdateCommands.UpdateLayoutEditByOptions.Execute(null, null);
   }
 
   /// レイアウト要素追加時に重なっていると醜いので少しずらす用のオフセット

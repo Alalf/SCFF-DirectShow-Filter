@@ -152,6 +152,7 @@ public partial class MainWindow : Window, IUpdateByProfile, IUpdateByOptions {
 
     // UserControls
     this.LayoutToolbar.UpdateByOptions();
+    this.LayoutEdit.UpdateByOptions();
     this.MainMenu.UpdateByOptions();
   }
 
@@ -344,6 +345,12 @@ public partial class MainWindow : Window, IUpdateByProfile, IUpdateByOptions {
   /// @param e 使用しない
   private void UpdateLayoutEditByEntireProfile_Executed(object sender, ExecutedRoutedEventArgs e) {
     this.LayoutEdit.UpdateByEntireProfile();
+  }
+  /// @copydoc SCFF::GUI::UpdateCommands::UpdateLayoutEditByCurrentProfile
+  /// @param sender 使用しない
+  /// @param e 使用しない
+  private void UpdateLayoutEditByCurrentProfile_Executed(object sender, ExecutedRoutedEventArgs e) {
+    this.LayoutEdit.UpdateByCurrentProfile();
   }
   /// @copydoc SCFF::GUI::UpdateCommands::UpdateTargetWindowByCurrentProfile
   /// @param sender 使用しない

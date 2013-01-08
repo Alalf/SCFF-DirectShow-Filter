@@ -20,12 +20,12 @@
 
 namespace SCFF.GUI.Controls {
 
-  using System;
-  using System.Windows;
-  using System.Windows.Controls;
-  using SCFF.Common;
+using System;
+using System.Windows.Controls;
+using SCFF.Common;
 
 /// 数値を指定してレイアウト配置を調整するためのUserControl
+/// @todo(me) InputValidationが甘すぎるので何とかする
 public partial class LayoutParameter
     : UserControl, IUpdateByProfile, IUpdateByRuntimeOptions {
   //===================================================================
@@ -173,6 +173,8 @@ public partial class LayoutParameter
       // Profileに書き込み
       App.Profile.CurrentOutputLayoutElement.BoundRelativeLeft = parsedValue;
       this.UpdateDisabledTextboxes();
+      // 関連するコントロールに通知
+      UpdateCommands.UpdateLayoutEditByCurrentProfile.Execute(null, null);
     }
   }
 
@@ -187,6 +189,8 @@ public partial class LayoutParameter
       // Profileに書き込み
       App.Profile.CurrentOutputLayoutElement.BoundRelativeTop = parsedValue;
       this.UpdateDisabledTextboxes();
+      // 関連するコントロールに通知
+      UpdateCommands.UpdateLayoutEditByCurrentProfile.Execute(null, null);
     }
   }
 
@@ -201,6 +205,8 @@ public partial class LayoutParameter
       // Profileに書き込み
       App.Profile.CurrentOutputLayoutElement.BoundRelativeRight = parsedValue;
       this.UpdateDisabledTextboxes();
+      // 関連するコントロールに通知
+      UpdateCommands.UpdateLayoutEditByCurrentProfile.Execute(null, null);
     }
   }
 
@@ -215,6 +221,8 @@ public partial class LayoutParameter
       // Profileに書き込み
       App.Profile.CurrentOutputLayoutElement.BoundRelativeBottom = parsedValue;
       this.UpdateDisabledTextboxes();
+      // 関連するコントロールに通知
+      UpdateCommands.UpdateLayoutEditByCurrentProfile.Execute(null, null);
     }
   }
 

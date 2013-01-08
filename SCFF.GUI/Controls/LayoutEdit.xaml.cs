@@ -321,8 +321,10 @@ public partial class LayoutEdit
   /// @param sender 使用しない
   /// @param e Client座標系でのマウス座標(GetPosition(...))の取得が可能
   private void LayoutEditImage_MouseDown(object sender, MouseButtonEventArgs e) {
+    // 左クリック以外はすぐに戻る
+    if (e.ChangedButton != MouseButton.Left) return;
+    
     // 前処理
-    e.Handled = true;
     var image = (IInputElement)sender;
     var relativeMousePoint = this.GetRelativeMousePoint(image, e);
 
@@ -361,7 +363,6 @@ public partial class LayoutEdit
   /// @param e Client座標系でのマウス座標(GetPosition(...))の取得が可能
   private void LayoutEditImage_MouseMove(object sender, MouseEventArgs e) {
     // 前処理
-    e.Handled = true;
     var image = (IInputElement)sender;
     var relativeMousePoint = this.GetRelativeMousePoint(image, e);
 
@@ -397,7 +398,6 @@ public partial class LayoutEdit
   /// @param sender 使用しない
   /// @param e Client座標系でのマウス座標(GetPosition(...))の取得が可能
   private void LayoutEditImage_MouseUp(object sender, MouseButtonEventArgs e) {
-    e.Handled = true;
     if (this.hitMode != HitModes.Neutral) {
       this.LayoutEditImage.ReleaseMouseCapture();
       this.hitMode = HitModes.Neutral;

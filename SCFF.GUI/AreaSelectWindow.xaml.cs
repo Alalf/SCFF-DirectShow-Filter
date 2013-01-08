@@ -59,8 +59,6 @@ public partial class AreaSelectWindow : Window {
 
   /// Save
   private void Save_Executed(object sender, ExecutedRoutedEventArgs e) {
-    e.Handled = true;
-
     this.DialogResult = true;
     this.Close();
   } 
@@ -71,8 +69,6 @@ public partial class AreaSelectWindow : Window {
 
   /// CloseWindow
   private void CloseWindow_Executed(object sender, ExecutedRoutedEventArgs e) {
-    e.Handled = true;
-
     this.DialogResult = false;
     this.Close();
   }

@@ -7,9 +7,17 @@
              Loaded="OnLoaded"
              FontSize="9">
   <Image x:Name="LayoutEditImage"
-          MouseDown="LayoutEditImage_MouseDown"
-          MouseMove="LayoutEditImage_MouseMove"
-          MouseUp="LayoutEditImage_MouseUp" >
+         MouseDown="LayoutEditImage_MouseDown"
+         MouseMove="LayoutEditImage_MouseMove"
+         MouseUp="LayoutEditImage_MouseUp" >
+    <!-- <Image.ContextMenu>
+      <ContextMenu FontSize="9" Background="{DynamicResource ControlBackgroundBrush}">
+        <MenuItem Header="Add"/>
+        <MenuItem Header="Remove"/>
+        <Separator />
+        <MenuItem Header="Fit"/>
+      </ContextMenu>
+    </Image.ContextMenu> -->
     <Image.Source>
       <DrawingImage>
         <DrawingImage.Drawing>

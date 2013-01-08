@@ -40,7 +40,7 @@ public static class BrushesAndPens {
 
   /// ペンの太さ(ダミー)
   /// @attention ダミーなので実際に使う場合はCloneしたのちにFreezeすること
-  private const double dummyPenThickness = 1;
+  private const double dummyPenThickness = 2;
 
   /// WindowTypes.NormalでCurrent時のペン
   public static readonly Pen CurrentNormalPen;

@@ -94,6 +94,9 @@ public partial class LayoutEdit
   // this.DrawingGroupへの描画
   //===================================================================
 
+  /// キャプションのフォントサイズ
+  private const int CaptionFontSize = 12;
+
   /// レイアウト要素のキャプションの生成
   /// @param layoutElement 対象のレイアウト要素
   /// @return DrawingContext.DrawTextで描画可能なDrawingVisualオブジェクト
@@ -101,15 +104,26 @@ public partial class LayoutEdit
     var isCurrent = layoutElement.Index == App.Profile.CurrentInputLayoutElement.Index;
 
     // Caption
-    // サンプル: [1] (640x480) WindowCaption
-    var layoutElementCaption = "[" + (layoutElement.Index+1) + "] "; 
+    var layoutElementCaption = string.Empty;
     if (isCurrent) {
-      /// @todo(me) ピクセル単位の幅と高さの出力
-      layoutElementCaption += layoutElement.WindowCaption;
+      // サンプル: [1] (640x480) WindowCaption
+      var isDummy = App.RuntimeOptions.SelectedEntryIndex == -1;
+      if (isDummy) {
+        layoutElementCaption = string.Format(" [{0}] {1}",
+            layoutElement.Index + 1,
+            layoutElement.WindowCaption);
+      } else {
+        layoutElementCaption = string.Format(" [{0}] ({1}x{2}) {3}",
+            layoutElement.Index + 1,
+            layoutElement.BoundWidth(App.RuntimeOptions.CurrentSampleWidth),
+            layoutElement.BoundHeight(App.RuntimeOptions.CurrentSampleHeight),
+            layoutElement.WindowCaption);
+      }
     } else {
-      // Currentでなければ[1]以外は表示する必要はない
+      // サンプル: [1]
+      layoutElementCaption = string.Format(" [{0}]", layoutElement.Index + 1);
     }
-    
+
     // Brush
     Brush textBrush = null;
     switch (layoutElement.WindowType) {
@@ -135,9 +149,12 @@ public partial class LayoutEdit
         System.Globalization.CultureInfo.CurrentUICulture,
         FlowDirection.LeftToRight,
         new Typeface("Meiryo"),
-        12,
+        CaptionFontSize,
         textBrush);
-    formattedText.MaxTextWidth = layoutElement.BoundWidth(App.RuntimeOptions.CurrentSampleWidth);
+
+    // Clipping
+    var maxWidth = layoutElement.BoundWidth(App.RuntimeOptions.CurrentSampleWidth);
+    formattedText.MaxTextWidth = maxWidth;
     formattedText.MaxLineCount = 1;
     return formattedText;
   }
@@ -195,9 +212,9 @@ public partial class LayoutEdit
                      Rect.Inflate(layoutElementRect, -inflateValue, -inflateValue));
 
     // キャプションの描画
-    var layoutElementCaption = this.CreateLayoutElementCaption(layoutElement);
-    var captionPoint = new Point(layoutElementRect.X + framePen.Thickness * 4,
-                                 layoutElementRect.Y + framePen.Thickness * 2);
+    var captionPoint = new Point(layoutElementRect.X, layoutElementRect.Y);
+    var layoutElementCaption =
+        this.CreateLayoutElementCaption(layoutElement);
 
     // キャプションから縁取りを取得
     /// @todo(me) 若干重い？

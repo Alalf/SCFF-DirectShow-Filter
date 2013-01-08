@@ -20,9 +20,10 @@
 
 namespace SCFF.GUI.Controls {
 
-using System;
-using System.Windows.Controls;
-using SCFF.Common;
+  using System;
+  using System.Windows;
+  using System.Windows.Controls;
+  using SCFF.Common;
 
 /// 数値を指定してレイアウト配置を調整するためのUserControl
 public partial class LayoutParameter
@@ -45,13 +46,58 @@ public partial class LayoutParameter
   //-------------------------------------------------------------------
 
   /// Fit: Click
+  ///
+  /// 現在選択中のレイアウト要素のアスペクト比をあわせ、黒帯を消す
+  /// @todo(me) コンテキストメニューにも実装したいのでCommand化したい
+  ///           (Shiftドラッグで比率維持とかやってもいいかも)
   /// @param sender 使用しない
-  /// @param e
+  /// @param e 使用しない
   private void Fit_Click(object sender, System.Windows.RoutedEventArgs e) {
-    /// 現在選択中のレイアウト要素のアスペクト比をあわせ、黒帯を消す
-    /// @todo(me) コンテキストメニューにも実装したいのでCommand化したい。
-    ///           というか結構めんどくさくないか？これ。むしろAdobeっぽく
-    //            Shiftドラッグで比率維持とかやったほうがいいと思うんだけど
+    // サンプル座標系でのパディングサイズを求める
+    double paddingTop, paddingBottom, paddingLeft, paddingRight;
+    Common.Imaging.Utilities.CalculatePaddingSize(
+        App.Profile.CurrentInputLayoutElement.BoundWidth(App.RuntimeOptions.CurrentSampleWidth),
+        App.Profile.CurrentInputLayoutElement.BoundHeight(App.RuntimeOptions.CurrentSampleHeight),
+        App.Profile.CurrentInputLayoutElement.ClippingWidthWithFit,
+        App.Profile.CurrentInputLayoutElement.ClippingHeightWithFit,
+        App.Profile.CurrentInputLayoutElement.Stretch,
+        App.Profile.CurrentInputLayoutElement.KeepAspectRatio,
+        out paddingTop, out paddingBottom,
+        out paddingLeft, out paddingRight);
+      
+    // パディングサイズを相対座標系に戻す
+    /// @todo(me) Fitを連続で押すと変更がとまらない可能性あり
+    var paddingRelativeTop = 0.0;
+    var paddingRelativeBottom = 0.0;
+    var paddingRelativeLeft = 0.0;
+    var paddingRelativeRight = 0.0;
+    if (paddingTop + paddingBottom >= 1.0) {
+      // 単位ピクセル未満の調整はしない
+      paddingRelativeTop = paddingTop / App.RuntimeOptions.CurrentSampleHeight;
+      paddingRelativeBottom = paddingBottom / App.RuntimeOptions.CurrentSampleHeight;
+    }
+    if (paddingLeft + paddingRight >= 1.0) {
+      // 単位ピクセル未満の調整はしない
+      paddingRelativeLeft = paddingLeft / App.RuntimeOptions.CurrentSampleWidth;
+      paddingRelativeRight = paddingRight / App.RuntimeOptions.CurrentSampleWidth;
+    }
+
+    // 新しい相対座標系でのLTRBを求める
+    var nextLeft = App.Profile.CurrentInputLayoutElement.BoundRelativeLeft + paddingRelativeLeft;
+    var nextTop = App.Profile.CurrentInputLayoutElement.BoundRelativeTop + paddingRelativeTop;
+    var nextRight = App.Profile.CurrentInputLayoutElement.BoundRelativeRight - paddingRelativeRight;
+    var nextBottom = App.Profile.CurrentInputLayoutElement.BoundRelativeBottom - paddingRelativeBottom;
+
+    // Profileの設定を変える
+    App.Profile.CurrentOutputLayoutElement.BoundRelativeLeft = nextLeft;
+    App.Profile.CurrentOutputLayoutElement.BoundRelativeTop = nextTop;
+    App.Profile.CurrentOutputLayoutElement.BoundRelativeRight = nextRight;
+    App.Profile.CurrentOutputLayoutElement.BoundRelativeBottom = nextBottom;
+
+    // 関連するUserControlに更新を伝える
+    UpdateCommands.UpdateLayoutEditByCurrentProfile.Execute(null, null);
+    // 自分自身はCommandsではなく直接更新する
+    this.UpdateByCurrentProfile();
   }
 
   //-------------------------------------------------------------------
@@ -65,22 +111,30 @@ public partial class LayoutParameter
   /// BoundX/BoundY/BoundWidth/BoundHeightを更新する
   /// @attention *Changedイベントハンドラが無いのでそのまま代入してOK
   private void UpdateDisabledTextboxes() {
-    if (App.RuntimeOptions.SelectedEntryIndex >= 0) {
-      // プロセス選択中
-      this.BoundX.Text = App.Profile.CurrentInputLayoutElement.BoundLeft(
-          App.RuntimeOptions.CurrentSampleWidth).ToString();
-      this.BoundY.Text = App.Profile.CurrentInputLayoutElement.BoundTop(
-          App.RuntimeOptions.CurrentSampleHeight).ToString();
-      this.BoundWidth.Text = App.Profile.CurrentInputLayoutElement.BoundWidth(
-          App.RuntimeOptions.CurrentSampleWidth).ToString();
-      this.BoundHeight.Text = App.Profile.CurrentInputLayoutElement.BoundHeight(
-          App.RuntimeOptions.CurrentSampleHeight).ToString();
-    } else {
+    // dummyの場合もあり
+    var isDummy = App.RuntimeOptions.SelectedEntryIndex == -1;
+
+    var boundX = App.Profile.CurrentInputLayoutElement.BoundLeft(
+          App.RuntimeOptions.CurrentSampleWidth);
+    var boundY = App.Profile.CurrentInputLayoutElement.BoundTop(
+          App.RuntimeOptions.CurrentSampleHeight);
+    var boundWidth = App.Profile.CurrentInputLayoutElement.BoundWidth(
+          App.RuntimeOptions.CurrentSampleWidth);
+    var boundHeight = App.Profile.CurrentInputLayoutElement.BoundHeight(
+          App.RuntimeOptions.CurrentSampleHeight);
+
+    if (isDummy) {
       // プロセス選択なし
-      this.BoundX.Text = "n/a";
-      this.BoundY.Text = "n/a";
-      this.BoundWidth.Text = "n/a";
-      this.BoundHeight.Text = "n/a";
+      this.BoundX.Text = string.Format("({0})", boundX);
+      this.BoundY.Text = string.Format("({0})", boundY);
+      this.BoundWidth.Text = string.Format("({0})", boundWidth);
+      this.BoundHeight.Text = string.Format("({0})", boundHeight);
+    } else {
+      // プロセス選択中
+      this.BoundX.Text = string.Format("{0}", boundX);
+      this.BoundY.Text = string.Format("{0}", boundY);
+      this.BoundWidth.Text = string.Format("{0}", boundWidth);
+      this.BoundHeight.Text = string.Format("{0}", boundHeight);
     }
   }
 

@@ -39,13 +39,15 @@
       <Grid.Resources>
         <ResourceDictionary Source="Resources\CaptionButton.xaml"/>
       </Grid.Resources>
-      <Button FontSize="11" Content="r"
-              Height="14" HorizontalAlignment="Right" VerticalAlignment="Center"
-              Style="{DynamicResource CaptionButton}" IsCancel="True"
+      <Button Style="{DynamicResource CaptionButton}"
+              VerticalAlignment="Center" HorizontalAlignment="Right" Height="14"
+              FontSize="11" Content="r"
+              IsCancel="True"
               Command="{x:Static shell:SystemCommands.CloseWindowCommand}"/>
-      <Label Grid.Row="2" Content="Double-click/Return to Apply"
-             Height="12" HorizontalAlignment="Center" VerticalAlignment="Center"
-             Foreground="Black" IsHitTestVisible="False"/>
+      <Label  Grid.Row="2"
+              VerticalAlignment="Center" HorizontalAlignment="Center" Height="12" 
+              IsHitTestVisible="False"
+              Foreground="Black" Content="Double-click/Return to Apply"/>
     </Grid>
   </Border>
 </Window>

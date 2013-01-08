@@ -3,9 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d" 
-             d:DesignWidth="300"
-             d:DesignHeight="300"
+             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="300"
              FontSize="9">
   <Grid>
     <Grid.ColumnDefinitions>
@@ -17,8 +15,14 @@
     <Grid.RowDefinitions>
       <RowDefinition Height="30"/>
     </Grid.RowDefinitions>
-    <Button Margin="5,0" Height="20" VerticalAlignment="Center" FontSize="10">Splash</Button>
-    <CheckBox x:Name="AutoApply" Grid.Column="2" Margin="5,0" Height="16" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="9" Click="AutoApply_Click">Auto</CheckBox>
-    <Button Margin="5,0" Grid.Column="3" Height="20" VerticalAlignment="Center"  FontSize="10">Apply</Button>
+    <Button   VerticalAlignment="Center" Height="20" Margin="5,0"
+              x:Name="Splash" FontSize="10" Content="Splash"/>
+    <CheckBox Grid.Column="2"
+              VerticalAlignment="Center" HorizontalAlignment="Right" Height="16" Margin="5,0"
+              x:Name="AutoApply" Content="Auto"
+              Click="AutoApply_Click"/>
+    <Button   Grid.Column="3"
+              VerticalAlignment="Center" Height="20" Margin="5,0"
+              x:Name="ApplyProfile" FontSize="10" Content="Apply"/>
   </Grid>
 </UserControl>

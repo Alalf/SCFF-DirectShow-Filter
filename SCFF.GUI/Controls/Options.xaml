@@ -3,8 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d" 
-             d:DesignHeight="89" d:DesignWidth="256"
+             mc:Ignorable="d" d:DesignWidth="256" d:DesignHeight="89"
              FontSize="9">
   <Grid>
     <Grid.RowDefinitions>
@@ -17,12 +16,32 @@
       <ColumnDefinition Width="140"/>
       <ColumnDefinition/>
     </Grid.ColumnDefinitions>
-    <CheckBox x:Name="ShowCursor" Height="15" VerticalAlignment="Center" Click="ShowCursor_Click">Show Mouse Cursor</CheckBox>
-    <CheckBox x:Name="ShowLayeredWindow" Grid.Row="1" Height="15" VerticalAlignment="Center" Click="ShowLayeredWindow_Click">Show Layered Window</CheckBox>
-    <CheckBox x:Name="KeepAspectRatio" Grid.Row="2" Height="15" VerticalAlignment="Center" Click="KeepAspectRatio_Click">Keep Aspect Ratio</CheckBox>
-    <CheckBox x:Name="Stretch" Grid.Row="3" Height="15" VerticalAlignment="Center" Click="Stretch_Click">Enable Enlargement</CheckBox>
-    <CheckBox x:Name="OverSampling" Grid.Column="1" Height="15" VerticalAlignment="Center" IsEnabled="False">Over-Sampling</CheckBox>
-    <Label Grid.Column="1" Grid.Row="2" Height="12" VerticalAlignment="Center" HorizontalAlignment="Right" IsEnabled="False">Thread Num</Label>
-    <ComboBox x:Name="ThreadCount" Grid.Column="1" Grid.Row="3" Height="20" VerticalAlignment="Center" IsEnabled="False"/>
+    <CheckBox VerticalAlignment="Center" Height="15"
+              x:Name="ShowCursor" Content="Show Mouse Cursor"
+              Click="ShowCursor_Click"/>
+    <CheckBox Grid.Row="1"
+              VerticalAlignment="Center" Height="15"
+              x:Name="ShowLayeredWindow" Content="Show Layered Window"
+              Click="ShowLayeredWindow_Click"/>
+    <CheckBox Grid.Row="2" 
+              VerticalAlignment="Center" Height="15"
+              x:Name="KeepAspectRatio" Content="Keep Aspect Ratio"
+              Click="KeepAspectRatio_Click"/>
+    <CheckBox Grid.Row="3"
+              VerticalAlignment="Center" Height="15" 
+              x:Name="Stretch" Content="Enable Enlargement"
+              Click="Stretch_Click"/>
+    <CheckBox Grid.Column="1"
+              VerticalAlignment="Center" Height="15"
+              IsEnabled="False"
+              x:Name="OverSampling" Content="Over-Sampling"/>
+    <Label    Grid.Column="1" Grid.Row="2"
+              VerticalAlignment="Center" HorizontalAlignment="Right" Height="12"
+              IsEnabled="False"
+              Content="Thread Num"/>
+    <ComboBox Grid.Column="1" Grid.Row="3"
+              VerticalAlignment="Center" Height="20"
+              IsEnabled="False"
+              x:Name="ThreadCount" />
   </Grid>
 </UserControl>

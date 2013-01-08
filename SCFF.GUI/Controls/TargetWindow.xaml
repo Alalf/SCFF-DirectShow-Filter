@@ -2,8 +2,9 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d" d:DesignHeight="55.896" d:DesignWidth="303.243" FontSize="9">
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d" d:DesignWidth="303.243" d:DesignHeight="55.896"
+             FontSize="9">
   <Grid>
     <Grid.RowDefinitions>
       <RowDefinition Height="30"/>
@@ -15,14 +16,25 @@
       <ColumnDefinition Width="50"/>
       <ColumnDefinition Width="50"/>
     </Grid.ColumnDefinitions>
-    <Label Height="15" Width="40" HorizontalAlignment="Right" VerticalAlignment="Center">Caption</Label>
-    <TextBox x:Name="WindowCaption" Height="20" Grid.Column="1" Grid.ColumnSpan="3"
-                     VerticalAlignment="Center" IsEnabled="False">(Window Classname)</TextBox>
-    <Button x:Name="DragHere" Height="20" Grid.Row="1" Grid.ColumnSpan="2"
-            PreviewMouseMove="DragHere_PreviewMouseMove"
-            PreviewMouseDown="DragHere_PreviewMouseDown"
-            PreviewMouseUp="DragHere_PreviewMouseUp">Drag here.</Button>
-    <Button x:Name="ListView" Height="20" Grid.Row="1" Grid.Column="2" Click="ListView_Click" >ListView</Button>
-    <Button x:Name="Desktop" Height="20" Grid.Row="1" Grid.Column="3" Click="Desktop_Click">Desktop</Button>
+    <Label    VerticalAlignment="Center" HorizontalAlignment="Right" Width="40" Height="15"
+              Content="Caption"/>
+    <TextBox  Grid.Column="1" Grid.ColumnSpan="3"
+              VerticalAlignment="Center" Height="20"
+              IsEnabled="False"
+              x:Name="WindowCaption" Text="(Window Classname)"/>
+    <Button   Grid.Row="1" Grid.ColumnSpan="2"
+              Height="20"
+              x:Name="DragHere" Content="Drag here."
+              PreviewMouseMove="DragHere_PreviewMouseMove"
+              PreviewMouseDown="DragHere_PreviewMouseDown"
+              PreviewMouseUp="DragHere_PreviewMouseUp"/>
+    <Button   Grid.Row="1" Grid.Column="2"
+              Height="20" 
+              x:Name="ListView" Content="ListView"
+              Click="ListView_Click"/>
+    <Button   Grid.Row="1" Grid.Column="3"
+              Height="20" 
+              x:Name="Desktop" Content="Desktop"
+              Click="Desktop_Click"/>
   </Grid>
 </UserControl>

@@ -55,7 +55,7 @@
             </VisualStateManager.VisualStateGroups>
             <ContentPresenter x:Name="ContentPresenter" Focusable="False" Margin="{TemplateBinding Padding}"
                         HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
           </Border>
         </ControlTemplate>
       </Setter.Value>

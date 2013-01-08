@@ -9,8 +9,10 @@
         Background="{DynamicResource WindowBackgroundBrush}"
         Icon="Images/app.ico"
         ResizeMode="CanResizeWithGrip"
-        Height="565" Width="772.437"
-        MinHeight="280" MinWidth="280"
+        Width="772.437"
+        Height="565"
+        MinWidth="280"
+        MinHeight="280" 
         Loaded="OnLoaded"
         Closing="OnClosing"
         Activated="OnActivated"
@@ -79,37 +81,57 @@
         <Grid.Resources>
           <ResourceDictionary Source="Resources\CaptionButton.xaml"/>
         </Grid.Resources>
-        <Rectangle Width="10" Height="10" Fill="#FF003B00" Margin="5,0" VerticalAlignment="Center"/>
-        <Label x:Name="WindowTitle" Grid.Column="1" FontSize="10" Content="SCFF DirectShow Filter Ver.*.*.*" VerticalAlignment="Center"/>
-        <Button Grid.Column="2" Height="12" VerticalAlignment="Center" Style="{DynamicResource CaptionButton}"
-                Command="{x:Static shell:SystemCommands.MinimizeWindowCommand}">0</Button>
-        <Button Grid.Column="3" Height="12" VerticalAlignment="Center" Style="{DynamicResource CaptionButton}"
-                Command="{x:Static shell:SystemCommands.MaximizeWindowCommand}">1</Button>
-        <Button Grid.Column="4" Height="12" VerticalAlignment="Center" Style="{DynamicResource CaptionButton}"
-                Command="{x:Static shell:SystemCommands.RestoreWindowCommand}">2</Button>
-        <Button Grid.Column="5" Height="12" VerticalAlignment="Center" Style="{DynamicResource CaptionButton}"
-                Command="{x:Static shell:SystemCommands.CloseWindowCommand}">r</Button>
+        <Rectangle  VerticalAlignment="Center" Width="10" Height="10" Margin="5,0"
+                    Fill="#FF003B00" />
+        <Label      Grid.Column="1"
+                    VerticalAlignment="Center"                    
+                    x:Name="WindowTitle" FontSize="10" Content="SCFF DirectShow Filter Ver.*.*.*" />
+        <Button     Grid.Column="2"
+                    Style="{DynamicResource CaptionButton}"
+                    VerticalAlignment="Center" Height="12" 
+                    FontSize="10" Content="0"
+                    Command="{x:Static shell:SystemCommands.MinimizeWindowCommand}"/>
+        <Button     Grid.Column="3"
+                    Style="{DynamicResource CaptionButton}"
+                    VerticalAlignment="Center" Height="12" 
+                    FontSize="10" Content="1"
+                    Command="{x:Static shell:SystemCommands.MaximizeWindowCommand}"/>
+        <Button     Grid.Column="4"
+                    Style="{DynamicResource CaptionButton}"
+                    VerticalAlignment="Center" Height="12" 
+                    FontSize="10" Content="2"
+                    Command="{x:Static shell:SystemCommands.RestoreWindowCommand}"/>
+        <Button     Grid.Column="5"
+                    Style="{DynamicResource CaptionButton}"
+                    VerticalAlignment="Center" Height="12"
+                    FontSize="10" Content="r"
+                    Command="{x:Static shell:SystemCommands.CloseWindowCommand}"/>
       </Grid>
       <!-- メニューバー -->
-      <localControls:MainMenu x:Name="MainMenu" DockPanel.Dock="Top"/>
+      <localControls:MainMenu DockPanel.Dock="Top"
+                              x:Name="MainMenu" />
       <!-- 各種設定 -->
-      <StackPanel Width="250" DockPanel.Dock="Left">
+      <StackPanel DockPanel.Dock="Left"
+                  Width="250">
         <!-- プロセス -->
         <localControls:SCFFDSFEntries x:Name="SCFFEntries"/>
         <!-- 取り込みウィンドウ -->
-        <GroupBox FontSize="9" Header="Target Window">
+        <GroupBox Header="Target Window">
           <localControls:TargetWindow x:Name="TargetWindow" />
         </GroupBox>
         <!-- 取り込み範囲 -->
-        <Expander x:Name="AreaExpander" FontSize="9" Header="Area" IsExpanded="True">
+        <Expander Header="Area"
+                  x:Name="AreaExpander" IsExpanded="True">
           <localControls:Area x:Name="Area"/>
         </Expander>
         <!-- 取り込みオプション -->
-        <Expander x:Name="OptionsExpander" FontSize="9" Header="Options" IsExpanded="True">
+        <Expander Header="Options"
+                  x:Name="OptionsExpander" IsExpanded="True">
           <localControls:Options x:Name="Options"/>
         </Expander>
         <!-- 拡大縮小オプション -->
-        <Expander x:Name="ResizeMethodExpander" FontSize="9" Header="Resize Method" IsExpanded="True">
+        <Expander Header="Resize Method"
+                  x:Name="ResizeMethodExpander" IsExpanded="True">
           <localControls:ResizeMethod x:Name="ResizeMethod"/>
         </Expander>
         <!-- レイアウト番号 -->
@@ -118,10 +140,14 @@
         <localControls:Apply x:Name="Apply" />
       </StackPanel>
       <!-- レイアウト表示 -->
-      <Expander x:Name="LayoutExpander" FontSize="9" ExpandDirection="Right" Header="Layout" IsExpanded="True">
+      <Expander Header="Layout" ExpandDirection="Right"
+                x:Name="LayoutExpander" IsExpanded="True">
         <DockPanel LastChildFill="True">
-          <localControls:LayoutToolbar x:Name="LayoutToolbar" DockPanel.Dock="Top" />
-          <localControls:LayoutParameter x:Name="LayoutParameter"  DockPanel.Dock="Bottom" Width="350" />
+          <localControls:LayoutToolbar    DockPanel.Dock="Top"
+                                          x:Name="LayoutToolbar"/>
+          <localControls:LayoutParameter  DockPanel.Dock="Bottom"
+                                          Width="350"
+                                          x:Name="LayoutParameter"/>
           <Viewbox Stretch="Uniform">
             <localControls:LayoutEdit x:Name="LayoutEdit"/>
           </Viewbox>

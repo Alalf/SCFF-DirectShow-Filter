@@ -4,18 +4,30 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:local="clr-namespace:SCFF.GUI"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d"
-             d:DesignWidth="411" 
-             d:DesignHeight="31"
+             mc:Ignorable="d" d:DesignWidth="411" d:DesignHeight="31"
              FontSize="9">
-  <ToolBarTray Background="{x:Null}" IsLocked="True" HorizontalAlignment="Center">
-    <ToolBar Header="Layout " Height="25">
-      <Button x:Name="Add" Content="Add" Margin="3,0,0,0" Click="Add_Click" VerticalAlignment="Top"/>
-      <Button x:Name="Remove" Content="Remove" Margin="3,0,0,0" Click="Remove_Click" IsEnabled="False"/>
+  <ToolBarTray HorizontalAlignment="Center"
+               Background="{x:Null}"
+               IsLocked="True" >
+    <ToolBar Height="25"
+             Header="Layout">
+      <Button Margin="3,0,0,0"
+              x:Name="Add" Content="Add"
+              Click="Add_Click" />
+      <Button Margin="3,0,0,0"
+              IsEnabled="False"
+              x:Name="Remove" Content="Remove"
+              Click="Remove_Click" />
       <Separator/>
-      <CheckBox x:Name="LayoutPreview" Content="Preview" Margin="3,0,0,0" Click="LayoutPreview_Click"/>
-      <CheckBox x:Name="LayoutBorder" Content="Border" Margin="3,0,0,0" Click="LayoutBorder_Click"/>
-      <CheckBox x:Name="LayoutSnap" Content="Snap" Margin="3,0,8,0" Click="LayoutSnap_Click"/>
+      <CheckBox Margin="3,0,0,0" 
+                x:Name="LayoutPreview" Content="Preview"
+                Click="LayoutPreview_Click"/>
+      <CheckBox Margin="3,0,0,0"
+                x:Name="LayoutBorder" Content="Border" 
+                Click="LayoutBorder_Click"/>
+      <CheckBox Margin="3,0,8,0"
+                x:Name="LayoutSnap" Content="Snap" 
+                Click="LayoutSnap_Click"/>
     </ToolBar>
   </ToolBarTray>
 </UserControl>

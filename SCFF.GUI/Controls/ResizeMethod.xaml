@@ -3,8 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d" 
-             d:DesignHeight="145" d:DesignWidth="245"
+             mc:Ignorable="d" d:DesignWidth="245" d:DesignHeight="145"
              FontSize="9">
   <Grid>
     <Grid.ColumnDefinitions>
@@ -21,21 +20,67 @@
       <RowDefinition Height="25"/>
       <RowDefinition Height="25"/>
     </Grid.RowDefinitions>
-    <ComboBox x:Name="SWScaleFlags" Grid.ColumnSpan="2" Height="20" VerticalAlignment="Center"/>
-    <CheckBox x:Name="SWScaleAccurateRnd" Grid.Column="2" Grid.ColumnSpan="2" Height="16" VerticalAlignment="Center" Click="SWScaleAccurateRnd_Click">Accurate Rounding</CheckBox>
+    <ComboBox Grid.ColumnSpan="2"
+              VerticalAlignment="Center" Height="20"
+              x:Name="SWScaleFlags" />
+    <CheckBox Grid.Column="2" Grid.ColumnSpan="2"
+              VerticalAlignment="Center" Height="16" Margin="3,0"
+              x:Name="SWScaleAccurateRnd" Content="Accurate Rounding"
+              Click="SWScaleAccurateRnd_Click"/>
     <Separator Grid.Row="1" Grid.ColumnSpan="4" />
-    <CheckBox x:Name="SWScaleIsFilterEnabled" Grid.Row="2" Grid.ColumnSpan="4" Height="16" VerticalAlignment="Center" Checked="SWScaleIsFilterEnabled_Checked" Unchecked="SWScaleIsFilterEnabled_Unchecked" Click="SWScaleIsFilterEnabled_Click">Enable filter</CheckBox>
-    <Label Grid.Row="3" Height="12" VerticalAlignment="Center" HorizontalAlignment="Right">L GBlur</Label>
-    <Label Grid.Row="4" Height="12" VerticalAlignment="Center" HorizontalAlignment="Right">L Sharpen</Label>
-    <Label Grid.Row="5" Height="12" VerticalAlignment="Center" HorizontalAlignment="Right">C HShift</Label>
-    <Label Grid.Column="2" Grid.Row="3" Height="12" VerticalAlignment="Center" HorizontalAlignment="Right">C GBlur</Label>
-    <Label Grid.Column="2" Grid.Row="4" Height="12" VerticalAlignment="Center" HorizontalAlignment="Right">C Sharpen</Label>
-    <Label Grid.Column="2" Grid.Row="5" Height="12" VerticalAlignment="Center" HorizontalAlignment="Right">C VShift</Label>
-    <TextBox x:Name="SWScaleLumaGBlur" Grid.Column="1" Grid.Row="3" Margin="5,0" Height="20" VerticalAlignment="Center" IsEnabled="False">9999</TextBox>
-    <TextBox x:Name="SWScaleLumaSharpen" Grid.Column="1" Grid.Row="4" Margin="5,0" Height="20" VerticalAlignment="Center" IsEnabled="False">9999</TextBox>
-    <TextBox x:Name="SWScaleChromaHshift" Grid.Column="1" Grid.Row="5" Margin="5,0" Height="20" VerticalAlignment="Center" IsEnabled="False">0.0</TextBox>
-    <TextBox x:Name="SWScaleChromaGBlur" Grid.Column="3" Grid.Row="3" Margin="5,0" Height="20" VerticalAlignment="Center" IsEnabled="False">9999</TextBox>
-    <TextBox x:Name="SWScaleChromaSharpen" Grid.Column="3" Grid.Row="4" Margin="5,0" Height="20" VerticalAlignment="Center" IsEnabled="False">9999</TextBox>
-    <TextBox x:Name="SWScaleChromaVshift" Grid.Column="3" Grid.Row="5" Margin="5,0" Height="20" VerticalAlignment="Center" IsEnabled="False">0.0</TextBox>
+    <CheckBox Grid.Row="2" Grid.ColumnSpan="4"
+              Height="16" VerticalAlignment="Center"
+              x:Name="SWScaleIsFilterEnabled" Content="Enable filter"
+              Checked="SWScaleIsFilterEnabled_Checked"
+              Unchecked="SWScaleIsFilterEnabled_Unchecked"
+              Click="SWScaleIsFilterEnabled_Click"/>
+    <!-- L GBlur -->
+    <Label    Grid.Row="3"
+              VerticalAlignment="Center" HorizontalAlignment="Right" Height="12"
+              Content="L GBlur"/>
+    <TextBox  Grid.Column="1" Grid.Row="3"
+              VerticalAlignment="Center" Height="20" Margin="5,0"
+              IsEnabled="False"
+              x:Name="SWScaleLumaGBlur" Text="9999"/>
+    <!-- L Sharpen -->
+    <Label    Grid.Row="4"
+              VerticalAlignment="Center" HorizontalAlignment="Right" Height="12"
+              Content="L Sharpen"/>
+    <TextBox  Grid.Row="4" Grid.Column="1"
+              VerticalAlignment="Center" Height="20" Margin="5,0" 
+              IsEnabled="False"
+              x:Name="SWScaleLumaSharpen" Text="9999"/>
+    <!-- C HShift -->
+    <Label    Grid.Row="5"
+              VerticalAlignment="Center" HorizontalAlignment="Right" Height="12"
+              Content="C HShift"/>
+    <TextBox  Grid.Row="5" Grid.Column="1"
+              VerticalAlignment="Center" Height="20" Margin="5,0"
+              IsEnabled="False"
+              x:Name="SWScaleChromaHshift" Text="0.0"/>
+    <!-- C GBlur -->
+    <Label    Grid.Row="3" Grid.Column="2"
+              VerticalAlignment="Center" HorizontalAlignment="Right" Height="12"
+              Content="C GBlur"/>
+    <TextBox  Grid.Row="3" Grid.Column="3"
+              VerticalAlignment="Center" Height="20" Margin="5,0"
+              IsEnabled="False"
+              x:Name="SWScaleChromaGBlur" Text="9999"/>
+    <!-- C Sharpen -->
+    <Label    Grid.Row="4" Grid.Column="2"
+              VerticalAlignment="Center" HorizontalAlignment="Right" Height="12"
+              Content="C Sharpen"/>
+    <TextBox  Grid.Row="4" Grid.Column="3" 
+              VerticalAlignment="Center" Height="20" Margin="5,0"
+              IsEnabled="False"
+              x:Name="SWScaleChromaSharpen" Text="9999"/>
+    <!-- C VShift -->
+    <Label    Grid.Row="5" Grid.Column="2"
+              VerticalAlignment="Center" HorizontalAlignment="Right" Height="12"
+              Content="C VShift"/>
+    <TextBox  Grid.Row="5" Grid.Column="3"
+              VerticalAlignment="Center" Height="20" Margin="5,0"
+              IsEnabled="False"
+              x:Name="SWScaleChromaVshift" Text="0.0"/>
   </Grid>
 </UserControl>

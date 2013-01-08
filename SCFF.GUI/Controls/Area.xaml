@@ -3,8 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d" 
-             d:DesignHeight="59" d:DesignWidth="395"
+             mc:Ignorable="d" d:DesignWidth="395" d:DesignHeight="59"
              FontSize="9">
   <Grid>
     <Grid.ColumnDefinitions>
@@ -21,17 +20,49 @@
       <RowDefinition Height="25"/>
       <RowDefinition Height="25"/>
     </Grid.RowDefinitions>
-    <Label Margin="3,0" Height="12" VerticalAlignment="Center">X</Label>
-    <Label Grid.Column="2" Margin="3,0" Height="12" VerticalAlignment="Center">Y</Label>
-    <Label Grid.Column="4" Margin="3,0" Height="12" VerticalAlignment="Center">Size</Label>
-    <Label Grid.Column="6" Margin="3,0" Height="12" VerticalAlignment="Center">x</Label>
-    <TextBox x:Name="ClippingX" Grid.Column="1" Margin="0,0,5,0" Height="20" VerticalAlignment="Center">9999</TextBox>
-    <TextBox x:Name="ClippingY" Grid.Column="3" Margin="0,0,5,0" Height="20" VerticalAlignment="Center">9999</TextBox>
-    <TextBox x:Name="ClippingWidth" Grid.Column="5" Margin="0,0,5,0" Height="20" VerticalAlignment="Center">9999</TextBox>
-    <TextBox x:Name="ClippingHeight" Grid.Column="8" Margin="0,0,5,0" Height="20" VerticalAlignment="Center">9999</TextBox>
-    <CheckBox x:Name="Fit"  Grid.Row="1" Grid.ColumnSpan="2" Height="16" VerticalAlignment="Center" Margin="0,4" IsChecked="True" Checked="Fit_Checked" Unchecked="Fit_Unchecked" Click="Fit_Click">Fit</CheckBox>
-    <Button x:Name="AreaSelect" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="3" Height="20" VerticalAlignment="Center" Margin="0,2" Click="AreaSelect_Click">Area Select</Button>
-    <Button x:Name="ListView" Grid.Row="1" Grid.Column="5" Grid.ColumnSpan="1" Height="20" VerticalAlignment="Center" Click="ListView_Click">ListView</Button>
-    <Button x:Name="Desktop" Grid.Row="1" Grid.Column="6" Grid.ColumnSpan="2" Height="20" VerticalAlignment="Center" Click="Desktop_Click">Desktop</Button>
+    <!-- X -->
+    <Label    VerticalAlignment="Center" Height="12" Margin="3,0"
+              Content="X"/>
+    <TextBox  Grid.Column="1"
+              VerticalAlignment="Center" Height="20" Margin="0,0,5,0"
+              x:Name="ClippingX" Text="9999"/>
+    <!-- Y -->
+    <Label    Grid.Column="2"
+              VerticalAlignment="Center" Height="12" Margin="3,0"
+              Content="Y"/>
+    <TextBox  Grid.Column="3"
+              VerticalAlignment="Center" Height="20" Margin="0,0,5,0"
+              x:Name="ClippingY" Text="9999"/>
+    <!-- Size -->
+    <Label    Grid.Column="4"
+              VerticalAlignment="Center" Height="12" Margin="3,0"
+              Content="Size"/>
+    <TextBox  Grid.Column="5"
+              VerticalAlignment="Center" Height="20" Margin="0,0,5,0"
+              x:Name="ClippingWidth" Text="9999"/>
+    <!-- x -->
+    <Label    Grid.Column="6"
+              VerticalAlignment="Center" Height="12" Margin="3,0"
+              Content="x"/>
+    <TextBox  Grid.Column="8"
+              VerticalAlignment="Center" Height="20" Margin="0,0,5,0"
+              x:Name="ClippingHeight" Text="9999"/>
+    <!-- (2nd row) -->
+    <CheckBox Grid.Row="1" Grid.ColumnSpan="2"
+              VerticalAlignment="Center" Height="16" Margin="0,4"
+              x:Name="Fit" Content="Fit" IsChecked="True" 
+              Checked="Fit_Checked" Unchecked="Fit_Unchecked" Click="Fit_Click"/>
+    <Button   Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="3"
+              VerticalAlignment="Center" Height="20" Margin="0,2"
+              x:Name="AreaSelect" Content="Area Select"
+              Click="AreaSelect_Click"/>
+    <Button   Grid.Row="1" Grid.Column="5" Grid.ColumnSpan="1"
+              VerticalAlignment="Center" Height="20"
+              x:Name="ListView" Content="ListView"
+              Click="ListView_Click"/>
+    <Button   Grid.Row="1" Grid.Column="6" Grid.ColumnSpan="2"
+              VerticalAlignment="Center" Height="20"
+              x:Name="Desktop" Content="Desktop"
+              Click="Desktop_Click"/>
   </Grid>
 </UserControl>

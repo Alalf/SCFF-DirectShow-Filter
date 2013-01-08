@@ -55,6 +55,9 @@
     <!-- Options -->
     <CommandBinding Command="{x:Static local:UpdateCommands.UpdateLayoutEditByOptions}"
                     Executed="UpdateLayoutEditByOptions_Executed" />
+    <!-- RuntimeOptions -->
+    <CommandBinding Command="{x:Static local:UpdateCommands.UpdateMainWindowByRuntimeOptions}"
+                    Executed="UpdateMainWindowByRuntimeOptions_Executed" />
   </Window.CommandBindings>
   <shell:WindowChrome.WindowChrome>
     <shell:WindowChrome CaptionHeight="{x:Static SystemParameters.CaptionHeight}"

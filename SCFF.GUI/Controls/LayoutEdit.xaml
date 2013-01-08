@@ -6,19 +6,16 @@
              mc:Ignorable="d" d:DesignWidth="640" d:DesignHeight="400"
              Loaded="OnLoaded"
              FontSize="9">
-  <Viewbox Width="640" Height="400" Stretch="Fill"
-           x:Name="LayoutEditViewBox">
-    <Image x:Name="LayoutEditImage"
-           MouseDown="LayoutEditImage_MouseDown"
-           MouseMove="LayoutEditImage_MouseMove"
-           MouseUp="LayoutEditImage_MouseUp" >
-      <Image.Source>
-        <DrawingImage>
-          <DrawingImage.Drawing>
-            <DrawingGroup x:Name="DrawingGroup"/>
-          </DrawingImage.Drawing>
-        </DrawingImage>
-      </Image.Source>
-    </Image>
-  </Viewbox>
+  <Image x:Name="LayoutEditImage"
+          MouseDown="LayoutEditImage_MouseDown"
+          MouseMove="LayoutEditImage_MouseMove"
+          MouseUp="LayoutEditImage_MouseUp" >
+    <Image.Source>
+      <DrawingImage>
+        <DrawingImage.Drawing>
+          <DrawingGroup x:Name="DrawingGroup"/>
+        </DrawingImage.Drawing>
+      </DrawingImage>
+    </Image.Source>
+  </Image>
 </UserControl>

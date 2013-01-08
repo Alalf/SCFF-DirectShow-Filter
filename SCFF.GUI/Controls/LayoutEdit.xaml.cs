@@ -41,21 +41,6 @@ public partial class LayoutEdit
   // 定数
   //===================================================================  
 
-  /// 相対座標→Image座標の倍率
-  /// @warning 1.0のままやると値が小さすぎてフォントがバグるので100倍
-  private const double Scale = 100.0;
-
-  /// Imageの幅
-  private const double MaxImageWidth = 1.0 * Scale;
-  /// Imageの高さ
-  private const double MaxImageHeight = 1.0 * Scale;
-  /// Image座標系でのペンの太さ
-  private const double PenThickness = 0.005 * Scale;
-  /// Image座標系でのフォントサイズ
-  private const double CaptionSize = 0.03 * Scale;
-  /// Image座標系でのキャプションと枠線のマージン
-  private const double CaptionMargin = PenThickness;
-
   /// カーソルをまとめたディクショナリ
   private static readonly Dictionary<HitModes, Cursor> HitModesToCursors =
       new Dictionary<HitModes,Cursor> {
@@ -76,20 +61,12 @@ public partial class LayoutEdit
   //===================================================================
 
   /// コンストラクタ
-  /// @todo(me) CompactViewで起動したときになぜかバックグラウンドでスレッドが実行されている
   public LayoutEdit() {
     InitializeComponent();
     this.Dispatcher.ShutdownStarted += OnShutdownStarted;
-
-    /// @todo(me) App.RuntimeOptionsからの値の取得
-    this.LayoutEditViewBox.Width = App.RuntimeOptions.CurrentSampleWidth;
-    this.LayoutEditViewBox.Height = App.RuntimeOptions.CurrentSampleHeight;
+    
+    // できるだけ軽く
     RenderOptions.SetBitmapScalingMode(this.DrawingGroup, BitmapScalingMode.LowQuality);
-
-    // Clipping
-    // 重くないか？
-    this.DrawingGroup.ClipGeometry = new RectangleGeometry(this.previewRect);
-    this.DrawingGroup.ClipGeometry.Freeze();
 
     // スクリーンキャプチャマネージャの準備
     this.screenCaptureTimer = new ScreenCaptureTimer(redrawTimerPeriod);
@@ -102,6 +79,9 @@ public partial class LayoutEdit
   /// Loaded
   void OnLoaded(object sender, RoutedEventArgs e) {
     Debug.WriteLine("LayoutEdit: OnLoaded");
+
+    // 一回DrawingGroupを生成
+    this.BuildDrawingGroup();
   }
 
   /// Dispatcher.ShutdownStarted
@@ -113,16 +93,6 @@ public partial class LayoutEdit
   //===================================================================
   // this.DrawingGroupへの描画
   //===================================================================
-
-  /// レイアウト要素の描画範囲を求める
-  private Rect CreateLayoutElementRect(Profile.InputLayoutElement layoutElement) {
-    return new Rect() {
-      X = layoutElement.BoundRelativeLeft * MaxImageWidth,
-      Y = layoutElement.BoundRelativeTop * MaxImageHeight,
-      Width = (layoutElement.BoundRelativeRight - layoutElement.BoundRelativeLeft) * MaxImageWidth,
-      Height = (layoutElement.BoundRelativeBottom - layoutElement.BoundRelativeTop) * MaxImageHeight
-    };
-  }
 
   /// レイアウト要素のキャプションの生成
   /// @param layoutElement 対象のレイアウト要素
@@ -165,9 +135,9 @@ public partial class LayoutEdit
         System.Globalization.CultureInfo.CurrentUICulture,
         FlowDirection.LeftToRight,
         new Typeface("Meiryo"),
-        CaptionSize,
+        12,
         textBrush);
-    formattedText.MaxTextWidth = layoutElement.BoundRelativeWidth * Scale;
+    formattedText.MaxTextWidth = layoutElement.BoundWidth(App.RuntimeOptions.CurrentSampleWidth);
     formattedText.MaxLineCount = 1;
     return formattedText;
   }
@@ -180,15 +150,12 @@ public partial class LayoutEdit
     if (bitmap == null) return;
 
     // プレビューの描画
-    var layoutElementRect = this.CreateLayoutElementRect(layoutElement);
-    /// @todo(me) ピクセルベース計算じゃないと根本的におかしい！
-    ///           なぜならばStretchの意味がなくなるから
-    var aspect = this.LayoutEditViewBox.Width / this.LayoutEditViewBox.Height;
+    var layoutElementRect = this.CreateSampleLayoutElementRect(layoutElement);
     double x, y, width, height;
     Common.Imaging.Utilities.CalculateLayout(
         layoutElementRect.Left, layoutElementRect.Top,
         layoutElementRect.Width, layoutElementRect.Height,
-        layoutElement.ClippingWidthWithFit, layoutElement.ClippingHeightWithFit * aspect,
+        layoutElement.ClippingWidthWithFit, layoutElement.ClippingHeightWithFit,
         layoutElement.Stretch, layoutElement.KeepAspectRatio,
         out x, out y, out width, out height);
     var actualLayoutElementRect = new Rect(x, y, width, height);
@@ -221,13 +188,16 @@ public partial class LayoutEdit
       }
     }
 
-    // フレームの描画
-    var layoutElementRect = this.CreateLayoutElementRect(layoutElement);
-    dc.DrawRectangle(Brushes.Transparent, framePen, layoutElementRect);
+    // フレーム(内枠)の描画
+    var layoutElementRect = this.CreateSampleLayoutElementRect(layoutElement);
+    var inflateValue = framePen.Thickness / 2;
+    dc.DrawRectangle(Brushes.Transparent, framePen,
+                     Rect.Inflate(layoutElementRect, -inflateValue, -inflateValue));
 
     // キャプションの描画
     var layoutElementCaption = this.CreateLayoutElementCaption(layoutElement);
-    var captionPoint = new Point(layoutElementRect.X + CaptionMargin, layoutElementRect.Y + CaptionMargin);
+    var captionPoint = new Point(layoutElementRect.X + framePen.Thickness * 4,
+                                 layoutElementRect.Y + framePen.Thickness * 2);
 
     // キャプションから縁取りを取得
     /// @todo(me) 若干重い？
@@ -237,12 +207,33 @@ public partial class LayoutEdit
     dc.DrawText(layoutElementCaption, captionPoint);
   }
 
-  /// プロファイル全体の描画
-  /// @todo(me) FPS制限が必要かも？でもあんまりかわらないかも
-  private void DrawProfile() {
+  /// サンプルの幅・高さをRectに変換
+  private Rect SampleRect {
+    get {
+      return new Rect {
+        X = 0.0,
+        Y = 0.0,
+        Width = (double)App.RuntimeOptions.CurrentSampleWidth,
+        Height = (double)App.RuntimeOptions.CurrentSampleHeight
+      };
+    }
+  }
+
+  /// サンプル座標系でのレイアウト要素の領域
+  private Rect CreateSampleLayoutElementRect(Profile.InputLayoutElement layoutElement) {
+    return new Rect {
+      X = layoutElement.BoundLeft(App.RuntimeOptions.CurrentSampleWidth),
+      Y = layoutElement.BoundTop(App.RuntimeOptions.CurrentSampleHeight),
+      Width = layoutElement.BoundWidth(App.RuntimeOptions.CurrentSampleWidth),
+      Height = layoutElement.BoundHeight(App.RuntimeOptions.CurrentSampleHeight)
+    };
+  }
+
+  /// DrawingGroupの再校正
+  private void BuildDrawingGroup() {
     using (var dc = this.DrawingGroup.Open()) {
       // 背景描画でサイズを決める
-      dc.DrawRectangle(Brushes.Black, null, this.previewRect);
+      dc.DrawRectangle(Brushes.Black, null, this.SampleRect);
 
       // プレビューを下に描画
       if (App.Options.LayoutPreview) {
@@ -285,8 +276,12 @@ public partial class LayoutEdit
     // マウス操作中は更新しない
     if (this.hitMode != HitModes.Neutral) return;
 
+    Debug.WriteLine("ActualSize: {0:F2}, {1:F2}",
+                    this.LayoutEditImage.ActualWidth,
+                    this.LayoutEditImage.ActualHeight);
+
     // プレビュー更新のために再描画
-    this.DrawProfile();
+    this.BuildDrawingGroup();
   }
 
   //===================================================================
@@ -300,7 +295,9 @@ public partial class LayoutEdit
   /// マウス座標(image座標系)を(0.0-1.0, 0.0-1.0)のRelativePointに変換
   private RelativePoint GetRelativeMousePoint(IInputElement image, MouseEventArgs e) {
     var mousePoint = e.GetPosition(image);
-    return new RelativePoint(mousePoint.X / MaxImageWidth, mousePoint.Y / MaxImageHeight);
+    var relativeX = mousePoint.X / App.RuntimeOptions.CurrentSampleWidth;
+    var relativeY = mousePoint.Y / App.RuntimeOptions.CurrentSampleHeight;
+    return new RelativePoint(relativeX, relativeY);
   }
 
   /// LayoutEditImage: MouseDown
@@ -339,7 +336,7 @@ public partial class LayoutEdit
     }
     image.CaptureMouse();
 
-    this.DrawProfile();
+    this.BuildDrawingGroup();
   }
 
   /// LayoutEditImage: MouseMove
@@ -376,7 +373,7 @@ public partial class LayoutEdit
     /// @todo(me) 変更をMainWindowに通知
     UpdateCommands.UpdateLayoutParameterByCurrentProfile.Execute(null, null);
 
-    this.DrawProfile();
+    this.BuildDrawingGroup();
   }
 
   /// LayoutEditImage: MouseUp
@@ -387,7 +384,7 @@ public partial class LayoutEdit
     if (this.hitMode != HitModes.Neutral) {
       this.LayoutEditImage.ReleaseMouseCapture();
       this.hitMode = HitModes.Neutral;
-      this.DrawProfile();
+      this.BuildDrawingGroup();
     }
   }
 
@@ -411,7 +408,7 @@ public partial class LayoutEdit
     } else {
       this.screenCaptureTimer.Suspend();    // タイマー停止
       if (App.Options.LayoutIsExpanded) {
-        this.DrawProfile();                 // 再描画
+        this.BuildDrawingGroup();                 // 再描画
       } else {
         this.DrawingGroup.Children.Clear(); // DrawingGroupもクリア
       }
@@ -436,7 +433,9 @@ public partial class LayoutEdit
 
   /// @copydoc IUpdateByRuntimeOptions::UpdateByRuntimeOptions
   public void UpdateByRuntimeOptions() {
-    // nop
+    // 再描画
+    /// @todo(me) 条件分岐はしたほうがいいかも？
+    this.BuildDrawingGroup();
   }
 
   /// @copydoc IUpdateByRuntimeOptions::DetachRuntimeOptionsChangedEventHandlers
@@ -456,7 +455,7 @@ public partial class LayoutEdit
   /// @copydoc IUpdateByProfile::UpdateByCurrentProfile
   public void UpdateByCurrentProfile() {
     this.SendRequest(App.Profile.CurrentInputLayoutElement, true);
-    this.DrawProfile();
+    this.BuildDrawingGroup();
     Debug.WriteLine("[GARBAGE COLLECT!]");
     GC.Collect();
   }
@@ -467,7 +466,7 @@ public partial class LayoutEdit
     foreach (var layoutElement in App.Profile) {
       this.SendRequest(layoutElement, true);
     }
-    this.DrawProfile();
+    this.BuildDrawingGroup();
     Debug.WriteLine("[GARBAGE COLLECT!]");
     GC.Collect();
   }
@@ -503,9 +502,6 @@ public partial class LayoutEdit
   //===================================================================
   // フィールド
   //===================================================================
-
-  /// プレビューサイズを決めるRect
-  private Rect previewRect = new Rect(0.0, 0.0, MaxImageWidth, MaxImageHeight);
 
   /// スクリーンキャプチャ用スレッド管理クラスのインスタンス
   private ScreenCaptureTimer screenCaptureTimer = null;

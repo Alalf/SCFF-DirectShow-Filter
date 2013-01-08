@@ -38,9 +38,9 @@ public static class BrushesAndPens {
   /// WindowTypes.Desktopのブラシ
   public static readonly Brush DesktopBrush;
 
-  /// ペンの太さ
-  /// @todo(me) 本当はここにあってはいけないのだが・・・
-  private const double penThickness = 0.005 * 100.0;
+  /// ペンの太さ(ダミー)
+  /// @attention ダミーなので実際に使う場合はCloneしたのちにFreezeすること
+  private const double dummyPenThickness = 1;
 
   /// WindowTypes.NormalでCurrent時のペン
   public static readonly Pen CurrentNormalPen;
@@ -79,26 +79,26 @@ public static class BrushesAndPens {
 
     // Pens
     BrushesAndPens.CurrentNormalPen =
-        new Pen(BrushesAndPens.CurrentNormalBrush, BrushesAndPens.penThickness);
+        new Pen(BrushesAndPens.CurrentNormalBrush, BrushesAndPens.dummyPenThickness);
     BrushesAndPens.CurrentNormalPen.Freeze();
     BrushesAndPens.NormalPen =
-        new Pen(BrushesAndPens.NormalBrush, BrushesAndPens.penThickness);
+        new Pen(BrushesAndPens.NormalBrush, BrushesAndPens.dummyPenThickness);
     BrushesAndPens.NormalPen.Freeze();
     BrushesAndPens.CurrentDesktopListViewPen =
-        new Pen(BrushesAndPens.CurrentDesktopListViewBrush, BrushesAndPens.penThickness);
+        new Pen(BrushesAndPens.CurrentDesktopListViewBrush, BrushesAndPens.dummyPenThickness);
     BrushesAndPens.CurrentDesktopListViewPen.Freeze();
     BrushesAndPens.DesktopListViewPen =
-        new Pen(BrushesAndPens.DesktopListViewBrush, BrushesAndPens.penThickness);
+        new Pen(BrushesAndPens.DesktopListViewBrush, BrushesAndPens.dummyPenThickness);
     BrushesAndPens.DesktopListViewPen.Freeze();
     BrushesAndPens.CurrentDesktopPen =
-        new Pen(BrushesAndPens.CurrentDesktopBrush, BrushesAndPens.penThickness);
+        new Pen(BrushesAndPens.CurrentDesktopBrush, BrushesAndPens.dummyPenThickness);
     BrushesAndPens.CurrentDesktopPen.Freeze();
     BrushesAndPens.DesktopPen =
-        new Pen(BrushesAndPens.DesktopBrush, BrushesAndPens.penThickness);
+        new Pen(BrushesAndPens.DesktopBrush, BrushesAndPens.dummyPenThickness);
     BrushesAndPens.DesktopPen.Freeze();
 
     BrushesAndPens.DropShadowPen =
-        new Pen(Brushes.Black, BrushesAndPens.penThickness);
+        new Pen(Brushes.Black, BrushesAndPens.dummyPenThickness);
     BrushesAndPens.DropShadowPen.Freeze();
   }
 }

@@ -398,6 +398,12 @@ public partial class MainWindow
   private void UpdateLayoutEditByOptions_Executed(object sender, ExecutedRoutedEventArgs e) {
     this.LayoutEdit.UpdateByOptions();
   }
+  /// @copydoc SCFF::GUI::UpdateCommands::UpdateMainWindowByRuntimeOptions
+  /// @param sender 使用しない
+  /// @param e 使用しない
+  private void UpdateMainWindowByRuntimeOptions_Executed(object sender, ExecutedRoutedEventArgs e) {
+    this.UpdateByRuntimeOptions();
+  }
 
   //-------------------------------------------------------------------
   // SCFF.GUI.Commands

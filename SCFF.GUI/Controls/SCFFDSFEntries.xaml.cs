@@ -48,10 +48,10 @@ public partial class SCFFDSFEntries
   /// @param e 使用しない
   private void Refresh_Click(object sender, System.Windows.RoutedEventArgs e) {
     /// @todo(me) プロセスリストを読み込み
-    // App.RuntimeOptions.Refresh();
+    App.RuntimeOptions.Refresh();
 
     /// メインウィンドウに必要な更新を伝える
-    MessageBox.Show("Refresh!");
+    UpdateCommands.UpdateMainWindowByRuntimeOptions.Execute(null, null);
   }
 
   //-------------------------------------------------------------------

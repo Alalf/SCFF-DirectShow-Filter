@@ -49,5 +49,8 @@ public static class UpdateCommands {
   //===================================================================
   // RuntimeOptions
   //===================================================================
+  
+  /// MainWindowのUpdateByRuntimeOptionsを呼び出す
+  public static readonly RoutedCommand UpdateMainWindowByRuntimeOptions = new RoutedCommand();
 }
 }   // namespace SCFF.GUI

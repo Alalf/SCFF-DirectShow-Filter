@@ -20,10 +20,10 @@
 
 namespace SCFF.Common {
 
-  using System;
-  using System.Diagnostics;
-  using System.Text;
-  using SCFF.Common.Ext;
+using System;
+using System.Diagnostics;
+using System.Text;
+using SCFF.Common.Ext;
 
 public partial class Profile {
   /// プロファイル内を参照・操作するためのカーソルクラス
@@ -36,9 +36,9 @@ public partial class Profile {
   ///   - this.profile.message.layoutParameters[*].Window
   /// - ProfileはProcessに関連した情報を知ることはできない
   ///   - よってsampleWidth/sampleHeightの存在は仮定しないこと
-  public class LayoutElement : ILayoutElement {
+  public class LayoutElement : ILayoutElementView, ILayoutElement {
     //=================================================================
-    // コンストラクタ
+    // コンストラクタ/Dispose
     //=================================================================
 
     /// コンストラクタ
@@ -61,6 +61,18 @@ public partial class Profile {
     // ILayoutElement: メソッド
     //=================================================================
 
+    /// 編集開始
+    public void Open() {
+      // nop
+      /// @todo(me) OpenしてないとCloseできないようにするとバグが見つけやすい？
+    }
+
+    /// 編集終了
+    public void Close() {
+      this.profile.UpdateTimestamp();
+    }
+
+    /// デフォルト値を設定
     /// @todo(me) インスタンスを生成する形でゼロクリアしているが非効率的？
     public void RestoreDefault() {
       // newで参照型をゼロクリア
@@ -547,7 +559,6 @@ public partial class Profile {
       this.profile.additionalLayoutParameters[this.Index].BackupClippingWidth = this.ClippingWidthWithFit;
       this.profile.additionalLayoutParameters[this.Index].BackupClippingHeight = this.ClippingHeightWithFit;
     }
-
   }
 }
 }   // namespace SCFF.Common

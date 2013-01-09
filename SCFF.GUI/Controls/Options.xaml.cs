@@ -48,7 +48,9 @@ public partial class Options : UserControl, IUpdateByProfile {
   private void ShowCursor_Click(object sender, RoutedEventArgs e) {
     if (!this.ShowCursor.IsChecked.HasValue) return;
 
-    App.Profile.CurrentMutable.SetShowCursor = (bool)this.ShowCursor.IsChecked;
+    App.Profile.Current.Open();
+    App.Profile.Current.SetShowCursor = (bool)this.ShowCursor.IsChecked;
+    App.Profile.Current.Close();
     UpdateCommands.UpdateLayoutEditByCurrentProfile.Execute(null, null);
   }
 
@@ -58,7 +60,9 @@ public partial class Options : UserControl, IUpdateByProfile {
   private void ShowLayeredWindow_Click(object sender, RoutedEventArgs e) {
     if (!this.ShowLayeredWindow.IsChecked.HasValue) return;
 
-    App.Profile.CurrentMutable.SetShowLayeredWindow = (bool)this.ShowLayeredWindow.IsChecked;
+    App.Profile.Current.Open();
+    App.Profile.Current.SetShowLayeredWindow = (bool)this.ShowLayeredWindow.IsChecked;
+    App.Profile.Current.Close();
     UpdateCommands.UpdateLayoutEditByCurrentProfile.Execute(null, null);
   }
 
@@ -68,7 +72,9 @@ public partial class Options : UserControl, IUpdateByProfile {
   private void KeepAspectRatio_Click(object sender, RoutedEventArgs e) {
     if (!this.KeepAspectRatio.IsChecked.HasValue) return;
 
-    App.Profile.CurrentMutable.SetKeepAspectRatio = (bool)this.KeepAspectRatio.IsChecked;
+    App.Profile.Current.Open();
+    App.Profile.Current.SetKeepAspectRatio = (bool)this.KeepAspectRatio.IsChecked;
+    App.Profile.Current.Close();
     UpdateCommands.UpdateLayoutEditByCurrentProfile.Execute(null, null);
   }
 
@@ -78,7 +84,9 @@ public partial class Options : UserControl, IUpdateByProfile {
   private void Stretch_Click(object sender, RoutedEventArgs e) {
     if (!this.Stretch.IsChecked.HasValue) return;
  
-    App.Profile.CurrentMutable.SetStretch = (bool)this.Stretch.IsChecked;
+    App.Profile.Current.Open();
+    App.Profile.Current.SetStretch = (bool)this.Stretch.IsChecked;
+    App.Profile.Current.Close();
     UpdateCommands.UpdateLayoutEditByCurrentProfile.Execute(null, null);
   }
 
@@ -97,10 +105,10 @@ public partial class Options : UserControl, IUpdateByProfile {
   /// @copydoc IUpdateByProfile::UpdateByCurrentProfile
   public void UpdateByCurrentProfile() {
     // checkboxはclickがあるのでeventハンドラをattach/detachする必要はない
-    this.ShowCursor.IsChecked = App.Profile.Current.ShowCursor;
-    this.ShowLayeredWindow.IsChecked = App.Profile.Current.ShowLayeredWindow;
-    this.KeepAspectRatio.IsChecked = App.Profile.Current.KeepAspectRatio;
-    this.Stretch.IsChecked = App.Profile.Current.Stretch;
+    this.ShowCursor.IsChecked = App.Profile.CurrentView.ShowCursor;
+    this.ShowLayeredWindow.IsChecked = App.Profile.CurrentView.ShowLayeredWindow;
+    this.KeepAspectRatio.IsChecked = App.Profile.CurrentView.KeepAspectRatio;
+    this.Stretch.IsChecked = App.Profile.CurrentView.Stretch;
     // @todo(me) overSampingとthreadCountはまだDSFでも実装されていない
   }
 

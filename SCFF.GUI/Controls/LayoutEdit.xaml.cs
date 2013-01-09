@@ -101,7 +101,7 @@ public partial class LayoutEdit
   /// @param layoutElement 対象のレイアウト要素
   /// @return DrawingContext.DrawTextで描画可能なDrawingVisualオブジェクト
   private FormattedText CreateLayoutElementCaption(ILayoutElementView layoutElement) {
-    var isCurrent = layoutElement.Index == App.Profile.Current.Index;
+    var isCurrent = layoutElement.Index == App.Profile.CurrentView.Index;
 
     // Caption
     var layoutElementCaption = string.Empty;
@@ -183,7 +183,7 @@ public partial class LayoutEdit
   /// @param dc 描画先
   /// @param layoutElement 描画対象
   private void DrawBorder(DrawingContext dc, ILayoutElementView layoutElement) {
-    var isCurrent = layoutElement.Index == App.Profile.Current.Index;
+    var isCurrent = layoutElement.Index == App.Profile.CurrentView.Index;
 
     // Pen
     Pen framePen = null;
@@ -334,10 +334,10 @@ public partial class LayoutEdit
     if (!HitTest.TryHitTest(App.Profile, relativeMousePoint, out hitIndex, out hitMode)) return;
 
     // 現在選択中のIndexではない場合はそれに変更する
-    if (hitIndex != App.Profile.Current.Index) {
-      Debug.WriteLine("*****LayoutEdit: Change Current*****");
+    if (hitIndex != App.Profile.CurrentView.Index) {
+      Debug.WriteLine("*****LayoutEdit: Change Index*****");
       Debug.WriteLine("{0:D}->{1:D} ({2:F2}, {3:F2})",
-                      App.Profile.Current.Index,
+                      App.Profile.CurrentView.Index,
                       hitIndex,
                       relativeMousePoint.X, relativeMousePoint.Y);
 
@@ -347,7 +347,7 @@ public partial class LayoutEdit
 
     // マウスを押した場所を記録してマウスキャプチャー開始
     this.hitMode = hitMode;
-    this.relativeMouseOffset = new RelativeMouseOffset(App.Profile.Current, relativeMousePoint);
+    this.relativeMouseOffset = new RelativeMouseOffset(App.Profile.CurrentView, relativeMousePoint);
     if (App.Options.LayoutSnap) {
       this.snapGuide = new SnapGuide(App.Profile);
     } else {
@@ -378,15 +378,17 @@ public partial class LayoutEdit
 
     // Move or Size
     double nextLeft, nextTop, nextRight, nextBottom;
-    MoveAndSize.MoveOrSize(App.Profile.Current, this.hitMode,
+    MoveAndSize.MoveOrSize(App.Profile.CurrentView, this.hitMode,
         relativeMousePoint, this.relativeMouseOffset, this.snapGuide, 
         out nextLeft, out nextTop, out nextRight, out nextBottom);
 
     // Profileを更新
-    App.Profile.CurrentMutable.SetBoundRelativeLeft = nextLeft;
-    App.Profile.CurrentMutable.SetBoundRelativeTop = nextTop;
-    App.Profile.CurrentMutable.SetBoundRelativeRight = nextRight;
-    App.Profile.CurrentMutable.SetBoundRelativeBottom = nextBottom;
+    App.Profile.Current.Open();
+    App.Profile.Current.SetBoundRelativeLeft = nextLeft;
+    App.Profile.Current.SetBoundRelativeTop = nextTop;
+    App.Profile.Current.SetBoundRelativeRight = nextRight;
+    App.Profile.Current.SetBoundRelativeBottom = nextBottom;
+    App.Profile.Current.Close();
       
     /// @todo(me) 変更をMainWindowに通知
     UpdateCommands.UpdateLayoutParameterByCurrentProfile.Execute(null, null);
@@ -471,7 +473,7 @@ public partial class LayoutEdit
 
   /// @copydoc IUpdateByProfile::UpdateByCurrentProfile
   public void UpdateByCurrentProfile() {
-    this.SendRequest(App.Profile.Current, true);
+    this.SendRequest(App.Profile.CurrentView, true);
     this.BuildDrawingGroup();
     Debug.WriteLine("[GARBAGE COLLECT!]");
     GC.Collect();

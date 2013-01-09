@@ -57,8 +57,10 @@ public partial class ResizeMethod : UserControl, IUpdateByProfile {
   private void SWScaleAccurateRnd_Click(object sender, RoutedEventArgs e) {
     if (!this.SWScaleAccurateRnd.IsChecked.HasValue) return;
     
-    App.Profile.CurrentMutable.SetSWScaleAccurateRnd =
+    App.Profile.Current.Open();
+    App.Profile.Current.SetSWScaleAccurateRnd =
         (bool)this.SWScaleAccurateRnd.IsChecked;
+    App.Profile.Current.Close();
   }
 
   /// SWScaleIsFilterEnabled: Click
@@ -67,8 +69,10 @@ public partial class ResizeMethod : UserControl, IUpdateByProfile {
   private void SWScaleIsFilterEnabled_Click(object sender, RoutedEventArgs e) {
     if (!this.SWScaleIsFilterEnabled.IsChecked.HasValue) return;
 
-    App.Profile.CurrentMutable.SetSWScaleIsFilterEnabled =
+    App.Profile.Current.Open();
+    App.Profile.Current.SetSWScaleIsFilterEnabled =
         (bool)this.SWScaleIsFilterEnabled.IsChecked;
+    App.Profile.Current.Close();
   }
 
   //-------------------------------------------------------------------
@@ -106,7 +110,10 @@ public partial class ResizeMethod : UserControl, IUpdateByProfile {
   /// @param e 使用しない
   private void SWScaleFlags_SelectionChanged(object sender, SelectionChangedEventArgs e) {
     SWScaleFlags flags = Constants.ResizeMethodArray[this.SWScaleFlags.SelectedIndex];
-    App.Profile.CurrentMutable.SetSWScaleFlags = flags;
+
+    App.Profile.Current.Open();
+    App.Profile.Current.SetSWScaleFlags = flags;
+    App.Profile.Current.Close();
   }
 
   /// 下限・上限つきでテキストボックスから値を取得する
@@ -142,7 +149,9 @@ public partial class ResizeMethod : UserControl, IUpdateByProfile {
     float parsedValue;
     if (this.TryParseSWScaleFilterParameter(this.SWScaleLumaGBlur, lowerBound, upperBound, out parsedValue)) {
       // Profileに書き込み
-      App.Profile.CurrentMutable.SetSWScaleLumaGBlur = parsedValue;
+      App.Profile.Current.Open();
+      App.Profile.Current.SetSWScaleLumaGBlur = parsedValue;
+      App.Profile.Current.Close();
     }
   }
 
@@ -155,7 +164,9 @@ public partial class ResizeMethod : UserControl, IUpdateByProfile {
     float parsedValue;
     if (this.TryParseSWScaleFilterParameter(this.SWScaleChromaGBlur, lowerBound, upperBound, out parsedValue)) {
       // Profileに書き込み
-      App.Profile.CurrentMutable.SetSWScaleChromaGBlur = parsedValue;
+      App.Profile.Current.Open();
+      App.Profile.Current.SetSWScaleChromaGBlur = parsedValue;
+      App.Profile.Current.Close();
     }
   }
 
@@ -168,7 +179,9 @@ public partial class ResizeMethod : UserControl, IUpdateByProfile {
     float parsedValue;
     if (this.TryParseSWScaleFilterParameter(this.SWScaleLumaSharpen, lowerBound, upperBound, out parsedValue)) {
       // Profileに書き込み
-      App.Profile.CurrentMutable.SetSWScaleLumaSharpen = parsedValue;
+      App.Profile.Current.Open();
+      App.Profile.Current.SetSWScaleLumaSharpen = parsedValue;
+      App.Profile.Current.Close();
     }
   }
 
@@ -181,7 +194,9 @@ public partial class ResizeMethod : UserControl, IUpdateByProfile {
     float parsedValue;
     if (this.TryParseSWScaleFilterParameter(this.SWScaleChromaSharpen, lowerBound, upperBound, out parsedValue)) {
       // Profileに書き込み
-      App.Profile.CurrentMutable.SetSWScaleChromaSharpen = parsedValue;
+      App.Profile.Current.Open();
+      App.Profile.Current.SetSWScaleChromaSharpen = parsedValue;
+      App.Profile.Current.Close();
     }
   }
 
@@ -194,7 +209,9 @@ public partial class ResizeMethod : UserControl, IUpdateByProfile {
     float parsedValue;
     if (this.TryParseSWScaleFilterParameter(this.SWScaleChromaHshift, lowerBound, upperBound, out parsedValue)) {
       // Profileに書き込み
-      App.Profile.CurrentMutable.SetSWScaleChromaHshift = parsedValue;
+      App.Profile.Current.Open();
+      App.Profile.Current.SetSWScaleChromaHshift = parsedValue;
+      App.Profile.Current.Close();
     }
   }
 
@@ -207,7 +224,9 @@ public partial class ResizeMethod : UserControl, IUpdateByProfile {
     float parsedValue;
     if (this.TryParseSWScaleFilterParameter(this.SWScaleChromaVshift, lowerBound, upperBound, out parsedValue)) {
       // Profileに書き込み
-      App.Profile.CurrentMutable.SetSWScaleChromaVshift = parsedValue;
+      App.Profile.Current.Open();
+      App.Profile.Current.SetSWScaleChromaVshift = parsedValue;
+      App.Profile.Current.Close();
     }
   }
 
@@ -217,19 +236,19 @@ public partial class ResizeMethod : UserControl, IUpdateByProfile {
 
   /// @copydoc IUpdateByProfile::UpdateByCurrentProfile
   public void UpdateByCurrentProfile() {
-    this.SWScaleAccurateRnd.IsChecked = App.Profile.Current.SWScaleAccurateRnd;
-    this.SWScaleIsFilterEnabled.IsChecked = App.Profile.Current.SWScaleIsFilterEnabled;
+    this.SWScaleAccurateRnd.IsChecked = App.Profile.CurrentView.SWScaleAccurateRnd;
+    this.SWScaleIsFilterEnabled.IsChecked = App.Profile.CurrentView.SWScaleIsFilterEnabled;
 
     this.DetachProfileChangedEventHandlers();
 
-    var index = Constants.ResizeMethodIndexes[App.Profile.Current.SWScaleFlags];
+    var index = Constants.ResizeMethodIndexes[App.Profile.CurrentView.SWScaleFlags];
     this.SWScaleFlags.SelectedIndex = index;
-    this.SWScaleLumaGBlur.Text = App.Profile.Current.SWScaleLumaGBlur.ToString("F2");
-    this.SWScaleLumaSharpen.Text = App.Profile.Current.SWScaleLumaSharpen.ToString("F2");
-    this.SWScaleChromaHshift.Text = App.Profile.Current.SWScaleChromaHshift.ToString("F2");
-    this.SWScaleChromaGBlur.Text = App.Profile.Current.SWScaleChromaGBlur.ToString("F2");
-    this.SWScaleChromaSharpen.Text = App.Profile.Current.SWScaleChromaSharpen.ToString("F2");
-    this.SWScaleChromaVshift.Text = App.Profile.Current.SWScaleChromaVshift.ToString("F2");
+    this.SWScaleLumaGBlur.Text = App.Profile.CurrentView.SWScaleLumaGBlur.ToString("F2");
+    this.SWScaleLumaSharpen.Text = App.Profile.CurrentView.SWScaleLumaSharpen.ToString("F2");
+    this.SWScaleChromaHshift.Text = App.Profile.CurrentView.SWScaleChromaHshift.ToString("F2");
+    this.SWScaleChromaGBlur.Text = App.Profile.CurrentView.SWScaleChromaGBlur.ToString("F2");
+    this.SWScaleChromaSharpen.Text = App.Profile.CurrentView.SWScaleChromaSharpen.ToString("F2");
+    this.SWScaleChromaVshift.Text = App.Profile.CurrentView.SWScaleChromaVshift.ToString("F2");
 
     this.AttachProfileChangedEventHandlers();
   }

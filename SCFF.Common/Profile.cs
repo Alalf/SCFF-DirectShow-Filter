@@ -61,11 +61,13 @@ public partial class Profile {
     // Profileのプロパティの初期化
     this.LayoutElementCount = 1;
     this.LayoutType = LayoutTypes.NativeLayout;
-    this.UpdateTimestamp();
+    // this.UpdateTimestamp();
 
     // currentの生成
     this.currentIndex = 0;
-    this.CurrentMutable.RestoreDefault();
+    this.Current.Open();
+    this.Current.RestoreDefault();
+    this.Current.Close();
   }
 
   //===================================================================
@@ -87,11 +89,13 @@ public partial class Profile {
     var nextIndex = this.LayoutElementCount;
     ++this.LayoutElementCount;
     this.LayoutType = LayoutTypes.ComplexLayout;
-    this.UpdateTimestamp();
+    // this.UpdateTimestamp();
 
     // currentを新たに生成したものに切り替える
     this.currentIndex = nextIndex;
-    this.CurrentMutable.RestoreDefault();    
+    this.Current.Open();
+    this.Current.RestoreDefault();
+    this.Current.Close();
   }
 
   /// レイアウト要素を削除可能か
@@ -194,7 +198,7 @@ public partial class Profile {
   //===================================================================
 
   /// 現在選択中のレイアウト要素を参照モードで返す
-  public ILayoutElementView Current {
+  public ILayoutElementView CurrentView {
     get {  
       if (this.layoutElements[this.currentIndex] == null) {
         this.layoutElements[this.currentIndex] =
@@ -204,8 +208,8 @@ public partial class Profile {
     }
   }
 
-  /// 現在選択中のレイアウト要素を参照・編集モードで返す
-  public LayoutElement CurrentMutable {
+  /// 現在選択中のレイアウト要素を編集モードで返す
+  public ILayoutElement Current {
     get {  
       if (this.layoutElements[this.currentIndex] == null) {
         this.layoutElements[this.currentIndex] =

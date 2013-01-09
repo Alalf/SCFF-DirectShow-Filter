@@ -56,12 +56,12 @@ public partial class LayoutParameter
     // サンプル座標系でのパディングサイズを求める
     double paddingTop, paddingBottom, paddingLeft, paddingRight;
     Common.Imaging.Utilities.CalculatePaddingSize(
-        App.Profile.Current.BoundWidth(App.RuntimeOptions.CurrentSampleWidth),
-        App.Profile.Current.BoundHeight(App.RuntimeOptions.CurrentSampleHeight),
-        App.Profile.Current.ClippingWidthWithFit,
-        App.Profile.Current.ClippingHeightWithFit,
-        App.Profile.Current.Stretch,
-        App.Profile.Current.KeepAspectRatio,
+        App.Profile.CurrentView.BoundWidth(App.RuntimeOptions.CurrentSampleWidth),
+        App.Profile.CurrentView.BoundHeight(App.RuntimeOptions.CurrentSampleHeight),
+        App.Profile.CurrentView.ClippingWidthWithFit,
+        App.Profile.CurrentView.ClippingHeightWithFit,
+        App.Profile.CurrentView.Stretch,
+        App.Profile.CurrentView.KeepAspectRatio,
         out paddingTop, out paddingBottom,
         out paddingLeft, out paddingRight);
       
@@ -83,16 +83,18 @@ public partial class LayoutParameter
     }
 
     // 新しい相対座標系でのLTRBを求める
-    var nextLeft = App.Profile.Current.BoundRelativeLeft + paddingRelativeLeft;
-    var nextTop = App.Profile.Current.BoundRelativeTop + paddingRelativeTop;
-    var nextRight = App.Profile.Current.BoundRelativeRight - paddingRelativeRight;
-    var nextBottom = App.Profile.Current.BoundRelativeBottom - paddingRelativeBottom;
+    var nextLeft = App.Profile.CurrentView.BoundRelativeLeft + paddingRelativeLeft;
+    var nextTop = App.Profile.CurrentView.BoundRelativeTop + paddingRelativeTop;
+    var nextRight = App.Profile.CurrentView.BoundRelativeRight - paddingRelativeRight;
+    var nextBottom = App.Profile.CurrentView.BoundRelativeBottom - paddingRelativeBottom;
 
     // Profileの設定を変える
-    App.Profile.CurrentMutable.SetBoundRelativeLeft = nextLeft;
-    App.Profile.CurrentMutable.SetBoundRelativeTop = nextTop;
-    App.Profile.CurrentMutable.SetBoundRelativeRight = nextRight;
-    App.Profile.CurrentMutable.SetBoundRelativeBottom = nextBottom;
+    App.Profile.Current.Open();
+    App.Profile.Current.SetBoundRelativeLeft = nextLeft;
+    App.Profile.Current.SetBoundRelativeTop = nextTop;
+    App.Profile.Current.SetBoundRelativeRight = nextRight;
+    App.Profile.Current.SetBoundRelativeBottom = nextBottom;
+    App.Profile.Current.Close();
 
     // 関連するUserControlに更新を伝える
     UpdateCommands.UpdateLayoutEditByCurrentProfile.Execute(null, null);
@@ -114,13 +116,13 @@ public partial class LayoutParameter
     // dummyの場合もあり
     var isDummy = App.RuntimeOptions.SelectedEntryIndex == -1;
 
-    var boundX = App.Profile.Current.BoundLeft(
+    var boundX = App.Profile.CurrentView.BoundLeft(
           App.RuntimeOptions.CurrentSampleWidth);
-    var boundY = App.Profile.Current.BoundTop(
+    var boundY = App.Profile.CurrentView.BoundTop(
           App.RuntimeOptions.CurrentSampleHeight);
-    var boundWidth = App.Profile.Current.BoundWidth(
+    var boundWidth = App.Profile.CurrentView.BoundWidth(
           App.RuntimeOptions.CurrentSampleWidth);
-    var boundHeight = App.Profile.Current.BoundHeight(
+    var boundHeight = App.Profile.CurrentView.BoundHeight(
           App.RuntimeOptions.CurrentSampleHeight);
 
     if (isDummy) {
@@ -171,7 +173,9 @@ public partial class LayoutParameter
     double parsedValue;
     if (this.TryParseBoundRelativeParameter(this.BoundRelativeLeft, lowerBound, upperBound, out parsedValue)) {
       // Profileに書き込み
-      App.Profile.CurrentMutable.SetBoundRelativeLeft = parsedValue;
+      App.Profile.Current.Open();
+      App.Profile.Current.SetBoundRelativeLeft = parsedValue;
+      App.Profile.Current.Close();
       this.UpdateDisabledTextboxes();
       // 関連するコントロールに通知
       UpdateCommands.UpdateLayoutEditByCurrentProfile.Execute(null, null);
@@ -187,7 +191,9 @@ public partial class LayoutParameter
     double parsedValue;
     if (this.TryParseBoundRelativeParameter(this.BoundRelativeTop, lowerBound, upperBound, out parsedValue)) {
       // Profileに書き込み
-      App.Profile.CurrentMutable.SetBoundRelativeTop = parsedValue;
+      App.Profile.Current.Open();
+      App.Profile.Current.SetBoundRelativeTop = parsedValue;
+      App.Profile.Current.Close();
       this.UpdateDisabledTextboxes();
       // 関連するコントロールに通知
       UpdateCommands.UpdateLayoutEditByCurrentProfile.Execute(null, null);
@@ -203,7 +209,9 @@ public partial class LayoutParameter
     double parsedValue;
     if (this.TryParseBoundRelativeParameter(this.BoundRelativeRight, lowerBound, upperBound, out parsedValue)) {
       // Profileに書き込み
-      App.Profile.CurrentMutable.SetBoundRelativeRight = parsedValue;
+      App.Profile.Current.Open();
+      App.Profile.Current.SetBoundRelativeRight = parsedValue;
+      App.Profile.Current.Close();
       this.UpdateDisabledTextboxes();
       // 関連するコントロールに通知
       UpdateCommands.UpdateLayoutEditByCurrentProfile.Execute(null, null);
@@ -219,7 +227,9 @@ public partial class LayoutParameter
     double parsedValue;
     if (this.TryParseBoundRelativeParameter(this.BoundRelativeBottom, lowerBound, upperBound, out parsedValue)) {
       // Profileに書き込み
-      App.Profile.CurrentMutable.SetBoundRelativeBottom = parsedValue;
+      App.Profile.Current.Open();
+      App.Profile.Current.SetBoundRelativeBottom = parsedValue;
+      App.Profile.Current.Close();
       this.UpdateDisabledTextboxes();
       // 関連するコントロールに通知
       UpdateCommands.UpdateLayoutEditByCurrentProfile.Execute(null, null);
@@ -255,8 +265,8 @@ public partial class LayoutParameter
   /// @copydoc IUpdateByProfile::UpdateByCurrentProfile
   public void UpdateByCurrentProfile() {
     var header = string.Format("Layout {0:D}: {1}",
-        App.Profile.Current.Index + 1,
-        App.Profile.Current.WindowCaption);
+        App.Profile.CurrentView.Index + 1,
+        App.Profile.CurrentView.WindowCaption);
     this.GroupBox.Header = header.Substring(0,
         Math.Min(header.Length, LayoutParameter.maxHeaderLength));
 
@@ -264,10 +274,10 @@ public partial class LayoutParameter
 
     this.DetachProfileChangedEventHandlers();
 
-    this.BoundRelativeLeft.Text = App.Profile.Current.BoundRelativeLeft.ToString("F3");
-    this.BoundRelativeTop.Text = App.Profile.Current.BoundRelativeTop.ToString("F3");
-    this.BoundRelativeRight.Text = App.Profile.Current.BoundRelativeRight.ToString("F3");
-    this.BoundRelativeBottom.Text = App.Profile.Current.BoundRelativeBottom.ToString("F3");
+    this.BoundRelativeLeft.Text = App.Profile.CurrentView.BoundRelativeLeft.ToString("F3");
+    this.BoundRelativeTop.Text = App.Profile.CurrentView.BoundRelativeTop.ToString("F3");
+    this.BoundRelativeRight.Text = App.Profile.CurrentView.BoundRelativeRight.ToString("F3");
+    this.BoundRelativeBottom.Text = App.Profile.CurrentView.BoundRelativeBottom.ToString("F3");
 
     this.AttachProfileChangedEventHandlers();
 

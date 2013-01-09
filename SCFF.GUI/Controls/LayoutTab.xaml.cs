@@ -67,7 +67,7 @@ public partial class LayoutTab : UserControl, IUpdateByProfile {
 
   /// @copydoc IUpdateByProfile::UpdateByCurrentProfile
   public void UpdateByCurrentProfile() {
-    // Current Profileの値が変わってもTabの内容は変わらない
+    // CurrentProfileの値が変わってもTabの内容は変わらない
   }
 
   /// Profileを見ながら必要な分を足し、必要な分を削る
@@ -77,7 +77,7 @@ public partial class LayoutTab : UserControl, IUpdateByProfile {
 
     var tabIndex = this.LayoutElementTab.SelectedIndex;
     var tabCount = this.LayoutElementTab.Items.Count;
-    var profileIndex = App.Profile.Current.Index;
+    var profileIndex = App.Profile.CurrentView.Index;
     var profileCount = App.Profile.LayoutElementCount;
     
     // まず数を合わせる
@@ -104,13 +104,13 @@ public partial class LayoutTab : UserControl, IUpdateByProfile {
     }
 
     // 次に選択しているところを同期させる
-    this.LayoutElementTab.SelectedIndex = App.Profile.Current.Index;
+    this.LayoutElementTab.SelectedIndex = App.Profile.CurrentView.Index;
 
     // コントロール編集終了
     this.AttachProfileChangedEventHandlers();
 
     Debug.Assert(App.Profile.LayoutElementCount == this.LayoutElementTab.Items.Count);
-    Debug.Assert(App.Profile.Current.Index == this.LayoutElementTab.SelectedIndex);
+    Debug.Assert(App.Profile.CurrentView.Index == this.LayoutElementTab.SelectedIndex);
   }
 
   /// @copydoc IUpdateByProfile::UpdateByEntireProfile

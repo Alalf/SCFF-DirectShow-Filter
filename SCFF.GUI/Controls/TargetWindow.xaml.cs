@@ -55,18 +55,20 @@ public partial class TargetWindow : UserControl, IUpdateByProfile {
 
   /// プロファイルを更新
   private void ModifyProfile(WindowTypes nextWindowType, UIntPtr nextTargetWindow) {
+    App.Profile.Current.Open();
+
     // Window
     switch (nextWindowType) {
       case WindowTypes.Normal: {
-        App.Profile.CurrentMutable.SetWindow(nextTargetWindow);
+        App.Profile.Current.SetWindow(nextTargetWindow);
         break;
       }
       case WindowTypes.DesktopListView: {
-        App.Profile.CurrentMutable.SetWindowToDesktopListView();
+        App.Profile.Current.SetWindowToDesktopListView();
         break;
       }
       case WindowTypes.Desktop: {
-        App.Profile.CurrentMutable.SetWindowToDesktop();
+        App.Profile.Current.SetWindowToDesktop();
         break;
       }
       default: {
@@ -74,19 +76,20 @@ public partial class TargetWindow : UserControl, IUpdateByProfile {
         return;
       }
     }
-    App.Profile.CurrentMutable.SetFit = true;
+    App.Profile.Current.SetFit = true;
 
     // Clipping*WithoutFitの補正
     // とりあえず0,0を原点にもってくる(ウィンドウが変われば左上座標に意味はなくなるから)
-    App.Profile.CurrentMutable.SetClippingXWithoutFit = 0;
-    App.Profile.CurrentMutable.SetClippingYWithoutFit = 0;
+    App.Profile.Current.SetClippingXWithoutFit = 0;
+    App.Profile.Current.SetClippingYWithoutFit = 0;
     // Width/HeightはFitした時の値をとりあえず上限とする
-    App.Profile.CurrentMutable.SetClippingWidthWithoutFit = Math.Min(
-      App.Profile.Current.ClippingWidthWithoutFit,
-      App.Profile.Current.WindowWidth);
-    App.Profile.CurrentMutable.SetClippingHeightWithoutFit = Math.Min(
-      App.Profile.Current.ClippingHeightWithoutFit,
-      App.Profile.Current.WindowHeight);
+    App.Profile.Current.SetClippingWidthWithoutFit = Math.Min(
+      App.Profile.CurrentView.ClippingWidthWithoutFit,
+      App.Profile.CurrentView.WindowWidth);
+    App.Profile.Current.SetClippingHeightWithoutFit = Math.Min(
+      App.Profile.CurrentView.ClippingHeightWithoutFit,
+      App.Profile.CurrentView.WindowHeight);
+    App.Profile.Current.Close();
 
     // コマンドをMainWindowに送信して関連するコントロールを更新
     UpdateCommands.UpdateTargetWindowByCurrentProfile.Execute(null, null);
@@ -221,7 +224,7 @@ public partial class TargetWindow : UserControl, IUpdateByProfile {
   /// @copydoc IUpdateByProfile::UpdateByCurrentProfile
   public void UpdateByCurrentProfile() {
     // *Changedイベントハンドラがないのでそのまま代入するだけ
-    this.WindowCaption.Text = App.Profile.Current.WindowCaption;
+    this.WindowCaption.Text = App.Profile.CurrentView.WindowCaption;
   }
 
   /// @copydoc IUpdateByProfile::UpdateByEntireProfile

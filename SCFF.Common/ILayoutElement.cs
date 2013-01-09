@@ -23,10 +23,18 @@ namespace SCFF.Common {
 using System;
 
 /// プロファイル内を編集するためのカーソルクラスインタフェース
-public interface ILayoutElement : ILayoutElementView {
+///
+/// @attention HACK!: Usingで論理単位での編集後にタイムスタンプを更新する
+public interface ILayoutElement {
 
   /// 初期値に戻す
   void RestoreDefault();
+
+  /// 編集開始
+  void Open();
+
+  /// 編集完了
+  void Close();
 
   //=================================================================
   // TargetWindow

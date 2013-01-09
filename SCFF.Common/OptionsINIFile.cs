@@ -73,7 +73,7 @@ public static class OptionsINIFile {
         return true;
       } catch (Exception ex) {
         // 特に何も警告はしない
-        Debug.Fail(ex.Message, "OptionsINIFile.Save");
+        Debug.WriteLine(ex.Message, "OptionsINIFile.Save");
         return false;
       }
     }

@@ -319,11 +319,25 @@ public partial class Area : UserControl, IUpdateByProfile {
     this.Fit.IsChecked = App.Profile.CurrentView.Fit;
 
     // *Changed
+    /// @todo(me) どう見てもおかしい！
+    ///           WindowIsInvalidのときのFitのセマンティクスがちゃんと決まってない！
     this.DetachProfileChangedEventHandlers();
-    this.ClippingX.Text = App.Profile.CurrentView.ClippingXWithFit.ToString();
-    this.ClippingY.Text = App.Profile.CurrentView.ClippingYWithFit.ToString();
-    this.ClippingWidth.Text = App.Profile.CurrentView.ClippingWidthWithFit.ToString();
-    this.ClippingHeight.Text = App.Profile.CurrentView.ClippingHeightWithFit.ToString();
+    if (App.Profile.CurrentView.IsWindowValid) {
+      this.ClippingX.Text = App.Profile.CurrentView.ClippingXWithFit.ToString();
+      this.ClippingY.Text = App.Profile.CurrentView.ClippingYWithFit.ToString();
+      this.ClippingWidth.Text = App.Profile.CurrentView.ClippingWidthWithFit.ToString();
+      this.ClippingHeight.Text = App.Profile.CurrentView.ClippingHeightWithFit.ToString();
+    } else if (App.Profile.CurrentView.Fit) {
+      this.ClippingX.Text = "****";
+      this.ClippingY.Text = "****";
+      this.ClippingWidth.Text = "****";
+      this.ClippingHeight.Text = "****";
+    } else {
+      this.ClippingX.Text = App.Profile.CurrentView.ClippingXWithoutFit.ToString();
+      this.ClippingY.Text = App.Profile.CurrentView.ClippingYWithoutFit.ToString();
+      this.ClippingWidth.Text = App.Profile.CurrentView.ClippingWidthWithoutFit.ToString();
+      this.ClippingHeight.Text = App.Profile.CurrentView.ClippingHeightWithoutFit.ToString();
+    }
     this.AttachProfileChangedEventHandlers();
   }
 

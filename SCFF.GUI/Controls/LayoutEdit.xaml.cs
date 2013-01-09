@@ -479,6 +479,7 @@ public partial class LayoutEdit
 
   /// @copydoc IUpdateByProfile::UpdateByCurrentProfile
   public void UpdateByCurrentProfile() {
+    if (!App.Profile.CurrentView.IsWindowValid) return;
     this.SendRequest(App.Profile.CurrentView, true);
     this.BuildDrawingGroup();
     Debug.WriteLine("Collect", "*** MEMORY[GC] ***");
@@ -489,6 +490,7 @@ public partial class LayoutEdit
   public void UpdateByEntireProfile() {
     this.screenCaptureTimer.ClearRequests();
     foreach (var layoutElement in App.Profile) {
+      if (!layoutElement.IsWindowValid) continue;
       this.SendRequest(layoutElement, true);
     }
     this.BuildDrawingGroup();
@@ -508,6 +510,7 @@ public partial class LayoutEdit
 
   /// LayoutElementの内容からRequestを生成してScreenCaptureTimerに画像生成を依頼
   private void SendRequest(ILayoutElementView layoutElement, bool forceUpdate) {
+    Debug.Assert(layoutElement.IsWindowValid);
     var request = new ScreenCaptureRequest(
         layoutElement.Index,
         layoutElement.Window,

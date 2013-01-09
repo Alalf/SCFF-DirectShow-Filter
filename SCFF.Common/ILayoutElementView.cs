@@ -40,12 +40,16 @@ public interface ILayoutElementView {
   /// @copydoc SCFF::Common::AdditionalLayoutParameter::WindowCaption
   string WindowCaption { get; }
   /// Windowの幅
+  /// @pre IsWindowValid == True
   int WindowWidth { get; }
   /// Windowの高さ
+  /// @pre IsWindowValid == True
   int WindowHeight { get;}
   /// Screen座標系でのWindow左上端のX座標
+  /// @pre IsWindowValid == True
   int ScreenWindowX { get; }
   /// Screen座標系でのWindow左上端のY座標
+  /// @pre IsWindowValid == True
   int ScreenWindowY { get; }
 
   //=================================================================
@@ -65,17 +69,23 @@ public interface ILayoutElementView {
   int ClippingHeightWithoutFit { get; }
 
   /// Fitオプションを考慮したクリッピング領域左上端のX座標
+  /// @pre IsWindowValid == True
   int ClippingXWithFit { get; }
   /// Fitオプションを考慮したクリッピング領域左上端のY座標
+  /// @pre IsWindowValid == True
   int ClippingYWithFit { get; }
   /// Fitオプションを考慮したクリッピング領域の幅
+  /// @pre IsWindowValid == True
   int ClippingWidthWithFit { get; }
   /// Fitオプションを考慮したクリッピング領域の高さ
+  /// @pre IsWindowValid == True
   int ClippingHeightWithFit { get; }
 
   /// Screen座標系でのクリッピング領域左上端のX座標
+  /// @pre IsWindowValid == True
   int ScreenClippingXWithFit { get; }
   /// Screen座標系でのクリッピング領域左上端のY座標
+  /// @pre IsWindowValid == True
   int ScreenClippingYWithFit { get; }
 
   //=================================================================

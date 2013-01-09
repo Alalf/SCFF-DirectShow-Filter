@@ -143,7 +143,7 @@ public partial class Profile {
       switch (this.WindowType) {
         case WindowTypes.Normal: {
           if (this.Window == UIntPtr.Zero || !User32.IsWindow(this.Window)) {
-            Debug.WriteLine("WindowWidth: Invalid Window");
+            Debug.WriteLine("Invalid Window", "LayoutElement.GetWindowWidth");
             return -1;
           }
           User32.RECT windowRect;
@@ -155,7 +155,7 @@ public partial class Profile {
           return User32.GetSystemMetrics(User32.SM_CXVIRTUALSCREEN);
         }
         default: {
-          Debug.Fail("WindowWidth: Invalid WindowType");
+          Debug.Fail("Invalid WindowType", "LayoutElement.GetWindowWidth");
           return -1;
         }
       }
@@ -170,7 +170,7 @@ public partial class Profile {
       switch (this.WindowType) {
         case WindowTypes.Normal: {
           if (this.Window == UIntPtr.Zero || !User32.IsWindow(this.Window)) {
-            Debug.WriteLine("GetWindowHeight: Invalid Window");
+            Debug.WriteLine("Invalid Window", "LayoutElement.GetWindowHeight");
             return -1;
           }
           User32.RECT windowRect;
@@ -182,7 +182,7 @@ public partial class Profile {
           return User32.GetSystemMetrics(User32.SM_CYVIRTUALSCREEN);
         }
         default: {
-          Debug.Fail("GetWindowHeight: Invalid WindowType");
+          Debug.Fail("Invalid WindowType", "LayoutElement.GetWindowHeight");
           return -1;
         }
       }

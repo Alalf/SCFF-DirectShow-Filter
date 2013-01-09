@@ -64,13 +64,13 @@ public class ScreenCaptureTimer {
 
   /// 開始
   public void Init() {
-    Debug.WriteLine("ScreenCapturer: Init");
+    Debug.WriteLine("Init", "ScreenCaptureTimer");
     this.captureTimer = new Timer(TimerCallback, null, 0, (int)this.timerPeriod);
   }
 
   /// 開始
   public void Start() {
-    Debug.WriteLine("ScreenCapturer: Start");
+    Debug.WriteLine("Start", "ScreenCaptureTimer");
     lock (this.sharedLock) {
       this.isSuspended = false;
     }
@@ -78,7 +78,7 @@ public class ScreenCaptureTimer {
 
   /// 中断
   public void Suspend() {
-    Debug.WriteLine("ScreenCapturer: Suspend");
+    Debug.WriteLine("Suspend", "ScreenCaptureTimer");
     lock (this.sharedLock) {
       this.isSuspended = true;
       // すべての格納されたBitmapを削除する
@@ -89,13 +89,13 @@ public class ScreenCaptureTimer {
   /// 終了
   /// @warning DispatcherShutdownなどで必ず呼ぶこと
   public void End() {
-    Debug.WriteLine("ScreenCapturer: End");
+    Debug.WriteLine("End", "ScreenCaptureTimer");
     lock (this.sharedLock) {
       this.isSuspended = true;
       if (this.captureTimer != null) {
         this.captureTimer.Change(Timeout.Infinite, Timeout.Infinite);
         this.captureTimer.Dispose();
-        Debug.WriteLine("ScreenCapturer: Timer is Disposed");
+        Debug.WriteLine("ScreenCaptureTimer.captureTimer", "*** MEMORY[DELETE] ***");
         this.captureTimer = null;
       }
     }
@@ -107,7 +107,9 @@ public class ScreenCaptureTimer {
 
   /// スクリーンキャプチャをこのマネージャに依頼
   public void SendRequest(ScreenCaptureRequest request, bool forceUpdate) {
-    Debug.WriteLine("ScreenCapturer: Request Arrived");
+    Debug.WriteLine(string.Format("SendRequest: {0}(forceUpdate: {1})",
+                    request.Index + 1, forceUpdate),
+                    "ScreenCaptureTimer");
     lock (this.sharedLock) {
       this.requests[request.Index] = request;
       // forceUpdate時はUIスレッドで一回処理を行う
@@ -119,7 +121,7 @@ public class ScreenCaptureTimer {
 
   /// すべてのリクエストを削除する
   public void ClearRequests() {
-    Debug.WriteLine("ScreenCapturer: RestoreDefault All Requests");
+    Debug.WriteLine("ClearRequests", "ScreenCaptureTimer");
     lock (this.sharedLock) {
       this.requests = new ScreenCaptureRequest[Common.Constants.MaxLayoutElementCount];
     }

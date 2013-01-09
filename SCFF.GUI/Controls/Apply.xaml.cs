@@ -27,12 +27,17 @@ using System.Windows.Controls;
 public partial class Apply
     : UserControl, IUpdateByOptions {
   //===================================================================
-  // コンストラクタ/Loaded/Closing/ShutdownStartedイベントハンドラ
+  // コンストラクタ/デストラクタ/Closing/ShutdownStartedイベントハンドラ
   //===================================================================
   
   /// コンストラクタ
   public Apply() {
     InitializeComponent();
+  }
+
+  /// デストラクタ
+  ~Apply() {
+    this.DetachOptionsChangedEventHandlers();
   }
 
   //===================================================================

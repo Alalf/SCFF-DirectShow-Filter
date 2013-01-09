@@ -42,12 +42,17 @@ public partial class Area : UserControl, IUpdateByProfile {
   };
 
   //===================================================================
-  // コンストラクタ/Loaded/Closing/ShutdownStartedイベントハンドラ
+  // コンストラクタ/デストラクタ/Closing/ShutdownStartedイベントハンドラ
   //===================================================================
 
   /// コンストラクタ
   public Area() {
     InitializeComponent();
+  }
+
+  /// デストラクタ
+  ~Area() {
+    this.DetachProfileChangedEventHandlers();
   }
 
   //===================================================================

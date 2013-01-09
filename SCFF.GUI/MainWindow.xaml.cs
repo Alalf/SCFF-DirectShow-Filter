@@ -73,7 +73,7 @@ public partial class MainWindow
 
     /// @todo(me) スクリーンキャプチャをの更新頻度を下げる
     ///           App.RuntimeOptionsに該当するデータを保存しておく感じかな？
-    Debug.WriteLine("MainWindow: Deactivated");
+    Debug.WriteLine("Deactivated", "MainWindow");
   }
 
   /// Activated
@@ -83,7 +83,7 @@ public partial class MainWindow
 
     /// @todo(me) スクリーンキャプチャを更新頻度を元に戻す
     ///           App.RuntimeOptionsに該当するデータを保存しておく感じかな？
-    Debug.WriteLine("MainWindow: Activated");
+    Debug.WriteLine("Activated", "MainWindow");
   }
 
   //-------------------------------------------------------------------
@@ -434,7 +434,7 @@ public partial class MainWindow
   /// @param sender 使用しない
   /// @param e 使用しない
   private void SetAero_Executed(object sender, ExecutedRoutedEventArgs e) {
-    Debug.WriteLine("Command [SetAero]:");
+    Debug.WriteLine("Execute", "[Command] SetAero");
     this.SetAero();
   }
 
@@ -465,7 +465,7 @@ public partial class MainWindow
   /// @param sender 使用しない
   /// @param e 使用しない
   private void SetCompactView_Executed(object sender, ExecutedRoutedEventArgs e) {
-    Debug.WriteLine("Command [SetCompactView]:");
+    Debug.WriteLine("Execute", "[Command] SetCompactView");
     this.SetCompactView();
   }
 }

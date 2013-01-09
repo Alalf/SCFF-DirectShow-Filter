@@ -79,9 +79,9 @@ public static class ScreenCapture {
           result.Bitmap, IntPtr.Zero, Int32Rect.Empty,
           BitmapSizeOptions.FromEmptyOptions());
 
-      Debug.WriteLine("Capture: [{0:D}] size:{1:D}x{2:D}",
-                      request.Index+1,
-                      bitmap.PixelWidth, bitmap.PixelHeight);
+      Debug.WriteLine(string.Format("{0:D} ({1:D}x{2:D})",
+                      request.Index+1, bitmap.PixelWidth, bitmap.PixelHeight),
+                      "ScreenCapture");
     }
 
     // Alphaチャンネル情報を削除

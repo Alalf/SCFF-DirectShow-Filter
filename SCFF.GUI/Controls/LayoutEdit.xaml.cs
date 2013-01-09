@@ -57,11 +57,13 @@ public partial class LayoutEdit
   };
 
   //===================================================================
-  // コンストラクタ/Loaded/Closing/ShutdownStartedイベントハンドラ
+  // コンストラクタ/デストラクタ/Closing/ShutdownStartedイベントハンドラ
   //===================================================================
 
   /// コンストラクタ
   public LayoutEdit() {
+    Debug.WriteLine("LayoutEdit", "*** MEMORY[NEW] ***");
+
     InitializeComponent();
     this.Dispatcher.ShutdownStarted += OnShutdownStarted;
     
@@ -74,11 +76,6 @@ public partial class LayoutEdit
 
     // BitmapSource更新用タイマーの準備
     this.StartRedrawTimer();
-  }
-
-  /// Loaded
-  void OnLoaded(object sender, RoutedEventArgs e) {
-    Debug.WriteLine("LayoutEdit: OnLoaded");
 
     // 一回DrawingGroupを生成
     this.BuildDrawingGroup();
@@ -86,8 +83,14 @@ public partial class LayoutEdit
 
   /// Dispatcher.ShutdownStarted
   private void OnShutdownStarted(object sender, EventArgs e) {
-    Debug.WriteLine("LayoutEdit: ShutdownStarted");
+    Debug.WriteLine("LayoutEdit", "*** MEMORY[ShutdownStarted] ***");
     this.screenCaptureTimer.End();
+  }
+
+  /// デストラクタ
+  ~LayoutEdit() {
+    Debug.WriteLine("LayoutEdit", "*** MEMORY[DELETE] ***");
+    this.Dispatcher.ShutdownStarted -= OnShutdownStarted;
   }
 
   //===================================================================
@@ -293,12 +296,12 @@ public partial class LayoutEdit
     // マウス操作中は更新しない
     if (this.hitMode != HitModes.Neutral) return;
 
-    Debug.WriteLine("ActualSize: {0:F2}, {1:F2}",
-                    this.LayoutEditImage.ActualWidth,
-                    this.LayoutEditImage.ActualHeight);
-
     // プレビュー更新のために再描画
     this.BuildDrawingGroup();
+    Debug.WriteLine(string.Format("Redraw ({0:F2}, {1:F2})",
+                                  this.LayoutEditImage.ActualWidth,
+                                  this.LayoutEditImage.ActualHeight),
+                    "LayoutEdit");
   }
 
   //===================================================================
@@ -335,11 +338,9 @@ public partial class LayoutEdit
 
     // 現在選択中のIndexではない場合はそれに変更する
     if (hitIndex != App.Profile.CurrentView.Index) {
-      Debug.WriteLine("*****LayoutEdit: Change Index*****");
-      Debug.WriteLine("{0:D}->{1:D} ({2:F2}, {3:F2})",
-                      App.Profile.CurrentView.Index,
-                      hitIndex,
-                      relativeMousePoint.X, relativeMousePoint.Y);
+      Debug.WriteLine(string.Format("CurrentIndex ({0:D}->{1:D})",
+                                    App.Profile.CurrentView.Index + 1, hitIndex + 1),
+                      "LayoutEdit");
 
       App.Profile.CurrentIndex = hitIndex;
       UpdateCommands.UpdateMainWindowByEntireProfile.Execute(null, null);
@@ -431,7 +432,7 @@ public partial class LayoutEdit
       } else {
         this.DrawingGroup.Children.Clear(); // DrawingGroupもクリア
       }
-      Debug.WriteLine("[GARBAGE COLLECT!]");
+      Debug.WriteLine("Collect", "*** MEMORY[GC] ***");
       GC.Collect();
     }
   }
@@ -475,7 +476,7 @@ public partial class LayoutEdit
   public void UpdateByCurrentProfile() {
     this.SendRequest(App.Profile.CurrentView, true);
     this.BuildDrawingGroup();
-    Debug.WriteLine("[GARBAGE COLLECT!]");
+    Debug.WriteLine("Collect", "*** MEMORY[GC] ***");
     GC.Collect();
   }
 
@@ -486,7 +487,7 @@ public partial class LayoutEdit
       this.SendRequest(layoutElement, true);
     }
     this.BuildDrawingGroup();
-    Debug.WriteLine("[GARBAGE COLLECT!]");
+    Debug.WriteLine("Collect", "*** MEMORY[GC] ***");
     GC.Collect();
   }
 

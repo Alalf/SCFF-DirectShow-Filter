@@ -73,7 +73,7 @@ public static class OptionsINIFile {
         return true;
       } catch (Exception ex) {
         // 特に何も警告はしない
-        Debug.Fail(ex.Message);
+        Debug.Fail(ex.Message, "OptionsINIFile.Save");
         return false;
       }
     }
@@ -99,7 +99,7 @@ public static class OptionsINIFile {
         }
       }
     } catch (FileNotFoundException ex) {
-      Debug.Fail(ex.ToString());
+      Debug.Fail(ex.ToString(), "OptionsINIFile.Load");
       return false;
     }
 

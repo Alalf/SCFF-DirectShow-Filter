@@ -33,6 +33,8 @@ public interface ILayoutElementView {
 
   /// Windowハンドル
   UIntPtr Window { get; }
+  /// 正常なWindowハンドルかどうか
+  bool IsWindowValid { get; } 
   /// @copydoc SCFF::Common::AdditionalLayoutParameter::WindowType
   WindowTypes WindowType { get; }
   /// @copydoc SCFF::Common::AdditionalLayoutParameter::WindowCaption

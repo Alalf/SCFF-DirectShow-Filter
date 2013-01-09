@@ -59,6 +59,8 @@ public partial class LayoutParameter
   /// @param sender 使用しない
   /// @param e 使用しない
   private void Fit_Click(object sender, System.Windows.RoutedEventArgs e) {
+    if (!App.Profile.CurrentView.IsWindowValid) return;
+
     // サンプル座標系でのパディングサイズを求める
     double paddingTop, paddingBottom, paddingLeft, paddingRight;
     Common.Imaging.Utilities.CalculatePaddingSize(

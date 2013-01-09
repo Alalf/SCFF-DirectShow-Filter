@@ -113,7 +113,41 @@ public partial class Profile {
 
     /// @copydoc ILayoutElementView::Window
     public UIntPtr Window {
-      get { return this.GetWindow(); }
+      get {
+        switch (this.WindowType) {
+          case WindowTypes.Normal: {
+            return (UIntPtr)this.profile.message.LayoutParameters[this.Index].Window;
+          }
+          case WindowTypes.DesktopListView: {
+            return Utilities.DesktopListViewWindow;
+          }
+          case WindowTypes.Desktop: {
+            return User32.GetDesktopWindow();
+          }
+          default: {
+            Debug.Fail("Invalid WindowTypes", "LayoutElement.Window");
+            return UIntPtr.Zero;
+          }
+        }
+      }
+    }
+    /// @copydoc ILayoutElementView::IsWindowValid
+    public bool IsWindowValid {
+      get {
+        switch(this.WindowType) {
+          case WindowTypes.Normal: {
+            return (this.Window != UIntPtr.Zero && User32.IsWindow(this.Window));
+          }
+          case WindowTypes.DesktopListView:
+          case WindowTypes.Desktop: {
+            return true;
+          }
+          default: {
+            Debug.Fail("Invalid WindowTypes", "LayoutElement.IsWindowValid");
+            return false;
+          }
+        }
+      }
     }
 
     /// @copydoc ILayoutElementView::WindowType
@@ -467,33 +501,14 @@ public partial class Profile {
     // private メソッド
     //=================================================================
 
-    /// Windowハンドルをタイプ別に取得する
-    private UIntPtr GetWindow() {
-      switch (this.WindowType) {
-        case WindowTypes.Normal: {
-          return (UIntPtr)this.profile.message.LayoutParameters[this.Index].Window;
-        }
-        case WindowTypes.DesktopListView: {
-          return Utilities.DesktopListViewWindow;
-        }
-        case WindowTypes.Desktop: {
-          return User32.GetDesktopWindow();
-        }
-        default: {
-          Debug.Fail("Window: Invalid WindowTypes");
-          return UIntPtr.Zero;
-        }
-      }
-    }
-
     /// Windowの幅をタイプ別に取得する
     private Tuple<int, int> windowSize {
       get {
         switch (this.WindowType) {
           case WindowTypes.Normal: {
-            if (this.Window == UIntPtr.Zero || !User32.IsWindow(this.Window)) {
-              Debug.WriteLine("Invalid Window", "LayoutElement.GetWindowWidth");
-              return new Tuple<int, int>(-1, -1);
+            if (!this.IsWindowValid) {
+              Debug.Fail("Invalid Window", "LayoutElement.windowSize");
+              return null;
             }
             User32.RECT windowRect;
             User32.GetClientRect(this.Window, out windowRect);
@@ -506,8 +521,8 @@ public partial class Profile {
                                       User32.GetSystemMetrics(User32.SM_CYVIRTUALSCREEN));
           }
           default: {
-            Debug.Fail("Invalid WindowType", "LayoutElement.GetWindowWidth");
-            return new Tuple<int, int>(-1, -1);
+            Debug.Fail("Invalid WindowTypes", "LayoutElement.windowSize");
+            return null;
           }
         }
       }
@@ -517,9 +532,9 @@ public partial class Profile {
     private Tuple<int, int> ClientToScreen(int clientX, int clientY) {
       switch (this.WindowType) {
         case WindowTypes.Normal: {
-          if (this.Window == UIntPtr.Zero || !User32.IsWindow(this.Window)) {
-            Debug.Fail("ClientXToScreenX: Invalid Window");
-            return new Tuple<int, int>(-1, -1);
+          if (!this.IsWindowValid) {
+            Debug.Fail("Invalid Window", "LayoutElement.ClientToScreen");
+            return null;
           }
           User32.POINT windowPoint = new User32.POINT { X = clientX, Y = clientY };
           User32.ClientToScreen(this.Window, ref windowPoint);
@@ -532,8 +547,8 @@ public partial class Profile {
                                      clientY + User32.GetSystemMetrics(User32.SM_YVIRTUALSCREEN));
         }
         default: {
-          Debug.Fail("ClientXToScreenX: Invalid WindowType");
-          return new Tuple<int, int>(-1, -1);
+          Debug.Fail("Invalid WindowTypes", "LayoutElement.ClientToScreen");
+          return null;
         }
       }
     }

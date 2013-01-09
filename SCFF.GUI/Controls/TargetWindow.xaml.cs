@@ -80,7 +80,7 @@ public partial class TargetWindow : UserControl, IUpdateByProfile {
         break;
       }
       default: {
-        Debug.Fail("ModifyProfile: Invalid WindowType");
+        Debug.Fail("Invalid WindowType", "TargetWindow.ModifyProfile");
         return;
       }
     }

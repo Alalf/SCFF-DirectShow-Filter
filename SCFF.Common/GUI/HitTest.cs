@@ -101,7 +101,7 @@ public static class HitTest {
       if (mousePoint.Y <= borderNBottom) {      // N
         return HitModes.SizeN;
       } else if (mousePoint.Y <= borderSTop) {  // (N)-(S)
-        Debug.Fail("GetHitMode: Move??");
+        Debug.Fail("Move?", "HitTest.GetHitMode");
         return HitModes.Move;
       } else {                                  // S
         return HitModes.SizeS;

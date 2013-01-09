@@ -170,6 +170,8 @@ public partial class LayoutEdit
     if (bitmap == null) return;
 
     // プレビューの描画
+    if (!layoutElement.IsWindowValid) return;
+
     var layoutElementRect = this.CreateSampleLayoutElementRect(layoutElement);
     double x, y, width, height;
     Common.Imaging.Utilities.CalculateLayout(
@@ -211,7 +213,10 @@ public partial class LayoutEdit
     // フレーム(内枠)の描画
     var layoutElementRect = this.CreateSampleLayoutElementRect(layoutElement);
     var inflateValue = framePen.Thickness / 2;
-    dc.DrawRectangle(Brushes.Transparent, framePen,
+
+    /// @todo(me) Windowが不正な場合はBorderオプションに関係なく表示しないといけない
+    var frameBrush = layoutElement.IsWindowValid ? Brushes.Transparent : Brushes.Red;
+    dc.DrawRectangle(frameBrush, framePen,
                      Rect.Inflate(layoutElementRect, -inflateValue, -inflateValue));
 
     // キャプションの描画
@@ -501,17 +506,17 @@ public partial class LayoutEdit
     // nop
   }
 
-  /// LayoutElementの内容からRequestを生成してScreenCapturerに画像生成を依頼
+  /// LayoutElementの内容からRequestを生成してScreenCaptureTimerに画像生成を依頼
   private void SendRequest(ILayoutElementView layoutElement, bool forceUpdate) {
     var request = new ScreenCaptureRequest(
         layoutElement.Index,
         layoutElement.Window,
         layoutElement.WindowType == WindowTypes.Desktop ?
-                        layoutElement.ScreenClippingXWithFit :
-                        layoutElement.ClippingXWithFit,
+            layoutElement.ScreenClippingXWithFit :
+            layoutElement.ClippingXWithFit,
         layoutElement.WindowType == WindowTypes.Desktop ?
-                        layoutElement.ScreenClippingYWithFit :
-                        layoutElement.ClippingYWithFit,
+            layoutElement.ScreenClippingYWithFit :
+            layoutElement.ClippingYWithFit,
         layoutElement.ClippingWidthWithFit,
         layoutElement.ClippingHeightWithFit,
         layoutElement.ShowCursor,

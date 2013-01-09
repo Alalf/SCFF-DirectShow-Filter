@@ -118,7 +118,7 @@ public partial class Area : UserControl, IUpdateByProfile {
         break;
       }
       default : {
-        Debug.Fail("CommonAreaSelect: Invalid WindowTypes");
+        Debug.Fail("Invalid WindowTypes", "Area.CommonAreaSelect");
         break;
       }
     }
@@ -150,7 +150,7 @@ public partial class Area : UserControl, IUpdateByProfile {
         break;
       }
       default : {
-        Debug.Fail("CommonAreaSelect: Invalid WindowTypes");
+        Debug.Fail("Invalid WindowTypes", "Area.CommonAreaSelect");
         break;
       }
     }

@@ -54,7 +54,7 @@ public class ScreenCaptureRequest {
   public BitmapHandle Execute() {
     // Windowチェック
     var window = this.Window;
-    if (!User32.IsWindow(window)) return null;
+    if (window == UIntPtr.Zero || !User32.IsWindow(window)) return null;
 
     // BitBlt
     var windowDC = User32.GetDC(window);

@@ -55,7 +55,7 @@ public partial class LayoutTab : UserControl, IUpdateByProfile {
   /// @param e 使用しない
   private void LayoutElementTab_SelectionChanged(object sender, SelectionChangedEventArgs e) {
     var next = this.LayoutElementTab.SelectedIndex;
-    App.Profile.ChangeCurrentIndex(next);
+    App.Profile.CurrentIndex = next;
 
     // 他のコントロールのデータの更新はWindowに任せる
     UpdateCommands.UpdateMainWindowByEntireProfile.Execute(null, null);

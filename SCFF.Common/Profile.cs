@@ -31,91 +31,134 @@ public partial class Profile {
   // コンストラクタ
   //===================================================================
 
+  /// カーソルの初期化
+  private void BuildLayoutElements() {
+    var length = Constants.MaxLayoutElementCount;
+    this.layoutElements = new LayoutElement[length];
+    for (int i = 0; i < length; ++i) {
+      this.layoutElements[i] = new LayoutElement(this, i);
+    }
+  }
+
   /// コンストラクタ
+  /// @warning コンストラクタでは実際の値の読み込みなどは行わない
   public Profile() {
     // 配列の初期化
     var length = Constants.MaxLayoutElementCount;
     this.message.LayoutParameters = new Interprocess.LayoutParameter[length];
     this.additionalLayoutParameters = new AdditionalLayoutParameter[length];
+    
+    // カーソルの初期化
+    this.BuildLayoutElements();
+  }
 
-    this.layoutElements = new LayoutElement[Constants.MaxLayoutElementCount];
+  /// サンプルの幅と高さを指定してmessageを生成する
+  /// @param sampleWidth サンプルの幅
+  /// @param sampleHeight サンプルの高さ
+  public Interprocess.Message ToMessage(int sampleWidth, int sampleHeight) {
+    /// @todo(me) 実装する。ただしこれは仮想メモリ出力用イテレータの機能な気がする
+    throw new NotImplementedException();
   }
 
   //===================================================================
-  // Profile全体のリセット
+  // 外部インタフェース
   //===================================================================
 
-  /// 配列をクリア
-  /// @pre 配列自体は生成済み
-  private void ClearLayoutParameters() {
+  /// メンバ配列を空にする
+  /// @pre メンバ配列自体は生成済み(not null)
+  private void ClearArrays() {
+    /// 配列をクリア
     var length = Constants.MaxLayoutElementCount;
     Array.Clear(this.message.LayoutParameters, 0, length);
     Array.Clear(this.additionalLayoutParameters, 0, length);
   }
 
-  /// Profile全体のリセット
-  public void ResetProfile() {
-    // 配列の初期化をして中身をクリア
-    this.ClearLayoutParameters();
+  //-------------------------------------------------------------------
+  // カーソル
+  //-------------------------------------------------------------------
+
+  /// 現在選択中のレイアウト要素
+  public int CurrentIndex { get; set; }
+
+  /// 現在選択中のレイアウト要素を参照モードで返す
+  public ILayoutElementView CurrentView {
+    get { return this.layoutElements[this.CurrentIndex]; }
+  }
+
+  /// 現在選択中のレイアウト要素を編集モードで返す
+  public ILayoutElement Current {
+    get { return this.layoutElements[this.CurrentIndex]; }
+  }
+
+  /// foreach用Enumerator(参照モード)を返す
+  public IEnumerator<ILayoutElementView> GetEnumerator() {
+    for (int i = 0; i < this.message.LayoutElementCount; ++i) {
+      yield return this.layoutElements[i];
+    }
+  }
+
+  //-------------------------------------------------------------------
+  // デフォルトに戻す
+  //-------------------------------------------------------------------
+
+  /// デフォルトに戻す
+  /// @post タイムスタンプ更新
+  public void RestoreDefault() {
+    this.ClearArrays();
     
     // Profileのプロパティの初期化
     this.LayoutElementCount = 1;
-    this.LayoutType = LayoutTypes.NativeLayout;
     // this.UpdateTimestamp();
 
     // currentの生成
-    this.currentIndex = 0;
+    this.CurrentIndex = 0;
     this.Current.Open();
     this.Current.RestoreDefault();
     this.Current.Close();
   }
 
-  //===================================================================
-  // LayoutElementの追加と削除
-  //===================================================================
+  //-------------------------------------------------------------------
+  // レイアウト要素の追加
+  //-------------------------------------------------------------------
 
-  /// レイアウト要素が追加可能か
-  public bool CanAddLayoutElement() {
-    var length = Constants.MaxLayoutElementCount;
-    if (this.message.LayoutElementCount < length) {
-      return true;
-    } else {
-      return false;
-    }
+  /// レイアウト要素を追加可能か
+  public bool CanAdd {
+    get { return this.message.LayoutElementCount < Constants.MaxLayoutElementCount; }
   }
 
   /// レイアウト要素を追加
-  public void AddLayoutElement() {
+  /// @post タイムスタンプ更新
+  public void Add() {
     var nextIndex = this.LayoutElementCount;
     ++this.LayoutElementCount;
-    this.LayoutType = LayoutTypes.ComplexLayout;
     // this.UpdateTimestamp();
 
     // currentを新たに生成したものに切り替える
-    this.currentIndex = nextIndex;
+    this.CurrentIndex = nextIndex;
     this.Current.Open();
     this.Current.RestoreDefault();
     this.Current.Close();
   }
 
+  //-------------------------------------------------------------------
+  // レイアウト要素の削除
+  //-------------------------------------------------------------------
+
   /// レイアウト要素を削除可能か
-  public bool CanRemoveLayoutElement() {
-    if (this.message.LayoutElementCount > 1) {
-      return true;
-    } else {
-      return false;
-    }
+  public bool CanRemove {
+    get { return this.message.LayoutElementCount > 1; }
   }
 
   /// 現在選択中のレイアウト要素を削除
-  public void RemoveCurrentLayoutElement() {
+  /// @post タイムスタンプ更新
+  public void RemoveCurrent() {
     // ややこしいので良く考えて書くこと！
     // とりあえず一番簡単なのは全部コピーして全部に書き戻すことだろう
     // また、全体的にスレッドセーフではないとおもうので何とかしたいところ
     var layoutParameterList = new List<Interprocess.LayoutParameter>();
     var additionalLayoutPararameterList = new List<AdditionalLayoutParameter>();
 
-    var removedIndex = this.currentIndex;
+    var removedIndex = this.CurrentIndex;
     for (int i = 0; i < this.LayoutElementCount; ++i) {
       if (i != removedIndex) {
         layoutParameterList.Add(this.message.LayoutParameters[i]);
@@ -124,45 +167,20 @@ public partial class Profile {
     }
 
     // 後は配列を消去した上で書き戻す
-    this.ClearLayoutParameters();
+    this.ClearArrays();
     layoutParameterList.CopyTo(this.message.LayoutParameters);
     additionalLayoutPararameterList.CopyTo(this.additionalLayoutParameters);
 
     // Profileメンバの更新
     --this.LayoutElementCount;
-    if (this.LayoutElementCount > 1) {
-      this.LayoutType = LayoutTypes.ComplexLayout;
-    } else {
-      this.LayoutType = LayoutTypes.NativeLayout;
-    }
     this.UpdateTimestamp();
 
     // currentIndexを新しい場所に移して終了
     if (removedIndex < this.LayoutElementCount) {
       // なにもしない
     } else {
-      this.currentIndex = removedIndex - 1;
+      this.CurrentIndex = removedIndex - 1;
     }
-  }
-
-  //===================================================================
-  // 現在選択中のIndexを変更する
-  //===================================================================
-
-  /// 現在選択中のIndexを変更する
-  public void ChangeCurrentIndex(int index) {
-    this.currentIndex = index;
-  }
-
-  //===================================================================
-  // Messageを更新
-  //===================================================================
-
-  /// サンプルの幅と高さを指定してthis.messageを更新する
-  /// @param sampleWidth サンプルの幅
-  /// @param sampleHeight サンプルの高さ
-  public void UpdateMessage(int sampleWidth, int sampleHeight) {
-  /// @todo(me) 実装する。ただしこれは仮想メモリ出力用イテレータの機能な気がする
   }
 
   //===================================================================
@@ -173,15 +191,15 @@ public partial class Profile {
   public Int64 Timestamp {
     get { return this.message.Timestamp; }
   } 
-  /// レイアウトの種類
-  public LayoutTypes LayoutType {
-    get { return (LayoutTypes)this.message.LayoutType; }
-    set { this.message.LayoutType = Convert.ToInt32(value); }
-  }
   /// レイアウト要素数
   public int LayoutElementCount {
     get { return this.message.LayoutElementCount; }
     set { this.message.LayoutElementCount = value; }
+  }
+
+  /// レイアウトの種類
+  public LayoutTypes LayoutType {
+    get { return this.LayoutElementCount == 1 ? LayoutTypes.NativeLayout : LayoutTypes.ComplexLayout; }
   }
 
   //===================================================================
@@ -194,49 +212,10 @@ public partial class Profile {
   }
 
   //===================================================================
-  // イテレータ
-  //===================================================================
-
-  /// 現在選択中のレイアウト要素を参照モードで返す
-  public ILayoutElementView CurrentView {
-    get {  
-      if (this.layoutElements[this.currentIndex] == null) {
-        this.layoutElements[this.currentIndex] =
-            new LayoutElement(this, this.currentIndex);
-      }
-      return this.layoutElements[this.currentIndex];
-    }
-  }
-
-  /// 現在選択中のレイアウト要素を編集モードで返す
-  public ILayoutElement Current {
-    get {  
-      if (this.layoutElements[this.currentIndex] == null) {
-        this.layoutElements[this.currentIndex] =
-            new LayoutElement(this, this.currentIndex);
-      }
-      return this.layoutElements[this.currentIndex];
-    }
-  }
-
-  /// foreach用Enumeratorを返す
-  public IEnumerator<ILayoutElementView> GetEnumerator() {
-    for (int i = 0; i < this.message.LayoutElementCount; ++i) {
-      if (this.layoutElements[i] == null) {
-        this.layoutElements[i] = new LayoutElement(this, i);
-      }
-      yield return this.layoutElements[i];
-    }
-  }
-
-  //===================================================================
   // フィールド
   //===================================================================
 
-  /// 現在選択中のIndex
-  private int currentIndex = 0;
-
-  /// イテレータのキャッシュ
+  /// カーソルのキャッシュ
   private LayoutElement[] layoutElements;
 
   /// レイアウトパラメータを格納したメッセージ

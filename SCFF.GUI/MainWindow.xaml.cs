@@ -271,7 +271,7 @@ public partial class MainWindow
                                  MessageBoxResult.Yes);
     switch (result) {
       case MessageBoxResult.No: {
-        App.Profile.ResetProfile();
+        App.Profile.RestoreDefault();
         this.UpdateByEntireProfile();
         break;
       }
@@ -286,7 +286,7 @@ public partial class MainWindow
           App.Options.AddRecentProfile(save.FileName);
           this.MainMenu.UpdateByOptions();
 
-          App.Profile.ResetProfile();
+          App.Profile.RestoreDefault();
           this.UpdateByEntireProfile();
         }
         break;

@@ -80,7 +80,7 @@ public partial class LayoutToolbar : UserControl, IUpdateByOptions {
   /// @param sender 使用しない
   /// @param e 使用しない
   private void Add_Click(object sender, RoutedEventArgs e) {
-    App.Profile.AddLayoutElement();
+    App.Profile.Add();
     App.Profile.Current.Open();
     App.Profile.Current.SetBoundRelativeLeft =
       LayoutToolbar.BoundOffset * App.Profile.CurrentView.Index;
@@ -88,8 +88,8 @@ public partial class LayoutToolbar : UserControl, IUpdateByOptions {
       LayoutToolbar.BoundOffset * App.Profile.CurrentView.Index;
     App.Profile.Current.Close();
 
-    this.Add.IsEnabled = App.Profile.CanAddLayoutElement();
-    this.Remove.IsEnabled = App.Profile.CanRemoveLayoutElement();
+    this.Add.IsEnabled = App.Profile.CanAdd;
+    this.Remove.IsEnabled = App.Profile.CanRemove;
 
     UpdateCommands.UpdateMainWindowByEntireProfile.Execute(null, null);
   }
@@ -98,10 +98,10 @@ public partial class LayoutToolbar : UserControl, IUpdateByOptions {
   /// @param sender 使用しない
   /// @param e 使用しない
   private void Remove_Click(object sender, RoutedEventArgs e) {
-    App.Profile.RemoveCurrentLayoutElement();
+    App.Profile.RemoveCurrent();
 
-    this.Add.IsEnabled = App.Profile.CanAddLayoutElement();
-    this.Remove.IsEnabled = App.Profile.CanRemoveLayoutElement();
+    this.Add.IsEnabled = App.Profile.CanAdd;
+    this.Remove.IsEnabled = App.Profile.CanRemove;
 
     UpdateCommands.UpdateMainWindowByEntireProfile.Execute(null, null);
   }

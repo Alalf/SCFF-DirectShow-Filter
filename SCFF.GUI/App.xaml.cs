@@ -56,25 +56,27 @@ public partial class App : Application {
   //===================================================================
 
   /// Startup: アプリケーション開始時
-  /// @param sender 使用しない
   /// @param e コマンドライン引数(Args)を参照可能
-  private void OnStartup(object sender, StartupEventArgs e) {
+  protected override void OnStartup(StartupEventArgs e) {
+    base.OnStartup(e);
+
     // Options
     OptionsINIFile.Load(App.Options);
 
     // Profile
     if (App.Options.RestoreLastProfile) {
       /// @todo(me) プロファイル読み込み
-      App.Profile.ResetProfile();
+      App.Profile.RestoreDefault();
     } else {
-      App.Profile.ResetProfile();
+      App.Profile.RestoreDefault();
     }
   }
 
   /// Exit: アプリケーション終了時
-  /// @param sender 使用しない
   /// @param e 終了コード(ApplicationExitCode)の参照・設定が可能
-  private void OnExit(object sender, ExitEventArgs e) {
+  protected override void OnExit(ExitEventArgs e) {
+    base.OnExit(e);
+
     // Profileの保存は明示的にMainWindow上で行うのでここでは何もしない
 
     // Options

@@ -341,7 +341,7 @@ public partial class LayoutEdit
                       hitIndex,
                       relativeMousePoint.X, relativeMousePoint.Y);
 
-      App.Profile.ChangeCurrentIndex(hitIndex);
+      App.Profile.CurrentIndex = hitIndex;
       UpdateCommands.UpdateMainWindowByEntireProfile.Execute(null, null);
     }
 

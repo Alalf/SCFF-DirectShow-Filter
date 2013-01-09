@@ -38,12 +38,16 @@ public partial class AreaSelectWindow : Window {
   // イベントハンドラ
   //===================================================================
 
+  /// DoubleClick
+  /// @param e 使用しない
   protected override void OnMouseDoubleClick(MouseButtonEventArgs e) {
     base.OnMouseDoubleClick(e);
     this.DialogResult = true;
     this.Close();
   }
 
+  /// LeftButtonDown
+  /// @param e 使用しない
   protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e) {
     base.OnMouseLeftButtonDown(e);
     this.DragMove();

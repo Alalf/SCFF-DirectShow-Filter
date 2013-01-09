@@ -26,12 +26,17 @@ using System.Windows.Controls;
 /// レイアウト編集用ツールバーを管理するUserControl
 public partial class LayoutToolbar : UserControl, IUpdateByOptions {
   //===================================================================
-  // コンストラクタ/Loaded/Closing/ShutdownStartedイベントハンドラ
+  // コンストラクタ/デストラクタ/Closing/ShutdownStartedイベントハンドラ
   //===================================================================
 
   /// コンストラクタ
   public LayoutToolbar() {
     InitializeComponent();
+  }
+
+  /// デストラクタ
+  ~LayoutToolbar() {
+    this.DetachOptionsChangedEventHandlers();
   }
 
   //===================================================================

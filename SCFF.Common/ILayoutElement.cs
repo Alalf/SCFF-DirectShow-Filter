@@ -41,6 +41,7 @@ public interface ILayoutElement {
   //=================================================================
 
   /// WindowタイプをNormalに＋Windowハンドルを設定する
+  /// @param window 設定するWindowハンドル
   void SetWindow(UIntPtr window);
   /// WindowタイプをDesktopにする
   void SetWindowToDesktop();

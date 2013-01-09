@@ -29,12 +29,18 @@ using SCFF.Common;
 public partial class LayoutParameter
     : UserControl, IUpdateByProfile, IUpdateByRuntimeOptions {
   //===================================================================
-  // コンストラクタ/Loaded/Closing/ShutdownStartedイベントハンドラ
+  // コンストラクタ/デストラクタ/Closing/ShutdownStartedイベントハンドラ
   //===================================================================
 
   /// コンストラクタ
   public LayoutParameter() {
     InitializeComponent();
+  }
+
+  /// デストラクタ
+  ~LayoutParameter() {
+    this.DetachRuntimeOptionsChangedEventHandlers();
+    this.DetachProfileChangedEventHandlers();
   }
 
   //===================================================================

@@ -157,7 +157,7 @@ public class ScreenCaptureTimer {
   private ScreenCaptureRequest[] requests =
       new ScreenCaptureRequest[Common.Constants.MaxLayoutElementCount];
 
-  /// 共有(自W/他R): スクリーンキャプチャのキャッシュ
+  /// 共有(自W/他R): スクリーンキャプチャビットマップのキャッシュ
   private BitmapSource[] cachedBitmaps =
       new BitmapSource[Common.Constants.MaxLayoutElementCount];
 }

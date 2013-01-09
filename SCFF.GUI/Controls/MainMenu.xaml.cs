@@ -27,12 +27,17 @@ using SCFF.Common;
 /// メインメニュー管理用UserControl
 public partial class MainMenu : UserControl, IUpdateByOptions {
   //===================================================================
-  // コンストラクタ/Loaded/Closing/ShutdownStartedイベントハンドラ
+  // コンストラクタ/デストラクタ/Closing/ShutdownStartedイベントハンドラ
   //===================================================================
 
   /// コンストラクタ
   public MainMenu() {
     InitializeComponent();
+  }
+
+  /// デストラクタ
+  ~MainMenu() {
+    this.DetachOptionsChangedEventHandlers();
   }
 
   //===================================================================

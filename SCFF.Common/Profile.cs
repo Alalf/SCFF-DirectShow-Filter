@@ -55,7 +55,10 @@ public partial class Profile {
   /// サンプルの幅と高さを指定してmessageを生成する
   /// @param sampleWidth サンプルの幅
   /// @param sampleHeight サンプルの高さ
-  public Interprocess.Message ToMessage(int sampleWidth, int sampleHeight) {
+  /// @param forceNullLayout 強制的にスプラッシュを表示させるか
+  /// @return 共有メモリにそのまま設定可能なMessage
+  public Interprocess.Message ToMessage(int sampleWidth, int sampleHeight,
+                                        bool forceNullLayout) {
     /// @todo(me) 実装する。ただしこれは仮想メモリ出力用イテレータの機能な気がする
     throw new NotImplementedException();
   }

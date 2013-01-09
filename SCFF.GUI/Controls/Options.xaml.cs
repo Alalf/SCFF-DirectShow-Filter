@@ -26,12 +26,17 @@ using System.Windows.Controls;
 /// SWScale以外の設定用UserControl
 public partial class Options : UserControl, IUpdateByProfile {
   //===================================================================
-  // コンストラクタ/Loaded/Closing/ShutdownStartedイベントハンドラ
+  // コンストラクタ/デストラクタ/Closing/ShutdownStartedイベントハンドラ
   //===================================================================
 
   /// コンストラクタ
   public Options() {
     InitializeComponent();
+  }
+
+  /// デストラクタ
+  ~Options() {
+    this.DetachProfileChangedEventHandlers();
   }
 
   //===================================================================

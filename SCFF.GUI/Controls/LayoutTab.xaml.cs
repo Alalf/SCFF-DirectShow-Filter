@@ -26,12 +26,17 @@ using System.Windows.Controls;
 /// レイアウト要素の切り替えと個数の表示を行うTabControl管理用UserControl
 public partial class LayoutTab : UserControl, IUpdateByProfile {
   //===================================================================
-  // コンストラクタ/Loaded/Closing/ShutdownStartedイベントハンドラ
+  // コンストラクタ/デストラクタ/Closing/ShutdownStartedイベントハンドラ
   //===================================================================
 
   /// コンストラクタ
   public LayoutTab() {
     InitializeComponent();
+  }
+
+  /// デストラクタ
+  ~LayoutTab() {
+    this.DetachProfileChangedEventHandlers();
   }
 
   //===================================================================

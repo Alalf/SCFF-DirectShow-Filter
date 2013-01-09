@@ -10,8 +10,7 @@
         Icon="Images/app.ico"
         ResizeMode="CanResizeWithGrip"
         FontSize="9"
-        Title="AreaSelectWindow" Width="320" Height="240"
-        MouseDown="OnMouseDown">
+        Title="AreaSelectWindow" Width="320" Height="240">
   <Window.CommandBindings>
     <!-- ApplicationCommands -->
     <CommandBinding Command="Save" Executed="Save_Executed"/>

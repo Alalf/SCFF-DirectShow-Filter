@@ -26,27 +26,27 @@ using System.Windows.Input;
 /// AreaSelectWindowのコードビハインド
 public partial class AreaSelectWindow : Window {
   //===================================================================
-  // コンストラクタ/Loaded/Closing/ShutdownStartedイベントハンドラ
+  // コンストラクタ/デストラクタ/Closing/ShutdownStartedイベントハンドラ
   //===================================================================
 
   /// コンストラクタ
   public AreaSelectWindow() {
     InitializeComponent();
-
-    this.MouseLeftButtonDown += (sender, e) => this.DragMove();
   }
 
   //===================================================================
   // イベントハンドラ
   //===================================================================
 
-  /// MouseDown
-  private void OnMouseDown(object sender, MouseButtonEventArgs e) {
-    if (e.ClickCount != 2) return;
-
-    // Double Click
+  protected override void OnMouseDoubleClick(MouseButtonEventArgs e) {
+    base.OnMouseDoubleClick(e);
     this.DialogResult = true;
     this.Close();
+  }
+
+  protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e) {
+    base.OnMouseLeftButtonDown(e);
+    this.DragMove();
   }
 
   //===================================================================

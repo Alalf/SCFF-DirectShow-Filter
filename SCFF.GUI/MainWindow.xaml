@@ -13,10 +13,6 @@
         Height="565"
         MinWidth="280"
         MinHeight="280" 
-        Loaded="OnLoaded"
-        Closing="OnClosing"
-        Activated="OnActivated"
-        Deactivated="OnDeactivated"
         FontSize="9">
   <!-- CommandBindings -->
   <Window.CommandBindings>

@@ -32,16 +32,13 @@ using SCFF.Common;
 public partial class MainWindow
     : Window, IUpdateByProfile, IUpdateByOptions, IUpdateByRuntimeOptions {
   //===================================================================
-  // コンストラクタ/Loaded/Closing/ShutdownStartedイベントハンドラ
+  // コンストラクタ/デストラクタ/Closing/ShutdownStartedイベントハンドラ
   //===================================================================
 
   /// コンストラクタ
   public MainWindow() {    
     this.InitializeComponent();
-  }
 
-  /// 全Window表示前に一度だけ起こる
-  private void OnLoaded(object sender, RoutedEventArgs e) {
     this.UpdateByOptions();
     this.UpdateByRuntimeOptions();
     this.UpdateByEntireProfile();
@@ -51,8 +48,17 @@ public partial class MainWindow
     this.SetCompactView();
   }
 
+  /// デストラクタ
+  ~MainWindow() {
+    this.DetachOptionsChangedEventHandlers();
+    this.DetachRuntimeOptionsChangedEventHandlers();
+    this.DetachProfileChangedEventHandlers();
+  }
+
   /// アプリケーション終了時に発生するClosingイベントハンドラ
-  private void OnClosing(object sender, System.ComponentModel.CancelEventArgs e) {
+  protected override void OnClosing(System.ComponentModel.CancelEventArgs e) {
+    base.OnClosing(e);
+
     this.SaveTemporaryOptions();
   }
 
@@ -61,19 +67,23 @@ public partial class MainWindow
   //===================================================================
 
   /// Deactivated
-  /// @param sender 使用しない
   /// @param e 使用しない
-  private void OnDeactivated(object sender, System.EventArgs e) {
+  protected override void OnDeactivated(System.EventArgs e) {
+    base.OnDeactivated(e);
+
     /// @todo(me) スクリーンキャプチャをの更新頻度を下げる
     ///           App.RuntimeOptionsに該当するデータを保存しておく感じかな？
+    Debug.WriteLine("MainWindow: Deactivated");
   }
 
   /// Activated
-  /// @param sender 使用しない
   /// @param e 使用しない
-  private void OnActivated(object sender, System.EventArgs e) {
+  protected override void OnActivated(System.EventArgs e) {
+    base.OnActivated(e);
+
     /// @todo(me) スクリーンキャプチャを更新頻度を元に戻す
     ///           App.RuntimeOptionsに該当するデータを保存しておく感じかな？
+    Debug.WriteLine("MainWindow: Activated");
   }
 
   //-------------------------------------------------------------------

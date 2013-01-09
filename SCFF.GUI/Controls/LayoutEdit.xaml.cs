@@ -100,8 +100,8 @@ public partial class LayoutEdit
   /// レイアウト要素のキャプションの生成
   /// @param layoutElement 対象のレイアウト要素
   /// @return DrawingContext.DrawTextで描画可能なDrawingVisualオブジェクト
-  private FormattedText CreateLayoutElementCaption(Profile.InputLayoutElement layoutElement) {
-    var isCurrent = layoutElement.Index == App.Profile.CurrentInputLayoutElement.Index;
+  private FormattedText CreateLayoutElementCaption(ILayoutElementView layoutElement) {
+    var isCurrent = layoutElement.Index == App.Profile.Current.Index;
 
     // Caption
     var layoutElementCaption = string.Empty;
@@ -162,7 +162,7 @@ public partial class LayoutEdit
   /// プレビュー画像の描画
   /// @param dc 描画先
   /// @param layoutElement 描画対象
-  private void DrawPreview(DrawingContext dc, Profile.InputLayoutElement layoutElement) {
+  private void DrawPreview(DrawingContext dc, ILayoutElementView layoutElement) {
     var bitmap = this.screenCaptureTimer.GetBitmapSource(layoutElement.Index);
     if (bitmap == null) return;
 
@@ -182,8 +182,8 @@ public partial class LayoutEdit
   /// 枠線とキャプションの描画
   /// @param dc 描画先
   /// @param layoutElement 描画対象
-  private void DrawBorder(DrawingContext dc, Profile.InputLayoutElement layoutElement) {
-    var isCurrent = layoutElement.Index == App.Profile.CurrentInputLayoutElement.Index;
+  private void DrawBorder(DrawingContext dc, ILayoutElementView layoutElement) {
+    var isCurrent = layoutElement.Index == App.Profile.Current.Index;
 
     // Pen
     Pen framePen = null;
@@ -237,7 +237,7 @@ public partial class LayoutEdit
   }
 
   /// サンプル座標系でのレイアウト要素の領域
-  private Rect CreateSampleLayoutElementRect(Profile.InputLayoutElement layoutElement) {
+  private Rect CreateSampleLayoutElementRect(ILayoutElementView layoutElement) {
     return new Rect {
       X = layoutElement.BoundLeft(App.RuntimeOptions.CurrentSampleWidth),
       Y = layoutElement.BoundTop(App.RuntimeOptions.CurrentSampleHeight),
@@ -334,10 +334,10 @@ public partial class LayoutEdit
     if (!HitTest.TryHitTest(App.Profile, relativeMousePoint, out hitIndex, out hitMode)) return;
 
     // 現在選択中のIndexではない場合はそれに変更する
-    if (hitIndex != App.Profile.CurrentInputLayoutElement.Index) {
+    if (hitIndex != App.Profile.Current.Index) {
       Debug.WriteLine("*****LayoutEdit: Change Current*****");
       Debug.WriteLine("{0:D}->{1:D} ({2:F2}, {3:F2})",
-                      App.Profile.CurrentInputLayoutElement.Index,
+                      App.Profile.Current.Index,
                       hitIndex,
                       relativeMousePoint.X, relativeMousePoint.Y);
 
@@ -347,7 +347,7 @@ public partial class LayoutEdit
 
     // マウスを押した場所を記録してマウスキャプチャー開始
     this.hitMode = hitMode;
-    this.relativeMouseOffset = new RelativeMouseOffset(App.Profile.CurrentInputLayoutElement, relativeMousePoint);
+    this.relativeMouseOffset = new RelativeMouseOffset(App.Profile.Current, relativeMousePoint);
     if (App.Options.LayoutSnap) {
       this.snapGuide = new SnapGuide(App.Profile);
     } else {
@@ -378,15 +378,15 @@ public partial class LayoutEdit
 
     // Move or Size
     double nextLeft, nextTop, nextRight, nextBottom;
-    MoveAndSize.MoveOrSize(App.Profile.CurrentInputLayoutElement, this.hitMode,
+    MoveAndSize.MoveOrSize(App.Profile.Current, this.hitMode,
         relativeMousePoint, this.relativeMouseOffset, this.snapGuide, 
         out nextLeft, out nextTop, out nextRight, out nextBottom);
 
     // Profileを更新
-    App.Profile.CurrentOutputLayoutElement.BoundRelativeLeft = nextLeft;
-    App.Profile.CurrentOutputLayoutElement.BoundRelativeTop = nextTop;
-    App.Profile.CurrentOutputLayoutElement.BoundRelativeRight = nextRight;
-    App.Profile.CurrentOutputLayoutElement.BoundRelativeBottom = nextBottom;
+    App.Profile.CurrentMutable.SetBoundRelativeLeft = nextLeft;
+    App.Profile.CurrentMutable.SetBoundRelativeTop = nextTop;
+    App.Profile.CurrentMutable.SetBoundRelativeRight = nextRight;
+    App.Profile.CurrentMutable.SetBoundRelativeBottom = nextBottom;
       
     /// @todo(me) 変更をMainWindowに通知
     UpdateCommands.UpdateLayoutParameterByCurrentProfile.Execute(null, null);
@@ -471,7 +471,7 @@ public partial class LayoutEdit
 
   /// @copydoc IUpdateByProfile::UpdateByCurrentProfile
   public void UpdateByCurrentProfile() {
-    this.SendRequest(App.Profile.CurrentInputLayoutElement, true);
+    this.SendRequest(App.Profile.Current, true);
     this.BuildDrawingGroup();
     Debug.WriteLine("[GARBAGE COLLECT!]");
     GC.Collect();
@@ -499,7 +499,7 @@ public partial class LayoutEdit
   }
 
   /// LayoutElementの内容からRequestを生成してScreenCapturerに画像生成を依頼
-  private void SendRequest(Profile.InputLayoutElement layoutElement, bool forceUpdate) {
+  private void SendRequest(ILayoutElementView layoutElement, bool forceUpdate) {
     var request = new ScreenCaptureRequest(
         layoutElement.Index,
         layoutElement.Window,

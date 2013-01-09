@@ -119,7 +119,7 @@ public class ScreenCaptureTimer {
 
   /// すべてのリクエストを削除する
   public void ClearRequests() {
-    Debug.WriteLine("ScreenCapturer: Clear All Requests");
+    Debug.WriteLine("ScreenCapturer: RestoreDefault All Requests");
     lock (this.sharedLock) {
       this.requests = new ScreenCaptureRequest[Common.Constants.MaxLayoutElementCount];
     }

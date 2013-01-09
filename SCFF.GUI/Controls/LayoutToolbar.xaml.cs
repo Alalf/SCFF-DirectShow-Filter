@@ -81,10 +81,10 @@ public partial class LayoutToolbar : UserControl, IUpdateByOptions {
   /// @param e 使用しない
   private void Add_Click(object sender, RoutedEventArgs e) {
     App.Profile.AddLayoutElement();
-    App.Profile.CurrentOutputLayoutElement.BoundRelativeLeft =
-      LayoutToolbar.BoundOffset * App.Profile.CurrentInputLayoutElement.Index;
-    App.Profile.CurrentOutputLayoutElement.BoundRelativeTop =
-      LayoutToolbar.BoundOffset * App.Profile.CurrentInputLayoutElement.Index;
+    App.Profile.CurrentMutable.SetBoundRelativeLeft =
+      LayoutToolbar.BoundOffset * App.Profile.Current.Index;
+    App.Profile.CurrentMutable.SetBoundRelativeTop =
+      LayoutToolbar.BoundOffset * App.Profile.Current.Index;
 
     this.Add.IsEnabled = App.Profile.CanAddLayoutElement();
     this.Remove.IsEnabled = App.Profile.CanRemoveLayoutElement();

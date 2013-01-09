@@ -32,7 +32,7 @@ public static class HitTest {
 
   /// レイアウト要素のうちボーダーを含めたRectを取得
   private static RelativeRect GetMaximumBoundRect(
-      Profile.InputLayoutElement layoutElement) {
+      ILayoutElementView layoutElement) {
     return new RelativeRect {
       X = layoutElement.BoundRelativeLeft -
           Constants.BorderRelativeThickness,
@@ -47,7 +47,7 @@ public static class HitTest {
 
   /// レイアウト要素のうちボーダーを含まないRectを取得
   private static RelativeRect GetMoveRect(
-      Profile.InputLayoutElement layoutElement) {
+      ILayoutElementView layoutElement) {
     return new RelativeRect {
       X = layoutElement.BoundRelativeLeft +
           Constants.BorderRelativeThickness,
@@ -68,7 +68,7 @@ public static class HitTest {
   /// @param layoutElement レイアウト要素
   /// @param mousePoint layoutElement内のマウス相対座標
   /// @return HitModes.SizeXXXのいずれか
-  private static HitModes GetHitMode(Profile.InputLayoutElement layoutElement,
+  private static HitModes GetHitMode(ILayoutElementView layoutElement,
       RelativePoint mousePoint) {
     // ---------------
     // |  |1     |2  |
@@ -125,8 +125,8 @@ public static class HitTest {
   public static bool TryHitTest(Profile profile, RelativePoint mousePoint,
       out int hitIndex, out HitModes hitMode) {
     // 計算途中の結果をまとめるスタック
-    var moveStack = new Stack<Profile.InputLayoutElement>();
-    var sizeStack = new Stack<Profile.InputLayoutElement>();
+    var moveStack = new Stack<ILayoutElementView>();
+    var sizeStack = new Stack<ILayoutElementView>();
 
     // レイアウト要素を線形探索
     foreach (var layoutElement in profile) {

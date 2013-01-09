@@ -91,10 +91,10 @@ public class AdditionalLayoutParameter {
   /// Fit=Falseの時のクリッピング領域の高さ
   public int ClippingHeightWithoutFit { get; set; }
 
-  /// 保存用: Desktop座標系でのクリッピング領域左上端のX座標
-  public int BackupDesktopClippingX { get; set; }
-  /// 保存用: Desktop座標系でのクリッピング領域左上端のY座標
-  public int BackupDesktopClippingY { get; set; }
+  /// 保存用: Screen座標系でのクリッピング領域左上端のX座標
+  public int BackupScreenClippingX { get; set; }
+  /// 保存用: Screen座標系でのクリッピング領域左上端のY座標
+  public int BackupScreenClippingY { get; set; }
   /// 保存用: クリッピング領域の幅
   public int BackupClippingWidth { get; set; }
   /// 保存用: クリッピング領域の高さ

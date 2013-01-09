@@ -27,7 +27,7 @@ public static class MoveAndSize {
   //===================================================================
 
   /// レイアウト要素を移動する
-  private static void Move(Profile.InputLayoutElement layoutElement,
+  private static void Move(ILayoutElementView layoutElement,
       HitModes hitMode,
       RelativePoint mousePoint, RelativeMouseOffset mouseOffset,
       SnapGuide snapGuide,
@@ -86,7 +86,7 @@ public static class MoveAndSize {
   //===================================================================
 
   /// レイアウト要素を拡大縮小する
-  private static void Size(Profile.InputLayoutElement layoutElement,
+  private static void Size(ILayoutElementView layoutElement,
       HitModes hitMode,
       RelativePoint mousePoint, RelativeMouseOffset mouseOffset,
       SnapGuide snapGuide,
@@ -160,7 +160,7 @@ public static class MoveAndSize {
   //===================================================================
 
   /// hitModeにあわせてレイアウト要素を移動 or 拡大縮小する
-  public static void MoveOrSize(Profile.InputLayoutElement layoutElement,
+  public static void MoveOrSize(ILayoutElementView layoutElement,
       HitModes hitMode,
       RelativePoint mousePoint, RelativeMouseOffset mouseOffset,
       SnapGuide snapGuide,

@@ -31,7 +31,7 @@ public class SnapGuide {
 
   /// コンストラクタ
   public SnapGuide(Profile profile) {
-    var currentIndex = profile.CurrentInputLayoutElement.Index;
+    var currentIndex = profile.Current.Index;
     foreach (var layoutElement in profile) {
       // currentにSnapさせる必要はない
       if (layoutElement.Index == currentIndex) continue;

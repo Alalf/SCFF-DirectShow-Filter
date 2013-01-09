@@ -38,59 +38,7 @@ public partial class Profile {
     this.message.LayoutParameters = new Interprocess.LayoutParameter[length];
     this.additionalLayoutParameters = new AdditionalLayoutParameter[length];
 
-    this.inputLayoutElements = new InputLayoutElement[Constants.MaxLayoutElementCount];
-    this.outputLayoutElements = new OutputLayoutElement[Constants.MaxLayoutElementCount];
-  }
-
-  //===================================================================
-  // OutputLayoutElementの操作
-  //===================================================================
-
-  /// レイアウトのインスタンスを生成
-  private OutputLayoutElement CreateLayoutElement(int index) {
-    var layoutParameter = new Interprocess.LayoutParameter();
-    layoutParameter.SWScaleConfig = new Interprocess.SWScaleConfig();
-    this.message.LayoutParameters[index] = layoutParameter;
-    this.additionalLayoutParameters[index] = new AdditionalLayoutParameter();
-
-    return new OutputLayoutElement(this, index);
-  }
-
-  /// レイアウトのゼロクリア
-  /// @param[in, out] layoutElement ゼロクリアされるレイアウト要素
-  private void ClearLayoutElement(OutputLayoutElement layoutElement) {
-    /// @todo(me) インスタンスを生成する形でゼロクリアしているが非効率的？
-    var layoutParameter = new Interprocess.LayoutParameter();
-    layoutParameter.SWScaleConfig = new Interprocess.SWScaleConfig();
-    this.message.LayoutParameters[layoutElement.Index] = layoutParameter;
-    this.additionalLayoutParameters[layoutElement.Index] = new AdditionalLayoutParameter();
-  }
-
-  /// レイアウトの初期値への設定
-  /// @pre layoutはゼロクリア済み
-  /// @param[in, out] layoutElement 初期値設定されるレイアウト要素
-  private void ResetLayoutElement(OutputLayoutElement layoutElement) {
-    this.ClearLayoutElement(layoutElement);
-
-    layoutElement.KeepAspectRatio = true;
-    layoutElement.RotateDirection = RotateDirections.NoRotate;
-    layoutElement.Stretch = true;
-    layoutElement.SWScaleFlags = SWScaleFlags.Area;
-    layoutElement.SWScaleIsFilterEnabled = false;
-
-    // プライマリモニタを表示
-    layoutElement.SetWindowToDesktop();
-    //layoutElement.SetWindowToDesktopListView();
-    layoutElement.ClippingXWithoutFit      = 0 - User32.GetSystemMetrics(User32.SM_XVIRTUALSCREEN);
-    layoutElement.ClippingYWithoutFit      = 0 - User32.GetSystemMetrics(User32.SM_YVIRTUALSCREEN);
-    layoutElement.ClippingWidthWithoutFit  = User32.GetSystemMetrics(User32.SM_CXSCREEN);
-    layoutElement.ClippingHeightWithoutFit = User32.GetSystemMetrics(User32.SM_CYSCREEN);
-    /// @todo(me) クリッピング座標のバックアップをどこで取ればいいのか迷い中
-    //layoutElement.TryUpdateBackupDesktopClippingParameters();
-    
-    layoutElement.Fit = false;
-    layoutElement.BoundRelativeRight = 1.0;
-    layoutElement.BoundRelativeBottom = 1.0;
+    this.layoutElements = new LayoutElement[Constants.MaxLayoutElementCount];
   }
 
   //===================================================================
@@ -117,8 +65,7 @@ public partial class Profile {
 
     // currentの生成
     this.currentIndex = 0;
-    var layoutElement = CreateLayoutElement(this.currentIndex);
-    this.ResetLayoutElement(layoutElement);
+    this.CurrentMutable.RestoreDefault();
   }
 
   //===================================================================
@@ -144,9 +91,7 @@ public partial class Profile {
 
     // currentを新たに生成したものに切り替える
     this.currentIndex = nextIndex;
-    var layoutElement = CreateLayoutElement(this.currentIndex);
-    this.ResetLayoutElement(layoutElement);
-    /// @todo(me) レイアウト配置時に毎回サイズと場所がかぶっているのはわかりづらいのでずらしたい
+    this.CurrentMutable.RestoreDefault();    
   }
 
   /// レイアウト要素を削除可能か
@@ -248,35 +193,35 @@ public partial class Profile {
   // イテレータ
   //===================================================================
 
-  /// 現在選択中のレイアウト要素を読み込み可能な状態で返す
-  public InputLayoutElement CurrentInputLayoutElement {
+  /// 現在選択中のレイアウト要素を参照モードで返す
+  public ILayoutElementView Current {
     get {  
-      if (this.inputLayoutElements[this.currentIndex] == null) {
-        this.inputLayoutElements[this.currentIndex] =
-            new InputLayoutElement(this, this.currentIndex);
+      if (this.layoutElements[this.currentIndex] == null) {
+        this.layoutElements[this.currentIndex] =
+            new LayoutElement(this, this.currentIndex);
       }
-      return this.inputLayoutElements[this.currentIndex];
+      return this.layoutElements[this.currentIndex];
     }
   }
 
-  /// 現在選択中のレイアウト要素を書き込み可能な状態で返す
-  public OutputLayoutElement CurrentOutputLayoutElement {
+  /// 現在選択中のレイアウト要素を参照・編集モードで返す
+  public LayoutElement CurrentMutable {
     get {  
-      if (this.outputLayoutElements[this.currentIndex] == null) {
-        this.outputLayoutElements[this.currentIndex] =
-            new OutputLayoutElement(this, this.currentIndex);
+      if (this.layoutElements[this.currentIndex] == null) {
+        this.layoutElements[this.currentIndex] =
+            new LayoutElement(this, this.currentIndex);
       }
-      return this.outputLayoutElements[this.currentIndex];
+      return this.layoutElements[this.currentIndex];
     }
   }
 
   /// foreach用Enumeratorを返す
-  public IEnumerator<InputLayoutElement> GetEnumerator() {
+  public IEnumerator<ILayoutElementView> GetEnumerator() {
     for (int i = 0; i < this.message.LayoutElementCount; ++i) {
-      if (this.inputLayoutElements[i] == null) {
-        this.inputLayoutElements[i] = new InputLayoutElement(this, i);
+      if (this.layoutElements[i] == null) {
+        this.layoutElements[i] = new LayoutElement(this, i);
       }
-      yield return this.inputLayoutElements[i];
+      yield return this.layoutElements[i];
     }
   }
 
@@ -287,11 +232,8 @@ public partial class Profile {
   /// 現在選択中のIndex
   private int currentIndex = 0;
 
-  /// 参照用イテレータのキャッシュ
-  private InputLayoutElement[] inputLayoutElements;
-
-  /// 操作用イテレータのキャッシュ
-  private OutputLayoutElement[] outputLayoutElements;
+  /// イテレータのキャッシュ
+  private LayoutElement[] layoutElements;
 
   /// レイアウトパラメータを格納したメッセージ
   ///

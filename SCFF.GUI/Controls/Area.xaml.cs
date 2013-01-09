@@ -62,7 +62,7 @@ public partial class Area : UserControl, IUpdateByProfile {
   private void Fit_Click(object sender, RoutedEventArgs e) {
     if (!this.Fit.IsChecked.HasValue) return;
 
-    App.Profile.CurrentOutputLayoutElement.Fit = (bool)this.Fit.IsChecked;
+    App.Profile.CurrentMutable.SetFit = (bool)this.Fit.IsChecked;
     this.UpdateByCurrentProfile();
   }
 
@@ -72,16 +72,16 @@ public partial class Area : UserControl, IUpdateByProfile {
   private void CommonAreaSelect(Rect boundScreenRect, WindowTypes nextWindowType) {
     // ダイアログの準備
     var dialog = new AreaSelectWindow();
-    dialog.Left   = App.Profile.CurrentInputLayoutElement.ScreenClippingXWithFit;
-    dialog.Top    = App.Profile.CurrentInputLayoutElement.ScreenClippingYWithFit;
-    dialog.Width  = App.Profile.CurrentInputLayoutElement.ClippingWidthWithFit;
-    dialog.Height = App.Profile.CurrentInputLayoutElement.ClippingHeightWithFit;
+    dialog.Left   = App.Profile.Current.ScreenClippingXWithFit;
+    dialog.Top    = App.Profile.Current.ScreenClippingYWithFit;
+    dialog.Width  = App.Profile.Current.ClippingWidthWithFit;
+    dialog.Height = App.Profile.Current.ClippingHeightWithFit;
 
     // カラーの変更
     switch (nextWindowType) {
       case WindowTypes.Normal: {
         // 更に現在のTypeによって色を分ける
-        switch (App.Profile.CurrentInputLayoutElement.WindowType) {
+        switch (App.Profile.Current.WindowType) {
           case WindowTypes.DesktopListView: {
             dialog.WindowBorder.BorderBrush = BrushesAndPens.CurrentDesktopListViewBrush;
             dialog.WindowGrid.Background = BrushesAndPens.DesktopListViewBrush;
@@ -135,11 +135,11 @@ public partial class Area : UserControl, IUpdateByProfile {
         break;
       }
       case WindowTypes.Desktop: {
-        App.Profile.CurrentOutputLayoutElement.SetWindowToDesktop();
+        App.Profile.CurrentMutable.SetWindowToDesktop();
         break;
       }
       case WindowTypes.DesktopListView: {
-        App.Profile.CurrentOutputLayoutElement.SetWindowToDesktopListView();
+        App.Profile.CurrentMutable.SetWindowToDesktopListView();
         break;
       }
       default : {
@@ -147,14 +147,14 @@ public partial class Area : UserControl, IUpdateByProfile {
         break;
       }
     }
-    App.Profile.CurrentOutputLayoutElement.Fit = false;
-    App.Profile.CurrentOutputLayoutElement.ClippingXWithoutFit =
+    App.Profile.CurrentMutable.SetFit = false;
+    App.Profile.CurrentMutable.SetClippingXWithoutFit =
         (int)(nextScreenRect.X - boundScreenRect.Left);
-    App.Profile.CurrentOutputLayoutElement.ClippingYWithoutFit = 
+    App.Profile.CurrentMutable.SetClippingYWithoutFit = 
         (int)(nextScreenRect.Y - boundScreenRect.Top);
-    App.Profile.CurrentOutputLayoutElement.ClippingWidthWithoutFit =
+    App.Profile.CurrentMutable.SetClippingWidthWithoutFit =
         (int)nextScreenRect.Width;
-    App.Profile.CurrentOutputLayoutElement.ClippingHeightWithoutFit =
+    App.Profile.CurrentMutable.SetClippingHeightWithoutFit =
         (int)nextScreenRect.Height;
     
     // コマンドをMainWindowに送信して関連するコントロールを更新
@@ -164,10 +164,10 @@ public partial class Area : UserControl, IUpdateByProfile {
   /// AreaSelect: Click
   private void AreaSelect_Click(object sender, RoutedEventArgs e) {
     var boundScreenRect = new Rect {
-      X = App.Profile.CurrentInputLayoutElement.ScreenWindowX,
-      Y = App.Profile.CurrentInputLayoutElement.ScreenWindowY,
-      Width = App.Profile.CurrentInputLayoutElement.WindowWidth,
-      Height = App.Profile.CurrentInputLayoutElement.WindowHeight
+      X = App.Profile.Current.ScreenWindowX,
+      Y = App.Profile.Current.ScreenWindowY,
+      Width = App.Profile.Current.WindowWidth,
+      Height = App.Profile.Current.WindowHeight
     };
     this.CommonAreaSelect(boundScreenRect, WindowTypes.Normal);
   }
@@ -233,44 +233,44 @@ public partial class Area : UserControl, IUpdateByProfile {
   /// ClippingX: TextChanged
   private void ClippingX_TextChanged(object sender, TextChangedEventArgs e) {
     var lowerBound = 0;
-    var upperBound = App.Profile.CurrentInputLayoutElement.WindowWidth;
+    var upperBound = App.Profile.Current.WindowWidth;
     int parsedValue;
     if (this.TryParseClippingParameters(this.ClippingX, lowerBound, upperBound, out parsedValue)) {
       // Profileに書き込み
-      App.Profile.CurrentOutputLayoutElement.ClippingXWithoutFit = parsedValue;
+      App.Profile.CurrentMutable.SetClippingXWithoutFit = parsedValue;
     }
   }
 
   /// ClippingY: TextChanged
   private void ClippingY_TextChanged(object sender, TextChangedEventArgs e) {
     var lowerBound = 0;
-    var upperBound = App.Profile.CurrentInputLayoutElement.WindowHeight;
+    var upperBound = App.Profile.Current.WindowHeight;
     int parsedValue;
     if (this.TryParseClippingParameters(this.ClippingY, lowerBound, upperBound, out parsedValue)) {
       // Profileに書き込み
-      App.Profile.CurrentOutputLayoutElement.ClippingYWithoutFit = parsedValue;
+      App.Profile.CurrentMutable.SetClippingYWithoutFit = parsedValue;
     }
   }
 
   /// ClippingWidth: TextChanged
   private void ClippingWidth_TextChanged(object sender, TextChangedEventArgs e) {
     var lowerBound = 0;
-    var upperBound = App.Profile.CurrentInputLayoutElement.WindowWidth;
+    var upperBound = App.Profile.Current.WindowWidth;
     int parsedValue;
     if (this.TryParseClippingParameters(this.ClippingWidth, lowerBound, upperBound, out parsedValue)) {
       // Profileに書き込み
-      App.Profile.CurrentOutputLayoutElement.ClippingWidthWithoutFit = parsedValue;
+      App.Profile.CurrentMutable.SetClippingWidthWithoutFit = parsedValue;
     }
   }
 
   /// ClippingHeight: TextChanged
   private void ClippingHeight_TextChanged(object sender, TextChangedEventArgs e) {
     var lowerBound = 0;
-    var upperBound = App.Profile.CurrentInputLayoutElement.WindowHeight;
+    var upperBound = App.Profile.Current.WindowHeight;
     int parsedValue;
     if (this.TryParseClippingParameters(this.ClippingHeight, lowerBound, upperBound, out parsedValue)) {
       // Profileに書き込み
-      App.Profile.CurrentOutputLayoutElement.ClippingHeightWithoutFit = parsedValue;
+      App.Profile.CurrentMutable.SetClippingHeightWithoutFit = parsedValue;
     }
   }
 
@@ -281,7 +281,7 @@ public partial class Area : UserControl, IUpdateByProfile {
   /// @copydoc IUpdateByProfile::UpdateByCurrentProfile
   public void UpdateByCurrentProfile() {
     // Enabled/Disabled
-    switch (App.Profile.CurrentInputLayoutElement.WindowType) {
+    switch (App.Profile.Current.WindowType) {
       case WindowTypes.Normal: {
         this.ListView.IsEnabled = true;
         this.Desktop.IsEnabled = true;
@@ -300,14 +300,14 @@ public partial class Area : UserControl, IUpdateByProfile {
     }
 
     // checkboxはclickがあるのでeventハンドラをattach/detachする必要はない
-    this.Fit.IsChecked = App.Profile.CurrentInputLayoutElement.Fit;
+    this.Fit.IsChecked = App.Profile.Current.Fit;
 
     // *Changed
     this.DetachProfileChangedEventHandlers();
-    this.ClippingX.Text = App.Profile.CurrentInputLayoutElement.ClippingXWithFit.ToString();
-    this.ClippingY.Text = App.Profile.CurrentInputLayoutElement.ClippingYWithFit.ToString();
-    this.ClippingWidth.Text = App.Profile.CurrentInputLayoutElement.ClippingWidthWithFit.ToString();
-    this.ClippingHeight.Text = App.Profile.CurrentInputLayoutElement.ClippingHeightWithFit.ToString();
+    this.ClippingX.Text = App.Profile.Current.ClippingXWithFit.ToString();
+    this.ClippingY.Text = App.Profile.Current.ClippingYWithFit.ToString();
+    this.ClippingWidth.Text = App.Profile.Current.ClippingWidthWithFit.ToString();
+    this.ClippingHeight.Text = App.Profile.Current.ClippingHeightWithFit.ToString();
     this.AttachProfileChangedEventHandlers();
   }
 

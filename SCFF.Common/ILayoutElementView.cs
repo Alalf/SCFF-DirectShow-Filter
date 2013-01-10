@@ -34,23 +34,11 @@ public interface ILayoutElementView {
   /// Windowハンドル
   UIntPtr Window { get; }
   /// 正常なWindowハンドルかどうか
-  bool IsWindowValid { get; } 
+  bool IsWindowValid { get; }
   /// @copydoc SCFF::Common::AdditionalLayoutParameter::WindowType
   WindowTypes WindowType { get; }
   /// @copydoc SCFF::Common::AdditionalLayoutParameter::WindowCaption
   string WindowCaption { get; }
-  /// Windowの幅
-  /// @pre IsWindowValid == True
-  int WindowWidth { get; }
-  /// Windowの高さ
-  /// @pre IsWindowValid == True
-  int WindowHeight { get;}
-  /// Screen座標系でのWindow左上端のX座標
-  /// @pre IsWindowValid == True
-  int ScreenWindowX { get; }
-  /// Screen座標系でのWindow左上端のY座標
-  /// @pre IsWindowValid == True
-  int ScreenWindowY { get; }
 
   //=================================================================
   // Area
@@ -80,13 +68,6 @@ public interface ILayoutElementView {
   /// Fitオプションを考慮したクリッピング領域の高さ
   /// @pre IsWindowValid == True
   int ClippingHeightWithFit { get; }
-
-  /// Screen座標系でのクリッピング領域左上端のX座標
-  /// @pre IsWindowValid == True
-  int ScreenClippingXWithFit { get; }
-  /// Screen座標系でのクリッピング領域左上端のY座標
-  /// @pre IsWindowValid == True
-  int ScreenClippingYWithFit { get; }
 
   //=================================================================
   // Options
@@ -179,6 +160,13 @@ public interface ILayoutElementView {
   int BoundHeight(int sampleHeight);
 
   //=================================================================
+  // Screen
+  //=================================================================
+
+  /// スクリーン座標系で表されたクリッピング領域(Fit考慮)を取得する
+  ScreenRect ScreenClippingRectWithFit { get; }
+
+  //=================================================================
   // Backup
   //=================================================================
 
@@ -187,8 +175,8 @@ public interface ILayoutElementView {
   /// @copydoc SCFF::Common::AdditionalLayoutParameter::BackupScreenClippingY
   int BackupScreenClippingY { get;} 
   /// @copydoc SCFF::Common::AdditionalLayoutParameter::BackupClippingWidth
-  int BackupDesktopClippingWidth { get; }
+  int BackupClippingWidth { get; }
   /// @copydoc SCFF::Common::AdditionalLayoutParameter::BackupClippingHeight
-  int BackupDesktopClippingHeight { get; }
+  int BackupClippingHeight { get; }
 }
 }   // namespace SCFF.Common

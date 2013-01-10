@@ -86,17 +86,6 @@ public partial class TargetWindow : UserControl, IUpdateByProfile {
     }
     App.Profile.Current.SetFit = true;
 
-    // Clipping*WithoutFitの補正
-    // とりあえず0,0を原点にもってくる(ウィンドウが変われば左上座標に意味はなくなるから)
-    App.Profile.Current.SetClippingXWithoutFit = 0;
-    App.Profile.Current.SetClippingYWithoutFit = 0;
-    // Width/HeightはFitした時の値をとりあえず上限とする
-    App.Profile.Current.SetClippingWidthWithoutFit = Math.Min(
-      App.Profile.CurrentView.ClippingWidthWithoutFit,
-      App.Profile.CurrentView.WindowWidth);
-    App.Profile.Current.SetClippingHeightWithoutFit = Math.Min(
-      App.Profile.CurrentView.ClippingHeightWithoutFit,
-      App.Profile.CurrentView.WindowHeight);
     App.Profile.Current.Close();
 
     // コマンドをMainWindowに送信して関連するコントロールを更新

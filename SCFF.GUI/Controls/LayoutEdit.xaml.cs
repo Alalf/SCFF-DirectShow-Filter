@@ -493,21 +493,8 @@ public partial class LayoutEdit
 
   /// LayoutElementの内容からRequestを生成してScreenCaptureTimerに画像生成を依頼
   private void SendRequest(ILayoutElementView layoutElement, bool forceUpdate) {
-    Debug.Assert(layoutElement.IsWindowValid);
-    /// @todo(me) どうみてもClippingXで値変換が入ってるのはおかしい！
-    var request = new ScreenCaptureRequest(
-        layoutElement.Index,
-        layoutElement.Window,
-        layoutElement.WindowType == WindowTypes.Desktop ?
-            layoutElement.ScreenClippingXWithFit :
-            layoutElement.ClippingXWithFit,
-        layoutElement.WindowType == WindowTypes.Desktop ?
-            layoutElement.ScreenClippingYWithFit :
-            layoutElement.ClippingYWithFit,
-        layoutElement.ClippingWidthWithFit,
-        layoutElement.ClippingHeightWithFit,
-        layoutElement.ShowCursor,
-        layoutElement.ShowLayeredWindow);
+    Debug.Assert(layoutElement.IsWindowValid, "Invalid Window", "LayoutEdit.SendRequest");
+    var request = new ScreenCaptureRequest(layoutElement);
     this.screenCaptureTimer.SendRequest(request, forceUpdate);
   }
 

@@ -21,6 +21,7 @@
 namespace SCFF.GUI.Controls {
 
 using System;
+using System.Diagnostics;
 using System.Windows.Controls;
 using SCFF.Common;
 
@@ -53,7 +54,10 @@ public partial class LayoutParameter
   /// @param sender 使用しない
   /// @param e 使用しない
   private void Fit_Click(object sender, System.Windows.RoutedEventArgs e) {
-    if (!App.Profile.CurrentView.IsWindowValid) return;
+    if (!App.Profile.CurrentView.IsWindowValid) {
+      Debug.WriteLine("Invalid Window", "LayoutParameter.Fit_Click");
+      return;
+    }
 
     // Profileの設定を変える
     App.Profile.Current.Open();

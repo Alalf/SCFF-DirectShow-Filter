@@ -93,16 +93,17 @@ public partial class Profile {
 
       // プライマリモニタを表示
       this.SetWindowToDesktop();
-      this.SetClippingXWithoutFit       = 0 - User32.GetSystemMetrics(User32.SM_XVIRTUALSCREEN);
-      this.SetClippingYWithoutFit       = 0 - User32.GetSystemMetrics(User32.SM_YVIRTUALSCREEN);
+      this.SetFit = false;
+      this.SetClippingXWithoutFit       = 0;
+      this.SetClippingYWithoutFit       = 0;
       this.SetClippingWidthWithoutFit   = User32.GetSystemMetrics(User32.SM_CXSCREEN);
       this.SetClippingHeightWithoutFit  = User32.GetSystemMetrics(User32.SM_CYSCREEN);
     
-      this.SetFit = false;
-
-      /// @todo(me) (IndexでRelativeLeft/Topをずらす)
-      ///           レイアウト配置時に毎回サイズと場所がかぶっているのはわかりづらいのでずらしたい
-
+      // 初期値を少しずつずらす
+      this.SetBoundRelativeLeft =
+          Constants.MinimumBoundRelativeSize * this.Index;
+      this.SetBoundRelativeTop =
+          Constants.MinimumBoundRelativeSize * this.Index;
       this.SetBoundRelativeRight = 1.0;
       this.SetBoundRelativeBottom = 1.0;
     }
@@ -131,23 +132,10 @@ public partial class Profile {
         }
       }
     }
+
     /// @copydoc ILayoutElementView::IsWindowValid
     public bool IsWindowValid {
-      get {
-        switch(this.WindowType) {
-          case WindowTypes.Normal: {
-            return (this.Window != UIntPtr.Zero && User32.IsWindow(this.Window));
-          }
-          case WindowTypes.DesktopListView:
-          case WindowTypes.Desktop: {
-            return true;
-          }
-          default: {
-            Debug.Fail("Invalid WindowTypes", "LayoutElement.IsWindowValid");
-            return false;
-          }
-        }
-      }
+      get { return Utilities.IsWindowValid(this.WindowType, this.Window); }
     }
 
     /// @copydoc ILayoutElementView::WindowType
@@ -160,26 +148,22 @@ public partial class Profile {
       get { return this.profile.additionalLayoutParameters[this.Index].WindowCaption; }
     }
 
-    /// @copydoc ILayoutElementView::WindowWidth
-    public int WindowWidth {
-      get { return this.windowSize.Item1; }
-    }
-    /// @copydoc ILayoutElementView::WindowHeight
-    public int WindowHeight {
-      get { return this.windowSize.Item2; }
-    }
-
-    /// @copydoc ILayoutElementView::ScreenWindowX
-    public int ScreenWindowX {
-      get { return this.ClientToScreen(0, 0).Item1; }
-    }
-    /// @copydoc ILayoutElementView::ScreenWindowY
-    public int ScreenWindowY {
-      get { return this.ClientToScreen(0, 0).Item2; }
+    // Clipping*WithoutFitの補正
+    private void FixClippingWithoutFit() {
+      this.SetClippingXWithoutFit = Utilities.GetWindowOrigin(this.WindowType).Item1;
+      this.SetClippingYWithoutFit = Utilities.GetWindowOrigin(this.WindowType).Item2;
+      this.SetClippingWidthWithoutFit = Math.Min(
+          this.ClippingWidthWithoutFit,
+          Utilities.GetWindowSize(this.WindowType, this.Window).Item1);
+      this.SetClippingHeightWithoutFit = Math.Min(
+          this.ClippingHeightWithoutFit,
+          Utilities.GetWindowSize(this.WindowType, this.Window).Item2);
     }
 
     /// @copydoc ILayoutElement::SetWindow
     public void SetWindow(UIntPtr window) {
+      var windowChanged = this.WindowType != WindowTypes.Normal;
+
       this.profile.additionalLayoutParameters[this.Index].WindowType = WindowTypes.Normal;
       this.profile.message.LayoutParameters[this.Index].Window = window.ToUInt64();
 
@@ -190,18 +174,34 @@ public partial class Profile {
         windowCaption = className.ToString();
       }
       this.profile.additionalLayoutParameters[this.Index].WindowCaption = windowCaption;
+
+      if (windowChanged) {
+        this.FixClippingWithoutFit();
+      }
     }
     /// @copydoc ILayoutElement::SetWindowToDesktop
     public void SetWindowToDesktop() {
+      var windowChanged = this.WindowType != WindowTypes.Desktop;
+
       this.profile.additionalLayoutParameters[this.Index].WindowType = WindowTypes.Desktop;
       this.profile.message.LayoutParameters[this.Index].Window = 0;
       this.profile.additionalLayoutParameters[this.Index].WindowCaption = "(Desktop)";
+
+      if (windowChanged) {
+        this.FixClippingWithoutFit();
+      }
     }
     /// @copydoc ILayoutElement::SetWindowToDesktopListView
     public void SetWindowToDesktopListView() {
+      var windowChanged = this.WindowType != WindowTypes.DesktopListView;
+
       this.profile.additionalLayoutParameters[this.Index].WindowType = WindowTypes.DesktopListView;
       this.profile.message.LayoutParameters[this.Index].Window = 0;
       this.profile.additionalLayoutParameters[this.Index].WindowCaption = "(DesktopListView)";
+
+      if (windowChanged) {
+        this.FixClippingWithoutFit();
+      }
     }
 
     //=================================================================
@@ -230,28 +230,31 @@ public partial class Profile {
     }
     /// @copydoc ILayoutElementView::ClippingXWithFit
     public int ClippingXWithFit {
-      get { return this.Fit ? 0 : this.ClippingXWithoutFit; }
+      get {
+        return this.Fit ? Utilities.GetWindowOrigin(this.WindowType).Item1
+                        : this.ClippingXWithoutFit;
+      }
     }
     /// @copydoc ILayoutElementView::ClippingYWithFit
     public int ClippingYWithFit {
-      get { return this.Fit ? 0 : this.ClippingYWithoutFit; }
+      get {
+        return this.Fit ? Utilities.GetWindowOrigin(this.WindowType).Item2
+                        : this.ClippingYWithoutFit;
+      }
     }
     /// @copydoc ILayoutElementView::ClippingWidthWithFit
     public int ClippingWidthWithFit {
-      get { return this.Fit ? this.WindowWidth : this.ClippingWidthWithoutFit; }
+      get {
+        return this.Fit ? Utilities.GetWindowSize(this.WindowType, this.Window).Item1
+                        : this.ClippingWidthWithoutFit;
+      }
     }
     /// @copydoc ILayoutElementView::ClippingHeightWithFit
     public int ClippingHeightWithFit {
-      get { return this.Fit ? this.WindowHeight : this.ClippingHeightWithoutFit; }
-    }
-
-    /// @copydoc ILayoutElementView::ScreenClippingXWithFit
-    public int ScreenClippingXWithFit {
-      get { return this.ClientToScreen(this.ClippingXWithFit, this.ClippingYWithFit).Item1; }
-    }
-    /// @copydoc ILayoutElementView::ScreenClippingYWithFit
-    public int ScreenClippingYWithFit {
-      get { return this.ClientToScreen(this.ClippingXWithFit, this.ClippingYWithFit).Item2; }
+      get {
+        return this.Fit ? Utilities.GetWindowSize(this.WindowType, this.Window).Item2
+                        : this.ClippingHeightWithoutFit;
+      }
     }
 
     /// @copydoc ILayoutElement::SetFit
@@ -470,7 +473,7 @@ public partial class Profile {
     }
     /// @copydoc ILayoutElement::FitBoundRelativeRect
     public void FitBoundRelativeRect(int sampleWidth, int sampleHeight) {
-      Debug.Assert(this.IsWindowValid);
+      Debug.Assert(this.IsWindowValid, "Invalid Window", "LayoutElement.FitBoundRelativeRect");
 
       // サンプル座標系でのパディングサイズを求める
       double paddingTop, paddingBottom, paddingLeft, paddingRight;
@@ -509,6 +512,61 @@ public partial class Profile {
     }
 
     //=================================================================
+    // Screen
+    //=================================================================
+
+    /// @copydoc ILayoutElementView::ScreenClippingRectWithFit
+    public ScreenRect ScreenClippingRectWithFit {
+      get {
+        var screenPoint = Utilities.ClientToScreen(
+            this.WindowType, this.Window, this.ClippingXWithFit, this.ClippingYWithFit);
+        return new ScreenRect(screenPoint.X, screenPoint.Y,
+            this.ClippingWidthWithFit, this.ClippingHeightWithFit);
+      }
+    }
+
+    /// @copydoc ILayoutElement::SetClippingRect
+    public void SetClippingRect(ScreenRect intersectRect) {
+      // ウィンドウの領域とIntersectをとる
+      var boundScreenRect = Utilities.GetWindowScreenRect(this.WindowType, this.Window);
+      var nextScreenRect = intersectRect.Intersect(boundScreenRect);
+      if (nextScreenRect == null) {
+        Debug.WriteLine("No Intersection", "LayoutElement.SetClippingRect");
+        return;
+      }
+
+      // プロパティを変更
+      this.SetFit = false;
+      switch (this.WindowType) {
+        case WindowTypes.Normal: {
+          // Screen->Client座標系変換
+          this.SetClippingXWithoutFit = nextScreenRect.X - boundScreenRect.X;
+          this.SetClippingYWithoutFit = nextScreenRect.Y - boundScreenRect.Y;
+          break;
+        }
+        case WindowTypes.Desktop: {
+          // 変換の必要なし
+          this.SetClippingXWithoutFit = nextScreenRect.X;
+          this.SetClippingYWithoutFit = nextScreenRect.Y;
+          break;
+        }
+        case WindowTypes.DesktopListView: {
+          // Screen->Client座標系変換
+          this.SetClippingXWithoutFit = nextScreenRect.X - boundScreenRect.X;
+          this.SetClippingYWithoutFit = nextScreenRect.Y - boundScreenRect.Y;
+          break;
+        }
+        default : {
+          Debug.Fail("Invalid WindowTypes", "LayoutElement.SetClippingRect");
+          break;
+        }
+      }
+      // Width/Heightは共通
+      this.SetClippingWidthWithoutFit = nextScreenRect.Width;
+      this.SetClippingHeightWithoutFit = nextScreenRect.Height;
+    }
+
+    //=================================================================
     // Backup
     //=================================================================
 
@@ -520,70 +578,21 @@ public partial class Profile {
     public int BackupScreenClippingY {
       get { return this.profile.additionalLayoutParameters[this.Index].BackupScreenClippingY; }
     }
-    /// @copydoc ILayoutElementView::BackupDesktopClippingWidth
-    public int BackupDesktopClippingWidth {
+    /// @copydoc ILayoutElementView::BackupClippingWidth
+    public int BackupClippingWidth {
       get { return this.profile.additionalLayoutParameters[this.Index].BackupClippingWidth; }
     }
-    /// @copydoc ILayoutElementView::BackupDesktopClippingHeight
-    public int BackupDesktopClippingHeight {
+    /// @copydoc ILayoutElementView::BackupClippingHeight
+    public int BackupClippingHeight {
       get { return this.profile.additionalLayoutParameters[this.Index].BackupClippingHeight; }
     }
     /// @copydoc ILayoutElement::UpdateBackupParameters
     public void UpdateBackupParameters() {
-      this.profile.additionalLayoutParameters[this.Index].BackupScreenClippingX = this.ScreenClippingXWithFit;
-      this.profile.additionalLayoutParameters[this.Index].BackupScreenClippingY = this.ScreenClippingYWithFit;
-      this.profile.additionalLayoutParameters[this.Index].BackupClippingWidth = this.ClippingWidthWithFit;
-      this.profile.additionalLayoutParameters[this.Index].BackupClippingHeight = this.ClippingHeightWithFit;
-    }
-
-    //=================================================================
-    // private メソッド
-    //=================================================================
-
-    /// Windowの幅をタイプ別に取得する
-    private Tuple<int, int> windowSize {
-      get {
-        switch (this.WindowType) {
-          case WindowTypes.Normal: {
-            Debug.Assert(this.IsWindowValid, "Invalid Window", "LayoutElement.windowSize");
-            User32.RECT windowRect;
-            User32.GetClientRect(this.Window, out windowRect);
-            return new Tuple<int,int>(windowRect.Right - windowRect.Left,
-                                      windowRect.Bottom - windowRect.Top);
-          }
-          case WindowTypes.DesktopListView:
-          case WindowTypes.Desktop: {
-            return new Tuple<int,int>(User32.GetSystemMetrics(User32.SM_CXVIRTUALSCREEN),
-                                      User32.GetSystemMetrics(User32.SM_CYVIRTUALSCREEN));
-          }
-          default: {
-            Debug.Fail("Invalid WindowTypes", "LayoutElement.windowSize");
-            return null;
-          }
-        }
-      }
-    }
-
-    /// Client座標系のX座標をWindowタイプ別にScreen座標系に変換する
-    private Tuple<int, int> ClientToScreen(int clientX, int clientY) {
-      switch (this.WindowType) {
-        case WindowTypes.Normal: {
-          Debug.Assert(this.IsWindowValid, "Invalid Window", "LayoutElement.ClientToScreen");
-          User32.POINT windowPoint = new User32.POINT { X = clientX, Y = clientY };
-          User32.ClientToScreen(this.Window, ref windowPoint);
-          return new Tuple<int, int>(windowPoint.X, windowPoint.Y);
-        }
-        case WindowTypes.DesktopListView:
-        case WindowTypes.Desktop: {
-          //　仮想デスクトップ座標なので補正を戻す
-          return new Tuple<int, int>(clientX + User32.GetSystemMetrics(User32.SM_XVIRTUALSCREEN),
-                                     clientY + User32.GetSystemMetrics(User32.SM_YVIRTUALSCREEN));
-        }
-        default: {
-          Debug.Fail("Invalid WindowTypes", "LayoutElement.ClientToScreen");
-          return null;
-        }
-      }
+      var screenRect = this.ScreenClippingRectWithFit;
+      this.profile.additionalLayoutParameters[this.Index].BackupScreenClippingX = screenRect.X;
+      this.profile.additionalLayoutParameters[this.Index].BackupScreenClippingY = screenRect.Y;
+      this.profile.additionalLayoutParameters[this.Index].BackupClippingWidth = screenRect.Width;
+      this.profile.additionalLayoutParameters[this.Index].BackupClippingHeight = screenRect.Height;
     }
   }
 }

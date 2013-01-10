@@ -68,6 +68,8 @@ public partial class Area : UserControl, IUpdateByProfile {
     App.Profile.Current.SetFit = (bool)this.Fit.IsChecked;
     App.Profile.Current.Close();
     this.UpdateByCurrentProfile();
+
+    UpdateCommands.UpdateLayoutEditByCurrentProfile.Execute(null, null);
   }
 
   //-------------------------------------------------------------------
@@ -118,18 +120,24 @@ public partial class Area : UserControl, IUpdateByProfile {
   }
 
   /// 現在編集中のレイアウト要素のクリッピング領域/Fitオプションを変更する
-  private void CommonAreaSelect(WindowTypes nextWindowType) {
+  private void CommonAreaSelect(bool changeWindowType = false,
+                                WindowTypes nextWindowType = WindowTypes.Normal) {
     if (!App.Profile.CurrentView.IsWindowValid) {
       Debug.WriteLine("Invalid Window", "Area.CommonAreaSelect");
       return;
     }
 
+    //-----------------------------------------------------------------
     // ダイアログの準備
+    //-----------------------------------------------------------------
     var dialog = new AreaSelectWindow();
-    dialog.Left   = App.Profile.CurrentView.ScreenClippingXWithFit;
-    dialog.Top    = App.Profile.CurrentView.ScreenClippingYWithFit;
-    dialog.Width  = App.Profile.CurrentView.ClippingWidthWithFit;
-    dialog.Height = App.Profile.CurrentView.ClippingHeightWithFit;
+
+    // サイズ
+    var screenRect = App.Profile.CurrentView.ScreenClippingRectWithFit;
+    dialog.Left   = screenRect.X;
+    dialog.Top    = screenRect.Y;
+    dialog.Width  = screenRect.Width;
+    dialog.Height = screenRect.Height;
 
     // カラーの変更
     Brush border, background;
@@ -143,51 +151,27 @@ public partial class Area : UserControl, IUpdateByProfile {
     var result = dialog.ShowDialog();
     if (!result.HasValue || !(bool)result) return;
 
-    // 結果をRECTにまとめる
-    var nextScreenRect = new Rect(dialog.Left, dialog.Top, dialog.Width, dialog.Height);
+    // 結果をScreenRectにまとめる
+    var nextScreenRect = new ScreenRect(
+        (int)dialog.Left, (int)dialog.Top, (int)dialog.Width, (int)dialog.Height);
 
-    // ウィンドウの領域とIntersectをとる
-    var boundScreenRect = Area.VirtualScreenRect;
-    if (nextWindowType == WindowTypes.Normal) {
-      boundScreenRect = new Rect {
-        X = App.Profile.CurrentView.ScreenWindowX,
-        Y = App.Profile.CurrentView.ScreenWindowY,
-        Width = App.Profile.CurrentView.WindowWidth,
-        Height = App.Profile.CurrentView.WindowHeight
-      };
-    }
-    if (!nextScreenRect.IntersectsWith(boundScreenRect)) return;
-    nextScreenRect.Intersect(boundScreenRect);
-
-    // 結果をProfileに書き込み
+    // Profile更新
     App.Profile.Current.Open();
-    switch (nextWindowType) {
-      case WindowTypes.Normal: {
-        // nop
-        break;
-      }
-      case WindowTypes.Desktop: {
-        App.Profile.Current.SetWindowToDesktop();
-        break;
-      }
-      case WindowTypes.DesktopListView: {
-        App.Profile.Current.SetWindowToDesktopListView();
-        break;
-      }
-      default : {
-        Debug.Fail("Invalid WindowTypes", "Area.CommonAreaSelect");
-        break;
+    if (changeWindowType) {
+      Debug.Assert(nextWindowType == WindowTypes.Desktop ||
+                   nextWindowType == WindowTypes.DesktopListView);
+      switch (nextWindowType) {
+        case WindowTypes.DesktopListView: {
+          App.Profile.Current.SetWindowToDesktopListView();
+          break;
+        }
+        case WindowTypes.Desktop: {
+          App.Profile.Current.SetWindowToDesktop();
+          break;
+        }
       }
     }
-    App.Profile.Current.SetFit = false;
-    App.Profile.Current.SetClippingXWithoutFit =
-        (int)(nextScreenRect.X - boundScreenRect.Left);
-    App.Profile.Current.SetClippingYWithoutFit = 
-        (int)(nextScreenRect.Y - boundScreenRect.Top);
-    App.Profile.Current.SetClippingWidthWithoutFit =
-        (int)nextScreenRect.Width;
-    App.Profile.Current.SetClippingHeightWithoutFit =
-        (int)nextScreenRect.Height;
+    App.Profile.Current.SetClippingRect(nextScreenRect);
     App.Profile.Current.Close();
 
     // コマンドをMainWindowに送信して関連するコントロールを更新
@@ -196,17 +180,17 @@ public partial class Area : UserControl, IUpdateByProfile {
 
   /// AreaSelect: Click
   private void AreaSelect_Click(object sender, RoutedEventArgs e) {
-    this.CommonAreaSelect(WindowTypes.Normal);
+    this.CommonAreaSelect();
   }
 
   /// ListView: Click
   private void ListView_Click(object sender, RoutedEventArgs e) {
-    this.CommonAreaSelect(WindowTypes.DesktopListView);
+    this.CommonAreaSelect(true, WindowTypes.DesktopListView);
   }
 
   /// Desktop: Click
   private void Desktop_Click(object sender, RoutedEventArgs e) {
-    this.CommonAreaSelect(WindowTypes.Desktop);
+    this.CommonAreaSelect(true, WindowTypes.Desktop);
   }
 
   //-------------------------------------------------------------------
@@ -261,7 +245,7 @@ public partial class Area : UserControl, IUpdateByProfile {
   private void ClippingX_TextChanged(object sender, TextChangedEventArgs e) {
     if (!this.IsEnabledByProfile) return;
     var lowerBound = 0;
-    var upperBound = App.Profile.CurrentView.WindowWidth;
+    var upperBound = 9999;
     int parsedValue;
     if (this.TryParseClippingParameters(this.ClippingX, lowerBound, upperBound, out parsedValue)) {
       // Profileに書き込み
@@ -275,7 +259,7 @@ public partial class Area : UserControl, IUpdateByProfile {
   private void ClippingY_TextChanged(object sender, TextChangedEventArgs e) {
     if (!this.IsEnabledByProfile) return;
     var lowerBound = 0;
-    var upperBound = App.Profile.CurrentView.WindowHeight;
+    var upperBound = 9999;
     int parsedValue;
     if (this.TryParseClippingParameters(this.ClippingY, lowerBound, upperBound, out parsedValue)) {
       // Profileに書き込み
@@ -289,7 +273,7 @@ public partial class Area : UserControl, IUpdateByProfile {
   private void ClippingWidth_TextChanged(object sender, TextChangedEventArgs e) {
     if (!this.IsEnabledByProfile) return;
     var lowerBound = 0;
-    var upperBound = App.Profile.CurrentView.WindowWidth;
+    var upperBound = 9999;
     int parsedValue;
     if (this.TryParseClippingParameters(this.ClippingWidth, lowerBound, upperBound, out parsedValue)) {
       // Profileに書き込み
@@ -303,7 +287,7 @@ public partial class Area : UserControl, IUpdateByProfile {
   private void ClippingHeight_TextChanged(object sender, TextChangedEventArgs e) {
     if (!this.IsEnabledByProfile) return;
     var lowerBound = 0;
-    var upperBound = App.Profile.CurrentView.WindowHeight;
+    var upperBound = 9999;
     int parsedValue;
     if (this.TryParseClippingParameters(this.ClippingHeight, lowerBound, upperBound, out parsedValue)) {
       // Profileに書き込み

@@ -20,6 +20,9 @@
 
 namespace SCFF.Common {
 
+using System;
+using System.Diagnostics;
+
 //=====================================================================
 // 列挙型
 //=====================================================================
@@ -73,13 +76,13 @@ public enum RotateDirections {
 //=====================================================================
 
 //---------------------------------------------------------------------
-// サンプル座標系のPoint/Rect etc.
+// スクリーン座標系のPoint/Rect etc.
 //---------------------------------------------------------------------
 
-/// サンプル座標系のPoint
-public class SamplePoint {
+/// スクリーン座標系のPoint
+public class ScreenPoint {
   /// コンストラクタ
-  public SamplePoint(int x, int y) {
+  public ScreenPoint(int x, int y) {
     this.X = x;
     this.Y = y;
   }
@@ -89,10 +92,10 @@ public class SamplePoint {
   public int Y { get; private set; }
 }
 
-/// サンプル座標系のRect
-public class SampleRect {
+/// スクリーン座標系のRect
+public class ScreenRect {
   /// コンストラクタ
-  public SampleRect(int x, int y, int width, int height) {
+  public ScreenRect(int x, int y, int width, int height) {
     this.X = x;
     this.Y = y;
     this.Width = width;
@@ -106,6 +109,25 @@ public class SampleRect {
   public int Width { get; private set; }
   /// 高さ
   public int Height { get; private set; }
+  /// 右下端のx座標
+  public int Right { get { return this.X + this.Width; } }
+  /// 右下端のy座標
+  public int Bottom { get { return this.Y + this.Height; } }
+
+  /// 交差判定
+  public bool IntersectsWith(ScreenRect other) {
+    return !(this.X > other.Right || other.X > this.Right ||
+             this.Y > other.Bottom || other.Y > this.Bottom);
+  }
+  /// 交差
+  public ScreenRect Intersect(ScreenRect other) {
+    if (!this.IntersectsWith(other)) return null;
+    var newX = Math.Max(this.X, other.X);
+    var newY = Math.Max(this.Y, other.Y);
+    var newRight = Math.Min(this.Right, other.Right);
+    var newBottom = Math.Min(this.Bottom, other.Bottom);
+    return new ScreenRect(newX, newY, newRight - newX, newBottom - newY);
+  }
 }
 
 //---------------------------------------------------------------------
@@ -161,11 +183,15 @@ public class RelativeRect {
   public double Width { get; private set; }
   /// 高さ
   public double Height { get; private set; }
+  /// 右下端のx座標
+  public double Right { get { return this.X + this.Width; } }
+  /// 右下端のy座標
+  public double Bottom { get { return this.Y + this.Height; } }
 
   /// 含有判定
   public bool Contains(RelativePoint point) {
-    return this.X <= point.X && point.X <= this.X + this.Width &&
-           this.Y <= point.Y && point.Y <= this.Y + this.Height;
+    return this.X <= point.X && point.X <= this.Right &&
+           this.Y <= point.Y && point.Y <= this.Bottom;
   }
 }
 

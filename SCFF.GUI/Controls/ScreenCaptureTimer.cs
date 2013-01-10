@@ -47,9 +47,13 @@ public class ScreenCaptureTimer {
       if (this.isSuspended) return;
 
       // キャプチャ
-      foreach (var request in this.requests) {
-        if (request == null) continue;
-        this.cachedBitmaps[request.Index] = ScreenCapture.Capture(request);
+      for (int i = 0; i < Common.Constants.MaxLayoutElementCount; ++i) {
+        if (this.requests[i] == null) {
+          // 明示的に参照を外す
+          this.cachedBitmaps[i] = null;
+        } else {
+          this.cachedBitmaps[i] = ScreenCapture.Capture(this.requests[i]);
+        }
       }
     }
   }
@@ -82,7 +86,7 @@ public class ScreenCaptureTimer {
     lock (this.sharedLock) {
       this.isSuspended = true;
       // すべての格納されたBitmapを削除する
-      this.cachedBitmaps = new BitmapSource[Common.Constants.MaxLayoutElementCount];
+      Array.Clear(this.cachedBitmaps, 0, Common.Constants.MaxLayoutElementCount);
     }
   }
 
@@ -123,7 +127,7 @@ public class ScreenCaptureTimer {
   public void ClearRequests() {
     Debug.WriteLine("ClearRequests", "ScreenCaptureTimer");
     lock (this.sharedLock) {
-      this.requests = new ScreenCaptureRequest[Common.Constants.MaxLayoutElementCount];
+      Array.Clear(this.requests, 0, Common.Constants.MaxLayoutElementCount);
     }
   }
 

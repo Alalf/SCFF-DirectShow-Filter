@@ -30,18 +30,15 @@ public class ScreenCaptureRequest {
   //===================================================================
 
   /// コンストラクタ
-  public ScreenCaptureRequest(int index, UIntPtr window,
-      int clippingX, int clippingY,
-      int clippingWidth, int clippingHeight,
-      bool showCursor, bool showLayeredWindow) {
-    this.Index = index;
-    this.Window = window;
-    this.ClippingX = clippingX;
-    this.ClippingY = clippingY;
-    this.ClippingWidth = clippingWidth;
-    this.ClippingHeight = clippingHeight;
-    this.ShowCursor = showCursor;
-    this.ShowLayeredWindow = showLayeredWindow;
+  public ScreenCaptureRequest(ILayoutElementView layoutElement) {
+    this.Index = layoutElement.Index;
+    this.Window = layoutElement.Window;
+    this.ClippingX = layoutElement.ClippingXWithFit;
+    this.ClippingY = layoutElement.ClippingYWithFit;
+    this.ClippingWidth = layoutElement.ClippingWidthWithFit;
+    this.ClippingHeight = layoutElement.ClippingHeightWithFit;
+    this.ShowCursor = layoutElement.ShowCursor;
+    this.ShowLayeredWindow = layoutElement.ShowLayeredWindow;
   }
 
   //===================================================================

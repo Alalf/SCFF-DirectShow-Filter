@@ -73,20 +73,11 @@ public partial class LayoutToolbar : UserControl, IUpdateByOptions {
     UpdateCommands.UpdateLayoutEditByOptions.Execute(null, null);
   }
 
-  /// レイアウト要素追加時に重なっていると醜いので少しずらす用のオフセット
-  private const double BoundOffset = 0.05;
-
   /// Add: Click
   /// @param sender 使用しない
   /// @param e 使用しない
   private void Add_Click(object sender, RoutedEventArgs e) {
     App.Profile.Add();
-    App.Profile.Current.Open();
-    App.Profile.Current.SetBoundRelativeLeft =
-      LayoutToolbar.BoundOffset * App.Profile.CurrentView.Index;
-    App.Profile.Current.SetBoundRelativeTop =
-      LayoutToolbar.BoundOffset * App.Profile.CurrentView.Index;
-    App.Profile.Current.Close();
 
     this.Add.IsEnabled = App.Profile.CanAdd;
     this.Remove.IsEnabled = App.Profile.CanRemove;

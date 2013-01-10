@@ -121,6 +121,13 @@ public interface ILayoutElement {
   void FitBoundRelativeRect(int sampleWidth, int sampleHeight);
 
   //=================================================================
+  // Screen
+  //=================================================================
+
+  /// スクリーン座標系のRectとIntersectを取り、新しいClipping領域に設定する。
+  void SetClippingRect(ScreenRect intersectRect);
+
+  //=================================================================
   // Backup
   //=================================================================
 

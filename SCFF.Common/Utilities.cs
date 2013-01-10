@@ -21,11 +21,112 @@
 namespace SCFF.Common {
 
 using System;
+using System.Diagnostics;
 using System.Text;
 using SCFF.Common.Ext;
 
 /// SCFF.Commonモジュール共通で利用する機能
 public static class Utilities {
+  //===================================================================
+  // WindowType/Window別の機能
+  //===================================================================
+
+  /// Windowハンドルが正常かどうか
+  public static bool IsWindowValid(WindowTypes windowType, UIntPtr window) {
+    switch(windowType) {
+      case WindowTypes.Normal: {
+        return (window != UIntPtr.Zero && User32.IsWindow(window));
+      }
+      case WindowTypes.DesktopListView:
+      case WindowTypes.Desktop: {
+        return true;
+      }
+      default: {
+        Debug.Fail("Invalid WindowTypes", "LayoutElement.IsWindowValid");
+        return false;
+      }
+    }
+  }
+
+  /// Windowの左上端の点を取得する
+  /// @attention 座標系はWindowTypeによって変わる
+  public static Tuple<int,int> GetWindowOrigin(WindowTypes windowType) {
+    switch(windowType) {
+      case WindowTypes.Normal:
+      case WindowTypes.DesktopListView: {
+        return new Tuple<int,int>(0, 0);
+      }
+      case WindowTypes.Desktop: {
+        return new Tuple<int,int>(
+            User32.GetSystemMetrics(User32.SM_XVIRTUALSCREEN),
+            User32.GetSystemMetrics(User32.SM_YVIRTUALSCREEN));
+      }
+      default: {
+        Debug.Fail("Invalid WindowTypes", "LayoutElement.windowOrigin");
+        return null;
+      }
+    }
+  }
+
+  /// WindowのサイズをWindowタイプ別に取得する
+  public static Tuple<int,int> GetWindowSize(WindowTypes windowType, UIntPtr window) {
+    switch (windowType) {
+      case WindowTypes.Normal: {
+        Debug.Assert(Utilities.IsWindowValid(windowType, window),
+                     "Invalid Window", "LayoutElement.windowSize");
+        User32.RECT windowRect;
+        User32.GetClientRect(window, out windowRect);
+        return new Tuple<int,int>(windowRect.Right - windowRect.Left,
+                                  windowRect.Bottom - windowRect.Top);
+      }
+      case WindowTypes.DesktopListView:
+      case WindowTypes.Desktop: {
+        return new Tuple<int,int>(User32.GetSystemMetrics(User32.SM_CXVIRTUALSCREEN),
+                                  User32.GetSystemMetrics(User32.SM_CYVIRTUALSCREEN));
+      }
+      default: {
+        Debug.Fail("Invalid WindowTypes", "LayoutElement.windowSize");
+        return null;
+      }
+    }
+  }
+
+  /// Client座標系の座標をWindowタイプ別にScreen座標系に変換する
+  public static ScreenPoint ClientToScreen(WindowTypes windowType, UIntPtr window, int clientX, int clientY) {
+    switch (windowType) {
+      case WindowTypes.Normal: {
+        Debug.Assert(Utilities.IsWindowValid(windowType, window),
+                     "Invalid Window", "LayoutElement.ClientToScreen");
+        User32.POINT windowPoint = new User32.POINT { X = clientX, Y = clientY };
+        User32.ClientToScreen(window, ref windowPoint);
+        return new ScreenPoint(windowPoint.X, windowPoint.Y);
+      }
+      case WindowTypes.DesktopListView: {
+        //　仮想スクリーン座標なので補正を戻す
+        return new ScreenPoint(clientX + User32.GetSystemMetrics(User32.SM_XVIRTUALSCREEN),
+                               clientY + User32.GetSystemMetrics(User32.SM_YVIRTUALSCREEN));
+      }
+      case WindowTypes.Desktop: {
+        // スクリーン座標系なのでそのまま返す
+        return new ScreenPoint(clientX, clientY);
+      }
+      default: {
+        Debug.Fail("Invalid WindowTypes", "LayoutElement.ClientToScreen");
+        return null;
+      }
+    }
+  }
+
+  /// Windowタイプ別にScreen座標系での領域を返す
+  public static ScreenRect GetWindowScreenRect(WindowTypes windowType, UIntPtr window) {
+    var screenPoint = Utilities.ClientToScreen(windowType, window,
+        Utilities.GetWindowOrigin(windowType).Item1,
+        Utilities.GetWindowOrigin(windowType).Item2);
+    return new ScreenRect(screenPoint.X, screenPoint.Y,
+        Utilities.GetWindowSize(windowType, window).Item1,
+        Utilities.GetWindowSize(windowType, window).Item2);
+  }
+
   //===================================================================
   // 特定のOSに依存しないDesktopListViewWindowの取得
   //===================================================================

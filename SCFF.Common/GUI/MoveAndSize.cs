@@ -27,58 +27,53 @@ public static class MoveAndSize {
   //===================================================================
 
   /// レイアウト要素を移動する
-  private static void Move(ILayoutElementView layoutElement,
+  private static RelativeLTRB Move(ILayoutElementView layoutElement,
       HitModes hitMode,
       RelativePoint mousePoint, RelativeMouseOffset mouseOffset,
-      SnapGuide snapGuide,
-      out double nextLeft, out double nextTop,
-      out double nextRight, out double nextBottom) {
+      SnapGuide snapGuide) {
     // Snapするのは軸あたり1回のみ
     bool hasAlreadyHorizontalSnapped = false;
     bool hasAlreadyVerticalSnapped = false;
 
     // Left
-    var tryNextLeft = mousePoint.X - mouseOffset.Left;
+    var nextLeft = mousePoint.X - mouseOffset.Left;
     if (snapGuide != null) {
-      hasAlreadyHorizontalSnapped |= snapGuide.TryHorizontalSnap(ref tryNextLeft);
+      hasAlreadyHorizontalSnapped |= snapGuide.TryHorizontalSnap(ref nextLeft);
     }
-    if (tryNextLeft < 0.0) tryNextLeft = 0.0;
+    if (nextLeft < 0.0) nextLeft = 0.0;
 
     // Top
-    var tryNextTop = mousePoint.Y - mouseOffset.Top;
+    var nextTop = mousePoint.Y - mouseOffset.Top;
     if (snapGuide != null) {
-      hasAlreadyVerticalSnapped |= snapGuide.TryVerticalSnap(ref tryNextTop);
+      hasAlreadyVerticalSnapped |= snapGuide.TryVerticalSnap(ref nextTop);
     }
-    if (tryNextTop < 0.0) tryNextTop = 0.0;
+    if (nextTop < 0.0) nextTop = 0.0;
 
     // Right
-    var tryNextRight = tryNextLeft + layoutElement.BoundRelativeWidth;
+    var nextRight = nextLeft + layoutElement.BoundRelativeWidth;
     if (snapGuide != null && !hasAlreadyHorizontalSnapped &&
-        snapGuide.TryHorizontalSnap(ref tryNextRight)) {
+        snapGuide.TryHorizontalSnap(ref nextRight)) {
       // スナップ補正がかかった場合
-      tryNextLeft = tryNextRight - layoutElement.BoundRelativeWidth;
+      nextLeft = nextRight - layoutElement.BoundRelativeWidth;
     }
-    if (tryNextRight > 1.0) {
-      tryNextRight = 1.0;
-      tryNextLeft = tryNextRight - layoutElement.BoundRelativeWidth;
+    if (nextRight > 1.0) {
+      nextRight = 1.0;
+      nextLeft = nextRight - layoutElement.BoundRelativeWidth;
     }
 
     // Bottom
-    var tryNextBottom = tryNextTop + layoutElement.BoundRelativeHeight;
+    var nextBottom = nextTop + layoutElement.BoundRelativeHeight;
     if (snapGuide != null && !hasAlreadyVerticalSnapped &&
-        snapGuide.TryVerticalSnap(ref tryNextBottom)) {
+        snapGuide.TryVerticalSnap(ref nextBottom)) {
       // スナップ補正がかかった場合
-      tryNextTop = tryNextBottom - layoutElement.BoundRelativeHeight;
+      nextTop = nextBottom - layoutElement.BoundRelativeHeight;
     }
-    if (tryNextBottom > 1.0) {
-      tryNextBottom = 1.0;
-      tryNextTop = tryNextBottom - layoutElement.BoundRelativeHeight;
+    if (nextBottom > 1.0) {
+      nextBottom = 1.0;
+      nextTop = nextBottom - layoutElement.BoundRelativeHeight;
     }
 
-    nextLeft = tryNextLeft;
-    nextTop = tryNextTop;
-    nextRight = tryNextRight;
-    nextBottom = tryNextBottom;
+    return new RelativeLTRB(nextLeft, nextTop, nextRight, nextBottom);
   }
 
   //===================================================================
@@ -86,17 +81,15 @@ public static class MoveAndSize {
   //===================================================================
 
   /// レイアウト要素を拡大縮小する
-  private static void Size(ILayoutElementView layoutElement,
+  private static RelativeLTRB Size(ILayoutElementView layoutElement,
       HitModes hitMode,
       RelativePoint mousePoint, RelativeMouseOffset mouseOffset,
-      SnapGuide snapGuide,
-      out double nextLeft, out double nextTop,
-      out double nextRight, out double nextBottom) {
+      SnapGuide snapGuide) {
     // 初期値
-    nextLeft = layoutElement.BoundRelativeLeft;
-    nextTop = layoutElement.BoundRelativeTop;
-    nextRight = layoutElement.BoundRelativeRight;
-    nextBottom = layoutElement.BoundRelativeBottom;
+    var nextLeft = layoutElement.BoundRelativeLeft;
+    var nextTop = layoutElement.BoundRelativeTop;
+    var nextRight = layoutElement.BoundRelativeRight;
+    var nextBottom = layoutElement.BoundRelativeBottom;
 
     // Top/Bottom
     switch (hitMode) {
@@ -153,6 +146,7 @@ public static class MoveAndSize {
         break;
       }
     }
+    return new RelativeLTRB(nextLeft, nextTop, nextRight, nextBottom);
   }
 
   //===================================================================
@@ -160,18 +154,16 @@ public static class MoveAndSize {
   //===================================================================
 
   /// hitModeにあわせてレイアウト要素を移動 or 拡大縮小する
-  public static void MoveOrSize(ILayoutElementView layoutElement,
+  public static RelativeLTRB MoveOrSize(ILayoutElementView layoutElement,
       HitModes hitMode,
       RelativePoint mousePoint, RelativeMouseOffset mouseOffset,
-      SnapGuide snapGuide,
-      out double nextLeft, out double nextTop,
-      out double nextRight, out double nextBottom) {
+      SnapGuide snapGuide) {
     if (hitMode == HitModes.Move) {
-      MoveAndSize.Move(layoutElement, hitMode, mousePoint, mouseOffset,
-          snapGuide, out nextLeft, out nextTop, out nextRight, out nextBottom);
+      return MoveAndSize.Move(layoutElement, hitMode,
+          mousePoint, mouseOffset, snapGuide);
     } else {
-      MoveAndSize.Size(layoutElement, hitMode, mousePoint, mouseOffset,
-          snapGuide, out nextLeft, out nextTop, out nextRight, out nextBottom);
+      return MoveAndSize.Size(layoutElement, hitMode,
+          mousePoint, mouseOffset, snapGuide);
     }
   }
 }

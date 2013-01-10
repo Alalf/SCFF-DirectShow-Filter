@@ -20,6 +20,10 @@
 
 namespace SCFF.Common {
 
+//=====================================================================
+// 列挙型
+//=====================================================================
+
 /// Options用WindowState。System.Windows.WindowStateと相互に変換する。
 public enum WindowState {
   Normal,     ///< 標準状態
@@ -63,6 +67,111 @@ public enum RotateDirections {
   Degrees180    = Interprocess.RotateDirections.Degrees180,
   Degrees270    = Interprocess.RotateDirections.Degrees270,
 }
+
+//=====================================================================
+// クラス・構造体
+//=====================================================================
+
+//---------------------------------------------------------------------
+// サンプル座標系のPoint/Rect etc.
+//---------------------------------------------------------------------
+
+/// サンプル座標系のPoint
+public class SamplePoint {
+  /// コンストラクタ
+  public SamplePoint(int x, int y) {
+    this.X = x;
+    this.Y = y;
+  }
+  /// x座標
+  public int X { get; private set; }
+  /// y座標
+  public int Y { get; private set; }
+}
+
+/// サンプル座標系のRect
+public class SampleRect {
+  /// コンストラクタ
+  public SampleRect(int x, int y, int width, int height) {
+    this.X = x;
+    this.Y = y;
+    this.Width = width;
+    this.Height = height;
+  }
+  /// 左上端のx座標
+  public int X { get; private set; }
+  /// 左上端のy座標
+  public int Y { get; private set; }
+  /// 幅
+  public int Width { get; private set; }
+  /// 高さ
+  public int Height { get; private set; }
+}
+
+//---------------------------------------------------------------------
+// 相対座標系([0-1], [0-1])のPoint/Rect etc.
+//---------------------------------------------------------------------
+
+/// ([0-1], [0-1])の相対座標系のPoint
+public class RelativePoint {
+  /// コンストラクタ
+  public RelativePoint(double x, double y) {
+    this.X = x;
+    this.Y = y;
+  }
+  /// x座標
+  public double X { get; private set; }
+  /// y座標
+  public double Y { get; private set; }
+}
+
+/// ([0-1], [0-1])の相対座標系内の領域を示すLTRB
+public class RelativeLTRB {
+  /// コンストラクタ
+  public RelativeLTRB(double left, double top, double right, double bottom) {
+    this.Left = left;
+    this.Top = top;
+    this.Right = right;
+    this.Bottom = bottom;
+  }
+  /// 左上端のx座標
+  public double Left { get; private set; }
+  /// 左上端のy座標
+  public double Top { get; private set; }
+  /// 右下端のx座標
+  public double Right { get; private set; }
+  /// 右上端のy座標
+  public double Bottom { get; private set; }
+}
+
+/// ([0-1], [0-1])の相対座標系に収まるRect
+public class RelativeRect {
+  /// コンストラクタ
+  public RelativeRect(double x, double y, double width, double height) {
+    this.X = x;
+    this.Y = y;
+    this.Width = width;
+    this.Height = height;
+  }
+  /// 左上端のx座標
+  public double X { get; private set; }
+  /// 左上端のy座標
+  public double Y { get; private set; }
+  /// 幅
+  public double Width { get; private set; }
+  /// 高さ
+  public double Height { get; private set; }
+
+  /// 含有判定
+  public bool Contains(RelativePoint point) {
+    return this.X <= point.X && point.X <= this.X + this.Width &&
+           this.Y <= point.Y && point.Y <= this.Y + this.Height;
+  }
+}
+
+//---------------------------------------------------------------------
+// レイアウトパラメータ
+//---------------------------------------------------------------------
 
 /// SCFF.Interprocess.LayoutParameter以外のレイアウト要素に必要なデータ
 public class AdditionalLayoutParameter {

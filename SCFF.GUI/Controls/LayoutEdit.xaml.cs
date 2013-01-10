@@ -385,17 +385,15 @@ public partial class LayoutEdit
     }
 
     // Move or Size
-    double nextLeft, nextTop, nextRight, nextBottom;
-    MoveAndSize.MoveOrSize(App.Profile.CurrentView, this.hitMode,
-        relativeMousePoint, this.relativeMouseOffset, this.snapGuide, 
-        out nextLeft, out nextTop, out nextRight, out nextBottom);
+    var nextBoundLTRB = MoveAndSize.MoveOrSize(App.Profile.CurrentView, this.hitMode,
+        relativeMousePoint, this.relativeMouseOffset, this.snapGuide);
 
     // Profileを更新
     App.Profile.Current.Open();
-    App.Profile.Current.SetBoundRelativeLeft = nextLeft;
-    App.Profile.Current.SetBoundRelativeTop = nextTop;
-    App.Profile.Current.SetBoundRelativeRight = nextRight;
-    App.Profile.Current.SetBoundRelativeBottom = nextBottom;
+    App.Profile.Current.SetBoundRelativeLeft = nextBoundLTRB.Left;
+    App.Profile.Current.SetBoundRelativeTop = nextBoundLTRB.Top;
+    App.Profile.Current.SetBoundRelativeRight = nextBoundLTRB.Right;
+    App.Profile.Current.SetBoundRelativeBottom = nextBoundLTRB.Bottom;
     App.Profile.Current.Close();
       
     /// @todo(me) 変更をMainWindowに通知

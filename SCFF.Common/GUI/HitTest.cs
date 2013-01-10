@@ -33,31 +33,29 @@ public static class HitTest {
   /// レイアウト要素のうちボーダーを含めたRectを取得
   private static RelativeRect GetMaximumBoundRect(
       ILayoutElementView layoutElement) {
-    return new RelativeRect {
-      X = layoutElement.BoundRelativeLeft -
-          Constants.BorderRelativeThickness,
-      Y = layoutElement.BoundRelativeTop -
-          Constants.BorderRelativeThickness,
-      Width = layoutElement.BoundRelativeWidth +
-          Constants.BorderRelativeThickness * 2,
-      Height = layoutElement.BoundRelativeHeight +
-          Constants.BorderRelativeThickness * 2
-    };
+    return new RelativeRect(
+        layoutElement.BoundRelativeLeft -
+            Constants.BorderRelativeThickness,
+        layoutElement.BoundRelativeTop -
+            Constants.BorderRelativeThickness,
+        layoutElement.BoundRelativeWidth +
+            Constants.BorderRelativeThickness * 2,
+        layoutElement.BoundRelativeHeight +
+            Constants.BorderRelativeThickness * 2);
   }
 
   /// レイアウト要素のうちボーダーを含まないRectを取得
   private static RelativeRect GetMoveRect(
       ILayoutElementView layoutElement) {
-    return new RelativeRect {
-      X = layoutElement.BoundRelativeLeft +
-          Constants.BorderRelativeThickness,
-      Y = layoutElement.BoundRelativeTop +
-          Constants.BorderRelativeThickness,
-      Width = Math.Max(layoutElement.BoundRelativeWidth -
-          Constants.BorderRelativeThickness * 2, 0.0),
-      Height = Math.Max(layoutElement.BoundRelativeHeight -
-          Constants.BorderRelativeThickness * 2, 0.0)
-    };
+    return new RelativeRect(
+        layoutElement.BoundRelativeLeft +
+            Constants.BorderRelativeThickness,
+        layoutElement.BoundRelativeTop +
+            Constants.BorderRelativeThickness,
+        Math.Max(layoutElement.BoundRelativeWidth -
+            Constants.BorderRelativeThickness * 2, 0.0),
+        Math.Max(layoutElement.BoundRelativeHeight -
+            Constants.BorderRelativeThickness * 2, 0.0));
   }
 
   //===================================================================

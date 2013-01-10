@@ -22,7 +22,6 @@
 namespace SCFF.Common.GUI {
 
 using System;
-using System.Diagnostics;
 using SCFF.Common.Ext;
 
 //=====================================================================
@@ -47,60 +46,17 @@ public enum HitModes {
 // クラス・構造体
 //=====================================================================
 
-//---------------------------------------------------------------------
-// 相対座標系([0-1], [0-1])のPoint/Rect etc.
-//---------------------------------------------------------------------
-
-/// ([0-1], [0-1])の相対座標系のPoint
-public class RelativePoint {
-  /// コンストラクタ
-  public RelativePoint(double X, double Y) {
-    this.X = X;
-    this.Y = Y;
-  }
-  /// x座標
-  public double X { get; set; }
-  /// y座標
-  public double Y { get; set; }
-}
-
-/// ([0-1], [0-1])の相対座標系に収まるRect
-public class RelativeRect {
-  /// 左上端のx座標
-  public double X { get; set; }
-  /// 左上端のy座標
-  public double Y { get; set; }
-  /// 幅
-  public double Width { get; set; }
-  /// 高さ
-  public double Height { get; set; }
-
-  /// 含有判定
-  public bool Contains(RelativePoint point) {
-    return this.X <= point.X && point.X <= this.X + this.Width &&
-           this.Y <= point.Y && point.Y <= this.Y + this.Height;
-  }
-}
-
 /// 相対マウス座標([0-1], [0-1])がレイアウト要素の上下左右とどれだけ離れているか
-public class RelativeMouseOffset {
+public class RelativeMouseOffset : RelativeLTRB {
   /// コンストラクタ
   public RelativeMouseOffset(ILayoutElementView layoutElement,
-                             RelativePoint mousePoint) {
-    this.Left = mousePoint.X - layoutElement.BoundRelativeLeft;
-    this.Top = mousePoint.Y - layoutElement.BoundRelativeTop;
-    this.Right = mousePoint.X - layoutElement.BoundRelativeRight;
-    this.Bottom = mousePoint.Y - layoutElement.BoundRelativeBottom;
+                             RelativePoint mousePoint)
+      : base(mousePoint.X - layoutElement.BoundRelativeLeft,
+             mousePoint.Y - layoutElement.BoundRelativeTop,
+             mousePoint.X - layoutElement.BoundRelativeRight,
+             mousePoint.Y - layoutElement.BoundRelativeBottom) {
+    // nop
   }
-
-  /// レイアウト要素の左端を原点としたマウスの相対X座標
-  public double Left { get; private set; }
-  /// レイアウト要素の上端を原点としたマウスの相対Y座標
-  public double Top { get; private set; }
-  /// レイアウト要素の右端を原点としたマウスの相対X座標
-  public double Right { get; private set; }
-  /// レイアウト要素の下端を原点としたマウスの相対Y座標
-  public double Bottom { get; private set; }
 }
 
 //---------------------------------------------------------------------

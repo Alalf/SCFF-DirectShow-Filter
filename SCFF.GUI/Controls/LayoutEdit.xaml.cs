@@ -374,9 +374,8 @@ public partial class LayoutEdit
     var image = (IInputElement)sender;
     var relativeMousePoint = this.GetRelativeMousePoint(image, e);
 
-    // Neutralのときだけはカーソルを帰るだけ
+    // Neutralのときだけはカーソルを変えるだけ
     if (this.hitMode == HitModes.Neutral) {
-      // カーソルかえるだけ
       int hitIndex;
       HitModes hitMode;
       HitTest.TryHitTest(App.Profile, relativeMousePoint, out hitIndex, out hitMode);
@@ -396,7 +395,7 @@ public partial class LayoutEdit
     App.Profile.Current.SetBoundRelativeBottom = nextBoundLTRB.Bottom;
     App.Profile.Current.Close();
       
-    /// @todo(me) 変更をMainWindowに通知
+    /// 変更をLayoutParameterに通知
     UpdateCommands.UpdateLayoutParameterByCurrentProfile.Execute(null, null);
 
     this.BuildDrawingGroup();
@@ -436,7 +435,7 @@ public partial class LayoutEdit
     } else {
       this.screenCaptureTimer.Suspend();    // タイマー停止
       if (App.Options.LayoutIsExpanded) {
-        this.BuildDrawingGroup();                 // 再描画
+        this.BuildDrawingGroup();           // 再描画
       } else {
         this.DrawingGroup.Children.Clear(); // DrawingGroupもクリア
       }
@@ -495,6 +494,7 @@ public partial class LayoutEdit
   /// LayoutElementの内容からRequestを生成してScreenCaptureTimerに画像生成を依頼
   private void SendRequest(ILayoutElementView layoutElement, bool forceUpdate) {
     Debug.Assert(layoutElement.IsWindowValid);
+    /// @todo(me) どうみてもClippingXで値変換が入ってるのはおかしい！
     var request = new ScreenCaptureRequest(
         layoutElement.Index,
         layoutElement.Window,

@@ -229,26 +229,18 @@ public partial class TargetWindow : UserControl, IUpdateByProfile {
   // IUpdateByProfileの実装
   //===================================================================
 
+  /// @copydoc IUpdateByProfile::IsEnabledByProfile
+  public bool IsEnabledByProfile { get; private set; }
   /// @copydoc IUpdateByProfile::UpdateByCurrentProfile
   public void UpdateByCurrentProfile() {
-    // *Changedイベントハンドラがないのでそのまま代入するだけ
+    this.IsEnabledByProfile = false;
     this.WindowCaption.Text = App.Profile.CurrentView.WindowCaption;
+    this.IsEnabledByProfile = true;
   }
-
   /// @copydoc IUpdateByProfile::UpdateByEntireProfile
   public void UpdateByEntireProfile() {
     // 編集するのはCurrentのみ
     this.UpdateByCurrentProfile();
-  }
-
-  /// @copydoc IUpdateByProfile::AttachProfileChangedEventHandlers
-  public void AttachProfileChangedEventHandlers() {
-    // nop
-  }
-
-  /// @copydoc IUpdateByProfile::DetachProfileChangedEventHandlers
-  public void DetachProfileChangedEventHandlers() {
-    // nop
   }
 
   //===================================================================

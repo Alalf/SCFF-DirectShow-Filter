@@ -34,11 +34,6 @@ public partial class LayoutTab : UserControl, IUpdateByProfile {
     InitializeComponent();
   }
 
-  /// デストラクタ
-  ~LayoutTab() {
-    this.DetachProfileChangedEventHandlers();
-  }
-
   //===================================================================
   // イベントハンドラ
   //===================================================================
@@ -59,6 +54,7 @@ public partial class LayoutTab : UserControl, IUpdateByProfile {
   /// @param sender 使用しない
   /// @param e 使用しない
   private void LayoutElementTab_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+    if (!this.IsEnabledByProfile) return;
     var next = this.LayoutElementTab.SelectedIndex;
     App.Profile.CurrentIndex = next;
 
@@ -71,14 +67,15 @@ public partial class LayoutTab : UserControl, IUpdateByProfile {
   //===================================================================
 
   /// @copydoc IUpdateByProfile::UpdateByCurrentProfile
+  public bool IsEnabledByProfile { get; private set; }
+  /// @copydoc IUpdateByProfile::UpdateByCurrentProfile
   public void UpdateByCurrentProfile() {
     // CurrentProfileの値が変わってもTabの内容は変わらない
   }
-
   /// Profileを見ながら必要な分を足し、必要な分を削る
   private void UpdateLayoutElementTab() {
     // コントロール編集開始
-    this.DetachProfileChangedEventHandlers();
+    this.IsEnabledByProfile = false;
 
     var tabIndex = this.LayoutElementTab.SelectedIndex;
     var tabCount = this.LayoutElementTab.Items.Count;
@@ -112,25 +109,14 @@ public partial class LayoutTab : UserControl, IUpdateByProfile {
     this.LayoutElementTab.SelectedIndex = App.Profile.CurrentView.Index;
 
     // コントロール編集終了
-    this.AttachProfileChangedEventHandlers();
+    this.IsEnabledByProfile = true;
 
     Debug.Assert(App.Profile.LayoutElementCount == this.LayoutElementTab.Items.Count);
     Debug.Assert(App.Profile.CurrentView.Index == this.LayoutElementTab.SelectedIndex);
   }
-
   /// @copydoc IUpdateByProfile::UpdateByEntireProfile
   public void UpdateByEntireProfile() {
     this.UpdateLayoutElementTab();
-  }
-
-  /// @copydoc IUpdateByProfile::AttachProfileChangedEventHandlers
-  public void AttachProfileChangedEventHandlers() {
-    this.LayoutElementTab.SelectionChanged += LayoutElementTab_SelectionChanged;
-  }
-
-  /// @copydoc IUpdateByProfile::DetachProfileChangedEventHandlers
-  public void DetachProfileChangedEventHandlers() {
-    this.LayoutElementTab.SelectionChanged -= LayoutElementTab_SelectionChanged;
   }
 }
 }   // namespace SCFF.GUI.Controls

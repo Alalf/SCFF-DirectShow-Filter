@@ -37,12 +37,6 @@ public partial class LayoutParameter
     InitializeComponent();
   }
 
-  /// デストラクタ
-  ~LayoutParameter() {
-    this.DetachRuntimeOptionsChangedEventHandlers();
-    this.DetachProfileChangedEventHandlers();
-  }
-
   //===================================================================
   // イベントハンドラ
   //===================================================================
@@ -140,6 +134,7 @@ public partial class LayoutParameter
   /// @param sender 使用しない
   /// @param e 使用しない
   private void BoundRelativeLeft_TextChanged(object sender, TextChangedEventArgs e) {
+    if (!this.IsEnabledByProfile) return;
     var lowerBound = 0.0;
     var upperBound = 1.0;
     double parsedValue;
@@ -158,6 +153,7 @@ public partial class LayoutParameter
   /// @param sender 使用しない
   /// @param e 使用しない
   private void BoundRelativeTop_TextChanged(object sender, TextChangedEventArgs e) {
+    if (!this.IsEnabledByProfile) return;
     var lowerBound = 0.0;
     var upperBound = 1.0;
     double parsedValue;
@@ -176,6 +172,7 @@ public partial class LayoutParameter
   /// @param sender 使用しない
   /// @param e 使用しない
   private void BoundRelativeRight_TextChanged(object sender, TextChangedEventArgs e) {
+    if (!this.IsEnabledByProfile) return;
     var lowerBound = 0.0;
     var upperBound = 1.0;
     double parsedValue;
@@ -194,6 +191,7 @@ public partial class LayoutParameter
   /// @param sender 使用しない
   /// @param e 使用しない
   private void BoundRelativeBottom_TextChanged(object sender, TextChangedEventArgs e) {
+    if (!this.IsEnabledByProfile) return;
     var lowerBound = 0.0;
     var upperBound = 1.0;
     double parsedValue;
@@ -212,19 +210,13 @@ public partial class LayoutParameter
   // IUpdateByRuntimeOptionsの実装
   //===================================================================
 
+  /// @copydoc IUpdateByRuntimeOptions::IsEnabledByRuntimeOptions
+  public bool IsEnabledByRuntimeOptions { get; private set; }
   /// @copydoc IUpdateByRuntimeOptions::UpdateByRuntimeOptions
   public void UpdateByRuntimeOptions() {
+    this.IsEnabledByRuntimeOptions = false;
     this.UpdateDisabledTextboxes();
-  }
-
-  /// @copydoc IUpdateByRuntimeOptions::DetachRuntimeOptionsChangedEventHandlers
-  public void DetachRuntimeOptionsChangedEventHandlers() {
-    // nop
-  }
-
-  /// @copydoc IUpdateByRuntimeOptions::AttachRuntimeOptionsChangedEventHandlers
-  public void AttachRuntimeOptionsChangedEventHandlers() {
-    // nop
+    this.IsEnabledByRuntimeOptions = true;
   }
 
   //===================================================================
@@ -234,8 +226,12 @@ public partial class LayoutParameter
   /// GroupBox.Headerの最大文字数
   private const int maxHeaderLength = 60;
 
+  /// @copydoc IUpdateByProfile::IsEnabledByProfile
+  public bool IsEnabledByProfile { get; private set; }
   /// @copydoc IUpdateByProfile::UpdateByCurrentProfile
   public void UpdateByCurrentProfile() {
+    this.IsEnabledByProfile = false;
+
     var header = string.Format("Layout {0:D}: {1}",
         App.Profile.CurrentView.Index + 1,
         App.Profile.CurrentView.WindowCaption);
@@ -244,42 +240,23 @@ public partial class LayoutParameter
 
     this.UpdateDisabledTextboxes();
 
-    this.DetachProfileChangedEventHandlers();
-
     this.BoundRelativeLeft.Text = App.Profile.CurrentView.BoundRelativeLeft.ToString("F3");
     this.BoundRelativeTop.Text = App.Profile.CurrentView.BoundRelativeTop.ToString("F3");
     this.BoundRelativeRight.Text = App.Profile.CurrentView.BoundRelativeRight.ToString("F3");
     this.BoundRelativeBottom.Text = App.Profile.CurrentView.BoundRelativeBottom.ToString("F3");
-
-    this.AttachProfileChangedEventHandlers();
 
     var isComplexLayout = App.Profile.LayoutType == LayoutTypes.ComplexLayout;
     this.BoundRelativeLeft.IsEnabled = isComplexLayout;
     this.BoundRelativeTop.IsEnabled = isComplexLayout;
     this.BoundRelativeRight.IsEnabled = isComplexLayout;
     this.BoundRelativeBottom.IsEnabled = isComplexLayout;
-  }
 
+    this.IsEnabledByProfile = true;
+  }
   /// @copydoc IUpdateByProfile::UpdateByEntireProfile
   public void UpdateByEntireProfile() {
     // 編集するのはCurrentのみ
     this.UpdateByCurrentProfile();
-  }
-
-  /// @copydoc IUpdateByProfile::AttachProfileChangedEventHandlers
-  public void AttachProfileChangedEventHandlers() {
-    this.BoundRelativeLeft.TextChanged += BoundRelativeLeft_TextChanged;
-    this.BoundRelativeTop.TextChanged += BoundRelativeTop_TextChanged;
-    this.BoundRelativeRight.TextChanged += BoundRelativeRight_TextChanged;
-    this.BoundRelativeBottom.TextChanged += BoundRelativeBottom_TextChanged;
-  }
-
-  /// @copydoc IUpdateByProfile::DetachProfileChangedEventHandlers
-  public void DetachProfileChangedEventHandlers() {
-    this.BoundRelativeLeft.TextChanged -= BoundRelativeLeft_TextChanged;
-    this.BoundRelativeTop.TextChanged -= BoundRelativeTop_TextChanged;
-    this.BoundRelativeRight.TextChanged -= BoundRelativeRight_TextChanged;
-    this.BoundRelativeBottom.TextChanged -= BoundRelativeBottom_TextChanged;
   }
 }
 }   // namespace SCFF.GUI.Controls

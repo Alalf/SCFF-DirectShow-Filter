@@ -120,17 +120,23 @@
         </GroupBox>
         <!-- 取り込み範囲 -->
         <Expander Header="Area"
-                  x:Name="AreaExpander" IsExpanded="True">
+                  x:Name="AreaExpander" IsExpanded="True"
+                  Collapsed="AreaExpander_Collapsed"
+                  Expanded="AreaExpander_Expanded">
           <localControls:Area x:Name="Area"/>
         </Expander>
         <!-- 取り込みオプション -->
         <Expander Header="Options"
-                  x:Name="OptionsExpander" IsExpanded="True">
+                  x:Name="OptionsExpander" IsExpanded="True"
+                  Collapsed="OptionsExpander_Collapsed"
+                  Expanded="OptionsExpander_Expanded">
           <localControls:Options x:Name="Options"/>
         </Expander>
         <!-- 拡大縮小オプション -->
         <Expander Header="Resize Method"
-                  x:Name="ResizeMethodExpander" IsExpanded="True">
+                  x:Name="ResizeMethodExpander" IsExpanded="True"
+                  Collapsed="ResizeMethodExpander_Collapsed"
+                  Expanded="ResizeMethodExpander_Expanded">
           <localControls:ResizeMethod x:Name="ResizeMethod"/>
         </Expander>
         <!-- レイアウト番号 -->
@@ -140,7 +146,9 @@
       </StackPanel>
       <!-- レイアウト表示 -->
       <Expander Header="Layout" ExpandDirection="Right"
-                x:Name="LayoutExpander" IsExpanded="True">
+                x:Name="LayoutExpander" IsExpanded="True"
+                Collapsed="LayoutExpander_Collapsed"
+                Expanded="LayoutExpander_Expanded">
         <DockPanel LastChildFill="True">
           <localControls:LayoutToolbar    DockPanel.Dock="Top"
                                           x:Name="LayoutToolbar"/>

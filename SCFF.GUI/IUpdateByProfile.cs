@@ -25,19 +25,13 @@ namespace SCFF.GUI {
 /// @attention どうしてもINotifyPropertyChangedなどの
 ///            リフレクションを使いたくなかったためやむなく用意した
 interface IUpdateByProfile {
+  /// Control->Profile可能にする
+  bool IsEnabledByProfile { get; }
+
   /// Profile(Currentのみ)->Control書き換え
   void UpdateByCurrentProfile();
 
   /// Profile(全体)->Control書き換え
   void UpdateByEntireProfile();
-
-  /// Profile->Controlと同時にControl->Profileされないように、
-  /// Profile->Control前にイベントハンドラを取り外す
-  void DetachProfileChangedEventHandlers();
-
-  /// Profile->Controlと同時にControl->Profileされないように、
-  /// Profile->Control後にイベントハンドラを戻す
-  void AttachProfileChangedEventHandlers();
-
 }
 }   // namespace SCFF.GUI

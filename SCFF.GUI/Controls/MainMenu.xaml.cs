@@ -35,11 +35,6 @@ public partial class MainMenu : UserControl, IUpdateByOptions {
     InitializeComponent();
   }
 
-  /// デストラクタ
-  ~MainMenu() {
-    this.DetachOptionsChangedEventHandlers();
-  }
-
   //===================================================================
   // イベントハンドラ
   //===================================================================
@@ -149,23 +144,16 @@ public partial class MainMenu : UserControl, IUpdateByOptions {
       }
     }
   }
-
+  /// @copydoc IUpdateByOptions::IsEnabledByOptions
+  public bool IsEnabledByOptions { get; private set; }
   /// @copydoc IUpdateByOptions::UpdateByOptions
   public void UpdateByOptions() {
+    this.IsEnabledByOptions = false;
     this.UpdateRecentProfiles();
     this.CompactView.IsChecked = App.Options.CompactView;
     this.ForceAeroOn.IsChecked = App.Options.ForceAeroOn;
     this.RestoreLastProfile.IsChecked = App.Options.RestoreLastProfile;
-  }
-
-  /// @copydoc IUpdateByOptions::DetachOptionsChangedEventHandlers
-  public void DetachOptionsChangedEventHandlers() {
-    // nop
-  }
-
-  /// @copydoc IUpdateByOptions::AttachOptionsChangedEventHandlers
-  public void AttachOptionsChangedEventHandlers() {
-    // nop
+    this.IsEnabledByOptions = true;
   }
 }
 }   // namespace SCFF.GUI.Controls

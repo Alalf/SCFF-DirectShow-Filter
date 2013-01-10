@@ -35,11 +35,6 @@ public partial class Apply
     InitializeComponent();
   }
 
-  /// デストラクタ
-  ~Apply() {
-    this.DetachOptionsChangedEventHandlers();
-  }
-
   //===================================================================
   // イベントハンドラ
   //===================================================================
@@ -67,18 +62,12 @@ public partial class Apply
   //===================================================================
 
   /// @copydoc IUpdateByOptions::UpdateByOptions
+  public bool IsEnabledByOptions { get; private set; }
+  /// @copydoc IUpdateByOptions::UpdateByOptions
   public void UpdateByOptions() {
+    this.IsEnabledByOptions = false;
     this.AutoApply.IsChecked = App.Options.AutoApply;
-  }
-
-  /// @copydoc IUpdateByOptions::DetachOptionsChangedEventHandlers
-  public void DetachOptionsChangedEventHandlers() {
-    // nop
-  }
-
-  /// @copydoc IUpdateByOptions::AttachOptionsChangedEventHandlers
-  public void AttachOptionsChangedEventHandlers() {
-    // nop
+    this.IsEnabledByOptions = true;
   }
 }
 }   // namespace SCFF.GUI.Controls

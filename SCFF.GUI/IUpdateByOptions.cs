@@ -25,15 +25,10 @@ namespace SCFF.GUI {
 /// @attention どうしてもINotifyPropertyChangedなどの
 ///            リフレクションを使いたくなかったためやむなく用意した
 interface IUpdateByOptions {
+  /// Control->Options可能にする
+  bool IsEnabledByOptions { get; }
+
   /// Options->Control書き換え
   void UpdateByOptions();
-
-  /// Options->Controlと同時にControl->Optionsされないように、
-  /// Options->Control前にイベントハンドラを取り外す
-  void DetachOptionsChangedEventHandlers();
-
-  /// Options->Controlと同時にControl->Optionsされないように、
-  /// Options->Control後にイベントハンドラを戻す
-  void AttachOptionsChangedEventHandlers();
 }
 }   // namespace SCFF.GUI

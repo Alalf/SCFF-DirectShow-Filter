@@ -36,7 +36,7 @@ public partial class MainWindow
   //===================================================================
 
   /// コンストラクタ
-  public MainWindow() {    
+  public MainWindow() {
     this.InitializeComponent();
 
     this.UpdateByOptions();
@@ -46,13 +46,6 @@ public partial class MainWindow
     // 必要な機能の実行
     this.SetAero();
     this.SetCompactView();
-  }
-
-  /// デストラクタ
-  ~MainWindow() {
-    this.DetachOptionsChangedEventHandlers();
-    this.DetachRuntimeOptionsChangedEventHandlers();
-    this.DetachProfileChangedEventHandlers();
   }
 
   /// アプリケーション終了時に発生するClosingイベントハンドラ
@@ -100,36 +93,44 @@ public partial class MainWindow
 
   /// AreaExpander: Collapsed
   private void AreaExpander_Collapsed(object sender, RoutedEventArgs e) {
+    if (!this.IsEnabledByOptions) return;
     App.Options.AreaIsExpanded = false;
   }
   /// AreaExpander: Expanded
   private void AreaExpander_Expanded(object sender, RoutedEventArgs e) {
+    if (!this.IsEnabledByOptions) return;
     App.Options.AreaIsExpanded = true;
   }
   /// OptionsExpander: Collapsed
   private void OptionsExpander_Collapsed(object sender, RoutedEventArgs e) {
+    if (!this.IsEnabledByOptions) return;
     App.Options.OptionsIsExpanded = false;
   }
   /// OptionsExpander: Expanded
   private void OptionsExpander_Expanded(object sender, RoutedEventArgs e) {
+    if (!this.IsEnabledByOptions) return;
     App.Options.OptionsIsExpanded = true;
   }
   /// ResizeMethodExpander: Collapsed
   private void ResizeMethodExpander_Collapsed(object sender, RoutedEventArgs e) {
+    if (!this.IsEnabledByOptions) return;
     App.Options.ResizeMethodIsExpanded = false;
   }
   /// ResizeMethodExpander: Expanded
   private void ResizeMethodExpander_Expanded(object sender, RoutedEventArgs e) {
+    if (!this.IsEnabledByOptions) return;
     App.Options.ResizeMethodIsExpanded = true;
   }
   /// LayoutExpander: Collapsed
   private void LayoutExpander_Collapsed(object sender, RoutedEventArgs e) {
+    if (!this.IsEnabledByOptions) return;
     App.Options.LayoutIsExpanded = false;
 
     UpdateCommands.UpdateLayoutEditByOptions.Execute(null, null);
   }
   /// LayoutExpander: Expanded
   private void LayoutExpander_Expanded(object sender, RoutedEventArgs e) {
+    if (!this.IsEnabledByOptions) return;
     App.Options.LayoutIsExpanded = true;
 
     UpdateCommands.UpdateLayoutEditByOptions.Execute(null, null);
@@ -139,8 +140,12 @@ public partial class MainWindow
   // IUpdateByOptionsの実装
   //===================================================================
 
+  /// @copydoc IUpdateByOptions::IsEnabledByOptions
+  public bool IsEnabledByOptions { get; private set; }
   /// @copydoc IUpdateByOptions::UpdateByOptions
   public void UpdateByOptions() {
+    this.IsEnabledByOptions = false;
+
     // Temporary
     this.Left         = App.Options.TmpMainWindowLeft;
     this.Top          = App.Options.TmpMainWindowTop;
@@ -149,42 +154,18 @@ public partial class MainWindow
     this.WindowState  = (System.Windows.WindowState)App.Options.TmpMainWindowState;
     
     // MainWindow.Controls
-    this.DetachOptionsChangedEventHandlers();
     this.AreaExpander.IsExpanded          = App.Options.AreaIsExpanded;
     this.OptionsExpander.IsExpanded       = App.Options.OptionsIsExpanded;
     this.ResizeMethodExpander.IsExpanded  = App.Options.ResizeMethodIsExpanded;
     this.LayoutExpander.IsExpanded        = App.Options.LayoutIsExpanded;
-    this.AttachOptionsChangedEventHandlers();
 
     // UserControls
     this.Apply.UpdateByOptions();
     this.LayoutToolbar.UpdateByOptions();
     this.LayoutEdit.UpdateByOptions();
     this.MainMenu.UpdateByOptions();
-  }
 
-  /// @copydoc IUpdateByOptions::DetachOptionsChangedEventHandlers
-  public void DetachOptionsChangedEventHandlers() {
-    this.AreaExpander.Collapsed -= this.AreaExpander_Collapsed;
-    this.AreaExpander.Expanded -= this.AreaExpander_Expanded;
-    this.OptionsExpander.Collapsed -= this.OptionsExpander_Collapsed;
-    this.OptionsExpander.Expanded -= this.OptionsExpander_Expanded;
-    this.ResizeMethodExpander.Collapsed -= this.ResizeMethodExpander_Collapsed;
-    this.ResizeMethodExpander.Expanded -= this.ResizeMethodExpander_Expanded;
-    this.LayoutExpander.Collapsed -= this.LayoutExpander_Collapsed;
-    this.LayoutExpander.Expanded -= this.LayoutExpander_Expanded;
-  }
-
-  /// @copydoc IUpdateByOptions::AttachOptionsChangedEventHandlers
-  public void AttachOptionsChangedEventHandlers() {
-    this.AreaExpander.Collapsed += this.AreaExpander_Collapsed;
-    this.AreaExpander.Expanded += this.AreaExpander_Expanded;
-    this.OptionsExpander.Collapsed += this.OptionsExpander_Collapsed;
-    this.OptionsExpander.Expanded += this.OptionsExpander_Expanded;
-    this.ResizeMethodExpander.Collapsed += this.ResizeMethodExpander_Collapsed;
-    this.ResizeMethodExpander.Expanded += this.ResizeMethodExpander_Expanded;
-    this.LayoutExpander.Collapsed += this.LayoutExpander_Collapsed;
-    this.LayoutExpander.Expanded += this.LayoutExpander_Expanded;
+    this.IsEnabledByOptions = true;
   }
 
   /// UIから設定にデータを保存
@@ -202,8 +183,11 @@ public partial class MainWindow
   // IUpdateByRuntimeOptionsの実装
   //===================================================================
 
+  /// @copydoc IUpdateByRuntimeOptions::IsEnabledByRuntimeOptions
+  public bool IsEnabledByRuntimeOptions { get; private set; }
   /// @copydoc IUpdateByRuntimeOptions::UpdateByRuntimeOptions
   public void UpdateByRuntimeOptions() {
+    this.IsEnabledByRuntimeOptions = false;
     /// @todo System.Reflection.Assembly.GetExecutingAssembly().GetName().Versionを使うか？
     ///       しかしどう見てもこれ実行時に決まる値で気持ち悪いな・・・
     var commonTitle = "SCFF DirectShow Filter Ver.0.1.7";
@@ -216,22 +200,19 @@ public partial class MainWindow
 
     this.LayoutEdit.UpdateByRuntimeOptions();
     this.LayoutParameter.UpdateByRuntimeOptions();
-  }
-  /// @copydoc IUpdateByRuntimeOptions::DetachRuntimeOptionsChangedEventHandlers
-  public void DetachRuntimeOptionsChangedEventHandlers() {
-    // nop
-  }
-  /// @copydoc IUpdateByRuntimeOptions::AttachRuntimeOptionsChangedEventHandlers
-  public void AttachRuntimeOptionsChangedEventHandlers() {
-    // nop
+    this.IsEnabledByRuntimeOptions = true;
   }
 
   //===================================================================
   // IUpdateByProfileの実装
   //===================================================================
 
+  /// @copydoc IUpdateByProfile::IsEnabledByProfile
+  public bool IsEnabledByProfile { get; private set; }
+
   /// @copydoc IUpdateByProfile::UpdateByCurrentProfile
   public void UpdateByCurrentProfile() {
+    this.IsEnabledByProfile = false;
     this.TargetWindow.UpdateByCurrentProfile();
     this.Area.UpdateByCurrentProfile();
     this.Options.UpdateByCurrentProfile();
@@ -239,10 +220,12 @@ public partial class MainWindow
     this.LayoutParameter.UpdateByCurrentProfile();
     this.LayoutTab.UpdateByCurrentProfile();
     this.LayoutEdit.UpdateByCurrentProfile();
+    this.IsEnabledByProfile = true;
   }
 
   /// @copydoc IUpdateByProfile::UpdateByEntireProfile
   public void UpdateByEntireProfile() {
+    this.IsEnabledByProfile = false;
     this.TargetWindow.UpdateByEntireProfile();
     this.Area.UpdateByEntireProfile();
     this.Options.UpdateByEntireProfile();
@@ -250,16 +233,7 @@ public partial class MainWindow
     this.LayoutParameter.UpdateByEntireProfile();
     this.LayoutTab.UpdateByEntireProfile();
     this.LayoutEdit.UpdateByEntireProfile();
-  }
-
-  /// @copydoc IUpdateByProfile::UpdateByEntireProfile
-  public void AttachProfileChangedEventHandlers() {
-    // nop
-  }
-
-  /// @copydoc IUpdateByProfile::UpdateByEntireProfile
-  public void DetachProfileChangedEventHandlers() {
-    // nop
+    this.IsEnabledByProfile = true;
   }
 
   //===================================================================

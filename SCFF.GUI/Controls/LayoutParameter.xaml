@@ -33,28 +33,32 @@
                 Content="Left"/>
       <TextBox  Grid.Column="2"
                 VerticalAlignment="Center" Height="20"
-                x:Name="BoundRelativeLeft" Text="1000"/>
+                x:Name="BoundRelativeLeft" Text="1000"
+                TextChanged="BoundRelativeLeft_TextChanged"/>
       <!-- RelativeTop -->
       <Label    Grid.Column="3"
                 VerticalAlignment="Center" HorizontalAlignment="Right" Height="12" Margin="5,0"
                 Content="Top"/>
       <TextBox  Grid.Column="4"
                 VerticalAlignment="Center" Height="20"
-                x:Name="BoundRelativeTop" Text="1000"/>
+                x:Name="BoundRelativeTop" Text="1000"
+                TextChanged="BoundRelativeTop_TextChanged"/>
       <!-- RelativeRight -->
       <Label    Grid.Column="5"
                 VerticalAlignment="Center" HorizontalAlignment="Right" Height="12" Margin="5,0"
                 Content="Right"/>
       <TextBox  Grid.Column="6"
                 VerticalAlignment="Center" Height="20"
-                x:Name="BoundRelativeRight" Text="1000"/>
+                x:Name="BoundRelativeRight" Text="1000"
+                TextChanged="BoundRelativeRight_TextChanged"/>
       <!-- RelativeBottom -->
       <Label    Grid.Column="7"
                 VerticalAlignment="Center" HorizontalAlignment="Right" Height="12" Margin="5,0"
                 Content="Bottom"/>
       <TextBox  Grid.Column="8"
                 VerticalAlignment="Center" Height="20"
-                x:Name="BoundRelativeBottom" Text="1000"/>
+                x:Name="BoundRelativeBottom" Text="1000"
+                TextChanged="BoundRelativeBottom_TextChanged"/>
       <!-- X -->
       <Label    Grid.Row="1" Grid.Column="1"
                 VerticalAlignment="Center" HorizontalAlignment="Right" Height="12" Margin="5,0"

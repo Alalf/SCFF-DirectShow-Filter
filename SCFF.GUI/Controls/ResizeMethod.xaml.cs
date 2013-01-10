@@ -43,11 +43,6 @@ public partial class ResizeMethod : UserControl, IUpdateByProfile {
     }
   }
 
-  /// デストラクタ
-  ~ResizeMethod() {
-    this.DetachProfileChangedEventHandlers();
-  }
-
   //===================================================================
   // イベントハンドラ
   //===================================================================
@@ -114,6 +109,7 @@ public partial class ResizeMethod : UserControl, IUpdateByProfile {
   /// @param sender 使用しない
   /// @param e 使用しない
   private void SWScaleFlags_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+    if (!this.IsEnabledByProfile) return;
     SWScaleFlags flags = Constants.ResizeMethodArray[this.SWScaleFlags.SelectedIndex];
 
     App.Profile.Current.Open();
@@ -149,6 +145,7 @@ public partial class ResizeMethod : UserControl, IUpdateByProfile {
   /// @param sender 使用しない
   /// @param e 使用しない
   private void SWScaleLumaGBlur_TextChanged(object sender, TextChangedEventArgs e) {
+    if (!this.IsEnabledByProfile) return;
     var lowerBound = 0.0F;
     var upperBound = 2.0F;
     float parsedValue;
@@ -164,6 +161,7 @@ public partial class ResizeMethod : UserControl, IUpdateByProfile {
   /// @param sender 使用しない
   /// @param e 使用しない
   private void SWScaleChromaGBlur_TextChanged(object sender, TextChangedEventArgs e) {
+    if (!this.IsEnabledByProfile) return;
     var lowerBound = 0.0F;
     var upperBound = 2.0F;
     float parsedValue;
@@ -179,6 +177,7 @@ public partial class ResizeMethod : UserControl, IUpdateByProfile {
   /// @param sender 使用しない
   /// @param e 使用しない
   private void SWScaleLumaSharpen_TextChanged(object sender, TextChangedEventArgs e) {
+    if (!this.IsEnabledByProfile) return;
     var lowerBound = 0.0F;
     var upperBound = 4.0F;
     float parsedValue;
@@ -194,6 +193,7 @@ public partial class ResizeMethod : UserControl, IUpdateByProfile {
   /// @param sender 使用しない
   /// @param e 使用しない
   private void SWScaleChromaSharpen_TextChanged(object sender, TextChangedEventArgs e) {
+    if (!this.IsEnabledByProfile) return;
     var lowerBound = 0.0F;
     var upperBound = 4.0F;
     float parsedValue;
@@ -209,6 +209,7 @@ public partial class ResizeMethod : UserControl, IUpdateByProfile {
   /// @param sender 使用しない
   /// @param e 使用しない
   private void SWScaleChromaHshift_TextChanged(object sender, TextChangedEventArgs e) {
+    if (!this.IsEnabledByProfile) return;
     var lowerBound = 0.0F;
     var upperBound = 1.0F;
     float parsedValue;
@@ -224,6 +225,7 @@ public partial class ResizeMethod : UserControl, IUpdateByProfile {
   /// @param sender 使用しない
   /// @param e 使用しない
   private void SWScaleChromaVshift_TextChanged(object sender, TextChangedEventArgs e) {
+    if (!this.IsEnabledByProfile) return;
     var lowerBound = 0.0F;
     var upperBound = 1.0F;
     float parsedValue;
@@ -239,12 +241,13 @@ public partial class ResizeMethod : UserControl, IUpdateByProfile {
   // IUpdateByProfileの実装
   //===================================================================
 
+  /// @copydoc IUpdateByProfile::IsEnabledByProfile
+  public bool IsEnabledByProfile { get; private set; }
   /// @copydoc IUpdateByProfile::UpdateByCurrentProfile
   public void UpdateByCurrentProfile() {
+    this.IsEnabledByProfile = false;
     this.SWScaleAccurateRnd.IsChecked = App.Profile.CurrentView.SWScaleAccurateRnd;
     this.SWScaleIsFilterEnabled.IsChecked = App.Profile.CurrentView.SWScaleIsFilterEnabled;
-
-    this.DetachProfileChangedEventHandlers();
 
     var index = Constants.ResizeMethodIndexes[App.Profile.CurrentView.SWScaleFlags];
     this.SWScaleFlags.SelectedIndex = index;
@@ -254,36 +257,12 @@ public partial class ResizeMethod : UserControl, IUpdateByProfile {
     this.SWScaleChromaGBlur.Text = App.Profile.CurrentView.SWScaleChromaGBlur.ToString("F2");
     this.SWScaleChromaSharpen.Text = App.Profile.CurrentView.SWScaleChromaSharpen.ToString("F2");
     this.SWScaleChromaVshift.Text = App.Profile.CurrentView.SWScaleChromaVshift.ToString("F2");
-
-    this.AttachProfileChangedEventHandlers();
+    this.IsEnabledByProfile = true;
   }
-
   /// @copydoc IUpdateByProfile::UpdateByEntireProfile
   public void UpdateByEntireProfile() {
     // 編集するのはCurrentのみ
     this.UpdateByCurrentProfile();
-  }
-
-  /// @copydoc IUpdateByProfile::AttachProfileChangedEventHandlers
-  public void AttachProfileChangedEventHandlers() {
-    this.SWScaleFlags.SelectionChanged += SWScaleFlags_SelectionChanged;
-    this.SWScaleLumaGBlur.TextChanged += SWScaleLumaGBlur_TextChanged;
-    this.SWScaleLumaSharpen.TextChanged += SWScaleLumaSharpen_TextChanged;
-    this.SWScaleChromaHshift.TextChanged += SWScaleChromaHshift_TextChanged;
-    this.SWScaleChromaGBlur.TextChanged += SWScaleChromaGBlur_TextChanged;
-    this.SWScaleChromaSharpen.TextChanged += SWScaleChromaSharpen_TextChanged;
-    this.SWScaleChromaVshift.TextChanged += SWScaleChromaVshift_TextChanged;
-  }
-
-  /// @copydoc IUpdateByProfile::DetachProfileChangedEventHandlers
-  public void DetachProfileChangedEventHandlers() {
-    this.SWScaleFlags.SelectionChanged -= SWScaleFlags_SelectionChanged;
-    this.SWScaleLumaGBlur.TextChanged -= SWScaleLumaGBlur_TextChanged;
-    this.SWScaleLumaSharpen.TextChanged -= SWScaleLumaSharpen_TextChanged;
-    this.SWScaleChromaHshift.TextChanged -= SWScaleChromaHshift_TextChanged;
-    this.SWScaleChromaGBlur.TextChanged -= SWScaleChromaGBlur_TextChanged;
-    this.SWScaleChromaSharpen.TextChanged -= SWScaleChromaSharpen_TextChanged;
-    this.SWScaleChromaVshift.TextChanged -= SWScaleChromaVshift_TextChanged;
   }
 }
 }   // namespace SCFF.GUI.Controls

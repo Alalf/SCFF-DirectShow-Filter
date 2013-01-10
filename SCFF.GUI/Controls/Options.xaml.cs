@@ -34,11 +34,6 @@ public partial class Options : UserControl, IUpdateByProfile {
     InitializeComponent();
   }
 
-  /// デストラクタ
-  ~Options() {
-    this.DetachProfileChangedEventHandlers();
-  }
-
   //===================================================================
   // イベントハンドラ
   //===================================================================
@@ -107,30 +102,23 @@ public partial class Options : UserControl, IUpdateByProfile {
   // IUpdateByProfileの実装
   //===================================================================
 
+  /// @copydoc IUpdateByProfile::IsEnabledByProfile
+  public bool IsEnabledByProfile { get; private set; }
   /// @copydoc IUpdateByProfile::UpdateByCurrentProfile
   public void UpdateByCurrentProfile() {
+    this.IsEnabledByProfile = false;
     // checkboxはclickがあるのでeventハンドラをattach/detachする必要はない
     this.ShowCursor.IsChecked = App.Profile.CurrentView.ShowCursor;
     this.ShowLayeredWindow.IsChecked = App.Profile.CurrentView.ShowLayeredWindow;
     this.KeepAspectRatio.IsChecked = App.Profile.CurrentView.KeepAspectRatio;
     this.Stretch.IsChecked = App.Profile.CurrentView.Stretch;
     // @todo(me) overSampingとthreadCountはまだDSFでも実装されていない
+    this.IsEnabledByProfile = true;
   }
-
   /// @copydoc IUpdateByProfile::UpdateByEntireProfile
   public void UpdateByEntireProfile() {
     // 編集するのはCurrentのみ
     this.UpdateByCurrentProfile();
-  }
-
-  /// @copydoc IUpdateByProfile::AttachProfileChangedEventHandlers
-  public void AttachProfileChangedEventHandlers() {
-    // nop
-  }
-
-  /// @copydoc IUpdateByProfile::DetachProfileChangedEventHandlers
-  public void DetachProfileChangedEventHandlers() {
-    // nop
   }
 }
 }   // namespace SCFF.GUI.Controls

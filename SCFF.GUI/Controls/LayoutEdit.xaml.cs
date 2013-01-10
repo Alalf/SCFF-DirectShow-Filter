@@ -427,8 +427,11 @@ public partial class LayoutEdit
   // IUpdateByOptionsの実装
   //===================================================================
 
+  /// @copydoc IUpdateByOptions::IsEnabledByOptions
+  public bool IsEnabledByOptions { get; private set; }
   /// @copydoc IUpdateByOptions::UpdateByOptions
   public void UpdateByOptions() {
+    this.IsEnabledByOptions = false;
     if (App.Options.LayoutIsExpanded && App.Options.LayoutPreview) {
       this.screenCaptureTimer.Start();      // タイマー再開
       this.UpdateByEntireProfile();         // プレビュー強制更新
@@ -442,54 +445,44 @@ public partial class LayoutEdit
       Debug.WriteLine("Collect", "*** MEMORY[GC] ***");
       GC.Collect();
     }
+    this.IsEnabledByOptions = true;
   }
   
-  /// @copydoc IUpdateByOptions::DetachOptionsChangedEventHandlers
-  public void DetachOptionsChangedEventHandlers() {
-    // nop
-  }
-
-  /// @copydoc IUpdateByOptions::AttachOptionsChangedEventHandlers
-  public void AttachOptionsChangedEventHandlers() {
-    // nop
-  }
-
   //===================================================================
   // IUpdateByRuntimeOptionsの実装
   //===================================================================
 
+  /// @copydoc IUpdateByRuntimeOptions::IsEnabledByRuntimeOptions
+  public bool IsEnabledByRuntimeOptions { get; private set; }
   /// @copydoc IUpdateByRuntimeOptions::UpdateByRuntimeOptions
   public void UpdateByRuntimeOptions() {
     // 再描画
     /// @todo(me) 条件分岐はしたほうがいいかも？
+    this.IsEnabledByRuntimeOptions = false;
     this.BuildDrawingGroup();
-  }
-
-  /// @copydoc IUpdateByRuntimeOptions::DetachRuntimeOptionsChangedEventHandlers
-  public void DetachRuntimeOptionsChangedEventHandlers() {
-    // nop
-  }
-
-  /// @copydoc IUpdateByRuntimeOptions::AttachRuntimeOptionsChangedEventHandlers
-  public void AttachRuntimeOptionsChangedEventHandlers() {
-    // nop
+    this.IsEnabledByRuntimeOptions = true;
   }
 
   //===================================================================
   // IUpdateByProfileの実装
   //===================================================================
 
+  /// @copydoc IUpdateByProfile::IsEnabledByProfile
+  public bool IsEnabledByProfile { get; private set; }
   /// @copydoc IUpdateByProfile::UpdateByCurrentProfile
   public void UpdateByCurrentProfile() {
+    this.IsEnabledByProfile = false;
     if (!App.Profile.CurrentView.IsWindowValid) return;
     this.SendRequest(App.Profile.CurrentView, true);
     this.BuildDrawingGroup();
     Debug.WriteLine("Collect", "*** MEMORY[GC] ***");
     GC.Collect();
+    this.IsEnabledByProfile = true;
   }
 
   /// @copydoc IUpdateByProfile::UpdateByEntireProfile
   public void UpdateByEntireProfile() {
+    this.IsEnabledByProfile = false;
     this.screenCaptureTimer.ClearRequests();
     foreach (var layoutElement in App.Profile) {
       if (!layoutElement.IsWindowValid) continue;
@@ -498,16 +491,7 @@ public partial class LayoutEdit
     this.BuildDrawingGroup();
     Debug.WriteLine("Collect", "*** MEMORY[GC] ***");
     GC.Collect();
-  }
-
-  /// @copydoc IUpdateByProfile::UpdateByEntireProfile
-  public void AttachProfileChangedEventHandlers() {
-    // nop
-  }
-
-  /// @copydoc IUpdateByProfile::UpdateByEntireProfile
-  public void DetachProfileChangedEventHandlers() {
-    // nop
+    this.IsEnabledByProfile = true;
   }
 
   /// LayoutElementの内容からRequestを生成してScreenCaptureTimerに画像生成を依頼

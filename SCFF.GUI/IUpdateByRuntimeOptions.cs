@@ -25,15 +25,10 @@ namespace SCFF.GUI {
 /// @attention どうしてもINotifyPropertyChangedなどの
 ///            リフレクションを使いたくなかったためやむなく用意した
 interface IUpdateByRuntimeOptions {
+  /// Control->RuntimeOptions可能にする
+  bool IsEnabledByRuntimeOptions { get; }
+
   /// RuntimeOptions->Control書き換え
   void UpdateByRuntimeOptions();
-
-  /// RuntimeOptions->Controlと同時にControl->RuntimeOptionsされないように、
-  /// RuntimeOptions->Control前にイベントハンドラを取り外す
-  void DetachRuntimeOptionsChangedEventHandlers();
-
-  /// RuntimeOptions->Controlと同時にControl->RuntimeOptionsされないように、
-  /// RuntimeOptions->Control後にイベントハンドラを戻す
-  void AttachRuntimeOptionsChangedEventHandlers();
 }
 }   // namespace SCFF.GUI

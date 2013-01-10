@@ -6,7 +6,8 @@
              mc:Ignorable="d" d:DesignWidth="231" d:DesignHeight="25"
              FontSize="9">
   <TabControl TabStripPlacement="Bottom"
-              x:Name="LayoutElementTab">
+              x:Name="LayoutElementTab"
+              SelectionChanged="LayoutElementTab_SelectionChanged">
     <TabItem Header="1" />
   </TabControl>
 </UserControl>

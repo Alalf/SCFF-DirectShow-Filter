@@ -35,11 +35,6 @@ public partial class SCFFDSFEntries
     InitializeComponent();
   }
 
-  /// デストラクタ
-  ~SCFFDSFEntries() {
-    this.DetachRuntimeOptionsChangedEventHandlers();
-  }
-
   //===================================================================
   // イベントハンドラ
   //===================================================================
@@ -71,19 +66,13 @@ public partial class SCFFDSFEntries
   // IUpdateByRuntimeOptionsの実装
   //===================================================================
 
+  /// @copydoc IUpdateByRuntimeOptions::IsEnabledByRuntimeOptions
+  public bool IsEnabledByRuntimeOptions { get; private set; }
   /// @copydoc IUpdateByRuntimeOptions::UpdateByRuntimeOptions
   public void UpdateByRuntimeOptions() {
     //// @todo(me) 仮想メモリからの読み込み
-  }
-
-  /// @copydoc IUpdateByRuntimeOptions::DetachRuntimeOptionsChangedEventHandlers
-  public void DetachRuntimeOptionsChangedEventHandlers() {
-    // nop
-  }
-
-  /// @copydoc IUpdateByRuntimeOptions::AttachRuntimeOptionsChangedEventHandlers
-  public void AttachRuntimeOptionsChangedEventHandlers() {
-    // nop
+    this.IsEnabledByRuntimeOptions = false;
+    this.IsEnabledByRuntimeOptions = true;
   }
 }
 }   // namespace SCFF.GUI.Controls

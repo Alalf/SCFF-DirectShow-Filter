@@ -501,17 +501,11 @@ public partial class Profile {
         paddingRelativeRight = paddingRight / sampleWidth;
       }
 
-      // 新しい相対座標系でのLTRBを求める
-      var nextLeft = this.BoundRelativeLeft + paddingRelativeLeft;
-      var nextTop = this.BoundRelativeTop + paddingRelativeTop;
-      var nextRight = this.BoundRelativeRight - paddingRelativeRight;
-      var nextBottom = this.BoundRelativeBottom - paddingRelativeBottom;
-
       // Profileの設定を変える
-      this.SetBoundRelativeLeft = nextLeft;
-      this.SetBoundRelativeTop = nextTop;
-      this.SetBoundRelativeRight = nextRight;
-      this.SetBoundRelativeBottom = nextBottom;
+      this.SetBoundRelativeLeft   = this.BoundRelativeLeft + paddingRelativeLeft;;
+      this.SetBoundRelativeTop    = this.BoundRelativeTop + paddingRelativeTop;
+      this.SetBoundRelativeRight  = this.BoundRelativeRight - paddingRelativeRight;
+      this.SetBoundRelativeBottom = this.BoundRelativeBottom - paddingRelativeBottom;
     }
 
     //=================================================================

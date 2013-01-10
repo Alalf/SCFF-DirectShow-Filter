@@ -468,6 +468,51 @@ public partial class Profile {
     public double SetBoundRelativeBottom {
       set { this.profile.additionalLayoutParameters[this.Index].BoundRelativeBottom = value; }
     }
+    /// @copydoc ILayoutElement::FitBoundRelativeRect
+    public void FitBoundRelativeRect(int sampleWidth, int sampleHeight) {
+      Debug.Assert(this.IsWindowValid);
+
+      // サンプル座標系でのパディングサイズを求める
+      double paddingTop, paddingBottom, paddingLeft, paddingRight;
+      Imaging.Utilities.CalculatePaddingSize(
+          this.BoundWidth(sampleWidth),
+          this.BoundHeight(sampleHeight),
+          this.ClippingWidthWithFit,
+          this.ClippingHeightWithFit,
+          this.Stretch,
+          this.KeepAspectRatio,
+          out paddingTop, out paddingBottom,
+          out paddingLeft, out paddingRight);
+      
+      // パディングサイズを相対座標系に戻す
+      /// @todo(me) Fitを連続で押すと変更がとまらない可能性あり
+      var paddingRelativeTop = 0.0;
+      var paddingRelativeBottom = 0.0;
+      var paddingRelativeLeft = 0.0;
+      var paddingRelativeRight = 0.0;
+      if (paddingTop + paddingBottom >= 1.0) {
+        // 単位ピクセル未満の調整はしない
+        paddingRelativeTop = paddingTop / sampleHeight;
+        paddingRelativeBottom = paddingBottom / sampleHeight;
+      }
+      if (paddingLeft + paddingRight >= 1.0) {
+        // 単位ピクセル未満の調整はしない
+        paddingRelativeLeft = paddingLeft / sampleWidth;
+        paddingRelativeRight = paddingRight / sampleWidth;
+      }
+
+      // 新しい相対座標系でのLTRBを求める
+      var nextLeft = this.BoundRelativeLeft + paddingRelativeLeft;
+      var nextTop = this.BoundRelativeTop + paddingRelativeTop;
+      var nextRight = this.BoundRelativeRight - paddingRelativeRight;
+      var nextBottom = this.BoundRelativeBottom - paddingRelativeBottom;
+
+      // Profileの設定を変える
+      this.SetBoundRelativeLeft = nextLeft;
+      this.SetBoundRelativeTop = nextTop;
+      this.SetBoundRelativeRight = nextRight;
+      this.SetBoundRelativeBottom = nextBottom;
+    }
 
     //=================================================================
     // Backup

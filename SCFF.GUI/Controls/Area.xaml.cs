@@ -29,6 +29,7 @@ using SCFF.Common.Ext;
 
 /// クリッピング領域設定用UserControl
 public partial class Area : UserControl, IUpdateByProfile {
+
   //===================================================================
   // 定数
   //===================================================================

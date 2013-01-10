@@ -255,6 +255,8 @@ public partial class LayoutEdit
   }
 
   /// DrawingGroupの再校正
+  ///
+  /// @todo(me) 負荷軽減のためFPS制限してもいいかも(30FPSでだいたい半分だがカクカク)
   private void BuildDrawingGroup() {
     using (var dc = this.DrawingGroup.Open()) {
       // 背景描画でサイズを決める

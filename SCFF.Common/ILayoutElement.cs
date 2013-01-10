@@ -115,6 +115,11 @@ public interface ILayoutElement {
   /// @copydoc SCFF::Common::AdditionalLayoutParameter::BoundRelativeBottom
   double SetBoundRelativeBottom { set; }
 
+  /// LayoutParameterをサンプル座標系で調整する
+  /// @param sampleWidth サンプルの幅
+  /// @param sampleHeight サンプルの高さ
+  void FitBoundRelativeRect(int sampleWidth, int sampleHeight);
+
   //=================================================================
   // Backup
   //=================================================================

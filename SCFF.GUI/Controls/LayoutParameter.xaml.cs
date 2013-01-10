@@ -61,47 +61,11 @@ public partial class LayoutParameter
   private void Fit_Click(object sender, System.Windows.RoutedEventArgs e) {
     if (!App.Profile.CurrentView.IsWindowValid) return;
 
-    // サンプル座標系でのパディングサイズを求める
-    double paddingTop, paddingBottom, paddingLeft, paddingRight;
-    Common.Imaging.Utilities.CalculatePaddingSize(
-        App.Profile.CurrentView.BoundWidth(App.RuntimeOptions.CurrentSampleWidth),
-        App.Profile.CurrentView.BoundHeight(App.RuntimeOptions.CurrentSampleHeight),
-        App.Profile.CurrentView.ClippingWidthWithFit,
-        App.Profile.CurrentView.ClippingHeightWithFit,
-        App.Profile.CurrentView.Stretch,
-        App.Profile.CurrentView.KeepAspectRatio,
-        out paddingTop, out paddingBottom,
-        out paddingLeft, out paddingRight);
-      
-    // パディングサイズを相対座標系に戻す
-    /// @todo(me) Fitを連続で押すと変更がとまらない可能性あり
-    var paddingRelativeTop = 0.0;
-    var paddingRelativeBottom = 0.0;
-    var paddingRelativeLeft = 0.0;
-    var paddingRelativeRight = 0.0;
-    if (paddingTop + paddingBottom >= 1.0) {
-      // 単位ピクセル未満の調整はしない
-      paddingRelativeTop = paddingTop / App.RuntimeOptions.CurrentSampleHeight;
-      paddingRelativeBottom = paddingBottom / App.RuntimeOptions.CurrentSampleHeight;
-    }
-    if (paddingLeft + paddingRight >= 1.0) {
-      // 単位ピクセル未満の調整はしない
-      paddingRelativeLeft = paddingLeft / App.RuntimeOptions.CurrentSampleWidth;
-      paddingRelativeRight = paddingRight / App.RuntimeOptions.CurrentSampleWidth;
-    }
-
-    // 新しい相対座標系でのLTRBを求める
-    var nextLeft = App.Profile.CurrentView.BoundRelativeLeft + paddingRelativeLeft;
-    var nextTop = App.Profile.CurrentView.BoundRelativeTop + paddingRelativeTop;
-    var nextRight = App.Profile.CurrentView.BoundRelativeRight - paddingRelativeRight;
-    var nextBottom = App.Profile.CurrentView.BoundRelativeBottom - paddingRelativeBottom;
-
     // Profileの設定を変える
     App.Profile.Current.Open();
-    App.Profile.Current.SetBoundRelativeLeft = nextLeft;
-    App.Profile.Current.SetBoundRelativeTop = nextTop;
-    App.Profile.Current.SetBoundRelativeRight = nextRight;
-    App.Profile.Current.SetBoundRelativeBottom = nextBottom;
+    App.Profile.Current.FitBoundRelativeRect(
+        App.RuntimeOptions.CurrentSampleWidth,
+        App.RuntimeOptions.CurrentSampleHeight);
     App.Profile.Current.Close();
 
     // 関連するUserControlに更新を伝える

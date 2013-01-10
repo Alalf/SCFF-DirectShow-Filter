@@ -506,7 +506,7 @@ public partial class Profile {
       get {
         switch (this.WindowType) {
           case WindowTypes.Normal: {
-            Debug.Assert(this.IsWindowValid);
+            Debug.Assert(this.IsWindowValid, "Invalid Window", "LayoutElement.windowSize");
             User32.RECT windowRect;
             User32.GetClientRect(this.Window, out windowRect);
             return new Tuple<int,int>(windowRect.Right - windowRect.Left,
@@ -529,7 +529,7 @@ public partial class Profile {
     private Tuple<int, int> ClientToScreen(int clientX, int clientY) {
       switch (this.WindowType) {
         case WindowTypes.Normal: {
-          Debug.Assert(this.IsWindowValid);
+          Debug.Assert(this.IsWindowValid, "Invalid Window", "LayoutElement.ClientToScreen");
           User32.POINT windowPoint = new User32.POINT { X = clientX, Y = clientY };
           User32.ClientToScreen(this.Window, ref windowPoint);
           return new Tuple<int, int>(windowPoint.X, windowPoint.Y);

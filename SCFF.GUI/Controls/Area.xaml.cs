@@ -20,11 +20,14 @@
 
 namespace SCFF.GUI.Controls {
 
-using System.Diagnostics;
-using System.Windows;
-using System.Windows.Controls;
-using SCFF.Common;
-using SCFF.Common.Ext;
+  using System;
+  using System.Collections.Generic;
+  using System.Diagnostics;
+  using System.Windows;
+  using System.Windows.Controls;
+  using System.Windows.Media;
+  using SCFF.Common;
+  using SCFF.Common.Ext;
 
 /// クリッピング領域設定用UserControl
 public partial class Area : UserControl, IUpdateByProfile {
@@ -75,8 +78,58 @@ public partial class Area : UserControl, IUpdateByProfile {
 
   //-------------------------------------------------------------------
 
+  /// レイアウトタイプに合わせて適切なBrush/Penを設定する
+  private void GetWindowTypesBrushes(
+      WindowTypes currentWindowType, WindowTypes nextWindowType,
+      out Brush border, out Brush background) {
+    switch (nextWindowType) {
+      case WindowTypes.Normal: {
+        // 更に現在のTypeによって色を分ける
+        switch (currentWindowType) {
+          case WindowTypes.DesktopListView: {
+            border = BrushesAndPens.CurrentDesktopListViewBrush;
+            background = BrushesAndPens.DesktopListViewBrush;
+            break;
+          }
+          case WindowTypes.Desktop: {
+            border = BrushesAndPens.CurrentDesktopBrush;
+            background = BrushesAndPens.DesktopBrush;
+            break;
+          }
+          default: {
+            border = BrushesAndPens.CurrentNormalBrush;
+            background = BrushesAndPens.NormalBrush;
+            break;
+          }
+        }
+        break;
+      }
+      case WindowTypes.DesktopListView: {
+        border = BrushesAndPens.CurrentDesktopListViewBrush;
+        background = BrushesAndPens.DesktopListViewBrush;
+        break;
+      }
+      case WindowTypes.Desktop: {
+        border = BrushesAndPens.CurrentDesktopBrush;
+        background = BrushesAndPens.DesktopBrush;
+        break;
+      }
+      default : {
+        Debug.Fail("Invalid WindowTypes", "Area.GetWindowTypesBrushes");
+        border = null;
+        background = null;
+        break;
+      }
+    }
+  }
+
   /// 現在編集中のレイアウト要素のクリッピング領域/Fitオプションを変更する
-  private void CommonAreaSelect(Rect boundScreenRect, WindowTypes nextWindowType) {
+  private void CommonAreaSelect(WindowTypes nextWindowType) {
+    if (!App.Profile.CurrentView.IsWindowValid) {
+      Debug.WriteLine("Invalid Window", "Area.CommonAreaSelect");
+      return;
+    }
+
     // ダイアログの準備
     var dialog = new AreaSelectWindow();
     dialog.Left   = App.Profile.CurrentView.ScreenClippingXWithFit;
@@ -85,43 +138,12 @@ public partial class Area : UserControl, IUpdateByProfile {
     dialog.Height = App.Profile.CurrentView.ClippingHeightWithFit;
 
     // カラーの変更
-    switch (nextWindowType) {
-      case WindowTypes.Normal: {
-        // 更に現在のTypeによって色を分ける
-        switch (App.Profile.CurrentView.WindowType) {
-          case WindowTypes.DesktopListView: {
-            dialog.WindowBorder.BorderBrush = BrushesAndPens.CurrentDesktopListViewBrush;
-            dialog.WindowGrid.Background = BrushesAndPens.DesktopListViewBrush;
-            break;
-          }
-          case WindowTypes.Desktop: {
-            dialog.WindowBorder.BorderBrush = BrushesAndPens.CurrentDesktopBrush;
-            dialog.WindowGrid.Background = BrushesAndPens.DesktopBrush;
-            break;
-          }
-          default: {
-            dialog.WindowBorder.BorderBrush = BrushesAndPens.CurrentNormalBrush;
-            dialog.WindowGrid.Background = BrushesAndPens.NormalBrush;
-            break;
-          }
-        }
-        break;
-      }
-      case WindowTypes.DesktopListView: {
-        dialog.WindowBorder.BorderBrush = BrushesAndPens.CurrentDesktopListViewBrush;
-        dialog.WindowGrid.Background = BrushesAndPens.DesktopListViewBrush;
-        break;
-      }
-      case WindowTypes.Desktop: {
-        dialog.WindowBorder.BorderBrush = BrushesAndPens.CurrentDesktopBrush;
-        dialog.WindowGrid.Background = BrushesAndPens.DesktopBrush;
-        break;
-      }
-      default : {
-        Debug.Fail("Invalid WindowTypes", "Area.CommonAreaSelect");
-        break;
-      }
-    }
+    Brush border, background;
+    this.GetWindowTypesBrushes(
+        App.Profile.CurrentView.WindowType, nextWindowType,
+        out border, out background);
+    dialog.WindowBorder.BorderBrush = border;
+    dialog.WindowGrid.Background = background;
 
     // ダイアログの表示
     var result = dialog.ShowDialog();
@@ -131,6 +153,15 @@ public partial class Area : UserControl, IUpdateByProfile {
     var nextScreenRect = new Rect(dialog.Left, dialog.Top, dialog.Width, dialog.Height);
 
     // ウィンドウの領域とIntersectをとる
+    var boundScreenRect = Area.VirtualScreenRect;
+    if (nextWindowType == WindowTypes.Normal) {
+      boundScreenRect = new Rect {
+        X = App.Profile.CurrentView.ScreenWindowX,
+        Y = App.Profile.CurrentView.ScreenWindowY,
+        Width = App.Profile.CurrentView.WindowWidth,
+        Height = App.Profile.CurrentView.WindowHeight
+      };
+    }
     if (!nextScreenRect.IntersectsWith(boundScreenRect)) return;
     nextScreenRect.Intersect(boundScreenRect);
 
@@ -171,23 +202,17 @@ public partial class Area : UserControl, IUpdateByProfile {
 
   /// AreaSelect: Click
   private void AreaSelect_Click(object sender, RoutedEventArgs e) {
-    var boundScreenRect = new Rect {
-      X = App.Profile.CurrentView.ScreenWindowX,
-      Y = App.Profile.CurrentView.ScreenWindowY,
-      Width = App.Profile.CurrentView.WindowWidth,
-      Height = App.Profile.CurrentView.WindowHeight
-    };
-    this.CommonAreaSelect(boundScreenRect, WindowTypes.Normal);
+    this.CommonAreaSelect(WindowTypes.Normal);
   }
 
   /// ListView: Click
   private void ListView_Click(object sender, RoutedEventArgs e) {
-    this.CommonAreaSelect(Area.VirtualScreenRect, WindowTypes.DesktopListView);
+    this.CommonAreaSelect(WindowTypes.DesktopListView);
   }
 
   /// Desktop: Click
   private void Desktop_Click(object sender, RoutedEventArgs e) {
-    this.CommonAreaSelect(Area.VirtualScreenRect, WindowTypes.Desktop);
+    this.CommonAreaSelect(WindowTypes.Desktop);
   }
 
   //-------------------------------------------------------------------

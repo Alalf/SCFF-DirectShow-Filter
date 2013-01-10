@@ -1549,6 +1549,12 @@
 
     </Grid>
     <ControlTemplate.Triggers>
+      <!-- 2013/01/10 Modified by Alalf -->
+      <Trigger Property="Validation.HasError" Value="True">
+        <Setter Property="ToolTip"
+                Value="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=(Validation.Errors).CurrentItem.ErrorContent}" />
+      </Trigger>
+
       <Trigger Property="IsFocused" Value="True">
         <Trigger.ExitActions>
           <BeginStoryboard Storyboard="{StaticResource FocusedOff}" x:Name="FocusedOff_BeginStoryboard" />

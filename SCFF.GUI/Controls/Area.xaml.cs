@@ -20,14 +20,12 @@
 
 namespace SCFF.GUI.Controls {
 
-  using System;
-  using System.Collections.Generic;
-  using System.Diagnostics;
-  using System.Windows;
-  using System.Windows.Controls;
-  using System.Windows.Media;
-  using SCFF.Common;
-  using SCFF.Common.Ext;
+using System.Diagnostics;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
+using SCFF.Common;
+using SCFF.Common.Ext;
 
 /// クリッピング領域設定用UserControl
 public partial class Area : UserControl, IUpdateByProfile {

@@ -306,7 +306,7 @@ public partial class Area : UserControl, IUpdateByProfile {
   /// @copydoc IUpdateByProfile::UpdateByCurrentProfile
   public void UpdateByCurrentProfile() {
     this.IsEnabledByProfile = false;
-    // Enabled/Disabled
+
     switch (App.Profile.CurrentView.WindowType) {
       case WindowTypes.Normal: {
         this.ListView.IsEnabled = true;
@@ -324,29 +324,13 @@ public partial class Area : UserControl, IUpdateByProfile {
         break;
       }
     }
-
-    // checkboxはclickがあるのでeventハンドラをattach/detachする必要はない
     this.Fit.IsChecked = App.Profile.CurrentView.Fit;
 
-    // *Changed
-    /// @todo(me) どう見てもおかしい！
-    ///           WindowIsInvalidのときのFitのセマンティクスがちゃんと決まってない！
-    if (App.Profile.CurrentView.IsWindowValid) {
-      this.ClippingX.Text = App.Profile.CurrentView.ClippingXWithFit.ToString();
-      this.ClippingY.Text = App.Profile.CurrentView.ClippingYWithFit.ToString();
-      this.ClippingWidth.Text = App.Profile.CurrentView.ClippingWidthWithFit.ToString();
-      this.ClippingHeight.Text = App.Profile.CurrentView.ClippingHeightWithFit.ToString();
-    } else if (App.Profile.CurrentView.Fit) {
-      this.ClippingX.Text = "****";
-      this.ClippingY.Text = "****";
-      this.ClippingWidth.Text = "****";
-      this.ClippingHeight.Text = "****";
-    } else {
-      this.ClippingX.Text = App.Profile.CurrentView.ClippingXWithoutFit.ToString();
-      this.ClippingY.Text = App.Profile.CurrentView.ClippingYWithoutFit.ToString();
-      this.ClippingWidth.Text = App.Profile.CurrentView.ClippingWidthWithoutFit.ToString();
-      this.ClippingHeight.Text = App.Profile.CurrentView.ClippingHeightWithoutFit.ToString();
-    }
+    // *Changed/Collapsed/Expanded
+    this.ClippingX.Text = App.Profile.CurrentView.ClippingXString;
+    this.ClippingY.Text = App.Profile.CurrentView.ClippingYString;
+    this.ClippingWidth.Text = App.Profile.CurrentView.ClippingWidthString;
+    this.ClippingHeight.Text = App.Profile.CurrentView.ClippingHeightString;
     
     this.IsEnabledByProfile = true;
   }

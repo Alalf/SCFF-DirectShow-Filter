@@ -167,6 +167,42 @@ public interface ILayoutElementView {
   ScreenRect ScreenClippingRectWithFit { get; }
 
   //=================================================================
+  // ToString
+  //=================================================================
+
+  /// ヘッダー表示用文字列
+  string GetHeaderString(int maxLength);
+  /// ヘッダー表示用文字列
+  string GetHeaderStringForGUI(bool isCurrent, bool isDummy, int sampleWidth, int sampleHeight);
+
+  /// ClippingX表示用
+  string ClippingXString { get; }
+  /// ClippingY表示用
+  string ClippingYString { get; }
+  /// ClippingWidth表示用
+  string ClippingWidthString { get; }
+  /// ClippingHeight表示用
+  string ClippingHeightString { get; }
+
+  /// BoundRelativeLeft表示用
+  string BoundRelativeLeftString { get; }
+  /// BoundRelativeTop表示用
+  string BoundRelativeTopString { get; }
+  /// BoundRelativeRight表示用
+  string BoundRelativeRightString { get; }
+  /// BoundRelativeBottom表示用
+  string BoundRelativeBottomString { get; }
+
+  /// BoundLeft表示用
+  string GetBoundLeftString(bool isDummy, int sampleWidth);
+  /// BoundTop表示用
+  string GetBoundTopString(bool isDummy, int sampleHeight);
+  /// BoundRight表示用
+  string GetBoundWidthString(bool isDummy, int sampleWidth);
+  /// BoundBottom表示用
+  string GetBoundHeightString(bool isDummy, int sampleHeight);
+
+  //=================================================================
   // Backup
   //=================================================================
 
@@ -178,5 +214,7 @@ public interface ILayoutElementView {
   int BackupClippingWidth { get; }
   /// @copydoc SCFF::Common::AdditionalLayoutParameter::BackupClippingHeight
   int BackupClippingHeight { get; }
+
+
 }
 }   // namespace SCFF.Common

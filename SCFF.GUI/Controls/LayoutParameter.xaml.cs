@@ -84,30 +84,18 @@ public partial class LayoutParameter
   /// @attention *Changedイベントハンドラが無いのでそのまま代入してOK
   private void UpdateDisabledTextboxes() {
     // dummyの場合もあり
+    var sampleWidth = App.RuntimeOptions.CurrentSampleWidth;
+    var sampleHeight = App.RuntimeOptions.CurrentSampleHeight;
     var isDummy = App.RuntimeOptions.SelectedEntryIndex == -1;
 
-    var boundX = App.Profile.CurrentView.BoundLeft(
-          App.RuntimeOptions.CurrentSampleWidth);
-    var boundY = App.Profile.CurrentView.BoundTop(
-          App.RuntimeOptions.CurrentSampleHeight);
-    var boundWidth = App.Profile.CurrentView.BoundWidth(
-          App.RuntimeOptions.CurrentSampleWidth);
-    var boundHeight = App.Profile.CurrentView.BoundHeight(
-          App.RuntimeOptions.CurrentSampleHeight);
-
-    if (isDummy) {
-      // プロセス選択なし
-      this.BoundX.Text = string.Format("({0})", boundX);
-      this.BoundY.Text = string.Format("({0})", boundY);
-      this.BoundWidth.Text = string.Format("({0})", boundWidth);
-      this.BoundHeight.Text = string.Format("({0})", boundHeight);
-    } else {
-      // プロセス選択中
-      this.BoundX.Text = string.Format("{0}", boundX);
-      this.BoundY.Text = string.Format("{0}", boundY);
-      this.BoundWidth.Text = string.Format("{0}", boundWidth);
-      this.BoundHeight.Text = string.Format("{0}", boundHeight);
-    }
+    this.BoundX.Text =
+        App.Profile.CurrentView.GetBoundLeftString(isDummy, sampleWidth);
+    this.BoundY.Text =
+        App.Profile.CurrentView.GetBoundTopString(isDummy, sampleHeight);
+    this.BoundWidth.Text =
+        App.Profile.CurrentView.GetBoundWidthString(isDummy, sampleHeight);
+    this.BoundHeight.Text =
+        App.Profile.CurrentView.GetBoundHeightString(isDummy, sampleWidth);
   }
 
   /// 下限・上限つきでテキストボックスから値を取得する
@@ -236,24 +224,22 @@ public partial class LayoutParameter
   public void UpdateByCurrentProfile() {
     this.IsEnabledByProfile = false;
 
-    var header = string.Format("Layout {0:D}: {1}",
-        App.Profile.CurrentView.Index + 1,
-        App.Profile.CurrentView.WindowCaption);
-    this.GroupBox.Header = header.Substring(0,
-        Math.Min(header.Length, LayoutParameter.maxHeaderLength));
+    this.GroupBox.Header =
+        App.Profile.CurrentView.GetHeaderString(LayoutParameter.maxHeaderLength);
 
     this.UpdateDisabledTextboxes();
-
-    this.BoundRelativeLeft.Text = App.Profile.CurrentView.BoundRelativeLeft.ToString("F3");
-    this.BoundRelativeTop.Text = App.Profile.CurrentView.BoundRelativeTop.ToString("F3");
-    this.BoundRelativeRight.Text = App.Profile.CurrentView.BoundRelativeRight.ToString("F3");
-    this.BoundRelativeBottom.Text = App.Profile.CurrentView.BoundRelativeBottom.ToString("F3");
 
     var isComplexLayout = App.Profile.LayoutType == LayoutTypes.ComplexLayout;
     this.BoundRelativeLeft.IsEnabled = isComplexLayout;
     this.BoundRelativeTop.IsEnabled = isComplexLayout;
     this.BoundRelativeRight.IsEnabled = isComplexLayout;
     this.BoundRelativeBottom.IsEnabled = isComplexLayout;
+
+    // *Changed/Collapsed/Expanded
+    this.BoundRelativeLeft.Text = App.Profile.CurrentView.BoundRelativeLeftString;
+    this.BoundRelativeTop.Text = App.Profile.CurrentView.BoundRelativeTopString;
+    this.BoundRelativeRight.Text = App.Profile.CurrentView.BoundRelativeRightString;
+    this.BoundRelativeBottom.Text = App.Profile.CurrentView.BoundRelativeBottomString;
 
     this.IsEnabledByProfile = true;
   }

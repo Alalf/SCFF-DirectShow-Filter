@@ -105,27 +105,14 @@ public partial class LayoutEdit
   /// @return DrawingContext.DrawTextで描画可能なDrawingVisualオブジェクト
   private FormattedText CreateLayoutElementCaption(ILayoutElementView layoutElement) {
     var isCurrent = layoutElement.Index == App.Profile.CurrentView.Index;
+    var isDummy = App.RuntimeOptions.SelectedEntryIndex == -1;
 
     // Caption
-    var layoutElementCaption = string.Empty;
-    if (isCurrent) {
-      // サンプル: [1] (640x480) WindowCaption
-      var isDummy = App.RuntimeOptions.SelectedEntryIndex == -1;
-      if (isDummy) {
-        layoutElementCaption = string.Format(" [{0}] {1}",
-            layoutElement.Index + 1,
-            layoutElement.WindowCaption);
-      } else {
-        layoutElementCaption = string.Format(" [{0}] ({1}x{2}) {3}",
-            layoutElement.Index + 1,
-            layoutElement.BoundWidth(App.RuntimeOptions.CurrentSampleWidth),
-            layoutElement.BoundHeight(App.RuntimeOptions.CurrentSampleHeight),
-            layoutElement.WindowCaption);
-      }
-    } else {
-      // サンプル: [1]
-      layoutElementCaption = string.Format(" [{0}]", layoutElement.Index + 1);
-    }
+    var header =
+        App.Profile.CurrentView.GetHeaderStringForGUI(
+            isCurrent, isDummy,
+            App.RuntimeOptions.CurrentSampleWidth,
+            App.RuntimeOptions.CurrentSampleHeight);
 
     // Brush
     Brush textBrush = null;
@@ -148,7 +135,7 @@ public partial class LayoutEdit
     }
 
     // FormattedText
-    var formattedText = new FormattedText(layoutElementCaption,
+    var formattedText = new FormattedText(header,
         System.Globalization.CultureInfo.CurrentUICulture,
         FlowDirection.LeftToRight,
         new Typeface("Meiryo"),

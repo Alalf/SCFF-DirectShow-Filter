@@ -564,6 +564,99 @@ public partial class Profile {
     }
 
     //=================================================================
+    // ToString
+    //=================================================================
+
+    /// @copydoc ILayoutElementView::GetHeaderString
+    public string GetHeaderString(int maxLength) {
+      var header = string.Format("Layout {0:D}: {1}",
+                                 this.Index + 1,
+                                 this.WindowCaption);
+      return header.Substring(0, Math.Min(header.Length, maxLength));
+    }
+
+    /// @copydoc ILayoutElementView::GetHeaderStringForGUI
+    public string GetHeaderStringForGUI(bool isCurrent, bool isDummy,
+                                        int sampleWidth, int sampleHeight) {
+      if (isCurrent && isDummy) {
+        return string.Format(" [{0}] {1}", this.Index + 1, this.WindowCaption);
+      } else if (isCurrent) {
+        return string.Format(" [{0}] ({1}x{2}) {3}",
+            this.Index + 1,
+            this.BoundWidth(sampleWidth),
+            this.BoundHeight(sampleHeight),
+            this.WindowCaption);
+      } else {
+        return string.Format(" [{0}]", this.Index + 1);
+      }
+    }
+
+    /// @copydoc ILayoutElementView::ClippingXString
+    public string ClippingXString {
+      get {
+        if (!this.IsWindowValid && this.Fit) return "****";
+        return this.ClippingXWithFit.ToString();
+      }
+    }
+    /// @copydoc ILayoutElementView::ClippingYString
+    public string ClippingYString {
+      get {
+        if (!this.IsWindowValid && this.Fit) return "****";
+        return this.ClippingYWithFit.ToString();
+      }
+    }
+    /// @copydoc ILayoutElementView::ClippingWidthString
+    public string ClippingWidthString {
+      get {
+        if (!this.IsWindowValid && this.Fit) return "****";
+        return this.ClippingWidthWithFit.ToString();
+      }
+    }
+    /// @copydoc ILayoutElementView::ClippingHeightString
+    public string ClippingHeightString {
+      get {
+        if (!this.IsWindowValid && this.Fit) return "****";
+        return this.ClippingHeightWithFit.ToString();
+      }
+    }
+    /// @copydoc ILayoutElementView::BoundRelativeLeftString
+    public string BoundRelativeLeftString {
+      get { return this.BoundRelativeLeft.ToString("F3"); }
+    }
+    /// @copydoc ILayoutElementView::BoundRelativeTopString
+    public string BoundRelativeTopString {
+      get { return this.BoundRelativeTop.ToString("F3"); }
+    }
+    /// @copydoc ILayoutElementView::BoundRelativeRightString
+    public string BoundRelativeRightString {
+      get { return this.BoundRelativeRight.ToString("F3"); }
+    }
+    /// @copydoc ILayoutElementView::BoundRelativeBottomString
+    public string BoundRelativeBottomString {
+      get { return this.BoundRelativeBottom.ToString("F3"); }
+    }
+    /// @copydoc ILayoutElementView::GetBoundLeftString
+    public string GetBoundLeftString(bool isDummy, int sampleWidth) {
+      return isDummy ? string.Format("({0})", this.BoundLeft(sampleWidth))
+                     : this.BoundLeft(sampleWidth).ToString();
+    }
+    /// @copydoc ILayoutElementView::GetBoundTopString
+    public string GetBoundTopString(bool isDummy, int sampleHeight) {
+      return isDummy ? string.Format("({0})", this.BoundTop(sampleHeight))
+                     : this.BoundTop(sampleHeight).ToString();
+    }
+    /// @copydoc ILayoutElementView::GetBoundWidthString
+    public string GetBoundWidthString(bool isDummy, int sampleWidth) {
+      return isDummy ? string.Format("({0})", this.BoundWidth(sampleWidth))
+                     : this.BoundWidth(sampleWidth).ToString();
+    }
+    /// @copydoc ILayoutElementView::GetBoundHeightString
+    public string GetBoundHeightString(bool isDummy, int sampleHeight) {
+      return isDummy ? string.Format("({0})", this.BoundHeight(sampleHeight))
+                     : this.BoundHeight(sampleHeight).ToString();
+    }
+
+    //=================================================================
     // Backup
     //=================================================================
 

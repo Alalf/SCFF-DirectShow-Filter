@@ -93,9 +93,9 @@ public partial class LayoutParameter
     this.BoundY.Text =
         App.Profile.CurrentView.GetBoundTopString(isDummy, sampleHeight);
     this.BoundWidth.Text =
-        App.Profile.CurrentView.GetBoundWidthString(isDummy, sampleHeight);
+        App.Profile.CurrentView.GetBoundWidthString(isDummy, sampleWidth);
     this.BoundHeight.Text =
-        App.Profile.CurrentView.GetBoundHeightString(isDummy, sampleWidth);
+        App.Profile.CurrentView.GetBoundHeightString(isDummy, sampleHeight);
   }
 
   /// 下限・上限つきでテキストボックスから値を取得する

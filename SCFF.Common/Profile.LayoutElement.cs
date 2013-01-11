@@ -546,7 +546,7 @@ public partial class Profile {
 
     /// @copydoc ILayoutElementView::GetBoundRect
     public SampleRect GetBoundRect(int sampleWidth, int sampleHeight) {
-      return new SampleRect(
+      return SampleRect.FromDouble(
         this.BoundRelativeLeft * sampleWidth,
         this.BoundRelativeTop * sampleHeight,
         this.BoundRelativeWidth * sampleWidth,

@@ -314,7 +314,7 @@ bool CalculateLayout(int bound_x, int bound_y,
       //    = widthの倍率はheightの引き伸ばし比率で求められる
       *new_height = bound_height;
       *new_width = input_width * bound_height / input_height;
-      ASSERT(*new_height <= bound_height);
+      ASSERT(*new_width <= bound_width);
       *new_y = bound_y;
       const int padding_width = (bound_width - *new_width) / 2;
       *new_x = bound_x + padding_width;

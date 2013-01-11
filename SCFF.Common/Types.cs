@@ -200,11 +200,16 @@ public class SampleRect : IntRect {
   /// コンストラクタ
   public SampleRect(int x, int y, int width, int height)
       : base(x, y, width, height) {}
-  /// 補正つきコンストラクタ
-  public SampleRect(double x, double y, double width, double height)
-      : base((int)Math.Floor(x), (int)Math.Floor(y),
-             (int)Math.Ceiling(x + width) - (int)Math.Floor(x),
-             (int)Math.Ceiling(y + height) - (int)Math.Floor(y)) {}
+  /// 補正つきstaticコンストラクタ
+  /// @todo(me) 単純すぎる気がする。ちょっと考え中。
+  public static SampleRect FromDouble(double x, double y, double width, double height) {
+    int newX, newY, newWidth, newHeight;
+    newX = (int)x;
+    newY = (int)y;
+    newWidth = (int)width;
+    newHeight = (int)height;
+    return new SampleRect(newX, newY, newWidth, newHeight);
+  }
 }
 
 //---------------------------------------------------------------------

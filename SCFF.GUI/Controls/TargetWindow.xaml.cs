@@ -29,28 +29,31 @@ using SCFF.Common.Ext;
 using SCFF.Common.GUI;
 
 /// Window取り込み対象の設定用UserControl
-public partial class TargetWindow : UserControl, IUpdateByProfile {
+public partial class TargetWindow : UserControl, IUpdateByProfile, IDisposable {
   //===================================================================
-  // コンストラクタ/デストラクタ/ShutdownStartedイベントハンドラ
+  // コンストラクタ/Dispose/デストラクタ
   //===================================================================
 
   /// コンストラクタ
   public TargetWindow() {
     Debug.WriteLine("TargetWindow", "*** MEMORY[NEW] ***");
     InitializeComponent();
-    this.Dispatcher.ShutdownStarted += OnShutdownStarted;
   }
 
-  /// Dispatcher.ShutdownStartedイベントハンドラ
-  private void OnShutdownStarted(object sender, EventArgs e) {
-    Debug.WriteLine("TargetWindow", "*** MEMORY[ShutdownStarted] ***");
-    this.nullPen.Dispose();
+  /// Dispose
+  public void Dispose() {
+    if (this.nullPen != null) {
+      this.nullPen.Dispose();
+      Debug.WriteLine("TargetWindow.nullPen", "*** MEMORY[DISPOSE] ***");
+      this.nullPen = null;
+    }
+    GC.SuppressFinalize(this);
   }
 
   /// デストラクタ
   ~TargetWindow() {
     Debug.WriteLine("TargetWindow", "*** MEMORY[DELETE] ***");
-    this.Dispatcher.ShutdownStarted -= OnShutdownStarted;
+    this.Dispose();
   }
 
   //===================================================================

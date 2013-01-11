@@ -27,7 +27,7 @@ namespace SCFF.GUI.Controls {
 public partial class SCFFDSFEntries
     : UserControl, IUpdateByRuntimeOptions {
   //===================================================================
-  // コンストラクタ/デストラクタ/Closing/ShutdownStartedイベントハンドラ
+  // コンストラクタ/Dispose/デストラクタ
   //===================================================================
   
   /// コンストラクタ

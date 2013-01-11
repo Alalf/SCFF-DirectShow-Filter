@@ -27,7 +27,7 @@ using SCFF.Common;
 /// メインメニュー管理用UserControl
 public partial class MainMenu : UserControl, IUpdateByOptions {
   //===================================================================
-  // コンストラクタ/デストラクタ/Closing/ShutdownStartedイベントハンドラ
+  // コンストラクタ/Dispose/デストラクタ
   //===================================================================
 
   /// コンストラクタ

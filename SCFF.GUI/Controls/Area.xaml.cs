@@ -29,22 +29,8 @@ using SCFF.Common.Ext;
 
 /// クリッピング領域設定用UserControl
 public partial class Area : UserControl, IUpdateByProfile {
-
   //===================================================================
-  // 定数
-  //===================================================================
-
-  /// 仮想画面をスクリーン座標系で表したRect
-  /// @todo(me) 現在Desktop/DesktopListViewで使い回ししているが、問題が発生する可能性あり
-  private static readonly Rect VirtualScreenRect = new Rect {
-    X       = User32.GetSystemMetrics(User32.SM_XVIRTUALSCREEN),
-    Y       = User32.GetSystemMetrics(User32.SM_YVIRTUALSCREEN),
-    Width   = User32.GetSystemMetrics(User32.SM_CXVIRTUALSCREEN),
-    Height  = User32.GetSystemMetrics(User32.SM_CYVIRTUALSCREEN)
-  };
-
-  //===================================================================
-  // コンストラクタ/デストラクタ/Closing/ShutdownStartedイベントハンドラ
+  // コンストラクタ/Dispose/デストラクタ
   //===================================================================
 
   /// コンストラクタ

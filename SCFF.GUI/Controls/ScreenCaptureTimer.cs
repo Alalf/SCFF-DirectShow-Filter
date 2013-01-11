@@ -27,14 +27,32 @@ using System.Windows.Media.Imaging;
 using SCFF.Common.GUI;
 
 /// スクリーンキャプチャデータを取得するためのスレッド管理クラス
-public class ScreenCaptureTimer {
+public class ScreenCaptureTimer : IDisposable {
   //===================================================================
-  // コンストラクタ
+  // コンストラクタ/Dispose/デストラクタ
   //===================================================================
 
   /// コンストラクタ
   public ScreenCaptureTimer(double timerPeriod) {
+    Debug.WriteLine("ScreenCaptureTimer", "*** MEMORY[NEW] ***");
     this.timerPeriod = timerPeriod;
+  }
+
+  /// Dispose
+  public void Dispose() {
+    if (this.captureTimer != null) {
+      this.captureTimer.Change(Timeout.Infinite, Timeout.Infinite);
+      this.captureTimer.Dispose();
+      Debug.WriteLine("ScreenCaptureTimer.captureTimer", "*** MEMORY[DISPOSE] ***");
+      this.captureTimer = null;
+    }
+    GC.SuppressFinalize(this);
+  }
+
+  /// デストラクタ
+  ~ScreenCaptureTimer() {
+    Debug.WriteLine("ScreenCaptureTimer", "*** MEMORY[DELETE] ***");
+    this.Dispose();
   }
 
   //===================================================================
@@ -70,6 +88,7 @@ public class ScreenCaptureTimer {
   public void Init() {
     Debug.WriteLine("Init", "ScreenCaptureTimer");
     this.captureTimer = new Timer(TimerCallback, null, 0, (int)this.timerPeriod);
+    Debug.WriteLine("ScreenCaptureTimer.captureTimer", "*** MEMORY[NEW] ***");
   }
 
   /// 開始
@@ -87,21 +106,6 @@ public class ScreenCaptureTimer {
       this.isSuspended = true;
       // すべての格納されたBitmapを削除する
       Array.Clear(this.cachedBitmaps, 0, Common.Constants.MaxLayoutElementCount);
-    }
-  }
-
-  /// 終了
-  /// @warning DispatcherShutdownなどで必ず呼ぶこと
-  public void End() {
-    Debug.WriteLine("End", "ScreenCaptureTimer");
-    lock (this.sharedLock) {
-      this.isSuspended = true;
-      if (this.captureTimer != null) {
-        this.captureTimer.Change(Timeout.Infinite, Timeout.Infinite);
-        this.captureTimer.Dispose();
-        Debug.WriteLine("ScreenCaptureTimer.captureTimer", "*** MEMORY[DELETE] ***");
-        this.captureTimer = null;
-      }
     }
   }
 

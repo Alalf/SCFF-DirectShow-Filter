@@ -36,7 +36,7 @@ using SCFF.Common.GUI;
 /// LayoutEditImage内の座標系は([0-1]*Scale,[0-1]*Scale)で固定（プレビューのサイズに依存しない）
 /// 逆に言うと依存させてはいけない
 public partial class LayoutEdit
-    : UserControl, IUpdateByProfile, IUpdateByOptions, IUpdateByRuntimeOptions {
+    : UserControl, IUpdateByProfile, IUpdateByOptions, IUpdateByRuntimeOptions, IDisposable {
   //===================================================================
   // 定数
   //===================================================================  
@@ -57,7 +57,7 @@ public partial class LayoutEdit
   };
 
   //===================================================================
-  // コンストラクタ/デストラクタ/Closing/ShutdownStartedイベントハンドラ
+  // コンストラクタ/Dispose/デストラクタ
   //===================================================================
 
   /// コンストラクタ
@@ -65,8 +65,7 @@ public partial class LayoutEdit
     Debug.WriteLine("LayoutEdit", "*** MEMORY[NEW] ***");
 
     InitializeComponent();
-    this.Dispatcher.ShutdownStarted += OnShutdownStarted;
-    
+
     // できるだけ軽く
     RenderOptions.SetBitmapScalingMode(this.DrawingGroup, BitmapScalingMode.LowQuality);
 
@@ -81,16 +80,21 @@ public partial class LayoutEdit
     this.BuildDrawingGroup();
   }
 
-  /// Dispatcher.ShutdownStarted
-  private void OnShutdownStarted(object sender, EventArgs e) {
-    Debug.WriteLine("LayoutEdit", "*** MEMORY[ShutdownStarted] ***");
-    this.screenCaptureTimer.End();
+  /// Dispose
+  public void Dispose() {
+    if (this.screenCaptureTimer != null) {
+      this.screenCaptureTimer.Suspend();
+      this.screenCaptureTimer.Dispose();
+      Debug.WriteLine("LayoutEdit.screenCaptureTimer", "*** MEMORY[DISPOSE] ***");
+      this.screenCaptureTimer = null;
+    }
+    GC.SuppressFinalize(this);
   }
 
   /// デストラクタ
   ~LayoutEdit() {
     Debug.WriteLine("LayoutEdit", "*** MEMORY[DELETE] ***");
-    this.Dispatcher.ShutdownStarted -= OnShutdownStarted;
+    this.Dispose();
   }
 
   //===================================================================

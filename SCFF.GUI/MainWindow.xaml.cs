@@ -32,7 +32,7 @@ using SCFF.Common;
 public partial class MainWindow
     : Window, IUpdateByProfile, IUpdateByOptions, IUpdateByRuntimeOptions {
   //===================================================================
-  // コンストラクタ/デストラクタ/Closing/ShutdownStartedイベントハンドラ
+  // コンストラクタ/Dispose/デストラクタ
   //===================================================================
 
   /// コンストラクタ
@@ -48,16 +48,16 @@ public partial class MainWindow
     this.SetCompactView();
   }
 
+  //===================================================================
+  // イベントハンドラ
+  //===================================================================
+
   /// アプリケーション終了時に発生するClosingイベントハンドラ
   protected override void OnClosing(System.ComponentModel.CancelEventArgs e) {
     base.OnClosing(e);
 
     this.SaveTemporaryOptions();
   }
-
-  //===================================================================
-  // イベントハンドラ
-  //===================================================================
 
   /// Deactivated
   /// @param e 使用しない

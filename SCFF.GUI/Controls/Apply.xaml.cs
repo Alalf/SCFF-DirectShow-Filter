@@ -27,7 +27,7 @@ using System.Windows.Controls;
 public partial class Apply
     : UserControl, IUpdateByOptions {
   //===================================================================
-  // コンストラクタ/デストラクタ/Closing/ShutdownStartedイベントハンドラ
+  // コンストラクタ/Dispose/デストラクタ
   //===================================================================
   
   /// コンストラクタ

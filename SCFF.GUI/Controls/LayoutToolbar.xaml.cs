@@ -26,7 +26,7 @@ using System.Windows.Controls;
 /// レイアウト編集用ツールバーを管理するUserControl
 public partial class LayoutToolbar : UserControl, IUpdateByOptions {
   //===================================================================
-  // コンストラクタ/デストラクタ/Closing/ShutdownStartedイベントハンドラ
+  // コンストラクタ/Dispose/デストラクタ
   //===================================================================
 
   /// コンストラクタ

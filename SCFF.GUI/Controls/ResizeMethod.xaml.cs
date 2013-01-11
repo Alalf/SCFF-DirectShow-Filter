@@ -27,7 +27,7 @@ using SCFF.Common;
 /// SWScaleパラメータ設定用UserControl
 public partial class ResizeMethod : UserControl, IUpdateByProfile {
   //===================================================================
-  // コンストラクタ/デストラクタ/Closing/ShutdownStartedイベントハンドラ
+  // コンストラクタ/Dispose/デストラクタ
   //===================================================================
 
   /// コンストラクタ

@@ -26,7 +26,7 @@ using System.Windows.Input;
 /// AreaSelectWindowのコードビハインド
 public partial class AreaSelectWindow : Window {
   //===================================================================
-  // コンストラクタ/デストラクタ/Closing/ShutdownStartedイベントハンドラ
+  // コンストラクタ/Dispose/デストラクタ
   //===================================================================
 
   /// コンストラクタ

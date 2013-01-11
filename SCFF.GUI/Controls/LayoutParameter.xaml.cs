@@ -30,7 +30,7 @@ using SCFF.Common;
 public partial class LayoutParameter
     : UserControl, IUpdateByProfile, IUpdateByRuntimeOptions {
   //===================================================================
-  // コンストラクタ/デストラクタ/Closing/ShutdownStartedイベントハンドラ
+  // コンストラクタ/Dispose/デストラクタ
   //===================================================================
 
   /// コンストラクタ

@@ -429,30 +429,6 @@ public partial class Profile {
     public double BoundRelativeHeight {
       get { return this.BoundRelativeBottom - this.BoundRelativeTop; }
     }
-    /// @copydoc ILayoutElementView::BoundLeft
-    public int BoundLeft(int sampleWidth) {
-      return (int)Math.Ceiling(this.profile.additionalLayoutParameters[this.Index].BoundRelativeLeft * sampleWidth);
-    }
-    /// @copydoc ILayoutElementView::BoundTop
-    public int BoundTop(int sampleHeight) {
-      return (int)Math.Ceiling(this.profile.additionalLayoutParameters[this.Index].BoundRelativeTop * sampleHeight);
-    }
-    /// @copydoc ILayoutElementView::BoundRight
-    public int BoundRight(int sampleWidth) {
-      return (int)Math.Floor(this.profile.additionalLayoutParameters[this.Index].BoundRelativeRight * sampleWidth);
-    }
-    /// @copydoc ILayoutElementView::BoundBottom
-    public int BoundBottom(int sampleHeight) {
-      return (int)Math.Floor(this.profile.additionalLayoutParameters[this.Index].BoundRelativeBottom * sampleHeight);
-    }
-    /// @copydoc ILayoutElementView::BoundWidth
-    public int BoundWidth(int sampleWidth) {
-      return this.BoundRight(sampleWidth) - this.BoundLeft(sampleWidth);
-    }
-    /// @copydoc ILayoutElementView::BoundHeight
-    public int BoundHeight(int sampleHeight) {
-      return this.BoundBottom(sampleHeight) - this.BoundTop(sampleHeight);
-    }
 
     /// @copydoc ILayoutElement::SetBoundRelativeLeft
     public double SetBoundRelativeLeft {
@@ -474,40 +450,41 @@ public partial class Profile {
     public void FitBoundRelativeRect(int sampleWidth, int sampleHeight) {
       Debug.Assert(this.IsWindowValid, "Invalid Window", "LayoutElement.FitBoundRelativeRect");
 
-      // サンプル座標系でのパディングサイズを求める
-      double paddingTop, paddingBottom, paddingLeft, paddingRight;
-      Imaging.Utilities.CalculatePaddingSize(
-          this.BoundWidth(sampleWidth),
-          this.BoundHeight(sampleHeight),
-          this.ClippingWidthWithFit,
-          this.ClippingHeightWithFit,
-          this.Stretch,
-          this.KeepAspectRatio,
-          out paddingTop, out paddingBottom,
-          out paddingLeft, out paddingRight);
-      
-      // パディングサイズを相対座標系に戻す
-      /// @todo(me) Fitを連続で押すと変更がとまらない可能性あり
-      var paddingRelativeTop = 0.0;
-      var paddingRelativeBottom = 0.0;
-      var paddingRelativeLeft = 0.0;
-      var paddingRelativeRight = 0.0;
-      if (paddingTop + paddingBottom >= 1.0) {
-        // 単位ピクセル未満の調整はしない
-        paddingRelativeTop = paddingTop / sampleHeight;
-        paddingRelativeBottom = paddingBottom / sampleHeight;
-      }
-      if (paddingLeft + paddingRight >= 1.0) {
-        // 単位ピクセル未満の調整はしない
-        paddingRelativeLeft = paddingLeft / sampleWidth;
-        paddingRelativeRight = paddingRight / sampleWidth;
+      // サンプル座標系での領域を求める
+      var boundRect = this.GetBoundRect(sampleWidth, sampleHeight);
+      int x, y, width, height;
+      Imaging.Utilities.CalculateLayout(
+          boundRect.X, boundRect.Y,
+          boundRect.Width, boundRect.Height,
+          this.ClippingWidthWithFit, this.ClippingHeightWithFit,
+          this.Stretch, this.KeepAspectRatio,
+          out x, out y, out width, out height);
+
+      // 相対座標系に直す
+      var nextRelativeLeft = (double)x / sampleWidth;
+      var nextRelativeTop = (double)y / sampleHeight;
+      var nextRelativeRight = (double)(x + width) / sampleWidth;
+      var nextRelativeBottom = (double)(y + height) / sampleHeight;
+
+      // 調整量を計算する
+      var deltaHorizontal = sampleWidth *
+          (Math.Abs(nextRelativeLeft - this.BoundRelativeLeft) +
+           Math.Abs(nextRelativeRight - this.BoundRelativeRight));
+      var deltaVertical = sampleHeight *
+          (Math.Abs(nextRelativeTop - this.BoundRelativeTop) +
+           Math.Abs(nextRelativeBottom - this.BoundRelativeBottom));
+
+      // 相対座標系に戻してProfileに反映
+      if (deltaHorizontal < 2.0 && deltaVertical < 2.0) {
+        // ただし、調整量が左右方向に2ピクセル未満かつ上下方向に2ピクセル未満の場合は調整しない
+        Debug.WriteLine("Deference is too small", "LayoutElement.FitBoundRelativeRect");
+        return;
       }
 
-      // Profileの設定を変える
-      this.SetBoundRelativeLeft   = this.BoundRelativeLeft + paddingRelativeLeft;;
-      this.SetBoundRelativeTop    = this.BoundRelativeTop + paddingRelativeTop;
-      this.SetBoundRelativeRight  = this.BoundRelativeRight - paddingRelativeRight;
-      this.SetBoundRelativeBottom = this.BoundRelativeBottom - paddingRelativeBottom;
+      this.SetBoundRelativeLeft   = nextRelativeLeft;
+      this.SetBoundRelativeRight  = nextRelativeRight;
+      this.SetBoundRelativeTop    = nextRelativeTop;
+      this.SetBoundRelativeBottom = nextRelativeBottom;
     }
 
     //=================================================================
@@ -564,6 +541,33 @@ public partial class Profile {
     }
 
     //=================================================================
+    // SampleWidth/Heightの値が必要
+    //=================================================================
+
+    /// @copydoc ILayoutElementView::GetBoundRect
+    public SampleRect GetBoundRect(int sampleWidth, int sampleHeight) {
+      return new SampleRect(
+        this.BoundRelativeLeft * sampleWidth,
+        this.BoundRelativeTop * sampleHeight,
+        this.BoundRelativeWidth * sampleWidth,
+        this.BoundRelativeHeight * sampleHeight);
+    }
+    /// @copydoc ILayoutElementView::GetActualBoundRect
+    public SampleRect GetActualBoundRect(int sampleWidth, int sampleHeight) {
+      Debug.Assert(this.IsWindowValid, "Invalid Window", "LayoutElement.GetActualSampleRect");
+      var boundRect = this.GetBoundRect(sampleWidth, sampleHeight);
+      int x, y, width, height;
+      Imaging.Utilities.CalculateLayout(
+          boundRect.X, boundRect.Y,
+          boundRect.Width, boundRect.Height,
+          this.ClippingWidthWithFit, this.ClippingHeightWithFit,
+          this.Stretch, this.KeepAspectRatio,
+          out x, out y, out width, out height);
+      /// @attention 切捨て・切り上げ計算をここでしている
+      return new SampleRect(x, y, width, height);
+    }
+
+    //=================================================================
     // ToString
     //=================================================================
 
@@ -581,10 +585,11 @@ public partial class Profile {
       if (isCurrent && isDummy) {
         return string.Format(" [{0}] {1}", this.Index + 1, this.WindowCaption);
       } else if (isCurrent) {
+        var boundRect = this.GetBoundRect(sampleWidth, sampleHeight);
         return string.Format(" [{0}] ({1}x{2}) {3}",
             this.Index + 1,
-            this.BoundWidth(sampleWidth),
-            this.BoundHeight(sampleHeight),
+            boundRect.Width,
+            boundRect.Height,
             this.WindowCaption);
       } else {
         return string.Format(" [{0}]", this.Index + 1);
@@ -637,23 +642,27 @@ public partial class Profile {
     }
     /// @copydoc ILayoutElementView::GetBoundLeftString
     public string GetBoundLeftString(bool isDummy, int sampleWidth) {
-      return isDummy ? string.Format("({0})", this.BoundLeft(sampleWidth))
-                     : this.BoundLeft(sampleWidth).ToString();
+      var boundRect = this.GetBoundRect(sampleWidth, 100);  // dummy
+      return isDummy ? string.Format("({0})", boundRect.X)
+                     : boundRect.X.ToString();
     }
     /// @copydoc ILayoutElementView::GetBoundTopString
     public string GetBoundTopString(bool isDummy, int sampleHeight) {
-      return isDummy ? string.Format("({0})", this.BoundTop(sampleHeight))
-                     : this.BoundTop(sampleHeight).ToString();
+      var boundRect = this.GetBoundRect(100, sampleHeight);  // dummy
+      return isDummy ? string.Format("({0})", boundRect.Y)
+                     : boundRect.Y.ToString();
     }
     /// @copydoc ILayoutElementView::GetBoundWidthString
     public string GetBoundWidthString(bool isDummy, int sampleWidth) {
-      return isDummy ? string.Format("({0})", this.BoundWidth(sampleWidth))
-                     : this.BoundWidth(sampleWidth).ToString();
+      var boundRect = this.GetBoundRect(sampleWidth, 100);  // dummy
+      return isDummy ? string.Format("({0})", boundRect.Width)
+                     : boundRect.Width.ToString();
     }
     /// @copydoc ILayoutElementView::GetBoundHeightString
     public string GetBoundHeightString(bool isDummy, int sampleHeight) {
-      return isDummy ? string.Format("({0})", this.BoundHeight(sampleHeight))
-                     : this.BoundHeight(sampleHeight).ToString();
+      var boundRect = this.GetBoundRect(100, sampleHeight);  // dummy
+      return isDummy ? string.Format("({0})", boundRect.Height)
+                     : boundRect.Height.ToString();
     }
 
     //=================================================================

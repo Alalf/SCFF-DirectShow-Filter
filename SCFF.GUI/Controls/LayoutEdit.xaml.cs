@@ -100,10 +100,10 @@ public partial class LayoutEdit
   /// キャプションのフォントサイズ
   private const int CaptionFontSize = 12;
 
-  /// レイアウト要素のキャプションの生成
+  /// レイアウト要素のヘッダーの生成
   /// @param layoutElement 対象のレイアウト要素
   /// @return DrawingContext.DrawTextで描画可能なDrawingVisualオブジェクト
-  private FormattedText CreateLayoutElementCaption(ILayoutElementView layoutElement) {
+  private FormattedText CreateHeader(ILayoutElementView layoutElement) {
     var isCurrent = layoutElement.Index == App.Profile.CurrentView.Index;
     var isDummy = App.RuntimeOptions.SelectedEntryIndex == -1;
 
@@ -143,8 +143,9 @@ public partial class LayoutEdit
         textBrush);
 
     // Clipping
-    var maxWidth = layoutElement.BoundWidth(App.RuntimeOptions.CurrentSampleWidth);
-    formattedText.MaxTextWidth = maxWidth;
+    var boundRect = layoutElement.GetBoundRect(App.RuntimeOptions.CurrentSampleWidth,
+                                               App.RuntimeOptions.CurrentSampleHeight);
+    formattedText.MaxTextWidth = boundRect.Width;
     formattedText.MaxLineCount = 1;
     return formattedText;
   }
@@ -159,16 +160,10 @@ public partial class LayoutEdit
     // プレビューの描画
     if (!layoutElement.IsWindowValid) return;
 
-    var layoutElementRect = this.CreateSampleLayoutElementRect(layoutElement);
-    double x, y, width, height;
-    Common.Imaging.Utilities.CalculateLayout(
-        layoutElementRect.Left, layoutElementRect.Top,
-        layoutElementRect.Width, layoutElementRect.Height,
-        layoutElement.ClippingWidthWithFit, layoutElement.ClippingHeightWithFit,
-        layoutElement.Stretch, layoutElement.KeepAspectRatio,
-        out x, out y, out width, out height);
-    var actualLayoutElementRect = new Rect(x, y, width, height);
-    dc.DrawImage(bitmap, actualLayoutElementRect);
+    var actualBoundRect = layoutElement.GetActualBoundRect(
+        App.RuntimeOptions.CurrentSampleWidth,
+        App.RuntimeOptions.CurrentSampleHeight).ToRect();
+    dc.DrawImage(bitmap, actualBoundRect);
   }
 
   /// 枠線とキャプションの描画
@@ -198,25 +193,26 @@ public partial class LayoutEdit
     }
 
     // フレーム(内枠)の描画
-    var layoutElementRect = this.CreateSampleLayoutElementRect(layoutElement);
-    var inflateValue = framePen.Thickness / 2;
+    var boundRect = layoutElement.GetBoundRect(
+        App.RuntimeOptions.CurrentSampleWidth,
+        App.RuntimeOptions.CurrentSampleHeight).ToRect();
 
     /// @todo(me) Windowが不正な場合はBorderオプションに関係なく表示しないといけない
     var frameBrush = layoutElement.IsWindowValid ? Brushes.Transparent : Brushes.Red;
+    var inflateValue = framePen.Thickness / 2;
     dc.DrawRectangle(frameBrush, framePen,
-                     Rect.Inflate(layoutElementRect, -inflateValue, -inflateValue));
+                     Rect.Inflate(boundRect, -inflateValue, -inflateValue));
 
-    // キャプションの描画
-    var captionPoint = new Point(layoutElementRect.X, layoutElementRect.Y);
-    var layoutElementCaption =
-        this.CreateLayoutElementCaption(layoutElement);
+    // ヘッダーの描画
+    var headerPoint = new Point(boundRect.X, boundRect.Y);
+    var header = this.CreateHeader(layoutElement);
 
-    // キャプションから縁取りを取得
+    // ヘッダーから縁取りを取得
     /// @todo(me) 若干重い？
-    var textGeometry = layoutElementCaption.BuildGeometry(captionPoint);
+    var textGeometry = header.BuildGeometry(headerPoint);
     dc.DrawGeometry(null, BrushesAndPens.DropShadowPen, textGeometry);
 
-    dc.DrawText(layoutElementCaption, captionPoint);
+    dc.DrawText(header, headerPoint);
   }
 
   /// サンプルの幅・高さをRectに変換
@@ -229,16 +225,6 @@ public partial class LayoutEdit
         Height = (double)App.RuntimeOptions.CurrentSampleHeight
       };
     }
-  }
-
-  /// サンプル座標系でのレイアウト要素の領域
-  private Rect CreateSampleLayoutElementRect(ILayoutElementView layoutElement) {
-    return new Rect {
-      X = layoutElement.BoundLeft(App.RuntimeOptions.CurrentSampleWidth),
-      Y = layoutElement.BoundTop(App.RuntimeOptions.CurrentSampleHeight),
-      Width = layoutElement.BoundWidth(App.RuntimeOptions.CurrentSampleWidth),
-      Height = layoutElement.BoundHeight(App.RuntimeOptions.CurrentSampleHeight)
-    };
   }
 
   /// DrawingGroupの再校正
@@ -313,6 +299,8 @@ public partial class LayoutEdit
     var relativeY = mousePoint.Y / App.RuntimeOptions.CurrentSampleHeight;
     return new RelativePoint(relativeX, relativeY);
   }
+
+  //-------------------------------------------------------------------
 
   /// LayoutEditImage: MouseDown
   /// @param sender 使用しない

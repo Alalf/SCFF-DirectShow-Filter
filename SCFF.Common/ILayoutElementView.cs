@@ -125,46 +125,22 @@ public interface ILayoutElementView {
   /// 相対座標系でのレイアウト要素の高さ
   double BoundRelativeHeight { get; }
 
-  /// サンプル上のレイアウト要素左上端のX座標
-  /// @attention 小数点以下切り捨て
-  /// @param sampleWidth サンプルの幅
-  /// @return サンプル上のレイアウト要素左上端のX座標
-  int BoundLeft(int sampleWidth);
-
-  /// サンプル上のレイアウト要素左上端のY座標
-  /// @attention 小数点以下切り捨て
-  /// @param sampleHeight サンプルの高さ
-  /// @return サンプル上のレイアウト要素左上端のY座標
-  int BoundTop(int sampleHeight);
-
-  /// サンプル上のレイアウト要素右下端のX座標
-  /// @attention 小数点以下切り上げ
-  /// @param sampleWidth サンプルの幅
-  /// @return サンプル上のレイアウト要素右下端のX座標
-  int BoundRight(int sampleWidth);
-
-  /// サンプル上のレイアウト要素右下端のY座標
-  /// @attention 小数点以下切り上げ
-  /// @param sampleHeight サンプルの高さ
-  /// @return サンプル上のレイアウト要素右下端のY座標
-  int BoundBottom(int sampleHeight);
-
-  /// サンプル上のレイアウト要素の幅
-  /// @param sampleWidth サンプルの幅
-  /// @return サンプル上のレイアウト要素の幅
-  int BoundWidth(int sampleWidth);
-
-  /// サンプル上のレイアウト要素の高さ
-  /// @param sampleHeight サンプルの高さ
-  /// @return サンプル上のレイアウト要素の高さ
-  int BoundHeight(int sampleHeight);
-
   //=================================================================
   // Screen
   //=================================================================
 
   /// スクリーン座標系で表されたクリッピング領域(Fit考慮)を取得する
   ScreenRect ScreenClippingRectWithFit { get; }
+
+  //=================================================================
+  // Sample
+  //=================================================================
+
+  /// サンプル座標系でのレイアウト要素の領域
+  SampleRect GetBoundRect(int sampleWidth, int sampleHeight);
+
+  /// サンプル座標系でのレイアウト要素の画像部分が占める領域
+  SampleRect GetActualBoundRect(int sampleWidth, int sampleHeight);
 
   //=================================================================
   // ToString

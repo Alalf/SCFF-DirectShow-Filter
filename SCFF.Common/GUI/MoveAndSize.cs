@@ -20,6 +20,8 @@
 
 namespace SCFF.Common.GUI {
 
+using System.Diagnostics;
+
 /// 現在のマウス座標とオフセットを指定してレイアウト要素を移動・拡大縮小
 public static class MoveAndSize {
   //===================================================================
@@ -31,44 +33,60 @@ public static class MoveAndSize {
       HitModes hitMode,
       RelativePoint mousePoint, RelativeMouseOffset mouseOffset,
       SnapGuide snapGuide) {
-    // Snapするのは軸あたり1回のみ
-    bool hasAlreadyHorizontalSnapped = false;
-    bool hasAlreadyVerticalSnapped = false;
-
-    // Left
+    // 初期値
     var nextLeft = mousePoint.X - mouseOffset.Left;
-    if (snapGuide != null) {
-      hasAlreadyHorizontalSnapped |= snapGuide.TryHorizontalSnap(ref nextLeft);
-    }
-    if (nextLeft < 0.0) nextLeft = 0.0;
-
-    // Top
     var nextTop = mousePoint.Y - mouseOffset.Top;
-    if (snapGuide != null) {
-      hasAlreadyVerticalSnapped |= snapGuide.TryVerticalSnap(ref nextTop);
-    }
-    if (nextTop < 0.0) nextTop = 0.0;
-
-    // Right
     var nextRight = nextLeft + layoutElement.BoundRelativeWidth;
-    if (snapGuide != null && !hasAlreadyHorizontalSnapped &&
-        snapGuide.TryHorizontalSnap(ref nextRight)) {
-      // スナップ補正がかかった場合
-      nextLeft = nextRight - layoutElement.BoundRelativeWidth;
+    var nextBottom = nextTop + layoutElement.BoundRelativeHeight;
+
+    // スナップガイドによる補正(優先度: 左上右下)
+    if (snapGuide != null) {
+      // Left
+      var isLeftSnapped = snapGuide.TryHorizontalSnap(ref nextLeft);
+      if (isLeftSnapped) {
+        nextRight = nextLeft + layoutElement.BoundRelativeWidth;
+      }
+      // Top
+      var isTopSnapped = snapGuide.TryVerticalSnap(ref nextTop);
+      if (isTopSnapped) {
+        nextBottom = nextTop + layoutElement.BoundRelativeHeight;
+      }
+      // Right (LeftにSnapされていたら無視する
+      if (!isLeftSnapped) {
+        var isRightSnapped = snapGuide.TryHorizontalSnap(ref nextRight);
+        if (isRightSnapped) {
+          nextLeft = nextRight - layoutElement.BoundRelativeWidth;
+        }
+      }
+      // Bottom (TopにSnapされていたら無視する
+      if (!isTopSnapped) {
+        var isBottomSnapped = snapGuide.TryVerticalSnap(ref nextBottom);
+        if (isBottomSnapped) {
+          nextTop = nextBottom - layoutElement.BoundRelativeHeight;
+        }
+      }
     }
-    if (nextRight > 1.0) {
+
+    // 一気に補正
+    if (nextLeft < 0.0 && 1.0 < nextRight) {
+      nextLeft = 0.0;
+      nextRight = 1.0;
+      Debug.WriteLine("Width is too wide for move", "MoveAndSize.Move");
+    } else if (nextLeft < 0.0) {
+      nextLeft = 0.0;
+      nextRight = nextLeft + layoutElement.BoundRelativeWidth;
+    } else if (nextRight > 1.0) {
       nextRight = 1.0;
       nextLeft = nextRight - layoutElement.BoundRelativeWidth;
-    }
-
-    // Bottom
-    var nextBottom = nextTop + layoutElement.BoundRelativeHeight;
-    if (snapGuide != null && !hasAlreadyVerticalSnapped &&
-        snapGuide.TryVerticalSnap(ref nextBottom)) {
-      // スナップ補正がかかった場合
-      nextTop = nextBottom - layoutElement.BoundRelativeHeight;
-    }
-    if (nextBottom > 1.0) {
+    } 
+    if (nextTop < 0.0 && 1.0 < nextBottom) {
+      nextTop = 0.0;
+      nextBottom = 1.0;
+      Debug.WriteLine("Height is too tall for move", "MoveAndSize.Move");
+    } else if (nextTop < 0.0) {
+      nextTop = 0.0;
+      nextBottom = nextTop + layoutElement.BoundRelativeHeight;
+    } else if (nextBottom > 1.0) {
       nextBottom = 1.0;
       nextTop = nextBottom - layoutElement.BoundRelativeHeight;
     }

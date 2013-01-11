@@ -29,12 +29,12 @@ using System.Diagnostics;
 /// @warning WPFでは座標のほとんどが整数型ではなく浮動小数点型
 public static class Utilities {
   /// 境界の座標系と同じ座標系の新しい配置を計算する
-  public static bool CalculateLayout(double boundX, double boundY,
-      double boundWidth, double boundHeight,
-      double inputWidth, double inputHeight,
+  public static bool CalculateLayout(int boundX, int boundY,
+      int boundWidth, int boundHeight,
+      int inputWidth, int inputHeight,
       bool stretch, bool keepAspectRatio,
-      out double newX, out double newY,
-      out double newWidth, out double newHeight) {
+      out int newX, out int newY,
+      out int newWidth, out int newHeight) {
     // 高さと幅はかならず0より上
     Debug.Assert(inputWidth > 0 && inputHeight > 0 &&
                  boundWidth > 0 && boundHeight > 0,
@@ -51,8 +51,8 @@ public static class Utilities {
     }
 
     // 高さと幅の比率を求めておく
-    var boundAspect = boundWidth / boundHeight;
-    var inputAspect = inputWidth / inputHeight;
+    var boundAspect = (double)boundWidth / boundHeight;
+    var inputAspect = (double)inputWidth / inputHeight;
 
     // inputのサイズがboundより完全に小さいかどうか
     bool needExpand = inputWidth <= boundWidth &&
@@ -75,7 +75,7 @@ public static class Utilities {
         //    = heightの倍率はwidthの引き伸ばし比率で求められる
         newWidth = boundWidth;
         newHeight = inputHeight * boundWidth / inputWidth;
-        if (boundHeight < newHeight) newHeight = boundHeight;
+        Debug.Assert(newHeight <= boundHeight);
         newX = boundX;
         var paddingHeight = (boundHeight - newHeight) / 2;
         newY = boundY + paddingHeight;
@@ -85,7 +85,7 @@ public static class Utilities {
         //    = widthの倍率はheightの引き伸ばし比率で求められる
         newHeight = boundHeight;
         newWidth = inputWidth * boundHeight / inputHeight;
-        if (boundWidth < newWidth) newWidth = boundWidth;
+        Debug.Assert(newWidth <= boundWidth);
         newY = boundY;
         var paddingWidth = (boundWidth - newWidth) / 2;
         newX = boundX + paddingWidth;
@@ -111,12 +111,12 @@ public static class Utilities {
   }
 
   /// 幅と高さから拡大縮小した場合のパディングサイズを求める
-  public static bool CalculatePaddingSize(double boundWidth, double boundHeight,
-      double inputWidth, double inputHeight,
+  public static bool CalculatePaddingSize(int boundWidth, int boundHeight,
+      int inputWidth, int inputHeight,
       bool stretch, bool keepAspectRatio,
-      out double paddingTop, out double paddingBottom,
-      out double paddingLeft, out double paddingRight) {
-    double newX, newY, newWidth, newHeight;
+      out int paddingTop, out int paddingBottom,
+      out int paddingLeft, out int paddingRight) {
+    int newX, newY, newWidth, newHeight;
     // 座標系はbound領域内
     bool error = Utilities.CalculateLayout(0, 0, boundWidth, boundHeight,
         inputWidth, inputHeight,

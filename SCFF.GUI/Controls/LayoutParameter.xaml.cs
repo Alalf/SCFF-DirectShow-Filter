@@ -80,7 +80,7 @@ public partial class LayoutParameter
   // *Changed/Collapsed/Expanded
   //-------------------------------------------------------------------
 
-  /// BoundX/BoundY/BoundWidth/BoundHeightを更新する
+  /// BoundX/BoundY/GetBoundWidth/BoundHeightを更新する
   /// @attention *Changedイベントハンドラが無いのでそのまま代入してOK
   private void UpdateDisabledTextboxes() {
     // dummyの場合もあり

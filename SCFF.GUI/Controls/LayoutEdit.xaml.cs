@@ -276,7 +276,12 @@ public partial class LayoutEdit
     // マウス操作中は更新しない
     if (this.hitMode != HitModes.Neutral) return;
 
-    // プレビュー更新のために再描画
+    // プレビュー更新のためにリクエスト送信+再描画
+    this.screenCaptureTimer.ClearRequests();
+    foreach (var layoutElement in App.Profile) {
+      if (!layoutElement.IsWindowValid) continue;
+      this.SendRequest(layoutElement, false);
+    }
     this.BuildDrawingGroup();
     Debug.WriteLine(string.Format("Redraw ({0:F2}, {1:F2})",
                                   this.LayoutEditImage.ActualWidth,

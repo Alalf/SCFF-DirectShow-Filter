@@ -137,9 +137,15 @@ public interface ILayoutElementView {
   //=================================================================
 
   /// サンプル座標系でのレイアウト要素の領域
+  /// @param sampleWidth サンプルの幅
+  /// @param sampleHeight サンプルの高さ
+  /// @return サンプル座標系でのレイアウト要素の領域
   SampleRect GetBoundRect(int sampleWidth, int sampleHeight);
 
   /// サンプル座標系でのレイアウト要素の画像部分が占める領域
+  /// @param sampleWidth サンプルの幅
+  /// @param sampleHeight サンプルの高さ
+  /// @return サンプル座標系でのレイアウト要素の画像部分が占める領域
   SampleRect GetActualBoundRect(int sampleWidth, int sampleHeight);
 
   //=================================================================
@@ -147,8 +153,15 @@ public interface ILayoutElementView {
   //=================================================================
 
   /// ヘッダー表示用文字列
+  /// @param maxLength 文字列の長さの上限
+  /// @return ヘッダー表示用文字列
   string GetHeaderString(int maxLength);
-  /// ヘッダー表示用文字列
+  /// ヘッダー表示用文字列(GUI用)
+  /// @param isCurrent 現在選択中のLayoutElementか
+  /// @param isDummy ダミープレビューサイズかどうか
+  /// @param sampleWidth サンプルの幅
+  /// @param sampleHeight サンプルの高さ
+  /// @return ヘッダー表示用文字列(GUI用)
   string GetHeaderStringForGUI(bool isCurrent, bool isDummy, int sampleWidth, int sampleHeight);
 
   /// ClippingX表示用
@@ -170,13 +183,38 @@ public interface ILayoutElementView {
   string BoundRelativeBottomString { get; }
 
   /// BoundLeft表示用
+  /// @param isDummy ダミープレビューサイズかどうか
+  /// @param sampleWidth サンプルの幅
+  /// @return BoundLeftを表す文字列
   string GetBoundLeftString(bool isDummy, int sampleWidth);
   /// BoundTop表示用
+  /// @param isDummy ダミープレビューサイズかどうか
+  /// @param sampleHeight サンプルの高さ
+  /// @return BoundTopを表す文字列
   string GetBoundTopString(bool isDummy, int sampleHeight);
   /// BoundRight表示用
+  /// @param isDummy ダミープレビューサイズかどうか
+  /// @param sampleWidth サンプルの幅
+  /// @return BoundWidthを表す文字列
   string GetBoundWidthString(bool isDummy, int sampleWidth);
   /// BoundBottom表示用
+  /// @param isDummy ダミープレビューサイズかどうか
+  /// @param sampleHeight サンプルの高さ
+  /// @return BoundHeightを表す文字列
   string GetBoundHeightString(bool isDummy, int sampleHeight);
+
+  /// SWScaleLumaGBlur表示用
+  string SWScaleLumaGBlurString { get; }
+  /// SWScaleLumaSharpen表示用
+  string SWScaleLumaSharpenString { get; } 
+  /// SWScaleChromaHshift表示用
+  string SWScaleChromaHshiftString { get; }
+  /// SWScaleChromaGBlur表示用
+  string SWScaleChromaGBlurString { get; }
+  /// SWScaleChromaSharpen表示用
+  string SWScaleChromaSharpenString { get; }
+  /// SWScaleChromaVshift表示用
+  string SWScaleChromaVshiftString { get; }
 
   //=================================================================
   // Backup

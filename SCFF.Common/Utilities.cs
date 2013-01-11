@@ -50,6 +50,9 @@ public static class Utilities {
 
   /// WindowのClient座標系での領域を返す
   /// @warning windowType == Desktop時のみ、左上端がマイナス座標になる可能性がある
+  /// @param windowType Windowタイプ
+  /// @param window Windowハンドル
+  /// @return WindowのClient座標系での領域(Desktopのみ左上端が(0,0)とは限らない)
   public static ClientRect GetWindowRect(WindowTypes windowType, UIntPtr window) {
     switch (windowType) {
       case WindowTypes.Normal: {

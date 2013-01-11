@@ -148,7 +148,7 @@ public partial class Profile {
       get { return this.profile.additionalLayoutParameters[this.Index].WindowCaption; }
     }
 
-    // Clipping*WithoutFitの補正
+    /// Clipping*WithoutFitの補正
     private void FixClippingWithoutFit() {
       var windowRect = Utilities.GetWindowRect(this.WindowType, this.Window);
       this.SetClippingXWithoutFit = windowRect.X;
@@ -663,6 +663,30 @@ public partial class Profile {
       var boundRect = this.GetBoundRect(100, sampleHeight);  // dummy
       return isDummy ? string.Format("({0})", boundRect.Height)
                      : boundRect.Height.ToString();
+    }
+    /// @copydoc ILayoutElementView::SWScaleLumaGBlurString
+    public string SWScaleLumaGBlurString {
+      get { return this.SWScaleLumaGBlur.ToString("F2"); }
+    }
+    /// @copydoc ILayoutElementView::SWScaleLumaSharpenString
+    public string SWScaleLumaSharpenString {
+      get { return this.SWScaleLumaSharpen.ToString("F2"); }
+    }
+    /// @copydoc ILayoutElementView::SWScaleChromaHshiftString
+    public string SWScaleChromaHshiftString {
+      get { return this.SWScaleChromaHshift.ToString("F2"); }
+    }
+    /// @copydoc ILayoutElementView::SWScaleChromaGBlurString
+    public string SWScaleChromaGBlurString {
+      get { return this.SWScaleChromaGBlur.ToString("F2"); }
+    }
+    /// @copydoc ILayoutElementView::SWScaleChromaSharpenString
+    public string SWScaleChromaSharpenString {
+      get { return this.SWScaleChromaSharpen.ToString("F2"); }
+    }
+    /// @copydoc ILayoutElementView::SWScaleChromaVshiftString
+    public string SWScaleChromaVshiftString {
+      get { return this.SWScaleChromaVshift.ToString("F2"); }
     }
 
     //=================================================================

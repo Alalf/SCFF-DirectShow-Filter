@@ -251,12 +251,12 @@ public partial class ResizeMethod : UserControl, IUpdateByProfile {
 
     var index = Constants.ResizeMethodIndexes[App.Profile.CurrentView.SWScaleFlags];
     this.SWScaleFlags.SelectedIndex = index;
-    this.SWScaleLumaGBlur.Text = App.Profile.CurrentView.SWScaleLumaGBlur.ToString("F2");
-    this.SWScaleLumaSharpen.Text = App.Profile.CurrentView.SWScaleLumaSharpen.ToString("F2");
-    this.SWScaleChromaHshift.Text = App.Profile.CurrentView.SWScaleChromaHshift.ToString("F2");
-    this.SWScaleChromaGBlur.Text = App.Profile.CurrentView.SWScaleChromaGBlur.ToString("F2");
-    this.SWScaleChromaSharpen.Text = App.Profile.CurrentView.SWScaleChromaSharpen.ToString("F2");
-    this.SWScaleChromaVshift.Text = App.Profile.CurrentView.SWScaleChromaVshift.ToString("F2");
+    this.SWScaleLumaGBlur.Text = App.Profile.CurrentView.SWScaleLumaGBlurString;
+    this.SWScaleLumaSharpen.Text = App.Profile.CurrentView.SWScaleLumaSharpenString;
+    this.SWScaleChromaHshift.Text = App.Profile.CurrentView.SWScaleChromaHshiftString;
+    this.SWScaleChromaGBlur.Text = App.Profile.CurrentView.SWScaleChromaGBlurString;
+    this.SWScaleChromaSharpen.Text = App.Profile.CurrentView.SWScaleChromaSharpenString;
+    this.SWScaleChromaVshift.Text = App.Profile.CurrentView.SWScaleChromaVshiftString;
     this.IsEnabledByProfile = true;
   }
   /// @copydoc IUpdateByProfile::UpdateByEntireProfile

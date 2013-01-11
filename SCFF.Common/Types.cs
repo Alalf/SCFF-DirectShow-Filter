@@ -196,12 +196,18 @@ public class DoubleRect {
 // サンプル座標系のPoint/Rect etc.
 //---------------------------------------------------------------------
 
+/// サンプル座標系のRect
 public class SampleRect : IntRect {
   /// コンストラクタ
   public SampleRect(int x, int y, int width, int height)
       : base(x, y, width, height) {}
   /// 補正つきstaticコンストラクタ
   /// @todo(me) 単純すぎる気がする。ちょっと考え中。
+  /// @param x Doubleのx
+  /// @param y Doubleのy
+  /// @param width DoubleのWidth
+  /// @param height DoubleのHeight
+  /// @return サンプル座標系のRect(プロパティは整数)
   public static SampleRect FromDouble(double x, double y, double width, double height) {
     int newX, newY, newWidth, newHeight;
     newX = (int)x;
@@ -216,6 +222,7 @@ public class SampleRect : IntRect {
 // クライアント座標系のPoint/Rect etc.
 //---------------------------------------------------------------------
 
+/// クライアント座標系のRect
 public class ClientRect : IntRect {
   /// コンストラクタ
   public ClientRect(int x, int y, int width, int height)

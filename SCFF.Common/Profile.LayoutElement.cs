@@ -150,14 +150,13 @@ public partial class Profile {
 
     // Clipping*WithoutFitの補正
     private void FixClippingWithoutFit() {
-      this.SetClippingXWithoutFit = Utilities.GetWindowOrigin(this.WindowType).Item1;
-      this.SetClippingYWithoutFit = Utilities.GetWindowOrigin(this.WindowType).Item2;
-      this.SetClippingWidthWithoutFit = Math.Min(
-          this.ClippingWidthWithoutFit,
-          Utilities.GetWindowSize(this.WindowType, this.Window).Item1);
-      this.SetClippingHeightWithoutFit = Math.Min(
-          this.ClippingHeightWithoutFit,
-          Utilities.GetWindowSize(this.WindowType, this.Window).Item2);
+      var windowRect = Utilities.GetWindowRect(this.WindowType, this.Window);
+      this.SetClippingXWithoutFit = windowRect.X;
+      this.SetClippingYWithoutFit = windowRect.Y;
+      this.SetClippingWidthWithoutFit =
+          Math.Min(this.ClippingWidthWithoutFit, windowRect.Width);
+      this.SetClippingHeightWithoutFit =
+          Math.Min(this.ClippingHeightWithoutFit, windowRect.Height);
     }
 
     /// @copydoc ILayoutElement::SetWindow
@@ -231,28 +230,28 @@ public partial class Profile {
     /// @copydoc ILayoutElementView::ClippingXWithFit
     public int ClippingXWithFit {
       get {
-        return this.Fit ? Utilities.GetWindowOrigin(this.WindowType).Item1
+        return this.Fit ? Utilities.GetWindowRect(this.WindowType, this.Window).X
                         : this.ClippingXWithoutFit;
       }
     }
     /// @copydoc ILayoutElementView::ClippingYWithFit
     public int ClippingYWithFit {
       get {
-        return this.Fit ? Utilities.GetWindowOrigin(this.WindowType).Item2
+        return this.Fit ? Utilities.GetWindowRect(this.WindowType, this.Window).Y
                         : this.ClippingYWithoutFit;
       }
     }
     /// @copydoc ILayoutElementView::ClippingWidthWithFit
     public int ClippingWidthWithFit {
       get {
-        return this.Fit ? Utilities.GetWindowSize(this.WindowType, this.Window).Item1
+        return this.Fit ? Utilities.GetWindowRect(this.WindowType, this.Window).Width
                         : this.ClippingWidthWithoutFit;
       }
     }
     /// @copydoc ILayoutElementView::ClippingHeightWithFit
     public int ClippingHeightWithFit {
       get {
-        return this.Fit ? Utilities.GetWindowSize(this.WindowType, this.Window).Item2
+        return this.Fit ? Utilities.GetWindowRect(this.WindowType, this.Window).Height
                         : this.ClippingHeightWithoutFit;
       }
     }
@@ -525,20 +524,24 @@ public partial class Profile {
       }
     }
 
-    /// @copydoc ILayoutElement::SetClippingRect
-    public void SetClippingRect(ScreenRect intersectRect) {
+    /// @copydoc ILayoutElement::SetClippingRectByScreenRect
+    public void SetClippingRectByScreenRect(ScreenRect nextScreenRect) {
+      Debug.Assert(this.IsWindowValid, "Invalid Window", "LayoutElement.SetClippingRectByScreenRect");
+
       // ウィンドウの領域とIntersectをとる
       var boundScreenRect = Utilities.GetWindowScreenRect(this.WindowType, this.Window);
-      var nextScreenRect = intersectRect.Intersect(boundScreenRect);
-      if (nextScreenRect == null) {
-        Debug.WriteLine("No Intersection", "LayoutElement.SetClippingRect");
+      if (!nextScreenRect.IntersectsWith(boundScreenRect)) {
+        Debug.WriteLine("No Intersection", "LayoutElement.SetClippingRectByScreenRect");
         return;
       }
+      /// @warning nextScreenRectが更新されるので注意
+      nextScreenRect.Intersect(boundScreenRect);
 
       // プロパティを変更
       this.SetFit = false;
       switch (this.WindowType) {
-        case WindowTypes.Normal: {
+        case WindowTypes.Normal:
+        case WindowTypes.DesktopListView: {
           // Screen->Client座標系変換
           this.SetClippingXWithoutFit = nextScreenRect.X - boundScreenRect.X;
           this.SetClippingYWithoutFit = nextScreenRect.Y - boundScreenRect.Y;
@@ -550,14 +553,8 @@ public partial class Profile {
           this.SetClippingYWithoutFit = nextScreenRect.Y;
           break;
         }
-        case WindowTypes.DesktopListView: {
-          // Screen->Client座標系変換
-          this.SetClippingXWithoutFit = nextScreenRect.X - boundScreenRect.X;
-          this.SetClippingYWithoutFit = nextScreenRect.Y - boundScreenRect.Y;
-          break;
-        }
         default : {
-          Debug.Fail("Invalid WindowTypes", "LayoutElement.SetClippingRect");
+          Debug.Fail("Invalid WindowTypes", "LayoutElement.SetClippingRectByScreenRect");
           break;
         }
       }

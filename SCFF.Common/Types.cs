@@ -75,14 +75,12 @@ public enum RotateDirections {
 // クラス・構造体
 //=====================================================================
 
-//---------------------------------------------------------------------
-// スクリーン座標系のPoint/Rect etc.
-//---------------------------------------------------------------------
+// これをC#のGenericsで綺麗にやろうと思うとかなりめんどくさいことになる（＝放置）
 
-/// スクリーン座標系のPoint
-public class ScreenPoint {
+/// WindowsのRectが使えないので自前で用意したPoint<int>
+public class IntPoint {
   /// コンストラクタ
-  public ScreenPoint(int x, int y) {
+  public IntPoint(int x, int y) {
     this.X = x;
     this.Y = y;
   }
@@ -92,10 +90,10 @@ public class ScreenPoint {
   public int Y { get; private set; }
 }
 
-/// スクリーン座標系のRect
-public class ScreenRect {
+/// WindowsのRectが使えないので自前で用意したRect<int>
+public class IntRect {
   /// コンストラクタ
-  public ScreenRect(int x, int y, int width, int height) {
+  public IntRect(int x, int y, int width, int height) {
     this.X = x;
     this.Y = y;
     this.Width = width;
@@ -115,29 +113,28 @@ public class ScreenRect {
   public int Bottom { get { return this.Y + this.Height; } }
 
   /// 交差判定
-  public bool IntersectsWith(ScreenRect other) {
+  public bool IntersectsWith(IntRect other) {
     return !(this.X > other.Right || other.X > this.Right ||
              this.Y > other.Bottom || other.Y > this.Bottom);
   }
   /// 交差
-  public ScreenRect Intersect(ScreenRect other) {
-    if (!this.IntersectsWith(other)) return null;
+  public void Intersect(IntRect other) {
+    if (!this.IntersectsWith(other)) return;
     var newX = Math.Max(this.X, other.X);
     var newY = Math.Max(this.Y, other.Y);
     var newRight = Math.Min(this.Right, other.Right);
     var newBottom = Math.Min(this.Bottom, other.Bottom);
-    return new ScreenRect(newX, newY, newRight - newX, newBottom - newY);
+    this.X = newX;
+    this.Y = newY;
+    this.Width = newRight - newX;
+    this.Height = newBottom - newY;
   }
 }
 
-//---------------------------------------------------------------------
-// 相対座標系([0-1], [0-1])のPoint/Rect etc.
-//---------------------------------------------------------------------
-
-/// ([0-1], [0-1])の相対座標系のPoint
-public class RelativePoint {
+/// WindowsのRectが使えないので自前で用意したPoint<double>
+public class DoublePoint {
   /// コンストラクタ
-  public RelativePoint(double x, double y) {
+  public DoublePoint(double x, double y) {
     this.X = x;
     this.Y = y;
   }
@@ -147,10 +144,10 @@ public class RelativePoint {
   public double Y { get; private set; }
 }
 
-/// ([0-1], [0-1])の相対座標系内の領域を示すLTRB
-public class RelativeLTRB {
+/// 自前で用意したLTRB<double>
+public class DoubleLTRB {
   /// コンストラクタ
-  public RelativeLTRB(double left, double top, double right, double bottom) {
+  public DoubleLTRB(double left, double top, double right, double bottom) {
     this.Left = left;
     this.Top = top;
     this.Right = right;
@@ -166,10 +163,10 @@ public class RelativeLTRB {
   public double Bottom { get; private set; }
 }
 
-/// ([0-1], [0-1])の相対座標系に収まるRect
-public class RelativeRect {
+/// WindowsのRectが使えないので自前で用意したPoint<double>
+public class DoubleRect {
   /// コンストラクタ
-  public RelativeRect(double x, double y, double width, double height) {
+  public DoubleRect(double x, double y, double width, double height) {
     this.X = x;
     this.Y = y;
     this.Width = width;
@@ -189,10 +186,61 @@ public class RelativeRect {
   public double Bottom { get { return this.Y + this.Height; } }
 
   /// 含有判定
-  public bool Contains(RelativePoint point) {
+  public bool Contains(DoublePoint point) {
     return this.X <= point.X && point.X <= this.Right &&
            this.Y <= point.Y && point.Y <= this.Bottom;
   }
+}
+
+//---------------------------------------------------------------------
+// クライアント座標系のPoint/Rect etc.
+//---------------------------------------------------------------------
+
+public class ClientRect : IntRect {
+  /// コンストラクタ
+  public ClientRect(int x, int y, int width, int height)
+      : base(x, y, width, height) {}
+}
+
+//---------------------------------------------------------------------
+// スクリーン座標系のPoint/Rect etc.
+//---------------------------------------------------------------------
+
+/// スクリーン座標系のPoint
+public class ScreenPoint : IntPoint {
+  /// コンストラクタ
+  public ScreenPoint(int x, int y) : base(x, y) {}
+}
+
+/// スクリーン座標系のRect
+public class ScreenRect : IntRect {
+  /// コンストラクタ
+  public ScreenRect(int x, int y, int width, int height)
+      : base(x, y, width, height) {}
+}
+
+//---------------------------------------------------------------------
+// 相対座標系([0-1], [0-1])のPoint/Rect etc.
+//---------------------------------------------------------------------
+
+/// ([0-1], [0-1])の相対座標系のPoint
+public class RelativePoint : DoublePoint {
+  /// コンストラクタ
+  public RelativePoint(double x, double y) : base(x, y) {}
+}
+
+/// ([0-1], [0-1])の相対座標系内の領域を示すLTRB
+public class RelativeLTRB : DoubleLTRB {
+  /// コンストラクタ
+  public RelativeLTRB(double left, double top, double right, double bottom)
+      : base(left, top, right, bottom) {}
+}
+
+/// ([0-1], [0-1])の相対座標系に収まるRect
+public class RelativeRect : DoubleRect {
+  /// コンストラクタ
+  public RelativeRect(double x, double y, double width, double height)
+      : base(x, y, width, height) {}
 }
 
 //---------------------------------------------------------------------

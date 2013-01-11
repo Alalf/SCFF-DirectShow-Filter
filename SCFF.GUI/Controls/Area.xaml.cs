@@ -171,7 +171,7 @@ public partial class Area : UserControl, IUpdateByProfile {
         }
       }
     }
-    App.Profile.Current.SetClippingRect(nextScreenRect);
+    App.Profile.Current.SetClippingRectByScreenRect(nextScreenRect);
     App.Profile.Current.Close();
 
     // コマンドをMainWindowに送信して関連するコントロールを更新

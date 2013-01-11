@@ -48,41 +48,28 @@ public static class Utilities {
     }
   }
 
-  /// Windowの左上端の点を取得する
-  /// @attention 座標系はWindowTypeによって変わる
-  public static Tuple<int,int> GetWindowOrigin(WindowTypes windowType) {
-    switch(windowType) {
-      case WindowTypes.Normal:
-      case WindowTypes.DesktopListView: {
-        return new Tuple<int,int>(0, 0);
-      }
-      case WindowTypes.Desktop: {
-        return new Tuple<int,int>(
-            User32.GetSystemMetrics(User32.SM_XVIRTUALSCREEN),
-            User32.GetSystemMetrics(User32.SM_YVIRTUALSCREEN));
-      }
-      default: {
-        Debug.Fail("Invalid WindowTypes", "LayoutElement.windowOrigin");
-        return null;
-      }
-    }
-  }
-
-  /// WindowのサイズをWindowタイプ別に取得する
-  public static Tuple<int,int> GetWindowSize(WindowTypes windowType, UIntPtr window) {
+  /// WindowのClient座標系での領域を返す
+  /// @warning windowType == Desktop時のみ、左上端がマイナス座標になる可能性がある
+  public static ClientRect GetWindowRect(WindowTypes windowType, UIntPtr window) {
     switch (windowType) {
       case WindowTypes.Normal: {
         Debug.Assert(Utilities.IsWindowValid(windowType, window),
                      "Invalid Window", "LayoutElement.windowSize");
         User32.RECT windowRect;
         User32.GetClientRect(window, out windowRect);
-        return new Tuple<int,int>(windowRect.Right - windowRect.Left,
-                                  windowRect.Bottom - windowRect.Top);
+        return new ClientRect(0, 0, windowRect.Right, windowRect.Bottom);
       }
-      case WindowTypes.DesktopListView:
+      case WindowTypes.DesktopListView: {
+        return new ClientRect(0, 0,
+            User32.GetSystemMetrics(User32.SM_CXVIRTUALSCREEN),
+            User32.GetSystemMetrics(User32.SM_CYVIRTUALSCREEN));
+      }
       case WindowTypes.Desktop: {
-        return new Tuple<int,int>(User32.GetSystemMetrics(User32.SM_CXVIRTUALSCREEN),
-                                  User32.GetSystemMetrics(User32.SM_CYVIRTUALSCREEN));
+        return new ClientRect(
+            User32.GetSystemMetrics(User32.SM_XVIRTUALSCREEN),
+            User32.GetSystemMetrics(User32.SM_YVIRTUALSCREEN),
+            User32.GetSystemMetrics(User32.SM_CXVIRTUALSCREEN),
+            User32.GetSystemMetrics(User32.SM_CYVIRTUALSCREEN));
       }
       default: {
         Debug.Fail("Invalid WindowTypes", "LayoutElement.windowSize");
@@ -119,12 +106,11 @@ public static class Utilities {
 
   /// Windowタイプ別にScreen座標系での領域を返す
   public static ScreenRect GetWindowScreenRect(WindowTypes windowType, UIntPtr window) {
-    var screenPoint = Utilities.ClientToScreen(windowType, window,
-        Utilities.GetWindowOrigin(windowType).Item1,
-        Utilities.GetWindowOrigin(windowType).Item2);
+    var screenRect = Utilities.GetWindowRect(windowType, window);
+    var screenPoint =
+        Utilities.ClientToScreen(windowType, window, screenRect.X, screenRect.Y);
     return new ScreenRect(screenPoint.X, screenPoint.Y,
-        Utilities.GetWindowSize(windowType, window).Item1,
-        Utilities.GetWindowSize(windowType, window).Item2);
+                          screenRect.Width, screenRect.Height);
   }
 
   //===================================================================

@@ -15,15 +15,15 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file SCFF.GUI/Controls/Constants.cs
-/// UserControl共通の定数
+/// @file SCFF.GUI/Controls/BrushesAndPens.cs
+/// @copydoc SCFF::GUI::Controls::BrushesAndPens
 
 /// SCFF.GUIで利用するUserControls
 namespace SCFF.GUI.Controls {
 
 using System.Windows.Media;
 
-/// ブラシとペン
+/// UserControl共通のブラシ・ペン
 public static class BrushesAndPens {
   /// WindowTypes.NormalでCurrent時のブラシ
   public static readonly Brush CurrentNormalBrush;

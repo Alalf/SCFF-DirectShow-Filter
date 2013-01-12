@@ -77,7 +77,7 @@
     <Compile Include="Controls\Apply.xaml.cs">
       <DependentUpon>Apply.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Constants.cs" />
+    <Compile Include="Controls\BrushesAndPens.cs" />
     <Compile Include="Controls\LayoutToolbar.xaml.cs">
       <DependentUpon>LayoutToolbar.xaml</DependentUpon>
     </Compile>

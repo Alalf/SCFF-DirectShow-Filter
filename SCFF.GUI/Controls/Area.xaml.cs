@@ -54,9 +54,13 @@ public partial class Area : UserControl, IBindingProfile {
     App.Profile.Current.Open();
     App.Profile.Current.SetFit = (bool)this.Fit.IsChecked;
     App.Profile.Current.Close();
-    this.OnCurrentProfileChanged();
 
-    UpdateCommands.UpdateLayoutEditByCurrentProfile.Execute(null, null);
+    //-----------------------------------------------------------------
+    // Notify self
+    this.OnCurrentProfileChanged();
+    // Notify other controls
+    Commands.NeedUpdateCurrentPreview.Execute(null, null);
+    //-----------------------------------------------------------------
   }
 
   //-------------------------------------------------------------------
@@ -161,8 +165,17 @@ public partial class Area : UserControl, IBindingProfile {
     App.Profile.Current.SetClippingRectByScreenRect(nextScreenRect);
     App.Profile.Current.Close();
 
-    // コマンドをMainWindowに送信して関連するコントロールを更新
-    UpdateCommands.UpdateTargetWindowByCurrentProfile.Execute(null, null);
+    //-----------------------------------------------------------------
+    // Notify self
+    this.OnCurrentProfileChanged();
+    // Notify other controls
+    if (changeWindowType) {
+      Commands.TargetWindowChanged.Execute(null, null);
+    } else {
+      // TargetWindowの更新は必要ないのでプレビューのみ更新
+      Commands.NeedUpdateCurrentPreview.Execute(null, null);
+    }
+    //-----------------------------------------------------------------
   }
 
   /// AreaSelect: Click
@@ -239,6 +252,12 @@ public partial class Area : UserControl, IBindingProfile {
       App.Profile.Current.Open();
       App.Profile.Current.SetClippingXWithoutFit = parsedValue;
       App.Profile.Current.Close();
+
+      //---------------------------------------------------------------
+      // Notify self
+      // Notify other controls
+      Commands.NeedUpdateCurrentPreview.Execute(null, null);
+      //---------------------------------------------------------------
     }
   }
 
@@ -253,6 +272,12 @@ public partial class Area : UserControl, IBindingProfile {
       App.Profile.Current.Open();
       App.Profile.Current.SetClippingYWithoutFit = parsedValue;
       App.Profile.Current.Close();
+
+      //---------------------------------------------------------------
+      // Notify self
+      // Notify other controls
+      Commands.NeedUpdateCurrentPreview.Execute(null, null);
+      //---------------------------------------------------------------
     }
   }
 
@@ -267,6 +292,12 @@ public partial class Area : UserControl, IBindingProfile {
       App.Profile.Current.Open();
       App.Profile.Current.SetClippingWidthWithoutFit = parsedValue;
       App.Profile.Current.Close();
+
+      //---------------------------------------------------------------
+      // Notify self
+      // Notify other controls
+      Commands.NeedUpdateCurrentPreview.Execute(null, null);
+      //---------------------------------------------------------------
     }
   }
 
@@ -281,6 +312,12 @@ public partial class Area : UserControl, IBindingProfile {
       App.Profile.Current.Open();
       App.Profile.Current.SetClippingHeightWithoutFit = parsedValue;
       App.Profile.Current.Close();
+
+      //---------------------------------------------------------------
+      // Notify self
+      // Notify other controls
+      Commands.NeedUpdateCurrentPreview.Execute(null, null);
+      //---------------------------------------------------------------
     }
   }
 

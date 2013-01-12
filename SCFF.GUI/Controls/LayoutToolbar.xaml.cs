@@ -50,7 +50,11 @@ public partial class LayoutToolbar : UserControl, IBindingOptions {
     if (!this.LayoutPreview.IsChecked.HasValue) return;
     App.Options.LayoutPreview = (bool)this.LayoutPreview.IsChecked;
 
-    UpdateCommands.UpdateLayoutEditByOptions.Execute(null, null);
+    //-----------------------------------------------------------------
+    // Notify self
+    // Notify other controls
+    Commands.NeedRedrawAll.Execute(null, null);
+    //-----------------------------------------------------------------
   }
 
   /// LayoutSnap: Click
@@ -60,8 +64,11 @@ public partial class LayoutToolbar : UserControl, IBindingOptions {
     if (!this.LayoutSnap.IsChecked.HasValue) return;
     App.Options.LayoutSnap = (bool)this.LayoutSnap.IsChecked;
 
-    // LayoutEditの能動的な更新は必要ない
-    // UpdateCommands.UpdateLayoutEditByOptions.Execute(null, null);
+    //-----------------------------------------------------------------
+    // Notify self
+    // Notify other controls
+    // Commands.NeedRedrawLayoutEdit.Execute(null, null);
+    //-----------------------------------------------------------------
   }
 
   /// LayoutBorder: Click
@@ -71,7 +78,11 @@ public partial class LayoutToolbar : UserControl, IBindingOptions {
     if (!this.LayoutBorder.IsChecked.HasValue) return;
     App.Options.LayoutBorder = (bool)this.LayoutBorder.IsChecked;
 
-    UpdateCommands.UpdateLayoutEditByOptions.Execute(null, null);
+    //-----------------------------------------------------------------
+    // Notify self
+    // Notify other controls
+    Commands.NeedRedrawAll.Execute(null, null);
+    //-----------------------------------------------------------------
   }
 
   /// Add: Click
@@ -83,7 +94,11 @@ public partial class LayoutToolbar : UserControl, IBindingOptions {
     this.Add.IsEnabled = App.Profile.CanAdd;
     this.Remove.IsEnabled = App.Profile.CanRemove;
 
-    UpdateCommands.UpdateMainWindowByEntireProfile.Execute(null, null);
+    //-----------------------------------------------------------------
+    // Notify self
+    // Notify other controls
+    Commands.LayoutElementAdded.Execute(null, null);
+    //-----------------------------------------------------------------
   }
 
   /// Remove: Click
@@ -95,7 +110,11 @@ public partial class LayoutToolbar : UserControl, IBindingOptions {
     this.Add.IsEnabled = App.Profile.CanAdd;
     this.Remove.IsEnabled = App.Profile.CanRemove;
 
-    UpdateCommands.UpdateMainWindowByEntireProfile.Execute(null, null);
+    //-----------------------------------------------------------------
+    // Notify self
+    // Notify other controls
+    Commands.CurrentLayoutElementRemoved.Execute(null, null);
+    //-----------------------------------------------------------------
   }
 
   //-------------------------------------------------------------------

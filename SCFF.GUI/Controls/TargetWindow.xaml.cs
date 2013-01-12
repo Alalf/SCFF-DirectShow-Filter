@@ -74,8 +74,12 @@ public partial class TargetWindow : UserControl, IBindingProfile {
 
     App.Profile.Current.Close();
 
-    // コマンドをMainWindowに送信して関連するコントロールを更新
-    UpdateCommands.UpdateTargetWindowByCurrentProfile.Execute(null, null);
+    //-----------------------------------------------------------------
+    // Notify self
+    this.OnCurrentProfileChanged();
+    // Notify other controls
+    Commands.AreaChanged.Execute(null, null);
+    //-----------------------------------------------------------------
   }
 
   /// Desktop: Click

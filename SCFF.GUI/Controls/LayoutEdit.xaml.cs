@@ -233,7 +233,7 @@ public partial class LayoutEdit
     if (this.DrawingGroup.Children.Count == 0) return;
     this.DrawingGroup.Children.Clear();
     GC.Collect();
-    Debug.WriteLine("Collect", "*** MEMORY[GC] ***");
+    Debug.WriteLine("Collect LayoutEdit.DrawingGroup", "*** MEMORY[GC] ***");
   }
 
   //===================================================================
@@ -315,7 +315,12 @@ public partial class LayoutEdit
                       "LayoutEdit");
 
       App.Profile.CurrentIndex = hitIndex;
-      UpdateCommands.UpdateMainWindowByEntireProfile.Execute(null, null);
+
+      //---------------------------------------------------------------
+      // Notify self
+      // Notify other controls
+      Commands.CurrentIndexChanged.Execute(null, null);
+      //---------------------------------------------------------------
     }
 
     // マウスを押した場所を記録してマウスキャプチャー開始
@@ -360,8 +365,11 @@ public partial class LayoutEdit
     App.Profile.Current.SetBoundRelativeBottom = nextBoundLTRB.Bottom;
     App.Profile.Current.Close();
       
-    /// 変更をLayoutParameterに通知
-    UpdateCommands.UpdateLayoutParameterByCurrentProfile.Execute(null, null);
+    //-----------------------------------------------------------------
+    // Notify self
+    // Notify other controls
+    Commands.LayoutParameterChanged.Execute(null, null);
+    //-----------------------------------------------------------------
 
     this.BuildDrawingGroup();
   }
@@ -395,13 +403,14 @@ public partial class LayoutEdit
   public void OnOptionsChanged() {
     this.CanChangeOptions = false;
 
-    if (App.Options.LayoutIsExpanded) {
-      if (App.Options.LayoutPreview) {
-        App.ScreenCaptureTimer.Start();       // タイマー再開
-        App.ScreenCaptureTimer.UpdateRequest(App.Profile);
-      }
+    if (App.Options.LayoutIsExpanded && App.Options.LayoutPreview) {
+      App.ScreenCaptureTimer.Start();       // タイマー再開
+      App.ScreenCaptureTimer.UpdateRequest(App.Profile);
       this.BuildDrawingGroup();
-    } else {
+    } else if (App.Options.LayoutIsExpanded && !App.Options.LayoutPreview) {
+      App.ScreenCaptureTimer.Suspend();     // タイマー停止
+      this.BuildDrawingGroup();
+    } else { // App.Options.!LayoutIsExpanded
       App.ScreenCaptureTimer.Suspend();     // タイマー停止
       this.ClearDrawingGroup();             // DrawingGroupもクリア
     }
@@ -438,7 +447,9 @@ public partial class LayoutEdit
     this.CanChangeProfile = false;
 
     if (App.Options.LayoutIsExpanded) {
-      App.ScreenCaptureTimer.UpdateRequest(App.Profile);
+      if (App.Options.LayoutPreview) {
+        App.ScreenCaptureTimer.UpdateRequest(App.Profile);
+      }
       this.BuildDrawingGroup();
     }
 

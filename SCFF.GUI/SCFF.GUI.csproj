@@ -86,7 +86,6 @@
     </Compile>
     <Compile Include="ScreenCaptureTimer.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="UpdateCommands.cs" />
     <Page Include="AreaSelectWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -50,8 +50,11 @@ public partial class SCFFDSFEntries : UserControl, IBindingRuntimeOptions {
     /// @todo(me) プロセスリストを読み込み
     App.RuntimeOptions.Refresh();
 
-    /// メインウィンドウに必要な更新を伝える
-    UpdateCommands.UpdateMainWindowByRuntimeOptions.Execute(null, null);
+    //-----------------------------------------------------------------
+    // Notify self
+    // Notify other controls
+    Commands.SampleSizeChanged.Execute(null, null);
+    //-----------------------------------------------------------------
   }
 
   //-------------------------------------------------------------------

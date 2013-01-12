@@ -49,6 +49,34 @@ public partial class MainWindow
     this.SetCompactView();
   }
 
+  //-------------------------------------------------------------------
+
+  /// AeroをON/OFF
+  private void SetAero() {
+    if (!this.CanUseAero()) return;
+    // @todo(me) 実装
+  }
+
+  /// AeroのON/OFFが可能か
+  private bool CanUseAero() {
+    // @todo(me) 実装
+    return true;
+  }
+
+  /// コンパクト表示切替
+  private void SetCompactView() {
+    if (App.Options.CompactView) {
+      this.OptionsExpander.Visibility = Visibility.Collapsed;
+      this.ResizeMethodExpander.Visibility = Visibility.Collapsed;
+      this.LayoutExpander.IsExpanded = false;
+      this.Width = Constants.CompactMainWindowWidth;
+      this.Height = Constants.CompactMainWindowHeight;
+    } else {
+      this.OptionsExpander.Visibility = Visibility.Visible;
+      this.ResizeMethodExpander.Visibility = Visibility.Visible;
+    }
+  }
+
   //===================================================================
   // イベントハンドラ
   //===================================================================
@@ -127,14 +155,22 @@ public partial class MainWindow
     if (!this.CanChangeOptions) return;
     App.Options.LayoutIsExpanded = false;
 
-    UpdateCommands.UpdateLayoutEditByOptions.Execute(null, null);
+    //-----------------------------------------------------------------
+    // Notify self
+    // Notify other controls
+    Commands.LayoutEditVisibilityChanged.Execute(null, null);
+    //-----------------------------------------------------------------
   }
   /// LayoutExpander: Expanded
   private void LayoutExpander_Expanded(object sender, RoutedEventArgs e) {
     if (!this.CanChangeOptions) return;
     App.Options.LayoutIsExpanded = true;
 
-    UpdateCommands.UpdateLayoutEditByOptions.Execute(null, null);
+    //-----------------------------------------------------------------
+    // Notify self
+    // Notify other controls
+    Commands.LayoutEditVisibilityChanged.Execute(null, null);
+    //-----------------------------------------------------------------
   }
 
   //===================================================================
@@ -341,99 +377,70 @@ public partial class MainWindow
 	}
 
   //-------------------------------------------------------------------
-  // SCFF.GUI.UpdateCommands
-  //-------------------------------------------------------------------
-
-  /// @copydoc SCFF::GUI::UpdateCommands::UpdateMainWindowByEntireProfile
-  /// @param sender 使用しない
-  /// @param e 使用しない
-  private void UpdateMainWindowByEntireProfile_Executed(object sender, ExecutedRoutedEventArgs e) {
-    this.OnEntireProfileChanged();
-  }
-  /// @copydoc SCFF::GUI::UpdateCommands::UpdateLayoutEditByEntireProfile
-  /// @param sender 使用しない
-  /// @param e 使用しない
-  private void UpdateLayoutEditByEntireProfile_Executed(object sender, ExecutedRoutedEventArgs e) {
-    this.LayoutEdit.OnEntireProfileChanged();
-  }
-  /// @copydoc SCFF::GUI::UpdateCommands::UpdateLayoutEditByCurrentProfile
-  /// @param sender 使用しない
-  /// @param e 使用しない
-  private void UpdateLayoutEditByCurrentProfile_Executed(object sender, ExecutedRoutedEventArgs e) {
-    this.LayoutEdit.OnCurrentProfileChanged();
-  }
-  /// @copydoc SCFF::GUI::UpdateCommands::UpdateTargetWindowByCurrentProfile
-  /// @param sender 使用しない
-  /// @param e 使用しない
-  private void UpdateTargetWindowByCurrentProfile_Executed(object sender, ExecutedRoutedEventArgs e) {
-    this.TargetWindow.OnCurrentProfileChanged();
-    this.Area.OnCurrentProfileChanged();
-    this.LayoutEdit.OnCurrentProfileChanged();
-    this.LayoutParameter.OnCurrentProfileChanged();
-  }
-  /// @copydoc SCFF::GUI::UpdateCommands::UpdateLayoutParameterByCurrentProfile
-  /// @param sender 使用しない
-  /// @param e 使用しない
-  private void UpdateLayoutParameterByCurrentProfile_Executed(object sender, ExecutedRoutedEventArgs e) {
-    this.LayoutParameter.OnCurrentProfileChanged();
-  }
-  /// @copydoc SCFF::GUI::UpdateCommands::UpdateLayoutEditByOptions
-  /// @param sender 使用しない
-  /// @param e 使用しない
-  private void UpdateLayoutEditByOptions_Executed(object sender, ExecutedRoutedEventArgs e) {
-    this.LayoutEdit.OnOptionsChanged();
-  }
-  /// @copydoc SCFF::GUI::UpdateCommands::UpdateMainWindowByRuntimeOptions
-  /// @param sender 使用しない
-  /// @param e 使用しない
-  private void UpdateMainWindowByRuntimeOptions_Executed(object sender, ExecutedRoutedEventArgs e) {
-    this.OnRuntimeOptionsChanged();
-  }
-
-  //-------------------------------------------------------------------
   // SCFF.GUI.Commands
   //-------------------------------------------------------------------
 
-  /// AeroをON/OFF
-  private void SetAero() {
-    // @todo(me) 実装
+  /// @copydoc Commands::NeedUpdateCurrentPreview
+  private void NeedUpdateCurrentPreview_Executed(object sender, ExecutedRoutedEventArgs e) {
+    this.LayoutEdit.OnCurrentProfileChanged();
+  }
+  /// @copydoc Commands::NeedRedrawAll
+  private void NeedRedrawAll_Executed(object sender, ExecutedRoutedEventArgs e) {
+    this.LayoutEdit.OnOptionsChanged();
+  }
+  /// @copydoc Commands::NeedRedrawCurrent
+  private void NeedRedrawCurrent_Executed(object sender, ExecutedRoutedEventArgs e) {
+    this.LayoutEdit.OnCurrentProfileChanged();
+  }
+  /// @copydoc Commands::LayoutParameterChanged
+  private void LayoutParameterChanged_Executed(object sender, ExecutedRoutedEventArgs e) {
+    this.LayoutParameter.OnCurrentProfileChanged();
+  }
+  /// @copydoc Commands::LayoutEditVisibilityChanged
+  private void LayoutEditVisibilityChanged_Executed(object sender, ExecutedRoutedEventArgs e) {
+    this.LayoutEdit.OnOptionsChanged();
+  }
+  /// @copydoc Commands::TargetWindowChanged
+  private void TargetWindowChanged_Executed(object sender, ExecutedRoutedEventArgs e) {
+    this.TargetWindow.OnCurrentProfileChanged();
+    this.LayoutEdit.OnCurrentProfileChanged();
+  }
+  /// @copydoc Commands::AreaChanged
+  private void AreaChanged_Executed(object sender, ExecutedRoutedEventArgs e) {
+    this.Area.OnCurrentProfileChanged();
+    this.LayoutEdit.OnCurrentProfileChanged();
+  }
+  /// @copydoc Commands::CurrentIndexChanged
+  private void CurrentIndexChanged_Executed(object sender, ExecutedRoutedEventArgs e) {
+    // tabの選択を変えないといけないのでEntireじゃなければいけない
+    this.OnEntireProfileChanged();
+  }
+  /// @copydoc Commands::LayoutElementAdded
+  private void LayoutElementAdded_Executed(object sender, ExecutedRoutedEventArgs e) {
+    // tabの選択を変えないといけないのでEntireじゃなければいけない
+    this.OnEntireProfileChanged();
+  }
+  /// @copydoc Commands::CurrentLayoutElementRemoved
+  private void CurrentLayoutElementRemoved_Executed(object sender, ExecutedRoutedEventArgs e) {
+    // tabの選択を変えないといけないのでEntireじゃなければいけない
+    this.OnEntireProfileChanged();
+  }
+  /// @copydoc Commands::SampleSizeChanged
+  private void SampleSizeChanged_Executed(object sender, ExecutedRoutedEventArgs e) {
+    this.LayoutEdit.OnRuntimeOptionsChanged();
+    this.LayoutParameter.OnRuntimeOptionsChanged();
   }
 
-  /// AeroのON/OFFが可能か
-  private bool CanUseAero() {
-    // @todo(me) 実装
-    return true;
-  }
+  //-------------------------------------------------------------------
 
   /// @copydoc SetAero
   /// @param sender 使用しない
   /// @param e 使用しない
   private void SetAero_Executed(object sender, ExecutedRoutedEventArgs e) {
+    if (!CanUseAero()) return;
+
     Debug.WriteLine("Execute", "[Command] SetAero");
     this.SetAero();
-  }
-
-  /// @copydoc CanUseAero
-  /// @param sender 使用しない
-  /// @param[out] e 実行可能か(CanExecute)を設定可能
-  private void SetAero_CanExecute(object sender, CanExecuteRoutedEventArgs e) {
-    e.CanExecute = this.CanUseAero();
-  }
-
-  //-------------------------------------------------------------------
-
-  /// コンパクト表示切替
-  private void SetCompactView() {
-    if (App.Options.CompactView) {
-      this.OptionsExpander.Visibility = Visibility.Collapsed;
-      this.ResizeMethodExpander.Visibility = Visibility.Collapsed;
-      this.LayoutExpander.IsExpanded = false;
-      this.Width = Constants.CompactMainWindowWidth;
-      this.Height = Constants.CompactMainWindowHeight;
-    } else {
-      this.OptionsExpander.Visibility = Visibility.Visible;
-      this.ResizeMethodExpander.Visibility = Visibility.Visible;
-    }
   }
 
   /// @copydoc SetCompactView

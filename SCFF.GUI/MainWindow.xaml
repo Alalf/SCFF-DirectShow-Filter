@@ -31,29 +31,34 @@
     <CommandBinding Command="Save" Executed="Save_Executed"/>
     <CommandBinding Command="SaveAs" Executed="SaveAs_Executed"/>
     <!-- SCFF.GUI.Commands -->
+    <!-- Event -->
+    <CommandBinding Command="{x:Static local:Commands.NeedUpdateCurrentPreview}"
+                    Executed="NeedUpdateCurrentPreview_Executed" />
+    <CommandBinding Command="{x:Static local:Commands.NeedRedrawAll}"
+                    Executed="NeedRedrawAll_Executed" />
+    <CommandBinding Command="{x:Static local:Commands.NeedRedrawCurrent}"
+                    Executed="NeedRedrawCurrent_Executed" />
+    <CommandBinding Command="{x:Static local:Commands.LayoutParameterChanged}"
+                    Executed="LayoutParameterChanged_Executed" />
+    <CommandBinding Command="{x:Static local:Commands.LayoutEditVisibilityChanged}"
+                    Executed="LayoutEditVisibilityChanged_Executed" />
+    <CommandBinding Command="{x:Static local:Commands.TargetWindowChanged}"
+                    Executed="TargetWindowChanged_Executed" />
+    <CommandBinding Command="{x:Static local:Commands.AreaChanged}"
+                    Executed="AreaChanged_Executed" />
+    <CommandBinding Command="{x:Static local:Commands.CurrentIndexChanged}"
+                    Executed="CurrentIndexChanged_Executed" />
+    <CommandBinding Command="{x:Static local:Commands.LayoutElementAdded}"
+                    Executed="LayoutElementAdded_Executed" />
+    <CommandBinding Command="{x:Static local:Commands.CurrentLayoutElementRemoved}"
+                    Executed="CurrentLayoutElementRemoved_Executed" />
+    <CommandBinding Command="{x:Static local:Commands.SampleSizeChanged}"
+                    Executed="SampleSizeChanged_Executed" />
+    <!-- Feature -->
     <CommandBinding Command="{x:Static local:Commands.SetAero}"
-                    Executed="SetAero_Executed"
-                    CanExecute="SetAero_CanExecute"/>
+                    Executed="SetAero_Executed"/>
     <CommandBinding Command="{x:Static local:Commands.SetCompactView}"
                     Executed="SetCompactView_Executed"/>
-    <!-- SCFF.GUI.UpdateCommands -->
-    <!-- Profile -->
-    <CommandBinding Command="{x:Static local:UpdateCommands.UpdateMainWindowByEntireProfile}"
-                    Executed="UpdateMainWindowByEntireProfile_Executed" />
-    <CommandBinding Command="{x:Static local:UpdateCommands.UpdateLayoutEditByEntireProfile}"
-                    Executed="UpdateLayoutEditByEntireProfile_Executed" />
-    <CommandBinding Command="{x:Static local:UpdateCommands.UpdateLayoutEditByCurrentProfile}"
-                    Executed="UpdateLayoutEditByCurrentProfile_Executed" />
-    <CommandBinding Command="{x:Static local:UpdateCommands.UpdateTargetWindowByCurrentProfile}"
-                    Executed="UpdateTargetWindowByCurrentProfile_Executed" />
-    <CommandBinding Command="{x:Static local:UpdateCommands.UpdateLayoutParameterByCurrentProfile}"
-                    Executed="UpdateLayoutParameterByCurrentProfile_Executed" />
-    <!-- Options -->
-    <CommandBinding Command="{x:Static local:UpdateCommands.UpdateLayoutEditByOptions}"
-                    Executed="UpdateLayoutEditByOptions_Executed" />
-    <!-- RuntimeOptions -->
-    <CommandBinding Command="{x:Static local:UpdateCommands.UpdateMainWindowByRuntimeOptions}"
-                    Executed="UpdateMainWindowByRuntimeOptions_Executed" />
   </Window.CommandBindings>
   <shell:WindowChrome.WindowChrome>
     <shell:WindowChrome CaptionHeight="{x:Static SystemParameters.CaptionHeight}"

@@ -52,7 +52,12 @@ public partial class Options : UserControl, IBindingProfile {
     App.Profile.Current.Open();
     App.Profile.Current.SetShowCursor = (bool)this.ShowCursor.IsChecked;
     App.Profile.Current.Close();
-    UpdateCommands.UpdateLayoutEditByCurrentProfile.Execute(null, null);
+    
+    //-----------------------------------------------------------------
+    // Notify self
+    // Notify other controls
+    Commands.NeedUpdateCurrentPreview.Execute(null, null);
+    //-----------------------------------------------------------------
   }
 
   /// ShowLayeredWindow: Click
@@ -64,7 +69,12 @@ public partial class Options : UserControl, IBindingProfile {
     App.Profile.Current.Open();
     App.Profile.Current.SetShowLayeredWindow = (bool)this.ShowLayeredWindow.IsChecked;
     App.Profile.Current.Close();
-    UpdateCommands.UpdateLayoutEditByCurrentProfile.Execute(null, null);
+
+    //-----------------------------------------------------------------
+    // Notify self
+    // Notify other controls
+    Commands.NeedUpdateCurrentPreview.Execute(null, null);
+    //-----------------------------------------------------------------
   }
 
   /// KeepAspectRatio: Click
@@ -76,7 +86,12 @@ public partial class Options : UserControl, IBindingProfile {
     App.Profile.Current.Open();
     App.Profile.Current.SetKeepAspectRatio = (bool)this.KeepAspectRatio.IsChecked;
     App.Profile.Current.Close();
-    UpdateCommands.UpdateLayoutEditByCurrentProfile.Execute(null, null);
+
+    //-----------------------------------------------------------------
+    // Notify self
+    // Notify other controls
+    Commands.NeedRedrawCurrent.Execute(null, null);
+    //-----------------------------------------------------------------
   }
 
   /// Stretch: Click
@@ -88,7 +103,12 @@ public partial class Options : UserControl, IBindingProfile {
     App.Profile.Current.Open();
     App.Profile.Current.SetStretch = (bool)this.Stretch.IsChecked;
     App.Profile.Current.Close();
-    UpdateCommands.UpdateLayoutEditByCurrentProfile.Execute(null, null);
+
+    //-----------------------------------------------------------------
+    // Notify self
+    // Notify other controls
+    Commands.NeedRedrawCurrent.Execute(null, null);
+    //-----------------------------------------------------------------
   }
 
   //-------------------------------------------------------------------

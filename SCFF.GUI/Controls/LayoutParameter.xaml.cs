@@ -67,10 +67,12 @@ public partial class LayoutParameter
         App.RuntimeOptions.CurrentSampleHeight);
     App.Profile.Current.Close();
 
-    // 関連するUserControlに更新を伝える
-    UpdateCommands.UpdateLayoutEditByCurrentProfile.Execute(null, null);
-    // 自分自身はCommandsではなく直接更新する
+    //-----------------------------------------------------------------
+    // Notify self
     this.OnCurrentProfileChanged();
+    // Notify other controls
+    Commands.NeedRedrawCurrent.Execute(null, null);
+    //-----------------------------------------------------------------
   }
 
   //-------------------------------------------------------------------
@@ -136,9 +138,13 @@ public partial class LayoutParameter
       App.Profile.Current.Open();
       App.Profile.Current.SetBoundRelativeLeft = parsedValue;
       App.Profile.Current.Close();
+
+      //-----------------------------------------------------------------
+      // Notify self
       this.UpdateDisabledTextboxes();
-      // 関連するコントロールに通知
-      UpdateCommands.UpdateLayoutEditByCurrentProfile.Execute(null, null);
+      // Notify other controls
+      Commands.NeedRedrawCurrent.Execute(null, null);
+      //-----------------------------------------------------------------
     }
   }
 
@@ -155,9 +161,13 @@ public partial class LayoutParameter
       App.Profile.Current.Open();
       App.Profile.Current.SetBoundRelativeTop = parsedValue;
       App.Profile.Current.Close();
+
+      //-----------------------------------------------------------------
+      // Notify self
       this.UpdateDisabledTextboxes();
-      // 関連するコントロールに通知
-      UpdateCommands.UpdateLayoutEditByCurrentProfile.Execute(null, null);
+      // Notify other controls
+      Commands.NeedRedrawCurrent.Execute(null, null);
+      //-----------------------------------------------------------------
     }
   }
 
@@ -174,9 +184,13 @@ public partial class LayoutParameter
       App.Profile.Current.Open();
       App.Profile.Current.SetBoundRelativeRight = parsedValue;
       App.Profile.Current.Close();
+
+      //-----------------------------------------------------------------
+      // Notify self
       this.UpdateDisabledTextboxes();
-      // 関連するコントロールに通知
-      UpdateCommands.UpdateLayoutEditByCurrentProfile.Execute(null, null);
+      // Notify other controls
+      Commands.NeedRedrawCurrent.Execute(null, null);
+      //-----------------------------------------------------------------
     }
   }
 
@@ -193,9 +207,13 @@ public partial class LayoutParameter
       App.Profile.Current.Open();
       App.Profile.Current.SetBoundRelativeBottom = parsedValue;
       App.Profile.Current.Close();
+
+      //-----------------------------------------------------------------
+      // Notify self
       this.UpdateDisabledTextboxes();
-      // 関連するコントロールに通知
-      UpdateCommands.UpdateLayoutEditByCurrentProfile.Execute(null, null);
+      // Notify other controls
+      Commands.NeedRedrawCurrent.Execute(null, null);
+      //-----------------------------------------------------------------
     }
   }
 

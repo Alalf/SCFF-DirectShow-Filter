@@ -162,22 +162,25 @@ public class ScreenCaptureTimer : IDisposable {
 
   /// 開始
   public void Start() {
-    Debug.WriteLine("Start", "ScreenCaptureTimer");
     lock (this.sharedLock) {
+      var changed = !this.isRunning;
+      Debug.WriteLineIf(changed, "Start", "ScreenCaptureTimer");
       this.isRunning = true;
     }
   }
 
   /// 中断
   public void Suspend() {
-    Debug.WriteLine("Suspend", "ScreenCaptureTimer");
     lock (this.sharedLock) {
+      var changed = this.isRunning;
+      Debug.WriteLineIf(changed, "Suspend", "ScreenCaptureTimer");
       this.isRunning = false;
       // メモリ解放
-      if (this.cache.Count == 0) return;
-      this.cache.Clear();
-      GC.Collect();
-      Debug.WriteLine("Collect", "*** MEMORY[GC] ***");
+      if (changed && this.cache.Count > 0) {
+        this.cache.Clear();
+        GC.Collect();
+        Debug.WriteLine("Collect ScreenCaptureTimer.cache", "*** MEMORY[GC] ***");
+      }
     }
   }
 

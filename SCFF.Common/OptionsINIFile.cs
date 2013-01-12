@@ -43,8 +43,8 @@ public static class OptionsINIFile {
 
   /// ファイル出力
   public static bool Save(Options options) {
-    using (var writer = new StreamWriter(OptionsINIFile.OptionsFilePath)) {
-      try {
+    try {
+      using (var writer = new StreamWriter(OptionsINIFile.OptionsFilePath)) {
         writer.WriteLine(OptionsINIFile.OptionsHeader);
         for (int i = 0; i < 5; ++i) {
           writer.WriteLine("RecentProfile{0}={1}", i,
@@ -71,11 +71,11 @@ public static class OptionsINIFile {
         writer.WriteLine("ForceAeroOn={0}", options.ForceAeroOn);
         writer.WriteLine("RestoreLastProfile={0}", options.RestoreLastProfile);
         return true;
-      } catch (Exception ex) {
-        // 特に何も警告はしない
-        Debug.WriteLine(ex.Message, "OptionsINIFile.Save");
-        return false;
       }
+    } catch (Exception) {
+      // 特に何も警告はしない
+      Debug.WriteLine("Cannot save options", "OptionsINIFile.Save");
+      return false;
     }
   }
 
@@ -98,8 +98,8 @@ public static class OptionsINIFile {
           lines.Add(reader.ReadLine());
         }
       }
-    } catch (FileNotFoundException ex) {
-      Debug.Fail(ex.ToString(), "OptionsINIFile.Load");
+    } catch (Exception) {
+      Debug.WriteLine("Cannot read options", "OptionsINIFile.Load");
       return false;
     }
 

@@ -59,8 +59,11 @@ public partial class LayoutTab : UserControl, IBindingProfile {
     var next = this.LayoutElementTab.SelectedIndex;
     App.Profile.CurrentIndex = next;
 
-    // 他のコントロールのデータの更新はWindowに任せる
-    UpdateCommands.UpdateMainWindowByEntireProfile.Execute(null, null);
+    //-----------------------------------------------------------------
+    // Notify self
+    // Notify other controls
+    Commands.CurrentIndexChanged.Execute(null, null);
+    //-----------------------------------------------------------------
   }
 
   //===================================================================

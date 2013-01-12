@@ -115,9 +115,10 @@ public class ScreenCaptureTimer : IDisposable {
 
   /// スクリーンキャプチャをこのマネージャに依頼
   public void SendRequest(ScreenCaptureRequest request, bool forceUpdate) {
-    Debug.WriteLine(string.Format("SendRequest: {0}(forceUpdate: {1})",
-                    request.Index + 1, forceUpdate),
-                    "ScreenCaptureTimer");
+    Debug.WriteLineIf(forceUpdate,
+                      string.Format("SendRequest: {0}(forceUpdate: {1})",
+                                    request.Index + 1, forceUpdate),
+                      "ScreenCaptureTimer");
     lock (this.sharedLock) {
       this.requests[request.Index] = request;
       // forceUpdate時はUIスレッドで一回処理を行う
@@ -129,7 +130,7 @@ public class ScreenCaptureTimer : IDisposable {
 
   /// すべてのリクエストを削除する
   public void ClearRequests() {
-    Debug.WriteLine("ClearRequests", "ScreenCaptureTimer");
+    // Debug.WriteLine("ClearRequests", "ScreenCaptureTimer");
     lock (this.sharedLock) {
       Array.Clear(this.requests, 0, Common.Constants.MaxLayoutElementCount);
     }

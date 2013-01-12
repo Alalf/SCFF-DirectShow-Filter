@@ -23,6 +23,7 @@ namespace SCFF.GUI {
 
 using System.Windows;
 using SCFF.Common;
+using SCFF.Common.GUI;
 
 /// Applicationクラス
 public partial class App : Application {
@@ -56,6 +57,17 @@ public partial class App : Application {
   /// スクリーンキャプチャ用タイマー
   public static ScreenCaptureTimer ScreenCaptureTimer {
     get { return App.screenCaptureTimer; }
+  }
+
+  //===================================================================
+  // 非マネージドリソース
+  //===================================================================
+  
+  /// Singleton: NullPen
+  private static NullPen nullPen = new NullPen();
+  /// NullPen
+  public static NullPen NullPen {
+    get { return App.nullPen; }
   }
 
   //===================================================================

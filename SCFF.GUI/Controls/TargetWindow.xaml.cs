@@ -29,31 +29,14 @@ using SCFF.Common.Ext;
 using SCFF.Common.GUI;
 
 /// Window取り込み対象の設定用UserControl
-public partial class TargetWindow : UserControl, IUpdateByProfile, IDisposable {
+public partial class TargetWindow : UserControl, IUpdateByProfile {
   //===================================================================
   // コンストラクタ/Dispose/デストラクタ
   //===================================================================
 
   /// コンストラクタ
   public TargetWindow() {
-    Debug.WriteLine("TargetWindow", "*** MEMORY[NEW] ***");
     InitializeComponent();
-  }
-
-  /// Dispose
-  public void Dispose() {
-    if (this.nullPen != null) {
-      this.nullPen.Dispose();
-      Debug.WriteLine("TargetWindow.nullPen", "*** MEMORY[DISPOSE] ***");
-      this.nullPen = null;
-    }
-    GC.SuppressFinalize(this);
-  }
-
-  /// デストラクタ
-  ~TargetWindow() {
-    Debug.WriteLine("TargetWindow", "*** MEMORY[DELETE] ***");
-    this.Dispose();
   }
 
   //===================================================================
@@ -119,7 +102,7 @@ public partial class TargetWindow : UserControl, IUpdateByProfile, IDisposable {
     User32.GetClientRect(this.currentTargetWindow, out currentTargetRect);
     
     var originalDrawMode = GDI32.SetROP2(this.currentTargetDC, GDI32.R2_XORPEN);
-    var originalPen = GDI32.SelectObject(this.currentTargetDC, this.nullPen.Pen);
+    var originalPen = GDI32.SelectObject(this.currentTargetDC, App.NullPen.Pen);
 
     GDI32.Rectangle(this.currentTargetDC,
         currentTargetRect.Left, currentTargetRect.Top,
@@ -238,9 +221,6 @@ public partial class TargetWindow : UserControl, IUpdateByProfile, IDisposable {
   //===================================================================
   // フィールド
   //===================================================================
-
-  /// AreaSelectのXORによる塗りつぶし時に枠線を描画しない用のペン
-  private NullPen nullPen = new NullPen();
 
   //-------------------------------------------------------------------
   // DragHere_PreviewMouseDown/Move/Up時の状態変数

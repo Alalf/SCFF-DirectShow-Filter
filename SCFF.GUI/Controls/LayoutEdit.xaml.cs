@@ -62,8 +62,6 @@ public partial class LayoutEdit
 
   /// コンストラクタ
   public LayoutEdit() {
-    Debug.WriteLine("LayoutEdit", "*** MEMORY[NEW] ***");
-
     InitializeComponent();
 
     // できるだけ軽く

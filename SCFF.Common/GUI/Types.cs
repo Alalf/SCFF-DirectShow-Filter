@@ -22,6 +22,7 @@
 namespace SCFF.Common.GUI {
 
 using System;
+using System.Diagnostics;
 using SCFF.Common.Ext;
 
 //=====================================================================
@@ -71,12 +72,18 @@ public class BitmapHandle : IDisposable {
     this.Bitmap = bitmap;
   }
 
-  /// デストラクタ
+  /// Dispose
   public void Dispose() {
     if (this.Bitmap != IntPtr.Zero) {
       GDI32.DeleteObject(this.Bitmap);
       this.Bitmap = IntPtr.Zero;
     }
+    GC.SuppressFinalize(this);
+  }
+
+  /// デストラクタ
+  ~BitmapHandle() {
+    this.Dispose();
   }
 
   /// ラップしているHBitmap
@@ -89,14 +96,22 @@ public class NullPen : IDisposable {
   /// コンストラクタ
   public NullPen() {
     this.Pen = GDI32.CreatePen(GDI32.PS_NULL, 1, 0x00000000);
+    Debug.WriteLine("NullPen", "*** MEMORY[NEW] ***");
   }
 
-  /// デストラクタ
+  /// Dispose
   public void Dispose() {
     if (this.Pen != IntPtr.Zero) {
       GDI32.DeleteObject(this.Pen);
       this.Pen = IntPtr.Zero;
+      Debug.WriteLine("NullPen", "*** MEMORY[DISPOSE] ***");
     }
+    GC.SuppressFinalize(this);
+  }
+
+  /// デストラクタ
+  ~NullPen() {
+    this.Dispose();
   }
 
   /// ラップしているHPen

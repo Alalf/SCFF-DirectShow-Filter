@@ -48,11 +48,10 @@ public class ScreenCaptureTimer : IDisposable {
 
   /// コンストラクタ
   public ScreenCaptureTimer() {
-    Debug.WriteLine("ScreenCaptureTimer", "*** MEMORY[NEW] ***");
     this.timerPeriod = ScreenCaptureTimer.DefaultTimerPeriod;
 
-    Debug.WriteLine("ScreenCaptureTimer.captureTimer", "*** MEMORY[NEW] ***");
     this.captureTimer = new Timer(TimerCallback, null, 0, (int)this.timerPeriod);
+    Debug.WriteLine("ScreenCaptureTimer.captureTimer", "*** MEMORY[NEW] ***");
   }
 
   /// Dispose
@@ -62,8 +61,8 @@ public class ScreenCaptureTimer : IDisposable {
         this.isRunning = false;
         this.captureTimer.Change(Timeout.Infinite, Timeout.Infinite);
         this.captureTimer.Dispose();
-        Debug.WriteLine("ScreenCaptureTimer.captureTimer", "*** MEMORY[DISPOSE] ***");
         this.captureTimer = null;
+        Debug.WriteLine("ScreenCaptureTimer.captureTimer", "*** MEMORY[DISPOSE] ***");
       }
     }
     GC.SuppressFinalize(this);
@@ -71,7 +70,6 @@ public class ScreenCaptureTimer : IDisposable {
 
   /// デストラクタ
   ~ScreenCaptureTimer() {
-    Debug.WriteLine("ScreenCaptureTimer", "*** MEMORY[DELETE] ***");
     this.Dispose();
   }
 
@@ -126,7 +124,7 @@ public class ScreenCaptureTimer : IDisposable {
     /// @todo(me) あまり大きな画像をメモリにおいておきたくない。
     ///           とはいえ、TransformedBitmapはちょっと重過ぎる。
     ///           メモリよりもCPUリソースを残しておきたいのでこのままでいいかも。
-    // bitmap = this.Resize(bitmap);
+    //bitmap = this.Resize(bitmap);
       
     // スレッド越しにアクセスされるためFreeze
     bitmap.Freeze();

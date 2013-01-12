@@ -45,6 +45,9 @@
     <Compile Include="Ext\GDI32.cs" />
     <Compile Include="Ext\User32.cs" />
     <Compile Include="GUI\HitTest.cs" />
+    <Compile Include="GUI\IBindingOptions.cs" />
+    <Compile Include="GUI\IBindingProfile.cs" />
+    <Compile Include="GUI\IBindingRuntimeOptions.cs" />
     <Compile Include="GUI\MoveAndSize.cs" />
     <Compile Include="GUI\ScreenCaptureRequest.cs" />
     <Compile Include="GUI\SnapGuide.cs" />

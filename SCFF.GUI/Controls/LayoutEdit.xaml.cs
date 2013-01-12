@@ -36,7 +36,7 @@ using SCFF.Common.GUI;
 /// LayoutEditImage内の座標系は([0-1]*Scale,[0-1]*Scale)で固定（プレビューのサイズに依存しない）
 /// 逆に言うと依存させてはいけない
 public partial class LayoutEdit
-    : UserControl, IUpdateByProfile, IUpdateByOptions, IUpdateByRuntimeOptions {
+    : UserControl, IBindingProfile, IBindingOptions, IBindingRuntimeOptions {
   //===================================================================
   // 定数
   //===================================================================  
@@ -135,8 +135,6 @@ public partial class LayoutEdit
     if (bitmap == null) return;
 
     // プレビューの描画
-    if (!layoutElement.IsWindowValid) return;
-
     var actualBoundRect = layoutElement.GetActualBoundRect(
         App.RuntimeOptions.CurrentSampleWidth,
         App.RuntimeOptions.CurrentSampleHeight).ToRect();
@@ -208,6 +206,8 @@ public partial class LayoutEdit
   ///
   /// @todo(me) 負荷軽減のためFPS制限してもいいかも(30FPSでだいたい半分だがカクカク)
   private void BuildDrawingGroup() {
+    Debug.Assert(App.Options.LayoutIsExpanded, "Must be shown", "LayoutEdit");
+
     using (var dc = this.DrawingGroup.Open()) {
       // 背景描画でサイズを決める
       dc.DrawRectangle(Brushes.Black, null, this.SampleRect);
@@ -230,6 +230,7 @@ public partial class LayoutEdit
 
   /// DrawingGroupの消去
   private void ClearDrawingGroup() {
+    if (this.DrawingGroup.Children.Count == 0) return;
     this.DrawingGroup.Children.Clear();
     GC.Collect();
     Debug.WriteLine("Collect", "*** MEMORY[GC] ***");
@@ -369,11 +370,11 @@ public partial class LayoutEdit
   /// @param sender 使用しない
   /// @param e Client座標系でのマウス座標(GetPosition(...))の取得が可能
   private void LayoutEditImage_MouseUp(object sender, MouseButtonEventArgs e) {
-    if (this.hitMode != HitModes.Neutral) {
-      this.LayoutEditImage.ReleaseMouseCapture();
-      this.hitMode = HitModes.Neutral;
-      this.BuildDrawingGroup();
-    }
+    if (this.hitMode == HitModes.Neutral) return;
+
+    this.LayoutEditImage.ReleaseMouseCapture();
+    this.hitMode = HitModes.Neutral;
+    this.BuildDrawingGroup();
   }
 
   //-------------------------------------------------------------------
@@ -388,60 +389,65 @@ public partial class LayoutEdit
   // IUpdateByOptionsの実装
   //===================================================================
 
-  /// @copydoc IUpdateByOptions::IsEnabledByOptions
-  public bool IsEnabledByOptions { get; private set; }
-  /// @copydoc IUpdateByOptions::UpdateByOptions
-  public void UpdateByOptions() {
-    this.IsEnabledByOptions = false;
-    if (App.Options.LayoutIsExpanded && App.Options.LayoutPreview) {
-      App.ScreenCaptureTimer.Start();       // タイマー再開
-      this.UpdateByEntireProfile();         // プレビュー強制更新
+  /// @copydoc IBindingOptions::CanChangeOptions
+  public bool CanChangeOptions { get; private set; }
+  /// @copydoc IBindingOptions::OnOptionsChanged
+  public void OnOptionsChanged() {
+    this.CanChangeOptions = false;
+
+    if (App.Options.LayoutIsExpanded) {
+      if (App.Options.LayoutPreview) {
+        App.ScreenCaptureTimer.Start();       // タイマー再開
+        App.ScreenCaptureTimer.UpdateRequest(App.Profile);
+      }
+      this.BuildDrawingGroup();
     } else {
       App.ScreenCaptureTimer.Suspend();     // タイマー停止
-      if (App.Options.LayoutIsExpanded) {
-        this.BuildDrawingGroup();           // 再描画
-      } else {
-        this.ClearDrawingGroup();           // DrawingGroupもクリア
-      }
+      this.ClearDrawingGroup();             // DrawingGroupもクリア
     }
-    this.IsEnabledByOptions = true;
+
+    this.CanChangeOptions = true;
   }
   
   //===================================================================
   // IUpdateByRuntimeOptionsの実装
   //===================================================================
 
-  /// @copydoc IUpdateByRuntimeOptions::IsEnabledByRuntimeOptions
-  public bool IsEnabledByRuntimeOptions { get; private set; }
-  /// @copydoc IUpdateByRuntimeOptions::UpdateByRuntimeOptions
-  public void UpdateByRuntimeOptions() {
+  /// @copydoc IBindingRuntimeOptions::CanChangeRuntimeOptions
+  public bool CanChangeRuntimeOptions { get; private set; }
+  /// @copydoc IBindingRuntimeOptions::OnRuntimeOptionsChanged
+  public void OnRuntimeOptionsChanged() {
+    this.CanChangeRuntimeOptions = false;
+
     // 再描画
-    /// @todo(me) 条件分岐はしたほうがいいかも？
-    this.IsEnabledByRuntimeOptions = false;
-    this.BuildDrawingGroup();
-    this.IsEnabledByRuntimeOptions = true;
+    if (App.Options.LayoutIsExpanded) {
+      this.BuildDrawingGroup();
+    }
+
+    this.CanChangeRuntimeOptions = true;
   }
 
   //===================================================================
   // IUpdateByProfileの実装
   //===================================================================
 
-  /// @copydoc IUpdateByProfile::IsEnabledByProfile
-  public bool IsEnabledByProfile { get; private set; }
-  /// @copydoc IUpdateByProfile::UpdateByCurrentProfile
-  public void UpdateByCurrentProfile() {
-    this.IsEnabledByProfile = false;
-    App.ScreenCaptureTimer.UpdateRequest(App.Profile);
-    this.BuildDrawingGroup();
-    this.IsEnabledByProfile = true;
+  /// @copydoc IBindingProfile::CanChangeProfile
+  public bool CanChangeProfile { get; private set; }
+  /// @copydoc IBindingProfile::OnCurrentProfileChanged
+  public void OnCurrentProfileChanged() {
+    this.CanChangeProfile = false;
+
+    if (App.Options.LayoutIsExpanded) {
+      App.ScreenCaptureTimer.UpdateRequest(App.Profile);
+      this.BuildDrawingGroup();
+    }
+
+    this.CanChangeProfile = true;
   }
 
-  /// @copydoc IUpdateByProfile::UpdateByEntireProfile
-  public void UpdateByEntireProfile() {
-    this.IsEnabledByProfile = false;
-    App.ScreenCaptureTimer.UpdateRequest(App.Profile);
-    this.BuildDrawingGroup();
-    this.IsEnabledByProfile = true;
+  /// @copydoc IBindingProfile::OnEntireProfileChanged
+  public void OnEntireProfileChanged() {
+    this.OnCurrentProfileChanged();
   }
 
   //===================================================================

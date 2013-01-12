@@ -27,10 +27,11 @@ using System.Windows.Input;
 using Microsoft.Win32;
 using Microsoft.Windows.Shell;
 using SCFF.Common;
+using SCFF.Common.GUI;
 
 /// MainWindowのコードビハインド
 public partial class MainWindow
-    : Window, IUpdateByProfile, IUpdateByOptions, IUpdateByRuntimeOptions {
+    : Window, IBindingProfile, IBindingOptions, IBindingRuntimeOptions {
   //===================================================================
   // コンストラクタ/Dispose/デストラクタ
   //===================================================================
@@ -39,9 +40,9 @@ public partial class MainWindow
   public MainWindow() {
     this.InitializeComponent();
 
-    this.UpdateByOptions();
-    this.UpdateByRuntimeOptions();
-    this.UpdateByEntireProfile();
+    this.OnOptionsChanged();
+    this.OnRuntimeOptionsChanged();
+    this.OnEntireProfileChanged();
 
     // 必要な機能の実行
     this.SetAero();
@@ -93,58 +94,58 @@ public partial class MainWindow
 
   /// AreaExpander: Collapsed
   private void AreaExpander_Collapsed(object sender, RoutedEventArgs e) {
-    if (!this.IsEnabledByOptions) return;
+    if (!this.CanChangeOptions) return;
     App.Options.AreaIsExpanded = false;
   }
   /// AreaExpander: Expanded
   private void AreaExpander_Expanded(object sender, RoutedEventArgs e) {
-    if (!this.IsEnabledByOptions) return;
+    if (!this.CanChangeOptions) return;
     App.Options.AreaIsExpanded = true;
   }
   /// OptionsExpander: Collapsed
   private void OptionsExpander_Collapsed(object sender, RoutedEventArgs e) {
-    if (!this.IsEnabledByOptions) return;
+    if (!this.CanChangeOptions) return;
     App.Options.OptionsIsExpanded = false;
   }
   /// OptionsExpander: Expanded
   private void OptionsExpander_Expanded(object sender, RoutedEventArgs e) {
-    if (!this.IsEnabledByOptions) return;
+    if (!this.CanChangeOptions) return;
     App.Options.OptionsIsExpanded = true;
   }
   /// ResizeMethodExpander: Collapsed
   private void ResizeMethodExpander_Collapsed(object sender, RoutedEventArgs e) {
-    if (!this.IsEnabledByOptions) return;
+    if (!this.CanChangeOptions) return;
     App.Options.ResizeMethodIsExpanded = false;
   }
   /// ResizeMethodExpander: Expanded
   private void ResizeMethodExpander_Expanded(object sender, RoutedEventArgs e) {
-    if (!this.IsEnabledByOptions) return;
+    if (!this.CanChangeOptions) return;
     App.Options.ResizeMethodIsExpanded = true;
   }
   /// LayoutExpander: Collapsed
   private void LayoutExpander_Collapsed(object sender, RoutedEventArgs e) {
-    if (!this.IsEnabledByOptions) return;
+    if (!this.CanChangeOptions) return;
     App.Options.LayoutIsExpanded = false;
 
     UpdateCommands.UpdateLayoutEditByOptions.Execute(null, null);
   }
   /// LayoutExpander: Expanded
   private void LayoutExpander_Expanded(object sender, RoutedEventArgs e) {
-    if (!this.IsEnabledByOptions) return;
+    if (!this.CanChangeOptions) return;
     App.Options.LayoutIsExpanded = true;
 
     UpdateCommands.UpdateLayoutEditByOptions.Execute(null, null);
   }
 
   //===================================================================
-  // IUpdateByOptionsの実装
+  // IBindingOptionsの実装
   //===================================================================
 
-  /// @copydoc IUpdateByOptions::IsEnabledByOptions
-  public bool IsEnabledByOptions { get; private set; }
-  /// @copydoc IUpdateByOptions::UpdateByOptions
-  public void UpdateByOptions() {
-    this.IsEnabledByOptions = false;
+  /// @copydoc Common::GUI::IBindingOptions::CanChangeOptions
+  public bool CanChangeOptions { get; private set; }
+  /// @copydoc Common::GUI::IBindingOptions::OnOptionsChanged
+  public void OnOptionsChanged() {
+    this.CanChangeOptions = false;
 
     // Temporary
     this.Left         = App.Options.TmpMainWindowLeft;
@@ -160,12 +161,12 @@ public partial class MainWindow
     this.LayoutExpander.IsExpanded        = App.Options.LayoutIsExpanded;
 
     // UserControls
-    this.Apply.UpdateByOptions();
-    this.LayoutToolbar.UpdateByOptions();
-    this.LayoutEdit.UpdateByOptions();
-    this.MainMenu.UpdateByOptions();
+    this.Apply.OnOptionsChanged();
+    this.LayoutToolbar.OnOptionsChanged();
+    this.LayoutEdit.OnOptionsChanged();
+    this.MainMenu.OnOptionsChanged();
 
-    this.IsEnabledByOptions = true;
+    this.CanChangeOptions = true;
   }
 
   /// UIから設定にデータを保存
@@ -180,14 +181,14 @@ public partial class MainWindow
   }
 
   //===================================================================
-  // IUpdateByRuntimeOptionsの実装
+  // IBindingRuntimeOptionsの実装
   //===================================================================
 
-  /// @copydoc IUpdateByRuntimeOptions::IsEnabledByRuntimeOptions
-  public bool IsEnabledByRuntimeOptions { get; private set; }
-  /// @copydoc IUpdateByRuntimeOptions::UpdateByRuntimeOptions
-  public void UpdateByRuntimeOptions() {
-    this.IsEnabledByRuntimeOptions = false;
+  /// @copydoc Common::GUI::IBindingRuntimeOptions::CanChangeRuntimeOptions
+  public bool CanChangeRuntimeOptions { get; private set; }
+  /// @copydoc Common::GUI::IBindingRuntimeOptions::OnRuntimeOptionsChanged
+  public void OnRuntimeOptionsChanged() {
+    this.CanChangeRuntimeOptions = false;
     /// @todo System.Reflection.Assembly.GetExecutingAssembly().GetName().Versionを使うか？
     ///       しかしどう見てもこれ実行時に決まる値で気持ち悪いな・・・
     var commonTitle = "SCFF DirectShow Filter Ver.0.1.7";
@@ -198,42 +199,42 @@ public partial class MainWindow
       this.WindowTitle.Content = commonTitle;
     }
 
-    this.LayoutEdit.UpdateByRuntimeOptions();
-    this.LayoutParameter.UpdateByRuntimeOptions();
-    this.IsEnabledByRuntimeOptions = true;
+    this.LayoutEdit.OnRuntimeOptionsChanged();
+    this.LayoutParameter.OnRuntimeOptionsChanged();
+    this.CanChangeRuntimeOptions = true;
   }
 
   //===================================================================
-  // IUpdateByProfileの実装
+  // IBindingProfileの実装
   //===================================================================
 
-  /// @copydoc IUpdateByProfile::IsEnabledByProfile
-  public bool IsEnabledByProfile { get; private set; }
+  /// @copydoc Common::GUI::IBindingProfile::CanChangeProfile
+  public bool CanChangeProfile { get; private set; }
 
-  /// @copydoc IUpdateByProfile::UpdateByCurrentProfile
-  public void UpdateByCurrentProfile() {
-    this.IsEnabledByProfile = false;
-    this.TargetWindow.UpdateByCurrentProfile();
-    this.Area.UpdateByCurrentProfile();
-    this.Options.UpdateByCurrentProfile();
-    this.ResizeMethod.UpdateByCurrentProfile();
-    this.LayoutParameter.UpdateByCurrentProfile();
-    this.LayoutTab.UpdateByCurrentProfile();
-    this.LayoutEdit.UpdateByCurrentProfile();
-    this.IsEnabledByProfile = true;
+  /// @copydoc Common::GUI::IBindingProfile::OnCurrentProfileChanged
+  public void OnCurrentProfileChanged() {
+    this.CanChangeProfile = false;
+    this.TargetWindow.OnCurrentProfileChanged();
+    this.Area.OnCurrentProfileChanged();
+    this.Options.OnCurrentProfileChanged();
+    this.ResizeMethod.OnCurrentProfileChanged();
+    this.LayoutParameter.OnCurrentProfileChanged();
+    this.LayoutTab.OnCurrentProfileChanged();
+    this.LayoutEdit.OnCurrentProfileChanged();
+    this.CanChangeProfile = true;
   }
 
-  /// @copydoc IUpdateByProfile::UpdateByEntireProfile
-  public void UpdateByEntireProfile() {
-    this.IsEnabledByProfile = false;
-    this.TargetWindow.UpdateByEntireProfile();
-    this.Area.UpdateByEntireProfile();
-    this.Options.UpdateByEntireProfile();
-    this.ResizeMethod.UpdateByEntireProfile();
-    this.LayoutParameter.UpdateByEntireProfile();
-    this.LayoutTab.UpdateByEntireProfile();
-    this.LayoutEdit.UpdateByEntireProfile();
-    this.IsEnabledByProfile = true;
+  /// @copydoc Common::GUI::IBindingProfile::OnEntireProfileChanged
+  public void OnEntireProfileChanged() {
+    this.CanChangeProfile = false;
+    this.TargetWindow.OnEntireProfileChanged();
+    this.Area.OnEntireProfileChanged();
+    this.Options.OnEntireProfileChanged();
+    this.ResizeMethod.OnEntireProfileChanged();
+    this.LayoutParameter.OnEntireProfileChanged();
+    this.LayoutTab.OnEntireProfileChanged();
+    this.LayoutEdit.OnEntireProfileChanged();
+    this.CanChangeProfile = true;
   }
 
   //===================================================================
@@ -256,7 +257,7 @@ public partial class MainWindow
     switch (result) {
       case MessageBoxResult.No: {
         App.Profile.RestoreDefault();
-        this.UpdateByEntireProfile();
+        this.OnEntireProfileChanged();
         break;
       }
       case MessageBoxResult.Yes: {
@@ -268,10 +269,10 @@ public partial class MainWindow
           /// @todo(me) 実装
           MessageBox.Show(save.FileName);
           App.Options.AddRecentProfile(save.FileName);
-          this.MainMenu.UpdateByOptions();
+          this.MainMenu.OnOptionsChanged();
 
           App.Profile.RestoreDefault();
-          this.UpdateByEntireProfile();
+          this.OnEntireProfileChanged();
         }
         break;
       }
@@ -298,7 +299,7 @@ public partial class MainWindow
       /// @todo(me) 実装
       MessageBox.Show(save.FileName);
       App.Options.AddRecentProfile(save.FileName);
-      this.MainMenu.UpdateByOptions();
+      this.MainMenu.OnOptionsChanged();
     }
   }
 
@@ -314,7 +315,7 @@ public partial class MainWindow
       /// @todo(me) 実装
       MessageBox.Show(save.FileName);
       App.Options.AddRecentProfile(save.FileName);
-      this.MainMenu.UpdateByOptions();
+      this.MainMenu.OnOptionsChanged();
     }
   }
 
@@ -347,46 +348,46 @@ public partial class MainWindow
   /// @param sender 使用しない
   /// @param e 使用しない
   private void UpdateMainWindowByEntireProfile_Executed(object sender, ExecutedRoutedEventArgs e) {
-    this.UpdateByEntireProfile();
+    this.OnEntireProfileChanged();
   }
   /// @copydoc SCFF::GUI::UpdateCommands::UpdateLayoutEditByEntireProfile
   /// @param sender 使用しない
   /// @param e 使用しない
   private void UpdateLayoutEditByEntireProfile_Executed(object sender, ExecutedRoutedEventArgs e) {
-    this.LayoutEdit.UpdateByEntireProfile();
+    this.LayoutEdit.OnEntireProfileChanged();
   }
   /// @copydoc SCFF::GUI::UpdateCommands::UpdateLayoutEditByCurrentProfile
   /// @param sender 使用しない
   /// @param e 使用しない
   private void UpdateLayoutEditByCurrentProfile_Executed(object sender, ExecutedRoutedEventArgs e) {
-    this.LayoutEdit.UpdateByCurrentProfile();
+    this.LayoutEdit.OnCurrentProfileChanged();
   }
   /// @copydoc SCFF::GUI::UpdateCommands::UpdateTargetWindowByCurrentProfile
   /// @param sender 使用しない
   /// @param e 使用しない
   private void UpdateTargetWindowByCurrentProfile_Executed(object sender, ExecutedRoutedEventArgs e) {
-    this.TargetWindow.UpdateByCurrentProfile();
-    this.Area.UpdateByCurrentProfile();
-    this.LayoutEdit.UpdateByCurrentProfile();
-    this.LayoutParameter.UpdateByCurrentProfile();
+    this.TargetWindow.OnCurrentProfileChanged();
+    this.Area.OnCurrentProfileChanged();
+    this.LayoutEdit.OnCurrentProfileChanged();
+    this.LayoutParameter.OnCurrentProfileChanged();
   }
   /// @copydoc SCFF::GUI::UpdateCommands::UpdateLayoutParameterByCurrentProfile
   /// @param sender 使用しない
   /// @param e 使用しない
   private void UpdateLayoutParameterByCurrentProfile_Executed(object sender, ExecutedRoutedEventArgs e) {
-    this.LayoutParameter.UpdateByCurrentProfile();
+    this.LayoutParameter.OnCurrentProfileChanged();
   }
   /// @copydoc SCFF::GUI::UpdateCommands::UpdateLayoutEditByOptions
   /// @param sender 使用しない
   /// @param e 使用しない
   private void UpdateLayoutEditByOptions_Executed(object sender, ExecutedRoutedEventArgs e) {
-    this.LayoutEdit.UpdateByOptions();
+    this.LayoutEdit.OnOptionsChanged();
   }
   /// @copydoc SCFF::GUI::UpdateCommands::UpdateMainWindowByRuntimeOptions
   /// @param sender 使用しない
   /// @param e 使用しない
   private void UpdateMainWindowByRuntimeOptions_Executed(object sender, ExecutedRoutedEventArgs e) {
-    this.UpdateByRuntimeOptions();
+    this.OnRuntimeOptionsChanged();
   }
 
   //-------------------------------------------------------------------

@@ -24,11 +24,12 @@ using System;
 using System.Diagnostics;
 using System.Windows.Controls;
 using SCFF.Common;
+using SCFF.Common.GUI;
 
 /// 数値を指定してレイアウト配置を調整するためのUserControl
 /// @todo(me) InputValidationが甘すぎるので何とかする
 public partial class LayoutParameter
-    : UserControl, IUpdateByProfile, IUpdateByRuntimeOptions {
+    : UserControl, IBindingProfile, IBindingRuntimeOptions {
   //===================================================================
   // コンストラクタ/Dispose/デストラクタ
   //===================================================================
@@ -69,7 +70,7 @@ public partial class LayoutParameter
     // 関連するUserControlに更新を伝える
     UpdateCommands.UpdateLayoutEditByCurrentProfile.Execute(null, null);
     // 自分自身はCommandsではなく直接更新する
-    this.UpdateByCurrentProfile();
+    this.OnCurrentProfileChanged();
   }
 
   //-------------------------------------------------------------------
@@ -126,7 +127,7 @@ public partial class LayoutParameter
   /// @param sender 使用しない
   /// @param e 使用しない
   private void BoundRelativeLeft_TextChanged(object sender, TextChangedEventArgs e) {
-    if (!this.IsEnabledByProfile) return;
+    if (!this.CanChangeProfile) return;
     var lowerBound = 0.0;
     var upperBound = 1.0;
     double parsedValue;
@@ -145,7 +146,7 @@ public partial class LayoutParameter
   /// @param sender 使用しない
   /// @param e 使用しない
   private void BoundRelativeTop_TextChanged(object sender, TextChangedEventArgs e) {
-    if (!this.IsEnabledByProfile) return;
+    if (!this.CanChangeProfile) return;
     var lowerBound = 0.0;
     var upperBound = 1.0;
     double parsedValue;
@@ -164,7 +165,7 @@ public partial class LayoutParameter
   /// @param sender 使用しない
   /// @param e 使用しない
   private void BoundRelativeRight_TextChanged(object sender, TextChangedEventArgs e) {
-    if (!this.IsEnabledByProfile) return;
+    if (!this.CanChangeProfile) return;
     var lowerBound = 0.0;
     var upperBound = 1.0;
     double parsedValue;
@@ -183,7 +184,7 @@ public partial class LayoutParameter
   /// @param sender 使用しない
   /// @param e 使用しない
   private void BoundRelativeBottom_TextChanged(object sender, TextChangedEventArgs e) {
-    if (!this.IsEnabledByProfile) return;
+    if (!this.CanChangeProfile) return;
     var lowerBound = 0.0;
     var upperBound = 1.0;
     double parsedValue;
@@ -199,30 +200,30 @@ public partial class LayoutParameter
   }
 
   //===================================================================
-  // IUpdateByRuntimeOptionsの実装
+  // IBindingRuntimeOptionsの実装
   //===================================================================
 
-  /// @copydoc IUpdateByRuntimeOptions::IsEnabledByRuntimeOptions
-  public bool IsEnabledByRuntimeOptions { get; private set; }
-  /// @copydoc IUpdateByRuntimeOptions::UpdateByRuntimeOptions
-  public void UpdateByRuntimeOptions() {
-    this.IsEnabledByRuntimeOptions = false;
+  /// @copydoc Common::GUI::IBindingRuntimeOptions::CanChangeRuntimeOptions
+  public bool CanChangeRuntimeOptions { get; private set; }
+  /// @copydoc Common::GUI::IBindingRuntimeOptions::OnRuntimeOptionsChanged
+  public void OnRuntimeOptionsChanged() {
+    this.CanChangeRuntimeOptions = false;
     this.UpdateDisabledTextboxes();
-    this.IsEnabledByRuntimeOptions = true;
+    this.CanChangeRuntimeOptions = true;
   }
 
   //===================================================================
-  // IUpdateByProfileの実装
+  // IBindingProfileの実装
   //===================================================================
 
   /// GroupBox.Headerの最大文字数
   private const int maxHeaderLength = 60;
 
-  /// @copydoc IUpdateByProfile::IsEnabledByProfile
-  public bool IsEnabledByProfile { get; private set; }
-  /// @copydoc IUpdateByProfile::UpdateByCurrentProfile
-  public void UpdateByCurrentProfile() {
-    this.IsEnabledByProfile = false;
+  /// @copydoc Common::GUI::IBindingProfile::CanChangeProfile
+  public bool CanChangeProfile { get; private set; }
+  /// @copydoc Common::GUI::IBindingProfile::OnCurrentProfileChanged
+  public void OnCurrentProfileChanged() {
+    this.CanChangeProfile = false;
 
     this.GroupBox.Header =
         App.Profile.CurrentView.GetHeaderString(LayoutParameter.maxHeaderLength);
@@ -241,12 +242,12 @@ public partial class LayoutParameter
     this.BoundRelativeRight.Text = App.Profile.CurrentView.BoundRelativeRightString;
     this.BoundRelativeBottom.Text = App.Profile.CurrentView.BoundRelativeBottomString;
 
-    this.IsEnabledByProfile = true;
+    this.CanChangeProfile = true;
   }
-  /// @copydoc IUpdateByProfile::UpdateByEntireProfile
-  public void UpdateByEntireProfile() {
+  /// @copydoc Common::GUI::IBindingProfile::OnEntireProfileChanged
+  public void OnEntireProfileChanged() {
     // 編集するのはCurrentのみ
-    this.UpdateByCurrentProfile();
+    this.OnCurrentProfileChanged();
   }
 }
 }   // namespace SCFF.GUI.Controls

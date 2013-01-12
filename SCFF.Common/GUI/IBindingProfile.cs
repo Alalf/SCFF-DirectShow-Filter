@@ -15,20 +15,23 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file SCFF.GUI/IUpdateByOptions.cs
-/// @copydoc SCFF::GUI::IUpdateByOptions
+/// @file SCFF.Common/GUI/IBindingProfile.cs
+/// @copydoc SCFF::Common::GUI::IBindingProfile
 
-namespace SCFF.GUI {
+namespace SCFF.Common.GUI {
 
-/// 自前Options->Controlデータバインディング用インタフェース
+/// 自前Profile->Controlデータバインディング用インタフェース
 ///
 /// @attention どうしてもINotifyPropertyChangedなどの
 ///            リフレクションを使いたくなかったためやむなく用意した
-interface IUpdateByOptions {
-  /// Control->Options可能にする
-  bool IsEnabledByOptions { get; }
+public interface IBindingProfile {
+  /// Control->Profile可能にする
+  bool CanChangeProfile { get; }
 
-  /// Options->Control書き換え
-  void UpdateByOptions();
+  /// Profile(Currentのみ)->Control書き換え
+  void OnCurrentProfileChanged();
+
+  /// Profile(全体)->Control書き換え
+  void OnEntireProfileChanged();
 }
-}   // namespace SCFF.GUI
+}   // namespace SCFF.Common.GUI

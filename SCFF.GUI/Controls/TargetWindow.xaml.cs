@@ -29,7 +29,7 @@ using SCFF.Common.Ext;
 using SCFF.Common.GUI;
 
 /// Window取り込み対象の設定用UserControl
-public partial class TargetWindow : UserControl, IUpdateByProfile {
+public partial class TargetWindow : UserControl, IBindingProfile {
   //===================================================================
   // コンストラクタ/Dispose/デストラクタ
   //===================================================================
@@ -204,18 +204,18 @@ public partial class TargetWindow : UserControl, IUpdateByProfile {
   // IUpdateByProfileの実装
   //===================================================================
 
-  /// @copydoc IUpdateByProfile::IsEnabledByProfile
-  public bool IsEnabledByProfile { get; private set; }
-  /// @copydoc IUpdateByProfile::UpdateByCurrentProfile
-  public void UpdateByCurrentProfile() {
-    this.IsEnabledByProfile = false;
+  /// @copydoc IBindingProfile::CanChangeProfile
+  public bool CanChangeProfile { get; private set; }
+  /// @copydoc IBindingProfile::OnCurrentProfileChanged
+  public void OnCurrentProfileChanged() {
+    this.CanChangeProfile = false;
     this.WindowCaption.Text = App.Profile.CurrentView.WindowCaption;
-    this.IsEnabledByProfile = true;
+    this.CanChangeProfile = true;
   }
-  /// @copydoc IUpdateByProfile::UpdateByEntireProfile
-  public void UpdateByEntireProfile() {
+  /// @copydoc IBindingProfile::OnEntireProfileChanged
+  public void OnEntireProfileChanged() {
     // 編集するのはCurrentのみ
-    this.UpdateByCurrentProfile();
+    this.OnCurrentProfileChanged();
   }
 
   //===================================================================

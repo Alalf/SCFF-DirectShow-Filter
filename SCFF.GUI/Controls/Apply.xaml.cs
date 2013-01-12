@@ -22,10 +22,10 @@ namespace SCFF.GUI.Controls {
 
 using System.Windows;
 using System.Windows.Controls;
+using SCFF.Common.GUI;
 
 /// Splash/ApplyボタンとAutoApplyチェックボックスを管理するためのUserControl
-public partial class Apply
-    : UserControl, IUpdateByOptions {
+public partial class Apply : UserControl, IBindingOptions {
   //===================================================================
   // コンストラクタ/Dispose/デストラクタ
   //===================================================================
@@ -58,16 +58,16 @@ public partial class Apply
   //-------------------------------------------------------------------
 
   //===================================================================
-  // IUpdateByOptionsの実装
+  // IBindingOptionsの実装
   //===================================================================
 
-  /// @copydoc IUpdateByOptions::UpdateByOptions
-  public bool IsEnabledByOptions { get; private set; }
-  /// @copydoc IUpdateByOptions::UpdateByOptions
-  public void UpdateByOptions() {
-    this.IsEnabledByOptions = false;
+  /// @copydoc Common::GUI::IBindingOptions::OnOptionsChanged
+  public bool CanChangeOptions { get; private set; }
+  /// @copydoc Common::GUI::IBindingOptions::OnOptionsChanged
+  public void OnOptionsChanged() {
+    this.CanChangeOptions = false;
     this.AutoApply.IsChecked = App.Options.AutoApply;
-    this.IsEnabledByOptions = true;
+    this.CanChangeOptions = true;
   }
 }
 }   // namespace SCFF.GUI.Controls

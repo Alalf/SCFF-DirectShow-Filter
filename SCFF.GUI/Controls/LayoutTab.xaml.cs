@@ -22,9 +22,10 @@ namespace SCFF.GUI.Controls {
 
 using System.Diagnostics;
 using System.Windows.Controls;
+using SCFF.Common.GUI;
 
 /// レイアウト要素の切り替えと個数の表示を行うTabControl管理用UserControl
-public partial class LayoutTab : UserControl, IUpdateByProfile {
+public partial class LayoutTab : UserControl, IBindingProfile {
   //===================================================================
   // コンストラクタ/Dispose/デストラクタ
   //===================================================================
@@ -54,7 +55,7 @@ public partial class LayoutTab : UserControl, IUpdateByProfile {
   /// @param sender 使用しない
   /// @param e 使用しない
   private void LayoutElementTab_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-    if (!this.IsEnabledByProfile) return;
+    if (!this.CanChangeProfile) return;
     var next = this.LayoutElementTab.SelectedIndex;
     App.Profile.CurrentIndex = next;
 
@@ -63,19 +64,19 @@ public partial class LayoutTab : UserControl, IUpdateByProfile {
   }
 
   //===================================================================
-  // IUpdateByProfileの実装
+  // IBindingProfileの実装
   //===================================================================
 
-  /// @copydoc IUpdateByProfile::UpdateByCurrentProfile
-  public bool IsEnabledByProfile { get; private set; }
-  /// @copydoc IUpdateByProfile::UpdateByCurrentProfile
-  public void UpdateByCurrentProfile() {
+  /// @copydoc Common::GUI::IBindingProfile::OnCurrentProfileChanged
+  public bool CanChangeProfile { get; private set; }
+  /// @copydoc Common::GUI::IBindingProfile::OnCurrentProfileChanged
+  public void OnCurrentProfileChanged() {
     // CurrentProfileの値が変わってもTabの内容は変わらない
   }
   /// Profileを見ながら必要な分を足し、必要な分を削る
   private void UpdateLayoutElementTab() {
     // コントロール編集開始
-    this.IsEnabledByProfile = false;
+    this.CanChangeProfile = false;
 
     var tabIndex = this.LayoutElementTab.SelectedIndex;
     var tabCount = this.LayoutElementTab.Items.Count;
@@ -109,13 +110,13 @@ public partial class LayoutTab : UserControl, IUpdateByProfile {
     this.LayoutElementTab.SelectedIndex = App.Profile.CurrentIndex;
 
     // コントロール編集終了
-    this.IsEnabledByProfile = true;
+    this.CanChangeProfile = true;
 
     Debug.Assert(App.Profile.LayoutElementCount == this.LayoutElementTab.Items.Count);
     Debug.Assert(App.Profile.CurrentIndex == this.LayoutElementTab.SelectedIndex);
   }
-  /// @copydoc IUpdateByProfile::UpdateByEntireProfile
-  public void UpdateByEntireProfile() {
+  /// @copydoc Common::GUI::IBindingProfile::OnEntireProfileChanged
+  public void OnEntireProfileChanged() {
     this.UpdateLayoutElementTab();
   }
 }

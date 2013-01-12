@@ -23,9 +23,10 @@ namespace SCFF.GUI.Controls {
 using System.Windows;
 using System.Windows.Controls;
 using SCFF.Common;
+using SCFF.Common.GUI;
 
 /// メインメニュー管理用UserControl
-public partial class MainMenu : UserControl, IUpdateByOptions {
+public partial class MainMenu : UserControl, IBindingOptions {
   //===================================================================
   // コンストラクタ/Dispose/デストラクタ
   //===================================================================
@@ -110,7 +111,7 @@ public partial class MainMenu : UserControl, IUpdateByOptions {
   //-------------------------------------------------------------------
 
   //===================================================================
-  // IUpdateByOptionsの実装
+  // IBindingOptionsの実装
   //===================================================================
 
   /// 最近使用したプロファイルメニューの更新
@@ -144,16 +145,16 @@ public partial class MainMenu : UserControl, IUpdateByOptions {
       }
     }
   }
-  /// @copydoc IUpdateByOptions::IsEnabledByOptions
-  public bool IsEnabledByOptions { get; private set; }
-  /// @copydoc IUpdateByOptions::UpdateByOptions
-  public void UpdateByOptions() {
-    this.IsEnabledByOptions = false;
+  /// @copydoc Common::GUI::IBindingOptions::CanChangeOptions
+  public bool CanChangeOptions { get; private set; }
+  /// @copydoc Common::GUI::IBindingOptions::OnOptionsChanged
+  public void OnOptionsChanged() {
+    this.CanChangeOptions = false;
     this.UpdateRecentProfiles();
     this.CompactView.IsChecked = App.Options.CompactView;
     this.ForceAeroOn.IsChecked = App.Options.ForceAeroOn;
     this.RestoreLastProfile.IsChecked = App.Options.RestoreLastProfile;
-    this.IsEnabledByOptions = true;
+    this.CanChangeOptions = true;
   }
 }
 }   // namespace SCFF.GUI.Controls

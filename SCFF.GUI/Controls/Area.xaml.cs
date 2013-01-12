@@ -26,9 +26,10 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using SCFF.Common;
 using SCFF.Common.Ext;
+using SCFF.Common.GUI;
 
 /// クリッピング領域設定用UserControl
-public partial class Area : UserControl, IUpdateByProfile {
+public partial class Area : UserControl, IBindingProfile {
   //===================================================================
   // コンストラクタ/Dispose/デストラクタ
   //===================================================================
@@ -53,7 +54,7 @@ public partial class Area : UserControl, IUpdateByProfile {
     App.Profile.Current.Open();
     App.Profile.Current.SetFit = (bool)this.Fit.IsChecked;
     App.Profile.Current.Close();
-    this.UpdateByCurrentProfile();
+    this.OnCurrentProfileChanged();
 
     UpdateCommands.UpdateLayoutEditByCurrentProfile.Execute(null, null);
   }
@@ -229,7 +230,7 @@ public partial class Area : UserControl, IUpdateByProfile {
 
   /// ClippingX: TextChanged
   private void ClippingX_TextChanged(object sender, TextChangedEventArgs e) {
-    if (!this.IsEnabledByProfile) return;
+    if (!this.CanChangeProfile) return;
     var lowerBound = 0;
     var upperBound = 9999;
     int parsedValue;
@@ -243,7 +244,7 @@ public partial class Area : UserControl, IUpdateByProfile {
 
   /// ClippingY: TextChanged
   private void ClippingY_TextChanged(object sender, TextChangedEventArgs e) {
-    if (!this.IsEnabledByProfile) return;
+    if (!this.CanChangeProfile) return;
     var lowerBound = 0;
     var upperBound = 9999;
     int parsedValue;
@@ -257,7 +258,7 @@ public partial class Area : UserControl, IUpdateByProfile {
 
   /// ClippingWidth: TextChanged
   private void ClippingWidth_TextChanged(object sender, TextChangedEventArgs e) {
-    if (!this.IsEnabledByProfile) return;
+    if (!this.CanChangeProfile) return;
     var lowerBound = 0;
     var upperBound = 9999;
     int parsedValue;
@@ -271,7 +272,7 @@ public partial class Area : UserControl, IUpdateByProfile {
 
   /// ClippingHeight: TextChanged
   private void ClippingHeight_TextChanged(object sender, TextChangedEventArgs e) {
-    if (!this.IsEnabledByProfile) return;
+    if (!this.CanChangeProfile) return;
     var lowerBound = 0;
     var upperBound = 9999;
     int parsedValue;
@@ -284,14 +285,14 @@ public partial class Area : UserControl, IUpdateByProfile {
   }
 
   //===================================================================
-  // IUpdateByProfileの実装
+  // IBindingProfileの実装
   //===================================================================
 
-  /// @copydoc IUpdateByProfile::IsEnabledByProfile
-  public bool IsEnabledByProfile { get; private set; }
-  /// @copydoc IUpdateByProfile::UpdateByCurrentProfile
-  public void UpdateByCurrentProfile() {
-    this.IsEnabledByProfile = false;
+  /// @copydoc Common::GUI::IBindingProfile::CanChangeProfile
+  public bool CanChangeProfile { get; private set; }
+  /// @copydoc Common::GUI::IBindingProfile::OnCurrentProfileChanged
+  public void OnCurrentProfileChanged() {
+    this.CanChangeProfile = false;
 
     switch (App.Profile.CurrentView.WindowType) {
       case WindowTypes.Normal: {
@@ -318,13 +319,13 @@ public partial class Area : UserControl, IUpdateByProfile {
     this.ClippingWidth.Text = App.Profile.CurrentView.ClippingWidthString;
     this.ClippingHeight.Text = App.Profile.CurrentView.ClippingHeightString;
     
-    this.IsEnabledByProfile = true;
+    this.CanChangeProfile = true;
   }
 
-  /// @copydoc IUpdateByProfile::UpdateByEntireProfile
-  public void UpdateByEntireProfile() {
+  /// @copydoc Common::GUI::IBindingProfile::OnEntireProfileChanged
+  public void OnEntireProfileChanged() {
     // current以外のデータを表示する必要はない
-    this.UpdateByCurrentProfile();
+    this.OnCurrentProfileChanged();
   }
 }
 }   // namespace SCFF.GUI.Controls

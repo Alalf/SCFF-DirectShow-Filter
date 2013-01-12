@@ -23,9 +23,10 @@ namespace SCFF.GUI.Controls {
 using System.Windows;
 using System.Windows.Controls;
 using SCFF.Common;
+using SCFF.Common.GUI;
 
 /// SWScaleパラメータ設定用UserControl
-public partial class ResizeMethod : UserControl, IUpdateByProfile {
+public partial class ResizeMethod : UserControl, IBindingProfile {
   //===================================================================
   // コンストラクタ/Dispose/デストラクタ
   //===================================================================
@@ -109,7 +110,7 @@ public partial class ResizeMethod : UserControl, IUpdateByProfile {
   /// @param sender 使用しない
   /// @param e 使用しない
   private void SWScaleFlags_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-    if (!this.IsEnabledByProfile) return;
+    if (!this.CanChangeProfile) return;
     SWScaleFlags flags = Constants.ResizeMethodArray[this.SWScaleFlags.SelectedIndex];
 
     App.Profile.Current.Open();
@@ -145,7 +146,7 @@ public partial class ResizeMethod : UserControl, IUpdateByProfile {
   /// @param sender 使用しない
   /// @param e 使用しない
   private void SWScaleLumaGBlur_TextChanged(object sender, TextChangedEventArgs e) {
-    if (!this.IsEnabledByProfile) return;
+    if (!this.CanChangeProfile) return;
     var lowerBound = 0.0F;
     var upperBound = 2.0F;
     float parsedValue;
@@ -161,7 +162,7 @@ public partial class ResizeMethod : UserControl, IUpdateByProfile {
   /// @param sender 使用しない
   /// @param e 使用しない
   private void SWScaleChromaGBlur_TextChanged(object sender, TextChangedEventArgs e) {
-    if (!this.IsEnabledByProfile) return;
+    if (!this.CanChangeProfile) return;
     var lowerBound = 0.0F;
     var upperBound = 2.0F;
     float parsedValue;
@@ -177,7 +178,7 @@ public partial class ResizeMethod : UserControl, IUpdateByProfile {
   /// @param sender 使用しない
   /// @param e 使用しない
   private void SWScaleLumaSharpen_TextChanged(object sender, TextChangedEventArgs e) {
-    if (!this.IsEnabledByProfile) return;
+    if (!this.CanChangeProfile) return;
     var lowerBound = 0.0F;
     var upperBound = 4.0F;
     float parsedValue;
@@ -193,7 +194,7 @@ public partial class ResizeMethod : UserControl, IUpdateByProfile {
   /// @param sender 使用しない
   /// @param e 使用しない
   private void SWScaleChromaSharpen_TextChanged(object sender, TextChangedEventArgs e) {
-    if (!this.IsEnabledByProfile) return;
+    if (!this.CanChangeProfile) return;
     var lowerBound = 0.0F;
     var upperBound = 4.0F;
     float parsedValue;
@@ -209,7 +210,7 @@ public partial class ResizeMethod : UserControl, IUpdateByProfile {
   /// @param sender 使用しない
   /// @param e 使用しない
   private void SWScaleChromaHshift_TextChanged(object sender, TextChangedEventArgs e) {
-    if (!this.IsEnabledByProfile) return;
+    if (!this.CanChangeProfile) return;
     var lowerBound = 0.0F;
     var upperBound = 1.0F;
     float parsedValue;
@@ -225,7 +226,7 @@ public partial class ResizeMethod : UserControl, IUpdateByProfile {
   /// @param sender 使用しない
   /// @param e 使用しない
   private void SWScaleChromaVshift_TextChanged(object sender, TextChangedEventArgs e) {
-    if (!this.IsEnabledByProfile) return;
+    if (!this.CanChangeProfile) return;
     var lowerBound = 0.0F;
     var upperBound = 1.0F;
     float parsedValue;
@@ -238,14 +239,14 @@ public partial class ResizeMethod : UserControl, IUpdateByProfile {
   }
 
   //===================================================================
-  // IUpdateByProfileの実装
+  // IBindingProfileの実装
   //===================================================================
 
-  /// @copydoc IUpdateByProfile::IsEnabledByProfile
-  public bool IsEnabledByProfile { get; private set; }
-  /// @copydoc IUpdateByProfile::UpdateByCurrentProfile
-  public void UpdateByCurrentProfile() {
-    this.IsEnabledByProfile = false;
+  /// @copydoc Common::GUI::IBindingProfile::CanChangeProfile
+  public bool CanChangeProfile { get; private set; }
+  /// @copydoc Common::GUI::IBindingProfile::OnCurrentProfileChanged
+  public void OnCurrentProfileChanged() {
+    this.CanChangeProfile = false;
     this.SWScaleAccurateRnd.IsChecked = App.Profile.CurrentView.SWScaleAccurateRnd;
     this.SWScaleIsFilterEnabled.IsChecked = App.Profile.CurrentView.SWScaleIsFilterEnabled;
 
@@ -257,12 +258,12 @@ public partial class ResizeMethod : UserControl, IUpdateByProfile {
     this.SWScaleChromaGBlur.Text = App.Profile.CurrentView.SWScaleChromaGBlurString;
     this.SWScaleChromaSharpen.Text = App.Profile.CurrentView.SWScaleChromaSharpenString;
     this.SWScaleChromaVshift.Text = App.Profile.CurrentView.SWScaleChromaVshiftString;
-    this.IsEnabledByProfile = true;
+    this.CanChangeProfile = true;
   }
-  /// @copydoc IUpdateByProfile::UpdateByEntireProfile
-  public void UpdateByEntireProfile() {
+  /// @copydoc Common::GUI::IBindingProfile::OnEntireProfileChanged
+  public void OnEntireProfileChanged() {
     // 編集するのはCurrentのみ
-    this.UpdateByCurrentProfile();
+    this.OnCurrentProfileChanged();
   }
 }
 }   // namespace SCFF.GUI.Controls

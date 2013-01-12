@@ -22,9 +22,10 @@ namespace SCFF.GUI.Controls {
 
 using System.Windows;
 using System.Windows.Controls;
+using SCFF.Common.GUI;
 
 /// レイアウト編集用ツールバーを管理するUserControl
-public partial class LayoutToolbar : UserControl, IUpdateByOptions {
+public partial class LayoutToolbar : UserControl, IBindingOptions {
   //===================================================================
   // コンストラクタ/Dispose/デストラクタ
   //===================================================================
@@ -106,18 +107,18 @@ public partial class LayoutToolbar : UserControl, IUpdateByOptions {
   //-------------------------------------------------------------------
 
   //===================================================================
-  // IUpdateByOptionsの実装
+  // IBindingOptionsの実装
   //===================================================================
 
-  /// @copydoc IUpdateByOptions::IsEnabledByOptions
-  public bool IsEnabledByOptions { get; private set; }
-  /// @copydoc IUpdateByOptions::UpdateByOptions
-  public void UpdateByOptions() {
-    this.IsEnabledByOptions = false;
+  /// @copydoc Common::GUI::IBindingOptions::CanChangeOptions
+  public bool CanChangeOptions { get; private set; }
+  /// @copydoc Common::GUI::IBindingOptions::OnOptionsChanged
+  public void OnOptionsChanged() {
+    this.CanChangeOptions = false;
     this.LayoutPreview.IsChecked = App.Options.LayoutPreview;
     this.LayoutBorder.IsChecked = App.Options.LayoutBorder;
     this.LayoutSnap.IsChecked = App.Options.LayoutSnap;
-    this.IsEnabledByOptions = true;
+    this.CanChangeOptions = true;
   }
 }
 }   // namespace SCFF.GUI.Controls

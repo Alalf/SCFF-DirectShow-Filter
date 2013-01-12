@@ -15,20 +15,20 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file SCFF.GUI/IUpdateByRuntimeOptions.cs
-/// @copydoc SCFF::GUI::IUpdateByRuntimeOptions
+/// @file SCFF.Common/GUI/IBindingOptions.cs
+/// @copydoc SCFF::Common::GUI::IBindingOptions
 
-namespace SCFF.GUI {
+namespace SCFF.Common.GUI {
 
-/// 自前RuntimeOptions->Controlデータバインディング用インタフェース
+/// 自前Options->Controlデータバインディング用インタフェース
 ///
 /// @attention どうしてもINotifyPropertyChangedなどの
 ///            リフレクションを使いたくなかったためやむなく用意した
-interface IUpdateByRuntimeOptions {
-  /// Control->RuntimeOptions可能にする
-  bool IsEnabledByRuntimeOptions { get; }
+public interface IBindingOptions {
+  /// Control->Options可能にする
+  bool CanChangeOptions { get; }
 
-  /// RuntimeOptions->Control書き換え
-  void UpdateByRuntimeOptions();
+  /// Options->Control書き換え
+  void OnOptionsChanged();
 }
-}   // namespace SCFF.GUI
+}   // namespace SCFF.Common.GUI

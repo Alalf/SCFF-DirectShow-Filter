@@ -22,9 +22,10 @@ namespace SCFF.GUI.Controls {
 
 using System.Windows;
 using System.Windows.Controls;
+using SCFF.Common.GUI;
 
 /// SWScale以外の設定用UserControl
-public partial class Options : UserControl, IUpdateByProfile {
+public partial class Options : UserControl, IBindingProfile {
   //===================================================================
   // コンストラクタ/Dispose/デストラクタ
   //===================================================================
@@ -99,26 +100,26 @@ public partial class Options : UserControl, IUpdateByProfile {
   //-------------------------------------------------------------------
 
   //===================================================================
-  // IUpdateByProfileの実装
+  // IBindingProfileの実装
   //===================================================================
 
-  /// @copydoc IUpdateByProfile::IsEnabledByProfile
-  public bool IsEnabledByProfile { get; private set; }
-  /// @copydoc IUpdateByProfile::UpdateByCurrentProfile
-  public void UpdateByCurrentProfile() {
-    this.IsEnabledByProfile = false;
+  /// @copydoc Common::GUI::IBindingProfile::CanChangeProfile
+  public bool CanChangeProfile { get; private set; }
+  /// @copydoc Common::GUI::IBindingProfile::OnCurrentProfileChanged
+  public void OnCurrentProfileChanged() {
+    this.CanChangeProfile = false;
     // checkboxはclickがあるのでeventハンドラをattach/detachする必要はない
     this.ShowCursor.IsChecked = App.Profile.CurrentView.ShowCursor;
     this.ShowLayeredWindow.IsChecked = App.Profile.CurrentView.ShowLayeredWindow;
     this.KeepAspectRatio.IsChecked = App.Profile.CurrentView.KeepAspectRatio;
     this.Stretch.IsChecked = App.Profile.CurrentView.Stretch;
     // @todo(me) overSampingとthreadCountはまだDSFでも実装されていない
-    this.IsEnabledByProfile = true;
+    this.CanChangeProfile = true;
   }
-  /// @copydoc IUpdateByProfile::UpdateByEntireProfile
-  public void UpdateByEntireProfile() {
+  /// @copydoc Common::GUI::IBindingProfile::OnEntireProfileChanged
+  public void OnEntireProfileChanged() {
     // 編集するのはCurrentのみ
-    this.UpdateByCurrentProfile();
+    this.OnCurrentProfileChanged();
   }
 }
 }   // namespace SCFF.GUI.Controls

@@ -20,12 +20,12 @@
 
 namespace SCFF.GUI.Controls {
 
-  using System.Windows;
-  using System.Windows.Controls;
+using System.Windows;
+using System.Windows.Controls;
+using SCFF.Common.GUI;
 
 /// SCFFDSFエントリを仮想メモリから読み込み・表示・選択するためのUserControl
-public partial class SCFFDSFEntries
-    : UserControl, IUpdateByRuntimeOptions {
+public partial class SCFFDSFEntries : UserControl, IBindingRuntimeOptions {
   //===================================================================
   // コンストラクタ/Dispose/デストラクタ
   //===================================================================
@@ -63,16 +63,18 @@ public partial class SCFFDSFEntries
   //-------------------------------------------------------------------
 
   //===================================================================
-  // IUpdateByRuntimeOptionsの実装
+  // IBindingRuntimeOptionsの実装
   //===================================================================
 
-  /// @copydoc IUpdateByRuntimeOptions::IsEnabledByRuntimeOptions
-  public bool IsEnabledByRuntimeOptions { get; private set; }
-  /// @copydoc IUpdateByRuntimeOptions::UpdateByRuntimeOptions
-  public void UpdateByRuntimeOptions() {
+  /// @copydoc Common::GUI::IBindingRuntimeOptions::CanChangeRuntimeOptions
+  public bool CanChangeRuntimeOptions { get; private set; }
+  /// @copydoc Common::GUI::IBindingRuntimeOptions::OnRuntimeOptionsChanged
+  public void OnRuntimeOptionsChanged() {
+    this.CanChangeRuntimeOptions = false;
+
     //// @todo(me) 仮想メモリからの読み込み
-    this.IsEnabledByRuntimeOptions = false;
-    this.IsEnabledByRuntimeOptions = true;
+
+    this.CanChangeRuntimeOptions = true;
   }
 }
 }   // namespace SCFF.GUI.Controls

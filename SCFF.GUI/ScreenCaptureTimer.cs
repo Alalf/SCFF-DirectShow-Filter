@@ -15,8 +15,8 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file SCFF.GUI/Controls/ScreenCaptureTimer.cs
-/// @copydoc SCFF::GUI::Controls::ScreenCaptureTimer
+/// @file SCFF.GUI/ScreenCaptureTimer.cs
+/// @copydoc SCFF::GUI::ScreenCaptureTimer
 
 namespace SCFF.GUI {
 
@@ -136,6 +136,7 @@ public class ScreenCaptureTimer : IDisposable {
   //===================================================================
 
   /// タイマーコールバック
+  /// @param state 使わない
   private void TimerCallback(object state) {
     lock (this.sharedLock) {
       if (!this.isRunning) return;
@@ -173,6 +174,7 @@ public class ScreenCaptureTimer : IDisposable {
     lock (this.sharedLock) {
       this.isRunning = false;
       // メモリ解放
+      if (this.cache.Count == 0) return;
       this.cache.Clear();
       GC.Collect();
       Debug.WriteLine("Collect", "*** MEMORY[GC] ***");
@@ -193,6 +195,8 @@ public class ScreenCaptureTimer : IDisposable {
     }
 
     lock (this.sharedLock) {
+      Debug.Assert(this.isRunning, "Must be running", "ScreenCaptureTimer");
+
       // 三つの場合で処理がわかれる
       // 1. profileにもcacheにも含まれている = nop
       // 2. cacheにはあるがprofileにはない = メモリ解放
@@ -223,11 +227,14 @@ public class ScreenCaptureTimer : IDisposable {
   }
 
   /// 結果を取得
+  /// @param layoutElement 対象のレイアウト要素
+  /// @return 生成済みならBitmapSourceを。でなければNullを返す。
   public BitmapSource GetBitmapSource(ILayoutElementView layoutElement) {
     if (!layoutElement.IsWindowValid) return null;
     var request = new ScreenCaptureRequest(layoutElement);
     lock (this.sharedLock) {
       /// ディクショナリはスレッドセーフではない
+      Debug.Assert(this.cache.ContainsKey(request), "No request in cache", "ScreenCaptureTimer");
       return this.cache[request];
     }
   }

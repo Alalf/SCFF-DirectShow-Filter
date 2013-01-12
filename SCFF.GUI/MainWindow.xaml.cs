@@ -381,51 +381,73 @@ public partial class MainWindow
   //-------------------------------------------------------------------
 
   /// @copydoc Commands::NeedUpdateCurrentPreview
+  /// @param sender 使用しない
+  /// @param e 使用しない
   private void NeedUpdateCurrentPreview_Executed(object sender, ExecutedRoutedEventArgs e) {
     this.LayoutEdit.OnCurrentProfileChanged();
   }
   /// @copydoc Commands::NeedRedrawAll
+  /// @param sender 使用しない
+  /// @param e 使用しない
   private void NeedRedrawAll_Executed(object sender, ExecutedRoutedEventArgs e) {
     this.LayoutEdit.OnOptionsChanged();
   }
   /// @copydoc Commands::NeedRedrawCurrent
+  /// @param sender 使用しない
+  /// @param e 使用しない
   private void NeedRedrawCurrent_Executed(object sender, ExecutedRoutedEventArgs e) {
     this.LayoutEdit.OnCurrentProfileChanged();
   }
   /// @copydoc Commands::LayoutParameterChanged
+  /// @param sender 使用しない
+  /// @param e 使用しない
   private void LayoutParameterChanged_Executed(object sender, ExecutedRoutedEventArgs e) {
     this.LayoutParameter.OnCurrentProfileChanged();
   }
   /// @copydoc Commands::LayoutEditVisibilityChanged
+  /// @param sender 使用しない
+  /// @param e 使用しない
   private void LayoutEditVisibilityChanged_Executed(object sender, ExecutedRoutedEventArgs e) {
     this.LayoutEdit.OnOptionsChanged();
   }
   /// @copydoc Commands::TargetWindowChanged
+  /// @param sender 使用しない
+  /// @param e 使用しない
   private void TargetWindowChanged_Executed(object sender, ExecutedRoutedEventArgs e) {
     this.TargetWindow.OnCurrentProfileChanged();
     this.LayoutEdit.OnCurrentProfileChanged();
   }
   /// @copydoc Commands::AreaChanged
+  /// @param sender 使用しない
+  /// @param e 使用しない
   private void AreaChanged_Executed(object sender, ExecutedRoutedEventArgs e) {
     this.Area.OnCurrentProfileChanged();
     this.LayoutEdit.OnCurrentProfileChanged();
   }
   /// @copydoc Commands::CurrentIndexChanged
+  /// @param sender 使用しない
+  /// @param e 使用しない
   private void CurrentIndexChanged_Executed(object sender, ExecutedRoutedEventArgs e) {
     // tabの選択を変えないといけないのでEntireじゃなければいけない
     this.OnEntireProfileChanged();
   }
   /// @copydoc Commands::LayoutElementAdded
+  /// @param sender 使用しない
+  /// @param e 使用しない
   private void LayoutElementAdded_Executed(object sender, ExecutedRoutedEventArgs e) {
     // tabの選択を変えないといけないのでEntireじゃなければいけない
     this.OnEntireProfileChanged();
   }
   /// @copydoc Commands::CurrentLayoutElementRemoved
+  /// @param sender 使用しない
+  /// @param e 使用しない
   private void CurrentLayoutElementRemoved_Executed(object sender, ExecutedRoutedEventArgs e) {
     // tabの選択を変えないといけないのでEntireじゃなければいけない
     this.OnEntireProfileChanged();
   }
   /// @copydoc Commands::SampleSizeChanged
+  /// @param sender 使用しない
+  /// @param e 使用しない
   private void SampleSizeChanged_Executed(object sender, ExecutedRoutedEventArgs e) {
     this.LayoutEdit.OnRuntimeOptionsChanged();
     this.LayoutParameter.OnRuntimeOptionsChanged();

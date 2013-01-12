@@ -22,6 +22,7 @@ namespace SCFF.Common.GUI {
 
 using System;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using SCFF.Common.Ext;
 
 /// スクリーンキャプチャリクエスト(+スクリーンキャプチャ機能)
@@ -108,6 +109,70 @@ public sealed class ScreenCaptureRequest {
     }
 
     return new BitmapHandle(capturedBitmap);
+  }
+
+  //-------------------------------------------------------------------
+
+  /// ストライド
+  public int Stride { get { return this.ClippingWidth * 4; } }
+  /// サイズ(byte単位)
+  private int Size { get { return this.Stride * this.ClippingHeight; } }
+  /// BITMAPINFO
+  private GDI32.BITMAPINFO BitmapInfo {
+    get {
+      var info = new GDI32.BITMAPINFO();
+      info.bmiColors = new uint[1];
+      var header = new GDI32.BITMAPINFOHEADER();
+      header.biBitCount = 32; ///< @warning 32bit限定
+      header.biWidth = this.ClippingWidth;
+      header.biHeight = -1 * this.ClippingHeight;
+      header.biSizeImage = (uint)this.Size;
+      header.biPlanes = 1;
+      header.biCompression = GDI32.BI_RGB;
+      header.biSize = (uint)Marshal.SizeOf(header);
+      info.bmih = header;
+      return info;
+    }
+  }
+
+  /// スクリーンキャプチャした結果をbyte[]に格納する
+  /// @return スクリーンキャプチャした結果のbyte[]
+  public byte[] ExecuteByGetDIBits() {
+    // Windowチェック
+    var window = this.Window;
+    if (window == UIntPtr.Zero || !User32.IsWindow(window)) return null;
+
+    // 結果を格納するためのbyte配列
+    var result = new byte[this.Size];
+    var bitmapInfo = this.BitmapInfo;
+
+    // BitBlt
+    var windowDC = User32.GetDC(window);
+    var capturedDC = GDI32.CreateCompatibleDC(windowDC);
+    var capturedBitmap = GDI32.CreateCompatibleBitmap(windowDC,
+        this.ClippingWidth, this.ClippingHeight);
+    {
+      var originalBitmap = GDI32.SelectObject(capturedDC, capturedBitmap);
+      GDI32.BitBlt(capturedDC,
+                   0, 0, this.ClippingWidth, this.ClippingHeight,
+                   windowDC,
+                   this.ClippingX, this.ClippingY,
+                   this.ShowLayeredWindow ? GDI32.SRCCOPY | GDI32.CAPTUREBLT
+                                          : GDI32.SRCCOPY);
+      GDI32.GetDIBits(capturedDC, capturedBitmap, 0, (uint)this.ClippingHeight, result,
+                      ref bitmapInfo, GDI32.DIB_RGB_COLORS);
+      GDI32.SelectObject(capturedDC, originalBitmap);
+    }
+    GDI32.DeleteObject(capturedBitmap);
+    GDI32.DeleteDC(capturedDC);
+    User32.ReleaseDC(window, windowDC);
+    
+    /// @todo(me) マウスカーソルの合成・・・？いるか？
+    if (this.ShowCursor) {
+      // nop
+    }
+    
+    return result;
   }
 
   //===================================================================

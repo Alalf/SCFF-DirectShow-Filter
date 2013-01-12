@@ -41,6 +41,39 @@ public class GDI32 {
   /// 描画モード: XOR
   public const int R2_XORPEN      = 7;
 
+  /// ビットマップ圧縮モード: 圧縮なしRGB
+  public const uint BI_RGB        = 0;
+  /// カラーテーブル: RGB
+  public const uint DIB_RGB_COLORS  = 0;
+
+  //===================================================================
+  // 構造体
+  //===================================================================
+
+  /// BITMAPINFOHEADER
+  [StructLayout(LayoutKind.Sequential, Pack = 1)]
+  public struct BITMAPINFOHEADER {
+    public uint biSize;         ///< 必要とするバイト数
+    public int biWidth;         ///< ビットマップの幅
+    public int biHeight;        ///< ビットマップの高さ
+    public ushort biPlanes;     ///< プレーンの数
+    public ushort biBitCount;   ///< 1ピクセルあたりのビット数
+    public uint biCompression;  ///< ビットマップの圧縮モード
+    public uint biSizeImage;    ///< イメージのサイズ(非圧縮の場合0でOK)
+    public int biXPelsPerMeter; ///< 水平解像度
+    public int biYPelsPerMeter; ///< 垂直解像度
+    public uint biClrUsed;      ///< 使用しているインデックスカラーの数
+    public uint biClrImportant; ///< 重要なインデックスカラーの数
+  }
+
+  /// BITMAPINFO
+  [StructLayout(LayoutKind.Sequential, Pack = 1)]
+  public struct BITMAPINFO {
+    public BITMAPINFOHEADER bmih; ///< BITMAPINFOHEADER
+    [MarshalAs(UnmanagedType.ByValArray, SizeConst = 1)]
+    public uint[] bmiColors;      ///< 色定義
+  }
+
   //===================================================================
   // API
   //===================================================================
@@ -53,6 +86,12 @@ public class GDI32 {
       IntPtr hSrcDC,
       int xSrc, int ySrc,
       int dwRop);
+
+  /// HBitmapからメインメモリに転送
+  [DllImport("gdi32.dll")]
+  public static extern int GetDIBits(IntPtr hdc,
+      IntPtr hbmp, uint uStartScan, uint cScanLines,
+      [Out] byte [] lpvBits, ref BITMAPINFO lpbi, uint uUsage);
 
   /// 互換DCを作成
   [DllImport("gdi32.dll")]

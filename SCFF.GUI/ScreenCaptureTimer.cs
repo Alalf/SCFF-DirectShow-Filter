@@ -131,6 +131,27 @@ public class ScreenCaptureTimer : IDisposable {
     return bitmap;
   }
 
+  /// キャプチャしたbyte[]をBitmapSource(Freezed)にして返す
+  /// @param request スクリーンキャプチャ設定をまとめたリクエスト
+  /// @return スクリーンキャプチャ結果が格納されたBitmapSource
+  private BitmapSource CaptureByGetDIBits(ScreenCaptureRequest request) {
+    // GetDIBitsでbyte[]にデータを格納
+    var result = request.ExecuteByGetDIBits();
+    if (result == null) return null;
+
+    var bitmap = BitmapSource.Create(request.ClippingWidth, request.ClippingHeight,
+                                 96.0, 96.0, PixelFormats.Bgr32, null, result, request.Stride);
+
+    /// @todo(me) あまり大きな画像をメモリにおいておきたくない。
+    ///           とはいえ、TransformedBitmapはちょっと重過ぎる。
+    ///           メモリよりもCPUリソースを残しておきたいのでこのままでいいかも。
+    //bitmap = this.Resize(bitmap);
+      
+    // スレッド越しにアクセスされるためFreeze
+    bitmap.Freeze();
+    return bitmap;
+  }
+
   //===================================================================
   // タイマーコールバック
   //===================================================================
@@ -144,7 +165,8 @@ public class ScreenCaptureTimer : IDisposable {
       var requests = new List<ScreenCaptureRequest>(this.cache.Keys);
       foreach(var request in requests) {
         Debug.Write("o");
-        this.cache[request] = this.Capture(request);
+        // this.cache[request] = this.Capture(request);
+        this.cache[request] = this.CaptureByGetDIBits(request);
       }
       /// @todo(me) 潔癖症過ぎないか？
       // GC.Collect();
@@ -224,7 +246,8 @@ public class ScreenCaptureTimer : IDisposable {
       // 3.
       foreach (var request in onlyProfileRequests) {
         Debug.Write("x");
-        this.cache[request] = this.Capture(request);
+        // this.cache[request] = this.Capture(request);
+        this.cache[request] = this.CaptureByGetDIBits(request);
       }
     }
   }

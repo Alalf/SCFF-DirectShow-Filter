@@ -43,6 +43,8 @@ public static class OptionsINIFile {
 
   /// ファイル出力
   /// @todo(me) パスを指定して保存を行いたい(現在だとワーキングディレクトリに保存されてしまう)
+  /// @param options 保存するOptions
+  /// @return 保存が成功したか
   public static bool Save(Options options) {
     try {
       using (var writer = new StreamWriter(OptionsINIFile.OptionsFilePath)) {

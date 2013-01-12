@@ -71,9 +71,6 @@ public partial class LayoutEdit
 
     // 再描画タイマーの準備
     this.StartRedrawTimer();
-
-    // 一回DrawingGroupを生成
-    //this.BuildDrawingGroup();
   }
 
   //===================================================================

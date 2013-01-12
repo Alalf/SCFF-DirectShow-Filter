@@ -66,7 +66,7 @@ public partial class MainWindow
 
     /// @todo(me) スクリーンキャプチャをの更新頻度を下げる
     ///           App.RuntimeOptionsに該当するデータを保存しておく感じかな？
-    Debug.WriteLine("Deactivated", "MainWindow");
+    // Debug.WriteLine("Deactivated", "MainWindow");
   }
 
   /// Activated
@@ -76,7 +76,7 @@ public partial class MainWindow
 
     /// @todo(me) スクリーンキャプチャを更新頻度を元に戻す
     ///           App.RuntimeOptionsに該当するデータを保存しておく感じかな？
-    Debug.WriteLine("Activated", "MainWindow");
+    // Debug.WriteLine("Activated", "MainWindow");
   }
 
   //-------------------------------------------------------------------

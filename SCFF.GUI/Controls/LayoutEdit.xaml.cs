@@ -36,7 +36,7 @@ using SCFF.Common.GUI;
 /// LayoutEditImage内の座標系は([0-1]*Scale,[0-1]*Scale)で固定（プレビューのサイズに依存しない）
 /// 逆に言うと依存させてはいけない
 public partial class LayoutEdit
-    : UserControl, IUpdateByProfile, IUpdateByOptions, IUpdateByRuntimeOptions, IDisposable {
+    : UserControl, IUpdateByProfile, IUpdateByOptions, IUpdateByRuntimeOptions {
   //===================================================================
   // 定数
   //===================================================================  
@@ -69,32 +69,11 @@ public partial class LayoutEdit
     // できるだけ軽く
     RenderOptions.SetBitmapScalingMode(this.DrawingGroup, BitmapScalingMode.LowQuality);
 
-    // スクリーンキャプチャマネージャの準備
-    this.screenCaptureTimer = new ScreenCaptureTimer(redrawTimerPeriod);
-    this.screenCaptureTimer.Init();
-
-    // BitmapSource更新用タイマーの準備
+    // 再描画タイマーの準備
     this.StartRedrawTimer();
 
     // 一回DrawingGroupを生成
-    this.BuildDrawingGroup();
-  }
-
-  /// Dispose
-  public void Dispose() {
-    if (this.screenCaptureTimer != null) {
-      this.screenCaptureTimer.Suspend();
-      this.screenCaptureTimer.Dispose();
-      Debug.WriteLine("LayoutEdit.screenCaptureTimer", "*** MEMORY[DISPOSE] ***");
-      this.screenCaptureTimer = null;
-    }
-    GC.SuppressFinalize(this);
-  }
-
-  /// デストラクタ
-  ~LayoutEdit() {
-    Debug.WriteLine("LayoutEdit", "*** MEMORY[DELETE] ***");
-    this.Dispose();
+    //this.BuildDrawingGroup();
   }
 
   //===================================================================
@@ -108,7 +87,7 @@ public partial class LayoutEdit
   /// @param layoutElement 対象のレイアウト要素
   /// @return DrawingContext.DrawTextで描画可能なDrawingVisualオブジェクト
   private FormattedText CreateHeader(ILayoutElementView layoutElement) {
-    var isCurrent = layoutElement.Index == App.Profile.CurrentView.Index;
+    var isCurrent = layoutElement.Index == App.Profile.CurrentIndex;
     var isDummy = App.RuntimeOptions.SelectedEntryIndex == -1;
 
     // Caption
@@ -157,7 +136,7 @@ public partial class LayoutEdit
   /// @param dc 描画先
   /// @param layoutElement 描画対象
   private void DrawPreview(DrawingContext dc, ILayoutElementView layoutElement) {
-    var bitmap = this.screenCaptureTimer.GetBitmapSource(layoutElement.Index);
+    var bitmap = App.ScreenCaptureTimer.GetBitmapSource(layoutElement);
     if (bitmap == null) return;
 
     // プレビューの描画
@@ -173,7 +152,7 @@ public partial class LayoutEdit
   /// @param dc 描画先
   /// @param layoutElement 描画対象
   private void DrawBorder(DrawingContext dc, ILayoutElementView layoutElement) {
-    var isCurrent = layoutElement.Index == App.Profile.CurrentView.Index;
+    var isCurrent = layoutElement.Index == App.Profile.CurrentIndex;
 
     // Pen
     Pen framePen = null;
@@ -230,7 +209,7 @@ public partial class LayoutEdit
     }
   }
 
-  /// DrawingGroupの再校正
+  /// DrawingGroupの生成
   ///
   /// @todo(me) 負荷軽減のためFPS制限してもいいかも(30FPSでだいたい半分だがカクカク)
   private void BuildDrawingGroup() {
@@ -252,6 +231,13 @@ public partial class LayoutEdit
         }
       }
     }
+  }
+
+  /// DrawingGroupの消去
+  private void ClearDrawingGroup() {
+    this.DrawingGroup.Children.Clear();
+    GC.Collect();
+    Debug.WriteLine("Collect", "*** MEMORY[GC] ***");
   }
 
   //===================================================================
@@ -279,17 +265,17 @@ public partial class LayoutEdit
     // マウス操作中は更新しない
     if (this.hitMode != HitModes.Neutral) return;
 
-    // プレビュー更新のためにリクエスト送信+再描画
-    this.screenCaptureTimer.ClearRequests();
-    foreach (var layoutElement in App.Profile) {
-      if (!layoutElement.IsWindowValid) continue;
-      this.SendRequest(layoutElement, false);
-    }
+    // プレビュー内容更新のためにリクエスト送信
+    App.ScreenCaptureTimer.UpdateRequest(App.Profile);
+
+    // 再描画
     this.BuildDrawingGroup();
-    Debug.WriteLine(string.Format("Redraw ({0:F2}, {1:F2})",
-                                  this.LayoutEditImage.ActualWidth,
-                                  this.LayoutEditImage.ActualHeight),
-                    "LayoutEdit");
+    Debug.WriteLineIf(!(this.LayoutEditImage.ActualWidth <= App.RuntimeOptions.CurrentSampleWidth &&
+                        this.LayoutEditImage.ActualHeight <= App.RuntimeOptions.CurrentSampleHeight),
+                      string.Format("Redraw ({0:F2}, {1:F2})",
+                                    this.LayoutEditImage.ActualWidth,
+                                    this.LayoutEditImage.ActualHeight),
+                      "LayoutEdit");
   }
 
   //===================================================================
@@ -327,9 +313,9 @@ public partial class LayoutEdit
     if (!HitTest.TryHitTest(App.Profile, relativeMousePoint, out hitIndex, out hitMode)) return;
 
     // 現在選択中のIndexではない場合はそれに変更する
-    if (hitIndex != App.Profile.CurrentView.Index) {
+    if (hitIndex != App.Profile.CurrentIndex) {
       Debug.WriteLine(string.Format("CurrentIndex ({0:D}->{1:D})",
-                                    App.Profile.CurrentView.Index + 1, hitIndex + 1),
+                                    App.Profile.CurrentIndex + 1, hitIndex + 1),
                       "LayoutEdit");
 
       App.Profile.CurrentIndex = hitIndex;
@@ -413,17 +399,15 @@ public partial class LayoutEdit
   public void UpdateByOptions() {
     this.IsEnabledByOptions = false;
     if (App.Options.LayoutIsExpanded && App.Options.LayoutPreview) {
-      this.screenCaptureTimer.Start();      // タイマー再開
+      App.ScreenCaptureTimer.Start();       // タイマー再開
       this.UpdateByEntireProfile();         // プレビュー強制更新
     } else {
-      this.screenCaptureTimer.Suspend();    // タイマー停止
+      App.ScreenCaptureTimer.Suspend();     // タイマー停止
       if (App.Options.LayoutIsExpanded) {
         this.BuildDrawingGroup();           // 再描画
       } else {
-        this.DrawingGroup.Children.Clear(); // DrawingGroupもクリア
+        this.ClearDrawingGroup();           // DrawingGroupもクリア
       }
-      Debug.WriteLine("Collect", "*** MEMORY[GC] ***");
-      GC.Collect();
     }
     this.IsEnabledByOptions = true;
   }
@@ -452,41 +436,22 @@ public partial class LayoutEdit
   /// @copydoc IUpdateByProfile::UpdateByCurrentProfile
   public void UpdateByCurrentProfile() {
     this.IsEnabledByProfile = false;
-    if (!App.Profile.CurrentView.IsWindowValid) return;
-    this.SendRequest(App.Profile.CurrentView, true);
+    App.ScreenCaptureTimer.UpdateRequest(App.Profile);
     this.BuildDrawingGroup();
-    Debug.WriteLine("Collect", "*** MEMORY[GC] ***");
-    GC.Collect();
     this.IsEnabledByProfile = true;
   }
 
   /// @copydoc IUpdateByProfile::UpdateByEntireProfile
   public void UpdateByEntireProfile() {
     this.IsEnabledByProfile = false;
-    this.screenCaptureTimer.ClearRequests();
-    foreach (var layoutElement in App.Profile) {
-      if (!layoutElement.IsWindowValid) continue;
-      this.SendRequest(layoutElement, true);
-    }
+    App.ScreenCaptureTimer.UpdateRequest(App.Profile);
     this.BuildDrawingGroup();
-    Debug.WriteLine("Collect", "*** MEMORY[GC] ***");
-    GC.Collect();
     this.IsEnabledByProfile = true;
-  }
-
-  /// LayoutElementの内容からRequestを生成してScreenCaptureTimerに画像生成を依頼
-  private void SendRequest(ILayoutElementView layoutElement, bool forceUpdate) {
-    Debug.Assert(layoutElement.IsWindowValid, "Invalid Window", "LayoutEdit.SendRequest");
-    var request = new ScreenCaptureRequest(layoutElement);
-    this.screenCaptureTimer.SendRequest(request, forceUpdate);
   }
 
   //===================================================================
   // フィールド
   //===================================================================
-
-  /// スクリーンキャプチャ用スレッド管理クラスのインスタンス
-  private ScreenCaptureTimer screenCaptureTimer = null;
 
   //-------------------------------------------------------------------
   // LayoutEditImage_MouseDown/Move/Up時の状態変数

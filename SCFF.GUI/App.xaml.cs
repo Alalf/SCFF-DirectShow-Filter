@@ -51,6 +51,13 @@ public partial class App : Application {
     get { return App.profile; }
   }
 
+  /// Singleton: スクリーンキャプチャ用タイマー
+  private static ScreenCaptureTimer screenCaptureTimer = new ScreenCaptureTimer();
+  /// スクリーンキャプチャ用タイマー
+  public static ScreenCaptureTimer ScreenCaptureTimer {
+    get { return App.screenCaptureTimer; }
+  }
+
   //===================================================================
   // イベントハンドラ
   //===================================================================

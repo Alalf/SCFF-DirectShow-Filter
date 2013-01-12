@@ -84,8 +84,7 @@
     <Compile Include="Controls\SCFFDSFEntries.xaml.cs">
       <DependentUpon>SCFFDSFEntries.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ScreenCapture.cs" />
-    <Compile Include="Controls\ScreenCaptureTimer.cs" />
+    <Compile Include="ScreenCaptureTimer.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="UpdateCommands.cs" />
     <Compile Include="IUpdateByRuntimeOptions.cs" />

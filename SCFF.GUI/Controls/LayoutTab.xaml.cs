@@ -79,7 +79,7 @@ public partial class LayoutTab : UserControl, IUpdateByProfile {
 
     var tabIndex = this.LayoutElementTab.SelectedIndex;
     var tabCount = this.LayoutElementTab.Items.Count;
-    var profileIndex = App.Profile.CurrentView.Index;
+    var profileIndex = App.Profile.CurrentIndex;
     var profileCount = App.Profile.LayoutElementCount;
     
     // まず数を合わせる
@@ -106,13 +106,13 @@ public partial class LayoutTab : UserControl, IUpdateByProfile {
     }
 
     // 次に選択しているところを同期させる
-    this.LayoutElementTab.SelectedIndex = App.Profile.CurrentView.Index;
+    this.LayoutElementTab.SelectedIndex = App.Profile.CurrentIndex;
 
     // コントロール編集終了
     this.IsEnabledByProfile = true;
 
     Debug.Assert(App.Profile.LayoutElementCount == this.LayoutElementTab.Items.Count);
-    Debug.Assert(App.Profile.CurrentView.Index == this.LayoutElementTab.SelectedIndex);
+    Debug.Assert(App.Profile.CurrentIndex == this.LayoutElementTab.SelectedIndex);
   }
   /// @copydoc IUpdateByProfile::UpdateByEntireProfile
   public void UpdateByEntireProfile() {

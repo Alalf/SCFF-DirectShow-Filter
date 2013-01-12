@@ -42,7 +42,7 @@ public static class Utilities {
         return true;
       }
       default: {
-        Debug.Fail("Invalid WindowTypes", "LayoutElement.IsWindowValid");
+        Debug.Fail("Invalid WindowTypes", "IsWindowValid");
         return false;
       }
     }
@@ -57,7 +57,7 @@ public static class Utilities {
     switch (windowType) {
       case WindowTypes.Normal: {
         Debug.Assert(Utilities.IsWindowValid(windowType, window),
-                     "Invalid Window", "LayoutElement.windowSize");
+                     "Invalid Window", "GetWindowRect");
         User32.RECT windowRect;
         User32.GetClientRect(window, out windowRect);
         return new ClientRect(0, 0, windowRect.Right, windowRect.Bottom);
@@ -75,7 +75,7 @@ public static class Utilities {
             User32.GetSystemMetrics(User32.SM_CYVIRTUALSCREEN));
       }
       default: {
-        Debug.Fail("Invalid WindowTypes", "LayoutElement.windowSize");
+        Debug.Fail("Invalid WindowTypes", "GetWindowRect");
         return null;
       }
     }
@@ -86,7 +86,7 @@ public static class Utilities {
     switch (windowType) {
       case WindowTypes.Normal: {
         Debug.Assert(Utilities.IsWindowValid(windowType, window),
-                     "Invalid Window", "LayoutElement.ClientToScreen");
+                     "Invalid Window", "ClientToScreen");
         User32.POINT windowPoint = new User32.POINT { X = clientX, Y = clientY };
         User32.ClientToScreen(window, ref windowPoint);
         return new ScreenPoint(windowPoint.X, windowPoint.Y);
@@ -101,7 +101,7 @@ public static class Utilities {
         return new ScreenPoint(clientX, clientY);
       }
       default: {
-        Debug.Fail("Invalid WindowTypes", "LayoutElement.ClientToScreen");
+        Debug.Fail("Invalid WindowTypes", "ClientToScreen");
         return null;
       }
     }

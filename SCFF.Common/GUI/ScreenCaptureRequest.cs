@@ -21,17 +21,18 @@
 namespace SCFF.Common.GUI {
 
 using System;
+using System.Diagnostics;
 using SCFF.Common.Ext;
 
 /// スクリーンキャプチャリクエスト(+スクリーンキャプチャ機能)
-public class ScreenCaptureRequest {
+public sealed class ScreenCaptureRequest {
   //===================================================================
   // コンストラクタ
   //===================================================================
 
   /// コンストラクタ
   public ScreenCaptureRequest(ILayoutElementView layoutElement) {
-    this.Index = layoutElement.Index;
+    Debug.Assert(layoutElement.IsWindowValid, "Invalid Window", "ScreenCaptureRequest");
     this.Window = layoutElement.Window;
     this.ClippingX = layoutElement.ClippingXWithFit;
     this.ClippingY = layoutElement.ClippingYWithFit;
@@ -39,6 +40,36 @@ public class ScreenCaptureRequest {
     this.ClippingHeight = layoutElement.ClippingHeightWithFit;
     this.ShowCursor = layoutElement.ShowCursor;
     this.ShowLayeredWindow = layoutElement.ShowLayeredWindow;
+  }
+
+  //===================================================================
+  // Equals/GetHashCodesの実装
+  //===================================================================
+
+  /// 等価判定
+  public override bool Equals(object obj) {
+    if (obj == null) return false;
+    var other = obj as ScreenCaptureRequest;
+    if (other == null) return false;
+    // プロパティはすべてPODなのでそのまま比較を使う
+    return this.Window == other.Window &&
+           this.ClippingX == other.ClippingX &&
+           this.ClippingY == other.ClippingY &&
+           this.ClippingWidth == other.ClippingWidth &&
+           this.ClippingHeight == other.ClippingHeight &&
+           this.ShowCursor == other.ShowCursor &&
+           this.ShowLayeredWindow == other.ShowLayeredWindow;
+  }
+
+  /// ハッシュコード
+  public override int GetHashCode() {
+    return this.Window.GetHashCode() ^
+           this.ClippingX ^
+           this.ClippingY ^
+           this.ClippingWidth ^
+           this.ClippingHeight ^
+           this.ShowCursor.GetHashCode() ^
+           this.ShowLayeredWindow.GetHashCode();
   }
 
   //===================================================================
@@ -83,8 +114,6 @@ public class ScreenCaptureRequest {
   // プロパティ
   //===================================================================
 
-  /// レイアウト要素のIndex
-  public int Index { get; private set; }
   /// Windowハンドル
   public UIntPtr Window { get; private set; }
   /// クリッピング領域の原点(x)

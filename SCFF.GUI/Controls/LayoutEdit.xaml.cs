@@ -20,16 +20,16 @@
 
 namespace SCFF.GUI.Controls {
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Threading;
-using SCFF.Common;
-using SCFF.Common.GUI;
+  using System;
+  using System.Collections.Generic;
+  using System.Diagnostics;
+  using System.Windows;
+  using System.Windows.Controls;
+  using System.Windows.Input;
+  using System.Windows.Media;
+  using System.Windows.Threading;
+  using SCFF.Common;
+  using SCFF.Common.GUI;
 
 /// WYSIWYGレイアウト編集用UserControl
 ///
@@ -233,6 +233,8 @@ public partial class LayoutEdit
     if (this.DrawingGroup.Children.Count == 0) return;
     this.DrawingGroup.Children.Clear();
     GC.Collect();
+    //GC.WaitForPendingFinalizers();
+    //GC.Collect();
     Debug.WriteLine("Collect LayoutEdit.DrawingGroup", "*** MEMORY[GC] ***");
   }
 

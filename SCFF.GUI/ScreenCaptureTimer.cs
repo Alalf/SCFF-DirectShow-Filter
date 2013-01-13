@@ -142,6 +142,7 @@ public class ScreenCaptureTimer : IDisposable {
     var bitmap = BitmapSource.Create(request.ClippingWidth, request.ClippingHeight,
                                  96.0, 96.0, PixelFormats.Bgr32, null, result, request.Stride);
 
+    result = null;
     /// @todo(me) あまり大きな画像をメモリにおいておきたくない。
     ///           とはいえ、TransformedBitmapはちょっと重過ぎる。
     ///           メモリよりもCPUリソースを残しておきたいのでこのままでいいかも。
@@ -201,6 +202,8 @@ public class ScreenCaptureTimer : IDisposable {
       if (changed && this.cache.Count > 0) {
         this.cache.Clear();
         GC.Collect();
+        //GC.WaitForPendingFinalizers();
+        //GC.Collect();
         Debug.WriteLine("Collect ScreenCaptureTimer.cache", "*** MEMORY[GC] ***");
       }
     }
@@ -241,6 +244,8 @@ public class ScreenCaptureTimer : IDisposable {
       if (needGC) {
         Debug.Write("G");
         GC.Collect();
+        //GC.WaitForPendingFinalizers();
+        //GC.Collect();
       }
 
       // 3.

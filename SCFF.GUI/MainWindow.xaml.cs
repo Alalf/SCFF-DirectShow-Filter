@@ -42,7 +42,7 @@ public partial class MainWindow
 
     this.OnOptionsChanged();
     this.OnRuntimeOptionsChanged();
-    this.OnEntireProfileChanged();
+    this.OnProfileChanged();
 
     // 必要な機能の実行
     this.SetAero();
@@ -237,6 +237,7 @@ public partial class MainWindow
 
     this.LayoutEdit.OnRuntimeOptionsChanged();
     this.LayoutParameter.OnRuntimeOptionsChanged();
+    this.SCFFEntries.OnRuntimeOptionsChanged();
     this.CanChangeRuntimeOptions = true;
   }
 
@@ -247,29 +248,29 @@ public partial class MainWindow
   /// @copydoc Common::GUI::IBindingProfile::CanChangeProfile
   public bool CanChangeProfile { get; private set; }
 
-  /// @copydoc Common::GUI::IBindingProfile::OnCurrentProfileChanged
-  public void OnCurrentProfileChanged() {
+  /// @copydoc Common::GUI::IBindingProfile::OnCurrentLayoutElementChanged
+  public void OnCurrentLayoutElementChanged() {
     this.CanChangeProfile = false;
-    this.TargetWindow.OnCurrentProfileChanged();
-    this.Area.OnCurrentProfileChanged();
-    this.Options.OnCurrentProfileChanged();
-    this.ResizeMethod.OnCurrentProfileChanged();
-    this.LayoutParameter.OnCurrentProfileChanged();
-    this.LayoutTab.OnCurrentProfileChanged();
-    this.LayoutEdit.OnCurrentProfileChanged();
+    this.TargetWindow.OnCurrentLayoutElementChanged();
+    this.Area.OnCurrentLayoutElementChanged();
+    this.Options.OnCurrentLayoutElementChanged();
+    this.ResizeMethod.OnCurrentLayoutElementChanged();
+    this.LayoutParameter.OnCurrentLayoutElementChanged();
+    this.LayoutTab.OnCurrentLayoutElementChanged();
+    this.LayoutEdit.OnCurrentLayoutElementChanged();
     this.CanChangeProfile = true;
   }
 
-  /// @copydoc Common::GUI::IBindingProfile::OnEntireProfileChanged
-  public void OnEntireProfileChanged() {
+  /// @copydoc Common::GUI::IBindingProfile::OnProfileChanged
+  public void OnProfileChanged() {
     this.CanChangeProfile = false;
-    this.TargetWindow.OnEntireProfileChanged();
-    this.Area.OnEntireProfileChanged();
-    this.Options.OnEntireProfileChanged();
-    this.ResizeMethod.OnEntireProfileChanged();
-    this.LayoutParameter.OnEntireProfileChanged();
-    this.LayoutTab.OnEntireProfileChanged();
-    this.LayoutEdit.OnEntireProfileChanged();
+    this.TargetWindow.OnProfileChanged();
+    this.Area.OnProfileChanged();
+    this.Options.OnProfileChanged();
+    this.ResizeMethod.OnProfileChanged();
+    this.LayoutParameter.OnProfileChanged();
+    this.LayoutTab.OnProfileChanged();
+    this.LayoutEdit.OnProfileChanged();
     this.CanChangeProfile = true;
   }
 
@@ -293,7 +294,7 @@ public partial class MainWindow
     switch (result) {
       case MessageBoxResult.No: {
         App.Profile.RestoreDefault();
-        this.OnEntireProfileChanged();
+        this.OnProfileChanged();
         break;
       }
       case MessageBoxResult.Yes: {
@@ -308,7 +309,7 @@ public partial class MainWindow
           this.MainMenu.OnOptionsChanged();
 
           App.Profile.RestoreDefault();
-          this.OnEntireProfileChanged();
+          this.OnProfileChanged();
         }
         break;
       }
@@ -384,7 +385,7 @@ public partial class MainWindow
   /// @param sender 使用しない
   /// @param e 使用しない
   private void NeedUpdateCurrentPreview_Executed(object sender, ExecutedRoutedEventArgs e) {
-    this.LayoutEdit.OnCurrentProfileChanged();
+    this.LayoutEdit.OnCurrentLayoutElementChanged();
   }
   /// @copydoc Commands::NeedRedrawAll
   /// @param sender 使用しない
@@ -396,13 +397,13 @@ public partial class MainWindow
   /// @param sender 使用しない
   /// @param e 使用しない
   private void NeedRedrawCurrent_Executed(object sender, ExecutedRoutedEventArgs e) {
-    this.LayoutEdit.OnCurrentProfileChanged();
+    this.LayoutEdit.OnCurrentLayoutElementChanged();
   }
   /// @copydoc Commands::LayoutParameterChanged
   /// @param sender 使用しない
   /// @param e 使用しない
   private void LayoutParameterChanged_Executed(object sender, ExecutedRoutedEventArgs e) {
-    this.LayoutParameter.OnCurrentProfileChanged();
+    this.LayoutParameter.OnCurrentLayoutElementChanged();
   }
   /// @copydoc Commands::LayoutEditVisibilityChanged
   /// @param sender 使用しない
@@ -414,36 +415,36 @@ public partial class MainWindow
   /// @param sender 使用しない
   /// @param e 使用しない
   private void TargetWindowChanged_Executed(object sender, ExecutedRoutedEventArgs e) {
-    this.TargetWindow.OnCurrentProfileChanged();
-    this.LayoutEdit.OnCurrentProfileChanged();
+    this.TargetWindow.OnCurrentLayoutElementChanged();
+    this.LayoutEdit.OnCurrentLayoutElementChanged();
   }
   /// @copydoc Commands::AreaChanged
   /// @param sender 使用しない
   /// @param e 使用しない
   private void AreaChanged_Executed(object sender, ExecutedRoutedEventArgs e) {
-    this.Area.OnCurrentProfileChanged();
-    this.LayoutEdit.OnCurrentProfileChanged();
+    this.Area.OnCurrentLayoutElementChanged();
+    this.LayoutEdit.OnCurrentLayoutElementChanged();
   }
   /// @copydoc Commands::CurrentIndexChanged
   /// @param sender 使用しない
   /// @param e 使用しない
   private void CurrentIndexChanged_Executed(object sender, ExecutedRoutedEventArgs e) {
     // tabの選択を変えないといけないのでEntireじゃなければいけない
-    this.OnEntireProfileChanged();
+    this.OnProfileChanged();
   }
   /// @copydoc Commands::LayoutElementAdded
   /// @param sender 使用しない
   /// @param e 使用しない
   private void LayoutElementAdded_Executed(object sender, ExecutedRoutedEventArgs e) {
     // tabの選択を変えないといけないのでEntireじゃなければいけない
-    this.OnEntireProfileChanged();
+    this.OnProfileChanged();
   }
   /// @copydoc Commands::CurrentLayoutElementRemoved
   /// @param sender 使用しない
   /// @param e 使用しない
   private void CurrentLayoutElementRemoved_Executed(object sender, ExecutedRoutedEventArgs e) {
     // tabの選択を変えないといけないのでEntireじゃなければいけない
-    this.OnEntireProfileChanged();
+    this.OnProfileChanged();
   }
   /// @copydoc Commands::SampleSizeChanged
   /// @param sender 使用しない

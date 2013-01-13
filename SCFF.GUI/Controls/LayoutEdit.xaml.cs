@@ -20,16 +20,16 @@
 
 namespace SCFF.GUI.Controls {
 
-  using System;
-  using System.Collections.Generic;
-  using System.Diagnostics;
-  using System.Windows;
-  using System.Windows.Controls;
-  using System.Windows.Input;
-  using System.Windows.Media;
-  using System.Windows.Threading;
-  using SCFF.Common;
-  using SCFF.Common.GUI;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Threading;
+using SCFF.Common;
+using SCFF.Common.GUI;
 
 /// WYSIWYGレイアウト編集用UserControl
 ///
@@ -444,8 +444,13 @@ public partial class LayoutEdit
 
   /// @copydoc IBindingProfile::CanChangeProfile
   public bool CanChangeProfile { get; private set; }
-  /// @copydoc IBindingProfile::OnCurrentProfileChanged
-  public void OnCurrentProfileChanged() {
+  /// @copydoc IBindingProfile::OnCurrentLayoutElementChanged
+  public void OnCurrentLayoutElementChanged() {
+    // Currentのみの更新はできない
+    this.OnProfileChanged();
+  }
+  /// @copydoc IBindingProfile::OnProfileChanged
+  public void OnProfileChanged() {
     this.CanChangeProfile = false;
 
     if (App.Options.LayoutIsExpanded) {
@@ -456,11 +461,6 @@ public partial class LayoutEdit
     }
 
     this.CanChangeProfile = true;
-  }
-
-  /// @copydoc IBindingProfile::OnEntireProfileChanged
-  public void OnEntireProfileChanged() {
-    this.OnCurrentProfileChanged();
   }
 
   //===================================================================

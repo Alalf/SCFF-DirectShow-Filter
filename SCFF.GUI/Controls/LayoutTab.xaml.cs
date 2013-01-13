@@ -70,10 +70,10 @@ public partial class LayoutTab : UserControl, IBindingProfile {
   // IBindingProfileの実装
   //===================================================================
 
-  /// @copydoc Common::GUI::IBindingProfile::OnCurrentProfileChanged
+  /// @copydoc Common::GUI::IBindingProfile::OnCurrentLayoutElementChanged
   public bool CanChangeProfile { get; private set; }
-  /// @copydoc Common::GUI::IBindingProfile::OnCurrentProfileChanged
-  public void OnCurrentProfileChanged() {
+  /// @copydoc Common::GUI::IBindingProfile::OnCurrentLayoutElementChanged
+  public void OnCurrentLayoutElementChanged() {
     // CurrentProfileの値が変わってもTabの内容は変わらない
   }
   /// Profileを見ながら必要な分を足し、必要な分を削る
@@ -118,8 +118,8 @@ public partial class LayoutTab : UserControl, IBindingProfile {
     Debug.Assert(App.Profile.LayoutElementCount == this.LayoutElementTab.Items.Count);
     Debug.Assert(App.Profile.CurrentIndex == this.LayoutElementTab.SelectedIndex);
   }
-  /// @copydoc Common::GUI::IBindingProfile::OnEntireProfileChanged
-  public void OnEntireProfileChanged() {
+  /// @copydoc Common::GUI::IBindingProfile::OnProfileChanged
+  public void OnProfileChanged() {
     this.UpdateLayoutElementTab();
   }
 }

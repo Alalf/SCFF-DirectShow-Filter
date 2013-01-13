@@ -244,8 +244,8 @@ public partial class ResizeMethod : UserControl, IBindingProfile {
 
   /// @copydoc Common::GUI::IBindingProfile::CanChangeProfile
   public bool CanChangeProfile { get; private set; }
-  /// @copydoc Common::GUI::IBindingProfile::OnCurrentProfileChanged
-  public void OnCurrentProfileChanged() {
+  /// @copydoc Common::GUI::IBindingProfile::OnCurrentLayoutElementChanged
+  public void OnCurrentLayoutElementChanged() {
     this.CanChangeProfile = false;
     this.SWScaleAccurateRnd.IsChecked = App.Profile.CurrentView.SWScaleAccurateRnd;
     this.SWScaleIsFilterEnabled.IsChecked = App.Profile.CurrentView.SWScaleIsFilterEnabled;
@@ -260,10 +260,10 @@ public partial class ResizeMethod : UserControl, IBindingProfile {
     this.SWScaleChromaVshift.Text = App.Profile.CurrentView.SWScaleChromaVshiftString;
     this.CanChangeProfile = true;
   }
-  /// @copydoc Common::GUI::IBindingProfile::OnEntireProfileChanged
-  public void OnEntireProfileChanged() {
+  /// @copydoc Common::GUI::IBindingProfile::OnProfileChanged
+  public void OnProfileChanged() {
     // 編集するのはCurrentのみ
-    this.OnCurrentProfileChanged();
+    this.OnCurrentLayoutElementChanged();
   }
 }
 }   // namespace SCFF.GUI.Controls

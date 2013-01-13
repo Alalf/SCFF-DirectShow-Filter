@@ -28,10 +28,11 @@ public interface IBindingProfile {
   /// Control->Profile可能にする
   bool CanChangeProfile { get; }
 
-  /// Profile(Currentのみ)->Control書き換え
-  void OnCurrentProfileChanged();
+  /// Profile(CurrentViewのみ)->Control書き換え
+  void OnCurrentLayoutElementChanged();
 
-  /// Profile(全体)->Control書き換え
-  void OnEntireProfileChanged();
+  /// Profile.CurrentIndex/Profile.LayoutElementCountなどが変更された場合の
+  /// Profile->Control書き換え
+  void OnProfileChanged();
 }
 }   // namespace SCFF.Common.GUI

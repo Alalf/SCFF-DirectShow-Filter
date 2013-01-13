@@ -57,7 +57,7 @@ public partial class Area : UserControl, IBindingProfile {
 
     //-----------------------------------------------------------------
     // Notify self
-    this.OnCurrentProfileChanged();
+    this.OnCurrentLayoutElementChanged();
     // Notify other controls
     Commands.NeedUpdateCurrentPreview.Execute(null, null);
     //-----------------------------------------------------------------
@@ -167,7 +167,7 @@ public partial class Area : UserControl, IBindingProfile {
 
     //-----------------------------------------------------------------
     // Notify self
-    this.OnCurrentProfileChanged();
+    this.OnCurrentLayoutElementChanged();
     // Notify other controls
     if (changeWindowType) {
       Commands.TargetWindowChanged.Execute(null, null);
@@ -327,8 +327,8 @@ public partial class Area : UserControl, IBindingProfile {
 
   /// @copydoc Common::GUI::IBindingProfile::CanChangeProfile
   public bool CanChangeProfile { get; private set; }
-  /// @copydoc Common::GUI::IBindingProfile::OnCurrentProfileChanged
-  public void OnCurrentProfileChanged() {
+  /// @copydoc Common::GUI::IBindingProfile::OnCurrentLayoutElementChanged
+  public void OnCurrentLayoutElementChanged() {
     this.CanChangeProfile = false;
 
     switch (App.Profile.CurrentView.WindowType) {
@@ -359,10 +359,10 @@ public partial class Area : UserControl, IBindingProfile {
     this.CanChangeProfile = true;
   }
 
-  /// @copydoc Common::GUI::IBindingProfile::OnEntireProfileChanged
-  public void OnEntireProfileChanged() {
+  /// @copydoc Common::GUI::IBindingProfile::OnProfileChanged
+  public void OnProfileChanged() {
     // current以外のデータを表示する必要はない
-    this.OnCurrentProfileChanged();
+    this.OnCurrentLayoutElementChanged();
   }
 }
 }   // namespace SCFF.GUI.Controls

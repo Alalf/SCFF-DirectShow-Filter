@@ -69,7 +69,7 @@ public partial class LayoutParameter
 
     //-----------------------------------------------------------------
     // Notify self
-    this.OnCurrentProfileChanged();
+    this.OnCurrentLayoutElementChanged();
     // Notify other controls
     Commands.NeedRedrawCurrent.Execute(null, null);
     //-----------------------------------------------------------------
@@ -239,8 +239,8 @@ public partial class LayoutParameter
 
   /// @copydoc Common::GUI::IBindingProfile::CanChangeProfile
   public bool CanChangeProfile { get; private set; }
-  /// @copydoc Common::GUI::IBindingProfile::OnCurrentProfileChanged
-  public void OnCurrentProfileChanged() {
+  /// @copydoc Common::GUI::IBindingProfile::OnCurrentLayoutElementChanged
+  public void OnCurrentLayoutElementChanged() {
     this.CanChangeProfile = false;
 
     this.GroupBox.Header =
@@ -262,10 +262,10 @@ public partial class LayoutParameter
 
     this.CanChangeProfile = true;
   }
-  /// @copydoc Common::GUI::IBindingProfile::OnEntireProfileChanged
-  public void OnEntireProfileChanged() {
+  /// @copydoc Common::GUI::IBindingProfile::OnProfileChanged
+  public void OnProfileChanged() {
     // 編集するのはCurrentのみ
-    this.OnCurrentProfileChanged();
+    this.OnCurrentLayoutElementChanged();
   }
 }
 }   // namespace SCFF.GUI.Controls

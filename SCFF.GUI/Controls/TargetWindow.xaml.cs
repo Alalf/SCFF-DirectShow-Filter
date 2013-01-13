@@ -76,7 +76,7 @@ public partial class TargetWindow : UserControl, IBindingProfile {
 
     //-----------------------------------------------------------------
     // Notify self
-    this.OnCurrentProfileChanged();
+    this.OnCurrentLayoutElementChanged();
     // Notify other controls
     Commands.AreaChanged.Execute(null, null);
     //-----------------------------------------------------------------
@@ -210,16 +210,16 @@ public partial class TargetWindow : UserControl, IBindingProfile {
 
   /// @copydoc IBindingProfile::CanChangeProfile
   public bool CanChangeProfile { get; private set; }
-  /// @copydoc IBindingProfile::OnCurrentProfileChanged
-  public void OnCurrentProfileChanged() {
+  /// @copydoc IBindingProfile::OnCurrentLayoutElementChanged
+  public void OnCurrentLayoutElementChanged() {
     this.CanChangeProfile = false;
     this.WindowCaption.Text = App.Profile.CurrentView.WindowCaption;
     this.CanChangeProfile = true;
   }
-  /// @copydoc IBindingProfile::OnEntireProfileChanged
-  public void OnEntireProfileChanged() {
+  /// @copydoc IBindingProfile::OnProfileChanged
+  public void OnProfileChanged() {
     // 編集するのはCurrentのみ
-    this.OnCurrentProfileChanged();
+    this.OnCurrentLayoutElementChanged();
   }
 
   //===================================================================

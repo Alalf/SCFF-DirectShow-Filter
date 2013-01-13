@@ -125,8 +125,8 @@ public partial class Options : UserControl, IBindingProfile {
 
   /// @copydoc Common::GUI::IBindingProfile::CanChangeProfile
   public bool CanChangeProfile { get; private set; }
-  /// @copydoc Common::GUI::IBindingProfile::OnCurrentProfileChanged
-  public void OnCurrentProfileChanged() {
+  /// @copydoc Common::GUI::IBindingProfile::OnCurrentLayoutElementChanged
+  public void OnCurrentLayoutElementChanged() {
     this.CanChangeProfile = false;
     // checkboxはclickがあるのでeventハンドラをattach/detachする必要はない
     this.ShowCursor.IsChecked = App.Profile.CurrentView.ShowCursor;
@@ -136,10 +136,10 @@ public partial class Options : UserControl, IBindingProfile {
     // @todo(me) overSampingとthreadCountはまだDSFでも実装されていない
     this.CanChangeProfile = true;
   }
-  /// @copydoc Common::GUI::IBindingProfile::OnEntireProfileChanged
-  public void OnEntireProfileChanged() {
+  /// @copydoc Common::GUI::IBindingProfile::OnProfileChanged
+  public void OnProfileChanged() {
     // 編集するのはCurrentのみ
-    this.OnCurrentProfileChanged();
+    this.OnCurrentLayoutElementChanged();
   }
 }
 }   // namespace SCFF.GUI.Controls

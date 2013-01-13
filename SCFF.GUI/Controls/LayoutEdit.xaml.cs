@@ -321,7 +321,7 @@ public partial class LayoutEdit
       //---------------------------------------------------------------
       // Notify self
       // Notify other controls
-      Commands.CurrentIndexChanged.Execute(null, null);
+      Commands.ProfileStructureChanged.Execute(null, null);
       //---------------------------------------------------------------
     }
 

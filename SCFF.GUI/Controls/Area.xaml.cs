@@ -59,7 +59,7 @@ public partial class Area : UserControl, IBindingProfile {
     // Notify self
     this.OnCurrentLayoutElementChanged();
     // Notify other controls
-    Commands.NeedUpdateCurrentPreview.Execute(null, null);
+    Commands.CurrentLayoutElementVisualChanged.Execute(null, null);
     //-----------------------------------------------------------------
   }
 
@@ -173,7 +173,7 @@ public partial class Area : UserControl, IBindingProfile {
       Commands.TargetWindowChanged.Execute(null, null);
     } else {
       // TargetWindowの更新は必要ないのでプレビューのみ更新
-      Commands.NeedUpdateCurrentPreview.Execute(null, null);
+      Commands.CurrentLayoutElementVisualChanged.Execute(null, null);
     }
     //-----------------------------------------------------------------
   }
@@ -256,7 +256,7 @@ public partial class Area : UserControl, IBindingProfile {
       //---------------------------------------------------------------
       // Notify self
       // Notify other controls
-      Commands.NeedUpdateCurrentPreview.Execute(null, null);
+      Commands.CurrentLayoutElementVisualChanged.Execute(null, null);
       //---------------------------------------------------------------
     }
   }
@@ -276,7 +276,7 @@ public partial class Area : UserControl, IBindingProfile {
       //---------------------------------------------------------------
       // Notify self
       // Notify other controls
-      Commands.NeedUpdateCurrentPreview.Execute(null, null);
+      Commands.CurrentLayoutElementVisualChanged.Execute(null, null);
       //---------------------------------------------------------------
     }
   }
@@ -296,7 +296,7 @@ public partial class Area : UserControl, IBindingProfile {
       //---------------------------------------------------------------
       // Notify self
       // Notify other controls
-      Commands.NeedUpdateCurrentPreview.Execute(null, null);
+      Commands.CurrentLayoutElementVisualChanged.Execute(null, null);
       //---------------------------------------------------------------
     }
   }
@@ -316,7 +316,7 @@ public partial class Area : UserControl, IBindingProfile {
       //---------------------------------------------------------------
       // Notify self
       // Notify other controls
-      Commands.NeedUpdateCurrentPreview.Execute(null, null);
+      Commands.CurrentLayoutElementVisualChanged.Execute(null, null);
       //---------------------------------------------------------------
     }
   }

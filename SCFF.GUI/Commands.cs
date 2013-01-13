@@ -28,35 +28,23 @@ public static class Commands {
   // イベント
   //===================================================================
 
-  /// プレビューの更新が必要
-  public static readonly RoutedCommand NeedUpdateCurrentPreview = new RoutedCommand();
+  /// CurrentViewを可視化(LayoutEdit)したときの内容が変更された
+  public static readonly RoutedCommand CurrentLayoutElementVisualChanged = new RoutedCommand();
 
-  /// レイアウト要素すべての再描画が必要
-  public static readonly RoutedCommand NeedRedrawAll = new RoutedCommand();
+  /// Profileを可視化(LayoutEdit)したときの内容が変更された
+  public static readonly RoutedCommand ProfileVisualChanged = new RoutedCommand();
 
-  /// 現在のレイアウト要素の再描画が必要
-  public static readonly RoutedCommand NeedRedrawCurrent = new RoutedCommand();
+  /// Profileの構造(Profile.CurrentIndex/LayoutElementCount)が変更された
+  public static readonly RoutedCommand ProfileStructureChanged = new RoutedCommand();
 
   /// LayoutParametersのみの更新が必要
   public static readonly RoutedCommand LayoutParameterChanged = new RoutedCommand();
 
-  /// LayoutEditそのもの表示・非表示が切り替わった
-  public static readonly RoutedCommand LayoutEditVisibilityChanged = new RoutedCommand();
-
-  /// TargetWindowが変更された
+  /// TargetWindowが変更された(→CurrentLayoutElementVisualChanged)
   public static readonly RoutedCommand TargetWindowChanged = new RoutedCommand();
 
-  /// Areaの情報が変更された
+  /// Areaの情報が変更された(→CurrentLayoutElementVisualChanged)
   public static readonly RoutedCommand AreaChanged = new RoutedCommand();
-
-  /// CurrentIndexが変更された
-  public static readonly RoutedCommand CurrentIndexChanged = new RoutedCommand();
-
-  /// LayoutElementが追加された
-  public static readonly RoutedCommand LayoutElementAdded = new RoutedCommand();
-
-  /// 現在のLayoutElementが削除された
-  public static readonly RoutedCommand CurrentLayoutElementRemoved = new RoutedCommand();
 
   /// サンプルサイズが変更された
   public static readonly RoutedCommand SampleSizeChanged = new RoutedCommand();

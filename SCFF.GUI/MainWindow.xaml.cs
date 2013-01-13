@@ -49,34 +49,6 @@ public partial class MainWindow
     this.SetCompactView();
   }
 
-  //-------------------------------------------------------------------
-
-  /// AeroをON/OFF
-  private void SetAero() {
-    if (!this.CanUseAero()) return;
-    // @todo(me) 実装
-  }
-
-  /// AeroのON/OFFが可能か
-  private bool CanUseAero() {
-    // @todo(me) 実装
-    return true;
-  }
-
-  /// コンパクト表示切替
-  private void SetCompactView() {
-    if (App.Options.CompactView) {
-      this.OptionsExpander.Visibility = Visibility.Collapsed;
-      this.ResizeMethodExpander.Visibility = Visibility.Collapsed;
-      this.LayoutExpander.IsExpanded = false;
-      this.Width = Constants.CompactMainWindowWidth;
-      this.Height = Constants.CompactMainWindowHeight;
-    } else {
-      this.OptionsExpander.Visibility = Visibility.Visible;
-      this.ResizeMethodExpander.Visibility = Visibility.Visible;
-    }
-  }
-
   //===================================================================
   // イベントハンドラ
   //===================================================================
@@ -157,8 +129,9 @@ public partial class MainWindow
 
     //-----------------------------------------------------------------
     // Notify self
+    this.FixWindowDesign(false);
     // Notify other controls
-    Commands.LayoutEditVisibilityChanged.Execute(null, null);
+    Commands.ProfileVisualChanged.Execute(null, null);
     //-----------------------------------------------------------------
   }
   /// LayoutExpander: Expanded
@@ -168,14 +141,66 @@ public partial class MainWindow
 
     //-----------------------------------------------------------------
     // Notify self
+    this.FixWindowDesign(false);
     // Notify other controls
-    Commands.LayoutEditVisibilityChanged.Execute(null, null);
+    Commands.ProfileVisualChanged.Execute(null, null);
     //-----------------------------------------------------------------
   }
 
   //===================================================================
   // IBindingOptionsの実装
   //===================================================================
+
+  /// AeroをON/OFF
+  private void SetAero() {
+    if (!this.CanUseAero()) return;
+    if (App.Options.ForceAeroOn) {
+      // @todo(me) 実装
+    } else {
+      // @todo(me) 実装
+    }
+  }
+
+  /// AeroのON/OFFが可能か
+  private bool CanUseAero() {
+    // @todo(me) 実装
+    return true;
+  }
+
+  /// コンパクト表示切替
+  private void SetCompactView() {
+    if (App.Options.CompactView) {
+      this.OptionsExpander.Visibility = Visibility.Collapsed;
+      this.ResizeMethodExpander.Visibility = Visibility.Collapsed;
+      this.LayoutExpander.IsExpanded = false;
+      this.Width = Constants.CompactMainWindowWidth;
+      this.Height = Constants.CompactMainWindowHeight;
+    } else {
+      this.OptionsExpander.Visibility = Visibility.Visible;
+      this.ResizeMethodExpander.Visibility = Visibility.Visible;
+    }
+  }
+
+  /// Max/MinWidthなどの設定
+  private void FixWindowDesign(bool fixHeight) {
+    // LayoutExpanderが縮小しているかどうか
+    if (App.Options.LayoutIsExpanded) {
+      this.MinWidth = Constants.MainWindowMinWidthWithLayoutEdit;
+      this.MaxWidth = double.PositiveInfinity;
+    } else {
+      this.MinWidth = Constants.CompactMainWindowWidth;
+      this.MaxWidth = Constants.CompactMainWindowWidth;
+    }
+    // CompactViewかどうか
+    if (fixHeight && App.Options.CompactView) {
+      this.Height = Constants.CompactMainWindowHeight;
+    }
+    this.Width = 0; // hack
+
+    this.CanChangeOptions = true;
+  }
+
+  //-------------------------------------------------------------------
 
   /// @copydoc Common::GUI::IBindingOptions::CanChangeOptions
   public bool CanChangeOptions { get; private set; }
@@ -381,23 +406,25 @@ public partial class MainWindow
   // SCFF.GUI.Commands
   //-------------------------------------------------------------------
 
-  /// @copydoc Commands::NeedUpdateCurrentPreview
+  /// @copydoc Commands::CurrentLayoutElementVisualChanged
   /// @param sender 使用しない
   /// @param e 使用しない
-  private void NeedUpdateCurrentPreview_Executed(object sender, ExecutedRoutedEventArgs e) {
+  private void CurrentLayoutElementVisualChanged_Executed(object sender, ExecutedRoutedEventArgs e) {
     this.LayoutEdit.OnCurrentLayoutElementChanged();
   }
-  /// @copydoc Commands::NeedRedrawAll
+  /// @copydoc Commands::ProfileVisualChanged
   /// @param sender 使用しない
   /// @param e 使用しない
-  private void NeedRedrawAll_Executed(object sender, ExecutedRoutedEventArgs e) {
+  private void ProfileVisualChanged_Executed(object sender, ExecutedRoutedEventArgs e) {
     this.LayoutEdit.OnOptionsChanged();
+    // 内部でOnProfileChangedと同じ処理が走る
   }
-  /// @copydoc Commands::NeedRedrawCurrent
+  /// @copydoc Commands::ProfileStructureChanged
   /// @param sender 使用しない
   /// @param e 使用しない
-  private void NeedRedrawCurrent_Executed(object sender, ExecutedRoutedEventArgs e) {
-    this.LayoutEdit.OnCurrentLayoutElementChanged();
+  private void ProfileStructureChanged_Executed(object sender, ExecutedRoutedEventArgs e) {
+    // tabの選択を変えないといけないのでEntireじゃなければいけない
+    this.OnProfileChanged();
   }
   /// @copydoc Commands::LayoutParameterChanged
   /// @param sender 使用しない
@@ -405,17 +432,12 @@ public partial class MainWindow
   private void LayoutParameterChanged_Executed(object sender, ExecutedRoutedEventArgs e) {
     this.LayoutParameter.OnCurrentLayoutElementChanged();
   }
-  /// @copydoc Commands::LayoutEditVisibilityChanged
-  /// @param sender 使用しない
-  /// @param e 使用しない
-  private void LayoutEditVisibilityChanged_Executed(object sender, ExecutedRoutedEventArgs e) {
-    this.LayoutEdit.OnOptionsChanged();
-  }
   /// @copydoc Commands::TargetWindowChanged
   /// @param sender 使用しない
   /// @param e 使用しない
   private void TargetWindowChanged_Executed(object sender, ExecutedRoutedEventArgs e) {
     this.TargetWindow.OnCurrentLayoutElementChanged();
+    // CurrentLayoutElementVisualChanged
     this.LayoutEdit.OnCurrentLayoutElementChanged();
   }
   /// @copydoc Commands::AreaChanged
@@ -423,28 +445,8 @@ public partial class MainWindow
   /// @param e 使用しない
   private void AreaChanged_Executed(object sender, ExecutedRoutedEventArgs e) {
     this.Area.OnCurrentLayoutElementChanged();
+    // CurrentLayoutElementVisualChanged
     this.LayoutEdit.OnCurrentLayoutElementChanged();
-  }
-  /// @copydoc Commands::CurrentIndexChanged
-  /// @param sender 使用しない
-  /// @param e 使用しない
-  private void CurrentIndexChanged_Executed(object sender, ExecutedRoutedEventArgs e) {
-    // tabの選択を変えないといけないのでEntireじゃなければいけない
-    this.OnProfileChanged();
-  }
-  /// @copydoc Commands::LayoutElementAdded
-  /// @param sender 使用しない
-  /// @param e 使用しない
-  private void LayoutElementAdded_Executed(object sender, ExecutedRoutedEventArgs e) {
-    // tabの選択を変えないといけないのでEntireじゃなければいけない
-    this.OnProfileChanged();
-  }
-  /// @copydoc Commands::CurrentLayoutElementRemoved
-  /// @param sender 使用しない
-  /// @param e 使用しない
-  private void CurrentLayoutElementRemoved_Executed(object sender, ExecutedRoutedEventArgs e) {
-    // tabの選択を変えないといけないのでEntireじゃなければいけない
-    this.OnProfileChanged();
   }
   /// @copydoc Commands::SampleSizeChanged
   /// @param sender 使用しない

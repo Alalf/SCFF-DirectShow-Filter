@@ -53,7 +53,7 @@ public partial class LayoutToolbar : UserControl, IBindingOptions {
     //-----------------------------------------------------------------
     // Notify self
     // Notify other controls
-    Commands.NeedRedrawAll.Execute(null, null);
+    Commands.ProfileVisualChanged.Execute(null, null);
     //-----------------------------------------------------------------
   }
 
@@ -67,7 +67,7 @@ public partial class LayoutToolbar : UserControl, IBindingOptions {
     //-----------------------------------------------------------------
     // Notify self
     // Notify other controls
-    // Commands.NeedRedrawLayoutEdit.Execute(null, null);
+    // Commands.ProfileVisualChanged.Execute(null, null);
     //-----------------------------------------------------------------
   }
 
@@ -81,7 +81,7 @@ public partial class LayoutToolbar : UserControl, IBindingOptions {
     //-----------------------------------------------------------------
     // Notify self
     // Notify other controls
-    Commands.NeedRedrawAll.Execute(null, null);
+    Commands.ProfileVisualChanged.Execute(null, null);
     //-----------------------------------------------------------------
   }
 
@@ -97,7 +97,7 @@ public partial class LayoutToolbar : UserControl, IBindingOptions {
     //-----------------------------------------------------------------
     // Notify self
     // Notify other controls
-    Commands.LayoutElementAdded.Execute(null, null);
+    Commands.ProfileStructureChanged.Execute(null, null);
     //-----------------------------------------------------------------
   }
 
@@ -113,7 +113,7 @@ public partial class LayoutToolbar : UserControl, IBindingOptions {
     //-----------------------------------------------------------------
     // Notify self
     // Notify other controls
-    Commands.CurrentLayoutElementRemoved.Execute(null, null);
+    Commands.ProfileStructureChanged.Execute(null, null);
     //-----------------------------------------------------------------
   }
 

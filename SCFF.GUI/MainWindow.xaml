@@ -32,26 +32,18 @@
     <CommandBinding Command="SaveAs" Executed="SaveAs_Executed"/>
     <!-- SCFF.GUI.Commands -->
     <!-- Event -->
-    <CommandBinding Command="{x:Static local:Commands.NeedUpdateCurrentPreview}"
-                    Executed="NeedUpdateCurrentPreview_Executed" />
-    <CommandBinding Command="{x:Static local:Commands.NeedRedrawAll}"
-                    Executed="NeedRedrawAll_Executed" />
-    <CommandBinding Command="{x:Static local:Commands.NeedRedrawCurrent}"
-                    Executed="NeedRedrawCurrent_Executed" />
+    <CommandBinding Command="{x:Static local:Commands.CurrentLayoutElementVisualChanged}"
+                    Executed="CurrentLayoutElementVisualChanged_Executed" />
+    <CommandBinding Command="{x:Static local:Commands.ProfileVisualChanged}"
+                    Executed="ProfileVisualChanged_Executed" />
+    <CommandBinding Command="{x:Static local:Commands.ProfileStructureChanged}"
+                    Executed="ProfileStructureChanged_Executed" />
     <CommandBinding Command="{x:Static local:Commands.LayoutParameterChanged}"
                     Executed="LayoutParameterChanged_Executed" />
-    <CommandBinding Command="{x:Static local:Commands.LayoutEditVisibilityChanged}"
-                    Executed="LayoutEditVisibilityChanged_Executed" />
     <CommandBinding Command="{x:Static local:Commands.TargetWindowChanged}"
                     Executed="TargetWindowChanged_Executed" />
     <CommandBinding Command="{x:Static local:Commands.AreaChanged}"
                     Executed="AreaChanged_Executed" />
-    <CommandBinding Command="{x:Static local:Commands.CurrentIndexChanged}"
-                    Executed="CurrentIndexChanged_Executed" />
-    <CommandBinding Command="{x:Static local:Commands.LayoutElementAdded}"
-                    Executed="LayoutElementAdded_Executed" />
-    <CommandBinding Command="{x:Static local:Commands.CurrentLayoutElementRemoved}"
-                    Executed="CurrentLayoutElementRemoved_Executed" />
     <CommandBinding Command="{x:Static local:Commands.SampleSizeChanged}"
                     Executed="SampleSizeChanged_Executed" />
     <!-- Feature -->

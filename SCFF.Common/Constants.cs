@@ -49,6 +49,8 @@ public static class Constants {
   public const double CompactMainWindowWidth = 280.0;
   /// コンパクト表示時の高さ
   public const double CompactMainWindowHeight = 280.0;
+  /// レイアウト編集画面表示時の最小幅
+  public const double MainWindowMinWidthWithLayoutEdit = 650.0;
 
   //-------------------------------------------------------------------
   // Preview

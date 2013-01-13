@@ -56,7 +56,7 @@ public partial class Options : UserControl, IBindingProfile {
     //-----------------------------------------------------------------
     // Notify self
     // Notify other controls
-    Commands.NeedUpdateCurrentPreview.Execute(null, null);
+    Commands.CurrentLayoutElementVisualChanged.Execute(null, null);
     //-----------------------------------------------------------------
   }
 
@@ -73,7 +73,7 @@ public partial class Options : UserControl, IBindingProfile {
     //-----------------------------------------------------------------
     // Notify self
     // Notify other controls
-    Commands.NeedUpdateCurrentPreview.Execute(null, null);
+    Commands.CurrentLayoutElementVisualChanged.Execute(null, null);
     //-----------------------------------------------------------------
   }
 
@@ -90,7 +90,7 @@ public partial class Options : UserControl, IBindingProfile {
     //-----------------------------------------------------------------
     // Notify self
     // Notify other controls
-    Commands.NeedRedrawCurrent.Execute(null, null);
+    Commands.CurrentLayoutElementVisualChanged.Execute(null, null);
     //-----------------------------------------------------------------
   }
 
@@ -107,7 +107,7 @@ public partial class Options : UserControl, IBindingProfile {
     //-----------------------------------------------------------------
     // Notify self
     // Notify other controls
-    Commands.NeedRedrawCurrent.Execute(null, null);
+    Commands.CurrentLayoutElementVisualChanged.Execute(null, null);
     //-----------------------------------------------------------------
   }
 

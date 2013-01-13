@@ -71,7 +71,7 @@ public partial class LayoutParameter
     // Notify self
     this.OnCurrentLayoutElementChanged();
     // Notify other controls
-    Commands.NeedRedrawCurrent.Execute(null, null);
+    Commands.CurrentLayoutElementVisualChanged.Execute(null, null);
     //-----------------------------------------------------------------
   }
 
@@ -143,7 +143,7 @@ public partial class LayoutParameter
       // Notify self
       this.UpdateDisabledTextboxes();
       // Notify other controls
-      Commands.NeedRedrawCurrent.Execute(null, null);
+      Commands.CurrentLayoutElementVisualChanged.Execute(null, null);
       //-----------------------------------------------------------------
     }
   }
@@ -166,7 +166,7 @@ public partial class LayoutParameter
       // Notify self
       this.UpdateDisabledTextboxes();
       // Notify other controls
-      Commands.NeedRedrawCurrent.Execute(null, null);
+      Commands.CurrentLayoutElementVisualChanged.Execute(null, null);
       //-----------------------------------------------------------------
     }
   }
@@ -189,7 +189,7 @@ public partial class LayoutParameter
       // Notify self
       this.UpdateDisabledTextboxes();
       // Notify other controls
-      Commands.NeedRedrawCurrent.Execute(null, null);
+      Commands.CurrentLayoutElementVisualChanged.Execute(null, null);
       //-----------------------------------------------------------------
     }
   }
@@ -212,7 +212,7 @@ public partial class LayoutParameter
       // Notify self
       this.UpdateDisabledTextboxes();
       // Notify other controls
-      Commands.NeedRedrawCurrent.Execute(null, null);
+      Commands.CurrentLayoutElementVisualChanged.Execute(null, null);
       //-----------------------------------------------------------------
     }
   }

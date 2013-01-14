@@ -46,7 +46,7 @@ public partial class MainWindow
 
     // 必要な機能の実行
     this.SetAero();
-    this.SetCompactView();
+    this.SetCompactView(false);
   }
 
   //===================================================================
@@ -129,7 +129,8 @@ public partial class MainWindow
 
     //-----------------------------------------------------------------
     // Notify self
-    this.FixWindowDesign(false);
+    this.FixMinMaxWidth();
+    this.FixWidthAndHeight();
     // Notify other controls
     Commands.ProfileVisualChanged.Execute(null, null);
     //-----------------------------------------------------------------
@@ -141,7 +142,8 @@ public partial class MainWindow
 
     //-----------------------------------------------------------------
     // Notify self
-    this.FixWindowDesign(false);
+    this.FixMinMaxWidth();
+    this.FixWidthAndHeight();
     // Notify other controls
     Commands.ProfileVisualChanged.Execute(null, null);
     //-----------------------------------------------------------------
@@ -168,22 +170,34 @@ public partial class MainWindow
   }
 
   /// コンパクト表示切替
-  private void SetCompactView() {
+  private void SetCompactView(bool fixValues) {
+    if (fixValues) {
+      this.FixMinMaxWidth();
+      this.FixWidthAndHeight();
+    }
     if (App.Options.CompactView) {
       this.OptionsExpander.Visibility = Visibility.Collapsed;
       this.ResizeMethodExpander.Visibility = Visibility.Collapsed;
       this.LayoutExpander.IsExpanded = false;
-      this.Width = Constants.CompactMainWindowWidth;
-      this.Height = Constants.CompactMainWindowHeight;
     } else {
       this.OptionsExpander.Visibility = Visibility.Visible;
       this.ResizeMethodExpander.Visibility = Visibility.Visible;
     }
   }
 
-  /// Max/MinWidthなどの設定
-  private void FixWindowDesign(bool fixHeight) {
-    // LayoutExpanderが縮小しているかどうか
+  /// Width/Heightの設定
+  private void FixWidthAndHeight() {
+    if (App.Options.CompactView) {
+      this.Width = Constants.CompactMainWindowWidth;
+      this.Height = Constants.CompactMainWindowHeight;
+    } else {
+      this.Width = App.Options.TmpMainWindowWidth;
+      this.Height = App.Options.TmpMainWindowHeight;
+    }
+  }
+
+  /// Max/MinWidthの設定
+  private void FixMinMaxWidth() {
     if (App.Options.LayoutIsExpanded) {
       this.MinWidth = Constants.MainWindowMinWidthWithLayoutEdit;
       this.MaxWidth = double.PositiveInfinity;
@@ -191,13 +205,6 @@ public partial class MainWindow
       this.MinWidth = Constants.CompactMainWindowWidth;
       this.MaxWidth = Constants.CompactMainWindowWidth;
     }
-    // CompactViewかどうか
-    if (fixHeight && App.Options.CompactView) {
-      this.Height = Constants.CompactMainWindowHeight;
-    }
-    this.Width = 0; // hack
-
-    this.CanChangeOptions = true;
   }
 
   //-------------------------------------------------------------------
@@ -211,8 +218,7 @@ public partial class MainWindow
     // Temporary
     this.Left         = App.Options.TmpMainWindowLeft;
     this.Top          = App.Options.TmpMainWindowTop;
-    this.Width        = App.Options.TmpMainWindowWidth;
-    this.Height       = App.Options.TmpMainWindowHeight;
+    this.FixMinMaxWidth();
     this.WindowState  = (System.Windows.WindowState)App.Options.TmpMainWindowState;
     
     // MainWindow.Controls
@@ -220,6 +226,8 @@ public partial class MainWindow
     this.OptionsExpander.IsExpanded       = App.Options.OptionsIsExpanded;
     this.ResizeMethodExpander.IsExpanded  = App.Options.ResizeMethodIsExpanded;
     this.LayoutExpander.IsExpanded        = App.Options.LayoutIsExpanded;
+
+    this.FixWidthAndHeight();
 
     // UserControls
     this.Apply.OnOptionsChanged();
@@ -236,8 +244,13 @@ public partial class MainWindow
     var isNormal = this.WindowState == System.Windows.WindowState.Normal;
     App.Options.TmpMainWindowLeft = isNormal ? this.Left : this.RestoreBounds.Left;
     App.Options.TmpMainWindowTop = isNormal ? this.Top : this.RestoreBounds.Top;
-    App.Options.TmpMainWindowWidth = isNormal ? this.Width : this.RestoreBounds.Width;
-    App.Options.TmpMainWindowHeight = isNormal ? this.Height : this.RestoreBounds.Height;
+    if (App.Options.CompactView) {
+      // nop
+    } else {
+      App.Options.TmpMainWindowWidth = isNormal ? this.Width : this.RestoreBounds.Width;
+      App.Options.TmpMainWindowHeight = isNormal ? this.Height : this.RestoreBounds.Height;
+    }
+    Debug.WriteLine("Options WindowSize: {0}x{1}", App.Options.TmpMainWindowWidth, App.Options.TmpMainWindowHeight);
     App.Options.TmpMainWindowState = (SCFF.Common.WindowState)this.WindowState;
   }
 
@@ -473,7 +486,7 @@ public partial class MainWindow
   /// @param e 使用しない
   private void SetCompactView_Executed(object sender, ExecutedRoutedEventArgs e) {
     Debug.WriteLine("Execute", "[Command] SetCompactView");
-    this.SetCompactView();
+    this.SetCompactView(true);
   }
 }
 }   // namespace SCFF.GUI

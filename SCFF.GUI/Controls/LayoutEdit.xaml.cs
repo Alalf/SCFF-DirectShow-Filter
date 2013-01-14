@@ -76,7 +76,7 @@ public partial class LayoutEdit
   //===================================================================
 
   /// キャプションのフォントサイズ
-  private const int CaptionFontSize = 12;
+  private const int CaptionFontSize = 20;
 
   /// レイアウト要素のヘッダーの生成
   /// @param layoutElement 対象のレイアウト要素

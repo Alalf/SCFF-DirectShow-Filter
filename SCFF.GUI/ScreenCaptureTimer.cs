@@ -265,8 +265,10 @@ public class ScreenCaptureTimer : IDisposable {
     var request = new ScreenCaptureRequest(layoutElement);
     lock (this.sharedLock) {
       /// ディクショナリはスレッドセーフではない
-      Debug.Assert(this.cache.ContainsKey(request), "No request in cache", "ScreenCaptureTimer");
-      return this.cache[request];
+      BitmapSource result;
+      var success = this.cache.TryGetValue(request, out result);
+      Debug.WriteLineIf(!success, "No request in cache", "ScreenCaptureTimer");
+      return result;
     }
   }
 

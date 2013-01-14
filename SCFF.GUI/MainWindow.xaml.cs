@@ -323,7 +323,7 @@ public partial class MainWindow
   /// New
   /// @param sender 使用しない
   /// @param e 使用しない
-  private void New_Executed(object sender, ExecutedRoutedEventArgs e) {
+  private void OnNew(object sender, ExecutedRoutedEventArgs e) {
     var result = MessageBox.Show("Do you want to save changes?",
                                  "SCFF.GUI",
                                  MessageBoxButton.YesNoCancel,
@@ -357,14 +357,14 @@ public partial class MainWindow
   /// Open
   /// @param sender 使用しない
   /// @param e 使用しない
-  private void Open_Executed(object sender, ExecutedRoutedEventArgs e) {
+  private void OnOpen(object sender, ExecutedRoutedEventArgs e) {
     /// @todo(me) Newと似たコードが必要だがかなりめんどくさい。あとでかく
   }
 
   /// Save
   /// @param sender 使用しない
   /// @param e 使用しない
-  private void Save_Executed(object sender, ExecutedRoutedEventArgs e) {
+  private void OnSave(object sender, ExecutedRoutedEventArgs e) {
     /// @todo(me) すでに保存されていない場合はダイアログをだす
     var save = new SaveFileDialog();
     save.Title = "SCFF.GUI";
@@ -381,7 +381,7 @@ public partial class MainWindow
   /// SaveAs
   /// @param sender 使用しない
   /// @param e 使用しない
-  private void SaveAs_Executed(object sender, ExecutedRoutedEventArgs e) {
+  private void OnSaveAs(object sender, ExecutedRoutedEventArgs e) {
     var save = new SaveFileDialog();
     save.Title = "SCFF.GUI";
     save.Filter = "SCFF.GUI Profile|*.SCFF.GUI.profile";
@@ -399,19 +399,19 @@ public partial class MainWindow
   //-------------------------------------------------------------------
   
   /// CloseWindow
-	private void CloseWindow_Executed(object sender, ExecutedRoutedEventArgs e) {
+	private void OnCloseWindow(object sender, ExecutedRoutedEventArgs e) {
 		SystemCommands.CloseWindow(this);
 	}
   /// MaximizeWindow
-	private void MaximizeWindow_Executed(object sender, ExecutedRoutedEventArgs e) {
+	private void OnMaximizeWindow(object sender, ExecutedRoutedEventArgs e) {
 		SystemCommands.MaximizeWindow(this);
 	}
   /// MinimizeWindow
-	private void MinimizeWindow_Executed(object sender, ExecutedRoutedEventArgs e) {
+	private void OnMinimizeWindow(object sender, ExecutedRoutedEventArgs e) {
 		SystemCommands.MinimizeWindow(this);
 	}
   /// RestoreWindow
-	private void RestoreWindow_Executed(object sender, ExecutedRoutedEventArgs e) {
+	private void OnRestoreWindow(object sender, ExecutedRoutedEventArgs e) {
 		SystemCommands.RestoreWindow(this);
 	}
 
@@ -422,33 +422,33 @@ public partial class MainWindow
   /// @copydoc Commands::CurrentLayoutElementVisualChanged
   /// @param sender 使用しない
   /// @param e 使用しない
-  private void CurrentLayoutElementVisualChanged_Executed(object sender, ExecutedRoutedEventArgs e) {
+  private void OnCurrentLayoutElementVisualChanged(object sender, ExecutedRoutedEventArgs e) {
     this.LayoutEdit.OnCurrentLayoutElementChanged();
   }
   /// @copydoc Commands::ProfileVisualChanged
   /// @param sender 使用しない
   /// @param e 使用しない
-  private void ProfileVisualChanged_Executed(object sender, ExecutedRoutedEventArgs e) {
+  private void OnProfileVisualChanged(object sender, ExecutedRoutedEventArgs e) {
     this.LayoutEdit.OnOptionsChanged();
     // 内部でOnProfileChangedと同じ処理が走る
   }
   /// @copydoc Commands::ProfileStructureChanged
   /// @param sender 使用しない
   /// @param e 使用しない
-  private void ProfileStructureChanged_Executed(object sender, ExecutedRoutedEventArgs e) {
+  private void OnProfileStructureChanged(object sender, ExecutedRoutedEventArgs e) {
     // tabの選択を変えないといけないのでEntireじゃなければいけない
     this.OnProfileChanged();
   }
   /// @copydoc Commands::LayoutParameterChanged
   /// @param sender 使用しない
   /// @param e 使用しない
-  private void LayoutParameterChanged_Executed(object sender, ExecutedRoutedEventArgs e) {
+  private void OnLayoutParameterChanged(object sender, ExecutedRoutedEventArgs e) {
     this.LayoutParameter.OnCurrentLayoutElementChanged();
   }
   /// @copydoc Commands::TargetWindowChanged
   /// @param sender 使用しない
   /// @param e 使用しない
-  private void TargetWindowChanged_Executed(object sender, ExecutedRoutedEventArgs e) {
+  private void OnTargetWindowChanged(object sender, ExecutedRoutedEventArgs e) {
     this.TargetWindow.OnCurrentLayoutElementChanged();
     // CurrentLayoutElementVisualChanged
     this.LayoutEdit.OnCurrentLayoutElementChanged();
@@ -456,7 +456,7 @@ public partial class MainWindow
   /// @copydoc Commands::AreaChanged
   /// @param sender 使用しない
   /// @param e 使用しない
-  private void AreaChanged_Executed(object sender, ExecutedRoutedEventArgs e) {
+  private void OnAreaChanged(object sender, ExecutedRoutedEventArgs e) {
     this.Area.OnCurrentLayoutElementChanged();
     // CurrentLayoutElementVisualChanged
     this.LayoutEdit.OnCurrentLayoutElementChanged();
@@ -464,7 +464,7 @@ public partial class MainWindow
   /// @copydoc Commands::SampleSizeChanged
   /// @param sender 使用しない
   /// @param e 使用しない
-  private void SampleSizeChanged_Executed(object sender, ExecutedRoutedEventArgs e) {
+  private void OnSampleSizeChanged(object sender, ExecutedRoutedEventArgs e) {
     this.LayoutEdit.OnRuntimeOptionsChanged();
     this.LayoutParameter.OnRuntimeOptionsChanged();
   }
@@ -474,7 +474,7 @@ public partial class MainWindow
   /// @copydoc SetAero
   /// @param sender 使用しない
   /// @param e 使用しない
-  private void SetAero_Executed(object sender, ExecutedRoutedEventArgs e) {
+  private void OnSetAero(object sender, ExecutedRoutedEventArgs e) {
     if (!CanUseAero()) return;
 
     Debug.WriteLine("Execute", "[Command] SetAero");
@@ -484,7 +484,7 @@ public partial class MainWindow
   /// @copydoc SetCompactView
   /// @param sender 使用しない
   /// @param e 使用しない
-  private void SetCompactView_Executed(object sender, ExecutedRoutedEventArgs e) {
+  private void OnSetCompactView(object sender, ExecutedRoutedEventArgs e) {
     Debug.WriteLine("Execute", "[Command] SetCompactView");
     this.SetCompactView(true);
   }

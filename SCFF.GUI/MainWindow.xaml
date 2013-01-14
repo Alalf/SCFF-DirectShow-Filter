@@ -18,39 +18,39 @@
   <Window.CommandBindings>
     <!-- shell:SystemCommands -->
     <CommandBinding Command="{x:Static shell:SystemCommands.CloseWindowCommand}"
-                    Executed="CloseWindow_Executed"/>
+                    Executed="OnCloseWindow"/>
     <CommandBinding Command="{x:Static shell:SystemCommands.MaximizeWindowCommand}"
-                    Executed="MaximizeWindow_Executed"/>
+                    Executed="OnMaximizeWindow"/>
     <CommandBinding Command="{x:Static shell:SystemCommands.MinimizeWindowCommand}"
-                    Executed="MinimizeWindow_Executed"/>
+                    Executed="OnMinimizeWindow"/>
     <CommandBinding Command="{x:Static shell:SystemCommands.RestoreWindowCommand}"
-                    Executed="RestoreWindow_Executed"/>
+                    Executed="OnRestoreWindow"/>
     <!-- ApplicationCommands -->
-    <CommandBinding Command="New" Executed="New_Executed"/>
-    <CommandBinding Command="Open" Executed="Open_Executed"/>
-    <CommandBinding Command="Save" Executed="Save_Executed"/>
-    <CommandBinding Command="SaveAs" Executed="SaveAs_Executed"/>
+    <CommandBinding Command="New" Executed="OnNew"/>
+    <CommandBinding Command="Open" Executed="OnOpen"/>
+    <CommandBinding Command="Save" Executed="OnSave"/>
+    <CommandBinding Command="SaveAs" Executed="OnSaveAs"/>
     <!-- SCFF.GUI.Commands -->
     <!-- Event -->
     <CommandBinding Command="{x:Static local:Commands.CurrentLayoutElementVisualChanged}"
-                    Executed="CurrentLayoutElementVisualChanged_Executed" />
+                    Executed="OnCurrentLayoutElementVisualChanged" />
     <CommandBinding Command="{x:Static local:Commands.ProfileVisualChanged}"
-                    Executed="ProfileVisualChanged_Executed" />
+                    Executed="OnProfileVisualChanged" />
     <CommandBinding Command="{x:Static local:Commands.ProfileStructureChanged}"
-                    Executed="ProfileStructureChanged_Executed" />
+                    Executed="OnProfileStructureChanged" />
     <CommandBinding Command="{x:Static local:Commands.LayoutParameterChanged}"
-                    Executed="LayoutParameterChanged_Executed" />
+                    Executed="OnLayoutParameterChanged" />
     <CommandBinding Command="{x:Static local:Commands.TargetWindowChanged}"
-                    Executed="TargetWindowChanged_Executed" />
+                    Executed="OnTargetWindowChanged" />
     <CommandBinding Command="{x:Static local:Commands.AreaChanged}"
-                    Executed="AreaChanged_Executed" />
+                    Executed="OnAreaChanged" />
     <CommandBinding Command="{x:Static local:Commands.SampleSizeChanged}"
-                    Executed="SampleSizeChanged_Executed" />
+                    Executed="OnSampleSizeChanged" />
     <!-- Feature -->
     <CommandBinding Command="{x:Static local:Commands.SetAero}"
-                    Executed="SetAero_Executed"/>
+                    Executed="OnSetAero"/>
     <CommandBinding Command="{x:Static local:Commands.SetCompactView}"
-                    Executed="SetCompactView_Executed"/>
+                    Executed="OnSetCompactView"/>
   </Window.CommandBindings>
   <shell:WindowChrome.WindowChrome>
     <shell:WindowChrome CaptionHeight="{x:Static SystemParameters.CaptionHeight}"

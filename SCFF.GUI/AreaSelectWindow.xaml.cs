@@ -62,7 +62,7 @@ public partial class AreaSelectWindow : Window {
   //-------------------------------------------------------------------
 
   /// Save
-  private void Save_Executed(object sender, ExecutedRoutedEventArgs e) {
+  private void OnSave(object sender, ExecutedRoutedEventArgs e) {
     this.DialogResult = true;
     this.Close();
   } 
@@ -72,7 +72,7 @@ public partial class AreaSelectWindow : Window {
   //-------------------------------------------------------------------
 
   /// CloseWindow
-  private void CloseWindow_Executed(object sender, ExecutedRoutedEventArgs e) {
+  private void OnCloseWindow(object sender, ExecutedRoutedEventArgs e) {
     this.DialogResult = false;
     this.Close();
   }

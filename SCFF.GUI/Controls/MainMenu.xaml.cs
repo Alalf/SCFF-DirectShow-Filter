@@ -48,11 +48,9 @@ public partial class MainMenu : UserControl, IBindingOptions {
   /// @param sender 使用しない
   /// @param e 使用しない
   private void ForceAeroOn_Click(object sender, RoutedEventArgs e) {
-    App.Options.ForceAeroOn = this.ForceAeroOn.IsChecked;
-
     //-----------------------------------------------------------------
     // Run
-    Commands.SetAero.Execute(null, null);
+    Commands.SetAero.Execute(this.ForceAeroOn.IsChecked, null);
     //-----------------------------------------------------------------
   }
 
@@ -60,11 +58,9 @@ public partial class MainMenu : UserControl, IBindingOptions {
   /// @param sender 使用しない
   /// @param e 使用しない
   private void CompactView_Click(object sender, RoutedEventArgs e) {
-    App.Options.CompactView = this.CompactView.IsChecked;
-
     //-----------------------------------------------------------------
     // Run
-    Commands.SetCompactView.Execute(null, null);
+    Commands.SetCompactView.Execute(this.CompactView.IsChecked, null);
     //-----------------------------------------------------------------
   }
 

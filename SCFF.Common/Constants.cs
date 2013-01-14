@@ -37,21 +37,60 @@ public static class Constants {
   // MainWindow
   //-------------------------------------------------------------------
 
-  /// メインウィンドウの初期位置(x)
-  public const double MainWindowLeft = 32.0;
-  /// メインウィンドウの初期位置(y)            
-  public const double MainWindowTop = 32.0;
-  /// メインウィンドウの初期幅
-  public const double MainWindowWidth = 730.0;
-  /// メインウィンドウの初期高さ
-  public const double MainWindowHeight = 545.0;
-  /// コンパクト表示時の幅
-  public const double CompactMainWindowWidth = 280.0;
-  /// コンパクト表示時の高さ
-  public const double CompactMainWindowHeight = 280.0;
-  /// レイアウト編集画面表示時の最小幅
-  public const double MainWindowMinWidthWithLayoutEdit = 650.0;
+  /// ウィンドウの初期位置(x)
+  public const double DefaultLeft = 32.0;
+  /// ウィンドウの初期位置(y)            
+  public const double DefaultTop = 32.0;
 
+  //-------------------------------------------------------------------
+  // MainWindow.Width/Height
+  //-------------------------------------------------------------------
+
+  // 1. Normal        : !LayoutIsExpanded && !CompactView
+  // 2. NormalLayout  : LayoutIsExpanded && !CompactView
+  // 3. Compact       : !LayoutIsExpanded && CompactView
+  // 4. CompactLayout : LayoutIsExpanded && CompactView
+
+  /// Normal/Compact: ウィンドウの最小幅
+  public const double NoLayoutMinWidth = 280.0;
+  /// NormalLayout/CompactLayout: ウィンドウの最小幅
+  public const double LayoutMinWidth = 650.0;
+
+  /// Normal/Compact: ウィンドウの最大幅
+  public const double NoLayoutMaxWidth = Constants.NoLayoutMinWidth;
+  /// NormalLayout/CompactLayout: ウィンドウの最大幅
+  public const double LayoutMaxWidth = double.PositiveInfinity;
+
+  /// ウィンドウの最小高さ
+  public const double MinHeight = 280.0;
+
+  /// Normal: ウィンドウの最大高さ
+  public const double NormalMaxHeight = 545.0;
+  /// Compact: ウィンドウの最大高さ
+  public const double CompactMaxHeight = 280.0;
+  /// NormalLayout/CompactLayout: ウィンドウの最大高さ
+  public const double LayoutMaxHeight = double.PositiveInfinity;
+
+  /// Normal: ウィンドウの初期幅
+  public const double NormalDefaultWidth = Constants.NoLayoutMinWidth;
+  /// Normal: ウィンドウの初期高さ
+  public const double NormalDefaultHeight = 545.0;
+
+  /// NormalLayout: ウィンドウの初期幅
+  public const double NormalLayoutDefaultWidth = 730.0;
+  /// NormalLayout: ウィンドウの初期高さ
+  public const double NormalLayoutDefaultHeight = 545.0;
+
+  // Compact: ウィンドウの初期幅
+  public const double CompactDefaultWidth = Constants.NoLayoutMinWidth;
+  // Compact: ウィンドウの初期高さ
+  public const double CompactDefaultHeight = Constants.MinHeight;
+
+  // CompactLayout: ウィンドウの初期幅
+  public const double CompactLayoutDefaultWidth = 730.0;
+  // CompactLayout: ウィンドウの初期高さ
+  public const double CompactLayoutDefaultHeight = 545.0;
+  
   //-------------------------------------------------------------------
   // Preview
   //-------------------------------------------------------------------

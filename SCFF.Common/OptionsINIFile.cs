@@ -55,12 +55,19 @@ public static class OptionsINIFile {
         }
         writer.WriteLine("FFmpegPath={0}", options.FFmpegPath);
         writer.WriteLine("FFmpegArguments={0}", options.FFmpegArguments);
-        writer.WriteLine("TmpMainWindowLeft={0}", options.TmpMainWindowLeft);
-        writer.WriteLine("TmpMainWindowTop={0}", options.TmpMainWindowTop);
-        writer.WriteLine("TmpMainWindowWidth={0}", options.TmpMainWindowWidth);
-        writer.WriteLine("TmpMainWindowHeight={0}",
-                         options.TmpMainWindowHeight);
-        writer.WriteLine("TmpMainWindowState={0}", options.TmpMainWindowState);
+        writer.WriteLine("TmpLeft={0}", options.TmpLeft);
+        writer.WriteLine("TmpTop={0}", options.TmpTop);
+
+        writer.WriteLine("TmpNormalWidth={0}", options.TmpNormalWidth);
+        writer.WriteLine("TmpNormalHeight={0}", options.TmpNormalHeight);
+        writer.WriteLine("TmpNormalLayoutWidth={0}", options.TmpNormalLayoutWidth);
+        writer.WriteLine("TmpNormalLayoutHeight={0}", options.TmpNormalLayoutHeight);
+        writer.WriteLine("TmpCompactWidth={0}", options.TmpCompactWidth);
+        writer.WriteLine("TmpCompactHeight={0}", options.TmpCompactHeight);
+        writer.WriteLine("TmpCompactLayoutWidth={0}", options.TmpCompactLayoutWidth);
+        writer.WriteLine("TmpCompactLayoutHeight={0}", options.TmpCompactLayoutHeight);
+
+        writer.WriteLine("TmpWindowState={0}", options.TmpWindowState);
         writer.WriteLine("AreaIsExpanded={0}", options.AreaIsExpanded);
         writer.WriteLine("OptionsIsExpanded={0}", options.OptionsIsExpanded);
         writer.WriteLine("ResizeMethodIsExpanded={0}",
@@ -153,34 +160,72 @@ public static class OptionsINIFile {
     if (labelToRawData.TryGetValue("FFmpegArguments", out rawData)) {
       options.FFmpegArguments = rawData;
     }
-    if (labelToRawData.TryGetValue("TmpMainWindowLeft", out rawData)) {
+    if (labelToRawData.TryGetValue("TmpLeft", out rawData)) {
       double parsedData;
       if (double.TryParse(rawData, out parsedData)) {
-        options.TmpMainWindowLeft = parsedData;
+        options.TmpLeft = parsedData;
       }
     }
-    if (labelToRawData.TryGetValue("TmpMainWindowTop", out rawData)) {
+    if (labelToRawData.TryGetValue("TmpTop", out rawData)) {
       double parsedData;
       if (double.TryParse(rawData, out parsedData)) {
-        options.TmpMainWindowTop = parsedData;
+        options.TmpTop = parsedData;
       }
     }
-    if (labelToRawData.TryGetValue("TmpMainWindowWidth", out rawData)) {
+
+    if (labelToRawData.TryGetValue("TmpNormalWidth", out rawData)) {
       double parsedData;
       if (double.TryParse(rawData, out parsedData)) {
-        options.TmpMainWindowWidth = parsedData;
+        options.TmpNormalWidth = parsedData;
       }
     }
-    if (labelToRawData.TryGetValue("TmpMainWindowHeight", out rawData)) {
+    if (labelToRawData.TryGetValue("TmpNormalHeight", out rawData)) {
       double parsedData;
       if (double.TryParse(rawData, out parsedData)) {
-        options.TmpMainWindowHeight = parsedData;
+        options.TmpNormalHeight = parsedData;
       }
     }
-    if (labelToRawData.TryGetValue("TmpMainWindowState", out rawData)) {
+    if (labelToRawData.TryGetValue("TmpNormalLayoutWidth", out rawData)) {
+      double parsedData;
+      if (double.TryParse(rawData, out parsedData)) {
+        options.TmpNormalLayoutWidth = parsedData;
+      }
+    }
+    if (labelToRawData.TryGetValue("TmpNormalLayoutHeight", out rawData)) {
+      double parsedData;
+      if (double.TryParse(rawData, out parsedData)) {
+        options.TmpNormalLayoutHeight = parsedData;
+      }
+    }
+    if (labelToRawData.TryGetValue("TmpCompactWidth", out rawData)) {
+      double parsedData;
+      if (double.TryParse(rawData, out parsedData)) {
+        options.TmpCompactWidth = parsedData;
+      }
+    }
+    if (labelToRawData.TryGetValue("TmpCompactHeight", out rawData)) {
+      double parsedData;
+      if (double.TryParse(rawData, out parsedData)) {
+        options.TmpCompactHeight = parsedData;
+      }
+    }
+    if (labelToRawData.TryGetValue("TmpCompactLayoutWidth", out rawData)) {
+      double parsedData;
+      if (double.TryParse(rawData, out parsedData)) {
+        options.TmpCompactLayoutWidth = parsedData;
+      }
+    }
+    if (labelToRawData.TryGetValue("TmpCompactLayoutHeight", out rawData)) {
+      double parsedData;
+      if (double.TryParse(rawData, out parsedData)) {
+        options.TmpCompactLayoutHeight = parsedData;
+      }
+    }
+
+    if (labelToRawData.TryGetValue("TmpWindowState", out rawData)) {
       WindowState parsedData;
       if (Enum.TryParse<WindowState>(rawData, out parsedData)) {
-        options.TmpMainWindowState = parsedData;
+        options.TmpWindowState = parsedData;
       }
     }
     if (labelToRawData.TryGetValue("AreaIsExpanded", out rawData)) {

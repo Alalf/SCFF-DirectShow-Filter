@@ -40,13 +40,9 @@ public partial class MainWindow
   public MainWindow() {
     this.InitializeComponent();
 
-    this.OnOptionsChanged();
-    this.OnRuntimeOptionsChanged();
-    this.OnProfileChanged();
-
-    // 必要な機能の実行
-    this.SetAero();
-    this.SetCompactView(false);
+    this.NotifyOptionsChanged();
+    this.NotifyRuntimeOptionsChanged();
+    this.NotifyProfileChanged();
   }
 
   //===================================================================
@@ -125,12 +121,13 @@ public partial class MainWindow
   /// LayoutExpander: Collapsed
   private void LayoutExpander_Collapsed(object sender, RoutedEventArgs e) {
     if (!this.CanChangeOptions) return;
-    App.Options.LayoutIsExpanded = false;
 
     //-----------------------------------------------------------------
     // Notify self
-    this.FixMinMaxWidth();
-    this.FixWidthAndHeight();
+    this.UpdateTmpSize();
+    App.Options.LayoutIsExpanded = false;
+    this.FixMinMaxSize();
+    this.FixSize();
     // Notify other controls
     Commands.ProfileVisualChanged.Execute(null, null);
     //-----------------------------------------------------------------
@@ -138,12 +135,13 @@ public partial class MainWindow
   /// LayoutExpander: Expanded
   private void LayoutExpander_Expanded(object sender, RoutedEventArgs e) {
     if (!this.CanChangeOptions) return;
-    App.Options.LayoutIsExpanded = true;
 
     //-----------------------------------------------------------------
     // Notify self
-    this.FixMinMaxWidth();
-    this.FixWidthAndHeight();
+    this.UpdateTmpSize();
+    App.Options.LayoutIsExpanded = true;
+    this.FixMinMaxSize();
+    this.FixSize();
     // Notify other controls
     Commands.ProfileVisualChanged.Execute(null, null);
     //-----------------------------------------------------------------
@@ -169,45 +167,89 @@ public partial class MainWindow
     return true;
   }
 
-  /// コンパクト表示切替
-  private void SetCompactView(bool fixValues) {
-    if (fixValues) {
-      this.FixMinMaxWidth();
-      this.FixWidthAndHeight();
-    }
+  // 1. Normal        : !LayoutIsExpanded && !CompactView
+  // 2. NormalLayout  : LayoutIsExpanded && !CompactView
+  // 3. Compact       : !LayoutIsExpanded && CompactView
+  // 4. CompactLayout : LayoutIsExpanded && CompactView
+
+  /// Expanderの表示を調整
+  private void FixExpanders() {
     if (App.Options.CompactView) {
       this.OptionsExpander.Visibility = Visibility.Collapsed;
       this.ResizeMethodExpander.Visibility = Visibility.Collapsed;
-      this.LayoutExpander.IsExpanded = false;
     } else {
       this.OptionsExpander.Visibility = Visibility.Visible;
       this.ResizeMethodExpander.Visibility = Visibility.Visible;
     }
   }
 
-  /// Width/Heightの設定
-  private void FixWidthAndHeight() {
-    if (App.Options.CompactView) {
-      this.Width = Constants.CompactMainWindowWidth;
-      this.Height = Constants.CompactMainWindowHeight;
+  /// Tmp*の更新
+  private void UpdateTmpSize() {
+    var isNormal = this.WindowState == System.Windows.WindowState.Normal;
+    if (!App.Options.LayoutIsExpanded && !App.Options.CompactView) {
+      App.Options.TmpNormalWidth = isNormal ? this.Width : this.RestoreBounds.Width;
+      App.Options.TmpNormalHeight = isNormal ? this.Height : this.RestoreBounds.Height;
+    } else if (App.Options.LayoutIsExpanded && !App.Options.CompactView) {
+      App.Options.TmpNormalLayoutWidth = isNormal ? this.Width : this.RestoreBounds.Width;
+      App.Options.TmpNormalLayoutHeight = isNormal ? this.Height : this.RestoreBounds.Height;
+    } else if (!App.Options.LayoutIsExpanded && App.Options.CompactView) {
+      App.Options.TmpCompactWidth = isNormal ? this.Width : this.RestoreBounds.Width;
+      App.Options.TmpCompactHeight = isNormal ? this.Height : this.RestoreBounds.Height;
     } else {
-      this.Width = App.Options.TmpMainWindowWidth;
-      this.Height = App.Options.TmpMainWindowHeight;
+      App.Options.TmpCompactLayoutWidth = isNormal ? this.Width : this.RestoreBounds.Width;
+      App.Options.TmpCompactLayoutHeight = isNormal ? this.Height : this.RestoreBounds.Height;
+    }
+  }
+
+  /// Width/Heightの設定
+  private void FixSize() {
+    if (!App.Options.LayoutIsExpanded && !App.Options.CompactView) {
+      this.Width = App.Options.TmpNormalWidth;
+      this.Height = App.Options.TmpNormalHeight;
+    } else if (App.Options.LayoutIsExpanded && !App.Options.CompactView) {
+      this.Width = App.Options.TmpNormalLayoutWidth;
+      this.Height = App.Options.TmpNormalLayoutHeight;
+    } else if (!App.Options.LayoutIsExpanded && App.Options.CompactView) {
+      this.Width = App.Options.TmpCompactWidth;
+      this.Height = App.Options.TmpCompactHeight;
+    } else {
+      this.Width = App.Options.TmpCompactLayoutWidth;
+      this.Height = App.Options.TmpCompactLayoutHeight;
     }
   }
 
   /// Max/MinWidthの設定
-  private void FixMinMaxWidth() {
-    if (App.Options.LayoutIsExpanded) {
-      this.MinWidth = Constants.MainWindowMinWidthWithLayoutEdit;
-      this.MaxWidth = double.PositiveInfinity;
+  private void FixMinMaxSize() {
+    this.MinHeight = Constants.MinHeight;
+    if (!App.Options.LayoutIsExpanded && !App.Options.CompactView) {
+      this.MinWidth = Constants.NoLayoutMinWidth;
+      this.MaxWidth = Constants.NoLayoutMaxWidth;
+      this.MaxHeight = Constants.NormalMaxHeight;
+    } else if (App.Options.LayoutIsExpanded && !App.Options.CompactView) {
+      this.MinWidth = Constants.LayoutMinWidth;
+      this.MaxWidth = Constants.LayoutMaxWidth;;
+      this.MaxHeight = Constants.LayoutMaxHeight;
+    } else if (!App.Options.LayoutIsExpanded && App.Options.CompactView) {
+      this.MinWidth = Constants.NoLayoutMinWidth;
+      this.MaxWidth = Constants.NoLayoutMaxWidth;
+      this.MaxHeight = Constants.CompactMaxHeight;
     } else {
-      this.MinWidth = Constants.CompactMainWindowWidth;
-      this.MaxWidth = Constants.CompactMainWindowWidth;
+      this.MinWidth = Constants.LayoutMinWidth;
+      this.MaxWidth = Constants.LayoutMaxWidth;;
+      this.MaxHeight = Constants.LayoutMaxHeight;
     }
   }
 
   //-------------------------------------------------------------------
+
+  /// thisを含むすべての子コントロールにOptionsChangedイベント発生を伝える
+  public void NotifyOptionsChanged() {
+    this.OnOptionsChanged();
+    this.Apply.OnOptionsChanged();
+    this.LayoutToolbar.OnOptionsChanged();
+    this.LayoutEdit.OnOptionsChanged();
+    this.MainMenu.OnOptionsChanged();
+  }
 
   /// @copydoc Common::GUI::IBindingOptions::CanChangeOptions
   public bool CanChangeOptions { get; private set; }
@@ -216,24 +258,21 @@ public partial class MainWindow
     this.CanChangeOptions = false;
 
     // Temporary
-    this.Left         = App.Options.TmpMainWindowLeft;
-    this.Top          = App.Options.TmpMainWindowTop;
-    this.FixMinMaxWidth();
-    this.WindowState  = (System.Windows.WindowState)App.Options.TmpMainWindowState;
-    
+    this.Left         = App.Options.TmpLeft;
+    this.Top          = App.Options.TmpTop;
+    this.WindowState  = (System.Windows.WindowState)App.Options.TmpWindowState;
+
     // MainWindow.Controls
     this.AreaExpander.IsExpanded          = App.Options.AreaIsExpanded;
     this.OptionsExpander.IsExpanded       = App.Options.OptionsIsExpanded;
     this.ResizeMethodExpander.IsExpanded  = App.Options.ResizeMethodIsExpanded;
     this.LayoutExpander.IsExpanded        = App.Options.LayoutIsExpanded;
 
-    this.FixWidthAndHeight();
+    this.FixMinMaxSize();
+    this.FixSize();
+    this.FixExpanders();
 
-    // UserControls
-    this.Apply.OnOptionsChanged();
-    this.LayoutToolbar.OnOptionsChanged();
-    this.LayoutEdit.OnOptionsChanged();
-    this.MainMenu.OnOptionsChanged();
+    this.SetAero();
 
     this.CanChangeOptions = true;
   }
@@ -242,21 +281,23 @@ public partial class MainWindow
   private void SaveTemporaryOptions() {
     // Tmp接頭辞のプロパティだけはここで更新する必要がある
     var isNormal = this.WindowState == System.Windows.WindowState.Normal;
-    App.Options.TmpMainWindowLeft = isNormal ? this.Left : this.RestoreBounds.Left;
-    App.Options.TmpMainWindowTop = isNormal ? this.Top : this.RestoreBounds.Top;
-    if (App.Options.CompactView) {
-      // nop
-    } else {
-      App.Options.TmpMainWindowWidth = isNormal ? this.Width : this.RestoreBounds.Width;
-      App.Options.TmpMainWindowHeight = isNormal ? this.Height : this.RestoreBounds.Height;
-    }
-    Debug.WriteLine("Options WindowSize: {0}x{1}", App.Options.TmpMainWindowWidth, App.Options.TmpMainWindowHeight);
-    App.Options.TmpMainWindowState = (SCFF.Common.WindowState)this.WindowState;
+    App.Options.TmpLeft = isNormal ? this.Left : this.RestoreBounds.Left;
+    App.Options.TmpTop = isNormal ? this.Top : this.RestoreBounds.Top;
+    this.UpdateTmpSize();
+    App.Options.TmpWindowState = (SCFF.Common.WindowState)this.WindowState;
   }
 
   //===================================================================
   // IBindingRuntimeOptionsの実装
   //===================================================================
+
+  /// thisを含むすべての子コントロールにRuntimeOptionsChangedイベント発生を伝える
+  public void NotifyRuntimeOptionsChanged() {
+    this.OnRuntimeOptionsChanged();
+    this.LayoutEdit.OnRuntimeOptionsChanged();
+    this.LayoutParameter.OnRuntimeOptionsChanged();
+    this.SCFFEntries.OnRuntimeOptionsChanged();
+  }
 
   /// @copydoc Common::GUI::IBindingRuntimeOptions::CanChangeRuntimeOptions
   public bool CanChangeRuntimeOptions { get; private set; }
@@ -272,10 +313,6 @@ public partial class MainWindow
     } else {
       this.WindowTitle.Content = commonTitle;
     }
-
-    this.LayoutEdit.OnRuntimeOptionsChanged();
-    this.LayoutParameter.OnRuntimeOptionsChanged();
-    this.SCFFEntries.OnRuntimeOptionsChanged();
     this.CanChangeRuntimeOptions = true;
   }
 
@@ -283,12 +320,9 @@ public partial class MainWindow
   // IBindingProfileの実装
   //===================================================================
 
-  /// @copydoc Common::GUI::IBindingProfile::CanChangeProfile
-  public bool CanChangeProfile { get; private set; }
-
-  /// @copydoc Common::GUI::IBindingProfile::OnCurrentLayoutElementChanged
-  public void OnCurrentLayoutElementChanged() {
-    this.CanChangeProfile = false;
+  /// thisを含むすべての子コントロールにCurrentLayoutElementChangedイベント発生を伝える
+  public void NotifyCurrentLayoutElementChanged() {
+    this.OnCurrentLayoutElementChanged();
     this.TargetWindow.OnCurrentLayoutElementChanged();
     this.Area.OnCurrentLayoutElementChanged();
     this.Options.OnCurrentLayoutElementChanged();
@@ -296,12 +330,11 @@ public partial class MainWindow
     this.LayoutParameter.OnCurrentLayoutElementChanged();
     this.LayoutTab.OnCurrentLayoutElementChanged();
     this.LayoutEdit.OnCurrentLayoutElementChanged();
-    this.CanChangeProfile = true;
   }
 
-  /// @copydoc Common::GUI::IBindingProfile::OnProfileChanged
-  public void OnProfileChanged() {
-    this.CanChangeProfile = false;
+  /// thisを含むすべての子コントロールにRuntimeOptionsChangedイベント発生を伝える
+  public void NotifyProfileChanged() {
+    this.OnProfileChanged();
     this.TargetWindow.OnProfileChanged();
     this.Area.OnProfileChanged();
     this.Options.OnProfileChanged();
@@ -309,6 +342,21 @@ public partial class MainWindow
     this.LayoutParameter.OnProfileChanged();
     this.LayoutTab.OnProfileChanged();
     this.LayoutEdit.OnProfileChanged();
+  }
+
+  /// @copydoc Common::GUI::IBindingProfile::CanChangeProfile
+  public bool CanChangeProfile { get; private set; }
+
+  /// @copydoc Common::GUI::IBindingProfile::OnCurrentLayoutElementChanged
+  public void OnCurrentLayoutElementChanged() {
+    // Currentのみの更新には対応していない
+    this.OnProfileChanged();
+  }
+
+  /// @copydoc Common::GUI::IBindingProfile::OnProfileChanged
+  public void OnProfileChanged() {
+    this.CanChangeProfile = false;
+    // nop
     this.CanChangeProfile = true;
   }
 
@@ -332,7 +380,7 @@ public partial class MainWindow
     switch (result) {
       case MessageBoxResult.No: {
         App.Profile.RestoreDefault();
-        this.OnProfileChanged();
+        this.NotifyProfileChanged();
         break;
       }
       case MessageBoxResult.Yes: {
@@ -347,7 +395,7 @@ public partial class MainWindow
           this.MainMenu.OnOptionsChanged();
 
           App.Profile.RestoreDefault();
-          this.OnProfileChanged();
+          this.NotifyProfileChanged();
         }
         break;
       }
@@ -437,7 +485,7 @@ public partial class MainWindow
   /// @param e 使用しない
   private void OnProfileStructureChanged(object sender, ExecutedRoutedEventArgs e) {
     // tabの選択を変えないといけないのでEntireじゃなければいけない
-    this.OnProfileChanged();
+    this.NotifyProfileChanged();
   }
   /// @copydoc Commands::LayoutParameterChanged
   /// @param sender 使用しない
@@ -477,6 +525,7 @@ public partial class MainWindow
   private void OnSetAero(object sender, ExecutedRoutedEventArgs e) {
     if (!CanUseAero()) return;
 
+    App.Options.ForceAeroOn = (bool)e.Parameter;
     Debug.WriteLine("Execute", "[Command] SetAero");
     this.SetAero();
   }
@@ -486,7 +535,13 @@ public partial class MainWindow
   /// @param e 使用しない
   private void OnSetCompactView(object sender, ExecutedRoutedEventArgs e) {
     Debug.WriteLine("Execute", "[Command] SetCompactView");
-    this.SetCompactView(true);
+
+    // App.Options.CompactViewの変更前にウィンドウの幅と高さを保存しておく
+    this.UpdateTmpSize();
+    App.Options.CompactView = (bool)e.Parameter;
+    this.FixMinMaxSize();
+    this.FixSize();
+    this.FixExpanders();
   }
 }
 }   // namespace SCFF.GUI

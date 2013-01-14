@@ -40,11 +40,19 @@ public class Options {
     };
     this.FFmpegPath = string.Empty;
     this.FFmpegArguments = string.Empty;
-    this.TmpMainWindowLeft = Constants.MainWindowLeft;
-    this.TmpMainWindowTop = Constants.MainWindowTop;
-    this.TmpMainWindowWidth = Constants.MainWindowWidth;
-    this.TmpMainWindowHeight = Constants.MainWindowHeight;
-    this.TmpMainWindowState = WindowState.Normal;
+    this.TmpLeft = Constants.DefaultLeft;
+    this.TmpTop = Constants.DefaultTop;
+    
+    this.TmpNormalWidth = Constants.NormalDefaultWidth;
+    this.TmpNormalHeight = Constants.NormalDefaultHeight;
+    this.TmpNormalLayoutWidth = Constants.NormalLayoutDefaultWidth;
+    this.TmpNormalLayoutHeight = Constants.NormalLayoutDefaultHeight;
+    this.TmpCompactWidth = Constants.CompactDefaultWidth;
+    this.TmpCompactHeight = Constants.CompactDefaultHeight;
+    this.TmpCompactLayoutWidth = Constants.CompactLayoutDefaultWidth;
+    this.TmpCompactLayoutHeight = Constants.CompactLayoutDefaultHeight;
+
+    this.TmpWindowState = WindowState.Normal;
     this.AreaIsExpanded = true;
     this.OptionsIsExpanded = true;
     this.ResizeMethodIsExpanded = true;
@@ -67,16 +75,35 @@ public class Options {
   /// FFmpeg.exeに渡す引数
   public string FFmpegArguments { get; set; }
 
-  /// MainWindowの左上端のX座標
-  public double TmpMainWindowLeft { get; set; }
-  /// MainWindowの左上端のY座標
-  public double TmpMainWindowTop { get; set; }
-  /// MainWindowの幅
-  public double TmpMainWindowWidth { get; set; }
-  /// MainWindowの高さ
-  public double TmpMainWindowHeight { get; set; }
-  /// MainWindowのWindow状態
-  public WindowState TmpMainWindowState { get; set; }
+  /// ウィンドウ左上端のX座標
+  public double TmpLeft { get; set; }
+  /// ウィンドウ左上端のY座標
+  public double TmpTop { get; set; }
+
+  // 1. Normal        : !LayoutIsExpanded && !CompactView
+  // 2. NormalLayout  : LayoutIsExpanded && !CompactView
+  // 3. Compact       : !LayoutIsExpanded && CompactView
+  // 4. CompactLayout : LayoutIsExpanded && CompactView
+
+  /// Normal: ウィンドウの幅
+  public double TmpNormalWidth { get; set; }
+  /// Normal: ウィンドウの高さ
+  public double TmpNormalHeight { get; set; }
+  /// NormalLayout: ウィンドウの幅
+  public double TmpNormalLayoutWidth { get; set; }
+  /// NormalLayout: ウィンドウの高さ
+  public double TmpNormalLayoutHeight { get; set; }
+  /// Compact: ウィンドウの幅
+  public double TmpCompactWidth { get; set; }
+  /// Compact: ウィンドウの高さ
+  public double TmpCompactHeight { get; set; }
+  /// CompactLayout: ウィンドウの幅
+  public double TmpCompactLayoutWidth { get; set; }
+  /// CompactLayout: ウィンドウの高さ
+  public double TmpCompactLayoutHeight { get; set; }
+  
+  /// ウィンドウ状態
+  public WindowState TmpWindowState { get; set; }
 
   /// AreaExpanderが開いている
   public bool AreaIsExpanded { get; set; }

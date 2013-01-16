@@ -315,7 +315,7 @@ public partial class Area : UserControl, IBindingProfile {
       this.CanChangeProfile = false;
       if (clippingX != fixedX) {
         this.ClippingX.Text = App.Profile.CurrentView.ClippingXString;
-        this.ClippingX.SelectAll();
+        this.ClippingX.Select(this.ClippingX.Text.Length, 0);
       }
       this.ClippingWidth.Text = App.Profile.CurrentView.ClippingWidthString;
       this.CanChangeProfile = true;
@@ -392,7 +392,7 @@ public partial class Area : UserControl, IBindingProfile {
       this.ClippingX.Text = App.Profile.CurrentView.ClippingXString;
       if (clippingWidth != fixedWidth) {
         this.ClippingWidth.Text = App.Profile.CurrentView.ClippingWidthString;
-        this.ClippingWidth.SelectAll();
+        this.ClippingWidth.Select(this.ClippingWidth.Text.Length, 0);
       }
       this.CanChangeProfile = true;
       // Notify other controls

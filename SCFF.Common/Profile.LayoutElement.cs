@@ -592,13 +592,8 @@ public partial class Profile {
         fixedWidth = windowRect.Width;
         return true;
       }
-
-      // Widthは0以上
-      if (fixedWidth < 0) {
-        fixedWidth = 0;
-        result = false;
-      }
  
+      // 上限・下限の補正
       if (fixedX < windowRect.X) {
         // Xが左にはみでている場合、Widthは保持＆Xを右にずらす
         fixedX = windowRect.X;
@@ -610,8 +605,14 @@ public partial class Profile {
         result = false;
       }
       
-      // 領域が右にはみでている場合、Xは保持＆Widthを縮める
+      // Widthの補正
+      if (fixedWidth < 0) {
+        // Widthは0以上
+        fixedWidth = 0;
+        result = false;
+      }
       if (windowRect.Right < fixedX + fixedWidth) {
+        // 領域が右にはみでている場合、Xは保持＆Widthを縮める
         fixedWidth = windowRect.Right - fixedX;
         result = false;
       }
@@ -636,6 +637,7 @@ public partial class Profile {
         return true;
       }
 
+      // 上限・下限の補正
       if (fixedWidth < 0) {
         // Widthは0以上
         fixedWidth = 0;
@@ -647,6 +649,7 @@ public partial class Profile {
         result = false;
       }
  
+      // Xの補正
       if (fixedX < windowRect.X) {
         // Xが左にはみでている場合、Widthは保持＆Xを右にずらす
         fixedX = windowRect.X;
@@ -657,9 +660,8 @@ public partial class Profile {
         fixedWidth = 0;
         result = false;
       }
-
-      // 領域が右にはみでている場合、Widthは保持＆Xを左にずらす
       if (windowRect.Right < fixedX + fixedWidth) {
+        // 領域が右にはみでている場合、Widthは保持＆Xを左にずらす
         fixedX = windowRect.Right - fixedWidth;
         result = false;
       }

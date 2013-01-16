@@ -568,6 +568,106 @@ public partial class Profile {
     }
 
     //=================================================================
+    // Validate
+    //=================================================================
+
+    /// @copydoc ILayoutElementView::ValidateClippingX
+    public bool ValidateClippingX(int value, out int fixedX, out int fixedWidth) {
+      var result = true;
+      fixedX = value;
+      fixedWidth = this.ClippingWidthWithoutFit;
+
+      // Windowは必須
+      if (!this.IsWindowValid) return false;
+      var windowRect = Utilities.GetWindowRect(this.WindowType, this.Window);
+
+      // FitならValidateは常にtrue
+      if (this.Fit) {
+        fixedX = windowRect.X;
+        fixedWidth = windowRect.Width;
+        return true;
+      }
+ 
+      // 領域が左にはみでている場合、Widthは保持＆Xを右にずらす
+      if (fixedX < windowRect.X) {
+        fixedX = windowRect.X;
+        result = false;
+      }
+
+      // Widthは0以上
+      Debug.Assert(fixedWidth >= 0);
+      
+      if (windowRect.Right < fixedX) {
+        // Widthによらず領域が右にオーバーしている場合、Xを左にずらす＆Widthを0に
+        fixedX = windowRect.Right;
+        fixedWidth = 0;
+        result = false;
+      } else if (windowRect.Right < fixedX + fixedWidth) {
+        // 領域が右にオーバーしている場合、Xは保持＆Widthを縮める
+        fixedWidth = windowRect.Right - fixedX;
+        result = false;
+      }
+  
+      // 出力
+      Debug.Assert(windowRect.X <= fixedX && fixedX + fixedWidth <= windowRect.Right);
+      return result;
+    }
+
+    /// @copydoc ILayoutElementView::ValidateClippingY
+    public bool ValidateClippingY(int value, out int fixedY, out int fixedHeight) {
+      throw new NotImplementedException();
+    }
+    /// @copydoc ILayoutElementView::ValidateClippingWidth
+    public bool ValidateClippingWidth(int value, out int fixedWidth, out int fixedX) {
+      throw new NotImplementedException();
+    }
+    /// @copydoc ILayoutElementView::ValidateClippingHeight
+    public bool ValidateClippingHeight(int value, out int fixedHeight, out int fixedY) {
+      throw new NotImplementedException();
+    }
+    /// @copydoc ILayoutElementView::ValidateBoundRelativeLeft
+    public bool ValidateBoundRelativeLeft(double value, out double fixedLeft, out double fixedRight) {
+      throw new NotImplementedException();
+    }
+    /// @copydoc ILayoutElementView::ValidateBoundRelativeTop
+    public bool ValidateBoundRelativeTop(double value, out double fixedTop, out double fixedBottom) {
+      throw new NotImplementedException();
+    }
+    /// @copydoc ILayoutElementView::ValidateBoundRelativeRight
+    public bool ValidateBoundRelativeRight(double value, out double fixedRight, out double fixedLeft) {
+      throw new NotImplementedException();
+    }
+    /// @copydoc ILayoutElementView::ValidateBoundRelativeBottom
+    public bool ValidateBoundRelativeBottom(double value, out double fixedBottom, out double fixedTop) {
+      throw new NotImplementedException();
+    }
+
+    /// @copydoc ILayoutElementView::ValidateSWScaleLumaGBlur
+    public bool ValidateSWScaleLumaGBlur(double value, out double fixedValue) {
+      throw new NotImplementedException();
+    }
+    /// @copydoc ILayoutElementView::ValidateSWScaleLumaSharpen
+    public bool ValidateSWScaleLumaSharpen(double value, out double fixedValue) {
+      throw new NotImplementedException();
+    }
+    /// @copydoc ILayoutElementView::ValidateSWScaleChromaHshift
+    public bool ValidateSWScaleChromaHshift(double value, out double fixedValue) {
+      throw new NotImplementedException();
+    }
+    /// @copydoc ILayoutElementView::ValidateSWScaleChromaGBlur
+    public bool ValidateSWScaleChromaGBlur(double value, out double fixedValue) {
+      throw new NotImplementedException();
+    }
+    /// @copydoc ILayoutElementView::ValidateSWScaleChromaSharpen
+    public bool ValidateSWScaleChromaSharpen(double value, out double fixedValue) {
+      throw new NotImplementedException();
+    }
+    /// @copydoc ILayoutElementView::ValidateSWScaleChromaVshift
+    public bool ValidateSWScaleChromaVshift(double value, out double fixedValue) {
+      throw new NotImplementedException();
+    }
+    
+    //=================================================================
     // ToString
     //=================================================================
 

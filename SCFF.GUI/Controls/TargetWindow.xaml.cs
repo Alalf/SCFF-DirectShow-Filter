@@ -133,8 +133,7 @@ public partial class TargetWindow : UserControl, IBindingProfile {
   /// @param sender 使用しない
   /// @param e 使用しない
   private void DragHere_PreviewMouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e) {
-    this.originalBorderBrush = this.DragHere.BorderBrush;
-    this.DragHere.BorderBrush = Brushes.DarkOrange;
+    this.DragHere.Tag = "IsDragging";
 
     this.dragHereMode = true;
     this.currentTargetWindow = UIntPtr.Zero;
@@ -182,7 +181,7 @@ public partial class TargetWindow : UserControl, IBindingProfile {
   /// @param sender 使用しない
   /// @param e Client座標系でのマウス座標(GetPosition(...))の取得が可能
   private void DragHere_PreviewMouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e) {
-    this.DragHere.BorderBrush = this.originalBorderBrush;
+    this.DragHere.Tag = null;
 
     // 後処理
     this.dragHereMode = false;
@@ -236,7 +235,5 @@ public partial class TargetWindow : UserControl, IBindingProfile {
   private UIntPtr currentTargetWindow = UIntPtr.Zero;
   /// 現在のマウスカーソル上のWindowハンドルのDC
   private IntPtr currentTargetDC = IntPtr.Zero;
-  /// DragHere中に枠線をオレンジ色で塗りつぶしているのでその復帰用
-  private Brush originalBorderBrush;
 }
 }   // namespace SCFF.GUI.Controls

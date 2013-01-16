@@ -46,6 +46,9 @@
 
   <!-- 2012/12/20 Modified by Alalf -->
   <SolidColorBrush x:Key="DisabledTextBrush" Color="#FF222222" />
+  <!-- 2013/01/16 Modified by Alalf -->
+  <SolidColorBrush x:Key="HasErrorBrush" Color="Red" />
+  <SolidColorBrush x:Key="IsDraggingBrush" Color="DarkOrange" />
 
   <SolidColorBrush x:Key="DisabledForegroundBrush" Color="#888" />
   <SolidColorBrush x:Key="DisabledBackgroundBrush" Color="#FF787878" />
@@ -91,6 +94,7 @@
       </Setter.Value>
     </Setter>
   </Style>
+
   <Style TargetType="{x:Type Button}" BasedOn="{x:Null}">
     <Setter Property="FocusVisualStyle" Value="{DynamicResource NuclearButtonFocusVisual}" />
     <Setter Property="Background" Value="{DynamicResource NormalBrush}" />
@@ -155,6 +159,11 @@
       <Border x:Name="FocusVisualElement" IsHitTestVisible="false" BorderBrush="{StaticResource HoverShineBrush}" BorderThickness="1" CornerRadius="3,3,3,3" Margin="1,1,1,1" Opacity="0" />
     </Grid>
     <ControlTemplate.Triggers>
+      <!-- 2013/01/16 Modified by Alalf -->
+      <Trigger Property="Tag" Value="IsDragging">
+        <Setter Property="BorderBrush" Value="{StaticResource IsDraggingBrush}"/>
+      </Trigger>
+
       <Trigger Property="IsDefault" Value="True">
         <Setter Property="BorderBrush" TargetName="ShineBorder" Value="{DynamicResource DefaultedBorderBrush}" />
       </Trigger>
@@ -1549,10 +1558,14 @@
 
     </Grid>
     <ControlTemplate.Triggers>
-      <!-- 2013/01/10 Modified by Alalf -->
+      <!-- 2013/01/10 Modified by Alalf 
       <Trigger Property="Validation.HasError" Value="True">
         <Setter Property="ToolTip"
                 Value="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=(Validation.Errors).CurrentItem.ErrorContent}" />
+      </Trigger> -->
+      <!-- 2013/01/16 Modified by Alalf -->
+      <Trigger Property="Tag" Value="HasError">
+        <Setter Property="BorderBrush" Value="{StaticResource HasErrorBrush}"/>
       </Trigger>
 
       <Trigger Property="IsFocused" Value="True">

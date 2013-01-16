@@ -26,7 +26,7 @@
     <TextBox  Grid.Column="1"
               VerticalAlignment="Center" Height="20" Margin="0,0,5,0"
               x:Name="ClippingX" Text="9999"
-              TextChanged="ClippingX_TextChanged"/>
+              TextChanged="ClippingX_TextChanged" LostFocus="ClippingX_LostFocus"/>
     <!-- Y -->
     <Label    Grid.Column="2"
               VerticalAlignment="Center" Height="12" Margin="3,0"
@@ -34,7 +34,7 @@
     <TextBox  Grid.Column="3"
               VerticalAlignment="Center" Height="20" Margin="0,0,5,0"
               x:Name="ClippingY" Text="9999"
-              TextChanged="ClippingY_TextChanged"/>
+              TextChanged="ClippingY_TextChanged" LostFocus="ClippingY_LostFocus"/>
     <!-- Size -->
     <Label    Grid.Column="4"
               VerticalAlignment="Center" Height="12" Margin="3,0"
@@ -42,7 +42,7 @@
     <TextBox  Grid.Column="5"
               VerticalAlignment="Center" Height="20" Margin="0,0,5,0"
               x:Name="ClippingWidth" Text="9999"
-              TextChanged="ClippingWidth_TextChanged"/>
+              TextChanged="ClippingWidth_TextChanged" LostFocus="ClippingWidth_LostFocus"/>
     <!-- x -->
     <Label    Grid.Column="6"
               VerticalAlignment="Center" Height="12" Margin="3,0"
@@ -50,7 +50,7 @@
     <TextBox  Grid.Column="8"
               VerticalAlignment="Center" Height="20" Margin="0,0,5,0"
               x:Name="ClippingHeight" Text="9999"
-              TextChanged="ClippingHeight_TextChanged"/>
+              TextChanged="ClippingHeight_TextChanged" LostFocus="ClippingHeight_LostFocus"/>
     <!-- (2nd row) -->
     <CheckBox Grid.Row="1" Grid.ColumnSpan="2"
               VerticalAlignment="Center" Height="16" Margin="0,4"

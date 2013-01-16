@@ -103,6 +103,11 @@ public class ScreenCaptureTimer : IDisposable {
   /// @param request スクリーンキャプチャ設定をまとめたリクエスト
   /// @return スクリーンキャプチャ結果が格納されたBitmapSource
   private BitmapSource Capture(ScreenCaptureRequest request) {
+    if (request.ClippingWidth <= 0 || request.ClippingHeight <= 0) {
+      // Debug.WriteLine("Invalid clipping size", "ScreenCaptureTimer.CaptureByGetDIBits");
+      return null;
+    }
+
     // HBitmapからBitmapSourceを作成
     BitmapSource bitmap = null;
     using (var result = request.Execute()) {
@@ -135,6 +140,11 @@ public class ScreenCaptureTimer : IDisposable {
   /// @param request スクリーンキャプチャ設定をまとめたリクエスト
   /// @return スクリーンキャプチャ結果が格納されたBitmapSource
   private BitmapSource CaptureByGetDIBits(ScreenCaptureRequest request) {
+    if (request.ClippingWidth <= 0 || request.ClippingHeight <= 0) {
+      // Debug.WriteLine("Invalid clipping size", "ScreenCaptureTimer.CaptureByGetDIBits");
+      return null;
+    }
+    
     // GetDIBitsでbyte[]にデータを格納
     var result = request.ExecuteByGetDIBits();
     if (result == null) return null;
@@ -165,9 +175,10 @@ public class ScreenCaptureTimer : IDisposable {
       
       var requests = new List<ScreenCaptureRequest>(this.cache.Keys);
       foreach(var request in requests) {
-        Debug.Write("o");
-        // this.cache[request] = this.Capture(request);
-        this.cache[request] = this.CaptureByGetDIBits(request);
+        // var bitmapSource = this.Capture(request);
+        var bitmapSource = this.CaptureByGetDIBits(request);
+        Debug.WriteIf(bitmapSource != null, "o");
+        this.cache[request] = bitmapSource;
       }
       /// @todo(me) 潔癖症過ぎないか？
       // GC.Collect();
@@ -250,9 +261,10 @@ public class ScreenCaptureTimer : IDisposable {
 
       // 3.
       foreach (var request in onlyProfileRequests) {
-        Debug.Write("x");
-        // this.cache[request] = this.Capture(request);
-        this.cache[request] = this.CaptureByGetDIBits(request);
+        // var bitmapSource = this.Capture(request);
+        var bitmapSource = this.CaptureByGetDIBits(request);
+        Debug.WriteIf(bitmapSource != null, "x");
+        this.cache[request] = bitmapSource;
       }
     }
   }

@@ -450,6 +450,12 @@ public partial class Profile {
     public void FitBoundRelativeRect(int sampleWidth, int sampleHeight) {
       Debug.Assert(this.IsWindowValid, "Invalid Window", "LayoutElement.FitBoundRelativeRect");
 
+      // クリッピング領域が存在していなければそのまま戻る
+      if (this.ClippingWidthWithoutFit <= 0 || this.ClippingHeightWithoutFit <= 0) {
+        Debug.WriteLine("Invalid Clipping Size", "LayoutElement.FitBoundRelativeRect");
+        return;
+      }
+
       // サンプル座標系での領域を求める
       var boundRect = this.GetBoundRect(sampleWidth, sampleHeight);
       int x, y, width, height;
@@ -573,12 +579,11 @@ public partial class Profile {
 
     /// @copydoc ILayoutElementView::ValidateClippingX
     public bool ValidateClippingX(int value, out int fixedX, out int fixedWidth) {
+      Debug.Assert(this.IsWindowValid);
+
       var result = true;
       fixedX = value;
       fixedWidth = this.ClippingWidthWithoutFit;
-
-      // Windowは必須
-      if (!this.IsWindowValid) return false;
       var windowRect = Utilities.GetWindowRect(this.WindowType, this.Window);
 
       // FitならValidateは常にtrue
@@ -587,24 +592,75 @@ public partial class Profile {
         fixedWidth = windowRect.Width;
         return true;
       }
- 
-      // 領域が左にはみでている場合、Widthは保持＆Xを右にずらす
-      if (fixedX < windowRect.X) {
-        fixedX = windowRect.X;
-        result = false;
-      }
 
       // Widthは0以上
-      Debug.Assert(fixedWidth >= 0);
-      
-      if (windowRect.Right < fixedX) {
-        // Widthによらず領域が右にオーバーしている場合、Xを左にずらす＆Widthを0に
+      if (fixedWidth < 0) {
+        fixedWidth = 0;
+        result = false;
+      }
+ 
+      if (fixedX < windowRect.X) {
+        // Xが左にはみでている場合、Widthは保持＆Xを右にずらす
+        fixedX = windowRect.X;
+        result = false;
+      } else if (windowRect.Right < fixedX) {
+        // Xが右にはみでている場合、Xを左にずらしてWidthを0に
         fixedX = windowRect.Right;
         fixedWidth = 0;
         result = false;
-      } else if (windowRect.Right < fixedX + fixedWidth) {
-        // 領域が右にオーバーしている場合、Xは保持＆Widthを縮める
+      }
+      
+      // 領域が右にはみでている場合、Xは保持＆Widthを縮める
+      if (windowRect.Right < fixedX + fixedWidth) {
         fixedWidth = windowRect.Right - fixedX;
+        result = false;
+      }
+  
+      // 出力
+      Debug.Assert(windowRect.X <= fixedX && fixedX + fixedWidth <= windowRect.Right);
+      return result;
+    }
+    /// @copydoc ILayoutElementView::ValidateClippingWidth
+    public bool ValidateClippingWidth(int value, out int fixedX, out int fixedWidth) {
+      Debug.Assert(this.IsWindowValid);
+
+      var result = true;
+      fixedX = this.ClippingXWithoutFit;
+      fixedWidth = value;
+      var windowRect = Utilities.GetWindowRect(this.WindowType, this.Window);
+
+      // FitならValidateは常にtrue
+      if (this.Fit) {
+        fixedX = windowRect.X;
+        fixedWidth = windowRect.Width;
+        return true;
+      }
+
+      if (fixedWidth < 0) {
+        // Widthは0以上
+        fixedWidth = 0;
+        result = false;
+      } else if (windowRect.Width < fixedWidth) {
+        // Widthが大きすぎる場合はFitさせる
+        fixedX = windowRect.X;
+        fixedWidth = windowRect.Width;
+        result = false;
+      }
+ 
+      if (fixedX < windowRect.X) {
+        // Xが左にはみでている場合、Widthは保持＆Xを右にずらす
+        fixedX = windowRect.X;
+        result = false;
+      } else if (windowRect.Right < fixedX) {
+        // Xが右にはみでている場合、Xを左にずらしてWidthを0に
+        fixedX = windowRect.Right;
+        fixedWidth = 0;
+        result = false;
+      }
+
+      // 領域が右にはみでている場合、Widthは保持＆Xを左にずらす
+      if (windowRect.Right < fixedX + fixedWidth) {
+        fixedX = windowRect.Right - fixedWidth;
         result = false;
       }
   
@@ -617,28 +673,24 @@ public partial class Profile {
     public bool ValidateClippingY(int value, out int fixedY, out int fixedHeight) {
       throw new NotImplementedException();
     }
-    /// @copydoc ILayoutElementView::ValidateClippingWidth
-    public bool ValidateClippingWidth(int value, out int fixedWidth, out int fixedX) {
-      throw new NotImplementedException();
-    }
     /// @copydoc ILayoutElementView::ValidateClippingHeight
-    public bool ValidateClippingHeight(int value, out int fixedHeight, out int fixedY) {
+    public bool ValidateClippingHeight(int value, out int fixedY, out int fixedHeight) {
       throw new NotImplementedException();
     }
     /// @copydoc ILayoutElementView::ValidateBoundRelativeLeft
     public bool ValidateBoundRelativeLeft(double value, out double fixedLeft, out double fixedRight) {
       throw new NotImplementedException();
     }
+    /// @copydoc ILayoutElementView::ValidateBoundRelativeRight
+    public bool ValidateBoundRelativeRight(double value, out double fixedLeft, out double fixedRight) {
+      throw new NotImplementedException();
+    }
     /// @copydoc ILayoutElementView::ValidateBoundRelativeTop
     public bool ValidateBoundRelativeTop(double value, out double fixedTop, out double fixedBottom) {
       throw new NotImplementedException();
     }
-    /// @copydoc ILayoutElementView::ValidateBoundRelativeRight
-    public bool ValidateBoundRelativeRight(double value, out double fixedRight, out double fixedLeft) {
-      throw new NotImplementedException();
-    }
     /// @copydoc ILayoutElementView::ValidateBoundRelativeBottom
-    public bool ValidateBoundRelativeBottom(double value, out double fixedBottom, out double fixedTop) {
+    public bool ValidateBoundRelativeBottom(double value, out double fixedTop, out double fixedBottom) {
       throw new NotImplementedException();
     }
 

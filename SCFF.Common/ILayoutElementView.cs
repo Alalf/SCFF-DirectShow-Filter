@@ -154,21 +154,21 @@ public interface ILayoutElementView {
 
   /// ClippingXが正常な値か
   bool ValidateClippingX(int value, out int fixedX, out int fixedWidth);
+  /// ClippingWidthが正常な値か
+  bool ValidateClippingWidth(int value, out int fixedX, out int fixedWidth);
   /// ClippingYが正常な値か
   bool ValidateClippingY(int value, out int fixedY, out int fixedHeight);
-  /// ClippingWidthが正常な値か
-  bool ValidateClippingWidth(int value, out int fixedWidth, out int fixedX);
   /// ClippingHeightが正常な値か
-  bool ValidateClippingHeight(int value, out int fixedHeight, out int fixedY);
+  bool ValidateClippingHeight(int value, out int fixedY, out int fixedHeight);
 
   /// BoundRelativeLeftが正常な値か
   bool ValidateBoundRelativeLeft(double value, out double fixedLeft, out double fixedRight);
+  /// BoundRelativeRightが正常な値か
+  bool ValidateBoundRelativeRight(double value, out double fixedLeft, out double fixedRight);
   /// BoundRelativeTopが正常な値か
   bool ValidateBoundRelativeTop(double value, out double fixedTop, out double fixedBottom);
-  /// BoundRelativeRightが正常な値か
-  bool ValidateBoundRelativeRight(double value, out double fixedRight, out double fixedLeft);
   /// BoundRelativeBottomが正常な値か
-  bool ValidateBoundRelativeBottom(double value, out double fixedBottom, out double fixedTop);
+  bool ValidateBoundRelativeBottom(double value, out double fixedTop, out double fixedBottom);
 
   /// SWScaleLumaGBlurが正常な値か
   bool ValidateSWScaleLumaGBlur(double value, out double fixedValue);

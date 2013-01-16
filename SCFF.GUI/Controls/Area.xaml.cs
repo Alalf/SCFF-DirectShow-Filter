@@ -193,6 +193,45 @@ public partial class Area : UserControl, IBindingProfile {
     this.CommonAreaSelect(true, WindowTypes.Desktop);
   }
 
+  /// ClippingX: LostFocus
+  /// @todo(me) まだ違和感が残る。エラーがあるかもしれないのにHasErrorを消していいのか？
+  ///           もういっかいValidateしないとだめでは？
+  private void ClippingX_LostFocus(object sender, RoutedEventArgs e) {
+    if (this.ClippingX.Tag as string == "HasError") {
+      this.CanChangeProfile = false;
+      this.ClippingX.Text = App.Profile.CurrentView.ClippingXString;
+      this.CanChangeProfile = true;
+      this.ClippingX.Tag = null;
+    }
+  }
+  /// ClippingY: LostFocus
+  private void ClippingY_LostFocus(object sender, RoutedEventArgs e) {
+    if (this.ClippingY.Tag as string == "HasError") {
+      this.CanChangeProfile = false;
+      this.ClippingY.Text = App.Profile.CurrentView.ClippingYString;
+      this.CanChangeProfile = true;
+      this.ClippingY.Tag = null;
+    }
+  }
+  /// ClippingWidth: LostFocus
+  private void ClippingWidth_LostFocus(object sender, RoutedEventArgs e) {
+    if (this.ClippingWidth.Tag as string == "HasError") {
+      this.CanChangeProfile = false;
+      this.ClippingWidth.Text = App.Profile.CurrentView.ClippingWidthString;
+      this.CanChangeProfile = true;
+      this.ClippingWidth.Tag = null;
+    }
+  }
+  /// ClippingHeight: LostFocus
+  private void ClippingHeight_LostFocus(object sender, RoutedEventArgs e) {
+    if (this.ClippingHeight.Tag as string == "HasError") {
+      this.CanChangeProfile = false;
+      this.ClippingHeight.Text = App.Profile.CurrentView.ClippingHeightString;
+      this.CanChangeProfile = true;
+      this.ClippingHeight.Tag = null;
+    }
+  }
+
   //-------------------------------------------------------------------
   // Checked/Unchecked
   //-------------------------------------------------------------------
@@ -244,13 +283,49 @@ public partial class Area : UserControl, IBindingProfile {
   /// ClippingX: TextChanged
   private void ClippingX_TextChanged(object sender, TextChangedEventArgs e) {
     if (!this.CanChangeProfile) return;
-    var lowerBound = 0;
-    var upperBound = 9999;
-    int parsedValue;
-    if (this.TryParseClippingParameters(this.ClippingX, lowerBound, upperBound, out parsedValue)) {
-      // Profileに書き込み
+
+    // Parse可能か
+    int clippingX;
+    if (!int.TryParse(this.ClippingX.Text, out clippingX)) {
+      this.ClippingX.Tag = "HasError";
+      return;
+    } else {
+      this.ClippingX.Tag = null;
+    }
+
+    // Windowチェック
+    if (!App.Profile.CurrentView.IsWindowValid) {
+      this.ClippingX.Tag = "HasError";
+      return;
+    } else {
+      this.ClippingX.Tag = null;
+    }
+
+    // 次にValidateする
+    int fixedX, fixedWidth;
+    if (!App.Profile.CurrentView.ValidateClippingX(clippingX, out fixedX, out fixedWidth)) {
+      // Validateで失敗したら自分とWidthのTextとデータを置き換える
       App.Profile.Current.Open();
-      App.Profile.Current.SetClippingXWithoutFit = parsedValue;
+      App.Profile.Current.SetClippingXWithoutFit = fixedX;
+      App.Profile.Current.SetClippingWidthWithoutFit = fixedWidth;
+      App.Profile.Current.Close();
+
+      //---------------------------------------------------------------
+      // Notify self
+      this.CanChangeProfile = false;
+      if (clippingX != fixedX) {
+        this.ClippingX.Text = App.Profile.CurrentView.ClippingXString;
+        this.ClippingX.SelectAll();
+      }
+      this.ClippingWidth.Text = App.Profile.CurrentView.ClippingWidthString;
+      this.CanChangeProfile = true;
+      // Notify other controls
+      Commands.CurrentLayoutElementVisualChanged.Execute(null, null);
+      //---------------------------------------------------------------
+    } else {
+      // 成功したらそのまま書き換え(Textは変更しない)
+      App.Profile.Current.Open();
+      App.Profile.Current.SetClippingXWithoutFit = clippingX;
       App.Profile.Current.Close();
 
       //---------------------------------------------------------------
@@ -284,13 +359,49 @@ public partial class Area : UserControl, IBindingProfile {
   /// ClippingWidth: TextChanged
   private void ClippingWidth_TextChanged(object sender, TextChangedEventArgs e) {
     if (!this.CanChangeProfile) return;
-    var lowerBound = 0;
-    var upperBound = 9999;
-    int parsedValue;
-    if (this.TryParseClippingParameters(this.ClippingWidth, lowerBound, upperBound, out parsedValue)) {
-      // Profileに書き込み
+
+    // Parse可能か
+    int clippingWidth;
+    if (!int.TryParse(this.ClippingWidth.Text, out clippingWidth)) {
+      this.ClippingWidth.Tag = "HasError";
+      return;
+    } else {
+      this.ClippingWidth.Tag = null;
+    }
+
+    // Windowチェック
+    if (!App.Profile.CurrentView.IsWindowValid) {
+      this.ClippingWidth.Tag = "HasError";
+      return;
+    } else {
+      this.ClippingWidth.Tag = null;
+    }
+
+    // 次にValidateする
+    int fixedX, fixedWidth;
+    if (!App.Profile.CurrentView.ValidateClippingWidth(clippingWidth, out fixedX, out fixedWidth)) {
+      // Validateで失敗したら自分とWidthのTextとデータを置き換える
       App.Profile.Current.Open();
-      App.Profile.Current.SetClippingWidthWithoutFit = parsedValue;
+      App.Profile.Current.SetClippingXWithoutFit = fixedX;
+      App.Profile.Current.SetClippingWidthWithoutFit = fixedWidth;
+      App.Profile.Current.Close();
+
+      //---------------------------------------------------------------
+      // Notify self
+      this.CanChangeProfile = false;
+      this.ClippingX.Text = App.Profile.CurrentView.ClippingXString;
+      if (clippingWidth != fixedWidth) {
+        this.ClippingWidth.Text = App.Profile.CurrentView.ClippingWidthString;
+        this.ClippingWidth.SelectAll();
+      }
+      this.CanChangeProfile = true;
+      // Notify other controls
+      Commands.CurrentLayoutElementVisualChanged.Execute(null, null);
+      //---------------------------------------------------------------
+    } else {
+      // 成功したらそのまま書き換え(Textは変更しない)
+      App.Profile.Current.Open();
+      App.Profile.Current.SetClippingWidthWithoutFit = clippingWidth;
       App.Profile.Current.Close();
 
       //---------------------------------------------------------------

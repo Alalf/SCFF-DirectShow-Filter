@@ -574,11 +574,11 @@ public partial class Profile {
     }
 
     //=================================================================
-    // Validate
+    // Input Correction
     //=================================================================
 
-    /// @copydoc ILayoutElementView::ValidateClippingX
-    public bool ValidateClippingX(int value, out int fixedX, out int fixedWidth) {
+    /// @copydoc ILayoutElementView::CorrectInputClippingX
+    public bool CorrectInputClippingX(int value, out int fixedX, out int fixedWidth) {
       Debug.Assert(this.IsWindowValid);
 
       var result = true;
@@ -586,7 +586,7 @@ public partial class Profile {
       fixedWidth = this.ClippingWidthWithoutFit;
       var windowRect = Utilities.GetWindowRect(this.WindowType, this.Window);
 
-      // FitならValidateは常にtrue
+      // Fitならvalueによらず訂正の必要はない
       if (this.Fit) {
         fixedX = windowRect.X;
         fixedWidth = windowRect.Width;
@@ -621,8 +621,8 @@ public partial class Profile {
       Debug.Assert(windowRect.X <= fixedX && fixedX + fixedWidth <= windowRect.Right);
       return result;
     }
-    /// @copydoc ILayoutElementView::ValidateClippingWidth
-    public bool ValidateClippingWidth(int value, out int fixedX, out int fixedWidth) {
+    /// @copydoc ILayoutElementView::CorrectInputClippingWidth
+    public bool CorrectInputClippingWidth(int value, out int fixedX, out int fixedWidth) {
       Debug.Assert(this.IsWindowValid);
 
       var result = true;
@@ -630,7 +630,7 @@ public partial class Profile {
       fixedWidth = value;
       var windowRect = Utilities.GetWindowRect(this.WindowType, this.Window);
 
-      // FitならValidateは常にtrue
+      // Fitならvalueによらず訂正の必要はない
       if (this.Fit) {
         fixedX = windowRect.X;
         fixedWidth = windowRect.Width;
@@ -671,53 +671,53 @@ public partial class Profile {
       return result;
     }
 
-    /// @copydoc ILayoutElementView::ValidateClippingY
-    public bool ValidateClippingY(int value, out int fixedY, out int fixedHeight) {
+    /// @copydoc ILayoutElementView::CorrectInputClippingY
+    public bool CorrectInputClippingY(int value, out int fixedY, out int fixedHeight) {
       throw new NotImplementedException();
     }
-    /// @copydoc ILayoutElementView::ValidateClippingHeight
-    public bool ValidateClippingHeight(int value, out int fixedY, out int fixedHeight) {
+    /// @copydoc ILayoutElementView::CorrectInputClippingHeight
+    public bool CorrectInputClippingHeight(int value, out int fixedY, out int fixedHeight) {
       throw new NotImplementedException();
     }
-    /// @copydoc ILayoutElementView::ValidateBoundRelativeLeft
-    public bool ValidateBoundRelativeLeft(double value, out double fixedLeft, out double fixedRight) {
+    /// @copydoc ILayoutElementView::CorrectInputBoundRelativeLeft
+    public bool CorrectInputBoundRelativeLeft(double value, out double fixedLeft, out double fixedRight) {
       throw new NotImplementedException();
     }
-    /// @copydoc ILayoutElementView::ValidateBoundRelativeRight
-    public bool ValidateBoundRelativeRight(double value, out double fixedLeft, out double fixedRight) {
+    /// @copydoc ILayoutElementView::CorrectInputBoundRelativeRight
+    public bool CorrectInputBoundRelativeRight(double value, out double fixedLeft, out double fixedRight) {
       throw new NotImplementedException();
     }
-    /// @copydoc ILayoutElementView::ValidateBoundRelativeTop
-    public bool ValidateBoundRelativeTop(double value, out double fixedTop, out double fixedBottom) {
+    /// @copydoc ILayoutElementView::CorrectInputBoundRelativeTop
+    public bool CorrectInputBoundRelativeTop(double value, out double fixedTop, out double fixedBottom) {
       throw new NotImplementedException();
     }
-    /// @copydoc ILayoutElementView::ValidateBoundRelativeBottom
-    public bool ValidateBoundRelativeBottom(double value, out double fixedTop, out double fixedBottom) {
+    /// @copydoc ILayoutElementView::CorrectInputBoundRelativeBottom
+    public bool CorrectInputBoundRelativeBottom(double value, out double fixedTop, out double fixedBottom) {
       throw new NotImplementedException();
     }
 
-    /// @copydoc ILayoutElementView::ValidateSWScaleLumaGBlur
-    public bool ValidateSWScaleLumaGBlur(double value, out double fixedValue) {
+    /// @copydoc ILayoutElementView::CorrectInputSWScaleLumaGBlur
+    public bool CorrectInputSWScaleLumaGBlur(double value, out double fixedValue) {
       throw new NotImplementedException();
     }
-    /// @copydoc ILayoutElementView::ValidateSWScaleLumaSharpen
-    public bool ValidateSWScaleLumaSharpen(double value, out double fixedValue) {
+    /// @copydoc ILayoutElementView::CorrectInputSWScaleLumaSharpen
+    public bool CorrectInputSWScaleLumaSharpen(double value, out double fixedValue) {
       throw new NotImplementedException();
     }
-    /// @copydoc ILayoutElementView::ValidateSWScaleChromaHshift
-    public bool ValidateSWScaleChromaHshift(double value, out double fixedValue) {
+    /// @copydoc ILayoutElementView::CorrectInputSWScaleChromaHshift
+    public bool CorrectInputSWScaleChromaHshift(double value, out double fixedValue) {
       throw new NotImplementedException();
     }
-    /// @copydoc ILayoutElementView::ValidateSWScaleChromaGBlur
-    public bool ValidateSWScaleChromaGBlur(double value, out double fixedValue) {
+    /// @copydoc ILayoutElementView::CorrectInputSWScaleChromaGBlur
+    public bool CorrectInputSWScaleChromaGBlur(double value, out double fixedValue) {
       throw new NotImplementedException();
     }
-    /// @copydoc ILayoutElementView::ValidateSWScaleChromaSharpen
-    public bool ValidateSWScaleChromaSharpen(double value, out double fixedValue) {
+    /// @copydoc ILayoutElementView::CorrectInputSWScaleChromaSharpen
+    public bool CorrectInputSWScaleChromaSharpen(double value, out double fixedValue) {
       throw new NotImplementedException();
     }
-    /// @copydoc ILayoutElementView::ValidateSWScaleChromaVshift
-    public bool ValidateSWScaleChromaVshift(double value, out double fixedValue) {
+    /// @copydoc ILayoutElementView::CorrectInputSWScaleChromaVshift
+    public bool CorrectInputSWScaleChromaVshift(double value, out double fixedValue) {
       throw new NotImplementedException();
     }
     
@@ -870,6 +870,17 @@ public partial class Profile {
       this.profile.additionalLayoutParameters[this.Index].BackupScreenClippingY = screenRect.Y;
       this.profile.additionalLayoutParameters[this.Index].BackupClippingWidth = screenRect.Width;
       this.profile.additionalLayoutParameters[this.Index].BackupClippingHeight = screenRect.Height;
+    }
+
+    //=================================================================
+    // Validate
+    //=================================================================
+
+    /// @copydoc ILayoutElementView::Validate
+    public ValidationErrors Validate() {
+      var result = new ValidationErrors();
+      /// @todo(me) 実装
+      return result;
     }
   }
 }

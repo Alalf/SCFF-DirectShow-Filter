@@ -149,39 +149,63 @@ public interface ILayoutElementView {
   SampleRect GetActualBoundRect(int sampleWidth, int sampleHeight);
 
   //=================================================================
-  // Validate
+  // Input Correction
   //=================================================================
 
-  /// ClippingXが正常な値か
-  bool ValidateClippingX(int value, out int fixedX, out int fixedWidth);
-  /// ClippingWidthが正常な値か
-  bool ValidateClippingWidth(int value, out int fixedX, out int fixedWidth);
-  /// ClippingYが正常な値か
-  bool ValidateClippingY(int value, out int fixedY, out int fixedHeight);
-  /// ClippingHeightが正常な値か
-  bool ValidateClippingHeight(int value, out int fixedY, out int fixedHeight);
+  /// ClippingXのユーザ入力を制約(WindowSizeなど)に基づいて訂正する
+  /// @attention できるだけvalueは訂正せずfixedWidthの調整で訂正を行う
+  /// @param value TextBoxから入力された数値
+  /// @param fixedX 訂正後のClippingX
+  /// @param fixedWidth 訂正後のClippingWidth
+  /// @retval true valueは制約を満たした値である
+  /// @retval false 制約を満たすにはfixedX/fixedWidthである必要がある
+  bool CorrectInputClippingX(int value, out int fixedX, out int fixedWidth);
+  /// ClippingWidthのユーザ入力を制約(WindowSizeなど)に基づいて訂正する
+  /// @attention できるだけvalueは訂正せずfixedXの調整で訂正を行う
+  /// @param value TextBoxから入力された数値
+  /// @param fixedX 訂正後のClippingX
+  /// @param fixedWidth 訂正後のClippingWidth
+  /// @retval true valueは制約を満たした値である
+  /// @retval false 制約を満たすにはfixedX/fixedWidthである必要がある
+  bool CorrectInputClippingWidth(int value, out int fixedX, out int fixedWidth);
+  /// ClippingYのユーザ入力を制約(WindowSizeなど)に基づいて訂正する
+  /// @attention できるだけvalueは訂正せずfixedHeightの調整で訂正を行う
+  /// @param value TextBoxから入力された数値
+  /// @param fixedY 訂正後のClippingY
+  /// @param fixedHeight 訂正後のClippingHeight
+  /// @retval true valueは制約を満たした値である
+  /// @retval false 制約を満たすにはfixedY/fixedHeightである必要がある
+  bool CorrectInputClippingY(int value, out int fixedY, out int fixedHeight);
+  /// ClippingHeightのユーザ入力を制約(WindowSizeなど)に基づいて訂正する
+  /// @attention できるだけvalueは訂正せずfixedYの調整で訂正を行う
+  /// @param value TextBoxから入力された数値
+  /// @param fixedY 訂正後のClippingY
+  /// @param fixedHeight 訂正後のClippingHeight
+  /// @retval true valueは制約を満たした値である
+  /// @retval false 制約を満たすにはfixedY/fixedHeightである必要がある
+  bool CorrectInputClippingHeight(int value, out int fixedY, out int fixedHeight);
 
-  /// BoundRelativeLeftが正常な値か
-  bool ValidateBoundRelativeLeft(double value, out double fixedLeft, out double fixedRight);
-  /// BoundRelativeRightが正常な値か
-  bool ValidateBoundRelativeRight(double value, out double fixedLeft, out double fixedRight);
-  /// BoundRelativeTopが正常な値か
-  bool ValidateBoundRelativeTop(double value, out double fixedTop, out double fixedBottom);
-  /// BoundRelativeBottomが正常な値か
-  bool ValidateBoundRelativeBottom(double value, out double fixedTop, out double fixedBottom);
+  /// BoundRelativeLeftのユーザ入力を訂正する
+  bool CorrectInputBoundRelativeLeft(double value, out double fixedLeft, out double fixedRight);
+  /// BoundRelativeRightのユーザ入力を訂正する
+  bool CorrectInputBoundRelativeRight(double value, out double fixedLeft, out double fixedRight);
+  /// BoundRelativeTopのユーザ入力を訂正する
+  bool CorrectInputBoundRelativeTop(double value, out double fixedTop, out double fixedBottom);
+  /// BoundRelativeBottomのユーザ入力を訂正する
+  bool CorrectInputBoundRelativeBottom(double value, out double fixedTop, out double fixedBottom);
 
-  /// SWScaleLumaGBlurが正常な値か
-  bool ValidateSWScaleLumaGBlur(double value, out double fixedValue);
-  /// SWScaleLumaSharpenが正しいかどうかのチェック
-  bool ValidateSWScaleLumaSharpen(double value, out double fixedValue);
-  /// SWScaleChromaHshiftが正しいかどうかのチェック
-  bool ValidateSWScaleChromaHshift(double value, out double fixedValue);
-  /// SWScaleChromaGBlurが正しいかどうかのチェック
-  bool ValidateSWScaleChromaGBlur(double value, out double fixedValue);
-  /// SWScaleChromaSharpenが正しいかどうかのチェック
-  bool ValidateSWScaleChromaSharpen(double value, out double fixedValue);
-  /// SWScaleChromaVshiftが正しいかどうかのチェック
-  bool ValidateSWScaleChromaVshift(double value, out double fixedValue);
+  /// SWScaleLumaGBlurのユーザ入力を訂正する
+  bool CorrectInputSWScaleLumaGBlur(double value, out double fixedValue);
+  /// SWScaleLumaSharpenのユーザ入力を訂正する
+  bool CorrectInputSWScaleLumaSharpen(double value, out double fixedValue);
+  /// SWScaleChromaHshiftのユーザ入力を訂正する
+  bool CorrectInputSWScaleChromaHshift(double value, out double fixedValue);
+  /// SWScaleChromaGBlurのユーザ入力を訂正する
+  bool CorrectInputSWScaleChromaGBlur(double value, out double fixedValue);
+  /// SWScaleChromaSharpenのユーザ入力を訂正する
+  bool CorrectInputSWScaleChromaSharpen(double value, out double fixedValue);
+  /// SWScaleChromaVshiftのユーザ入力を訂正する
+  bool CorrectInputSWScaleChromaVshift(double value, out double fixedValue);
 
   //=================================================================
   // ToString
@@ -264,6 +288,10 @@ public interface ILayoutElementView {
   /// @copydoc SCFF::Common::AdditionalLayoutParameter::BackupClippingHeight
   int BackupClippingHeight { get; }
 
+  //=================================================================
+  // Validate
+  //=================================================================
 
+  ValidationErrors Validate();
 }
 }   // namespace SCFF.Common

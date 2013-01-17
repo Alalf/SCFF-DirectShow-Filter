@@ -65,6 +65,7 @@
     <Compile Include="Utilities.cs" />
     <Compile Include="Profile.LayoutElement.cs" />
     <Compile Include="ILayoutElement.cs" />
+    <Compile Include="ValidationErrors.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SCFF.Interprocess\SCFF.Interprocess.csproj">

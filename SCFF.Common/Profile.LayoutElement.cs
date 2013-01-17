@@ -670,14 +670,98 @@ public partial class Profile {
       Debug.Assert(windowRect.X <= fixedX && fixedX + fixedWidth <= windowRect.Right);
       return result;
     }
-
     /// @copydoc ILayoutElementView::CorrectInputClippingY
     public bool CorrectInputClippingY(int value, out int fixedY, out int fixedHeight) {
-      throw new NotImplementedException();
+      Debug.Assert(this.IsWindowValid);
+
+      var result = true;
+      fixedY = value;
+      fixedHeight = this.ClippingHeightWithoutFit;
+      var windowRect = Utilities.GetWindowRect(this.WindowType, this.Window);
+
+      // Fitならvalueによらず訂正の必要はない
+      if (this.Fit) {
+        fixedY = windowRect.Y;
+        fixedHeight = windowRect.Height;
+        return true;
+      }
+ 
+      // 上限・下限の補正
+      if (fixedY < windowRect.Y) {
+        // Yが上にはみでている場合、Heightは保持＆Yを下にずらす
+        fixedY = windowRect.Y;
+        result = false;
+      } else if (windowRect.Bottom < fixedY) {
+        // Yが下にはみでている場合、Yを上にずらしてHeightを0に
+        fixedY = windowRect.Bottom;
+        fixedHeight = 0;
+        result = false;
+      }
+      
+      // Heightの補正
+      if (fixedHeight < 0) {
+        // Heightは0以上
+        fixedHeight = 0;
+        result = false;
+      }
+      if (windowRect.Bottom < fixedY + fixedHeight) {
+        // 領域が下にはみでている場合、Yは保持＆Heightを縮める
+        fixedHeight = windowRect.Bottom - fixedY;
+        result = false;
+      }
+  
+      // 出力
+      Debug.Assert(windowRect.Y <= fixedY && fixedY + fixedHeight <= windowRect.Bottom);
+      return result;
     }
     /// @copydoc ILayoutElementView::CorrectInputClippingHeight
     public bool CorrectInputClippingHeight(int value, out int fixedY, out int fixedHeight) {
-      throw new NotImplementedException();
+      Debug.Assert(this.IsWindowValid);
+
+      var result = true;
+      fixedY = this.ClippingYWithoutFit;
+      fixedHeight = value;
+      var windowRect = Utilities.GetWindowRect(this.WindowType, this.Window);
+
+      // Fitならvalueによらず訂正の必要はない
+      if (this.Fit) {
+        fixedY = windowRect.Y;
+        fixedHeight = windowRect.Height;
+        return true;
+      }
+
+      // 上限・下限の補正
+      if (fixedHeight < 0) {
+        // Heightは0以上
+        fixedHeight = 0;
+        result = false;
+      } else if (windowRect.Height < fixedHeight) {
+        // Heightが大きすぎる場合はFitさせる
+        fixedY = windowRect.Y;
+        fixedHeight = windowRect.Height;
+        result = false;
+      }
+ 
+      // Yの補正
+      if (fixedY < windowRect.Y) {
+        // Yが上にはみでている場合、Heightは保持＆Yを下にずらす
+        fixedY = windowRect.Y;
+        result = false;
+      } else if (windowRect.Bottom < fixedY) {
+        // Yが下にはみでている場合、Yを上にずらしてHeightを0に
+        fixedY = windowRect.Bottom;
+        fixedHeight = 0;
+        result = false;
+      }
+      if (windowRect.Bottom < fixedY + fixedHeight) {
+        // 領域が下にはみでている場合、Heightは保持＆Yを上にずらす
+        fixedY = windowRect.Bottom - fixedHeight;
+        result = false;
+      }
+  
+      // 出力
+      Debug.Assert(windowRect.Y <= fixedY && fixedY + fixedHeight <= windowRect.Height);
+      return result;
     }
     /// @copydoc ILayoutElementView::CorrectInputBoundRelativeLeft
     public bool CorrectInputBoundRelativeLeft(double value, out double fixedLeft, out double fixedRight) {

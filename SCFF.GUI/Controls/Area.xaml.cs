@@ -246,30 +246,6 @@ public partial class Area : UserControl, IBindingProfile {
   // *Changed/Collapsed/Expanded
   //-------------------------------------------------------------------
 
-  /// 下限・上限つきでテキストボックスから値を取得する
-  private bool TryParseClippingParameters(TextBox textBox,
-      int lowerBound, int upperBound, out int parsedValue) {
-    // Parse
-    if (!int.TryParse(textBox.Text, out parsedValue)) {
-      parsedValue = lowerBound;
-      textBox.Text = lowerBound.ToString();
-      return false;
-    }
-
-    // Validation
-    if (parsedValue < lowerBound) {
-      parsedValue = lowerBound;
-      textBox.Text = lowerBound.ToString();
-      return false;
-    } else if (parsedValue > upperBound) {
-      parsedValue = upperBound;
-      textBox.Text = upperBound.ToString();
-      return false;
-    }
-
-    return true;
-  }
-
   /// ClippingX: TextChanged
   private void ClippingX_TextChanged(object sender, TextChangedEventArgs e) {
     if (!this.CanChangeProfile) return;
@@ -294,7 +270,7 @@ public partial class Area : UserControl, IBindingProfile {
     // 次にValidateする
     int fixedX, fixedWidth;
     if (!App.Profile.CurrentView.CorrectInputClippingX(clippingX, out fixedX, out fixedWidth)) {
-      // Validateで失敗したら自分とWidthのTextとデータを置き換える
+      // Validateで失敗したらX/WidthのTextとデータを置き換える
       App.Profile.Current.Open();
       App.Profile.Current.SetClippingXWithoutFit = fixedX;
       App.Profile.Current.SetClippingWidthWithoutFit = fixedWidth;
@@ -347,7 +323,7 @@ public partial class Area : UserControl, IBindingProfile {
     // 次にValidateする
     int fixedX, fixedWidth;
     if (!App.Profile.CurrentView.CorrectInputClippingWidth(clippingWidth, out fixedX, out fixedWidth)) {
-      // Validateで失敗したら自分とWidthのTextとデータを置き換える
+      // Validateで失敗したらX/WidthのTextとデータを置き換える
       App.Profile.Current.Open();
       App.Profile.Current.SetClippingXWithoutFit = fixedX;
       App.Profile.Current.SetClippingWidthWithoutFit = fixedWidth;
@@ -359,7 +335,6 @@ public partial class Area : UserControl, IBindingProfile {
       if (clippingWidth != fixedWidth) {
         this.OverwriteClippingWidthText(true);
       }
-      this.CanChangeProfile = true;
       // Notify other controls
       Commands.CurrentLayoutElementVisualChanged.Execute(null, null);
       //---------------------------------------------------------------
@@ -380,13 +355,46 @@ public partial class Area : UserControl, IBindingProfile {
   /// ClippingY: TextChanged
   private void ClippingY_TextChanged(object sender, TextChangedEventArgs e) {
     if (!this.CanChangeProfile) return;
-    var lowerBound = 0;
-    var upperBound = 9999;
-    int parsedValue;
-    if (this.TryParseClippingParameters(this.ClippingY, lowerBound, upperBound, out parsedValue)) {
-      // Profileに書き込み
+
+    // Parse可能か
+    int clippingY;
+    if (!int.TryParse(this.ClippingY.Text, out clippingY)) {
+      this.ClippingY.Tag = "HasError";
+      return;
+    } else {
+      this.ClippingY.Tag = null;
+    }
+
+    // Windowチェック
+    if (!App.Profile.CurrentView.IsWindowValid) {
+      this.ClippingY.Tag = "HasError";
+      return;
+    } else {
+      this.ClippingY.Tag = null;
+    }
+
+    // 次にValidateする
+    int fixedY, fixedHeight;
+    if (!App.Profile.CurrentView.CorrectInputClippingY(clippingY, out fixedY, out fixedHeight)) {
+      // Validateで失敗したらY/HeightのTextとデータを置き換える
       App.Profile.Current.Open();
-      App.Profile.Current.SetClippingYWithoutFit = parsedValue;
+      App.Profile.Current.SetClippingYWithoutFit = fixedY;
+      App.Profile.Current.SetClippingHeightWithoutFit = fixedHeight;
+      App.Profile.Current.Close();
+
+      //---------------------------------------------------------------
+      // Notify self
+      if (clippingY != fixedY) {
+        this.OverwriteClippingYText(true);
+      }
+      this.OverwriteClippingHeightText(false);
+      // Notify other controls
+      Commands.CurrentLayoutElementVisualChanged.Execute(null, null);
+      //---------------------------------------------------------------
+    } else {
+      // 成功したらそのまま書き換え(Textは変更しない)
+      App.Profile.Current.Open();
+      App.Profile.Current.SetClippingYWithoutFit = clippingY;
       App.Profile.Current.Close();
 
       //---------------------------------------------------------------
@@ -400,13 +408,46 @@ public partial class Area : UserControl, IBindingProfile {
   /// ClippingHeight: TextChanged
   private void ClippingHeight_TextChanged(object sender, TextChangedEventArgs e) {
     if (!this.CanChangeProfile) return;
-    var lowerBound = 0;
-    var upperBound = 9999;
-    int parsedValue;
-    if (this.TryParseClippingParameters(this.ClippingHeight, lowerBound, upperBound, out parsedValue)) {
-      // Profileに書き込み
+
+    // Parse可能か
+    int clippingHeight;
+    if (!int.TryParse(this.ClippingHeight.Text, out clippingHeight)) {
+      this.ClippingHeight.Tag = "HasError";
+      return;
+    } else {
+      this.ClippingHeight.Tag = null;
+    }
+
+    // Windowチェック
+    if (!App.Profile.CurrentView.IsWindowValid) {
+      this.ClippingHeight.Tag = "HasError";
+      return;
+    } else {
+      this.ClippingHeight.Tag = null;
+    }
+
+    // 次にValidateする
+    int fixedY, fixedHeight;
+    if (!App.Profile.CurrentView.CorrectInputClippingHeight(clippingHeight, out fixedY, out fixedHeight)) {
+      // Validateで失敗したらY/HeightのTextとデータを置き換える
       App.Profile.Current.Open();
-      App.Profile.Current.SetClippingHeightWithoutFit = parsedValue;
+      App.Profile.Current.SetClippingYWithoutFit = fixedY;
+      App.Profile.Current.SetClippingHeightWithoutFit = fixedHeight;
+      App.Profile.Current.Close();
+
+      //---------------------------------------------------------------
+      // Notify self
+      this.OverwriteClippingYText(false);
+      if (clippingHeight != fixedHeight) {
+        this.OverwriteClippingHeightText(true);
+      }
+      // Notify other controls
+      Commands.CurrentLayoutElementVisualChanged.Execute(null, null);
+      //---------------------------------------------------------------
+    } else {
+      // 成功したらそのまま書き換え(Textは変更しない)
+      App.Profile.Current.Open();
+      App.Profile.Current.SetClippingHeightWithoutFit = clippingHeight;
       App.Profile.Current.Close();
 
       //---------------------------------------------------------------

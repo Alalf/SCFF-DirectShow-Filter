@@ -223,7 +223,7 @@ public struct LayoutParameter {
   public UInt64 window;
   /// 取り込み範囲の開始X座標
   public Int32 clipping_x;
-  /// 取り込み範囲の開始y座標
+  /// 取り込み範囲の開始Y座標
   public Int32 clipping_y;
   /// 取り込み範囲の幅
   public Int32 clipping_width;

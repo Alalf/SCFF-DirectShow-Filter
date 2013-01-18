@@ -24,6 +24,7 @@ using System.Windows;
 using System.Windows.Controls;
 using SCFF.Common;
 using SCFF.Common.GUI;
+using SCFF.Common.Profile;
 
 /// SWScaleパラメータ設定用UserControl
 public partial class ResizeMethod : UserControl, IBindingProfile {
@@ -252,12 +253,12 @@ public partial class ResizeMethod : UserControl, IBindingProfile {
 
     var index = Constants.ResizeMethodIndexes[App.Profile.CurrentView.SWScaleFlags];
     this.SWScaleFlags.SelectedIndex = index;
-    this.SWScaleLumaGBlur.Text = App.Profile.CurrentView.SWScaleLumaGBlurString;
-    this.SWScaleLumaSharpen.Text = App.Profile.CurrentView.SWScaleLumaSharpenString;
-    this.SWScaleChromaHshift.Text = App.Profile.CurrentView.SWScaleChromaHshiftString;
-    this.SWScaleChromaGBlur.Text = App.Profile.CurrentView.SWScaleChromaGBlurString;
-    this.SWScaleChromaSharpen.Text = App.Profile.CurrentView.SWScaleChromaSharpenString;
-    this.SWScaleChromaVshift.Text = App.Profile.CurrentView.SWScaleChromaVshiftString;
+    this.SWScaleLumaGBlur.Text = StringConverter.GetSWScaleLumaGBlurString(App.Profile.CurrentView);
+    this.SWScaleLumaSharpen.Text = StringConverter.GetSWScaleLumaSharpenString(App.Profile.CurrentView);
+    this.SWScaleChromaHshift.Text = StringConverter.GetSWScaleChromaHshiftString(App.Profile.CurrentView);
+    this.SWScaleChromaGBlur.Text = StringConverter.GetSWScaleChromaGBlurString(App.Profile.CurrentView);
+    this.SWScaleChromaSharpen.Text = StringConverter.GetSWScaleChromaSharpenString(App.Profile.CurrentView);
+    this.SWScaleChromaVshift.Text = StringConverter.GetSWScaleChromaVshiftString(App.Profile.CurrentView);
     this.CanChangeProfile = true;
   }
   /// @copydoc Common::GUI::IBindingProfile::OnProfileChanged

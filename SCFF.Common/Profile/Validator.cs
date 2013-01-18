@@ -15,8 +15,8 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file SCFF.Common/Profile/ValidationErrors.cs
-/// @copydoc SCFF::Common::Profile::ValidationErrors
+/// @file SCFF.Common/Profile/Validator.cs
+/// @copydoc SCFF::Common::Profile::Validator
 
 namespace SCFF.Common.Profile {
 
@@ -67,5 +67,26 @@ public class ValidationErrors {
   /// Index->ValidationErrorのディクショナリ
   private Dictionary<int,ValidationError> errors =
       new Dictionary<int,ValidationError>();
+}
+
+/// 検証メソッドをまとめたstaticクラス
+public static class Validator {
+  //=================================================================
+  // Validate
+  //=================================================================
+
+  /// レイアウト要素単位での検証
+  private static ValidationErrors ValidateLayoutElement(ILayoutElementView layoutElement) {
+    var result = new ValidationErrors();
+    /// @todo(me) 実装
+    return result;
+  }
+
+  /// プロファイル単位での検証
+  public static ValidationErrors ValidateProfile(Profile profile) {
+    var result = new ValidationErrors();
+    /// @todo(me) 実装
+    return result;
+  }
 }
 }   // namespace SCFF.Common.Profile

@@ -24,6 +24,7 @@ using System.Diagnostics;
 using System.Windows.Controls;
 using SCFF.Common;
 using SCFF.Common.GUI;
+using SCFF.Common.Profile;
 
 /// 数値を指定してレイアウト配置を調整するためのUserControl
 /// @todo(me) InputValidationが甘すぎるので何とかする
@@ -91,13 +92,13 @@ public partial class LayoutParameter
     var isDummy = App.RuntimeOptions.SelectedEntryIndex == -1;
 
     this.BoundX.Text =
-        App.Profile.CurrentView.GetBoundLeftString(isDummy, sampleWidth);
+        StringConverter.GetBoundXString(App.Profile.CurrentView, isDummy, sampleWidth);
     this.BoundY.Text =
-        App.Profile.CurrentView.GetBoundTopString(isDummy, sampleHeight);
+        StringConverter.GetBoundYString(App.Profile.CurrentView, isDummy, sampleHeight);
     this.BoundWidth.Text =
-        App.Profile.CurrentView.GetBoundWidthString(isDummy, sampleWidth);
+        StringConverter.GetBoundWidthString(App.Profile.CurrentView, isDummy, sampleWidth);
     this.BoundHeight.Text =
-        App.Profile.CurrentView.GetBoundHeightString(isDummy, sampleHeight);
+        StringConverter.GetBoundHeightString(App.Profile.CurrentView, isDummy, sampleHeight);
   }
 
   /// 下限・上限つきでテキストボックスから値を取得する
@@ -243,7 +244,7 @@ public partial class LayoutParameter
     this.CanChangeProfile = false;
 
     this.GroupBox.Header =
-        App.Profile.CurrentView.GetHeaderString(LayoutParameter.maxHeaderLength);
+        StringConverter.GetHeaderString(App.Profile.CurrentView, LayoutParameter.maxHeaderLength);
 
     this.UpdateDisabledTextboxes();
 
@@ -254,10 +255,10 @@ public partial class LayoutParameter
     this.BoundRelativeBottom.IsEnabled = isComplexLayout;
 
     // *Changed/Collapsed/Expanded
-    this.BoundRelativeLeft.Text = App.Profile.CurrentView.BoundRelativeLeftString;
-    this.BoundRelativeTop.Text = App.Profile.CurrentView.BoundRelativeTopString;
-    this.BoundRelativeRight.Text = App.Profile.CurrentView.BoundRelativeRightString;
-    this.BoundRelativeBottom.Text = App.Profile.CurrentView.BoundRelativeBottomString;
+    this.BoundRelativeLeft.Text = StringConverter.GetBoundRelativeLeftString(App.Profile.CurrentView);
+    this.BoundRelativeTop.Text = StringConverter.GetBoundRelativeTopString(App.Profile.CurrentView);
+    this.BoundRelativeRight.Text = StringConverter.GetBoundRelativeRightString(App.Profile.CurrentView);
+    this.BoundRelativeBottom.Text = StringConverter.GetBoundRelativeBottomString(App.Profile.CurrentView);
 
     this.CanChangeProfile = true;
   }

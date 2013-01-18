@@ -87,7 +87,7 @@ public static class HitTest {
     var borderSTop = layoutElement.BoundRelativeBottom -
                      Constants.BorderRelativeThickness;
     
-    // x座標→Y座標
+    // X座標→Y座標
     if (mousePoint.X <= borderWRight) {         // W
       if (mousePoint.Y <= borderNBottom) {      // N
         return HitModes.SizeNW;

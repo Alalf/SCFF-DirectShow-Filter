@@ -84,9 +84,9 @@ public class IntPoint {
     this.X = x;
     this.Y = y;
   }
-  /// x座標
+  /// X座標
   public int X { get; private set; }
-  /// y座標
+  /// Y座標
   public int Y { get; private set; }
 }
 
@@ -99,17 +99,17 @@ public class IntRect {
     this.Width = width;
     this.Height = height;
   }
-  /// 左上端のx座標
+  /// 左上端のX座標
   public int X { get; private set; }
-  /// 左上端のy座標
+  /// 左上端のY座標
   public int Y { get; private set; }
   /// 幅
   public int Width { get; private set; }
   /// 高さ
   public int Height { get; private set; }
-  /// 右下端のx座標
+  /// 右下端のX座標
   public int Right { get { return this.X + this.Width; } }
-  /// 右下端のy座標
+  /// 右下端のY座標
   public int Bottom { get { return this.Y + this.Height; } }
 
   /// 交差判定
@@ -140,7 +140,7 @@ public class DoublePoint {
   }
   /// x座標
   public double X { get; private set; }
-  /// y座標
+  /// Y座標
   public double Y { get; private set; }
 }
 
@@ -153,13 +153,13 @@ public class DoubleLTRB {
     this.Right = right;
     this.Bottom = bottom;
   }
-  /// 左上端のx座標
+  /// 左上端のX座標
   public double Left { get; private set; }
-  /// 左上端のy座標
+  /// 左上端のY座標
   public double Top { get; private set; }
-  /// 右下端のx座標
+  /// 右下端のX座標
   public double Right { get; private set; }
-  /// 右上端のy座標
+  /// 右上端のY座標
   public double Bottom { get; private set; }
 }
 
@@ -172,17 +172,17 @@ public class DoubleRect {
     this.Width = width;
     this.Height = height;
   }
-  /// 左上端のx座標
+  /// 左上端のX座標
   public double X { get; private set; }
-  /// 左上端のy座標
+  /// 左上端のY座標
   public double Y { get; private set; }
   /// 幅
   public double Width { get; private set; }
   /// 高さ
   public double Height { get; private set; }
-  /// 右下端のx座標
+  /// 右下端のX座標
   public double Right { get { return this.X + this.Width; } }
-  /// 右下端のy座標
+  /// 右下端のY座標
   public double Bottom { get { return this.Y + this.Height; } }
 
   /// 含有判定

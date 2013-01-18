@@ -26,6 +26,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using SCFF.Common;
 using SCFF.Common.GUI;
+using SCFF.Common.Profile;
 
 /// クリッピング領域設定用UserControl
 public partial class Area : UserControl, IBindingProfile {
@@ -268,7 +269,7 @@ public partial class Area : UserControl, IBindingProfile {
 
     // 次にValidateする
     int fixedX, fixedWidth;
-    if (!App.Profile.CurrentView.CorrectInputClippingX(clippingX, out fixedX, out fixedWidth)) {
+    if (!InputCorrector.CorrectInputClippingX(App.Profile.CurrentView, clippingX, out fixedX, out fixedWidth)) {
       // Validateで失敗したらX/WidthのTextとデータを置き換える
       App.Profile.Current.Open();
       App.Profile.Current.SetClippingXWithoutFit = fixedX;
@@ -321,7 +322,7 @@ public partial class Area : UserControl, IBindingProfile {
 
     // 次にValidateする
     int fixedX, fixedWidth;
-    if (!App.Profile.CurrentView.CorrectInputClippingWidth(clippingWidth, out fixedX, out fixedWidth)) {
+    if (!InputCorrector.CorrectInputClippingWidth(App.Profile.CurrentView, clippingWidth, out fixedX, out fixedWidth)) {
       // Validateで失敗したらX/WidthのTextとデータを置き換える
       App.Profile.Current.Open();
       App.Profile.Current.SetClippingXWithoutFit = fixedX;
@@ -374,7 +375,7 @@ public partial class Area : UserControl, IBindingProfile {
 
     // 次にValidateする
     int fixedY, fixedHeight;
-    if (!App.Profile.CurrentView.CorrectInputClippingY(clippingY, out fixedY, out fixedHeight)) {
+    if (!InputCorrector.CorrectInputClippingY(App.Profile.CurrentView, clippingY, out fixedY, out fixedHeight)) {
       // Validateで失敗したらY/HeightのTextとデータを置き換える
       App.Profile.Current.Open();
       App.Profile.Current.SetClippingYWithoutFit = fixedY;
@@ -427,7 +428,7 @@ public partial class Area : UserControl, IBindingProfile {
 
     // 次にValidateする
     int fixedY, fixedHeight;
-    if (!App.Profile.CurrentView.CorrectInputClippingHeight(clippingHeight, out fixedY, out fixedHeight)) {
+    if (!InputCorrector.CorrectInputClippingHeight(App.Profile.CurrentView, clippingHeight, out fixedY, out fixedHeight)) {
       // Validateで失敗したらY/HeightのTextとデータを置き換える
       App.Profile.Current.Open();
       App.Profile.Current.SetClippingYWithoutFit = fixedY;
@@ -463,28 +464,28 @@ public partial class Area : UserControl, IBindingProfile {
 
   private void OverwriteClippingXText(bool fixCursor) {
     this.CanChangeProfile = false;
-    this.ClippingX.Text = App.Profile.CurrentView.ClippingXString;
+    this.ClippingX.Text = StringConverter.GetClippingXString(App.Profile.CurrentView);
     if (fixCursor) this.ClippingX.Select(this.ClippingX.Text.Length, 0);
     this.CanChangeProfile = true;
   }
 
   private void OverwriteClippingWidthText(bool fixCursor) {
     this.CanChangeProfile = false;
-    this.ClippingWidth.Text = App.Profile.CurrentView.ClippingWidthString;
+    this.ClippingWidth.Text = StringConverter.GetClippingWidthString(App.Profile.CurrentView);
     if (fixCursor) this.ClippingWidth.Select(this.ClippingWidth.Text.Length, 0);
     this.CanChangeProfile = true;
   }
 
   private void OverwriteClippingYText(bool fixCursor) {
     this.CanChangeProfile = false;
-    this.ClippingY.Text = App.Profile.CurrentView.ClippingYString;
+    this.ClippingY.Text = StringConverter.GetClippingYString(App.Profile.CurrentView);
     if (fixCursor) this.ClippingY.Select(this.ClippingY.Text.Length, 0);
     this.CanChangeProfile = true;
   }
 
   private void OverwriteClippingHeightText(bool fixCursor) {
     this.CanChangeProfile = false;
-    this.ClippingHeight.Text = App.Profile.CurrentView.ClippingHeightString;
+    this.ClippingHeight.Text = StringConverter.GetClippingHeightString(App.Profile.CurrentView);
     if (fixCursor) this.ClippingHeight.Select(this.ClippingHeight.Text.Length, 0);
     this.CanChangeProfile = true;
   }
@@ -517,10 +518,10 @@ public partial class Area : UserControl, IBindingProfile {
     this.Fit.IsChecked = App.Profile.CurrentView.Fit;
 
     // *Changed/Collapsed/Expanded
-    this.ClippingX.Text = App.Profile.CurrentView.ClippingXString;
-    this.ClippingY.Text = App.Profile.CurrentView.ClippingYString;
-    this.ClippingWidth.Text = App.Profile.CurrentView.ClippingWidthString;
-    this.ClippingHeight.Text = App.Profile.CurrentView.ClippingHeightString;
+    this.ClippingX.Text = StringConverter.GetClippingXString(App.Profile.CurrentView);
+    this.ClippingY.Text = StringConverter.GetClippingYString(App.Profile.CurrentView);
+    this.ClippingWidth.Text = StringConverter.GetClippingWidthString(App.Profile.CurrentView);
+    this.ClippingHeight.Text = StringConverter.GetClippingHeightString(App.Profile.CurrentView);
 
     this.CanChangeProfile = true;
   }

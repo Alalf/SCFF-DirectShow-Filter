@@ -23,7 +23,6 @@ namespace SCFF.Common.Profile {
 
 using System;
 using System.Collections.Generic;
-using SCFF.Common.Ext;
 
 /// レイアウト設定などをまとめたプロファイル
 public partial class Profile {

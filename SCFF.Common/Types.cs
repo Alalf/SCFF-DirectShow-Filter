@@ -22,7 +22,6 @@
 namespace SCFF.Common {
 
 using System;
-using System.Diagnostics;
 
 //=====================================================================
 // 列挙型

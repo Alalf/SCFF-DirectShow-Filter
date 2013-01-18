@@ -24,6 +24,7 @@ using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using SCFF.Common.Ext;
+using SCFF.Common.Profile;
 
 /// スクリーンキャプチャリクエスト(+スクリーンキャプチャ機能)
 public sealed class ScreenCaptureRequest {

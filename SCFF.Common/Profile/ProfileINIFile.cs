@@ -15,10 +15,10 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file SCFF.Common/ProfileINIFile.cs
-/// @copydoc SCFF::Common::ProfileINIFile
+/// @file SCFF.Common/Profile/ProfileINIFile.cs
+/// @copydoc SCFF::Common::Profile::ProfileINIFile
 
-namespace SCFF.Common {
+namespace SCFF.Common.Profile {
 
 /// プロファイルのINIファイル入出力機能
 public static class ProfileINIFile {
@@ -31,4 +31,4 @@ public static class ProfileINIFile {
   /// プロファイル保存時のファイル名のSuffix(=拡張子)
   private const string ProfilePathSuffix = ".ini";
 }
-}   // namespace SCFF.Common
+}   // namespace SCFF.Common.Profile

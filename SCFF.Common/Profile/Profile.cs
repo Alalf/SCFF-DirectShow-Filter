@@ -15,11 +15,11 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file SCFF.Common/Profile.cs
-/// @copydoc SCFF::Common::Profile
+/// @file SCFF.Common/Profile/Profile.cs
+/// @copydoc SCFF::Common::Profile::Profile
 
-/// SCFF共有クラスライブラリ
-namespace SCFF.Common {
+/// プロファイルに関連したクラスをまとめた名前空間
+namespace SCFF.Common.Profile {
 
 using System;
 using System.Collections.Generic;
@@ -231,4 +231,4 @@ public partial class Profile {
   /// @attention messageLayoutParametersにあわせて非初期化済みにした
   private AdditionalLayoutParameter[] additionalLayoutParameters;
 }
-}   // namespace SCFF.Common
+}   // namespace SCFF.Common.Profile

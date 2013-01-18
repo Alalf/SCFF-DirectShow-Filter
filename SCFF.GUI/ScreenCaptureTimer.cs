@@ -28,8 +28,8 @@ using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using SCFF.Common;
 using SCFF.Common.GUI;
+using SCFF.Common.Profile;
 
 /// スクリーンキャプチャデータを取得するためのスレッド管理クラス
 public class ScreenCaptureTimer : IDisposable {

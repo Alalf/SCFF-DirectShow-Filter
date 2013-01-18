@@ -15,10 +15,10 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file SCFF.Common/ValidationErrors.cs
-/// @copydoc SCFF::Common::ValidationErrors
+/// @file SCFF.Common/Profile/ValidationErrors.cs
+/// @copydoc SCFF::Common::Profile::ValidationErrors
 
-namespace SCFF.Common {
+namespace SCFF.Common.Profile {
 
 using System.Collections.Generic;
 
@@ -68,4 +68,4 @@ public class ValidationErrors {
   private Dictionary<int,ValidationError> errors =
       new Dictionary<int,ValidationError>();
 }
-}   // namespace SCFF.Common
+}   // namespace SCFF.Common.Profile

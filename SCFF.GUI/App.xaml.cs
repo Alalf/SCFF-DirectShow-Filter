@@ -24,6 +24,7 @@ namespace SCFF.GUI {
 using System.Windows;
 using SCFF.Common;
 using SCFF.Common.GUI;
+using SCFF.Common.Profile;
 
 /// Applicationクラス
 public partial class App : Application {

@@ -15,10 +15,10 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file SCFF.Common/Profile.LayoutElement.cs
-/// @copydoc SCFF::Common::Profile::LayoutElement
+/// @file SCFF.Common/Profile/Profile.LayoutElement.cs
+/// @copydoc SCFF::Common::Profile::Profile::LayoutElement
 
-namespace SCFF.Common {
+namespace SCFF.Common.Profile {
 
 using System;
 using System.Diagnostics;
@@ -765,11 +765,75 @@ public partial class Profile {
     }
     /// @copydoc ILayoutElementView::CorrectInputBoundRelativeLeft
     public bool CorrectInputBoundRelativeLeft(double value, out double fixedLeft, out double fixedRight) {
-      throw new NotImplementedException();
+      var result = true;
+      fixedLeft = value;
+      fixedRight = this.BoundRelativeRight;
+
+      // Rightの補正
+      if (fixedRight < 0.0 + Constants.MinimumBoundRelativeSize) {
+        fixedRight = 0.0 + Constants.MinimumBoundRelativeSize;
+        result = false;
+      } else if (1.0 < fixedRight) {
+        fixedRight = 1.0;
+        result = false;
+      }
+
+      // 上限・下限の補正
+      if (fixedLeft < 0.0) {
+        fixedLeft = 0.0;
+        result = false;
+      } else if (1.0 < fixedLeft + Constants.MinimumBoundRelativeSize) {
+        fixedLeft = 1.0 - Constants.MinimumBoundRelativeSize;
+        result = false;
+      }
+      
+      // 右にはみ出ていたらRightを右にずらして最小幅を確保
+      if (fixedRight < fixedLeft + Constants.MinimumBoundRelativeSize) {
+        fixedRight = fixedLeft + Constants.MinimumBoundRelativeSize;
+        result = false;
+      }
+        
+      // 出力
+      Debug.Assert(0.0 <= fixedLeft &&
+                   fixedLeft + Constants.MinimumBoundRelativeSize <= fixedRight &&
+                   fixedRight <= 1.0);
+      return result;
     }
     /// @copydoc ILayoutElementView::CorrectInputBoundRelativeRight
     public bool CorrectInputBoundRelativeRight(double value, out double fixedLeft, out double fixedRight) {
-      throw new NotImplementedException();
+      var result = true;
+      fixedLeft = this.BoundRelativeLeft;
+      fixedRight = value;
+
+      // Leftの補正
+      if (fixedLeft < 0.0) {
+        fixedLeft = 0.0;
+        result = false;
+      } else if (1.0 < fixedLeft + Constants.MinimumBoundRelativeSize) {
+        fixedLeft = 1.0 - Constants.MinimumBoundRelativeSize;
+        result = false;
+      }
+
+      // 上限・下限の補正
+      if (fixedRight < 0.0 + Constants.MinimumBoundRelativeSize) {
+        fixedRight = 0.0 + Constants.MinimumBoundRelativeSize;
+        result = false;
+      } else if (1.0 < fixedRight) {
+        fixedRight = 1.0;
+        result = false;
+      }
+      
+      // 左にはみ出ていたらLeftを左にずらして最小幅を確保
+      if (fixedRight < fixedLeft + Constants.MinimumBoundRelativeSize) {
+        fixedLeft = fixedRight - Constants.MinimumBoundRelativeSize;
+        result = false;
+      }
+        
+      // 出力
+      Debug.Assert(0.0 <= fixedLeft &&
+                   fixedLeft + Constants.MinimumBoundRelativeSize <= fixedRight &&
+                   fixedRight <= 1.0);
+      return result;
     }
     /// @copydoc ILayoutElementView::CorrectInputBoundRelativeTop
     public bool CorrectInputBoundRelativeTop(double value, out double fixedTop, out double fixedBottom) {
@@ -968,4 +1032,4 @@ public partial class Profile {
     }
   }
 }
-}   // namespace SCFF.Common
+}   // namespace SCFF.Common.Profile

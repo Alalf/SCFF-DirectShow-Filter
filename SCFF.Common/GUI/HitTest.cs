@@ -23,6 +23,7 @@ namespace SCFF.Common.GUI {
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using SCFF.Common.Profile;
 
 /// 与えられたマウス座標([0-1], [0-1])からレイアウト要素のIndexとHitModesを取得
 public static class HitTest {

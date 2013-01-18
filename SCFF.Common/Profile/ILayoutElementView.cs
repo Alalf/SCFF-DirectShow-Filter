@@ -15,10 +15,10 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file SCFF.Common/ILayoutElementView.cs
-/// @copydoc SCFF::Common::ILayoutElementView
+/// @file SCFF.Common/Profile/ILayoutElementView.cs
+/// @copydoc SCFF::Common::Profile::ILayoutElementView
 
-namespace SCFF.Common {
+namespace SCFF.Common.Profile {
 
 using System;
 
@@ -294,4 +294,4 @@ public interface ILayoutElementView {
 
   ValidationErrors Validate();
 }
-}   // namespace SCFF.Common
+}   // namespace SCFF.Common.Profile

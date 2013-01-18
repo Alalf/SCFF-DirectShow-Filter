@@ -15,10 +15,10 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file SCFF.Common/ILayoutElement.cs
-/// @copydoc SCFF::Common::ILayoutElement
+/// @file SCFF.Common/Profile/ILayoutElement.cs
+/// @copydoc SCFF::Common::Profile::ILayoutElement
 
-namespace SCFF.Common {
+namespace SCFF.Common.Profile {
 
 using System;
 
@@ -135,4 +135,4 @@ public interface ILayoutElement {
   /// Backup*をすべて更新
   void UpdateBackupParameters();
 }
-}   // namespace SCFF.Common
+}   // namespace SCFF.Common.Profile

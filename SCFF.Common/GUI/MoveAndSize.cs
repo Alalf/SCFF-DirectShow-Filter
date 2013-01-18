@@ -21,6 +21,7 @@
 namespace SCFF.Common.GUI {
 
 using System.Diagnostics;
+using SCFF.Common.Profile;
 
 /// 現在のマウス座標とオフセットを指定してレイアウト要素を移動・拡大縮小
 public static class MoveAndSize {

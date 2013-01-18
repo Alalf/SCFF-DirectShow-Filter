@@ -25,7 +25,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using SCFF.Common;
-using SCFF.Common.Ext;
 using SCFF.Common.GUI;
 
 /// クリッピング領域設定用UserControl

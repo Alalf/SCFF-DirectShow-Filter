@@ -18,6 +18,7 @@
 /// @file SCFF.Common/Types.cs
 /// SCFF.Commonモジュールで利用する型
 
+/// SCFF共有クラスライブラリ
 namespace SCFF.Common {
 
 using System;

@@ -51,21 +51,21 @@
     <Compile Include="GUI\MoveAndSize.cs" />
     <Compile Include="GUI\ScreenCaptureRequest.cs" />
     <Compile Include="GUI\SnapGuide.cs" />
-    <Compile Include="ILayoutElementView.cs" />
+    <Compile Include="Profile\ILayoutElementView.cs" />
     <Compile Include="OptionsINIFile.cs" />
-    <Compile Include="Profile.cs" />
+    <Compile Include="Profile\Profile.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Imaging\Utilities.cs" />
     <Compile Include="Options.cs" />
-    <Compile Include="ProfileINIFile.cs" />
+    <Compile Include="Profile\ProfileINIFile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GUI\Types.cs" />
     <Compile Include="RuntimeOptions.cs" />
     <Compile Include="Types.cs" />
     <Compile Include="Utilities.cs" />
-    <Compile Include="Profile.LayoutElement.cs" />
-    <Compile Include="ILayoutElement.cs" />
-    <Compile Include="ValidationErrors.cs" />
+    <Compile Include="Profile\Profile.LayoutElement.cs" />
+    <Compile Include="Profile\ILayoutElement.cs" />
+    <Compile Include="Profile\ValidationErrors.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SCFF.Interprocess\SCFF.Interprocess.csproj">

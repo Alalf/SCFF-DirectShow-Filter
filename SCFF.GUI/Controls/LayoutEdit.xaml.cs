@@ -30,6 +30,7 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using SCFF.Common;
 using SCFF.Common.GUI;
+using SCFF.Common.Profile;
 
 /// WYSIWYGレイアウト編集用UserControl
 ///
@@ -123,6 +124,7 @@ public partial class LayoutEdit
     var boundRect = layoutElement.GetBoundRect(App.RuntimeOptions.CurrentSampleWidth,
                                                App.RuntimeOptions.CurrentSampleHeight);
     formattedText.MaxTextWidth = boundRect.Width;
+    formattedText.MaxTextHeight = boundRect.Height;
     formattedText.MaxLineCount = 1;
     return formattedText;
   }

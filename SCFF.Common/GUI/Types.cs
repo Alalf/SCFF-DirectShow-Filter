@@ -24,6 +24,7 @@ namespace SCFF.Common.GUI {
 using System;
 using System.Diagnostics;
 using SCFF.Common.Ext;
+using SCFF.Common.Profile;
 
 //=====================================================================
 // 列挙型

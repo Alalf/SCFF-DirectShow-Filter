@@ -30,6 +30,7 @@ public static class StringConverter {
   //=================================================================
 
   /// ヘッダー表示用文字列
+  /// @param layoutElement データ取得元のレイアウト要素
   /// @param maxLength 文字列の長さの上限
   /// @return ヘッダー表示用文字列
   public static string GetHeaderString(ILayoutElementView layoutElement, int maxLength) {
@@ -40,6 +41,7 @@ public static class StringConverter {
   }
 
   /// ヘッダー表示用文字列(GUI用)
+  /// @param layoutElement データ取得元のレイアウト要素
   /// @param isCurrent 現在選択中のLayoutElementか
   /// @param isDummy ダミープレビューサイズかどうか
   /// @param sampleWidth サンプルの幅
@@ -65,21 +67,29 @@ public static class StringConverter {
   //=================================================================
 
   /// ClippingX表示用
+  /// @param layoutElement データ取得元のレイアウト要素
+  /// @return ClippingX表示用文字列
   public static string GetClippingXString(ILayoutElementView layoutElement) {
     if (!layoutElement.IsWindowValid && layoutElement.Fit) return "****";
     return layoutElement.ClippingXWithFit.ToString();
   }
   /// ClippingY表示用
+  /// @param layoutElement データ取得元のレイアウト要素
+  /// @return ClippingY表示用文字列
   public static string GetClippingYString(ILayoutElementView layoutElement) {
     if (!layoutElement.IsWindowValid && layoutElement.Fit) return "****";
     return layoutElement.ClippingYWithFit.ToString();
   }
   /// ClippingWidth表示用
+  /// @param layoutElement データ取得元のレイアウト要素
+  /// @return ClippingWidth表示用文字列
   public static string GetClippingWidthString(ILayoutElementView layoutElement) {
     if (!layoutElement.IsWindowValid && layoutElement.Fit) return "****";
     return layoutElement.ClippingWidthWithFit.ToString();
   }
   /// ClippingHeight表示用
+  /// @param layoutElement データ取得元のレイアウト要素
+  /// @return ClippingHeight表示用文字列
   public static string GetClippingHeightString(ILayoutElementView layoutElement) {
     if (!layoutElement.IsWindowValid && layoutElement.Fit) return "****";
     return layoutElement.ClippingHeightWithFit.ToString();
@@ -90,18 +100,26 @@ public static class StringConverter {
   //=================================================================
 
   /// BoundRelativeLeft表示用
+  /// @param layoutElement データ取得元のレイアウト要素
+  /// @return BoundRelativeLeft表示用文字列
   public static string GetBoundRelativeLeftString(ILayoutElementView layoutElement) {
     return layoutElement.BoundRelativeLeft.ToString("F3");
   }
   /// BoundRelativeTop表示用
+  /// @param layoutElement データ取得元のレイアウト要素
+  /// @return BoundRelativeTop表示用文字列
   public static string GetBoundRelativeTopString(ILayoutElementView layoutElement) {
     return layoutElement.BoundRelativeTop.ToString("F3");
   }
   /// BoundRelativeRight表示用
+  /// @param layoutElement データ取得元のレイアウト要素
+  /// @return BoundRelativeRight表示用文字列
   public static string GetBoundRelativeRightString(ILayoutElementView layoutElement) {
     return layoutElement.BoundRelativeRight.ToString("F3");
   }
   /// BoundRelativeBottom表示用
+  /// @param layoutElement データ取得元のレイアウト要素
+  /// @return BoundRelativeBottom表示用文字列
   public static string GetBoundRelativeBottomString(ILayoutElementView layoutElement) {
     return layoutElement.BoundRelativeBottom.ToString("F3");
   }
@@ -114,36 +132,40 @@ public static class StringConverter {
   private const int dummySampleSize = 100;
 
   /// BoundX表示用
+  /// @param layoutElement データ取得元のレイアウト要素
   /// @param isDummy ダミープレビューサイズかどうか
   /// @param sampleWidth サンプルの幅
-  /// @return BoundXを表す文字列
+  /// @return BoundX表示用文字列
   public static string GetBoundXString(ILayoutElementView layoutElement, bool isDummy, int sampleWidth) {
     var boundRect = layoutElement.GetBoundRect(sampleWidth, StringConverter.dummySampleSize);
     return isDummy ? string.Format("({0})", boundRect.X)
                    : boundRect.X.ToString();
   }
   /// BoundY表示用
+  /// @param layoutElement データ取得元のレイアウト要素
   /// @param isDummy ダミープレビューサイズかどうか
   /// @param sampleHeight サンプルの高さ
-  /// @return BoundYを表す文字列
+  /// @return BoundY表示用文字列
   public static string GetBoundYString(ILayoutElementView layoutElement, bool isDummy, int sampleHeight) {
     var boundRect = layoutElement.GetBoundRect(StringConverter.dummySampleSize, sampleHeight);
     return isDummy ? string.Format("({0})", boundRect.Y)
                    : boundRect.Y.ToString();
   }
   /// BoundWidth表示用
+  /// @param layoutElement データ取得元のレイアウト要素
   /// @param isDummy ダミープレビューサイズかどうか
   /// @param sampleWidth サンプルの幅
-  /// @return BoundWidthを表す文字列
+  /// @return BoundWidth表示用文字列
   public static string GetBoundWidthString(ILayoutElementView layoutElement, bool isDummy, int sampleWidth) {
     var boundRect = layoutElement.GetBoundRect(sampleWidth, StringConverter.dummySampleSize);
     return isDummy ? string.Format("({0})", boundRect.Width)
                    : boundRect.Width.ToString();
   }
   /// BoundHeight表示用
+  /// @param layoutElement データ取得元のレイアウト要素
   /// @param isDummy ダミープレビューサイズかどうか
   /// @param sampleHeight サンプルの高さ
-  /// @return BoundHeightを表す文字列
+  /// @return BoundHeight表示用文字列
   public static string GetBoundHeightString(ILayoutElementView layoutElement, bool isDummy, int sampleHeight) {
     var boundRect = layoutElement.GetBoundRect(StringConverter.dummySampleSize, sampleHeight);
     return isDummy ? string.Format("({0})", boundRect.Height)
@@ -155,26 +177,38 @@ public static class StringConverter {
   //=================================================================
 
   /// SWScaleLumaGBlur表示用
+  /// @param layoutElement データ取得元のレイアウト要素
+  /// @return SWScaleLumaGBlur表示用文字列
   public static string GetSWScaleLumaGBlurString(ILayoutElementView layoutElement) {
     return layoutElement.SWScaleLumaGBlur.ToString("F2");
   }
   /// SWScaleLumaSharpen表示用
+  /// @param layoutElement データ取得元のレイアウト要素
+  /// @return SWScaleLumaSharpen表示用文字列
   public static string GetSWScaleLumaSharpenString(ILayoutElementView layoutElement) {
     return layoutElement.SWScaleLumaSharpen.ToString("F2"); 
   } 
   /// SWScaleChromaHshift表示用
+  /// @param layoutElement データ取得元のレイアウト要素
+  /// @return SWScaleChromaHshift表示用文字列
   public static string GetSWScaleChromaHshiftString(ILayoutElementView layoutElement) {
     return layoutElement.SWScaleChromaHshift.ToString("F2");
   }
   /// SWScaleChromaGBlur表示用
+  /// @param layoutElement データ取得元のレイアウト要素
+  /// @return SWScaleChromaGBlur表示用文字列
   public static string GetSWScaleChromaGBlurString(ILayoutElementView layoutElement) {
     return layoutElement.SWScaleChromaGBlur.ToString("F2");
   }
   /// SWScaleChromaSharpen表示用
+  /// @param layoutElement データ取得元のレイアウト要素
+  /// @return SWScaleChromaSharpen表示用文字列
   public static string GetSWScaleChromaSharpenString(ILayoutElementView layoutElement) {
     return layoutElement.SWScaleChromaSharpen.ToString("F2");
   }
   /// SWScaleChromaVshift表示用
+  /// @param layoutElement データ取得元のレイアウト要素
+  /// @return SWScaleChromaVshift表示用文字列
   public static string GetSWScaleChromaVshiftString(ILayoutElementView layoutElement) {
     return layoutElement.SWScaleChromaVshift.ToString("F2");
   }

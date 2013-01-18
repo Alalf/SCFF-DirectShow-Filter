@@ -81,14 +81,14 @@ public static class Constants {
   /// NormalLayout: ウィンドウの初期高さ
   public const double NormalLayoutDefaultHeight = 545.0;
 
-  // Compact: ウィンドウの初期幅
+  /// Compact: ウィンドウの初期幅
   public const double CompactDefaultWidth = Constants.NoLayoutMinWidth;
-  // Compact: ウィンドウの初期高さ
+  /// Compact: ウィンドウの初期高さ
   public const double CompactDefaultHeight = Constants.MinHeight;
 
-  // CompactLayout: ウィンドウの初期幅
+  /// CompactLayout: ウィンドウの初期幅
   public const double CompactLayoutDefaultWidth = 730.0;
-  // CompactLayout: ウィンドウの初期高さ
+  /// CompactLayout: ウィンドウの初期高さ
   public const double CompactLayoutDefaultHeight = 545.0;
   
   //-------------------------------------------------------------------

@@ -530,7 +530,7 @@ public partial class MainWindow
     this.SetAero();
   }
 
-  /// @copydoc SetCompactView
+  /// Compact表示に変更する
   /// @param sender 使用しない
   /// @param e 使用しない
   private void OnSetCompactView(object sender, ExecutedRoutedEventArgs e) {

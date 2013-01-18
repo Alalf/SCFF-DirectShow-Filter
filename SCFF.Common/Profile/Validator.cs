@@ -24,13 +24,15 @@ using System.Collections.Generic;
 
 /// 検証エラータイプ
 public enum ValidationErrorTypes {
-  TargetWindowError,
-  AreaError
+  TargetWindowError,  ///< ターゲットWindowに関するエラー
+  AreaError           ///< Clipping領域に関するエラー
 }
 
 /// 検証エラー
 public struct ValidationError {
+  /// 検証エラータイプ
   public ValidationErrorTypes Type { get; set; }
+  /// エラーメッセージ
   public string Message { get; set; }
 }
 
@@ -52,6 +54,7 @@ public class ValidationErrors {
   }
 
   /// 参照
+  /// @param index レイアウト要素のIndex
   /// @return エラーが無ければnullがかえる
   public ValidationError GetError(int index) {
     ValidationError result;
@@ -71,11 +74,9 @@ public class ValidationErrors {
 
 /// 検証メソッドをまとめたstaticクラス
 public static class Validator {
-  //=================================================================
-  // Validate
-  //=================================================================
-
   /// レイアウト要素単位での検証
+  /// @param layoutElement 対象のレイアウト要素
+  /// @return 検証エラーリスト
   private static ValidationErrors ValidateLayoutElement(ILayoutElementView layoutElement) {
     var result = new ValidationErrors();
     /// @todo(me) 実装
@@ -83,6 +84,8 @@ public static class Validator {
   }
 
   /// プロファイル単位での検証
+  /// @param profile 対象のプロファイル
+  /// @return 検証エラーリスト
   public static ValidationErrors ValidateProfile(Profile profile) {
     var result = new ValidationErrors();
     /// @todo(me) 実装

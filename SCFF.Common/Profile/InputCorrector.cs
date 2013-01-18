@@ -31,6 +31,7 @@ public static class InputCorrector {
 
   /// ClippingXのユーザ入力を制約(WindowSizeなど)に基づいて訂正する
   /// @attention できるだけvalueは訂正せずfixedWidthの調整で訂正を行う
+  /// @param layoutElement 対象のレイアウト要素
   /// @param value TextBoxから入力された数値
   /// @param fixedX 訂正後のClippingX
   /// @param fixedWidth 訂正後のClippingWidth
@@ -83,6 +84,7 @@ public static class InputCorrector {
 
   /// ClippingWidthのユーザ入力を制約(WindowSizeなど)に基づいて訂正する
   /// @attention できるだけvalueは訂正せずfixedXの調整で訂正を行う
+  /// @param layoutElement 対象のレイアウト要素
   /// @param value TextBoxから入力された数値
   /// @param fixedX 訂正後のClippingX
   /// @param fixedWidth 訂正後のClippingWidth
@@ -140,6 +142,7 @@ public static class InputCorrector {
 
   /// ClippingYのユーザ入力を制約(WindowSizeなど)に基づいて訂正する
   /// @attention できるだけvalueは訂正せずfixedHeightの調整で訂正を行う
+  /// @param layoutElement 対象のレイアウト要素
   /// @param value TextBoxから入力された数値
   /// @param fixedY 訂正後のClippingY
   /// @param fixedHeight 訂正後のClippingHeight
@@ -192,6 +195,7 @@ public static class InputCorrector {
 
   /// ClippingHeightのユーザ入力を制約(WindowSizeなど)に基づいて訂正する
   /// @attention できるだけvalueは訂正せずfixedYの調整で訂正を行う
+  /// @param layoutElement 対象のレイアウト要素
   /// @param value TextBoxから入力された数値
   /// @param fixedY 訂正後のClippingY
   /// @param fixedHeight 訂正後のClippingHeight

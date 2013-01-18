@@ -462,27 +462,28 @@ public partial class Area : UserControl, IBindingProfile {
   // IBindingProfileの実装
   //===================================================================
 
+  /// ClippingX.TextをTextChangedイベントハンドラを実行せずに書き換える
   private void OverwriteClippingXText(bool fixCursor) {
     this.CanChangeProfile = false;
     this.ClippingX.Text = StringConverter.GetClippingXString(App.Profile.CurrentView);
     if (fixCursor) this.ClippingX.Select(this.ClippingX.Text.Length, 0);
     this.CanChangeProfile = true;
   }
-
+  /// ClippingWidth.TextをTextChangedイベントハンドラを実行せずに書き換える
   private void OverwriteClippingWidthText(bool fixCursor) {
     this.CanChangeProfile = false;
     this.ClippingWidth.Text = StringConverter.GetClippingWidthString(App.Profile.CurrentView);
     if (fixCursor) this.ClippingWidth.Select(this.ClippingWidth.Text.Length, 0);
     this.CanChangeProfile = true;
   }
-
+  /// ClippingY.TextをTextChangedイベントハンドラを実行せずに書き換える
   private void OverwriteClippingYText(bool fixCursor) {
     this.CanChangeProfile = false;
     this.ClippingY.Text = StringConverter.GetClippingYString(App.Profile.CurrentView);
     if (fixCursor) this.ClippingY.Select(this.ClippingY.Text.Length, 0);
     this.CanChangeProfile = true;
   }
-
+  /// ClippingHeight.TextをTextChangedイベントハンドラを実行せずに書き換える
   private void OverwriteClippingHeightText(bool fixCursor) {
     this.CanChangeProfile = false;
     this.ClippingHeight.Text = StringConverter.GetClippingHeightString(App.Profile.CurrentView);

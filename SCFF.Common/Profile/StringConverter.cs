@@ -70,29 +70,49 @@ public static class StringConverter {
   /// @param layoutElement データ取得元のレイアウト要素
   /// @return ClippingX表示用文字列
   public static string GetClippingXString(ILayoutElementView layoutElement) {
-    if (!layoutElement.IsWindowValid && layoutElement.Fit) return "****";
-    return layoutElement.ClippingXWithFit.ToString();
+    if (layoutElement.Fit && !layoutElement.IsWindowValid) {
+      return "n/a";
+    } else if (layoutElement.Fit) {
+      return string.Format("{0}*", layoutElement.ClippingXWithFit);
+    } else {
+      return layoutElement.ClippingXWithFit.ToString();
+    }
   }
   /// ClippingY表示用
   /// @param layoutElement データ取得元のレイアウト要素
   /// @return ClippingY表示用文字列
   public static string GetClippingYString(ILayoutElementView layoutElement) {
-    if (!layoutElement.IsWindowValid && layoutElement.Fit) return "****";
-    return layoutElement.ClippingYWithFit.ToString();
+    if (layoutElement.Fit && !layoutElement.IsWindowValid) {
+      return "n/a";
+    } else if (layoutElement.Fit) {
+      return string.Format("{0}*", layoutElement.ClippingYWithFit);
+    } else {
+      return layoutElement.ClippingYWithFit.ToString();
+    }
   }
   /// ClippingWidth表示用
   /// @param layoutElement データ取得元のレイアウト要素
   /// @return ClippingWidth表示用文字列
   public static string GetClippingWidthString(ILayoutElementView layoutElement) {
-    if (!layoutElement.IsWindowValid && layoutElement.Fit) return "****";
-    return layoutElement.ClippingWidthWithFit.ToString();
+    if (layoutElement.Fit && !layoutElement.IsWindowValid) {
+      return "n/a";
+    } else if (layoutElement.Fit) {
+      return string.Format("{0}*", layoutElement.ClippingWidthWithFit);
+    } else {
+      return layoutElement.ClippingWidthWithFit.ToString();
+    }
   }
   /// ClippingHeight表示用
   /// @param layoutElement データ取得元のレイアウト要素
   /// @return ClippingHeight表示用文字列
   public static string GetClippingHeightString(ILayoutElementView layoutElement) {
-    if (!layoutElement.IsWindowValid && layoutElement.Fit) return "****";
-    return layoutElement.ClippingHeightWithFit.ToString();
+    if (layoutElement.Fit && !layoutElement.IsWindowValid) {
+      return "n/a";
+    } else if (layoutElement.Fit) {
+      return string.Format("{0}*", layoutElement.ClippingHeightWithFit);
+    } else {
+      return layoutElement.ClippingHeightWithFit.ToString();
+    }
   }
 
   //=================================================================

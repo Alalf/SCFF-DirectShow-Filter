@@ -48,6 +48,7 @@
   <SolidColorBrush x:Key="DisabledTextBrush" Color="#FF222222" />
   <!-- 2013/01/16 Modified by Alalf -->
   <SolidColorBrush x:Key="HasErrorBrush" Color="Red" />
+  <SolidColorBrush x:Key="HasWarningBrush" Color="Yellow" />
   <SolidColorBrush x:Key="IsDraggingBrush" Color="DarkOrange" />
 
   <SolidColorBrush x:Key="DisabledForegroundBrush" Color="#888" />
@@ -1566,6 +1567,9 @@
       <!-- 2013/01/16 Modified by Alalf -->
       <Trigger Property="Tag" Value="HasError">
         <Setter Property="BorderBrush" Value="{StaticResource HasErrorBrush}"/>
+      </Trigger>
+      <Trigger Property="Tag" Value="HasWarning">
+        <Setter Property="BorderBrush" Value="{StaticResource HasWarningBrush}"/>
       </Trigger>
 
       <Trigger Property="IsFocused" Value="True">

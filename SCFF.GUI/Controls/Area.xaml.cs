@@ -193,6 +193,8 @@ public partial class Area : UserControl, IBindingProfile {
     this.CommonAreaSelect(true, WindowTypes.Desktop);
   }
 
+  //-------------------------------------------------------------------
+
   /// ClippingX: LostFocus
   private void ClippingX_LostFocus(object sender, RoutedEventArgs e) {
     if (this.ClippingX.Tag as string == "HasError") {

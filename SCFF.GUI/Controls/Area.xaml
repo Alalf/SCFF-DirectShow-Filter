@@ -5,68 +5,74 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" d:DesignWidth="395" d:DesignHeight="59"
              FontSize="9">
-  <Grid>
-    <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="12"/>
-      <ColumnDefinition Width="1*"/>
-      <ColumnDefinition Width="12"/>
-      <ColumnDefinition Width="1*"/>
-      <ColumnDefinition Width="25"/>
-      <ColumnDefinition Width="1*"/>
-      <ColumnDefinition Width="12"/>
-      <ColumnDefinition Width="1*"/>
-    </Grid.ColumnDefinitions>
-    <Grid.RowDefinitions>
-      <RowDefinition Height="25"/>
-      <RowDefinition Height="25"/>
-    </Grid.RowDefinitions>
-    <!-- X -->
-    <Label    VerticalAlignment="Center" Height="12" Margin="3,0"
-              Content="X"/>
-    <TextBox  Grid.Column="1"
-              VerticalAlignment="Center" Height="20" Margin="0,0,5,0"
-              x:Name="ClippingX" Text="9999" HorizontalContentAlignment="Right"
-              TextChanged="ClippingX_TextChanged" LostFocus="ClippingX_LostFocus" />
-    <!-- Y -->
-    <Label    Grid.Column="2"
-              VerticalAlignment="Center" Height="12" Margin="3,0"
-              Content="Y"/>
-    <TextBox  Grid.Column="3"
-              VerticalAlignment="Center" Height="20" Margin="0,0,5,0"
-              x:Name="ClippingY" Text="9999" HorizontalContentAlignment="Right"
-              TextChanged="ClippingY_TextChanged" LostFocus="ClippingY_LostFocus"/>
-    <!-- Size -->
-    <Label    Grid.Column="4"
-              VerticalAlignment="Center" Height="12" Margin="3,0"
-              Content="Size"/>
-    <TextBox  Grid.Column="5"
-              VerticalAlignment="Center" Height="20" Margin="0,0,5,0"
-              x:Name="ClippingWidth" Text="9999" HorizontalContentAlignment="Right"
-              TextChanged="ClippingWidth_TextChanged" LostFocus="ClippingWidth_LostFocus"/>
-    <!-- x -->
-    <Label    Grid.Column="6"
-              VerticalAlignment="Center" Height="12" Margin="3,0"
-              Content="x"/>
-    <TextBox  Grid.Column="8"
-              VerticalAlignment="Center" Height="20" Margin="0,0,5,0"
-              x:Name="ClippingHeight" Text="9999" HorizontalContentAlignment="Right"
-              TextChanged="ClippingHeight_TextChanged" LostFocus="ClippingHeight_LostFocus"/>
-    <!-- (2nd row) -->
-    <CheckBox Grid.Row="1" Grid.ColumnSpan="2"
-              VerticalAlignment="Center" Height="16" Margin="0,4"
-              x:Name="Fit" Content="Fit" IsChecked="True" 
-              Checked="Fit_Checked" Unchecked="Fit_Unchecked" Click="Fit_Click"/>
-    <Button   Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="3"
-              VerticalAlignment="Center" Height="20" Margin="0,2"
-              x:Name="AreaSelect" Content="Area Select"
-              Click="AreaSelect_Click"/>
-    <Button   Grid.Row="1" Grid.Column="5" Grid.ColumnSpan="1"
-              VerticalAlignment="Center" Height="20"
-              x:Name="ListView" Content="ListView"
-              Click="ListView_Click"/>
-    <Button   Grid.Row="1" Grid.Column="6" Grid.ColumnSpan="2"
-              VerticalAlignment="Center" Height="20"
-              x:Name="Desktop" Content="Desktop"
-              Click="Desktop_Click"/>
-  </Grid>
+  <StackPanel>
+    <!-- Clipping X/Y/Width/Height -->
+    <Grid Height="25">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="12"/>
+        <ColumnDefinition Width="1*"/>
+        <ColumnDefinition Width="12"/>
+        <ColumnDefinition Width="1*"/>
+        <ColumnDefinition Width="25"/>
+        <ColumnDefinition Width="1*"/>
+        <ColumnDefinition Width="12"/>
+        <ColumnDefinition Width="1*"/>
+      </Grid.ColumnDefinitions>
+      <!-- X -->
+      <Label    VerticalAlignment="Center" Height="12" Margin="3,0"
+                Content="X"/>
+      <TextBox  Grid.Column="1"
+                VerticalAlignment="Center" Height="20" Margin="0,0,5,0"
+                x:Name="ClippingX" Text="9999" HorizontalContentAlignment="Right"
+                TextChanged="ClippingX_TextChanged" LostFocus="ClippingX_LostFocus" />
+      <!-- Y -->
+      <Label    Grid.Column="2"
+                VerticalAlignment="Center" Height="12" Margin="3,0"
+                Content="Y"/>
+      <TextBox  Grid.Column="3"
+                VerticalAlignment="Center" Height="20" Margin="0,0,5,0"
+                x:Name="ClippingY" Text="9999" HorizontalContentAlignment="Right"
+                TextChanged="ClippingY_TextChanged" LostFocus="ClippingY_LostFocus"/>
+      <!-- Size -->
+      <Label    Grid.Column="4"
+                VerticalAlignment="Center" Height="12" Margin="3,0"
+                Content="Size"/>
+      <TextBox  Grid.Column="5"
+                VerticalAlignment="Center" Height="20" Margin="0,0,5,0"
+                x:Name="ClippingWidth" Text="9999" HorizontalContentAlignment="Right"
+                TextChanged="ClippingWidth_TextChanged" LostFocus="ClippingWidth_LostFocus"/>
+      <!-- x -->
+      <Label    Grid.Column="6"
+                VerticalAlignment="Center" Height="12" Margin="3,0"
+                Content="x"/>
+      <TextBox  Grid.Column="8"
+                VerticalAlignment="Center" Height="20" Margin="0,0,5,0"
+                x:Name="ClippingHeight" Text="9999" HorizontalContentAlignment="Right"
+                TextChanged="ClippingHeight_TextChanged" LostFocus="ClippingHeight_LostFocus"/>
+    </Grid>
+    <!-- Fit and CommandButtons -->
+    <Grid Height="25">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="10*"/>
+        <ColumnDefinition Width="15*"/>
+        <ColumnDefinition Width="10*"/>
+        <ColumnDefinition Width="10*"/>
+      </Grid.ColumnDefinitions>
+      <CheckBox VerticalAlignment="Center" Height="16" Margin="0,4"
+                x:Name="Fit" Content="Fit" IsChecked="True" 
+                Checked="Fit_Checked" Unchecked="Fit_Unchecked" Click="Fit_Click"/>
+      <Button   Grid.Column="1"
+                VerticalAlignment="Center" Height="20"
+                x:Name="AreaSelect" Content="Area Select"
+                Click="AreaSelect_Click"/>
+      <Button   Grid.Column="2"
+                VerticalAlignment="Center" Height="20"
+                x:Name="ListView" Content="ListView"
+                Click="ListView_Click"/>
+      <Button   Grid.Column="3"
+                VerticalAlignment="Center" Height="20" Margin="0,0,5,0"
+                x:Name="Desktop" Content="Desktop"
+                Click="Desktop_Click"/>
+    </Grid>
+  </StackPanel>
 </UserControl>

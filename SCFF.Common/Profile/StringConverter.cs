@@ -29,25 +29,25 @@ public static class StringConverter {
   // Header
   //=================================================================
 
-  /// ヘッダー表示用文字列
+  /// LayoutParameter用ヘッダー文字列
   /// @param layoutElement データ取得元のレイアウト要素
   /// @param maxLength 文字列の長さの上限
-  /// @return ヘッダー表示用文字列
-  public static string GetHeaderString(ILayoutElementView layoutElement, int maxLength) {
+  /// @return LayoutParameter用ヘッダー文字列
+  public static string GetHeaderStringForLayoutParameter(ILayoutElementView layoutElement, int maxLength) {
     var header = string.Format("Layout {0:D}: {1}",
                                 layoutElement.Index + 1,
                                 layoutElement.WindowCaption);
     return header.Substring(0, Math.Min(header.Length, maxLength));
   }
 
-  /// ヘッダー表示用文字列(GUI用)
+  /// LayoutEdit用ヘッダー文字列
   /// @param layoutElement データ取得元のレイアウト要素
   /// @param isCurrent 現在選択中のLayoutElementか
   /// @param isDummy ダミープレビューサイズかどうか
   /// @param sampleWidth サンプルの幅
   /// @param sampleHeight サンプルの高さ
-  /// @return ヘッダー表示用文字列(GUI用)
-  public static string GetHeaderStringForGUI(ILayoutElementView layoutElement, bool isCurrent, bool isDummy, int sampleWidth, int sampleHeight) {
+  /// @return LayoutEdit用ヘッダー文字列
+  public static string GetHeaderStringForLayoutEdit(ILayoutElementView layoutElement, bool isCurrent, bool isDummy, int sampleWidth, int sampleHeight) {
     if (isCurrent && isDummy) {
       return string.Format(" [{0}] {1}", layoutElement.Index + 1, layoutElement.WindowCaption);
     } else if (isCurrent) {
@@ -59,6 +59,19 @@ public static class StringConverter {
           layoutElement.WindowCaption);
     } else {
       return string.Format(" [{0}]", layoutElement.Index + 1);
+    }
+  }
+
+  //=================================================================
+  // Window
+  //=================================================================
+
+  /// ウィンドウ名
+  public static string GetWindowCaption(ILayoutElementView layoutElement) {
+    if (layoutElement.IsWindowValid) {
+      return layoutElement.WindowCaption;
+    } else {
+      return string.Format("n/a ({0})", layoutElement.WindowCaption);
     }
   }
 

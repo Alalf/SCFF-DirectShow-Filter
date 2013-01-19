@@ -87,7 +87,7 @@ public partial class LayoutEdit
     var isDummy = App.RuntimeOptions.SelectedEntryIndex == -1;
 
     // Caption
-    var header = StringConverter.GetHeaderStringForGUI(layoutElement,
+    var header = StringConverter.GetHeaderStringForLayoutEdit(layoutElement,
             isCurrent, isDummy,
             App.RuntimeOptions.CurrentSampleWidth,
             App.RuntimeOptions.CurrentSampleHeight);

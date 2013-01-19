@@ -26,6 +26,7 @@ using System.Windows.Controls;
 using SCFF.Common;
 using SCFF.Common.Ext;
 using SCFF.Common.GUI;
+using SCFF.Common.Profile;
 
 /// Window取り込み対象の設定用UserControl
 public partial class TargetWindow : UserControl, IBindingProfile {
@@ -211,7 +212,7 @@ public partial class TargetWindow : UserControl, IBindingProfile {
   /// @copydoc IBindingProfile::OnCurrentLayoutElementChanged
   public void OnCurrentLayoutElementChanged() {
     this.CanChangeProfile = false;
-    this.WindowCaption.Text = App.Profile.CurrentView.WindowCaption;
+    this.WindowCaption.Text = StringConverter.GetWindowCaption(App.Profile.CurrentView);
     this.CanChangeProfile = true;
   }
   /// @copydoc IBindingProfile::OnProfileChanged

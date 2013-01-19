@@ -317,7 +317,8 @@ public partial class LayoutParameter
     this.CanChangeProfile = false;
 
     this.GroupBox.Header =
-        StringConverter.GetHeaderString(App.Profile.CurrentView, LayoutParameter.maxHeaderLength);
+        StringConverter.GetHeaderStringForLayoutParameter(
+            App.Profile.CurrentView, LayoutParameter.maxHeaderLength);
 
     this.UpdateDisabledTextboxes();
 

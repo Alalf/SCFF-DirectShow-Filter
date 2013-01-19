@@ -24,7 +24,11 @@
       <TextBox  Grid.Column="1"
                 VerticalAlignment="Center" Height="20" Margin="0,0,5,0"
                 x:Name="ClippingX" Text="9999" HorizontalContentAlignment="Right"
-                TextChanged="ClippingX_TextChanged" LostFocus="ClippingX_LostFocus" />
+                TextChanged="ClippingX_TextChanged" KeyDown="ClippingX_KeyDown" LostFocus="ClippingX_LostFocus">
+        <TextBox.ToolTip>
+          <ToolTip x:Name="ClippingXToolTip" Placement="Bottom" Visibility="Hidden"/>
+        </TextBox.ToolTip>
+      </TextBox>
       <!-- Y -->
       <Label    Grid.Column="2"
                 VerticalAlignment="Center" Height="12" Margin="3,0"
@@ -32,7 +36,11 @@
       <TextBox  Grid.Column="3"
                 VerticalAlignment="Center" Height="20" Margin="0,0,5,0"
                 x:Name="ClippingY" Text="9999" HorizontalContentAlignment="Right"
-                TextChanged="ClippingY_TextChanged" LostFocus="ClippingY_LostFocus"/>
+                TextChanged="ClippingY_TextChanged" KeyDown="ClippingY_KeyDown" LostFocus="ClippingY_LostFocus">
+        <TextBox.ToolTip>
+          <ToolTip x:Name="ClippingYToolTip" Placement="Bottom" Visibility="Hidden"/>
+        </TextBox.ToolTip>
+      </TextBox>
       <!-- Size -->
       <Label    Grid.Column="4"
                 VerticalAlignment="Center" Height="12" Margin="3,0"
@@ -40,7 +48,11 @@
       <TextBox  Grid.Column="5"
                 VerticalAlignment="Center" Height="20" Margin="0,0,5,0"
                 x:Name="ClippingWidth" Text="9999" HorizontalContentAlignment="Right"
-                TextChanged="ClippingWidth_TextChanged" LostFocus="ClippingWidth_LostFocus"/>
+                TextChanged="ClippingWidth_TextChanged" KeyDown="ClippingWidth_KeyDown" LostFocus="ClippingWidth_LostFocus">
+        <TextBox.ToolTip>
+          <ToolTip x:Name="ClippingWidthToolTip" Placement="Bottom" Visibility="Hidden"/>
+        </TextBox.ToolTip>
+      </TextBox>
       <!-- x -->
       <Label    Grid.Column="6"
                 VerticalAlignment="Center" Height="12" Margin="3,0"
@@ -48,7 +60,11 @@
       <TextBox  Grid.Column="8"
                 VerticalAlignment="Center" Height="20" Margin="0,0,5,0"
                 x:Name="ClippingHeight" Text="9999" HorizontalContentAlignment="Right"
-                TextChanged="ClippingHeight_TextChanged" LostFocus="ClippingHeight_LostFocus"/>
+                TextChanged="ClippingHeight_TextChanged" KeyDown="ClippingHeight_KeyDown" LostFocus="ClippingHeight_LostFocus">
+        <TextBox.ToolTip>
+          <ToolTip x:Name="ClippingHeightToolTip" Placement="Bottom" Visibility="Hidden"/>
+        </TextBox.ToolTip>
+      </TextBox>
     </Grid>
     <!-- Fit and CommandButtons -->
     <Grid Height="25">

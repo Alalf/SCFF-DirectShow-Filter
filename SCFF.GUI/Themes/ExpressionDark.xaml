@@ -1559,19 +1559,6 @@
 
     </Grid>
     <ControlTemplate.Triggers>
-      <!-- 2013/01/10 Modified by Alalf 
-      <Trigger Property="Validation.HasError" Value="True">
-        <Setter Property="ToolTip"
-                Value="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=(Validation.Errors).CurrentItem.ErrorContent}" />
-      </Trigger> -->
-      <!-- 2013/01/16 Modified by Alalf -->
-      <Trigger Property="Tag" Value="HasError">
-        <Setter Property="BorderBrush" Value="{StaticResource HasErrorBrush}"/>
-      </Trigger>
-      <Trigger Property="Tag" Value="HasWarning">
-        <Setter Property="BorderBrush" Value="{StaticResource HasWarningBrush}"/>
-      </Trigger>
-
       <Trigger Property="IsFocused" Value="True">
         <Trigger.ExitActions>
           <BeginStoryboard Storyboard="{StaticResource FocusedOff}" x:Name="FocusedOff_BeginStoryboard" />
@@ -1599,6 +1586,19 @@
         <Setter Property="BorderBrush" TargetName="Border" Value="{DynamicResource DisabledBorderBrush}" />
         <!-- 2012/12/20 Modified by Alalf -->
         <Setter Property="Foreground" Value="{DynamicResource DisabledTextBrush}" />
+      </Trigger>
+
+      <!-- 2013/01/10 Modified by Alalf 
+      <Trigger Property="Validation.HasError" Value="True">
+        <Setter Property="ToolTip"
+                Value="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=(Validation.Errors).CurrentItem.ErrorContent}" />
+      </Trigger> -->
+      <!-- 2013/01/16 Modified by Alalf -->
+      <Trigger Property="Tag" Value="HasError">
+        <Setter Property="BorderBrush" TargetName="Border" Value="{StaticResource HasErrorBrush}"/>
+      </Trigger>
+      <Trigger Property="Tag" Value="HasWarning">
+        <Setter Property="BorderBrush" TargetName="Border" Value="{StaticResource HasWarningBrush}"/>
       </Trigger>
     </ControlTemplate.Triggers>
   </ControlTemplate>

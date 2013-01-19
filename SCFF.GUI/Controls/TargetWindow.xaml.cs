@@ -212,6 +212,7 @@ public partial class TargetWindow : UserControl, IBindingProfile {
   /// @copydoc IBindingProfile::OnCurrentLayoutElementChanged
   public void OnCurrentLayoutElementChanged() {
     this.CanChangeProfile = false;
+    this.WindowCaption.Tag = App.Profile.CurrentView.IsWindowValid ? null : "HasError";
     this.WindowCaption.Text = StringConverter.GetWindowCaption(App.Profile.CurrentView);
     this.CanChangeProfile = true;
   }

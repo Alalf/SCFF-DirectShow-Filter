@@ -113,15 +113,17 @@
         <localControls:SCFFDSFEntries x:Name="SCFFEntries"/>
         <!-- 取り込みウィンドウ -->
         <GroupBox Header="Target Window">
-          <localControls:TargetWindow x:Name="TargetWindow" />
+          <StackPanel>
+            <localControls:TargetWindow x:Name="TargetWindow" />
+            <!-- 取り込み範囲 -->
+            <Expander Header="Area"
+                      x:Name="AreaExpander" IsExpanded="True"
+                      Collapsed="AreaExpander_Collapsed"
+                      Expanded="AreaExpander_Expanded">
+              <localControls:Area x:Name="Area"/>
+            </Expander>
+          </StackPanel>
         </GroupBox>
-        <!-- 取り込み範囲 -->
-        <Expander Header="Area"
-                  x:Name="AreaExpander" IsExpanded="True"
-                  Collapsed="AreaExpander_Collapsed"
-                  Expanded="AreaExpander_Expanded">
-          <localControls:Area x:Name="Area"/>
-        </Expander>
         <!-- 取り込みオプション -->
         <Expander Header="Options"
                   x:Name="OptionsExpander" IsExpanded="True"

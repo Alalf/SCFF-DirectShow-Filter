@@ -40,18 +40,12 @@ public static class InputCorrector {
   public static bool CorrectInputClippingX(ILayoutElementView layoutElement,
       int value, out int fixedX, out int fixedWidth) {
     Debug.Assert(layoutElement.IsWindowValid);
+    Debug.Assert(!layoutElement.Fit);
 
     var result = true;
     fixedX = value;
     fixedWidth = layoutElement.ClippingWidthWithoutFit;
     var windowRect = Utilities.GetWindowRect(layoutElement.WindowType, layoutElement.Window);
-
-    // Fitならvalueによらず訂正の必要はない
-    if (layoutElement.Fit) {
-      fixedX = windowRect.X;
-      fixedWidth = windowRect.Width;
-      return true;
-    }
  
     // 上限・下限の補正
     if (fixedX < windowRect.X) {
@@ -93,18 +87,12 @@ public static class InputCorrector {
   public static bool CorrectInputClippingWidth(ILayoutElementView layoutElement,
       int value, out int fixedX, out int fixedWidth) {
     Debug.Assert(layoutElement.IsWindowValid);
+    Debug.Assert(!layoutElement.Fit);
 
     var result = true;
     fixedX = layoutElement.ClippingXWithoutFit;
     fixedWidth = value;
     var windowRect = Utilities.GetWindowRect(layoutElement.WindowType, layoutElement.Window);
-
-    // Fitならvalueによらず訂正の必要はない
-    if (layoutElement.Fit) {
-      fixedX = windowRect.X;
-      fixedWidth = windowRect.Width;
-      return true;
-    }
 
     // 上限・下限の補正
     if (fixedWidth < 0) {
@@ -151,18 +139,12 @@ public static class InputCorrector {
   public static bool CorrectInputClippingY(ILayoutElementView layoutElement,
       int value, out int fixedY, out int fixedHeight) {
     Debug.Assert(layoutElement.IsWindowValid);
+    Debug.Assert(!layoutElement.Fit);
 
     var result = true;
     fixedY = value;
     fixedHeight = layoutElement.ClippingHeightWithoutFit;
     var windowRect = Utilities.GetWindowRect(layoutElement.WindowType, layoutElement.Window);
-
-    // Fitならvalueによらず訂正の必要はない
-    if (layoutElement.Fit) {
-      fixedY = windowRect.Y;
-      fixedHeight = windowRect.Height;
-      return true;
-    }
  
     // 上限・下限の補正
     if (fixedY < windowRect.Y) {
@@ -204,18 +186,12 @@ public static class InputCorrector {
   public static bool CorrectInputClippingHeight(ILayoutElementView layoutElement,
       int value, out int fixedY, out int fixedHeight) {
     Debug.Assert(layoutElement.IsWindowValid);
+    Debug.Assert(!layoutElement.Fit);
 
     var result = true;
     fixedY = layoutElement.ClippingYWithoutFit;
     fixedHeight = value;
     var windowRect = Utilities.GetWindowRect(layoutElement.WindowType, layoutElement.Window);
-
-    // Fitならvalueによらず訂正の必要はない
-    if (layoutElement.Fit) {
-      fixedY = windowRect.Y;
-      fixedHeight = windowRect.Height;
-      return true;
-    }
 
     // 上限・下限の補正
     if (fixedHeight < 0) {

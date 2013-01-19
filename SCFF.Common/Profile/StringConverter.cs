@@ -105,17 +105,17 @@ public static class StringConverter {
   public static string GetBoundRelativeLeftString(ILayoutElementView layoutElement) {
     return layoutElement.BoundRelativeLeft.ToString("F3");
   }
-  /// BoundRelativeTop表示用
-  /// @param layoutElement データ取得元のレイアウト要素
-  /// @return BoundRelativeTop表示用文字列
-  public static string GetBoundRelativeTopString(ILayoutElementView layoutElement) {
-    return layoutElement.BoundRelativeTop.ToString("F3");
-  }
   /// BoundRelativeRight表示用
   /// @param layoutElement データ取得元のレイアウト要素
   /// @return BoundRelativeRight表示用文字列
   public static string GetBoundRelativeRightString(ILayoutElementView layoutElement) {
     return layoutElement.BoundRelativeRight.ToString("F3");
+  }
+  /// BoundRelativeTop表示用
+  /// @param layoutElement データ取得元のレイアウト要素
+  /// @return BoundRelativeTop表示用文字列
+  public static string GetBoundRelativeTopString(ILayoutElementView layoutElement) {
+    return layoutElement.BoundRelativeTop.ToString("F3");
   }
   /// BoundRelativeBottom表示用
   /// @param layoutElement データ取得元のレイアウト要素

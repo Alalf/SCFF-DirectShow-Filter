@@ -42,7 +42,7 @@
     <TextBox  Grid.Column="1" Grid.Row="3"
               VerticalAlignment="Center" Height="20" Margin="5,0"
               IsEnabled="False"
-              x:Name="SWScaleLumaGBlur" Text="9999"
+              x:Name="SWScaleLumaGBlur" Text="9999" HorizontalContentAlignment="Right"
               TextChanged="SWScaleLumaGBlur_TextChanged"/>
     <!-- L Sharpen -->
     <Label    Grid.Row="4"
@@ -51,7 +51,7 @@
     <TextBox  Grid.Row="4" Grid.Column="1"
               VerticalAlignment="Center" Height="20" Margin="5,0" 
               IsEnabled="False"
-              x:Name="SWScaleLumaSharpen" Text="9999"
+              x:Name="SWScaleLumaSharpen" Text="9999" HorizontalContentAlignment="Right"
               TextChanged="SWScaleLumaSharpen_TextChanged"/>
     <!-- C HShift -->
     <Label    Grid.Row="5"
@@ -60,7 +60,7 @@
     <TextBox  Grid.Row="5" Grid.Column="1"
               VerticalAlignment="Center" Height="20" Margin="5,0"
               IsEnabled="False"
-              x:Name="SWScaleChromaHshift" Text="0.0"
+              x:Name="SWScaleChromaHshift" Text="0.0" HorizontalContentAlignment="Right"
               TextChanged="SWScaleChromaHshift_TextChanged"/>
     <!-- C GBlur -->
     <Label    Grid.Row="3" Grid.Column="2"
@@ -69,7 +69,7 @@
     <TextBox  Grid.Row="3" Grid.Column="3"
               VerticalAlignment="Center" Height="20" Margin="5,0"
               IsEnabled="False"
-              x:Name="SWScaleChromaGBlur" Text="9999"
+              x:Name="SWScaleChromaGBlur" Text="9999" HorizontalContentAlignment="Right"
               TextChanged="SWScaleChromaGBlur_TextChanged"/>
     <!-- C Sharpen -->
     <Label    Grid.Row="4" Grid.Column="2"
@@ -78,7 +78,7 @@
     <TextBox  Grid.Row="4" Grid.Column="3" 
               VerticalAlignment="Center" Height="20" Margin="5,0"
               IsEnabled="False"
-              x:Name="SWScaleChromaSharpen" Text="9999"
+              x:Name="SWScaleChromaSharpen" Text="9999" HorizontalContentAlignment="Right"
               TextChanged="SWScaleChromaSharpen_TextChanged"/>
     <!-- C VShift -->
     <Label    Grid.Row="5" Grid.Column="2"
@@ -87,7 +87,7 @@
     <TextBox  Grid.Row="5" Grid.Column="3"
               VerticalAlignment="Center" Height="20" Margin="5,0"
               IsEnabled="False"
-              x:Name="SWScaleChromaVshift" Text="0.0"
+              x:Name="SWScaleChromaVshift" Text="0.0" HorizontalContentAlignment="Right"
               TextChanged="SWScaleChromaVshift_TextChanged"/>
   </Grid>
 </UserControl>

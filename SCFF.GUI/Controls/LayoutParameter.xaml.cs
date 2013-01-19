@@ -47,6 +47,24 @@ public partial class LayoutParameter
   // *Changed/Checked/Unchecked以外
   //-------------------------------------------------------------------
 
+  /// BoundX/BoundY/BoundWidth/BoundHeightを更新する
+  /// @attention *Changedイベントハンドラが無いのでそのまま代入してOK
+  private void UpdateDisabledTextboxes() {
+    // dummyの場合もあり
+    var sampleWidth = App.RuntimeOptions.CurrentSampleWidth;
+    var sampleHeight = App.RuntimeOptions.CurrentSampleHeight;
+    var isDummy = App.RuntimeOptions.SelectedEntryIndex == -1;
+
+    this.BoundX.Text =
+        StringConverter.GetBoundXString(App.Profile.CurrentView, isDummy, sampleWidth);
+    this.BoundY.Text =
+        StringConverter.GetBoundYString(App.Profile.CurrentView, isDummy, sampleHeight);
+    this.BoundWidth.Text =
+        StringConverter.GetBoundWidthString(App.Profile.CurrentView, isDummy, sampleWidth);
+    this.BoundHeight.Text =
+        StringConverter.GetBoundHeightString(App.Profile.CurrentView, isDummy, sampleHeight);
+  }
+
   /// Fit: Click
   ///
   /// 現在選択中のレイアウト要素のアスペクト比をあわせ、黒帯を消す
@@ -83,24 +101,6 @@ public partial class LayoutParameter
   // *Changed/Collapsed/Expanded
   //-------------------------------------------------------------------
 
-  /// BoundX/BoundY/GetBoundWidth/BoundHeightを更新する
-  /// @attention *Changedイベントハンドラが無いのでそのまま代入してOK
-  private void UpdateDisabledTextboxes() {
-    // dummyの場合もあり
-    var sampleWidth = App.RuntimeOptions.CurrentSampleWidth;
-    var sampleHeight = App.RuntimeOptions.CurrentSampleHeight;
-    var isDummy = App.RuntimeOptions.SelectedEntryIndex == -1;
-
-    this.BoundX.Text =
-        StringConverter.GetBoundXString(App.Profile.CurrentView, isDummy, sampleWidth);
-    this.BoundY.Text =
-        StringConverter.GetBoundYString(App.Profile.CurrentView, isDummy, sampleHeight);
-    this.BoundWidth.Text =
-        StringConverter.GetBoundWidthString(App.Profile.CurrentView, isDummy, sampleWidth);
-    this.BoundHeight.Text =
-        StringConverter.GetBoundHeightString(App.Profile.CurrentView, isDummy, sampleHeight);
-  }
-
   /// 下限・上限つきでテキストボックスから値を取得する
   private bool TryParseBoundRelativeParameter(TextBox textBox,
       double lowerBound, double upperBound, out double parsedValue) {
@@ -125,18 +125,113 @@ public partial class LayoutParameter
     return true;
   }
 
+  private void OverwriteBoundRelativeLeftText(bool fixCursor) {
+    this.CanChangeProfile = false;
+    this.BoundRelativeLeft.Text = StringConverter.GetBoundRelativeLeftString(App.Profile.CurrentView);
+    if (fixCursor) this.BoundRelativeLeft.Select(this.BoundRelativeLeft.Text.Length, 0);
+    this.CanChangeProfile = true;
+  }
+
+  private void OverwriteBoundRelativeRightText(bool fixCursor) {
+    this.CanChangeProfile = false;
+    this.BoundRelativeRight.Text = StringConverter.GetBoundRelativeRightString(App.Profile.CurrentView);
+    if (fixCursor) this.BoundRelativeRight.Select(this.BoundRelativeRight.Text.Length, 0);
+    this.CanChangeProfile = true;
+  }
+
+
   /// BoundRelativeLeft: TextChanged
   /// @param sender 使用しない
   /// @param e 使用しない
   private void BoundRelativeLeft_TextChanged(object sender, TextChangedEventArgs e) {
     if (!this.CanChangeProfile) return;
-    var lowerBound = 0.0;
-    var upperBound = 1.0;
-    double parsedValue;
-    if (this.TryParseBoundRelativeParameter(this.BoundRelativeLeft, lowerBound, upperBound, out parsedValue)) {
-      // Profileに書き込み
+
+    // Parse
+    double boundRelativeLeft;
+    if (!double.TryParse(this.BoundRelativeLeft.Text, out boundRelativeLeft)) {
+      this.BoundRelativeLeft.Tag = "HasError";
+      return;
+    } else {
+      this.BoundRelativeLeft.Tag = null;
+    }
+
+    /// @todo(me) どう考えてもまずい事態が起きている・・・どうしよう
+
+    // Correct
+    double fixedLeft, fixedRight;
+    if (!InputCorrector.CorrectInputBoundRelativeLeft(boundRelativeLeft,
+        App.Profile.CurrentView.BoundRelativeRight, out fixedLeft, out fixedRight)) {
+      // 失敗: Left/Rightのデータを書き換える
       App.Profile.Current.Open();
-      App.Profile.Current.SetBoundRelativeLeft = parsedValue;
+      App.Profile.Current.SetBoundRelativeLeft = fixedLeft;
+      App.Profile.Current.SetBoundRelativeRight = fixedRight;
+      App.Profile.Current.Close();
+
+      //-----------------------------------------------------------------
+      // Notify self
+      if (boundRelativeLeft != fixedLeft) {
+        this.OverwriteBoundRelativeLeftText(true);
+      }
+      this.OverwriteBoundRelativeRightText(false);
+      this.UpdateDisabledTextboxes();
+      // Notify other controls
+      Commands.CurrentLayoutElementVisualChanged.Execute(null, null);
+      //-----------------------------------------------------------------
+    } else {
+      // 成功: そのまま書き換え(Textは変更しない)
+      App.Profile.Current.Open();
+      App.Profile.Current.SetBoundRelativeLeft = boundRelativeLeft;
+      App.Profile.Current.Close();
+
+      //-----------------------------------------------------------------
+      // Notify self
+      this.UpdateDisabledTextboxes();
+      // Notify other controls
+      Commands.CurrentLayoutElementVisualChanged.Execute(null, null);
+      //-----------------------------------------------------------------
+    }
+  }
+
+
+  /// BoundRelativeRight: TextChanged
+  /// @param sender 使用しない
+  /// @param e 使用しない
+  private void BoundRelativeRight_TextChanged(object sender, TextChangedEventArgs e) {
+    if (!this.CanChangeProfile) return;
+
+    // Parse
+    double boundRelativeRight;
+    if (!double.TryParse(this.BoundRelativeRight.Text, out boundRelativeRight)) {
+      this.BoundRelativeRight.Tag = "HasError";
+      return;
+    } else {
+      this.BoundRelativeRight.Tag = null;
+    }
+
+    // Correct
+    double fixedLeft, fixedRight;
+    if (!InputCorrector.CorrectInputBoundRelativeRight(App.Profile.CurrentView.BoundRelativeLeft,
+        boundRelativeRight, out fixedLeft, out fixedRight)) {
+      // 失敗: Left/Rightのデータを書き換える
+      App.Profile.Current.Open();
+      App.Profile.Current.SetBoundRelativeLeft = fixedLeft;
+      App.Profile.Current.SetBoundRelativeRight = fixedRight;
+      App.Profile.Current.Close();
+
+      //-----------------------------------------------------------------
+      // Notify self
+      this.OverwriteBoundRelativeLeftText(false);
+      if (boundRelativeRight != fixedRight) {
+        this.OverwriteBoundRelativeRightText(true);
+      }
+      this.UpdateDisabledTextboxes();
+      // Notify other controls
+      Commands.CurrentLayoutElementVisualChanged.Execute(null, null);
+      //-----------------------------------------------------------------
+    } else {
+      // 成功: そのまま書き換え(Textは変更しない)
+      App.Profile.Current.Open();
+      App.Profile.Current.SetBoundRelativeRight = boundRelativeRight;
       App.Profile.Current.Close();
 
       //-----------------------------------------------------------------
@@ -171,28 +266,6 @@ public partial class LayoutParameter
     }
   }
 
-  /// BoundRelativeRight: TextChanged
-  /// @param sender 使用しない
-  /// @param e 使用しない
-  private void BoundRelativeRight_TextChanged(object sender, TextChangedEventArgs e) {
-    if (!this.CanChangeProfile) return;
-    var lowerBound = 0.0;
-    var upperBound = 1.0;
-    double parsedValue;
-    if (this.TryParseBoundRelativeParameter(this.BoundRelativeRight, lowerBound, upperBound, out parsedValue)) {
-      // Profileに書き込み
-      App.Profile.Current.Open();
-      App.Profile.Current.SetBoundRelativeRight = parsedValue;
-      App.Profile.Current.Close();
-
-      //-----------------------------------------------------------------
-      // Notify self
-      this.UpdateDisabledTextboxes();
-      // Notify other controls
-      Commands.CurrentLayoutElementVisualChanged.Execute(null, null);
-      //-----------------------------------------------------------------
-    }
-  }
 
   /// BoundRelativeBottom: TextChanged
   /// @param sender 使用しない

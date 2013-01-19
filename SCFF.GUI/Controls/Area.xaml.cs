@@ -250,7 +250,7 @@ public partial class Area : UserControl, IBindingProfile {
   private void ClippingX_TextChanged(object sender, TextChangedEventArgs e) {
     if (!this.CanChangeProfile) return;
 
-    // Parse可能か
+    // Parse
     int clippingX;
     if (!int.TryParse(this.ClippingX.Text, out clippingX)) {
       this.ClippingX.Tag = "HasError";
@@ -259,7 +259,7 @@ public partial class Area : UserControl, IBindingProfile {
       this.ClippingX.Tag = null;
     }
 
-    // Windowチェック
+    // Window Check
     if (!App.Profile.CurrentView.IsWindowValid) {
       this.ClippingX.Tag = "HasError";
       return;
@@ -267,10 +267,10 @@ public partial class Area : UserControl, IBindingProfile {
       this.ClippingX.Tag = null;
     }
 
-    // 次にValidateする
+    // Correct
     int fixedX, fixedWidth;
     if (!InputCorrector.CorrectInputClippingX(App.Profile.CurrentView, clippingX, out fixedX, out fixedWidth)) {
-      // Validateで失敗したらX/WidthのTextとデータを置き換える
+      // 失敗: X/WidthのTextとデータを置き換える
       App.Profile.Current.Open();
       App.Profile.Current.SetClippingXWithoutFit = fixedX;
       App.Profile.Current.SetClippingWidthWithoutFit = fixedWidth;
@@ -286,7 +286,7 @@ public partial class Area : UserControl, IBindingProfile {
       Commands.CurrentLayoutElementVisualChanged.Execute(null, null);
       //---------------------------------------------------------------
     } else {
-      // 成功したらそのまま書き換え(Textは変更しない)
+      // 成功: そのまま書き換え(Textは変更しない)
       App.Profile.Current.Open();
       App.Profile.Current.SetClippingXWithoutFit = clippingX;
       App.Profile.Current.Close();
@@ -303,7 +303,7 @@ public partial class Area : UserControl, IBindingProfile {
   private void ClippingWidth_TextChanged(object sender, TextChangedEventArgs e) {
     if (!this.CanChangeProfile) return;
 
-    // Parse可能か
+    // Parse
     int clippingWidth;
     if (!int.TryParse(this.ClippingWidth.Text, out clippingWidth)) {
       this.ClippingWidth.Tag = "HasError";
@@ -312,7 +312,7 @@ public partial class Area : UserControl, IBindingProfile {
       this.ClippingWidth.Tag = null;
     }
 
-    // Windowチェック
+    // Window Check
     if (!App.Profile.CurrentView.IsWindowValid) {
       this.ClippingWidth.Tag = "HasError";
       return;
@@ -320,10 +320,10 @@ public partial class Area : UserControl, IBindingProfile {
       this.ClippingWidth.Tag = null;
     }
 
-    // 次にValidateする
+    // Correct
     int fixedX, fixedWidth;
     if (!InputCorrector.CorrectInputClippingWidth(App.Profile.CurrentView, clippingWidth, out fixedX, out fixedWidth)) {
-      // Validateで失敗したらX/WidthのTextとデータを置き換える
+      // 失敗: X/WidthのTextとデータを置き換える
       App.Profile.Current.Open();
       App.Profile.Current.SetClippingXWithoutFit = fixedX;
       App.Profile.Current.SetClippingWidthWithoutFit = fixedWidth;
@@ -339,7 +339,7 @@ public partial class Area : UserControl, IBindingProfile {
       Commands.CurrentLayoutElementVisualChanged.Execute(null, null);
       //---------------------------------------------------------------
     } else {
-      // 成功したらそのまま書き換え(Textは変更しない)
+      // 成功: そのまま書き換え(Textは変更しない)
       App.Profile.Current.Open();
       App.Profile.Current.SetClippingWidthWithoutFit = clippingWidth;
       App.Profile.Current.Close();
@@ -356,7 +356,7 @@ public partial class Area : UserControl, IBindingProfile {
   private void ClippingY_TextChanged(object sender, TextChangedEventArgs e) {
     if (!this.CanChangeProfile) return;
 
-    // Parse可能か
+    // Parse
     int clippingY;
     if (!int.TryParse(this.ClippingY.Text, out clippingY)) {
       this.ClippingY.Tag = "HasError";
@@ -365,7 +365,7 @@ public partial class Area : UserControl, IBindingProfile {
       this.ClippingY.Tag = null;
     }
 
-    // Windowチェック
+    // Window Check
     if (!App.Profile.CurrentView.IsWindowValid) {
       this.ClippingY.Tag = "HasError";
       return;
@@ -373,10 +373,10 @@ public partial class Area : UserControl, IBindingProfile {
       this.ClippingY.Tag = null;
     }
 
-    // 次にValidateする
+    // Correct
     int fixedY, fixedHeight;
     if (!InputCorrector.CorrectInputClippingY(App.Profile.CurrentView, clippingY, out fixedY, out fixedHeight)) {
-      // Validateで失敗したらY/HeightのTextとデータを置き換える
+      // 失敗: Y/HeightのTextとデータを置き換える
       App.Profile.Current.Open();
       App.Profile.Current.SetClippingYWithoutFit = fixedY;
       App.Profile.Current.SetClippingHeightWithoutFit = fixedHeight;
@@ -392,7 +392,7 @@ public partial class Area : UserControl, IBindingProfile {
       Commands.CurrentLayoutElementVisualChanged.Execute(null, null);
       //---------------------------------------------------------------
     } else {
-      // 成功したらそのまま書き換え(Textは変更しない)
+      // 成功: そのまま書き換え(Textは変更しない)
       App.Profile.Current.Open();
       App.Profile.Current.SetClippingYWithoutFit = clippingY;
       App.Profile.Current.Close();
@@ -409,7 +409,7 @@ public partial class Area : UserControl, IBindingProfile {
   private void ClippingHeight_TextChanged(object sender, TextChangedEventArgs e) {
     if (!this.CanChangeProfile) return;
 
-    // Parse可能か
+    // Parse
     int clippingHeight;
     if (!int.TryParse(this.ClippingHeight.Text, out clippingHeight)) {
       this.ClippingHeight.Tag = "HasError";
@@ -418,7 +418,7 @@ public partial class Area : UserControl, IBindingProfile {
       this.ClippingHeight.Tag = null;
     }
 
-    // Windowチェック
+    // Window Check
     if (!App.Profile.CurrentView.IsWindowValid) {
       this.ClippingHeight.Tag = "HasError";
       return;
@@ -426,10 +426,10 @@ public partial class Area : UserControl, IBindingProfile {
       this.ClippingHeight.Tag = null;
     }
 
-    // 次にValidateする
+    // Correct
     int fixedY, fixedHeight;
     if (!InputCorrector.CorrectInputClippingHeight(App.Profile.CurrentView, clippingHeight, out fixedY, out fixedHeight)) {
-      // Validateで失敗したらY/HeightのTextとデータを置き換える
+      // 失敗: Y/HeightのTextとデータを置き換える
       App.Profile.Current.Open();
       App.Profile.Current.SetClippingYWithoutFit = fixedY;
       App.Profile.Current.SetClippingHeightWithoutFit = fixedHeight;
@@ -445,7 +445,7 @@ public partial class Area : UserControl, IBindingProfile {
       Commands.CurrentLayoutElementVisualChanged.Execute(null, null);
       //---------------------------------------------------------------
     } else {
-      // 成功したらそのまま書き換え(Textは変更しない)
+      // 成功: そのまま書き換え(Textは変更しない)
       App.Profile.Current.Open();
       App.Profile.Current.SetClippingHeightWithoutFit = clippingHeight;
       App.Profile.Current.Close();

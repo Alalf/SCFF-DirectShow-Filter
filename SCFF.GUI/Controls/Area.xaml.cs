@@ -32,18 +32,6 @@ using SCFF.Common.Profile;
 /// クリッピング領域設定用UserControl
 public partial class Area : UserControl, IBindingProfile {
   //===================================================================
-  // 列挙型
-  //===================================================================
-
-  /// x:Nameのグループ
-  private enum Names {
-    ClippingX,
-    ClippingY,
-    ClippingWidth,
-    ClippingHeight
-  }
-
-  //===================================================================
   // コンストラクタ/Dispose/デストラクタ
   //===================================================================
 
@@ -52,35 +40,53 @@ public partial class Area : UserControl, IBindingProfile {
     InitializeComponent();
 
     // HACK!: PlacementTargetが上手く動かないのでここで設定する
-    this.GetToolTip(Names.ClippingX).PlacementTarget = this.GetTextBox(Names.ClippingX);
-    this.GetToolTip(Names.ClippingY).PlacementTarget = this.GetTextBox(Names.ClippingY);
-    this.GetToolTip(Names.ClippingWidth).PlacementTarget = this.GetTextBox(Names.ClippingWidth);
-    this.GetToolTip(Names.ClippingHeight).PlacementTarget = this.GetTextBox(Names.ClippingHeight);
+    this.GetToolTip(Positions.X).PlacementTarget = this.GetTextBox(Positions.X);
+    this.GetToolTip(Positions.Y).PlacementTarget = this.GetTextBox(Positions.Y);
+    this.GetToolTip(Sizes.Width).PlacementTarget = this.GetTextBox(Sizes.Width);
+    this.GetToolTip(Sizes.Height).PlacementTarget = this.GetTextBox(Sizes.Height);
   }
 
   //-------------------------------------------------------------------
 
-  private TextBox GetTextBox(Names name) {
-    switch (name) {
-      case Names.ClippingX: return this.ClippingX;
-      case Names.ClippingY: return this.ClippingY;
-      case Names.ClippingWidth: return this.ClippingWidth;
-      case Names.ClippingHeight: return this.ClippingHeight;
+  private TextBox GetTextBox(Positions position) {
+    switch (position) {
+      case Positions.X: return this.ClippingX;
+      case Positions.Y: return this.ClippingY;
       default: {
-        Debug.Fail("Invalid Name", "Area.GetTextBox");
+        Debug.Fail("Invalid Position", "Area.GetTextBox");
         return null;
       }
     }
   }
 
-  private ToolTip GetToolTip(Names name) {
-    switch (name) {
-      case Names.ClippingX: return this.ClippingXToolTip;
-      case Names.ClippingY: return this.ClippingYToolTip;
-      case Names.ClippingWidth: return this.ClippingWidthToolTip;
-      case Names.ClippingHeight: return this.ClippingHeightToolTip;
+  private TextBox GetTextBox(Sizes size) {
+    switch (size) {
+      case Sizes.Width: return this.ClippingWidth;
+      case Sizes.Height: return this.ClippingHeight;
       default: {
-        Debug.Fail("Invalid Name", "Area.GetToolTip");
+        Debug.Fail("Invalid Size", "Area.GetTextBox");
+        return null;
+      }
+    }
+  }
+
+  private ToolTip GetToolTip(Positions position) {
+    switch (position) {
+      case Positions.X: return this.ClippingXToolTip;
+      case Positions.Y: return this.ClippingYToolTip;
+      default: {
+        Debug.Fail("Invalid Position", "Area.GetToolTip");
+        return null;
+      }
+    }
+  }
+
+  private ToolTip GetToolTip(Sizes size) {
+    switch (size) {
+      case Sizes.Width: return this.ClippingWidthToolTip;
+      case Sizes.Height: return this.ClippingHeightToolTip;
+      default: {
+        Debug.Fail("Invalid Size", "Area.GetToolTip");
         return null;
       }
     }
@@ -90,271 +96,284 @@ public partial class Area : UserControl, IBindingProfile {
   // 入力エラー処理
   //===================================================================
 
-  private bool HasError(Names name) {
-    return this.GetTextBox(name).Tag != null;
+  private bool HasError(Positions position) {
+    return TextBoxError.HasError(this.GetTextBox(position));
+  }
+  private bool HasError(Sizes size) {
+    return TextBoxError.HasError(this.GetTextBox(size));
+  }
+  private void ResetError(Positions position) {
+    TextBoxError.ResetError(this.GetTextBox(position), this.GetToolTip(position));
+  }
+  private void ResetError(Sizes size) {
+    TextBoxError.ResetError(this.GetTextBox(size), this.GetToolTip(size));
+  }
+  private void SetError(Positions position, string message = null) {
+    TextBoxError.SetError(this.GetTextBox(position), this.GetToolTip(position), message);
+  }
+  private void SetError(Sizes size, string message = null) {
+    TextBoxError.SetError(this.GetTextBox(size), this.GetToolTip(size), message);
+  }
+  private void SetWarning(Positions position, string message = null) {
+    TextBoxError.SetWarning(this.GetTextBox(position), this.GetToolTip(position), message);
+  }
+  private void SetWarning(Sizes size, string message = null) {
+    TextBoxError.SetWarning(this.GetTextBox(size), this.GetToolTip(size), message);
   }
 
-  private void ResetError(Names name) {
-    var textBox = this.GetTextBox(name);
-    var toolTip = this.GetToolTip(name);
-    textBox.Tag = null;
-    toolTip.Visibility = Visibility.Hidden;
-    toolTip.Content = null;
-    toolTip.IsOpen = false;
-  }
+  //-------------------------------------------------------------------
 
-  private void SetError(Names name, string message = null) {
-    var textBox = this.GetTextBox(name);
-    var toolTip = this.GetToolTip(name);
-    textBox.Tag = "HasError";
-    if (message != null) {
-      toolTip.Visibility = Visibility.Visible;
-      toolTip.Content = message;
-      toolTip.IsOpen = true;
-    } else {
-      toolTip.Visibility = Visibility.Hidden;
-      toolTip.Content = null;
-      toolTip.IsOpen = false;
-    }
-  }
-
-  private void SetWarning(Names name, string message = null) {
-    var textBox = this.GetTextBox(name);
-    var toolTip = this.GetToolTip(name);
-    textBox.Tag = "HasWarning";
-    if (message != null) {
-      toolTip.Visibility = Visibility.Visible;
-      toolTip.Content = message;
-      toolTip.IsOpen = true;
-    } else {
-      toolTip.Visibility = Visibility.Hidden;
-      toolTip.Content = null;
-      toolTip.IsOpen = false;
-    }
-  }
-
-  private void ChangePosition(Names positionName) {
-    Debug.Assert(positionName == Names.ClippingX ||
-                 positionName == Names.ClippingY);
-    var isHorizontal = (positionName == Names.ClippingX);
-    var sizeName = isHorizontal ? Names.ClippingWidth : Names.ClippingHeight;
+  private void ChangePosition(Positions position) {
+    var size = (position == Positions.X) ? Sizes.Width : Sizes.Height;
 
     // Parse
-    int position;
-    if (!int.TryParse(this.GetTextBox(positionName).Text, out position)) {
-      this.SetError(positionName, "must be integer");
-      this.ResetError(sizeName);
+    int value;
+    if (!int.TryParse(this.GetTextBox(position).Text, out value)) {
+      this.SetError(position, "must be integer");
+      this.ResetError(size);
       return;
     }
 
     // Window Check
     if (!App.Profile.CurrentView.IsWindowValid) {
-      this.SetError(positionName, "Target window is invalid");
-      this.ResetError(sizeName);
+      this.SetError(position, "Target window is invalid");
+      this.ResetError(size);
       return;
     }
 
     // Correct
-    int fixedPosition, fixedSize;
-    var size = isHorizontal
-        ? App.Profile.CurrentView.ClippingWidthWithoutFit
-        : App.Profile.CurrentView.ClippingHeightWithoutFit;
-    var correctionResult = InputCorrector.CorrectInputClippingPosition(
-        isHorizontal, App.Profile.CurrentView, position,
-        out fixedPosition, out fixedSize);
+    ClientRect changed;
+    var tryResult = InputCorrector.TryChangeClippingPosition(
+        App.Profile.CurrentView, position, value, out changed);
 
-    // 失敗
-    if (!correctionResult) {
-      // Set Error/Warning
-      this.SetWarning(positionName, "Return/Enter: Correct Value");
-      if (size != fixedSize) {
-        this.SetWarning(sizeName);
-      } else {
-        this.ResetError(sizeName);
+    // Error表示
+    switch (tryResult) {
+      case InputCorrector.TryResult.NothingChanged: {
+        this.ResetError(position);
+        this.ResetError(size);
+        break;
       }
-      return;
+      case InputCorrector.TryResult.PositionChanged: {
+        this.SetWarning(position, "Return/Enter: Correct Value");
+        this.ResetError(size);
+        return;
+      }
+      case InputCorrector.TryResult.SizeChanged:
+      case InputCorrector.TryResult.PositionAndSizeChanged: {
+        this.SetWarning(position, "Return/Enter: Correct Value");
+        this.SetWarning(size);
+        return;
+      }
+      default: {
+        Debug.Fail("Invalid TryResult", "Area.ChangePosition");
+        return;
+      }
     }
 
     // 成功: そのまま書き換え(Textは変更しない)
     App.Profile.Current.Open();
-    if (isHorizontal) {
-      App.Profile.Current.SetClippingXWithoutFit = position;
+    if (position == Positions.X) {
+      App.Profile.Current.SetClippingXWithoutFit = value;
     } else {
-      App.Profile.Current.SetClippingYWithoutFit = position;
+      App.Profile.Current.SetClippingYWithoutFit = value;
     }
     App.Profile.Current.Close();
 
     //---------------------------------------------------------------
     // Notify self
-    this.ResetError(positionName);
-    this.ResetError(sizeName);
     // Notify other controls
     Commands.CurrentLayoutElementVisualChanged.Execute(null, null);
     //---------------------------------------------------------------
   }
 
-  private void CorrectPosition(Names positionName) {
-    Debug.Assert(positionName == Names.ClippingX ||
-                 positionName == Names.ClippingY);
-    var isHorizontal = (positionName == Names.ClippingX);
-    var sizeName = isHorizontal ? Names.ClippingWidth : Names.ClippingHeight;
+  private void CorrectPosition(Positions position) {
+    var size = (position == Positions.X) ? Sizes.Width : Sizes.Height;
 
     // Parse
-    int position;
-    if (!int.TryParse(this.GetTextBox(positionName).Text, out position)) {
-      this.OverwriteText(positionName);
-      this.ResetError(sizeName);
+    int value;
+    if (!int.TryParse(this.GetTextBox(position).Text, out value)) {
+      this.OverwriteText(position);
+      this.ResetError(size);
       return;
     }
 
     // Window Check
     if (!App.Profile.CurrentView.IsWindowValid) {
-      this.OverwriteText(positionName);
-      this.ResetError(sizeName);
+      this.OverwriteText(position);
+      this.ResetError(size);
       return;
     }
 
     // Correct
-    int fixedPosition, fixedSize;
-    var correctionResult = InputCorrector.CorrectInputClippingPosition(
-        isHorizontal, App.Profile.CurrentView, position,
-        out fixedPosition, out fixedSize);
+    ClientRect changed;
+    var tryResult = InputCorrector.TryChangeClippingPosition(
+        App.Profile.CurrentView, position, value, out changed);
 
     // 訂正の必要がない=TextChangedで設定済み
-    if (correctionResult) return;
+    if (tryResult == InputCorrector.TryResult.NothingChanged) return;
 
     // Update Profile
     App.Profile.Current.Open();
-    if (isHorizontal) {
-      App.Profile.Current.SetClippingXWithoutFit = fixedPosition;
-      App.Profile.Current.SetClippingWidthWithoutFit = fixedSize;
+    if (position == Positions.X) {
+      App.Profile.Current.SetClippingXWithoutFit = changed.X;
+      App.Profile.Current.SetClippingWidthWithoutFit = changed.Width;
     } else {
-      App.Profile.Current.SetClippingYWithoutFit = fixedPosition;
-      App.Profile.Current.SetClippingHeightWithoutFit = fixedSize;
+      App.Profile.Current.SetClippingYWithoutFit = changed.Y;
+      App.Profile.Current.SetClippingHeightWithoutFit = changed.Height;
     }
     App.Profile.Current.Close();
 
     //---------------------------------------------------------------
     // Notify self
-    if (position != fixedPosition) {
-      this.OverwriteText(positionName);
-    } else {
-      this.ResetError(positionName);
+    switch (tryResult) {
+      case InputCorrector.TryResult.PositionChanged: {
+        this.OverwriteText(position);
+        this.ResetError(size);
+        break;
+      }
+      case InputCorrector.TryResult.SizeChanged: {
+        this.ResetError(position);
+        this.OverwriteText(size);
+        break;
+      }
+      case InputCorrector.TryResult.PositionAndSizeChanged: {
+        this.OverwriteText(position);
+        this.OverwriteText(size);
+        break;
+      }
+      default: {
+        Debug.Fail("Invalid TryResult", "Area.CorrectPosition");
+        return;
+      }
     }
-    this.OverwriteText(sizeName);
     // Notify other controls
     Commands.CurrentLayoutElementVisualChanged.Execute(null, null);
     //---------------------------------------------------------------
   }
 
-  private void ChangeSize(Names sizeName) {
-    Debug.Assert(sizeName == Names.ClippingWidth ||
-                 sizeName == Names.ClippingHeight);
-    var isHorizontal = (sizeName == Names.ClippingWidth);
-    var positionName = isHorizontal ? Names.ClippingX : Names.ClippingY;
+  private void ChangeSize(Sizes size) {
+    var position = (size == Sizes.Width) ? Positions.X : Positions.Y;
 
     // Parse
-    int size;
-    if (!int.TryParse(this.GetTextBox(sizeName).Text, out size)) {
-      this.ResetError(positionName);
-      this.SetError(sizeName, "must be integer");
+    int value;
+    if (!int.TryParse(this.GetTextBox(size).Text, out value)) {
+      this.ResetError(position);
+      this.SetError(size, "must be integer");
       return;
     }
 
     // Window Check
     if (!App.Profile.CurrentView.IsWindowValid) {
-      this.ResetError(positionName);
-      this.SetError(sizeName, "Target window is invalid");
+      this.ResetError(position);
+      this.SetError(size, "Target window is invalid");
       return;
     }
 
     // Correct
-    int fixedPosition, fixedSize;
-    var position = isHorizontal
-        ? App.Profile.CurrentView.ClippingXWithoutFit
-        : App.Profile.CurrentView.ClippingYWithoutFit;
-    var correctionResult = InputCorrector.CorrectInputClippingSize(
-        isHorizontal, App.Profile.CurrentView, size,
-        out fixedPosition, out fixedSize);
+    ClientRect changed;
+    var tryResult = InputCorrector.TryChangeClippingSize(
+        App.Profile.CurrentView, size, value, out changed);
 
     // 失敗
-    if (!correctionResult) {
-      // Set Error/Warning
-      if (position != fixedPosition) {
-        this.SetWarning(positionName);
-      } else {
-        this.ResetError(positionName);
+    // Error表示
+    switch (tryResult) {
+      case InputCorrector.TryResult.NothingChanged: {
+        this.ResetError(position);
+        this.ResetError(size);
+        break;
       }
-      this.SetWarning(sizeName, "Return/Enter: Correct Value");
-      return;
+      case InputCorrector.TryResult.SizeChanged: {
+        this.ResetError(position);
+        this.SetWarning(size, "Return/Enter: Correct Value");
+        return;
+      }
+      case InputCorrector.TryResult.PositionChanged:
+      case InputCorrector.TryResult.PositionAndSizeChanged: {
+        this.SetWarning(position);
+        this.SetWarning(size, "Return/Enter: Correct Value");
+        return;
+      }
+      default: {
+        Debug.Fail("Invalid TryResult", "Area.ChangeSize");
+        return;
+      }
     }
 
     // 成功: そのまま書き換え(Textは変更しない)
     App.Profile.Current.Open();
-    if (isHorizontal) {
-      App.Profile.Current.SetClippingWidthWithoutFit = size;
+    if (size == Sizes.Width) {
+      App.Profile.Current.SetClippingWidthWithoutFit = value;
     } else {
-      App.Profile.Current.SetClippingHeightWithoutFit = size;
+      App.Profile.Current.SetClippingHeightWithoutFit = value;
     }
     App.Profile.Current.Close();
 
     //---------------------------------------------------------------
     // Notify self
-    this.ResetError(positionName);
-    this.ResetError(sizeName);
     // Notify other controls
     Commands.CurrentLayoutElementVisualChanged.Execute(null, null);
     //---------------------------------------------------------------
   }
 
-  private void CorrectSize(Names sizeName) {
-    Debug.Assert(sizeName == Names.ClippingWidth ||
-                 sizeName == Names.ClippingHeight);
-    var isHorizontal = (sizeName == Names.ClippingWidth);
-    var positionName = isHorizontal ? Names.ClippingX : Names.ClippingY;
+  private void CorrectSize(Sizes size) {
+    var position = (size == Sizes.Width) ? Positions.X : Positions.Y;
 
     // Parse
-    int size;
-    if (!int.TryParse(this.GetTextBox(sizeName).Text, out size)) {
-      this.ResetError(positionName);
-      this.OverwriteText(sizeName);
+    int value;
+    if (!int.TryParse(this.GetTextBox(size).Text, out value)) {
+      this.ResetError(position);
+      this.OverwriteText(size);
       return;
     }
 
     // Window Check
     if (!App.Profile.CurrentView.IsWindowValid) {
-      this.ResetError(positionName);
-      this.OverwriteText(sizeName);
+      this.ResetError(position);
+      this.OverwriteText(size);
       return;
     }
 
     // Correct
-    int fixedPosition, fixedSize;
-    var correctionResult = InputCorrector.CorrectInputClippingSize(
-        isHorizontal, App.Profile.CurrentView, size,
-        out fixedPosition, out fixedSize);
+    ClientRect changed;
+    var tryResult = InputCorrector.TryChangeClippingSize(
+        App.Profile.CurrentView, size, value, out changed);
 
     // 訂正の必要がない=TextChangedで設定済み
-    if (correctionResult) return;
+    if (tryResult == InputCorrector.TryResult.NothingChanged) return;
 
     // Update Profile
     App.Profile.Current.Open();
-    if (isHorizontal) {
-      App.Profile.Current.SetClippingXWithoutFit = fixedPosition;
-      App.Profile.Current.SetClippingWidthWithoutFit = fixedSize;
+    if (size == Sizes.Width) {
+      App.Profile.Current.SetClippingXWithoutFit = changed.X;
+      App.Profile.Current.SetClippingWidthWithoutFit = changed.Width;
     } else {
-      App.Profile.Current.SetClippingYWithoutFit = fixedPosition;
-      App.Profile.Current.SetClippingHeightWithoutFit = fixedSize;
+      App.Profile.Current.SetClippingYWithoutFit = changed.Y;
+      App.Profile.Current.SetClippingHeightWithoutFit = changed.Height;
     }
     App.Profile.Current.Close();
 
     //---------------------------------------------------------------
     // Notify self
-    this.OverwriteText(positionName);
-    if (size != fixedSize) {
-      this.OverwriteText(sizeName);
-    } else {
-      this.ResetError(sizeName);
+    switch (tryResult) {
+      case InputCorrector.TryResult.SizeChanged: {
+        this.ResetError(position);
+        this.OverwriteText(size);
+        break;
+      }
+      case InputCorrector.TryResult.PositionChanged: {
+        this.OverwriteText(position);
+        this.ResetError(size);
+        break;
+      }
+      case InputCorrector.TryResult.PositionAndSizeChanged: {
+        this.OverwriteText(position);
+        this.OverwriteText(size);
+        break;
+      }
+      default: {
+        Debug.Fail("Invalid TryResult", "Area.CorrectSize");
+        return;
+      }
     }
     // Notify other controls
     Commands.CurrentLayoutElementVisualChanged.Execute(null, null);
@@ -520,43 +539,43 @@ public partial class Area : UserControl, IBindingProfile {
   /// ClippingX: KeyDown
   private void ClippingX_KeyDown(object sender, KeyEventArgs e) {
     if (e.Key != Key.Return && e.Key != Key.Enter) return;
-    this.CorrectPosition(Names.ClippingX);
+    this.CorrectPosition(Positions.X);
   }
   /// ClippingY: KeyDown
   private void ClippingY_KeyDown(object sender, KeyEventArgs e) {
     if (e.Key != Key.Return && e.Key != Key.Enter) return;
-    this.CorrectPosition(Names.ClippingY);
+    this.CorrectPosition(Positions.Y);
   }
   /// ClippingWidth: KeyDown
   private void ClippingWidth_KeyDown(object sender, KeyEventArgs e) {
     if (e.Key != Key.Return && e.Key != Key.Enter) return;
-    this.CorrectSize(Names.ClippingWidth);
+    this.CorrectSize(Sizes.Width);
   }
   /// ClippingHeight: KeyDown
   private void ClippingHeight_KeyDown(object sender, KeyEventArgs e) {
     if (e.Key != Key.Return && e.Key != Key.Enter) return;
-    this.CorrectSize(Names.ClippingHeight);
+    this.CorrectSize(Sizes.Height);
   }
 
   /// ClippingX: LostFocus
   private void ClippingX_LostFocus(object sender, RoutedEventArgs e) {
-    this.OverwriteText(Names.ClippingX);
-    this.ResetError(Names.ClippingWidth);
+    this.OverwriteText(Positions.X);
+    this.ResetError(Sizes.Width);
   }
   /// ClippingY: LostFocus
   private void ClippingY_LostFocus(object sender, RoutedEventArgs e) {
-    this.OverwriteText(Names.ClippingY);
-    this.ResetError(Names.ClippingHeight);
+    this.OverwriteText(Positions.Y);
+    this.ResetError(Sizes.Height);
   }
   /// ClippingWidth: LostFocus
   private void ClippingWidth_LostFocus(object sender, RoutedEventArgs e) {
-    this.ResetError(Names.ClippingX);
-    this.OverwriteText(Names.ClippingWidth);
+    this.ResetError(Positions.X);
+    this.OverwriteText(Sizes.Width);
   }
   /// ClippingHeight: LostFocus
   private void ClippingHeight_LostFocus(object sender, RoutedEventArgs e) {
-    this.ResetError(Names.ClippingY);
-    this.OverwriteText(Names.ClippingHeight);
+    this.ResetError(Positions.Y);
+    this.OverwriteText(Sizes.Height);
   }
 
   //-------------------------------------------------------------------
@@ -586,58 +605,76 @@ public partial class Area : UserControl, IBindingProfile {
   /// ClippingX: TextChanged
   private void ClippingX_TextChanged(object sender, TextChangedEventArgs e) {
     if (!this.CanChangeProfile) return;
-    this.ChangePosition(Names.ClippingX);
+    this.ChangePosition(Positions.X);
   }
   /// ClippingY: TextChanged
   private void ClippingY_TextChanged(object sender, TextChangedEventArgs e) {
     if (!this.CanChangeProfile) return;
-    this.ChangePosition(Names.ClippingY);
+    this.ChangePosition(Positions.Y);
   }
   /// ClippingWidth: TextChanged
   private void ClippingWidth_TextChanged(object sender, TextChangedEventArgs e) {
     if (!this.CanChangeProfile) return;
-    this.ChangeSize(Names.ClippingWidth);
+    this.ChangeSize(Sizes.Width);
   }
   /// ClippingHeight: TextChanged
   private void ClippingHeight_TextChanged(object sender, TextChangedEventArgs e) {
     if (!this.CanChangeProfile) return;
-    this.ChangeSize(Names.ClippingHeight);
+    this.ChangeSize(Sizes.Height);
   }
 
   //===================================================================
   // IBindingProfileの実装
   //===================================================================
 
-  private void OverwriteText(Names name) {
+  private void OverwriteText(Positions position) {
     this.CanChangeProfile = false;
 
-    var textBox = this.GetTextBox(name);
-    switch (name) {
-      case Names.ClippingX: {
+    var textBox = this.GetTextBox(position);
+    switch (position) {
+      case Positions.X: {
         textBox.Text = StringConverter.GetClippingXString(App.Profile.CurrentView);
         break;
       }
-      case Names.ClippingY: {
+      case Positions.Y: {
         textBox.Text = StringConverter.GetClippingYString(App.Profile.CurrentView);
         break;
       }
-      case Names.ClippingWidth: {
-        textBox.Text = StringConverter.GetClippingWidthString(App.Profile.CurrentView);
-        break;
-      }
-      case Names.ClippingHeight: {
-        textBox.Text = StringConverter.GetClippingHeightString(App.Profile.CurrentView);
-        break;
-      }
       default: {
-        Debug.Fail("Invalid Name", "Area.OverwriteText");
+        Debug.Fail("Invalid Position", "Area.OverwriteText");
         break;
       }
     }
     if (textBox.IsKeyboardFocused) {
       textBox.Select(textBox.Text.Length, 0);
     }
-    this.ResetError(name);
+    this.ResetError(position);
+
+    this.CanChangeProfile = true;
+  }
+
+  private void OverwriteText(Sizes size) {
+    this.CanChangeProfile = false;
+
+    var textBox = this.GetTextBox(size);
+    switch (size) {
+      case Sizes.Width: {
+        textBox.Text = StringConverter.GetClippingWidthString(App.Profile.CurrentView);
+        break;
+      }
+      case Sizes.Height: {
+        textBox.Text = StringConverter.GetClippingHeightString(App.Profile.CurrentView);
+        break;
+      }
+      default: {
+        Debug.Fail("Invalid Size", "Area.OverwriteText");
+        break;
+      }
+    }
+    if (textBox.IsKeyboardFocused) {
+      textBox.Select(textBox.Text.Length, 0);
+    }
+    this.ResetError(size);
 
     this.CanChangeProfile = true;
   }
@@ -674,10 +711,10 @@ public partial class Area : UserControl, IBindingProfile {
     this.ClippingY.Text = StringConverter.GetClippingYString(App.Profile.CurrentView);
     this.ClippingWidth.Text = StringConverter.GetClippingWidthString(App.Profile.CurrentView);
     this.ClippingHeight.Text = StringConverter.GetClippingHeightString(App.Profile.CurrentView);
-    this.ResetError(Names.ClippingX);
-    this.ResetError(Names.ClippingY);
-    this.ResetError(Names.ClippingWidth);
-    this.ResetError(Names.ClippingHeight);
+    this.ResetError(Positions.X);
+    this.ResetError(Positions.Y);
+    this.ResetError(Sizes.Width);
+    this.ResetError(Sizes.Height);
 
     this.CanChangeProfile = true;
   }

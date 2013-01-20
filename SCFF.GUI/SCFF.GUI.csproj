@@ -78,6 +78,7 @@
       <DependentUpon>Apply.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\BrushesAndPens.cs" />
+    <Compile Include="Controls\TextBoxError.cs" />
     <Compile Include="Controls\LayoutToolbar.xaml.cs">
       <DependentUpon>LayoutToolbar.xaml</DependentUpon>
     </Compile>

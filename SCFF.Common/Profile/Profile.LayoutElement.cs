@@ -228,6 +228,7 @@ public class LayoutElement : ILayoutElementView, ILayoutElement {
   public int ClippingHeightWithoutFit {
     get { return this.profile.additionalLayoutParameters[this.Index].ClippingHeightWithoutFit; }
   }
+
   /// @copydoc ILayoutElementView::ClippingXWithFit
   public int ClippingXWithFit {
     get {

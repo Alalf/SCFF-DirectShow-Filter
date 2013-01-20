@@ -110,6 +110,7 @@ public partial class LayoutEdit
                               : BrushesAndPens.DesktopBrush;
         break;
       }
+      default: Debug.Fail("switch"); throw new System.ArgumentException();
     }
 
     // FormattedText
@@ -167,6 +168,7 @@ public partial class LayoutEdit
                              : BrushesAndPens.DesktopPen;
         break;
       }
+      default: Debug.Fail("switch"); throw new System.ArgumentException();
     }
 
     // フレーム(内枠)の描画

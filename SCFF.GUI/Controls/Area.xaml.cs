@@ -64,10 +64,7 @@ public partial class Area : UserControl, IBindingProfile {
       case Names.ClippingY: return this.ClippingY;
       case Names.ClippingWidth: return this.ClippingWidth;
       case Names.ClippingHeight: return this.ClippingHeight;
-      default: {
-        Debug.Fail("Invalid Name", "Area.GetTextBox");
-        return null;
-      }
+      default: Debug.Fail("switch"); throw new System.ArgumentException();
     }
   }
 
@@ -77,13 +74,9 @@ public partial class Area : UserControl, IBindingProfile {
       case Names.ClippingY: return this.ClippingYToolTip;
       case Names.ClippingWidth: return this.ClippingWidthToolTip;
       case Names.ClippingHeight: return this.ClippingHeightToolTip;
-      default: {
-        Debug.Fail("Invalid Name", "Area.GetToolTip");
-        return null;
-      }
+      default: Debug.Fail("switch"); throw new System.ArgumentException();
     }
   }
-
 
   //===================================================================
   // 入力エラー処理
@@ -103,6 +96,16 @@ public partial class Area : UserControl, IBindingProfile {
   }
 
   //-------------------------------------------------------------------
+
+  private Names GetPair(Names name) {
+    switch (name) {
+      case Names.ClippingX: return Names.ClippingWidth;
+      case Names.ClippingY: return Names.ClippingHeight;
+      case Names.ClippingWidth: return Names.ClippingX;
+      case Names.ClippingHeight: return Names.ClippingY;
+      default: Debug.Fail("switch"); throw new System.ArgumentException();
+    }
+  }
 
   private void ChangePosition(Positions position) {
     var onX = (position == Positions.X);
@@ -148,10 +151,7 @@ public partial class Area : UserControl, IBindingProfile {
         this.SetWarning(sizeName);
         return;
       }
-      default: {
-        Debug.Fail("Invalid TryResult", "Area.ChangePosition");
-        return;
-      }
+      default: Debug.Fail("switch"); throw new System.ArgumentException();
     }
 
     // 成功: そのまま書き換え(Textは変更しない)
@@ -228,10 +228,7 @@ public partial class Area : UserControl, IBindingProfile {
         this.OverwriteText(sizeName);
         break;
       }
-      default: {
-        Debug.Fail("Invalid TryResult", "Area.CorrectPosition");
-        return;
-      }
+      default: Debug.Fail("switch"); throw new System.ArgumentException();
     }
     // Notify other controls
     Commands.CurrentLayoutElementVisualChanged.Execute(null, null);
@@ -283,10 +280,7 @@ public partial class Area : UserControl, IBindingProfile {
         this.SetWarning(sizeName, "Return/Enter: Correct Value");
         return;
       }
-      default: {
-        Debug.Fail("Invalid TryResult", "Area.ChangeSize");
-        return;
-      }
+      default: Debug.Fail("switch"); throw new System.ArgumentException();
     }
 
     // 成功: そのまま書き換え(Textは変更しない)
@@ -363,10 +357,7 @@ public partial class Area : UserControl, IBindingProfile {
         this.OverwriteText(sizeName);
         break;
       }
-      default: {
-        Debug.Fail("Invalid TryResult", "Area.CorrectSize");
-        return;
-      }
+      default: Debug.Fail("switch"); throw new System.ArgumentException();
     }
     // Notify other controls
     Commands.CurrentLayoutElementVisualChanged.Execute(null, null);
@@ -417,11 +408,12 @@ public partial class Area : UserControl, IBindingProfile {
             background = BrushesAndPens.DesktopBrush;
             break;
           }
-          default: {
+          case WindowTypes.Normal: {
             border = BrushesAndPens.CurrentNormalBrush;
             background = BrushesAndPens.NormalBrush;
             break;
           }
+          default: Debug.Fail("switch"); throw new System.ArgumentException();
         }
         break;
       }
@@ -435,12 +427,7 @@ public partial class Area : UserControl, IBindingProfile {
         background = BrushesAndPens.DesktopBrush;
         break;
       }
-      default : {
-        Debug.Fail("Invalid WindowTypes", "Area.GetWindowTypesBrushes");
-        border = null;
-        background = null;
-        break;
-      }
+      default: Debug.Fail("switch"); throw new System.ArgumentException();
     }
   }
 
@@ -483,8 +470,6 @@ public partial class Area : UserControl, IBindingProfile {
     // Profile更新
     App.Profile.Current.Open();
     if (changeWindowType) {
-      Debug.Assert(nextWindowType == WindowTypes.Desktop ||
-                   nextWindowType == WindowTypes.DesktopListView);
       switch (nextWindowType) {
         case WindowTypes.DesktopListView: {
           App.Profile.Current.SetWindowToDesktopListView();
@@ -494,6 +479,7 @@ public partial class Area : UserControl, IBindingProfile {
           App.Profile.Current.SetWindowToDesktop();
           break;
         }
+        default: Debug.Fail("switch"); throw new System.ArgumentException();
       }
     }
     App.Profile.Current.SetClippingRectByScreenRect(nextScreenRect);
@@ -641,10 +627,7 @@ public partial class Area : UserControl, IBindingProfile {
         textBox.Text = StringConverter.GetClippingHeightString(App.Profile.CurrentView);
         break;
       }
-      default: {
-        Debug.Fail("Invalid Name", "Area.OverwriteText");
-        break;
-      }
+      default: Debug.Fail("switch"); throw new System.ArgumentException();
     }
     if (textBox.IsKeyboardFocused) {
       textBox.Select(textBox.Text.Length, 0);
@@ -678,6 +661,7 @@ public partial class Area : UserControl, IBindingProfile {
         this.Desktop.IsEnabled = true;
         break;
       }
+      default: Debug.Fail("switch"); throw new System.ArgumentException();
     }
     this.Fit.IsChecked = App.Profile.CurrentView.Fit;
 

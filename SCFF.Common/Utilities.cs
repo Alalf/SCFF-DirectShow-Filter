@@ -41,10 +41,7 @@ public static class Utilities {
       case WindowTypes.Desktop: {
         return true;
       }
-      default: {
-        Debug.Fail("Invalid WindowTypes", "IsWindowValid");
-        return false;
-      }
+      default: Debug.Fail("switch"); throw new System.ArgumentException();
     }
   }
 
@@ -74,10 +71,7 @@ public static class Utilities {
             User32.GetSystemMetrics(User32.SM_CXVIRTUALSCREEN),
             User32.GetSystemMetrics(User32.SM_CYVIRTUALSCREEN));
       }
-      default: {
-        Debug.Fail("Invalid WindowTypes", "GetWindowRect");
-        return null;
-      }
+      default: Debug.Fail("switch"); throw new System.ArgumentException();
     }
   }
 
@@ -100,10 +94,7 @@ public static class Utilities {
         // スクリーン座標系なのでそのまま返す
         return new ScreenPoint(clientX, clientY);
       }
-      default: {
-        Debug.Fail("Invalid WindowTypes", "ClientToScreen");
-        return null;
-      }
+      default: Debug.Fail("switch"); throw new System.ArgumentException();
     }
   }
 

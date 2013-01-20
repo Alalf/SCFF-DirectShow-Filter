@@ -104,6 +104,8 @@ public static class MoveAndSize {
       HitModes hitMode,
       RelativePoint mousePoint, RelativeMouseOffset mouseOffset,
       SnapGuide snapGuide) {
+    Debug.Assert(hitMode != HitModes.Move && hitMode != HitModes.Neutral);
+
     // 初期値
     var nextLeft = layoutElement.BoundRelativeLeft;
     var nextTop = layoutElement.BoundRelativeTop;

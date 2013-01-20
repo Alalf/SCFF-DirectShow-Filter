@@ -20,6 +20,7 @@
 
 namespace SCFF.GUI.Controls {
 
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using SCFF.Common;
@@ -34,6 +35,20 @@ public partial class MainMenu : UserControl, IBindingOptions {
   /// コンストラクタ
   public MainMenu() {
     InitializeComponent();
+  }
+
+  //-------------------------------------------------------------------
+
+  /// index->MenuItem変換
+  private MenuItem GetMenuItem(int index) {
+    switch (index) {
+      case 0: return this.RecentProfile1;
+      case 1: return this.RecentProfile2;
+      case 2: return this.RecentProfile3;
+      case 3: return this.RecentProfile4;
+      case 4: return this.RecentProfile5;
+      default: Debug.Fail("switch"); throw new System.ArgumentException();
+    }
   }
 
   //===================================================================
@@ -121,32 +136,12 @@ public partial class MainMenu : UserControl, IBindingOptions {
   /// 最近使用したプロファイルメニューの更新
   private void UpdateRecentProfiles() {
     for (int i = 0; i < Constants.RecentProfilesLength; ++i ) {
-      var isEmpty = App.Options.GetRecentProfile(i) == string.Empty;
-      var header = (i+1) + " " + (isEmpty ? "" : App.Options.GetRecentProfile(i)) +
-        "(_" + (i+1) + ")";
+      var isEmpty = (App.Options.GetRecentProfile(i) == string.Empty);
+      var header = string.Format("{0} {1}(_{0})",
+          i+1, (isEmpty ? "" : App.Options.GetRecentProfile(i)));
 
-      switch (i) {
-        case 0:
-          this.RecentProfile1.IsEnabled = !isEmpty;
-          this.RecentProfile1.Header = header;
-          break;
-        case 1:
-          this.RecentProfile2.IsEnabled = !isEmpty;
-          this.RecentProfile2.Header = header;
-          break;
-        case 2:
-          this.RecentProfile3.IsEnabled = !isEmpty;
-          this.RecentProfile3.Header = header;
-          break;
-        case 3:
-          this.RecentProfile4.IsEnabled = !isEmpty;
-          this.RecentProfile4.Header = header;
-          break;
-        case 4:
-          this.RecentProfile5.IsEnabled = !isEmpty;
-          this.RecentProfile5.Header = header;
-          break;
-      }
+      this.GetMenuItem(i).IsEnabled = !isEmpty;
+      this.GetMenuItem(i).Header = header;
     }
   }
   /// @copydoc Common::GUI::IBindingOptions::CanChangeOptions

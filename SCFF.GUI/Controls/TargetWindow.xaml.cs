@@ -65,10 +65,7 @@ public partial class TargetWindow : UserControl, IBindingProfile {
         App.Profile.Current.SetWindowToDesktop();
         break;
       }
-      default: {
-        Debug.Fail("Invalid WindowType", "TargetWindow.ModifyProfile");
-        return;
-      }
+      default: Debug.Fail("switch"); throw new System.ArgumentException();
     }
     App.Profile.Current.SetFit = true;
 

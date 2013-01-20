@@ -126,10 +126,7 @@ public class LayoutElement : ILayoutElementView, ILayoutElement {
         case WindowTypes.Desktop: {
           return User32.GetDesktopWindow();
         }
-        default: {
-          Debug.Fail("Invalid WindowTypes", "LayoutElement.Window");
-          return UIntPtr.Zero;
-        }
+        default: Debug.Fail("switch"); throw new System.ArgumentException();
       }
     }
   }
@@ -538,10 +535,7 @@ public class LayoutElement : ILayoutElementView, ILayoutElement {
         this.SetClippingYWithoutFit = nextScreenRect.Y;
         break;
       }
-      default : {
-        Debug.Fail("Invalid WindowTypes", "LayoutElement.SetClippingRectByScreenRect");
-        break;
-      }
+      default: Debug.Fail("switch"); throw new System.ArgumentException();
     }
     // Width/Heightは共通
     this.SetClippingWidthWithoutFit = nextScreenRect.Width;

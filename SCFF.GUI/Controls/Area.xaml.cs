@@ -136,8 +136,8 @@ public partial class Area : UserControl, IBindingProfile {
   private void ChangePosition(Names positionName) {
     Debug.Assert(positionName == Names.ClippingX ||
                  positionName == Names.ClippingY);
-    var sizeName = (positionName == Names.ClippingX)
-        ? Names.ClippingWidth : Names.ClippingHeight;
+    var isHorizontal = (positionName == Names.ClippingX);
+    var sizeName = isHorizontal ? Names.ClippingWidth : Names.ClippingHeight;
 
     // Parse
     int position;
@@ -156,14 +156,12 @@ public partial class Area : UserControl, IBindingProfile {
 
     // Correct
     int fixedPosition, fixedSize;
-    var size = (sizeName == Names.ClippingWidth)
+    var size = isHorizontal
         ? App.Profile.CurrentView.ClippingWidthWithoutFit
         : App.Profile.CurrentView.ClippingHeightWithoutFit;
-    var correctionResult = (positionName == Names.ClippingX)
-        ? InputCorrector.CorrectInputClippingX(App.Profile.CurrentView, position,
-            out fixedPosition, out fixedSize)
-        : InputCorrector.CorrectInputClippingY(App.Profile.CurrentView, position,
-            out fixedPosition, out fixedSize);
+    var correctionResult = InputCorrector.CorrectInputClippingPosition(
+        isHorizontal, App.Profile.CurrentView, position,
+        out fixedPosition, out fixedSize);
 
     // 失敗
     if (!correctionResult) {
@@ -179,7 +177,7 @@ public partial class Area : UserControl, IBindingProfile {
 
     // 成功: そのまま書き換え(Textは変更しない)
     App.Profile.Current.Open();
-    if (positionName == Names.ClippingX) {
+    if (isHorizontal) {
       App.Profile.Current.SetClippingXWithoutFit = position;
     } else {
       App.Profile.Current.SetClippingYWithoutFit = position;
@@ -198,8 +196,8 @@ public partial class Area : UserControl, IBindingProfile {
   private void CorrectPosition(Names positionName) {
     Debug.Assert(positionName == Names.ClippingX ||
                  positionName == Names.ClippingY);
-    var sizeName = (positionName == Names.ClippingX)
-        ? Names.ClippingWidth : Names.ClippingHeight;
+    var isHorizontal = (positionName == Names.ClippingX);
+    var sizeName = isHorizontal ? Names.ClippingWidth : Names.ClippingHeight;
 
     // Parse
     int position;
@@ -218,18 +216,16 @@ public partial class Area : UserControl, IBindingProfile {
 
     // Correct
     int fixedPosition, fixedSize;
-    var correctionResult = (positionName == Names.ClippingX)
-        ? InputCorrector.CorrectInputClippingX(App.Profile.CurrentView, position,
-            out fixedPosition, out fixedSize)
-        : InputCorrector.CorrectInputClippingY(App.Profile.CurrentView, position,
-            out fixedPosition, out fixedSize);
+    var correctionResult = InputCorrector.CorrectInputClippingPosition(
+        isHorizontal, App.Profile.CurrentView, position,
+        out fixedPosition, out fixedSize);
 
     // 訂正の必要がない=TextChangedで設定済み
     if (correctionResult) return;
 
     // Update Profile
     App.Profile.Current.Open();
-    if (positionName == Names.ClippingX) {
+    if (isHorizontal) {
       App.Profile.Current.SetClippingXWithoutFit = fixedPosition;
       App.Profile.Current.SetClippingWidthWithoutFit = fixedSize;
     } else {
@@ -254,8 +250,8 @@ public partial class Area : UserControl, IBindingProfile {
   private void ChangeSize(Names sizeName) {
     Debug.Assert(sizeName == Names.ClippingWidth ||
                  sizeName == Names.ClippingHeight);
-    var positionName = (sizeName == Names.ClippingWidth)
-        ? Names.ClippingX : Names.ClippingY;
+    var isHorizontal = (sizeName == Names.ClippingWidth);
+    var positionName = isHorizontal ? Names.ClippingX : Names.ClippingY;
 
     // Parse
     int size;
@@ -274,14 +270,12 @@ public partial class Area : UserControl, IBindingProfile {
 
     // Correct
     int fixedPosition, fixedSize;
-    var position = (positionName == Names.ClippingX)
+    var position = isHorizontal
         ? App.Profile.CurrentView.ClippingXWithoutFit
         : App.Profile.CurrentView.ClippingYWithoutFit;
-    var correctionResult = (sizeName == Names.ClippingWidth)
-        ? InputCorrector.CorrectInputClippingWidth(App.Profile.CurrentView, size,
-            out fixedPosition, out fixedSize)
-        : InputCorrector.CorrectInputClippingHeight(App.Profile.CurrentView, size,
-            out fixedPosition, out fixedSize);
+    var correctionResult = InputCorrector.CorrectInputClippingSize(
+        isHorizontal, App.Profile.CurrentView, size,
+        out fixedPosition, out fixedSize);
 
     // 失敗
     if (!correctionResult) {
@@ -297,7 +291,7 @@ public partial class Area : UserControl, IBindingProfile {
 
     // 成功: そのまま書き換え(Textは変更しない)
     App.Profile.Current.Open();
-    if (sizeName == Names.ClippingWidth) {
+    if (isHorizontal) {
       App.Profile.Current.SetClippingWidthWithoutFit = size;
     } else {
       App.Profile.Current.SetClippingHeightWithoutFit = size;
@@ -316,8 +310,8 @@ public partial class Area : UserControl, IBindingProfile {
   private void CorrectSize(Names sizeName) {
     Debug.Assert(sizeName == Names.ClippingWidth ||
                  sizeName == Names.ClippingHeight);
-    var positionName = (sizeName == Names.ClippingWidth)
-        ? Names.ClippingX : Names.ClippingY;
+    var isHorizontal = (sizeName == Names.ClippingWidth);
+    var positionName = isHorizontal ? Names.ClippingX : Names.ClippingY;
 
     // Parse
     int size;
@@ -336,18 +330,16 @@ public partial class Area : UserControl, IBindingProfile {
 
     // Correct
     int fixedPosition, fixedSize;
-    var correctionResult = (sizeName == Names.ClippingWidth)
-        ? InputCorrector.CorrectInputClippingWidth(App.Profile.CurrentView, size,
-            out fixedPosition, out fixedSize)
-        : InputCorrector.CorrectInputClippingHeight(App.Profile.CurrentView, size,
-            out fixedPosition, out fixedSize);
+    var correctionResult = InputCorrector.CorrectInputClippingSize(
+        isHorizontal, App.Profile.CurrentView, size,
+        out fixedPosition, out fixedSize);
 
     // 訂正の必要がない=TextChangedで設定済み
     if (correctionResult) return;
 
     // Update Profile
     App.Profile.Current.Open();
-    if (sizeName == Names.ClippingWidth) {
+    if (isHorizontal) {
       App.Profile.Current.SetClippingXWithoutFit = fixedPosition;
       App.Profile.Current.SetClippingWidthWithoutFit = fixedSize;
     } else {

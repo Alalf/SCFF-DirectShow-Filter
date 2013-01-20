@@ -26,204 +26,129 @@ using System.Diagnostics;
 /// @attention Decoratorパターンにすべきではない(newが多くなりすぎるので)
 public static class InputCorrector {
   //=================================================================
-  // Clipping X/Width/Y/Height
+  // Clipping Position(X,Y)/Size(Width,Height)
   //=================================================================
 
-  /// ClippingXのユーザ入力を制約(WindowSizeなど)に基づいて訂正する
-  /// @attention できるだけvalueは訂正せずfixedWidthの調整で訂正を行う
+  /// ClippingX/Yのユーザ入力を制約(WindowSizeなど)に基づいて訂正する
+  /// @attention できるだけX/Yは訂正せずWidth/Heightの調整で訂正を行う
+  /// @param isHorizontal X-Widthが対象か
   /// @param layoutElement 対象のレイアウト要素
-  /// @param value TextBoxから入力された数値
-  /// @param fixedX 訂正後のClippingX
-  /// @param fixedWidth 訂正後のClippingWidth
+  /// @param position TextBoxから入力された数値
+  /// @param fixedPosition 訂正後のClippingX/Y
+  /// @param fixedSize 訂正後のClippingWidth/Height
   /// @retval true valueは制約を満たした値である
-  /// @retval false 制約を満たすにはfixedX/fixedWidthである必要がある
-  public static bool CorrectInputClippingX(ILayoutElementView layoutElement,
-      int value, out int fixedX, out int fixedWidth) {
+  /// @retval false 制約を満たすにはfixedPosition/fixedSizeである必要がある
+  public static bool CorrectInputClippingPosition(bool isHorizontal,
+      ILayoutElementView layoutElement, int position,
+      out int fixedPosition, out int fixedSize) {
+    // 準備
     Debug.Assert(layoutElement.IsWindowValid);
     Debug.Assert(!layoutElement.Fit);
-
     var result = true;
-    fixedX = value;
-    fixedWidth = layoutElement.ClippingWidthWithoutFit;
+    fixedPosition = isHorizontal
+        ? layoutElement.ClippingXWithoutFit : layoutElement.ClippingYWithoutFit;
+    fixedSize = isHorizontal
+        ? layoutElement.ClippingWidthWithoutFit : layoutElement.ClippingHeightWithoutFit;
     var windowRect = Utilities.GetWindowRect(layoutElement.WindowType, layoutElement.Window);
- 
+    var positionLowerBound = isHorizontal ? windowRect.X : windowRect.Y;
+    var positionUpperBound = isHorizontal ? windowRect.Right : windowRect.Bottom;
+    var sizeLowerBound = 0;
+    var sizeUpperBound = isHorizontal ? windowRect.Width : windowRect.Height;
+
+    // 訂正開始
+    fixedPosition = position;
+
     // 上限・下限の補正
-    if (fixedX < windowRect.X) {
-      // Xが左にはみでている場合、Widthは保持＆Xを右にずらす
-      fixedX = windowRect.X;
+    if (fixedPosition < positionLowerBound) {
+      // Positionが小さすぎる場合、Sizeは保持＆Positionを増やす
+      fixedPosition = positionLowerBound;
       result = false;
-    } else if (windowRect.Right < fixedX) {
-      // Xが右にはみでている場合、Xを左にずらしてWidthを0に
-      fixedX = windowRect.Right;
-      fixedWidth = 0;
+    } else if (positionUpperBound < fixedPosition) {
+      // Positionが大きすぎる場合、Positionを減らしてSizeを下限に
+      fixedPosition = positionUpperBound - sizeLowerBound;
+      fixedSize = sizeLowerBound;
       result = false;
     }
       
-    // Widthの補正
-    if (fixedWidth < 0) {
-      // Widthは0以上
-      fixedWidth = 0;
+    // Sizeの補正
+    if (fixedSize < sizeLowerBound) {
+      // Sizeは下限以上
+      fixedSize = sizeLowerBound;
       result = false;
     }
-    if (windowRect.Right < fixedX + fixedWidth) {
-      // 領域が右にはみでている場合、Xは保持＆Widthを縮める
-      fixedWidth = windowRect.Right - fixedX;
+    if (positionUpperBound < fixedPosition + fixedSize) {
+      // 領域が境界内に収まらない場合、Positionは保持＆Sizeを縮める
+      fixedSize = positionUpperBound - fixedPosition;
       result = false;
     }
   
     // 出力
-    Debug.Assert(windowRect.X <= fixedX && fixedX + fixedWidth <= windowRect.Right);
+    Debug.Assert(positionLowerBound <= fixedPosition &&
+                 fixedPosition + fixedSize <= positionUpperBound);
     return result;
   }
 
-  /// ClippingWidthのユーザ入力を制約(WindowSizeなど)に基づいて訂正する
-  /// @attention できるだけvalueは訂正せずfixedXの調整で訂正を行う
+  /// ClippingWidth/Heightのユーザ入力を制約(WindowSizeなど)に基づいて訂正する
+  /// @attention できるだけWidth/Heightは訂正せずX/Yの調整で訂正を行う
+  /// @param isHorizontal X-Widthが対象か
   /// @param layoutElement 対象のレイアウト要素
-  /// @param value TextBoxから入力された数値
-  /// @param fixedX 訂正後のClippingX
-  /// @param fixedWidth 訂正後のClippingWidth
+  /// @param size TextBoxから入力された数値
+  /// @param fixedPosition 訂正後のClippingX
+  /// @param fixedSize 訂正後のClippingWidth
   /// @retval true valueは制約を満たした値である
-  /// @retval false 制約を満たすにはfixedX/fixedWidthである必要がある
-  public static bool CorrectInputClippingWidth(ILayoutElementView layoutElement,
-      int value, out int fixedX, out int fixedWidth) {
+  /// @retval false 制約を満たすにはfixedPosition/fixedSizeである必要がある
+  public static bool CorrectInputClippingSize(bool isHorizontal,
+      ILayoutElementView layoutElement, int size,
+      out int fixedPosition, out int fixedSize) {
+    // 準備
     Debug.Assert(layoutElement.IsWindowValid);
     Debug.Assert(!layoutElement.Fit);
-
     var result = true;
-    fixedX = layoutElement.ClippingXWithoutFit;
-    fixedWidth = value;
+    fixedPosition = isHorizontal
+        ? layoutElement.ClippingXWithoutFit : layoutElement.ClippingYWithoutFit;
+    fixedSize = isHorizontal
+        ? layoutElement.ClippingWidthWithoutFit : layoutElement.ClippingHeightWithoutFit;
     var windowRect = Utilities.GetWindowRect(layoutElement.WindowType, layoutElement.Window);
+    var positionLowerBound = isHorizontal ? windowRect.X : windowRect.Y;
+    var positionUpperBound = isHorizontal ? windowRect.Right : windowRect.Bottom;
+    var sizeLowerBound = 0;
+    var sizeUpperBound = isHorizontal ? windowRect.Width : windowRect.Height;
+
+    // 訂正開始
+    fixedSize = size;
 
     // 上限・下限の補正
-    if (fixedWidth < 0) {
-      // Widthは0以上
-      fixedWidth = 0;
+    if (fixedSize < sizeLowerBound) {
+      // Sizeは下限以上
+      fixedSize = sizeLowerBound;
       result = false;
-    } else if (windowRect.Width < fixedWidth) {
-      // Widthが大きすぎる場合はFitさせる
-      fixedX = windowRect.X;
-      fixedWidth = windowRect.Width;
+    } else if (sizeUpperBound < fixedSize) {
+      // Sizeが大きすぎる場合はFitさせる
+      fixedPosition = positionLowerBound;
+      fixedSize = sizeUpperBound;
       result = false;
     }
  
-    // Xの補正
-    if (fixedX < windowRect.X) {
-      // Xが左にはみでている場合、Widthは保持＆Xを右にずらす
-      fixedX = windowRect.X;
+    // Positionの補正
+    if (fixedPosition < positionLowerBound) {
+      // Positionが小さすぎる場合、Sizeは保持＆Positionを増やす
+      fixedPosition = positionLowerBound;
       result = false;
-    } else if (windowRect.Right < fixedX) {
-      // Xが右にはみでている場合、Xを左にずらしてWidthを0に
-      fixedX = windowRect.Right;
-      fixedWidth = 0;
+    } else if (positionUpperBound < fixedPosition) {
+      // Positionが大きすぎる場合、Positionを減らしてWidthを下限に
+      fixedPosition = positionUpperBound - sizeLowerBound;
+      fixedSize = sizeLowerBound;
       result = false;
     }
-    if (windowRect.Right < fixedX + fixedWidth) {
-      // 領域が右にはみでている場合、Widthは保持＆Xを左にずらす
-      fixedX = windowRect.Right - fixedWidth;
+    if (positionUpperBound < fixedPosition + fixedSize) {
+      // 領域が境界内に収まらない場合、Sizeは保持＆Positionを小さく
+      fixedPosition = positionUpperBound - fixedSize;
       result = false;
     }
   
     // 出力
-    Debug.Assert(windowRect.X <= fixedX && fixedX + fixedWidth <= windowRect.Right);
-    return result;
-  }
-
-  /// ClippingYのユーザ入力を制約(WindowSizeなど)に基づいて訂正する
-  /// @attention できるだけvalueは訂正せずfixedHeightの調整で訂正を行う
-  /// @param layoutElement 対象のレイアウト要素
-  /// @param value TextBoxから入力された数値
-  /// @param fixedY 訂正後のClippingY
-  /// @param fixedHeight 訂正後のClippingHeight
-  /// @retval true valueは制約を満たした値である
-  /// @retval false 制約を満たすにはfixedY/fixedHeightである必要がある
-  public static bool CorrectInputClippingY(ILayoutElementView layoutElement,
-      int value, out int fixedY, out int fixedHeight) {
-    Debug.Assert(layoutElement.IsWindowValid);
-    Debug.Assert(!layoutElement.Fit);
-
-    var result = true;
-    fixedY = value;
-    fixedHeight = layoutElement.ClippingHeightWithoutFit;
-    var windowRect = Utilities.GetWindowRect(layoutElement.WindowType, layoutElement.Window);
- 
-    // 上限・下限の補正
-    if (fixedY < windowRect.Y) {
-      // Yが上にはみでている場合、Heightは保持＆Yを下にずらす
-      fixedY = windowRect.Y;
-      result = false;
-    } else if (windowRect.Bottom < fixedY) {
-      // Yが下にはみでている場合、Yを上にずらしてHeightを0に
-      fixedY = windowRect.Bottom;
-      fixedHeight = 0;
-      result = false;
-    }
-      
-    // Heightの補正
-    if (fixedHeight < 0) {
-      // Heightは0以上
-      fixedHeight = 0;
-      result = false;
-    }
-    if (windowRect.Bottom < fixedY + fixedHeight) {
-      // 領域が下にはみでている場合、Yは保持＆Heightを縮める
-      fixedHeight = windowRect.Bottom - fixedY;
-      result = false;
-    }
-  
-    // 出力
-    Debug.Assert(windowRect.Y <= fixedY && fixedY + fixedHeight <= windowRect.Bottom);
-    return result;
-  }
-
-  /// ClippingHeightのユーザ入力を制約(WindowSizeなど)に基づいて訂正する
-  /// @attention できるだけvalueは訂正せずfixedYの調整で訂正を行う
-  /// @param layoutElement 対象のレイアウト要素
-  /// @param value TextBoxから入力された数値
-  /// @param fixedY 訂正後のClippingY
-  /// @param fixedHeight 訂正後のClippingHeight
-  /// @retval true valueは制約を満たした値である
-  /// @retval false 制約を満たすにはfixedY/fixedHeightである必要がある
-  public static bool CorrectInputClippingHeight(ILayoutElementView layoutElement,
-      int value, out int fixedY, out int fixedHeight) {
-    Debug.Assert(layoutElement.IsWindowValid);
-    Debug.Assert(!layoutElement.Fit);
-
-    var result = true;
-    fixedY = layoutElement.ClippingYWithoutFit;
-    fixedHeight = value;
-    var windowRect = Utilities.GetWindowRect(layoutElement.WindowType, layoutElement.Window);
-
-    // 上限・下限の補正
-    if (fixedHeight < 0) {
-      // Heightは0以上
-      fixedHeight = 0;
-      result = false;
-    } else if (windowRect.Height < fixedHeight) {
-      // Heightが大きすぎる場合はFitさせる
-      fixedY = windowRect.Y;
-      fixedHeight = windowRect.Height;
-      result = false;
-    }
- 
-    // Yの補正
-    if (fixedY < windowRect.Y) {
-      // Yが上にはみでている場合、Heightは保持＆Yを下にずらす
-      fixedY = windowRect.Y;
-      result = false;
-    } else if (windowRect.Bottom < fixedY) {
-      // Yが下にはみでている場合、Yを上にずらしてHeightを0に
-      fixedY = windowRect.Bottom;
-      fixedHeight = 0;
-      result = false;
-    }
-    if (windowRect.Bottom < fixedY + fixedHeight) {
-      // 領域が下にはみでている場合、Heightは保持＆Yを上にずらす
-      fixedY = windowRect.Bottom - fixedHeight;
-      result = false;
-    }
-  
-    // 出力
-    Debug.Assert(windowRect.Y <= fixedY && fixedY + fixedHeight <= windowRect.Height);
+    Debug.Assert(positionLowerBound <= fixedPosition &&
+                 fixedPosition + fixedSize <= positionUpperBound);
     return result;
   }
 
@@ -263,8 +188,8 @@ public static class InputCorrector {
         
     // 出力
     Debug.Assert(0.0 <= fixedLeft &&
-                  fixedLeft + Constants.MinimumBoundRelativeSize <= fixedRight &&
-                  fixedRight <= 1.0);
+                 fixedLeft + Constants.MinimumBoundRelativeSize <= fixedRight &&
+                 fixedRight <= 1.0);
     return result;
   }
   /// BoundRelativeRightのユーザ入力を訂正する
@@ -299,8 +224,8 @@ public static class InputCorrector {
         
     // 出力
     Debug.Assert(0.0 <= fixedLeft &&
-                  fixedLeft + Constants.MinimumBoundRelativeSize <= fixedRight &&
-                  fixedRight <= 1.0);
+                 fixedLeft + Constants.MinimumBoundRelativeSize <= fixedRight &&
+                 fixedRight <= 1.0);
     return result;
   }
   /// BoundRelativeTopのユーザ入力を訂正する

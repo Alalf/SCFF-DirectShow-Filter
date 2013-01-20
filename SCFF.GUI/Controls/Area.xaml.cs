@@ -105,10 +105,10 @@ public partial class Area : UserControl, IBindingProfile {
   //-------------------------------------------------------------------
 
   private void ChangePosition(Positions position) {
-    var OnX = (position == Positions.X);
-    var positionName = OnX ? Names.ClippingX : Names.ClippingY;
-    var size = OnX ? Sizes.Width : Sizes.Height;
-    var sizeName = OnX ? Names.ClippingWidth : Names.ClippingHeight;
+    var onX = (position == Positions.X);
+    var positionName = onX ? Names.ClippingX : Names.ClippingY;
+    var size = onX ? Sizes.Width : Sizes.Height;
+    var sizeName = onX ? Names.ClippingWidth : Names.ClippingHeight;
 
     // Parse
     int value;
@@ -156,7 +156,7 @@ public partial class Area : UserControl, IBindingProfile {
 
     // 成功: そのまま書き換え(Textは変更しない)
     App.Profile.Current.Open();
-    if (OnX) {
+    if (onX) {
       App.Profile.Current.SetClippingXWithoutFit = value;
     } else {
       App.Profile.Current.SetClippingYWithoutFit = value;
@@ -171,10 +171,10 @@ public partial class Area : UserControl, IBindingProfile {
   }
 
   private void CorrectPosition(Positions position) {
-    var OnX = (position == Positions.X);
-    var positionName = OnX ? Names.ClippingX : Names.ClippingY;
-    var size = OnX ? Sizes.Width : Sizes.Height;
-    var sizeName = OnX ? Names.ClippingWidth : Names.ClippingHeight;
+    var onX = (position == Positions.X);
+    var positionName = onX ? Names.ClippingX : Names.ClippingY;
+    var size = onX ? Sizes.Width : Sizes.Height;
+    var sizeName = onX ? Names.ClippingWidth : Names.ClippingHeight;
 
     // Parse
     int value;
@@ -201,7 +201,7 @@ public partial class Area : UserControl, IBindingProfile {
 
     // Update Profile
     App.Profile.Current.Open();
-    if (OnX) {
+    if (onX) {
       App.Profile.Current.SetClippingXWithoutFit = changed.X;
       App.Profile.Current.SetClippingWidthWithoutFit = changed.Width;
     } else {
@@ -239,10 +239,10 @@ public partial class Area : UserControl, IBindingProfile {
   }
 
   private void ChangeSize(Sizes size) {
-    var OnX = (size == Sizes.Width);
-    var sizeName = OnX ? Names.ClippingWidth : Names.ClippingHeight;
-    var position = OnX ? Positions.X : Positions.Y;
-    var positionName = OnX ? Names.ClippingX : Names.ClippingY;
+    var onX = (size == Sizes.Width);
+    var sizeName = onX ? Names.ClippingWidth : Names.ClippingHeight;
+    var position = onX ? Positions.X : Positions.Y;
+    var positionName = onX ? Names.ClippingX : Names.ClippingY;
 
     // Parse
     int value;
@@ -291,7 +291,7 @@ public partial class Area : UserControl, IBindingProfile {
 
     // 成功: そのまま書き換え(Textは変更しない)
     App.Profile.Current.Open();
-    if (OnX) {
+    if (onX) {
       App.Profile.Current.SetClippingWidthWithoutFit = value;
     } else {
       App.Profile.Current.SetClippingHeightWithoutFit = value;
@@ -306,10 +306,10 @@ public partial class Area : UserControl, IBindingProfile {
   }
 
   private void CorrectSize(Sizes size) {
-    var OnX = (size == Sizes.Width);
-    var sizeName = OnX ? Names.ClippingWidth : Names.ClippingHeight;
-    var position = OnX ? Positions.X : Positions.Y;
-    var positionName = OnX ? Names.ClippingX : Names.ClippingY;
+    var onX = (size == Sizes.Width);
+    var sizeName = onX ? Names.ClippingWidth : Names.ClippingHeight;
+    var position = onX ? Positions.X : Positions.Y;
+    var positionName = onX ? Names.ClippingX : Names.ClippingY;
 
     // Parse
     int value;
@@ -336,7 +336,7 @@ public partial class Area : UserControl, IBindingProfile {
 
     // Update Profile
     App.Profile.Current.Open();
-    if (OnX) {
+    if (onX) {
       App.Profile.Current.SetClippingXWithoutFit = changed.X;
       App.Profile.Current.SetClippingWidthWithoutFit = changed.Width;
     } else {

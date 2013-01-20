@@ -58,6 +58,16 @@ public partial class Area : UserControl, IBindingProfile {
 
   //-------------------------------------------------------------------
 
+  private Names GetPair(Names name) {
+    switch (name) {
+      case Names.ClippingX: return Names.ClippingWidth;
+      case Names.ClippingY: return Names.ClippingHeight;
+      case Names.ClippingWidth: return Names.ClippingX;
+      case Names.ClippingHeight: return Names.ClippingY;
+      default: Debug.Fail("switch"); throw new System.ArgumentException();
+    }
+  }
+
   private TextBox GetTextBox(Names name) {
     switch (name) {
       case Names.ClippingX: return this.ClippingX;
@@ -96,16 +106,6 @@ public partial class Area : UserControl, IBindingProfile {
   }
 
   //-------------------------------------------------------------------
-
-  private Names GetPair(Names name) {
-    switch (name) {
-      case Names.ClippingX: return Names.ClippingWidth;
-      case Names.ClippingY: return Names.ClippingHeight;
-      case Names.ClippingWidth: return Names.ClippingX;
-      case Names.ClippingHeight: return Names.ClippingY;
-      default: Debug.Fail("switch"); throw new System.ArgumentException();
-    }
-  }
 
   private void ChangePosition(Positions position) {
     var onX = (position == Positions.X);

@@ -125,20 +125,20 @@ public partial class LayoutParameter
     return true;
   }
 
+  /// BoundRelativeLeft.Textをイベントハンドラの実行なしで書き換える
   private void OverwriteBoundRelativeLeftText(bool fixCursor) {
     this.CanChangeProfile = false;
     this.BoundRelativeLeft.Text = StringConverter.GetBoundRelativeLeftString(App.Profile.CurrentView);
     if (fixCursor) this.BoundRelativeLeft.Select(this.BoundRelativeLeft.Text.Length, 0);
     this.CanChangeProfile = true;
   }
-
+  /// BoundRelativeRight.Textをイベントハンドラの実行なしで書き換える
   private void OverwriteBoundRelativeRightText(bool fixCursor) {
     this.CanChangeProfile = false;
     this.BoundRelativeRight.Text = StringConverter.GetBoundRelativeRightString(App.Profile.CurrentView);
     if (fixCursor) this.BoundRelativeRight.Select(this.BoundRelativeRight.Text.Length, 0);
     this.CanChangeProfile = true;
   }
-
 
   /// BoundRelativeLeft: TextChanged
   /// @param sender 使用しない

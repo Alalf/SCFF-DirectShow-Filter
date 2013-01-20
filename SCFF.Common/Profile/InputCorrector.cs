@@ -28,17 +28,139 @@ public static class InputCorrector {
   //=================================================================
   // 列挙型
   //=================================================================
+
+  /// 試行結果（訂正箇所）
   public enum TryResult {
-    NothingChanged = 0x0,
-    PositionChanged = 0x1,
-    SizeChanged = 0x2,
-    PositionAndSizeChanged = 0x3
+    /// 訂正なしでTargetへの値の設定が可能
+    NothingChanged    = 0x0,
+    /// Targetの訂正が必要
+    TargetChanged     = 0x1,
+    /// Dependentの訂正が必要
+    DependentChanged  = 0x2,
+    /// Target/Dependent両方の訂正が必要
+    BothChanged       = TargetChanged | DependentChanged
   }
 
   //=================================================================
   // Clipping Position(X,Y)/Size(Width,Height)
   //=================================================================
 
+  /// ClientRectの位置要素(X/Y)の変更を試みる
+  /// @param original 変更前のClientRect
+  /// @param target 変更箇所
+  /// @param value 変更値
+  /// @param bound 境界を表すClientRect
+  /// @param sizeLowerBound 訂正後のサイズ要素(Width/Height)の最小値
+  /// @param[out] changed 変更後、制約を満たす形に訂正されたClientRect
+  /// @return 試行結果（訂正箇所）
+  private static TryResult TryChangePosition(ClientRect original,
+      RectProperties target, int value, ClientRect bound, int sizeLowerBound,
+      out ClientRect changed) {
+    Debug.Assert(target == RectProperties.X || target == RectProperties.Y);
+
+    // 準備
+    var onX = (target == RectProperties.X);
+    var fixedPosition = value;
+    var fixedSize = onX ? original.Width : original.Height;
+    var positionLowerBound = onX ? bound.X : bound.Y;
+    var positionUpperBound = onX ? bound.Right : bound.Bottom;
+    var sizeUpperBound = onX ? bound.Width : bound.Height;
+    var tryResult = TryResult.NothingChanged;
+
+    // 上限・下限の補正
+    if (fixedPosition < positionLowerBound) {
+      // Positionが小さすぎる場合、Sizeは保持＆Positionを増やす
+      fixedPosition = positionLowerBound;
+      tryResult |= TryResult.TargetChanged;
+    } else if (positionUpperBound < fixedPosition) {
+      // Positionが大きすぎる場合、Positionを減らしてSizeを下限に
+      fixedPosition = positionUpperBound - sizeLowerBound;
+      fixedSize = sizeLowerBound;
+      tryResult |= TryResult.BothChanged;
+    }
+      
+    // Sizeの補正
+    if (fixedSize < sizeLowerBound) {
+      // Sizeは下限以上
+      fixedSize = sizeLowerBound;
+      tryResult |= TryResult.DependentChanged;
+    }
+    if (positionUpperBound < fixedPosition + fixedSize) {
+      // 領域が境界内に収まらない場合、Positionは保持＆Sizeを縮める
+      fixedSize = positionUpperBound - fixedPosition;
+      tryResult |= TryResult.DependentChanged;
+    }
+
+    Debug.Assert(positionLowerBound <= fixedPosition &&
+                 fixedPosition + fixedSize <= positionUpperBound);
+    changed = onX
+        ? new ClientRect(fixedPosition, original.Y, fixedSize, original.Height)
+        : new ClientRect(original.X, fixedPosition, original.Width, fixedSize);
+    return tryResult;
+  }
+
+  /// ClientRectのサイズ要素(Width/Height)の変更を試みる
+  /// @param original 変更前のClientRect
+  /// @param target 変更箇所
+  /// @param value 変更値
+  /// @param bound 境界を表すClientRect
+  /// @param sizeLowerBound 訂正後のサイズ要素(Width/Height)の最小値
+  /// @param[out] changed 変更後、制約を満たす形に訂正されたClientRect
+  /// @return 試行結果（訂正箇所）
+  private static TryResult TryChangeSize(ClientRect original,
+      RectProperties target, int value, ClientRect bound, int sizeLowerBound,
+      out ClientRect changed) {
+    Debug.Assert(target == RectProperties.Width || target == RectProperties.Height);
+
+    // 準備
+    var onX = (target == RectProperties.Width);
+    var fixedPosition = onX ? original.X : original.Y;
+    var fixedSize = value;
+    var positionLowerBound = onX ? bound.X : bound.Y;
+    var positionUpperBound = onX ? bound.Right : bound.Bottom;
+    var sizeUpperBound = onX ? bound.Width : bound.Height;
+    var tryResult = TryResult.NothingChanged;
+
+    // 上限・下限の補正
+    if (fixedSize < sizeLowerBound) {
+      // Sizeは下限以上
+      fixedSize = sizeLowerBound;
+      tryResult |= TryResult.TargetChanged;
+    } else if (sizeUpperBound < fixedSize) {
+      // Sizeが大きすぎる場合はFitさせる
+      fixedPosition = positionLowerBound;
+      fixedSize = sizeUpperBound;
+      tryResult |= TryResult.BothChanged;
+    }
+ 
+    // Positionの補正
+    if (fixedPosition < positionLowerBound) {
+      // Positionが小さすぎる場合、Sizeは保持＆Positionを増やす
+      fixedPosition = positionLowerBound;
+      tryResult |= TryResult.DependentChanged;
+    } else if (positionUpperBound < fixedPosition) {
+      // Positionが大きすぎる場合、Positionを減らしてWidthを下限に
+      fixedPosition = positionUpperBound - sizeLowerBound;
+      fixedSize = sizeLowerBound;
+      tryResult |= TryResult.BothChanged;
+    }
+    if (positionUpperBound < fixedPosition + fixedSize) {
+      // 領域が境界内に収まらない場合、Sizeは保持＆Positionを小さく
+      fixedPosition = positionUpperBound - fixedSize;
+      tryResult |= TryResult.DependentChanged;
+    }
+
+    Debug.Assert(positionLowerBound <= fixedPosition &&
+                 fixedPosition + fixedSize <= positionUpperBound);
+    changed = onX
+        ? new ClientRect(fixedPosition, original.Y, fixedSize, original.Height)
+        : new ClientRect(original.X, fixedPosition, original.Width, fixedSize);
+    return tryResult;
+  }
+
+  //-------------------------------------------------------------------
+
+  /// レイアウト要素からClipping領域(Fitオプションなし)を取得
   private static ClientRect GetClippingRectWithoutFit(ILayoutElementView layoutElement) {
     return new ClientRect(layoutElement.ClippingXWithoutFit,
                           layoutElement.ClippingYWithoutFit,
@@ -46,113 +168,14 @@ public static class InputCorrector {
                           layoutElement.ClippingHeightWithoutFit);
   }
 
-
-  /// Rectの位置要素(X/Y)の変更を試みる
-  /// @param original 変更前のRect
-  /// @param position 変更対象の位置要素(X/Y)
+  /// レイアウト要素のClipping領域(Fitオプションなし)の変更を試みる
+  /// @param layoutElement レイアウト要素
+  /// @param target 変更箇所
   /// @param value 変更値
-  /// @param bound 上限・下限を決めるRect
-  /// @param sizeLowerBound 変更後のサイズ要素(Width/Height)の最小値
-  /// @return 変更した場合のRect
-  private static TryResult TryChangePosition(ClientRect original,
-      Positions position, int value, ClientRect bound, int sizeLowerBound,
-      out ClientRect changed) {
-    // 準備
-    var fixedPosition = value;
-    var fixedSize = (position == Positions.X) ? original.Width : original.Height;
-    var positionLowerBound = (position == Positions.X) ? bound.X : bound.Y;
-    var positionUpperBound = (position == Positions.X) ? bound.Right : bound.Bottom;
-    var sizeUpperBound = (position == Positions.X) ? bound.Width : bound.Height;
-    var tryResult = TryResult.NothingChanged;
-
-    // 上限・下限の補正
-    if (fixedPosition < positionLowerBound) {
-      // Positionが小さすぎる場合、Sizeは保持＆Positionを増やす
-      fixedPosition = positionLowerBound;
-      tryResult |= TryResult.PositionChanged;
-    } else if (positionUpperBound < fixedPosition) {
-      // Positionが大きすぎる場合、Positionを減らしてSizeを下限に
-      fixedPosition = positionUpperBound - sizeLowerBound;
-      fixedSize = sizeLowerBound;
-      tryResult |= TryResult.PositionAndSizeChanged;
-    }
-      
-    // Sizeの補正
-    if (fixedSize < sizeLowerBound) {
-      // Sizeは下限以上
-      fixedSize = sizeLowerBound;
-      tryResult |= TryResult.SizeChanged;
-    }
-    if (positionUpperBound < fixedPosition + fixedSize) {
-      // 領域が境界内に収まらない場合、Positionは保持＆Sizeを縮める
-      fixedSize = positionUpperBound - fixedPosition;
-      tryResult |= TryResult.SizeChanged;
-    }
-
-    Debug.Assert(positionLowerBound <= fixedPosition &&
-                 fixedPosition + fixedSize <= positionUpperBound);
-    changed = (position == Positions.X)
-        ? new ClientRect(fixedPosition, original.Y, fixedSize, original.Height)
-        : new ClientRect(original.X, fixedPosition, original.Width, fixedSize);
-    return tryResult;
-  }
-  /// Rectのサイズ要素(Width/Height)の変更を試みる
-  /// @param original 変更前のRect
-  /// @param size 変更対象のサイズ要素(Width/Height)
-  /// @param value 変更値
-  /// @param bound 上限・下限を決めるRect
-  /// @param sizeLowerBound 変更後のサイズ要素(Width/Height)の最小値
-  /// @return 変更した場合のRect
-  private static TryResult TryChangeSize(ClientRect original,
-      Sizes size, int value, ClientRect bound, int sizeLowerBound,
-      out ClientRect changed) {
-    // 準備
-    var fixedPosition = (size == Sizes.Width) ? original.X : original.Y;
-    var fixedSize = value;
-    var positionLowerBound = (size == Sizes.Width) ? bound.X : bound.Y;
-    var positionUpperBound = (size == Sizes.Width) ? bound.Right : bound.Bottom;
-    var sizeUpperBound = (size == Sizes.Width) ? bound.Width : bound.Height;
-    var tryResult = TryResult.NothingChanged;
-
-    // 上限・下限の補正
-    if (fixedSize < sizeLowerBound) {
-      // Sizeは下限以上
-      fixedSize = sizeLowerBound;
-      tryResult |= TryResult.SizeChanged;
-    } else if (sizeUpperBound < fixedSize) {
-      // Sizeが大きすぎる場合はFitさせる
-      fixedPosition = positionLowerBound;
-      fixedSize = sizeUpperBound;
-      tryResult |= TryResult.PositionAndSizeChanged;
-    }
- 
-    // Positionの補正
-    if (fixedPosition < positionLowerBound) {
-      // Positionが小さすぎる場合、Sizeは保持＆Positionを増やす
-      fixedPosition = positionLowerBound;
-      tryResult |= TryResult.PositionChanged;
-    } else if (positionUpperBound < fixedPosition) {
-      // Positionが大きすぎる場合、Positionを減らしてWidthを下限に
-      fixedPosition = positionUpperBound - sizeLowerBound;
-      fixedSize = sizeLowerBound;
-      tryResult |= TryResult.PositionAndSizeChanged;
-    }
-    if (positionUpperBound < fixedPosition + fixedSize) {
-      // 領域が境界内に収まらない場合、Sizeは保持＆Positionを小さく
-      fixedPosition = positionUpperBound - fixedSize;
-      tryResult |= TryResult.PositionChanged;
-    }
-
-    Debug.Assert(positionLowerBound <= fixedPosition &&
-                 fixedPosition + fixedSize <= positionUpperBound);
-    changed = (size == Sizes.Width)
-        ? new ClientRect(fixedPosition, original.Y, fixedSize, original.Height)
-        : new ClientRect(original.X, fixedPosition, original.Width, fixedSize);
-    return tryResult;
-  }
-
-  public static TryResult TryChangeClippingPosition(
-      ILayoutElementView layoutElement, Positions position, int value,
+  /// @param[out] changed 変更後、制約を満たす形に訂正されたClipping領域
+  /// @return 試行結果（訂正箇所）
+  public static TryResult TryChangeClippingRectWithoutFit(
+      ILayoutElementView layoutElement, RectProperties target, int value,
       out ClientRect changed) {
     Debug.Assert(layoutElement.IsWindowValid);
     Debug.Assert(!layoutElement.Fit);
@@ -162,21 +185,17 @@ public static class InputCorrector {
     var window = Utilities.GetWindowRect(layoutElement.WindowType, layoutElement.Window);
 
     // 訂正
-    return InputCorrector.TryChangePosition(original, position, value, window, 0, out changed);
-  }
-
-  public static TryResult TryChangeClippingSize(
-      ILayoutElementView layoutElement, Sizes size, int value,
-      out ClientRect changed) {
-    Debug.Assert(layoutElement.IsWindowValid);
-    Debug.Assert(!layoutElement.Fit);
-
-    // 準備
-    var original = InputCorrector.GetClippingRectWithoutFit(layoutElement);
-    var window = Utilities.GetWindowRect(layoutElement.WindowType, layoutElement.Window);
-
-    // 訂正
-    return InputCorrector.TryChangeSize(original, size, value, window, 0, out changed);
+    switch (target) {
+      case RectProperties.X:
+      case RectProperties.Y: {
+        return InputCorrector.TryChangePosition(original, target, value, window, 0, out changed);
+      }
+      case RectProperties.Width:
+      case RectProperties.Height: {
+        return InputCorrector.TryChangeSize(original, target, value, window, 0, out changed);
+      }
+      default: Debug.Fail("switch"); throw new System.ArgumentException();
+    }
   }
 
   //=================================================================

@@ -25,9 +25,11 @@ using System.Windows.Controls;
 
 /// エラー表示用メソッドをまとめたstaticクラス
 public static class TextBoxError {
+  /// TextBoxがエラー状態か
   public static bool HasError(TextBox textBox) {
     return textBox.Tag != null;
   }
+  /// TextBoxのエラー状態解除
   public static void ResetError(TextBox textBox, ToolTip toolTip = null) {
     textBox.Tag = null;
     if (toolTip == null) return;
@@ -35,6 +37,7 @@ public static class TextBoxError {
     toolTip.Content = null;
     toolTip.IsOpen = false;
   }
+  /// TextBoxのエラー状態設定
   public static void SetError(TextBox textBox, ToolTip toolTip = null, string message = null) {
     textBox.Tag = "HasError";
     if (toolTip == null) return;
@@ -48,6 +51,7 @@ public static class TextBoxError {
       toolTip.IsOpen = false;
     }
   }
+  /// TextBoxの警告状態設定
   public static void SetWarning(TextBox textBox, ToolTip toolTip = null, string message = null) {
     textBox.Tag = "HasWarning";
     if (toolTip == null) return;

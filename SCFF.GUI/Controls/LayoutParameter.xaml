@@ -34,7 +34,11 @@
       <TextBox  Grid.Column="2"
                 VerticalAlignment="Center" Height="20"
                 x:Name="BoundRelativeLeft" Text="1000" HorizontalContentAlignment="Right"
-                TextChanged="BoundRelativeLeft_TextChanged"/>
+                TextChanged="BoundRelativeLeft_TextChanged" KeyDown="BoundRelativeLeft_KeyDown" HorizontalAlignment="Left" Margin="0,3" Width="41" LostFocus="BoundRelativeLeft_LostFocus">
+        <TextBox.ToolTip>
+          <ToolTip x:Name="BoundRelativeLeftToolTip" Placement="Bottom" Visibility="Hidden"/>
+        </TextBox.ToolTip>
+      </TextBox>
       <!-- RelativeTop -->
       <Label    Grid.Column="3"
                 VerticalAlignment="Center" HorizontalAlignment="Right" Height="12" Margin="5,0"
@@ -42,7 +46,11 @@
       <TextBox  Grid.Column="4"
                 VerticalAlignment="Center" Height="20"
                 x:Name="BoundRelativeTop" Text="1000" HorizontalContentAlignment="Right"
-                TextChanged="BoundRelativeTop_TextChanged"/>
+                TextChanged="BoundRelativeTop_TextChanged" KeyDown="BoundRelativeTop_KeyDown" LostFocus="BoundRelativeTop_LostFocus">
+        <TextBox.ToolTip>
+          <ToolTip x:Name="BoundRelativeTopToolTip" Placement="Bottom" Visibility="Hidden"/>
+        </TextBox.ToolTip>
+      </TextBox>
       <!-- RelativeRight -->
       <Label    Grid.Column="5"
                 VerticalAlignment="Center" HorizontalAlignment="Right" Height="12" Margin="5,0"
@@ -50,7 +58,11 @@
       <TextBox  Grid.Column="6"
                 VerticalAlignment="Center" Height="20"
                 x:Name="BoundRelativeRight" Text="1000" HorizontalContentAlignment="Right"
-                TextChanged="BoundRelativeRight_TextChanged"/>
+                TextChanged="BoundRelativeRight_TextChanged" KeyDown="BoundRelativeRight_KeyDown" LostFocus="BoundRelativeRight_LostFocus">
+        <TextBox.ToolTip>
+          <ToolTip x:Name="BoundRelativeRightToolTip" Placement="Bottom" Visibility="Hidden"/>
+        </TextBox.ToolTip>
+      </TextBox>
       <!-- RelativeBottom -->
       <Label    Grid.Column="7"
                 VerticalAlignment="Center" HorizontalAlignment="Right" Height="12" Margin="5,0"
@@ -58,7 +70,11 @@
       <TextBox  Grid.Column="8"
                 VerticalAlignment="Center" Height="20"
                 x:Name="BoundRelativeBottom" Text="1000" HorizontalContentAlignment="Right"
-                TextChanged="BoundRelativeBottom_TextChanged"/>
+                TextChanged="BoundRelativeBottom_TextChanged" KeyDown="BoundRelativeBottom_KeyDown" LostFocus="BoundRelativeBottom_LostFocus">
+        <TextBox.ToolTip>
+          <ToolTip x:Name="BoundRelativeBottomToolTip" Placement="Bottom" Visibility="Hidden"/>
+        </TextBox.ToolTip>
+      </TextBox>
       <!-- X -->
       <Label    Grid.Row="1" Grid.Column="1"
                 VerticalAlignment="Center" HorizontalAlignment="Right" Height="12" Margin="5,0"

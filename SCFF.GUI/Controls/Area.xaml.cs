@@ -51,7 +51,7 @@ public partial class Area : UserControl, IBindingProfile {
   //===================================================================
 
   /// Rectのプロパティ名->Clipping*文字列
-  private string GetLayoutElementString(RectProperties name) {
+  private string GetClippingValueString(RectProperties name) {
     switch (name) {
       case RectProperties.X: return StringConverter.GetClippingXString(App.Profile.CurrentView);
       case RectProperties.Y: return StringConverter.GetClippingYString(App.Profile.CurrentView);
@@ -61,24 +61,12 @@ public partial class Area : UserControl, IBindingProfile {
     }
   }
   /// Rectのプロパティ名と値を指定してClipping*WithoutFitを変更
-  private void SetLayoutElementValue(RectProperties name, int value) {
+  private void SetClippingValue(RectProperties name, int value) {
     switch (name) {
-      case RectProperties.X: {
-        App.Profile.Current.SetClippingXWithoutFit = value;
-        break;
-      }
-      case RectProperties.Y: {
-        App.Profile.Current.SetClippingYWithoutFit = value;
-        break;
-      }
-      case RectProperties.Width: {
-        App.Profile.Current.SetClippingWidthWithoutFit = value;
-        break;
-      }
-      case RectProperties.Height: {
-        App.Profile.Current.SetClippingHeightWithoutFit = value;
-        break;
-      }
+      case RectProperties.X: App.Profile.Current.SetClippingXWithoutFit = value; break;
+      case RectProperties.Y: App.Profile.Current.SetClippingYWithoutFit = value; break;
+      case RectProperties.Width: App.Profile.Current.SetClippingWidthWithoutFit = value; break;
+      case RectProperties.Height: App.Profile.Current.SetClippingHeightWithoutFit = value; break;
       default: Debug.Fail("switch"); throw new System.ArgumentException();
     }
   }
@@ -156,20 +144,20 @@ public partial class Area : UserControl, IBindingProfile {
       case InputCorrector.TryResult.TargetChanged: {
         this.SetWarning(target, "Return/Enter: Correct Value");
         this.ResetError(dependent);
-        break;
+        return;
       }
       case InputCorrector.TryResult.DependentChanged:
       case InputCorrector.TryResult.BothChanged: {
         this.SetWarning(target, "Return/Enter: Correct Value");
         this.SetWarning(dependent);
-        break;
+        return;
       }
       default: Debug.Fail("switch"); throw new System.ArgumentException();
     }
 
     // 成功: そのまま書き換え(Textは変更しない)
     App.Profile.Current.Open();
-    this.SetLayoutElementValue(target, value);
+    this.SetClippingValue(target, value);
     App.Profile.Current.Close();
 
     //---------------------------------------------------------------
@@ -486,7 +474,7 @@ public partial class Area : UserControl, IBindingProfile {
     this.CanChangeProfile = false;
 
     var textBox = this.GetTextBox(name);
-    textBox.Text = this.GetLayoutElementString(name);
+    textBox.Text = this.GetClippingValueString(name);
     if (textBox.IsKeyboardFocused) {
       textBox.Select(textBox.Text.Length, 0);
     }

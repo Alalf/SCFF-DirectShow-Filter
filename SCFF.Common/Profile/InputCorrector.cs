@@ -46,6 +46,7 @@ public static class InputCorrector {
   //=================================================================
 
   /// ClientRectの位置要素(X/Y)の変更を試みる
+  /// @caution sizeLowerBound = 0以外の動作テストをしていない
   /// @param original 変更前のClientRect
   /// @param target 変更箇所
   /// @param value 変更値
@@ -60,46 +61,48 @@ public static class InputCorrector {
 
     // 準備
     var onX = (target == RectProperties.X);
-    var fixedPosition = value;
-    var fixedSize = onX ? original.Width : original.Height;
+    var position = value;
+    var size = onX ? original.Width : original.Height;
     var positionLowerBound = onX ? bound.X : bound.Y;
     var positionUpperBound = onX ? bound.Right : bound.Bottom;
     var sizeUpperBound = onX ? bound.Width : bound.Height;
     var tryResult = TryResult.NothingChanged;
 
     // 上限・下限の補正
-    if (fixedPosition < positionLowerBound) {
+    if (position < positionLowerBound) {
       // Positionが小さすぎる場合、Sizeは保持＆Positionを増やす
-      fixedPosition = positionLowerBound;
+      position = positionLowerBound;
       tryResult |= TryResult.TargetChanged;
-    } else if (positionUpperBound < fixedPosition) {
+    } else if (positionUpperBound < position) {
       // Positionが大きすぎる場合、Positionを減らしてSizeを下限に
-      fixedPosition = positionUpperBound - sizeLowerBound;
-      fixedSize = sizeLowerBound;
+      position = positionUpperBound - sizeLowerBound;
+      size = sizeLowerBound;
       tryResult |= TryResult.BothChanged;
     }
-      
+
     // Sizeの補正
-    if (fixedSize < sizeLowerBound) {
+    if (size < sizeLowerBound) {
       // Sizeは下限以上
-      fixedSize = sizeLowerBound;
-      tryResult |= TryResult.DependentChanged;
-    }
-    if (positionUpperBound < fixedPosition + fixedSize) {
-      // 領域が境界内に収まらない場合、Positionは保持＆Sizeを縮める
-      fixedSize = positionUpperBound - fixedPosition;
+      size = sizeLowerBound;
       tryResult |= TryResult.DependentChanged;
     }
 
-    Debug.Assert(positionLowerBound <= fixedPosition &&
-                 fixedPosition + fixedSize <= positionUpperBound);
+    // 領域が境界内に収まらない場合、Positionは保持＆Sizeを縮める
+    if (positionUpperBound < position + size) {
+      size = positionUpperBound - position;
+      tryResult |= TryResult.DependentChanged;
+    }
+
+    Debug.Assert(positionLowerBound <= position &&
+                 position + size <= positionUpperBound);
     changed = onX
-        ? new ClientRect(fixedPosition, original.Y, fixedSize, original.Height)
-        : new ClientRect(original.X, fixedPosition, original.Width, fixedSize);
+        ? new ClientRect(position, original.Y, size, original.Height)
+        : new ClientRect(original.X, position, original.Width, size);
     return tryResult;
   }
 
   /// ClientRectのサイズ要素(Width/Height)の変更を試みる
+  /// @caution sizeLowerBound = 0以外の動作テストをしていない
   /// @param original 変更前のClientRect
   /// @param target 変更箇所
   /// @param value 変更値
@@ -114,47 +117,48 @@ public static class InputCorrector {
 
     // 準備
     var onX = (target == RectProperties.Width);
-    var fixedPosition = onX ? original.X : original.Y;
-    var fixedSize = value;
+    var position = onX ? original.X : original.Y;
+    var size = value;
     var positionLowerBound = onX ? bound.X : bound.Y;
     var positionUpperBound = onX ? bound.Right : bound.Bottom;
     var sizeUpperBound = onX ? bound.Width : bound.Height;
     var tryResult = TryResult.NothingChanged;
 
     // 上限・下限の補正
-    if (fixedSize < sizeLowerBound) {
+    if (size < sizeLowerBound) {
       // Sizeは下限以上
-      fixedSize = sizeLowerBound;
+      size = sizeLowerBound;
       tryResult |= TryResult.TargetChanged;
-    } else if (sizeUpperBound < fixedSize) {
+    } else if (sizeUpperBound < size) {
       // Sizeが大きすぎる場合はFitさせる
-      fixedPosition = positionLowerBound;
-      fixedSize = sizeUpperBound;
+      position = positionLowerBound;
+      size = sizeUpperBound;
       tryResult |= TryResult.BothChanged;
     }
- 
+
     // Positionの補正
-    if (fixedPosition < positionLowerBound) {
+    if (position < positionLowerBound) {
       // Positionが小さすぎる場合、Sizeは保持＆Positionを増やす
-      fixedPosition = positionLowerBound;
+      position = positionLowerBound;
       tryResult |= TryResult.DependentChanged;
-    } else if (positionUpperBound < fixedPosition) {
+    } else if (positionUpperBound < position) {
       // Positionが大きすぎる場合、Positionを減らしてWidthを下限に
-      fixedPosition = positionUpperBound - sizeLowerBound;
-      fixedSize = sizeLowerBound;
+      position = positionUpperBound - sizeLowerBound;
+      size = sizeLowerBound;
       tryResult |= TryResult.BothChanged;
     }
-    if (positionUpperBound < fixedPosition + fixedSize) {
-      // 領域が境界内に収まらない場合、Sizeは保持＆Positionを小さく
-      fixedPosition = positionUpperBound - fixedSize;
+
+    // 領域が境界内に収まらない場合、Sizeは保持＆Positionを小さく
+    if (positionUpperBound < position + size) {
+      position = positionUpperBound - size;
       tryResult |= TryResult.DependentChanged;
     }
 
-    Debug.Assert(positionLowerBound <= fixedPosition &&
-                 fixedPosition + fixedSize <= positionUpperBound);
+    Debug.Assert(positionLowerBound <= position &&
+                 position + size <= positionUpperBound);
     changed = onX
-        ? new ClientRect(fixedPosition, original.Y, fixedSize, original.Height)
-        : new ClientRect(original.X, fixedPosition, original.Width, fixedSize);
+        ? new ClientRect(position, original.Y, size, original.Height)
+        : new ClientRect(original.X, position, original.Width, size);
     return tryResult;
   }
 
@@ -202,85 +206,132 @@ public static class InputCorrector {
   // BoundRelative Left/Right/Top/Bottom
   //=================================================================
 
-  /// BoundRelativeLeftのユーザ入力を訂正する
-  public static bool CorrectInputBoundRelativeLeft(double inputLeft, double originalRight, out double fixedLeft, out double fixedRight) {
-    var result = true;
-    fixedLeft = inputLeft;
-    fixedRight = originalRight;
+  private static TryResult TryChangeRelativeLow(RelativeLTRB original,
+      LTRBProperties target, double value, double sizeLowerBound,
+      out RelativeLTRB changed) {
+    Debug.Assert(target == LTRBProperties.Left || target == LTRBProperties.Top);
 
-    // Rightの補正
-    if (fixedRight < 0.0 + Constants.MinimumBoundRelativeSize) {
-      fixedRight = 0.0 + Constants.MinimumBoundRelativeSize;
-      result = false;
-    } else if (1.0 < fixedRight) {
-      fixedRight = 1.0;
-      result = false;
-    }
+    // 準備
+    var onX = (target == LTRBProperties.Left);
+    var low = value;
+    var high = onX ? original.Right : original.Bottom;
+    var tryResult = TryResult.NothingChanged;
 
-    // 上限・下限の補正
-    if (fixedLeft < 0.0) {
-      fixedLeft = 0.0;
-      result = false;
-    } else if (1.0 < fixedLeft + Constants.MinimumBoundRelativeSize) {
-      fixedLeft = 1.0 - Constants.MinimumBoundRelativeSize;
-      result = false;
-    }
-      
-    // 右にはみ出ていたらRightを右にずらして最小幅を確保
-    if (fixedRight < fixedLeft + Constants.MinimumBoundRelativeSize) {
-      fixedRight = fixedLeft + Constants.MinimumBoundRelativeSize;
-      result = false;
-    }
-        
-    // 出力
-    Debug.Assert(0.0 <= fixedLeft &&
-                 fixedLeft + Constants.MinimumBoundRelativeSize <= fixedRight &&
-                 fixedRight <= 1.0);
-    return result;
-  }
-  /// BoundRelativeRightのユーザ入力を訂正する
-  public static bool CorrectInputBoundRelativeRight(double originalLeft, double inputRight, out double fixedLeft, out double fixedRight) {
-    var result = true;
-    fixedLeft = originalLeft;
-    fixedRight = inputRight;
-
-    // Leftの補正
-    if (fixedLeft < 0.0) {
-      fixedLeft = 0.0;
-      result = false;
-    } else if (1.0 < fixedLeft + Constants.MinimumBoundRelativeSize) {
-      fixedLeft = 1.0 - Constants.MinimumBoundRelativeSize;
-      result = false;
+    // highの補正
+    if (high < 0.0 + sizeLowerBound) {
+      high = 0.0 + sizeLowerBound;
+      tryResult |= TryResult.DependentChanged;
+    } else if (1.0 < high) {
+      high = 1.0;
+      tryResult |= TryResult.DependentChanged;
     }
 
     // 上限・下限の補正
-    if (fixedRight < 0.0 + Constants.MinimumBoundRelativeSize) {
-      fixedRight = 0.0 + Constants.MinimumBoundRelativeSize;
-      result = false;
-    } else if (1.0 < fixedRight) {
-      fixedRight = 1.0;
-      result = false;
+    if (low < 0.0) {
+      low = 0.0;
+      tryResult |= TryResult.TargetChanged;
+    } else if (1.0 < low + sizeLowerBound) {
+      low = 1.0 - sizeLowerBound;
+      tryResult |= TryResult.TargetChanged;
     }
-      
-    // 左にはみ出ていたらLeftを左にずらして最小幅を確保
-    if (fixedRight < fixedLeft + Constants.MinimumBoundRelativeSize) {
-      fixedLeft = fixedRight - Constants.MinimumBoundRelativeSize;
-      result = false;
+
+    // lowが大きすぎる場合、highを減らして最小幅を確保
+    if (high < low + sizeLowerBound) {
+      high = low + sizeLowerBound;
+      tryResult |= TryResult.DependentChanged;
     }
-        
+
     // 出力
-    Debug.Assert(0.0 <= fixedLeft &&
-                 fixedLeft + Constants.MinimumBoundRelativeSize <= fixedRight &&
-                 fixedRight <= 1.0);
-    return result;
+    Debug.Assert(0.0 <= low &&
+                 low + sizeLowerBound <= high &&
+                 high <= 1.0);
+    changed = onX
+        ? new RelativeLTRB(low, original.Top, high, original.Bottom)
+        : new RelativeLTRB(original.Left, low, original.Right, high);
+    return tryResult;
   }
-  /// BoundRelativeTopのユーザ入力を訂正する
-  public static bool CorrectInputBoundRelativeTop(double inputTop, double originalBottom, out double fixedTop, out double fixedBottom) {
-    throw new System.NotImplementedException();
+
+  public static TryResult TryChangeRelativeHigh(RelativeLTRB original,
+      LTRBProperties target, double value, double sizeLowerBound,
+      out RelativeLTRB changed) {
+    Debug.Assert(target == LTRBProperties.Right || target == LTRBProperties.Bottom);
+ 
+    // 準備
+    var onX = (target == LTRBProperties.Right);
+    var low = onX ? original.Left : original.Top;
+    var high = value;
+    var tryResult = TryResult.NothingChanged;
+
+    // lowの補正
+    if (low < 0.0) {
+      low = 0.0;
+      tryResult |= TryResult.DependentChanged;
+    } else if (1.0 < low + sizeLowerBound) {
+      low = 1.0 - sizeLowerBound;
+      tryResult |= TryResult.DependentChanged;
+    }
+
+    // 上限・下限の補正
+    if (high < 0.0 + sizeLowerBound) {
+      high = 0.0 + sizeLowerBound;
+      tryResult |= TryResult.TargetChanged;
+    } else if (1.0 < high) {
+      high = 1.0;
+      tryResult |= TryResult.TargetChanged;
+    }
+
+    // lowが大きすぎる場合、lowを減らして最小幅を確保
+    if (high < low + sizeLowerBound) {
+      low = high - sizeLowerBound;
+      tryResult |= TryResult.DependentChanged;
+    }
+
+    // 出力
+    Debug.Assert(0.0 <= low &&
+                 low + sizeLowerBound <= high &&
+                 high <= 1.0);
+    changed = onX
+        ? new RelativeLTRB(low, original.Top, high, original.Bottom)
+        : new RelativeLTRB(original.Left, low, original.Right, high);
+    return tryResult;
   }
-  /// BoundRelativeBottomのユーザ入力を訂正する
-  public static bool CorrectInputBoundRelativeBottom(double originalTop, double inputBottom, out double fixedTop, out double fixedBottom) {
-    throw new System.NotImplementedException();
+
+  //-------------------------------------------------------------------
+
+  /// レイアウト要素からClipping領域(Fitオプションなし)を取得
+  private static RelativeLTRB GetBoundRelativeLTRB(ILayoutElementView layoutElement) {
+    return new RelativeLTRB(layoutElement.BoundRelativeLeft,
+                            layoutElement.BoundRelativeTop,
+                            layoutElement.BoundRelativeRight,
+                            layoutElement.BoundRelativeBottom);
+  }
+
+  /// レイアウト要素のClipping領域(Fitオプションなし)の変更を試みる
+  /// @param layoutElement レイアウト要素
+  /// @param target 変更箇所
+  /// @param value 変更値
+  /// @param[out] changed 変更後、制約を満たす形に訂正されたClipping領域
+  /// @return 試行結果（訂正箇所）
+  public static TryResult TryChangeBoundRelativeLTRB(
+      ILayoutElementView layoutElement, LTRBProperties target, double value,
+      out RelativeLTRB changed) {
+    // 準備
+    var original = InputCorrector.GetBoundRelativeLTRB(layoutElement);
+
+    // 訂正
+    switch (target) {
+      case LTRBProperties.Left:
+      case LTRBProperties.Top: {
+        return InputCorrector.TryChangeRelativeLow(original, target, value,
+            Constants.MinimumBoundRelativeSize, out changed);
+      }
+      case LTRBProperties.Right:
+      case LTRBProperties.Bottom: {
+        return InputCorrector.TryChangeRelativeHigh(original, target, value,
+            Constants.MinimumBoundRelativeSize, out changed);
+      }
+      default: Debug.Fail("switch"); throw new System.ArgumentException();
+    }
   }
 
   //=================================================================

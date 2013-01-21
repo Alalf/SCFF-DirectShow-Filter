@@ -42,6 +42,17 @@ public static class Utilities {
     }
   }
 
+  /// LTRBの関連するプロパティを返す
+  public static LTRBProperties GetDependent(LTRBProperties target) {
+    switch (target) {
+      case LTRBProperties.Left: return LTRBProperties.Right;
+      case LTRBProperties.Top: return LTRBProperties.Bottom;
+      case LTRBProperties.Right: return LTRBProperties.Left;
+      case LTRBProperties.Bottom: return LTRBProperties.Top;
+      default: Debug.Fail("switch"); throw new System.ArgumentException();
+    }
+  }
+
   //===================================================================
   // WindowType/Window別の機能
   //===================================================================

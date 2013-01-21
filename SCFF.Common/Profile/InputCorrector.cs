@@ -53,7 +53,7 @@ public static class InputCorrector {
   /// @param sizeLowerBound 訂正後のサイズ要素(Width/Height)の最小値
   /// @param[out] changed 変更後、制約を満たす形に訂正されたClientRect
   /// @return 試行結果（訂正箇所）
-  private static TryResult TryChangePosition(ClientRect original,
+  private static TryResult TryChangeClientRectPosition(ClientRect original,
       RectProperties target, int value, ClientRect bound, int sizeLowerBound,
       out ClientRect changed) {
     Debug.Assert(target == RectProperties.X || target == RectProperties.Y);
@@ -107,7 +107,7 @@ public static class InputCorrector {
   /// @param sizeLowerBound 訂正後のサイズ要素(Width/Height)の最小値
   /// @param[out] changed 変更後、制約を満たす形に訂正されたClientRect
   /// @return 試行結果（訂正箇所）
-  private static TryResult TryChangeSize(ClientRect original,
+  private static TryResult TryChangeClientRectSize(ClientRect original,
       RectProperties target, int value, ClientRect bound, int sizeLowerBound,
       out ClientRect changed) {
     Debug.Assert(target == RectProperties.Width || target == RectProperties.Height);
@@ -188,11 +188,11 @@ public static class InputCorrector {
     switch (target) {
       case RectProperties.X:
       case RectProperties.Y: {
-        return InputCorrector.TryChangePosition(original, target, value, window, 0, out changed);
+        return InputCorrector.TryChangeClientRectPosition(original, target, value, window, 0, out changed);
       }
       case RectProperties.Width:
       case RectProperties.Height: {
-        return InputCorrector.TryChangeSize(original, target, value, window, 0, out changed);
+        return InputCorrector.TryChangeClientRectSize(original, target, value, window, 0, out changed);
       }
       default: Debug.Fail("switch"); throw new System.ArgumentException();
     }

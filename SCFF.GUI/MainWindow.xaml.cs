@@ -467,33 +467,33 @@ public partial class MainWindow
   // SCFF.GUI.Commands
   //-------------------------------------------------------------------
 
-  /// @copydoc Commands::CurrentLayoutElementVisualChanged
+  /// @copybrief Commands::CurrentLayoutElementVisualChanged
   /// @param sender 使用しない
   /// @param e 使用しない
   private void OnCurrentLayoutElementVisualChanged(object sender, ExecutedRoutedEventArgs e) {
     this.LayoutEdit.OnCurrentLayoutElementChanged();
   }
-  /// @copydoc Commands::ProfileVisualChanged
+  /// @copybrief Commands::ProfileVisualChanged
   /// @param sender 使用しない
   /// @param e 使用しない
   private void OnProfileVisualChanged(object sender, ExecutedRoutedEventArgs e) {
     this.LayoutEdit.OnOptionsChanged();
     // 内部でOnProfileChangedと同じ処理が走る
   }
-  /// @copydoc Commands::ProfileStructureChanged
+  /// @copybrief Commands::ProfileStructureChanged
   /// @param sender 使用しない
   /// @param e 使用しない
   private void OnProfileStructureChanged(object sender, ExecutedRoutedEventArgs e) {
     // tabの選択を変えないといけないのでEntireじゃなければいけない
     this.NotifyProfileChanged();
   }
-  /// @copydoc Commands::LayoutParameterChanged
+  /// @copybrief Commands::LayoutParameterChanged
   /// @param sender 使用しない
   /// @param e 使用しない
   private void OnLayoutParameterChanged(object sender, ExecutedRoutedEventArgs e) {
     this.LayoutParameter.OnCurrentLayoutElementChanged();
   }
-  /// @copydoc Commands::TargetWindowChanged
+  /// @copybrief Commands::TargetWindowChanged
   /// @param sender 使用しない
   /// @param e 使用しない
   private void OnTargetWindowChanged(object sender, ExecutedRoutedEventArgs e) {
@@ -501,7 +501,7 @@ public partial class MainWindow
     // CurrentLayoutElementVisualChanged
     this.LayoutEdit.OnCurrentLayoutElementChanged();
   }
-  /// @copydoc Commands::AreaChanged
+  /// @copybrief Commands::AreaChanged
   /// @param sender 使用しない
   /// @param e 使用しない
   private void OnAreaChanged(object sender, ExecutedRoutedEventArgs e) {
@@ -509,7 +509,7 @@ public partial class MainWindow
     // CurrentLayoutElementVisualChanged
     this.LayoutEdit.OnCurrentLayoutElementChanged();
   }
-  /// @copydoc Commands::SampleSizeChanged
+  /// @copybrief Commands::SampleSizeChanged
   /// @param sender 使用しない
   /// @param e 使用しない
   private void OnSampleSizeChanged(object sender, ExecutedRoutedEventArgs e) {
@@ -519,7 +519,7 @@ public partial class MainWindow
 
   //-------------------------------------------------------------------
 
-  /// @copydoc SetAero
+  /// @copybrief SetAero
   /// @param sender 使用しない
   /// @param e 使用しない
   private void OnSetAero(object sender, ExecutedRoutedEventArgs e) {

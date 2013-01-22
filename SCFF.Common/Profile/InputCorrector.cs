@@ -88,31 +88,31 @@ public static class InputCorrector {
     var positionLowerBound = onX ? bound.X : bound.Y;
     var positionUpperBound = onX ? bound.Right : bound.Bottom;
     var sizeUpperBound = onX ? bound.Width : bound.Height;
-    var tryResult = TryResult.NothingChanged;
+    var result = TryResult.NothingChanged;
 
     // 上限・下限の補正
     if (position < positionLowerBound) {
       // Positionが小さすぎる場合、Sizeは保持＆Positionを増やす
       position = positionLowerBound;
-      tryResult |= TryResult.TargetChanged;
+      result |= TryResult.TargetChanged;
     } else if (positionUpperBound < position) {
       // Positionが大きすぎる場合、Positionを減らしてSizeを下限に
       position = positionUpperBound - sizeLowerBound;
       size = sizeLowerBound;
-      tryResult |= TryResult.BothChanged;
+      result |= TryResult.BothChanged;
     }
 
     // Sizeの補正
     if (size < sizeLowerBound) {
       // Sizeは下限以上
       size = sizeLowerBound;
-      tryResult |= TryResult.DependentChanged;
+      result |= TryResult.DependentChanged;
     }
 
     // 領域が境界内に収まらない場合、Positionは保持＆Sizeを縮める
     if (positionUpperBound < position + size) {
       size = positionUpperBound - position;
-      tryResult |= TryResult.DependentChanged;
+      result |= TryResult.DependentChanged;
     }
 
     Debug.Assert(positionLowerBound <= position &&
@@ -120,7 +120,7 @@ public static class InputCorrector {
     changed = onX
         ? new ClientRect(position, original.Y, size, original.Height)
         : new ClientRect(original.X, position, original.Width, size);
-    return tryResult;
+    return result;
   }
 
   /// Clipping*のサイズ要素(Width/Height)の変更を試みる
@@ -144,36 +144,36 @@ public static class InputCorrector {
     var positionLowerBound = onX ? bound.X : bound.Y;
     var positionUpperBound = onX ? bound.Right : bound.Bottom;
     var sizeUpperBound = onX ? bound.Width : bound.Height;
-    var tryResult = TryResult.NothingChanged;
+    var result = TryResult.NothingChanged;
 
     // 上限・下限の補正
     if (size < sizeLowerBound) {
       // Sizeは下限以上
       size = sizeLowerBound;
-      tryResult |= TryResult.TargetChanged;
+      result |= TryResult.TargetChanged;
     } else if (sizeUpperBound < size) {
       // Sizeが大きすぎる場合はFitさせる
       position = positionLowerBound;
       size = sizeUpperBound;
-      tryResult |= TryResult.BothChanged;
+      result |= TryResult.BothChanged;
     }
 
     // Positionの補正
     if (position < positionLowerBound) {
       // Positionが小さすぎる場合、Sizeは保持＆Positionを増やす
       position = positionLowerBound;
-      tryResult |= TryResult.DependentChanged;
+      result |= TryResult.DependentChanged;
     } else if (positionUpperBound < position) {
       // Positionが大きすぎる場合、Positionを減らしてWidthを下限に
       position = positionUpperBound - sizeLowerBound;
       size = sizeLowerBound;
-      tryResult |= TryResult.BothChanged;
+      result |= TryResult.BothChanged;
     }
 
     // 領域が境界内に収まらない場合、Sizeは保持＆Positionを小さく
     if (positionUpperBound < position + size) {
       position = positionUpperBound - size;
-      tryResult |= TryResult.DependentChanged;
+      result |= TryResult.DependentChanged;
     }
 
     Debug.Assert(positionLowerBound <= position &&
@@ -181,7 +181,7 @@ public static class InputCorrector {
     changed = onX
         ? new ClientRect(position, original.Y, size, original.Height)
         : new ClientRect(original.X, position, original.Width, size);
-    return tryResult;
+    return result;
   }
 
   //-------------------------------------------------------------------
@@ -263,30 +263,30 @@ public static class InputCorrector {
     var onX = (target == BoundRelative.Left);
     var low = value;
     var high = onX ? original.Right : original.Bottom;
-    var tryResult = TryResult.NothingChanged;
+    var result = TryResult.NothingChanged;
 
     // highの補正
     if (high < 0.0 + sizeLowerBound) {
       high = 0.0 + sizeLowerBound;
-      tryResult |= TryResult.DependentChanged;
+      result |= TryResult.DependentChanged;
     } else if (1.0 < high) {
       high = 1.0;
-      tryResult |= TryResult.DependentChanged;
+      result |= TryResult.DependentChanged;
     }
 
     // 上限・下限の補正
     if (low < 0.0) {
       low = 0.0;
-      tryResult |= TryResult.TargetChanged;
+      result |= TryResult.TargetChanged;
     } else if (1.0 < low + sizeLowerBound) {
       low = 1.0 - sizeLowerBound;
-      tryResult |= TryResult.TargetChanged;
+      result |= TryResult.TargetChanged;
     }
 
     // lowが大きすぎる場合、highを減らして最小幅を確保
     if (high < low + sizeLowerBound) {
       high = low + sizeLowerBound;
-      tryResult |= TryResult.DependentChanged;
+      result |= TryResult.DependentChanged;
     }
 
     // 出力
@@ -296,7 +296,7 @@ public static class InputCorrector {
     changed = onX
         ? new RelativeLTRB(low, original.Top, high, original.Bottom)
         : new RelativeLTRB(original.Left, low, original.Right, high);
-    return tryResult;
+    return result;
   }
 
   /// BoundRelative*の値が大きい方の位置要素(Right/Bottom)の変更を試みる
@@ -315,30 +315,30 @@ public static class InputCorrector {
     var onX = (target == BoundRelative.Right);
     var low = onX ? original.Left : original.Top;
     var high = value;
-    var tryResult = TryResult.NothingChanged;
+    var result = TryResult.NothingChanged;
 
     // lowの補正
     if (low < 0.0) {
       low = 0.0;
-      tryResult |= TryResult.DependentChanged;
+      result |= TryResult.DependentChanged;
     } else if (1.0 < low + sizeLowerBound) {
       low = 1.0 - sizeLowerBound;
-      tryResult |= TryResult.DependentChanged;
+      result |= TryResult.DependentChanged;
     }
 
     // 上限・下限の補正
     if (high < 0.0 + sizeLowerBound) {
       high = 0.0 + sizeLowerBound;
-      tryResult |= TryResult.TargetChanged;
+      result |= TryResult.TargetChanged;
     } else if (1.0 < high) {
       high = 1.0;
-      tryResult |= TryResult.TargetChanged;
+      result |= TryResult.TargetChanged;
     }
 
     // lowが大きすぎる場合、lowを減らして最小幅を確保
     if (high < low + sizeLowerBound) {
       low = high - sizeLowerBound;
-      tryResult |= TryResult.DependentChanged;
+      result |= TryResult.DependentChanged;
     }
 
     // 出力
@@ -348,7 +348,7 @@ public static class InputCorrector {
     changed = onX
         ? new RelativeLTRB(low, original.Top, high, original.Bottom)
         : new RelativeLTRB(original.Left, low, original.Right, high);
-    return tryResult;
+    return result;
   }
 
   //-------------------------------------------------------------------
@@ -403,29 +403,41 @@ public static class InputCorrector {
     ChromaVShift
   }
 
-  /// SWScaleLumaGBlurのユーザ入力を訂正する
-  public static bool TryChangeSWScaleLumaGBlur(double value, out double changed) {
-    throw new System.NotImplementedException();
-  }
-  /// SWScaleLumaSharpenのユーザ入力を訂正する
-  public static bool TryChangeSWScaleLumaSharpen(double value, out double changed) {
-    throw new System.NotImplementedException();
-  }
-  /// SWScaleChromaHShiftのユーザ入力を訂正する
-  public static bool TryChangeSWScaleChromaHShift(double value, out double changed) {
-    throw new System.NotImplementedException();
-  }
-  /// SWScaleChromaGBlurのユーザ入力を訂正する
-  public static bool TryChangeSWScaleChromaGBlur(double value, out double changed) {
-    throw new System.NotImplementedException();
-  }
-  /// SWScaleChromaSharpenのユーザ入力を訂正する
-  public static bool TryChangeSWScaleChromaSharpen(double value, out double changed) {
-    throw new System.NotImplementedException();
-  }
-  /// SWScaleChromaVShiftのユーザ入力を訂正する
-  public static bool TryChangeSWScaleChromaVShift(double value, out double changed) {
-    throw new System.NotImplementedException();
+  /// レイアウト要素のSWScale*の変更を試みる
+  public static bool TryChangeSWScaleValue(SWScale target, float value, out float changed) {
+    float lowerBound = 0.0F;
+    float upperBound = 0.0F;
+    switch (target) {
+      case SWScale.LumaGBlur:
+      case SWScale.ChromaGBlur: {
+        lowerBound = 0.0F;
+        upperBound = 2.0F;
+        break;
+      }
+      case SWScale.LumaSharpen:
+      case SWScale.ChromaSharpen: {
+        lowerBound = 0.0F;
+        upperBound = 4.0F;
+        break;
+      }
+      case SWScale.ChromaHShift:
+      case SWScale.ChromaVShift: {
+        lowerBound = 0.0F;
+        upperBound = 1.0F;
+        break;
+      }
+      default: Debug.Fail("switch"); throw new System.ArgumentException();
+    }
+    if (value < lowerBound) {
+      changed = lowerBound;
+      return false;
+    } else if (upperBound < value) {
+      changed = upperBound;
+      return false;
+    } else {
+      changed = value;
+      return true;
+    }
   }
 }
 }   // namespace SCFF.Common.Profile

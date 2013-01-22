@@ -43,7 +43,11 @@
               VerticalAlignment="Center" Height="20" Margin="5,0"
               IsEnabled="False"
               x:Name="SWScaleLumaGBlur" Text="9999" HorizontalContentAlignment="Right"
-              TextChanged="SWScaleLumaGBlur_TextChanged"/>
+              TextChanged="SWScaleLumaGBlur_TextChanged" KeyDown="SWScaleLumaGBlur_KeyDown" LostFocus="SWScaleLumaGBlur_LostFocus">
+      <TextBox.ToolTip>
+        <ToolTip x:Name="SWScaleLumaGBlurToolTip" Placement="Bottom" Visibility="Hidden"/>
+      </TextBox.ToolTip>
+    </TextBox>
     <!-- L Sharpen -->
     <Label    Grid.Row="4"
               VerticalAlignment="Center" HorizontalAlignment="Right" Height="12"
@@ -52,16 +56,24 @@
               VerticalAlignment="Center" Height="20" Margin="5,0" 
               IsEnabled="False"
               x:Name="SWScaleLumaSharpen" Text="9999" HorizontalContentAlignment="Right"
-              TextChanged="SWScaleLumaSharpen_TextChanged"/>
+              TextChanged="SWScaleLumaSharpen_TextChanged" KeyDown="SWScaleLumaSharpen_KeyDown" LostFocus="SWScaleLumaSharpen_LostFocus">
+      <TextBox.ToolTip>
+        <ToolTip x:Name="SWScaleLumaSharpenToolTip" Placement="Bottom" Visibility="Hidden"/>
+      </TextBox.ToolTip>
+    </TextBox>
     <!-- C HShift -->
     <Label    Grid.Row="5"
               VerticalAlignment="Center" HorizontalAlignment="Right" Height="12"
               Content="C HShift"/>
     <TextBox  Grid.Row="5" Grid.Column="1"
-              VerticalAlignment="Center" Height="20" Margin="5,0"
+              VerticalAlignment="Top" Height="20" Margin="5,3,5,0"
               IsEnabled="False"
               x:Name="SWScaleChromaHShift" Text="0.0" HorizontalContentAlignment="Right"
-              TextChanged="SWScaleChromaHShift_TextChanged"/>
+              TextChanged="SWScaleChromaHShift_TextChanged" KeyDown="SWScaleChromaHShift_KeyDown" LostFocus="SWScaleChromaHShift_LostFocus">
+      <TextBox.ToolTip>
+        <ToolTip x:Name="SWScaleChromaHShiftToolTip" Placement="Bottom" Visibility="Hidden"/>
+      </TextBox.ToolTip>
+    </TextBox>
     <!-- C GBlur -->
     <Label    Grid.Row="3" Grid.Column="2"
               VerticalAlignment="Center" HorizontalAlignment="Right" Height="12"
@@ -70,7 +82,11 @@
               VerticalAlignment="Center" Height="20" Margin="5,0"
               IsEnabled="False"
               x:Name="SWScaleChromaGBlur" Text="9999" HorizontalContentAlignment="Right"
-              TextChanged="SWScaleChromaGBlur_TextChanged"/>
+              TextChanged="SWScaleChromaGBlur_TextChanged" KeyDown="SWScaleChromaGBlur_KeyDown" LostFocus="SWScaleChromaGBlur_LostFocus">
+      <TextBox.ToolTip>
+        <ToolTip x:Name="SWScaleChromaGBlurToolTip" Placement="Bottom" Visibility="Hidden"/>
+      </TextBox.ToolTip>
+    </TextBox>
     <!-- C Sharpen -->
     <Label    Grid.Row="4" Grid.Column="2"
               VerticalAlignment="Center" HorizontalAlignment="Right" Height="12"
@@ -79,7 +95,11 @@
               VerticalAlignment="Center" Height="20" Margin="5,0"
               IsEnabled="False"
               x:Name="SWScaleChromaSharpen" Text="9999" HorizontalContentAlignment="Right"
-              TextChanged="SWScaleChromaSharpen_TextChanged"/>
+              TextChanged="SWScaleChromaSharpen_TextChanged" KeyDown="SWScaleChromaSharpen_KeyDown" LostFocus="SWScaleChromaSharpen_LostFocus">
+      <TextBox.ToolTip>
+        <ToolTip x:Name="SWScaleChromaSharpenToolTip" Placement="Bottom" Visibility="Hidden"/>
+      </TextBox.ToolTip>
+    </TextBox>
     <!-- C VShift -->
     <Label    Grid.Row="5" Grid.Column="2"
               VerticalAlignment="Center" HorizontalAlignment="Right" Height="12"
@@ -88,6 +108,10 @@
               VerticalAlignment="Center" Height="20" Margin="5,0"
               IsEnabled="False"
               x:Name="SWScaleChromaVShift" Text="0.0" HorizontalContentAlignment="Right"
-              TextChanged="SWScaleChromaVShift_TextChanged"/>
+              TextChanged="SWScaleChromaVShift_TextChanged" KeyDown="SWScaleChromaVShift_KeyDown" LostFocus="SWScaleChromaVShift_LostFocus">
+      <TextBox.ToolTip>
+        <ToolTip x:Name="SWScaleChromaVShiftToolTip" Placement="Bottom" Visibility="Hidden"/>
+      </TextBox.ToolTip>
+    </TextBox>
   </Grid>
 </UserControl>

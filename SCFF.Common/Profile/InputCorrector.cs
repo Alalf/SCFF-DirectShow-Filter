@@ -68,7 +68,6 @@ public static class InputCorrector {
 
 
   /// Clipping*の位置要素(X/Y)の変更を試みる
-  /// @warning sizeLowerBound = 0以外の動作テストをしていない
   /// @warning boundは常に変わり続けている。
   ///          よって、Position入力中でもSizeを常に最新の値に更新しておく必要がある。
   /// @param original 変更前のClientRect
@@ -118,6 +117,7 @@ public static class InputCorrector {
     }
 
     Debug.Assert(positionLowerBound <= position &&
+                 sizeLowerBound <= size &&
                  position + size <= positionUpperBound);
     changed = onX
         ? new ClientRect(position, original.Y, size, original.Height)
@@ -126,9 +126,8 @@ public static class InputCorrector {
   }
 
   /// Clipping*のサイズ要素(Width/Height)の変更を試みる
-  /// @warning sizeLowerBound = 0以外の動作テストをしていない
   /// @warning boundは常に変わり続けている。
-  ///          よって、Position入力中でもSizeを常に最新の値に更新しておく必要がある。
+  ///          よって、Size入力中でもPositionを常に最新の値に更新しておく必要がある。
   /// @param original 変更前のClientRect
   /// @param target 変更箇所
   /// @param value 変更値
@@ -181,6 +180,7 @@ public static class InputCorrector {
     }
 
     Debug.Assert(positionLowerBound <= position &&
+                 sizeLowerBound <= size &&
                  position + size <= positionUpperBound);
     changed = onX
         ? new ClientRect(position, original.Y, size, original.Height)
@@ -218,11 +218,11 @@ public static class InputCorrector {
     switch (target) {
       case Clipping.X:
       case Clipping.Y: {
-        return InputCorrector.TryChangeClippingPosition(original, target, value, window, 0, out changed);
+        return InputCorrector.TryChangeClippingPosition(original, target, value, window, 1, out changed);
       }
       case Clipping.Width:
       case Clipping.Height: {
-        return InputCorrector.TryChangeClippingSize(original, target, value, window, 0, out changed);
+        return InputCorrector.TryChangeClippingSize(original, target, value, window, 1, out changed);
       }
       default: Debug.Fail("switch"); throw new System.ArgumentException();
     }

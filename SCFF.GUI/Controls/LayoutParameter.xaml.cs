@@ -262,41 +262,49 @@ public partial class LayoutParameter
 
   //-------------------------------------------------------------------
 
+  /// BoundRelativeLeft: KeyDown
   private void BoundRelativeLeft_KeyDown(object sender, KeyEventArgs e) {
     if (e.Key != Key.Return && e.Key != Key.Enter) return;
     this.Correct(InputCorrector.BoundRelative.Left);
   }
+  /// BoundRelativeTop: KeyDown
   private void BoundRelativeTop_KeyDown(object sender, KeyEventArgs e) {
     if (e.Key != Key.Return && e.Key != Key.Enter) return;
     this.Correct(InputCorrector.BoundRelative.Top);
   }
+  /// BoundRelativeRight: KeyDown
   private void BoundRelativeRight_KeyDown(object sender, KeyEventArgs e) {
     if (e.Key != Key.Return && e.Key != Key.Enter) return;
     this.Correct(InputCorrector.BoundRelative.Right);
   }
+  /// BoundRelativeBottom: KeyDown
   private void BoundRelativeBottom_KeyDown(object sender, KeyEventArgs e) {
     if (e.Key != Key.Return && e.Key != Key.Enter) return;
     this.Correct(InputCorrector.BoundRelative.Bottom);
   }
 
+  /// BoundRelativeLeft: LostFocus
   private void BoundRelativeLeft_LostFocus(object sender, RoutedEventArgs e) {
     var target = InputCorrector.BoundRelative.Left;
     var dependent = InputCorrector.GetDependent(target);
     this.OverwriteText(target);
     this.ResetError(dependent);
   }
+  /// BoundRelativeTop: LostFocus
   private void BoundRelativeTop_LostFocus(object sender, RoutedEventArgs e) {
     var target = InputCorrector.BoundRelative.Top;
     var dependent = InputCorrector.GetDependent(target);
     this.OverwriteText(target);
     this.ResetError(dependent);
   }
+  /// BoundRelativeRight: LostFocus
   private void BoundRelativeRight_LostFocus(object sender, RoutedEventArgs e) {
     var target = InputCorrector.BoundRelative.Right;
     var dependent = InputCorrector.GetDependent(target);
     this.OverwriteText(target);
     this.ResetError(dependent);
   }
+  /// BoundRelativeBottom: LostFocus
   private void BoundRelativeBottom_LostFocus(object sender, RoutedEventArgs e) {
     var target = InputCorrector.BoundRelative.Bottom;
     var dependent = InputCorrector.GetDependent(target);
@@ -313,29 +321,21 @@ public partial class LayoutParameter
   //-------------------------------------------------------------------
 
   /// BoundRelativeLeft: TextChanged
-  /// @param sender 使用しない
-  /// @param e 使用しない
   private void BoundRelativeLeft_TextChanged(object sender, TextChangedEventArgs e) {
     if (!this.CanChangeProfile) return;
     this.Change(InputCorrector.BoundRelative.Left);
   }
   /// BoundRelativeTop: TextChanged
-  /// @param sender 使用しない
-  /// @param e 使用しない
   private void BoundRelativeTop_TextChanged(object sender, TextChangedEventArgs e) {
     if (!this.CanChangeProfile) return;
     this.Change(InputCorrector.BoundRelative.Top);
   }
   /// BoundRelativeRight: TextChanged
-  /// @param sender 使用しない
-  /// @param e 使用しない
   private void BoundRelativeRight_TextChanged(object sender, TextChangedEventArgs e) {
     if (!this.CanChangeProfile) return;
     this.Change(InputCorrector.BoundRelative.Bottom);
   }
   /// BoundRelativeBottom: TextChanged
-  /// @param sender 使用しない
-  /// @param e 使用しない
   private void BoundRelativeBottom_TextChanged(object sender, TextChangedEventArgs e) {
     if (!this.CanChangeProfile) return;
     this.Change(InputCorrector.BoundRelative.Bottom);

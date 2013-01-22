@@ -26,7 +26,7 @@ using System.Diagnostics;
 /// @attention Decoratorパターンにすべきではない(newが多くなりすぎるので)
 public static class InputCorrector {
   //=================================================================
-  // 列挙型
+  // 共通
   //=================================================================
 
   /// 試行結果（訂正箇所）
@@ -41,20 +41,16 @@ public static class InputCorrector {
     BothChanged       = TargetChanged | DependentChanged
   }
 
+  //=================================================================
+  // Clipping Position(X,Y)/Size(Width,Height)
+  //=================================================================
+
   /// LayoutElement.Clipping*の要素を表す列挙型
   public enum Clipping {
     X,
     Y,
     Width,
     Height
-  }
-
-  /// LayoutElement.BoundRelative*の要素を表す列挙型
-  public enum BoundRelative {
-    Left,
-    Top,
-    Right,
-    Bottom
   }
 
   /// LayoutElement.Clipping*の関連するプロパティを返す
@@ -68,23 +64,9 @@ public static class InputCorrector {
     }
   }
 
-  /// LayoutElement.BoundRelative*の関連するプロパティを返す
-  public static BoundRelative GetDependent(BoundRelative target) {
-    switch (target) {
-      case BoundRelative.Left: return BoundRelative.Right;
-      case BoundRelative.Top: return BoundRelative.Bottom;
-      case BoundRelative.Right: return BoundRelative.Left;
-      case BoundRelative.Bottom: return BoundRelative.Top;
-      default: Debug.Fail("switch"); throw new System.ArgumentException();
-    }
-  }
-
-  //=================================================================
-  // Clipping Position(X,Y)/Size(Width,Height)
-  //=================================================================
 
   /// Clipping*の位置要素(X/Y)の変更を試みる
-  /// @caution sizeLowerBound = 0以外の動作テストをしていない
+  /// @warning sizeLowerBound = 0以外の動作テストをしていない
   /// @param original 変更前のClientRect
   /// @param target 変更箇所
   /// @param value 変更値
@@ -140,7 +122,7 @@ public static class InputCorrector {
   }
 
   /// Clipping*のサイズ要素(Width/Height)の変更を試みる
-  /// @caution sizeLowerBound = 0以外の動作テストをしていない
+  /// @warning sizeLowerBound = 0以外の動作テストをしていない
   /// @param original 変更前のClientRect
   /// @param target 変更箇所
   /// @param value 変更値
@@ -244,6 +226,32 @@ public static class InputCorrector {
   // BoundRelative Left/Right/Top/Bottom
   //=================================================================
 
+  /// LayoutElement.BoundRelative*の要素を表す列挙型
+  public enum BoundRelative {
+    Left,
+    Top,
+    Right,
+    Bottom
+  }
+
+  /// LayoutElement.BoundRelative*の関連するプロパティを返す
+  public static BoundRelative GetDependent(BoundRelative target) {
+    switch (target) {
+      case BoundRelative.Left: return BoundRelative.Right;
+      case BoundRelative.Top: return BoundRelative.Bottom;
+      case BoundRelative.Right: return BoundRelative.Left;
+      case BoundRelative.Bottom: return BoundRelative.Top;
+      default: Debug.Fail("switch"); throw new System.ArgumentException();
+    }
+  }
+
+  /// BoundRelative*の値が小さい方の位置要素(Left/Top)の変更を試みる
+  /// @param original 変更前のBoundRelativeRect
+  /// @param target 変更箇所
+  /// @param value 変更値
+  /// @param sizeLowerBound 訂正後のサイズ要素(Width/Height)の最小値
+  /// @param[out] changed 変更後、制約を満たす形に訂正されたBoundRelativeRect
+  /// @return 試行結果（訂正箇所）
   private static TryResult TryChangeBoundRelativeLow(RelativeLTRB original,
       BoundRelative target, double value, double sizeLowerBound,
       out RelativeLTRB changed) {
@@ -289,6 +297,13 @@ public static class InputCorrector {
     return tryResult;
   }
 
+  /// BoundRelative*の値が大きい方の位置要素(Right/Bottom)の変更を試みる
+  /// @param original 変更前のBoundRelativeRect
+  /// @param target 変更箇所
+  /// @param value 変更値
+  /// @param sizeLowerBound 訂正後のサイズ要素(Width/Height)の最小値
+  /// @param[out] changed 変更後、制約を満たす形に訂正されたBoundRelativeRect
+  /// @return 試行結果（訂正箇所）
   public static TryResult TryChangeBoundRelativeHigh(RelativeLTRB original,
       BoundRelative target, double value, double sizeLowerBound,
       out RelativeLTRB changed) {

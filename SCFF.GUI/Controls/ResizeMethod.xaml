@@ -60,8 +60,8 @@
     <TextBox  Grid.Row="5" Grid.Column="1"
               VerticalAlignment="Center" Height="20" Margin="5,0"
               IsEnabled="False"
-              x:Name="SWScaleChromaHshift" Text="0.0" HorizontalContentAlignment="Right"
-              TextChanged="SWScaleChromaHshift_TextChanged"/>
+              x:Name="SWScaleChromaHShift" Text="0.0" HorizontalContentAlignment="Right"
+              TextChanged="SWScaleChromaHShift_TextChanged"/>
     <!-- C GBlur -->
     <Label    Grid.Row="3" Grid.Column="2"
               VerticalAlignment="Center" HorizontalAlignment="Right" Height="12"
@@ -87,7 +87,7 @@
     <TextBox  Grid.Row="5" Grid.Column="3"
               VerticalAlignment="Center" Height="20" Margin="5,0"
               IsEnabled="False"
-              x:Name="SWScaleChromaVshift" Text="0.0" HorizontalContentAlignment="Right"
-              TextChanged="SWScaleChromaVshift_TextChanged"/>
+              x:Name="SWScaleChromaVShift" Text="0.0" HorizontalContentAlignment="Right"
+              TextChanged="SWScaleChromaVShift_TextChanged"/>
   </Grid>
 </UserControl>

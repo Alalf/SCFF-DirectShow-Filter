@@ -221,11 +221,11 @@ public static class StringConverter {
   public static string GetSWScaleLumaSharpenString(ILayoutElementView layoutElement) {
     return layoutElement.SWScaleLumaSharpen.ToString("F2"); 
   } 
-  /// SWScaleChromaHshift表示用
+  /// SWScaleChromaHShift表示用
   /// @param layoutElement データ取得元のレイアウト要素
-  /// @return SWScaleChromaHshift表示用文字列
-  public static string GetSWScaleChromaHshiftString(ILayoutElementView layoutElement) {
-    return layoutElement.SWScaleChromaHshift.ToString("F2");
+  /// @return SWScaleChromaHShift表示用文字列
+  public static string GetSWScaleChromaHShiftString(ILayoutElementView layoutElement) {
+    return layoutElement.SWScaleChromaHShift.ToString("F2");
   }
   /// SWScaleChromaGBlur表示用
   /// @param layoutElement データ取得元のレイアウト要素
@@ -239,11 +239,11 @@ public static class StringConverter {
   public static string GetSWScaleChromaSharpenString(ILayoutElementView layoutElement) {
     return layoutElement.SWScaleChromaSharpen.ToString("F2");
   }
-  /// SWScaleChromaVshift表示用
+  /// SWScaleChromaVShift表示用
   /// @param layoutElement データ取得元のレイアウト要素
-  /// @return SWScaleChromaVshift表示用文字列
-  public static string GetSWScaleChromaVshiftString(ILayoutElementView layoutElement) {
-    return layoutElement.SWScaleChromaVshift.ToString("F2");
+  /// @return SWScaleChromaVShift表示用文字列
+  public static string GetSWScaleChromaVShiftString(ILayoutElementView layoutElement) {
+    return layoutElement.SWScaleChromaVShift.ToString("F2");
   }
 }
 }   // namespace SCFF.Common.Profile

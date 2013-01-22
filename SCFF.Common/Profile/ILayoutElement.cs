@@ -97,10 +97,10 @@ public interface ILayoutElement {
   float SetSWScaleLumaSharpen { set; }
   /// @copydoc SCFF::Interprocess::SWScaleConfig::ChromaSharpen
   float SetSWScaleChromaSharpen { set; }
-  /// @copydoc SCFF::Interprocess::SWScaleConfig::ChromaHshift
-  float SetSWScaleChromaHshift { set; }
-  /// @copydoc SCFF::Interprocess::SWScaleConfig::ChromaVshift
-  float SetSWScaleChromaVshift { set; }
+  /// @copydoc SCFF::Interprocess::SWScaleConfig::ChromaHShift
+  float SetSWScaleChromaHShift { set; }
+  /// @copydoc SCFF::Interprocess::SWScaleConfig::ChromaVShift
+  float SetSWScaleChromaVShift { set; }
 
   //=================================================================
   // LayoutParameter

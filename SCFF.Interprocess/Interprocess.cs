@@ -148,9 +148,9 @@ public struct SWScaleConfig {
   /// 色差のシャープ化
   public Single ChromaSharpen;
   /// 水平方向のワープ
-  public Single ChromaHshift;
+  public Single ChromaHShift;
   /// 垂直方向のワープ
-  public Single ChromaVshift;
+  public Single ChromaVShift;
 }
 
 /// レイアウトパラメータ

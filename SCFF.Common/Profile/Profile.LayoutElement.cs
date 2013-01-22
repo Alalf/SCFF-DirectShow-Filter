@@ -354,13 +354,13 @@ public class LayoutElement : ILayoutElementView, ILayoutElement {
   public float SWScaleChromaSharpen {
     get { return this.profile.message.LayoutParameters[this.Index].SWScaleConfig.ChromaSharpen; }
   }
-  /// @copydoc ILayoutElementView::SWScaleChromaHshift
-  public float SWScaleChromaHshift {
-    get { return this.profile.message.LayoutParameters[this.Index].SWScaleConfig.ChromaHshift; }
+  /// @copydoc ILayoutElementView::SWScaleChromaHShift
+  public float SWScaleChromaHShift {
+    get { return this.profile.message.LayoutParameters[this.Index].SWScaleConfig.ChromaHShift; }
   }
-  /// @copydoc ILayoutElementView::SWScaleChromaVshift
-  public float SWScaleChromaVshift {
-    get { return this.profile.message.LayoutParameters[this.Index].SWScaleConfig.ChromaVshift; }
+  /// @copydoc ILayoutElementView::SWScaleChromaVShift
+  public float SWScaleChromaVShift {
+    get { return this.profile.message.LayoutParameters[this.Index].SWScaleConfig.ChromaVShift; }
   }
 
   /// @copydoc ILayoutElement::SetSWScaleFlags
@@ -391,13 +391,13 @@ public class LayoutElement : ILayoutElementView, ILayoutElement {
   public float SetSWScaleChromaSharpen {
     set { this.profile.message.LayoutParameters[this.Index].SWScaleConfig.ChromaSharpen = value; }
   }
-  /// @copydoc ILayoutElement::SetSWScaleChromaHshift
-  public float SetSWScaleChromaHshift {
-    set { this.profile.message.LayoutParameters[this.Index].SWScaleConfig.ChromaHshift = value; }
+  /// @copydoc ILayoutElement::SetSWScaleChromaHShift
+  public float SetSWScaleChromaHShift {
+    set { this.profile.message.LayoutParameters[this.Index].SWScaleConfig.ChromaHShift = value; }
   }
-  /// @copydoc ILayoutElement::SetSWScaleChromaVshift
-  public float SetSWScaleChromaVshift {
-    set { this.profile.message.LayoutParameters[this.Index].SWScaleConfig.ChromaVshift = value; }
+  /// @copydoc ILayoutElement::SetSWScaleChromaVShift
+  public float SetSWScaleChromaVShift {
+    set { this.profile.message.LayoutParameters[this.Index].SWScaleConfig.ChromaVShift = value; }
   }
 
   //=================================================================

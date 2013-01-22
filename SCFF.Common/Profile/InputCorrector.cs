@@ -30,6 +30,8 @@ public static class InputCorrector {
   //=================================================================
 
   /// 試行結果（訂正箇所）
+  /// - Target: 変更箇所
+  /// - Dependent: Targetを変更した場合に訂正される可能性がある箇所
   public enum TryResult {
     /// 訂正なしでTargetへの値の設定が可能
     NothingChanged    = 0x0,
@@ -42,7 +44,7 @@ public static class InputCorrector {
   }
 
   //=================================================================
-  // Clipping Position(X,Y)/Size(Width,Height)
+  // LayoutElement.Clipping*
   //=================================================================
 
   /// LayoutElement.Clipping*の要素を表す列挙型
@@ -223,7 +225,7 @@ public static class InputCorrector {
   }
 
   //=================================================================
-  // BoundRelative Left/Right/Top/Bottom
+  // LayoutElement.BoundRelative*
   //=================================================================
 
   /// LayoutElement.BoundRelative*の要素を表す列挙型
@@ -391,6 +393,16 @@ public static class InputCorrector {
   // SWScale *
   //=================================================================
 
+  /// LayoutElement.SWScale*の要素を表す列挙型
+  public enum SWScale {
+    LumaGBlur,
+    LumaSharpen,
+    ChromaHShift,
+    ChromaGBlur,
+    ChromaSharpen,
+    ChromaVShift
+  }
+
   /// SWScaleLumaGBlurのユーザ入力を訂正する
   public static bool TryChangeSWScaleLumaGBlur(double value, out double changed) {
     throw new System.NotImplementedException();
@@ -399,8 +411,8 @@ public static class InputCorrector {
   public static bool TryChangeSWScaleLumaSharpen(double value, out double changed) {
     throw new System.NotImplementedException();
   }
-  /// SWScaleChromaHshiftのユーザ入力を訂正する
-  public static bool TryChangeSWScaleChromaHshift(double value, out double changed) {
+  /// SWScaleChromaHShiftのユーザ入力を訂正する
+  public static bool TryChangeSWScaleChromaHShift(double value, out double changed) {
     throw new System.NotImplementedException();
   }
   /// SWScaleChromaGBlurのユーザ入力を訂正する
@@ -411,8 +423,8 @@ public static class InputCorrector {
   public static bool TryChangeSWScaleChromaSharpen(double value, out double changed) {
     throw new System.NotImplementedException();
   }
-  /// SWScaleChromaVshiftのユーザ入力を訂正する
-  public static bool TryChangeSWScaleChromaVshift(double value, out double changed) {
+  /// SWScaleChromaVShiftのユーザ入力を訂正する
+  public static bool TryChangeSWScaleChromaVShift(double value, out double changed) {
     throw new System.NotImplementedException();
   }
 }

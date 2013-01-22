@@ -89,7 +89,7 @@ public partial class ResizeMethod : UserControl, IBindingProfile {
     this.SWScaleLumaSharpen.IsEnabled = true;
     this.SWScaleChromaGBlur.IsEnabled = true;
     this.SWScaleChromaSharpen.IsEnabled = true;
-    /// @todo(me) HshiftおよびVshiftの使い方がわかるまで設定できないように
+    /// @todo(me) HShiftおよびVShiftの使い方がわかるまで設定できないように
   }
 
   /// SWScaleIsFilterEnabled: Unchecked
@@ -100,7 +100,7 @@ public partial class ResizeMethod : UserControl, IBindingProfile {
     this.SWScaleLumaSharpen.IsEnabled = false;
     this.SWScaleChromaGBlur.IsEnabled = false;
     this.SWScaleChromaSharpen.IsEnabled = false;
-    /// @todo(me) HshiftおよびVshiftの使い方がわかるまで設定できないように
+    /// @todo(me) HShiftおよびVShiftの使い方がわかるまで設定できないように
   }
 
   //-------------------------------------------------------------------
@@ -207,34 +207,34 @@ public partial class ResizeMethod : UserControl, IBindingProfile {
     }
   }
 
-  /// SWScaleChromaHshift: TextChanged
+  /// SWScaleChromaHShift: TextChanged
   /// @param sender 使用しない
   /// @param e 使用しない
-  private void SWScaleChromaHshift_TextChanged(object sender, TextChangedEventArgs e) {
+  private void SWScaleChromaHShift_TextChanged(object sender, TextChangedEventArgs e) {
     if (!this.CanChangeProfile) return;
     var lowerBound = 0.0F;
     var upperBound = 1.0F;
     float parsedValue;
-    if (this.TryParseSWScaleFilterParameter(this.SWScaleChromaHshift, lowerBound, upperBound, out parsedValue)) {
+    if (this.TryParseSWScaleFilterParameter(this.SWScaleChromaHShift, lowerBound, upperBound, out parsedValue)) {
       // Profileに書き込み
       App.Profile.Current.Open();
-      App.Profile.Current.SetSWScaleChromaHshift = parsedValue;
+      App.Profile.Current.SetSWScaleChromaHShift = parsedValue;
       App.Profile.Current.Close();
     }
   }
 
-  /// SWScaleChromaVshift: TextChanged
+  /// SWScaleChromaVShift: TextChanged
   /// @param sender 使用しない
   /// @param e 使用しない
-  private void SWScaleChromaVshift_TextChanged(object sender, TextChangedEventArgs e) {
+  private void SWScaleChromaVShift_TextChanged(object sender, TextChangedEventArgs e) {
     if (!this.CanChangeProfile) return;
     var lowerBound = 0.0F;
     var upperBound = 1.0F;
     float parsedValue;
-    if (this.TryParseSWScaleFilterParameter(this.SWScaleChromaVshift, lowerBound, upperBound, out parsedValue)) {
+    if (this.TryParseSWScaleFilterParameter(this.SWScaleChromaVShift, lowerBound, upperBound, out parsedValue)) {
       // Profileに書き込み
       App.Profile.Current.Open();
-      App.Profile.Current.SetSWScaleChromaVshift = parsedValue;
+      App.Profile.Current.SetSWScaleChromaVShift = parsedValue;
       App.Profile.Current.Close();
     }
   }
@@ -255,10 +255,10 @@ public partial class ResizeMethod : UserControl, IBindingProfile {
     this.SWScaleFlags.SelectedIndex = index;
     this.SWScaleLumaGBlur.Text = StringConverter.GetSWScaleLumaGBlurString(App.Profile.CurrentView);
     this.SWScaleLumaSharpen.Text = StringConverter.GetSWScaleLumaSharpenString(App.Profile.CurrentView);
-    this.SWScaleChromaHshift.Text = StringConverter.GetSWScaleChromaHshiftString(App.Profile.CurrentView);
+    this.SWScaleChromaHShift.Text = StringConverter.GetSWScaleChromaHShiftString(App.Profile.CurrentView);
     this.SWScaleChromaGBlur.Text = StringConverter.GetSWScaleChromaGBlurString(App.Profile.CurrentView);
     this.SWScaleChromaSharpen.Text = StringConverter.GetSWScaleChromaSharpenString(App.Profile.CurrentView);
-    this.SWScaleChromaVshift.Text = StringConverter.GetSWScaleChromaVshiftString(App.Profile.CurrentView);
+    this.SWScaleChromaVShift.Text = StringConverter.GetSWScaleChromaVShiftString(App.Profile.CurrentView);
     this.CanChangeProfile = true;
   }
   /// @copydoc Common::GUI::IBindingProfile::OnProfileChanged

@@ -265,19 +265,19 @@ public partial class LayoutEdit
     if (!App.Options.LayoutPreview) return;
     
     // マウス操作中は更新しない
-    if (this.hitMode != HitModes.Neutral) return;
+    if (this.moveAndSize.IsRunning) return;
 
     // プレビュー内容更新のためにリクエスト送信
     App.ScreenCaptureTimer.UpdateRequest(App.Profile);
 
     // 再描画
-    this.BuildDrawingGroup();
     Debug.WriteLineIf(!(this.LayoutEditImage.ActualWidth <= App.RuntimeOptions.CurrentSampleWidth &&
                         this.LayoutEditImage.ActualHeight <= App.RuntimeOptions.CurrentSampleHeight),
                       string.Format("Redraw ({0:F2}, {1:F2})",
                                     this.LayoutEditImage.ActualWidth,
                                     this.LayoutEditImage.ActualHeight),
                       "LayoutEdit");
+    this.BuildDrawingGroup();
   }
 
   //===================================================================
@@ -327,19 +327,16 @@ public partial class LayoutEdit
       // Notify other controls
       Commands.ProfileStructureChanged.Execute(null, null);
       //---------------------------------------------------------------
+
+      this.BuildDrawingGroup();
     }
 
     // マウスを押した場所を記録してマウスキャプチャー開始
-    this.hitMode = hitMode;
-    this.relativeMouseOffset = new RelativeMouseOffset(App.Profile.CurrentView, relativeMousePoint);
-    if (App.Options.LayoutSnap) {
-      this.snapGuide = new SnapGuide(App.Profile);
-    } else {
-      this.snapGuide = null;
-    }
-    image.CaptureMouse();
+    var snapGuide = App.Options.LayoutSnap ? new SnapGuide(App.Profile) : null;
+    this.moveAndSize.Start(App.Profile.CurrentView, hitMode, relativeMousePoint, snapGuide);
 
-    this.BuildDrawingGroup();
+    // マウスキャプチャー開始
+    image.CaptureMouse();
   }
 
   /// LayoutEditImage: MouseMove
@@ -350,8 +347,8 @@ public partial class LayoutEdit
     var image = (IInputElement)sender;
     var relativeMousePoint = this.GetRelativeMousePoint(image, e);
 
-    // Neutralのときだけはカーソルを変えるだけ
-    if (this.hitMode == HitModes.Neutral) {
+    // 動作中でなければカーソルを変更するだけ
+    if (!this.moveAndSize.IsRunning) {
       int hitIndex;
       HitModes hitMode;
       HitTest.TryHitTest(App.Profile, relativeMousePoint, out hitIndex, out hitMode);
@@ -360,17 +357,16 @@ public partial class LayoutEdit
     }
 
     // Move or Size
-    var nextBoundLTRB = MoveAndSize.MoveOrSize(App.Profile.CurrentView, this.hitMode,
-        relativeMousePoint, this.relativeMouseOffset, this.snapGuide);
-
+    var nextLTRB = this.moveAndSize.Do(relativeMousePoint, Keyboard.Modifiers == ModifierKeys.Shift);
+      
     // Profileを更新
     App.Profile.Current.Open();
-    App.Profile.Current.SetBoundRelativeLeft = nextBoundLTRB.Left;
-    App.Profile.Current.SetBoundRelativeTop = nextBoundLTRB.Top;
-    App.Profile.Current.SetBoundRelativeRight = nextBoundLTRB.Right;
-    App.Profile.Current.SetBoundRelativeBottom = nextBoundLTRB.Bottom;
+    App.Profile.Current.SetBoundRelativeLeft = nextLTRB.Left;
+    App.Profile.Current.SetBoundRelativeTop = nextLTRB.Top;
+    App.Profile.Current.SetBoundRelativeRight = nextLTRB.Right;
+    App.Profile.Current.SetBoundRelativeBottom = nextLTRB.Bottom;
     App.Profile.Current.Close();
-      
+
     //-----------------------------------------------------------------
     // Notify self
     // Notify other controls
@@ -384,11 +380,9 @@ public partial class LayoutEdit
   /// @param sender 使用しない
   /// @param e Client座標系でのマウス座標(GetPosition(...))の取得が可能
   private void LayoutEditImage_MouseUp(object sender, MouseButtonEventArgs e) {
-    if (this.hitMode == HitModes.Neutral) return;
-
+    if (!this.moveAndSize.IsRunning) return;
+    this.moveAndSize.End();
     this.LayoutEditImage.ReleaseMouseCapture();
-    this.hitMode = HitModes.Neutral;
-    this.BuildDrawingGroup();
   }
 
   //-------------------------------------------------------------------
@@ -471,18 +465,7 @@ public partial class LayoutEdit
   // フィールド
   //===================================================================
 
-  //-------------------------------------------------------------------
-  // LayoutEditImage_MouseDown/Move/Up時の状態変数
-  //-------------------------------------------------------------------
-
-  /// マウス座標とLeft/Right/Top/BottomのOffset
-  /// @todo(me) MoveAndSizeStateとしてまとめられないだろうか？
-  private RelativeMouseOffset relativeMouseOffset = null;
-  /// スナップガイド
-  /// @todo(me) MoveAndSizeStateとしてまとめられないだろうか？
-  private SnapGuide snapGuide = null;
-  /// ヒットテストの結果
-  /// @todo(me) MoveAndSizeStateとしてまとめられないだろうか？
-  private HitModes hitMode = HitModes.Neutral;
+  /// MoveAndSize
+  private MoveAndSize moveAndSize = new MoveAndSize();
 }
 }   // namespace SCFF.GUI.Controls

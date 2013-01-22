@@ -8,7 +8,7 @@
   <Image x:Name="LayoutEditImage"
          MouseDown="LayoutEditImage_MouseDown"
          MouseMove="LayoutEditImage_MouseMove"
-         MouseUp="LayoutEditImage_MouseUp" >
+         MouseUp="LayoutEditImage_MouseUp">
     <!-- <Image.ContextMenu>
       <ContextMenu FontSize="9" Background="{DynamicResource ControlBackgroundBrush}">
         <MenuItem Header="Add"/>

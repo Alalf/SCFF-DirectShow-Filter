@@ -28,32 +28,6 @@ using SCFF.Common.Ext;
 /// SCFF.Commonモジュール共通で利用する機能
 public static class Utilities {
   //===================================================================
-  // Enum関連
-  //===================================================================
-
-  /// Rectの関連するプロパティを返す
-  public static RectProperties GetDependent(RectProperties target) {
-    switch (target) {
-      case RectProperties.X: return RectProperties.Width;
-      case RectProperties.Y: return RectProperties.Height;
-      case RectProperties.Width: return RectProperties.X;
-      case RectProperties.Height: return RectProperties.Y;
-      default: Debug.Fail("switch"); throw new System.ArgumentException();
-    }
-  }
-
-  /// LTRBの関連するプロパティを返す
-  public static LTRBProperties GetDependent(LTRBProperties target) {
-    switch (target) {
-      case LTRBProperties.Left: return LTRBProperties.Right;
-      case LTRBProperties.Top: return LTRBProperties.Bottom;
-      case LTRBProperties.Right: return LTRBProperties.Left;
-      case LTRBProperties.Bottom: return LTRBProperties.Top;
-      default: Debug.Fail("switch"); throw new System.ArgumentException();
-    }
-  }
-
-  //===================================================================
   // WindowType/Window別の機能
   //===================================================================
 

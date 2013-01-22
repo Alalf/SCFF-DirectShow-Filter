@@ -71,22 +71,6 @@ public enum RotateDirections {
   Degrees270    = Interprocess.RotateDirections.Degrees270,
 }
 
-/// Rectの要素を表す列挙型
-public enum RectProperties {
-  X,
-  Y,
-  Width,
-  Height
-}
-
-/// LTRBの要素を表す列挙型
-public enum LTRBProperties {
-  Left,
-  Top,
-  Right,
-  Bottom
-}
-
 //=====================================================================
 // クラス・構造体
 //=====================================================================

@@ -41,11 +41,49 @@ public static class InputCorrector {
     BothChanged       = TargetChanged | DependentChanged
   }
 
+  /// LayoutElement.Clipping*の要素を表す列挙型
+  public enum Clipping {
+    X,
+    Y,
+    Width,
+    Height
+  }
+
+  /// LayoutElement.BoundRelative*の要素を表す列挙型
+  public enum BoundRelative {
+    Left,
+    Top,
+    Right,
+    Bottom
+  }
+
+  /// LayoutElement.Clipping*の関連するプロパティを返す
+  public static Clipping GetDependent(Clipping target) {
+    switch (target) {
+      case Clipping.X: return Clipping.Width;
+      case Clipping.Y: return Clipping.Height;
+      case Clipping.Width: return Clipping.X;
+      case Clipping.Height: return Clipping.Y;
+      default: Debug.Fail("switch"); throw new System.ArgumentException();
+    }
+  }
+
+  /// LayoutElement.BoundRelative*の関連するプロパティを返す
+  public static BoundRelative GetDependent(BoundRelative target) {
+    switch (target) {
+      case BoundRelative.Left: return BoundRelative.Right;
+      case BoundRelative.Top: return BoundRelative.Bottom;
+      case BoundRelative.Right: return BoundRelative.Left;
+      case BoundRelative.Bottom: return BoundRelative.Top;
+      default: Debug.Fail("switch"); throw new System.ArgumentException();
+    }
+  }
+
   //=================================================================
   // Clipping Position(X,Y)/Size(Width,Height)
   //=================================================================
 
-  /// ClientRectの位置要素(X/Y)の変更を試みる
+  /// Clipping*の位置要素(X/Y)の変更を試みる
   /// @caution sizeLowerBound = 0以外の動作テストをしていない
   /// @param original 変更前のClientRect
   /// @param target 変更箇所
@@ -54,13 +92,13 @@ public static class InputCorrector {
   /// @param sizeLowerBound 訂正後のサイズ要素(Width/Height)の最小値
   /// @param[out] changed 変更後、制約を満たす形に訂正されたClientRect
   /// @return 試行結果（訂正箇所）
-  private static TryResult TryChangeClientRectPosition(ClientRect original,
-      RectProperties target, int value, ClientRect bound, int sizeLowerBound,
+  private static TryResult TryChangeClippingPosition(ClientRect original,
+      Clipping target, int value, ClientRect bound, int sizeLowerBound,
       out ClientRect changed) {
-    Debug.Assert(target == RectProperties.X || target == RectProperties.Y);
+    Debug.Assert(target == Clipping.X || target == Clipping.Y);
 
     // 準備
-    var onX = (target == RectProperties.X);
+    var onX = (target == Clipping.X);
     var position = value;
     var size = onX ? original.Width : original.Height;
     var positionLowerBound = onX ? bound.X : bound.Y;
@@ -101,7 +139,7 @@ public static class InputCorrector {
     return tryResult;
   }
 
-  /// ClientRectのサイズ要素(Width/Height)の変更を試みる
+  /// Clipping*のサイズ要素(Width/Height)の変更を試みる
   /// @caution sizeLowerBound = 0以外の動作テストをしていない
   /// @param original 変更前のClientRect
   /// @param target 変更箇所
@@ -110,13 +148,13 @@ public static class InputCorrector {
   /// @param sizeLowerBound 訂正後のサイズ要素(Width/Height)の最小値
   /// @param[out] changed 変更後、制約を満たす形に訂正されたClientRect
   /// @return 試行結果（訂正箇所）
-  private static TryResult TryChangeClientRectSize(ClientRect original,
-      RectProperties target, int value, ClientRect bound, int sizeLowerBound,
+  private static TryResult TryChangeClippingSize(ClientRect original,
+      Clipping target, int value, ClientRect bound, int sizeLowerBound,
       out ClientRect changed) {
-    Debug.Assert(target == RectProperties.Width || target == RectProperties.Height);
+    Debug.Assert(target == Clipping.Width || target == Clipping.Height);
 
     // 準備
-    var onX = (target == RectProperties.Width);
+    var onX = (target == Clipping.Width);
     var position = onX ? original.X : original.Y;
     var size = value;
     var positionLowerBound = onX ? bound.X : bound.Y;
@@ -179,7 +217,7 @@ public static class InputCorrector {
   /// @param[out] changed 変更後、制約を満たす形に訂正されたClipping領域
   /// @return 試行結果（訂正箇所）
   public static TryResult TryChangeClippingRectWithoutFit(
-      ILayoutElementView layoutElement, RectProperties target, int value,
+      ILayoutElementView layoutElement, Clipping target, int value,
       out ClientRect changed) {
     Debug.Assert(layoutElement.IsWindowValid);
     Debug.Assert(!layoutElement.Fit);
@@ -190,13 +228,13 @@ public static class InputCorrector {
 
     // 訂正
     switch (target) {
-      case RectProperties.X:
-      case RectProperties.Y: {
-        return InputCorrector.TryChangeClientRectPosition(original, target, value, window, 0, out changed);
+      case Clipping.X:
+      case Clipping.Y: {
+        return InputCorrector.TryChangeClippingPosition(original, target, value, window, 0, out changed);
       }
-      case RectProperties.Width:
-      case RectProperties.Height: {
-        return InputCorrector.TryChangeClientRectSize(original, target, value, window, 0, out changed);
+      case Clipping.Width:
+      case Clipping.Height: {
+        return InputCorrector.TryChangeClippingSize(original, target, value, window, 0, out changed);
       }
       default: Debug.Fail("switch"); throw new System.ArgumentException();
     }
@@ -206,13 +244,13 @@ public static class InputCorrector {
   // BoundRelative Left/Right/Top/Bottom
   //=================================================================
 
-  private static TryResult TryChangeRelativeLow(RelativeLTRB original,
-      LTRBProperties target, double value, double sizeLowerBound,
+  private static TryResult TryChangeBoundRelativeLow(RelativeLTRB original,
+      BoundRelative target, double value, double sizeLowerBound,
       out RelativeLTRB changed) {
-    Debug.Assert(target == LTRBProperties.Left || target == LTRBProperties.Top);
+    Debug.Assert(target == BoundRelative.Left || target == BoundRelative.Top);
 
     // 準備
-    var onX = (target == LTRBProperties.Left);
+    var onX = (target == BoundRelative.Left);
     var low = value;
     var high = onX ? original.Right : original.Bottom;
     var tryResult = TryResult.NothingChanged;
@@ -251,13 +289,13 @@ public static class InputCorrector {
     return tryResult;
   }
 
-  public static TryResult TryChangeRelativeHigh(RelativeLTRB original,
-      LTRBProperties target, double value, double sizeLowerBound,
+  public static TryResult TryChangeBoundRelativeHigh(RelativeLTRB original,
+      BoundRelative target, double value, double sizeLowerBound,
       out RelativeLTRB changed) {
-    Debug.Assert(target == LTRBProperties.Right || target == LTRBProperties.Bottom);
+    Debug.Assert(target == BoundRelative.Right || target == BoundRelative.Bottom);
  
     // 準備
-    var onX = (target == LTRBProperties.Right);
+    var onX = (target == BoundRelative.Right);
     var low = onX ? original.Left : original.Top;
     var high = value;
     var tryResult = TryResult.NothingChanged;
@@ -306,28 +344,28 @@ public static class InputCorrector {
                             layoutElement.BoundRelativeBottom);
   }
 
-  /// レイアウト要素のClipping領域(Fitオプションなし)の変更を試みる
+  /// レイアウト要素のBoundRelative領域の変更を試みる
   /// @param layoutElement レイアウト要素
   /// @param target 変更箇所
   /// @param value 変更値
-  /// @param[out] changed 変更後、制約を満たす形に訂正されたClipping領域
+  /// @param[out] changed 変更後、制約を満たす形に訂正されたBoundRelative領域
   /// @return 試行結果（訂正箇所）
   public static TryResult TryChangeBoundRelativeLTRB(
-      ILayoutElementView layoutElement, LTRBProperties target, double value,
+      ILayoutElementView layoutElement, BoundRelative target, double value,
       out RelativeLTRB changed) {
     // 準備
     var original = InputCorrector.GetBoundRelativeLTRB(layoutElement);
 
     // 訂正
     switch (target) {
-      case LTRBProperties.Left:
-      case LTRBProperties.Top: {
-        return InputCorrector.TryChangeRelativeLow(original, target, value,
+      case BoundRelative.Left:
+      case BoundRelative.Top: {
+        return InputCorrector.TryChangeBoundRelativeLow(original, target, value,
             Constants.MinimumBoundRelativeSize, out changed);
       }
-      case LTRBProperties.Right:
-      case LTRBProperties.Bottom: {
-        return InputCorrector.TryChangeRelativeHigh(original, target, value,
+      case BoundRelative.Right:
+      case BoundRelative.Bottom: {
+        return InputCorrector.TryChangeBoundRelativeHigh(original, target, value,
             Constants.MinimumBoundRelativeSize, out changed);
       }
       default: Debug.Fail("switch"); throw new System.ArgumentException();
@@ -339,27 +377,27 @@ public static class InputCorrector {
   //=================================================================
 
   /// SWScaleLumaGBlurのユーザ入力を訂正する
-  public static bool CorrectInputSWScaleLumaGBlur(double value, out double fixedValue) {
+  public static bool TryChangeSWScaleLumaGBlur(double value, out double changed) {
     throw new System.NotImplementedException();
   }
   /// SWScaleLumaSharpenのユーザ入力を訂正する
-  public static bool CorrectInputSWScaleLumaSharpen(double value, out double fixedValue) {
+  public static bool TryChangeSWScaleLumaSharpen(double value, out double changed) {
     throw new System.NotImplementedException();
   }
   /// SWScaleChromaHshiftのユーザ入力を訂正する
-  public static bool CorrectInputSWScaleChromaHshift(double value, out double fixedValue) {
+  public static bool TryChangeSWScaleChromaHshift(double value, out double changed) {
     throw new System.NotImplementedException();
   }
   /// SWScaleChromaGBlurのユーザ入力を訂正する
-  public static bool CorrectInputSWScaleChromaGBlur(double value, out double fixedValue) {
+  public static bool TryChangeSWScaleChromaGBlur(double value, out double changed) {
     throw new System.NotImplementedException();
   }
   /// SWScaleChromaSharpenのユーザ入力を訂正する
-  public static bool CorrectInputSWScaleChromaSharpen(double value, out double fixedValue) {
+  public static bool TryChangeSWScaleChromaSharpen(double value, out double changed) {
     throw new System.NotImplementedException();
   }
   /// SWScaleChromaVshiftのユーザ入力を訂正する
-  public static bool CorrectInputSWScaleChromaVshift(double value, out double fixedValue) {
+  public static bool TryChangeSWScaleChromaVshift(double value, out double changed) {
     throw new System.NotImplementedException();
   }
 }

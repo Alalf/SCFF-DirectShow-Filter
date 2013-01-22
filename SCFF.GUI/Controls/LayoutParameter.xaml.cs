@@ -333,7 +333,7 @@ public partial class LayoutParameter
   /// BoundRelativeRight: TextChanged
   private void BoundRelativeRight_TextChanged(object sender, TextChangedEventArgs e) {
     if (!this.CanChangeProfile) return;
-    this.Change(InputCorrector.BoundRelative.Bottom);
+    this.Change(InputCorrector.BoundRelative.Right);
   }
   /// BoundRelativeBottom: TextChanged
   private void BoundRelativeBottom_TextChanged(object sender, TextChangedEventArgs e) {

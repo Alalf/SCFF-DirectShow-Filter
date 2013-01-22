@@ -69,6 +69,8 @@ public static class InputCorrector {
 
   /// Clipping*の位置要素(X/Y)の変更を試みる
   /// @warning sizeLowerBound = 0以外の動作テストをしていない
+  /// @warning boundは常に変わり続けている。
+  ///          よって、Position入力中でもSizeを常に最新の値に更新しておく必要がある。
   /// @param original 変更前のClientRect
   /// @param target 変更箇所
   /// @param value 変更値
@@ -95,7 +97,7 @@ public static class InputCorrector {
       // Positionが小さすぎる場合、Sizeは保持＆Positionを増やす
       position = positionLowerBound;
       result |= TryResult.TargetChanged;
-    } else if (positionUpperBound < position) {
+    } else if (positionUpperBound < position + sizeLowerBound) {
       // Positionが大きすぎる場合、Positionを減らしてSizeを下限に
       position = positionUpperBound - sizeLowerBound;
       size = sizeLowerBound;
@@ -125,6 +127,8 @@ public static class InputCorrector {
 
   /// Clipping*のサイズ要素(Width/Height)の変更を試みる
   /// @warning sizeLowerBound = 0以外の動作テストをしていない
+  /// @warning boundは常に変わり続けている。
+  ///          よって、Position入力中でもSizeを常に最新の値に更新しておく必要がある。
   /// @param original 変更前のClientRect
   /// @param target 変更箇所
   /// @param value 変更値
@@ -163,7 +167,7 @@ public static class InputCorrector {
       // Positionが小さすぎる場合、Sizeは保持＆Positionを増やす
       position = positionLowerBound;
       result |= TryResult.DependentChanged;
-    } else if (positionUpperBound < position) {
+    } else if (positionUpperBound < position + sizeLowerBound) {
       // Positionが大きすぎる場合、Positionを減らしてWidthを下限に
       position = positionUpperBound - sizeLowerBound;
       size = sizeLowerBound;
@@ -265,14 +269,8 @@ public static class InputCorrector {
     var high = onX ? original.Right : original.Bottom;
     var result = TryResult.NothingChanged;
 
-    // highの補正
-    if (high < 0.0 + sizeLowerBound) {
-      high = 0.0 + sizeLowerBound;
-      result |= TryResult.DependentChanged;
-    } else if (1.0 < high) {
-      high = 1.0;
-      result |= TryResult.DependentChanged;
-    }
+    // highのチェック
+    Debug.Assert(0.0 + sizeLowerBound <= high && high <= 1.0);
 
     // 上限・下限の補正
     if (low < 0.0) {
@@ -283,7 +281,7 @@ public static class InputCorrector {
       result |= TryResult.TargetChanged;
     }
 
-    // lowが大きすぎる場合、highを減らして最小幅を確保
+    // lowが大きすぎる場合、highを増やして最小幅を確保
     if (high < low + sizeLowerBound) {
       high = low + sizeLowerBound;
       result |= TryResult.DependentChanged;
@@ -291,7 +289,7 @@ public static class InputCorrector {
 
     // 出力
     Debug.Assert(0.0 <= low &&
-                 low + sizeLowerBound <= high &&
+                 sizeLowerBound <= high - low &&
                  high <= 1.0);
     changed = onX
         ? new RelativeLTRB(low, original.Top, high, original.Bottom)
@@ -317,14 +315,8 @@ public static class InputCorrector {
     var high = value;
     var result = TryResult.NothingChanged;
 
-    // lowの補正
-    if (low < 0.0) {
-      low = 0.0;
-      result |= TryResult.DependentChanged;
-    } else if (1.0 < low + sizeLowerBound) {
-      low = 1.0 - sizeLowerBound;
-      result |= TryResult.DependentChanged;
-    }
+    // lowのチェック
+    Debug.Assert(0.0 <= low && low <= 1.0 - sizeLowerBound);
 
     // 上限・下限の補正
     if (high < 0.0 + sizeLowerBound) {
@@ -343,7 +335,7 @@ public static class InputCorrector {
 
     // 出力
     Debug.Assert(0.0 <= low &&
-                 low + sizeLowerBound <= high &&
+                 sizeLowerBound <= high - low &&
                  high <= 1.0);
     changed = onX
         ? new RelativeLTRB(low, original.Top, high, original.Bottom)

@@ -164,7 +164,7 @@ public partial class ResizeMethod : UserControl, IBindingProfile {
     //---------------------------------------------------------------
     // Notify self
     // Notify other controls
-    Commands.CurrentLayoutElementVisualChanged.Execute(null, null);
+    Commands.CurrentLayoutElementVisualChanged.Execute(null, this);
     //---------------------------------------------------------------
   }
 
@@ -193,7 +193,7 @@ public partial class ResizeMethod : UserControl, IBindingProfile {
     // Notify self
     this.OverwriteText(target);
     // Notify other controls
-    Commands.CurrentLayoutElementVisualChanged.Execute(null, null);
+    Commands.CurrentLayoutElementVisualChanged.Execute(null, this);
     //---------------------------------------------------------------
   }
 

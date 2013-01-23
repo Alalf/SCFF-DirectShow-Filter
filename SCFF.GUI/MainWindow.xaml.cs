@@ -129,7 +129,7 @@ public partial class MainWindow
     this.FixMinMaxSize();
     this.FixSize();
     // Notify other controls
-    Commands.ProfileVisualChanged.Execute(null, null);
+    Commands.ProfileVisualChanged.Execute(null, this);
     //-----------------------------------------------------------------
   }
   /// LayoutExpander: Expanded
@@ -143,7 +143,7 @@ public partial class MainWindow
     this.FixMinMaxSize();
     this.FixSize();
     // Notify other controls
-    Commands.ProfileVisualChanged.Execute(null, null);
+    Commands.ProfileVisualChanged.Execute(null, this);
     //-----------------------------------------------------------------
   }
 

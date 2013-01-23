@@ -75,7 +75,7 @@ public partial class TargetWindow : UserControl, IBindingProfile {
     // Notify self
     this.OnCurrentLayoutElementChanged();
     // Notify other controls
-    Commands.AreaChanged.Execute(null, null);
+    Commands.AreaChanged.Execute(null, this);
     //-----------------------------------------------------------------
   }
 

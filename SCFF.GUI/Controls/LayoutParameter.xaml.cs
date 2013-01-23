@@ -168,7 +168,7 @@ public partial class LayoutParameter
     //---------------------------------------------------------------
     // Notify self
     // Notify other controls
-    Commands.CurrentLayoutElementVisualChanged.Execute(null, null);
+    Commands.CurrentLayoutElementVisualChanged.Execute(null, this);
     //---------------------------------------------------------------
   }
 
@@ -220,7 +220,7 @@ public partial class LayoutParameter
       this.ResetError(dependent);
     }
     // Notify other controls
-    Commands.CurrentLayoutElementVisualChanged.Execute(null, null);
+    Commands.CurrentLayoutElementVisualChanged.Execute(null, this);
     //---------------------------------------------------------------
   }
 

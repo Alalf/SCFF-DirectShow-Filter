@@ -62,7 +62,7 @@ public partial class LayoutTab : UserControl, IBindingProfile {
     //-----------------------------------------------------------------
     // Notify self
     // Notify other controls
-    Commands.ProfileStructureChanged.Execute(null, null);
+    Commands.ProfileStructureChanged.Execute(null, this);
     //-----------------------------------------------------------------
   }
 

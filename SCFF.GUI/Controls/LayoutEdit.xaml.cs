@@ -323,7 +323,7 @@ public partial class LayoutEdit
       //---------------------------------------------------------------
       // Notify self
       // Notify other controls
-      Commands.ProfileStructureChanged.Execute(null, null);
+      Commands.ProfileStructureChanged.Execute(null, this);
       //---------------------------------------------------------------
 
       this.BuildDrawingGroup();
@@ -371,7 +371,7 @@ public partial class LayoutEdit
     //-----------------------------------------------------------------
     // Notify self
     // Notify other controls
-    Commands.LayoutParameterChanged.Execute(null, null);
+    Commands.LayoutParameterChanged.Execute(null, this);
     //-----------------------------------------------------------------
 
     this.BuildDrawingGroup();

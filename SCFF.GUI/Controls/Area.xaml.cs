@@ -167,7 +167,7 @@ public partial class Area : UserControl, IBindingProfile {
     //---------------------------------------------------------------
     // Notify self
     // Notify other controls
-    Commands.CurrentLayoutElementVisualChanged.Execute(null, null);
+    Commands.CurrentLayoutElementVisualChanged.Execute(null, this);
     //---------------------------------------------------------------
   }
 
@@ -219,7 +219,7 @@ public partial class Area : UserControl, IBindingProfile {
       this.ResetError(dependent);
     }
     // Notify other controls
-    Commands.CurrentLayoutElementVisualChanged.Execute(null, null);
+    Commands.CurrentLayoutElementVisualChanged.Execute(null, this);
     //---------------------------------------------------------------
   }
 
@@ -243,7 +243,7 @@ public partial class Area : UserControl, IBindingProfile {
     // Notify self
     this.OnCurrentLayoutElementChanged();
     // Notify other controls
-    Commands.CurrentLayoutElementVisualChanged.Execute(null, null);
+    Commands.CurrentLayoutElementVisualChanged.Execute(null, this);
     //-----------------------------------------------------------------
   }
 
@@ -349,10 +349,10 @@ public partial class Area : UserControl, IBindingProfile {
     this.OnCurrentLayoutElementChanged();
     // Notify other controls
     if (changeWindowType) {
-      Commands.TargetWindowChanged.Execute(null, null);
+      Commands.TargetWindowChanged.Execute(null, this);
     } else {
       // TargetWindowの更新は必要ないのでプレビューのみ更新
-      Commands.CurrentLayoutElementVisualChanged.Execute(null, null);
+      Commands.CurrentLayoutElementVisualChanged.Execute(null, this);
     }
     //-----------------------------------------------------------------
   }

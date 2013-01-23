@@ -53,7 +53,7 @@ public partial class LayoutToolbar : UserControl, IBindingOptions {
     //-----------------------------------------------------------------
     // Notify self
     // Notify other controls
-    Commands.ProfileVisualChanged.Execute(null, null);
+    Commands.ProfileVisualChanged.Execute(null, this);
     //-----------------------------------------------------------------
   }
 
@@ -67,7 +67,7 @@ public partial class LayoutToolbar : UserControl, IBindingOptions {
     //-----------------------------------------------------------------
     // Notify self
     // Notify other controls
-    // Commands.ProfileVisualChanged.Execute(null, null);
+    // Commands.ProfileVisualChanged.Execute(null, this);
     //-----------------------------------------------------------------
   }
 
@@ -81,7 +81,7 @@ public partial class LayoutToolbar : UserControl, IBindingOptions {
     //-----------------------------------------------------------------
     // Notify self
     // Notify other controls
-    Commands.ProfileVisualChanged.Execute(null, null);
+    Commands.ProfileVisualChanged.Execute(null, this);
     //-----------------------------------------------------------------
   }
 

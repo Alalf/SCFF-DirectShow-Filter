@@ -52,7 +52,7 @@ public partial class SCFFDSFEntries : UserControl, IBindingRuntimeOptions {
     //-----------------------------------------------------------------
     // Notify self
     // Notify other controls
-    Commands.SampleSizeChanged.Execute(null, null);
+    Commands.SampleSizeChanged.Execute(null, this);
     //-----------------------------------------------------------------
   }
 

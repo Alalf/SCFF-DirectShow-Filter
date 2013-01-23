@@ -259,17 +259,17 @@ public partial class Area : UserControl, IBindingProfile {
         switch (currentWindowType) {
           case WindowTypes.DesktopListView: {
             border = BrushesAndPens.CurrentDesktopListViewBrush;
-            background = BrushesAndPens.DesktopListViewBrush;
+            background = BrushesAndPens.TransparentDesktopListViewBrush;
             break;
           }
           case WindowTypes.Desktop: {
             border = BrushesAndPens.CurrentDesktopBrush;
-            background = BrushesAndPens.DesktopBrush;
+            background = BrushesAndPens.TransparentDesktopBrush;
             break;
           }
           case WindowTypes.Normal: {
             border = BrushesAndPens.CurrentNormalBrush;
-            background = BrushesAndPens.NormalBrush;
+            background = BrushesAndPens.TransparentNormalBrush;
             break;
           }
           default: Debug.Fail("switch"); throw new System.ArgumentException();
@@ -278,12 +278,12 @@ public partial class Area : UserControl, IBindingProfile {
       }
       case WindowTypes.DesktopListView: {
         border = BrushesAndPens.CurrentDesktopListViewBrush;
-        background = BrushesAndPens.DesktopListViewBrush;
+        background = BrushesAndPens.TransparentDesktopListViewBrush;
         break;
       }
       case WindowTypes.Desktop: {
         border = BrushesAndPens.CurrentDesktopBrush;
-        background = BrushesAndPens.DesktopBrush;
+        background = BrushesAndPens.TransparentDesktopBrush;
         break;
       }
       default: Debug.Fail("switch"); throw new System.ArgumentException();

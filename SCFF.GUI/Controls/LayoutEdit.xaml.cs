@@ -79,10 +79,46 @@ public partial class LayoutEdit
   /// キャプションのフォントサイズ
   private const int CaptionFontSize = 20;
 
+  /// DrawBorder用のスタイル(Brush,Pen)を生成
+  private void CreateBorderStyle(ILayoutElementView layoutElement,
+      out Brush frameBrush, out Pen framePen, out Brush textBrush) {
+    var isCurrent = layoutElement.Index == App.Profile.CurrentIndex;
+
+    // frameBrush
+    frameBrush = layoutElement.IsWindowValid ? Brushes.Transparent : Brushes.Red;
+
+    // framePen/textBrush
+    switch (layoutElement.WindowType) {
+      case WindowTypes.Normal: {
+        framePen = isCurrent ? BrushesAndPens.CurrentNormalPen
+                             : BrushesAndPens.NormalPen;
+        textBrush = isCurrent ? BrushesAndPens.CurrentNormalBrush
+                              : BrushesAndPens.NormalBrush;
+        break;
+      }
+      case WindowTypes.DesktopListView: {
+        framePen = isCurrent ? BrushesAndPens.CurrentDesktopListViewPen
+                             : BrushesAndPens.DesktopListViewPen;
+        textBrush = isCurrent ? BrushesAndPens.CurrentDesktopListViewBrush
+                              : BrushesAndPens.DesktopListViewBrush;
+        break;
+      }
+      case WindowTypes.Desktop: {
+        framePen = isCurrent ? BrushesAndPens.CurrentDesktopPen
+                             : BrushesAndPens.DesktopPen;
+        textBrush = isCurrent ? BrushesAndPens.CurrentDesktopBrush
+                              : BrushesAndPens.DesktopBrush;
+        break;
+      }
+      default: Debug.Fail("switch"); throw new System.ArgumentException();
+    }
+  }
+
   /// レイアウト要素のヘッダーの生成
   /// @param layoutElement 対象のレイアウト要素
   /// @return DrawingContext.DrawTextで描画可能なDrawingVisualオブジェクト
-  private FormattedText CreateHeader(ILayoutElementView layoutElement) {
+  private FormattedText CreateHeader(ILayoutElementView layoutElement,
+      Rect boundRect, Brush textBrush) {
     var isCurrent = layoutElement.Index == App.Profile.CurrentIndex;
     var isDummy = App.RuntimeOptions.SelectedEntryIndex == -1;
 
@@ -91,27 +127,6 @@ public partial class LayoutEdit
             isCurrent, isDummy,
             App.RuntimeOptions.CurrentSampleWidth,
             App.RuntimeOptions.CurrentSampleHeight);
-
-    // Brush
-    Brush textBrush = null;
-    switch (layoutElement.WindowType) {
-      case WindowTypes.Normal: {
-        textBrush = isCurrent ? BrushesAndPens.CurrentNormalBrush
-                              : BrushesAndPens.NormalBrush;
-        break;
-      }
-      case WindowTypes.DesktopListView: {
-        textBrush = isCurrent ? BrushesAndPens.CurrentDesktopListViewBrush
-                              : BrushesAndPens.DesktopListViewBrush;
-        break;
-      }
-      case WindowTypes.Desktop: {
-        textBrush = isCurrent ? BrushesAndPens.CurrentDesktopBrush
-                              : BrushesAndPens.DesktopBrush;
-        break;
-      }
-      default: Debug.Fail("switch"); throw new System.ArgumentException();
-    }
 
     // FormattedText
     var formattedText = new FormattedText(header,
@@ -122,8 +137,6 @@ public partial class LayoutEdit
         textBrush);
 
     // Clipping
-    var boundRect = layoutElement.GetBoundRect(App.RuntimeOptions.CurrentSampleWidth,
-                                               App.RuntimeOptions.CurrentSampleHeight);
     formattedText.MaxTextWidth = boundRect.Width;
     formattedText.MaxTextHeight = boundRect.Height;
     formattedText.MaxLineCount = 1;
@@ -148,61 +161,44 @@ public partial class LayoutEdit
   /// @param dc 描画先
   /// @param layoutElement 描画対象
   private void DrawBorder(DrawingContext dc, ILayoutElementView layoutElement) {
-    var isCurrent = layoutElement.Index == App.Profile.CurrentIndex;
-
-    // Pen
-    Pen framePen = null;
-    switch (layoutElement.WindowType) {
-      case WindowTypes.Normal: {
-        framePen = isCurrent ? BrushesAndPens.CurrentNormalPen
-                             : BrushesAndPens.NormalPen;
-        break;
-      }
-      case WindowTypes.DesktopListView: {
-        framePen = isCurrent ? BrushesAndPens.CurrentDesktopListViewPen
-                             : BrushesAndPens.DesktopListViewPen;
-        break;
-      }
-      case WindowTypes.Desktop: {
-        framePen = isCurrent ? BrushesAndPens.CurrentDesktopPen
-                             : BrushesAndPens.DesktopPen;
-        break;
-      }
-      default: Debug.Fail("switch"); throw new System.ArgumentException();
-    }
-
-    // フレーム(内枠)の描画
+    // フレームサイズ
     var boundRect = layoutElement.GetBoundRect(
         App.RuntimeOptions.CurrentSampleWidth,
         App.RuntimeOptions.CurrentSampleHeight).ToRect();
 
+    // スタイルの取得
+    Brush frameBrush, textBrush;
+    Pen framePen;
+    this.CreateBorderStyle(layoutElement, out frameBrush, out framePen, out textBrush);
+
+    // フレームの描画
     /// @todo(me) Windowが不正な場合はBorderオプションに関係なく表示しないといけない
-    var frameBrush = layoutElement.IsWindowValid ? Brushes.Transparent : Brushes.Red;
     var inflateValue = framePen.Thickness / 2;
-    dc.DrawRectangle(frameBrush, framePen,
-                     Rect.Inflate(boundRect, -inflateValue, -inflateValue));
+    var infraleRect = Rect.Inflate(boundRect, -inflateValue, -inflateValue);
+    dc.DrawRectangle(frameBrush, framePen, infraleRect);
+
+    // ヘッダーのドロップシャドウの描画
+    var shadowOffset = 1.0;
+    var shadowPoint = new Point(boundRect.X + shadowOffset, boundRect.Y + shadowOffset);
+    var shadowBoundRect = new Rect(boundRect.X + shadowOffset,
+                                   boundRect.Y + shadowOffset,
+                                   boundRect.Width - shadowOffset,
+                                   boundRect.Height - shadowOffset);
+    var shadow = this.CreateHeader(layoutElement, shadowBoundRect, BrushesAndPens.DropShadowBrush);
+    dc.DrawText(shadow, shadowPoint);
 
     // ヘッダーの描画
     var headerPoint = new Point(boundRect.X, boundRect.Y);
-    var header = this.CreateHeader(layoutElement);
-
-    // ヘッダーから縁取りを取得
-    /// @todo(me) 若干重い？
-    var textGeometry = header.BuildGeometry(headerPoint);
-    dc.DrawGeometry(null, BrushesAndPens.DropShadowPen, textGeometry);
-
+    var header = this.CreateHeader(layoutElement, boundRect, textBrush);
     dc.DrawText(header, headerPoint);
   }
 
   /// サンプルの幅・高さをRectに変換
   private Rect SampleRect {
     get {
-      return new Rect {
-        X = 0.0,
-        Y = 0.0,
-        Width = (double)App.RuntimeOptions.CurrentSampleWidth,
-        Height = (double)App.RuntimeOptions.CurrentSampleHeight
-      };
+      return new Rect(0.0, 0.0,
+          (double)App.RuntimeOptions.CurrentSampleWidth,
+          (double)App.RuntimeOptions.CurrentSampleHeight);
     }
   }
 

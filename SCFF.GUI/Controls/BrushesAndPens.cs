@@ -27,16 +27,27 @@ using System.Windows.Media;
 public static class BrushesAndPens {
   /// WindowTypes.NormalでCurrent時のブラシ
   public static readonly Brush CurrentNormalBrush;
+  /// WindowTypes.Normalの半透明ブラシ
+  public static readonly Brush TransparentNormalBrush;
   /// WindowTypes.Normalのブラシ
   public static readonly Brush NormalBrush;
+
   /// WindowTypes.DesktopListViewでCurrent時のブラシ
   public static readonly Brush CurrentDesktopListViewBrush;
+  /// WindowTypes.DesktopListViewの半透明ブラシ
+  public static readonly Brush TransparentDesktopListViewBrush;
   /// WindowTypes.DesktopListViewのブラシ
   public static readonly Brush DesktopListViewBrush;
+
   /// WindowTypes.DesktopでCurrent時のブラシ
   public static readonly Brush CurrentDesktopBrush;
-  /// WindowTypes.Desktopのブラシ
+  /// WindowTypes.Desktopの半透明ブラシ
+  public static readonly Brush TransparentDesktopBrush;
+  /// WindowTypes.Desktopの半透明ブラシ
   public static readonly Brush DesktopBrush;
+
+  /// ドロップシャドウ描画用ブラシ
+  public static readonly Brush DropShadowBrush;
 
   /// ペンの太さ(ダミー)
   /// @attention ダミーなので実際に使う場合はCloneしたのちにFreezeすること
@@ -55,27 +66,38 @@ public static class BrushesAndPens {
   /// WindowTypes.Desktopのペン
   public static readonly Pen DesktopPen;
 
-  /// ドロップシャドウ描画用ペン（正確には黒色の縁取りだが・・・）
-  public static readonly Pen DropShadowPen;
-
   /// staticコンストラクタ
   static BrushesAndPens() {
     // Brushes
     BrushesAndPens.CurrentNormalBrush = Brushes.DarkOrange;
     BrushesAndPens.CurrentNormalBrush.Freeze();
-    BrushesAndPens.NormalBrush =
+    BrushesAndPens.TransparentNormalBrush =
         new SolidColorBrush(Color.FromArgb(0x99, 0xFF, 0x8C, 0x00));
+    BrushesAndPens.TransparentNormalBrush.Freeze();
+    BrushesAndPens.NormalBrush =
+        new SolidColorBrush(Color.FromRgb(0x7F, 0x44, 0x00));
     BrushesAndPens.NormalBrush.Freeze();
+
     BrushesAndPens.CurrentDesktopListViewBrush = Brushes.DarkCyan;
     BrushesAndPens.CurrentDesktopListViewBrush.Freeze();
-    BrushesAndPens.DesktopListViewBrush =
+    BrushesAndPens.TransparentDesktopListViewBrush =
         new SolidColorBrush(Color.FromArgb(0x99, 0x00, 0x8B, 0x8B));
+    BrushesAndPens.TransparentDesktopListViewBrush.Freeze();
+    BrushesAndPens.DesktopListViewBrush =
+        new SolidColorBrush(Color.FromRgb(0x00, 0x3F, 0x3F));
     BrushesAndPens.DesktopListViewBrush.Freeze();
+
     BrushesAndPens.CurrentDesktopBrush = Brushes.DarkGreen;
     BrushesAndPens.CurrentDesktopBrush.Freeze();
-    BrushesAndPens.DesktopBrush =
+    BrushesAndPens.TransparentDesktopBrush =
         new SolidColorBrush(Color.FromArgb(0x99, 0x00, 0x64, 0x00));
+    BrushesAndPens.TransparentDesktopBrush.Freeze();
+    BrushesAndPens.DesktopBrush =
+        new SolidColorBrush(Color.FromRgb(0x00, 0x33, 0x00));
     BrushesAndPens.DesktopBrush.Freeze();
+
+    BrushesAndPens.DropShadowBrush = Brushes.Black;
+    BrushesAndPens.DropShadowBrush.Freeze();
 
     // Pens
     BrushesAndPens.CurrentNormalPen =
@@ -96,10 +118,6 @@ public static class BrushesAndPens {
     BrushesAndPens.DesktopPen =
         new Pen(BrushesAndPens.DesktopBrush, BrushesAndPens.dummyPenThickness);
     BrushesAndPens.DesktopPen.Freeze();
-
-    BrushesAndPens.DropShadowPen =
-        new Pen(Brushes.Black, BrushesAndPens.dummyPenThickness);
-    BrushesAndPens.DropShadowPen.Freeze();
   }
 }
 }   // SCFF.GUI.Controls

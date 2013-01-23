@@ -61,7 +61,7 @@ public partial class Apply : UserControl, IBindingOptions {
   // IBindingOptionsの実装
   //===================================================================
 
-  /// @copydoc Common::GUI::IBindingOptions::OnOptionsChanged
+  /// @copydoc Common::GUI::IBindingOptions::CanChangeOptions
   public bool CanChangeOptions { get; private set; }
   /// @copydoc Common::GUI::IBindingOptions::OnOptionsChanged
   public void OnOptionsChanged() {

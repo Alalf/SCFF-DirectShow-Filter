@@ -2,6 +2,7 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:local="clr-namespace:SCFF.GUI"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" d:DesignWidth="369" d:DesignHeight="104"
              FontSize="9">
@@ -26,7 +27,7 @@
       <Button   Grid.RowSpan="2"
                 VerticalAlignment="Center" Height="20"
                 x:Name="Fit" Content="Fit"
-                Click="Fit_Click"/>
+                Command="{x:Static local:Commands.FitCurrentBoundRect}"/>
       <!-- RelativeLeft -->
       <Label    Grid.Column="1"
                 VerticalAlignment="Center" HorizontalAlignment="Right" Height="12" Margin="5,0"

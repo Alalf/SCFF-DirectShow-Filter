@@ -232,36 +232,6 @@ public partial class LayoutParameter
   // *Changed/Checked/Unchecked以外
   //-------------------------------------------------------------------
 
-  /// Fit: Click
-  ///
-  /// 現在選択中のレイアウト要素のアスペクト比をあわせ、黒帯を消す
-  /// @todo(me) コンテキストメニューにも実装したいのでCommand化したい
-  ///           (Shiftドラッグで比率維持とかやってもいいかも)
-  /// @param sender 使用しない
-  /// @param e 使用しない
-  private void Fit_Click(object sender, System.Windows.RoutedEventArgs e) {
-    if (!App.Profile.CurrentView.IsWindowValid) {
-      Debug.WriteLine("Invalid Window", "LayoutParameter.Fit_Click");
-      return;
-    }
-
-    // Profileの設定を変える
-    App.Profile.Current.Open();
-    App.Profile.Current.FitBoundRelativeRect(
-        App.RuntimeOptions.CurrentSampleWidth,
-        App.RuntimeOptions.CurrentSampleHeight);
-    App.Profile.Current.Close();
-
-    //-----------------------------------------------------------------
-    // Notify self
-    this.OnCurrentLayoutElementChanged();
-    // Notify other controls
-    Commands.CurrentLayoutElementVisualChanged.Execute(null, null);
-    //-----------------------------------------------------------------
-  }
-
-  //-------------------------------------------------------------------
-
   /// BoundRelativeLeft: KeyDown
   private void BoundRelativeLeft_KeyDown(object sender, KeyEventArgs e) {
     if (e.Key != Key.Return && e.Key != Key.Enter) return;

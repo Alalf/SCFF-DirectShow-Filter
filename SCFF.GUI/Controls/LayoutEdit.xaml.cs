@@ -81,11 +81,8 @@ public partial class LayoutEdit
 
   /// DrawBorder用のスタイル(Brush,Pen)を生成
   private void CreateBorderStyle(ILayoutElementView layoutElement,
-      out Brush frameBrush, out Pen framePen, out Brush textBrush) {
+      out Pen framePen, out Brush textBrush) {
     var isCurrent = layoutElement.Index == App.Profile.CurrentIndex;
-
-    // frameBrush
-    frameBrush = layoutElement.IsWindowValid ? Brushes.Transparent : Brushes.Red;
 
     // framePen/textBrush
     switch (layoutElement.WindowType) {
@@ -148,13 +145,19 @@ public partial class LayoutEdit
   /// @param layoutElement 描画対象
   private void DrawPreview(DrawingContext dc, ILayoutElementView layoutElement) {
     var bitmap = App.ScreenCaptureTimer.GetBitmapSource(layoutElement);
-    if (bitmap == null) return;
-
-    // プレビューの描画
-    var actualBoundRect = layoutElement.GetActualBoundRect(
-        App.RuntimeOptions.CurrentSampleWidth,
-        App.RuntimeOptions.CurrentSampleHeight).ToRect();
-    dc.DrawImage(bitmap, actualBoundRect);
+    if (bitmap == null) {
+      // エラーが起きた場合は赤色の四角形を描画
+      var boundRect = layoutElement.GetBoundRect(
+          App.RuntimeOptions.CurrentSampleWidth,
+          App.RuntimeOptions.CurrentSampleHeight).ToRect();
+      dc.DrawRectangle(Brushes.Red, null, boundRect);
+    } else {
+      // プレビューの描画
+      var actualBoundRect = layoutElement.GetActualBoundRect(
+          App.RuntimeOptions.CurrentSampleWidth,
+          App.RuntimeOptions.CurrentSampleHeight).ToRect();
+      dc.DrawImage(bitmap, actualBoundRect);
+    }
   }
 
   /// 枠線とキャプションの描画
@@ -167,15 +170,14 @@ public partial class LayoutEdit
         App.RuntimeOptions.CurrentSampleHeight).ToRect();
 
     // スタイルの取得
-    Brush frameBrush, textBrush;
+    Brush textBrush;
     Pen framePen;
-    this.CreateBorderStyle(layoutElement, out frameBrush, out framePen, out textBrush);
+    this.CreateBorderStyle(layoutElement, out framePen, out textBrush);
 
     // フレームの描画
-    /// @todo(me) Windowが不正な場合はBorderオプションに関係なく表示しないといけない
     var inflateValue = framePen.Thickness / 2;
     var infraleRect = Rect.Inflate(boundRect, -inflateValue, -inflateValue);
-    dc.DrawRectangle(frameBrush, framePen, infraleRect);
+    dc.DrawRectangle(null, framePen, infraleRect);
 
     // ヘッダーのドロップシャドウの描画
     var shadowOffset = 1.0;
@@ -298,8 +300,8 @@ public partial class LayoutEdit
   /// @param sender 使用しない
   /// @param e Client座標系でのマウス座標(GetPosition(...))の取得が可能
   private void LayoutEditImage_MouseDown(object sender, MouseButtonEventArgs e) {
-    // 左クリック以外はすぐに戻る
-    if (e.ChangedButton != MouseButton.Left) return;
+    // 左/右クリック以外はすぐに戻る
+    if (e.ChangedButton != MouseButton.Left && e.ChangedButton != MouseButton.Right) return;
     
     // 前処理
     var image = (IInputElement)sender;
@@ -326,6 +328,9 @@ public partial class LayoutEdit
 
       this.BuildDrawingGroup();
     }
+
+    // 右クリックの場合はCurrentを変えただけで終了（残りはコンテキストメニューに任せる）
+    if (e.ChangedButton == MouseButton.Right) return;
 
     // マウスを押した場所を記録してマウスキャプチャー開始
     var snapGuide = App.Options.LayoutSnap ? new SnapGuide(App.Profile) : null;

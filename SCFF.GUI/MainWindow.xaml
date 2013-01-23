@@ -53,6 +53,8 @@
     <CommandBinding Command="{x:Static local:Commands.RemoveCurrentLayoutElement}"
                     Executed="OnRemoveCurrentLayoutElement"
                     CanExecute="CanRemoveCurrentLayoutElement"/>
+    <CommandBinding Command="{x:Static local:Commands.FitCurrentBoundRect}"
+                    Executed="OnFitCurrentBoundRect"/>
     <CommandBinding Command="{x:Static local:Commands.SetAero}"
                     Executed="OnSetAero"/>
     <CommandBinding Command="{x:Static local:Commands.SetCompactView}"

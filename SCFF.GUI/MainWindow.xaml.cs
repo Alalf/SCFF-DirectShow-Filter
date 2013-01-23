@@ -546,12 +546,33 @@ public partial class MainWindow
     //-----------------------------------------------------------------
   }
 
-  //-------------------------------------------------------------------
-
   /// @warning CanExecuteは処理負荷が高いのであまり使いたくないがしょうがない
   private void CanRemoveCurrentLayoutElement(object sender, CanExecuteRoutedEventArgs e) {
     e.CanExecute = App.Profile.CanRemoveCurrent;
   }
+
+  private void OnFitCurrentBoundRect(object sender, ExecutedRoutedEventArgs e) {
+    if (!App.Profile.CurrentView.IsWindowValid) {
+      Debug.WriteLine("Invalid Window", "[Command] FitCurrentBoundRect");
+      return;
+    }
+
+    // Profileの設定を変える
+    App.Profile.Current.Open();
+    App.Profile.Current.FitBoundRelativeRect(
+        App.RuntimeOptions.CurrentSampleWidth,
+        App.RuntimeOptions.CurrentSampleHeight);
+    App.Profile.Current.Close();
+
+    //-----------------------------------------------------------------
+    // Notify self
+    // Notify other controls
+    this.LayoutParameter.OnCurrentLayoutElementChanged();
+    this.LayoutEdit.OnCurrentLayoutElementChanged();
+    //-----------------------------------------------------------------
+  }
+
+  //-------------------------------------------------------------------
 
   /// @copybrief SetAero
   /// @param sender 使用しない
@@ -577,7 +598,5 @@ public partial class MainWindow
     this.FixSize();
     this.FixExpanders();
   }
-
-
 }
 }   // namespace SCFF.GUI

@@ -58,6 +58,9 @@ public static class Commands {
   /// 現在編集中のレイアウト要素の削除
   public static readonly RoutedCommand RemoveCurrentLayoutElement = new RoutedCommand();
 
+  /// 現在編集中のレイアウト要素の境界を取り込み内容に合わせて調整する
+  public static readonly RoutedCommand FitCurrentBoundRect = new RoutedCommand();
+  
   /// AeroのON/OFF
   public static readonly RoutedCommand SetAero = new RoutedCommand();
   /// コンパクト表示の切り替え

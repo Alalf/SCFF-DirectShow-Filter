@@ -2,6 +2,7 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:local="clr-namespace:SCFF.GUI"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" d:DesignWidth="640" d:DesignHeight="400"
              FontSize="9">
@@ -9,14 +10,20 @@
          MouseDown="LayoutEditImage_MouseDown"
          MouseMove="LayoutEditImage_MouseMove"
          MouseUp="LayoutEditImage_MouseUp">
-    <!-- <Image.ContextMenu>
-      <ContextMenu FontSize="9" Background="{DynamicResource ControlBackgroundBrush}">
-        <MenuItem Header="Add"/>
-        <MenuItem Header="Remove"/>
+    <Image.ContextMenu>
+      <ContextMenu x:Name="LayoutEditMenu" FontSize="9" Background="{DynamicResource ControlBackgroundBrush}">
+        <MenuItem Header="Add" Command="{x:Static local:Commands.AddLayoutElement}"
+                  CommandTarget="{Binding Path=PlacementTarget,
+                      RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"/>
+        <MenuItem Header="Remove Current" Command="{x:Static local:Commands.RemoveCurrentLayoutElement}"
+                  CommandTarget="{Binding Path=PlacementTarget,
+                      RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"/>
         <Separator />
-        <MenuItem Header="Fit"/>
+        <MenuItem Header="Fit" Command="{x:Static local:Commands.FitCurrentBoundRect}"
+                  CommandTarget="{Binding Path=PlacementTarget,
+                      RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"/>
       </ContextMenu>
-    </Image.ContextMenu> -->
+    </Image.ContextMenu>
     <Image.Source>
       <DrawingImage>
         <DrawingImage.Drawing>

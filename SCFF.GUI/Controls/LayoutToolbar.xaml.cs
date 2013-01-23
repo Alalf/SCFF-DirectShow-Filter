@@ -85,38 +85,6 @@ public partial class LayoutToolbar : UserControl, IBindingOptions {
     //-----------------------------------------------------------------
   }
 
-  /// Add: Click
-  /// @param sender 使用しない
-  /// @param e 使用しない
-  private void Add_Click(object sender, RoutedEventArgs e) {
-    App.Profile.Add();
-
-    this.Add.IsEnabled = App.Profile.CanAdd;
-    this.Remove.IsEnabled = App.Profile.CanRemove;
-
-    //-----------------------------------------------------------------
-    // Notify self
-    // Notify other controls
-    Commands.ProfileStructureChanged.Execute(null, null);
-    //-----------------------------------------------------------------
-  }
-
-  /// Remove: Click
-  /// @param sender 使用しない
-  /// @param e 使用しない
-  private void Remove_Click(object sender, RoutedEventArgs e) {
-    App.Profile.RemoveCurrent();
-
-    this.Add.IsEnabled = App.Profile.CanAdd;
-    this.Remove.IsEnabled = App.Profile.CanRemove;
-
-    //-----------------------------------------------------------------
-    // Notify self
-    // Notify other controls
-    Commands.ProfileStructureChanged.Execute(null, null);
-    //-----------------------------------------------------------------
-  }
-
   //-------------------------------------------------------------------
   // Checked/Unchecked
   //-------------------------------------------------------------------

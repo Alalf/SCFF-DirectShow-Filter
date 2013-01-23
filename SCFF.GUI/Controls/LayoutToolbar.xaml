@@ -13,11 +13,10 @@
              Header="Layout">
       <Button Margin="3,0,0,0"
               x:Name="Add" Content="Add"
-              Click="Add_Click" />
+              Command="{x:Static local:Commands.AddLayoutElement}"/>
       <Button Margin="3,0,0,0"
-              IsEnabled="False"
               x:Name="Remove" Content="Remove"
-              Click="Remove_Click" />
+              Command="{x:Static local:Commands.RemoveCurrentLayoutElement}"/>
       <Separator/>
       <CheckBox Margin="3,0,0,0" 
                 x:Name="LayoutPreview" Content="Preview"

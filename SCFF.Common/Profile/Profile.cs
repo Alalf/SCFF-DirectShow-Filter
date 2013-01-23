@@ -147,7 +147,7 @@ public partial class Profile {
   //-------------------------------------------------------------------
 
   /// レイアウト要素を削除可能か
-  public bool CanRemove {
+  public bool CanRemoveCurrent {
     get { return this.message.LayoutElementCount > 1; }
   }
 

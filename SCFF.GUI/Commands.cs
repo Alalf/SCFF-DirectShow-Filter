@@ -53,6 +53,11 @@ public static class Commands {
   // 機能
   //===================================================================
   
+  /// レイアウト要素の追加
+  public static readonly RoutedCommand AddLayoutElement = new RoutedCommand();
+  /// 現在編集中のレイアウト要素の削除
+  public static readonly RoutedCommand RemoveCurrentLayoutElement = new RoutedCommand();
+
   /// AeroのON/OFF
   public static readonly RoutedCommand SetAero = new RoutedCommand();
   /// コンパクト表示の切り替え

@@ -47,6 +47,12 @@
     <CommandBinding Command="{x:Static local:Commands.SampleSizeChanged}"
                     Executed="OnSampleSizeChanged" />
     <!-- Feature -->
+    <CommandBinding Command="{x:Static local:Commands.AddLayoutElement}"
+                    Executed="OnAddLayoutElement"
+                    CanExecute="CanAddLayoutElement"/>
+    <CommandBinding Command="{x:Static local:Commands.RemoveCurrentLayoutElement}"
+                    Executed="OnRemoveCurrentLayoutElement"
+                    CanExecute="CanRemoveCurrentLayoutElement"/>
     <CommandBinding Command="{x:Static local:Commands.SetAero}"
                     Executed="OnSetAero"/>
     <CommandBinding Command="{x:Static local:Commands.SetCompactView}"

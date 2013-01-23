@@ -519,6 +519,40 @@ public partial class MainWindow
 
   //-------------------------------------------------------------------
 
+  private void OnAddLayoutElement(object sender, ExecutedRoutedEventArgs e) {
+    App.Profile.Add();
+
+    //-----------------------------------------------------------------
+    // Notify self
+    // tabの選択を変えないといけないので全てに通知
+    this.NotifyProfileChanged();
+    // Notify other controls
+    //-----------------------------------------------------------------
+  }
+
+  /// @warning CanExecuteは処理負荷が高いのであまり使いたくないがしょうがない
+  private void CanAddLayoutElement(object sender, CanExecuteRoutedEventArgs e) {
+    e.CanExecute = App.Profile.CanAdd;
+  }
+
+  private void OnRemoveCurrentLayoutElement(object sender, ExecutedRoutedEventArgs e) {
+    App.Profile.RemoveCurrent();
+
+    //-----------------------------------------------------------------
+    // Notify self
+    // tabの選択を変えないといけないので全てに通知
+    this.NotifyProfileChanged();
+    // Notify other controls
+    //-----------------------------------------------------------------
+  }
+
+  //-------------------------------------------------------------------
+
+  /// @warning CanExecuteは処理負荷が高いのであまり使いたくないがしょうがない
+  private void CanRemoveCurrentLayoutElement(object sender, CanExecuteRoutedEventArgs e) {
+    e.CanExecute = App.Profile.CanRemoveCurrent;
+  }
+
   /// @copybrief SetAero
   /// @param sender 使用しない
   /// @param e 使用しない
@@ -543,5 +577,7 @@ public partial class MainWindow
     this.FixSize();
     this.FixExpanders();
   }
+
+
 }
 }   // namespace SCFF.GUI

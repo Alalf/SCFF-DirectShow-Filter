@@ -201,8 +201,7 @@ public class SampleRect : IntRect {
   /// コンストラクタ
   public SampleRect(int x, int y, int width, int height)
       : base(x, y, width, height) {}
-  /// 補正つきstaticコンストラクタ
-  /// @todo(me) 単純すぎる気がする。ちょっと考え中。
+  /// 四捨五入補正つきstaticコンストラクタ
   /// @param x Doubleのx
   /// @param y Doubleのy
   /// @param width DoubleのWidth
@@ -210,10 +209,10 @@ public class SampleRect : IntRect {
   /// @return サンプル座標系のRect(プロパティは整数)
   public static SampleRect FromDouble(double x, double y, double width, double height) {
     int newX, newY, newWidth, newHeight;
-    newX = (int)x;
-    newY = (int)y;
-    newWidth = (int)width;
-    newHeight = (int)height;
+    newX = (int)Math.Round(x);
+    newY = (int)Math.Round(y);
+    newWidth = (int)Math.Round(width);
+    newHeight = (int)Math.Round(height);
     return new SampleRect(newX, newY, newWidth, newHeight);
   }
 }

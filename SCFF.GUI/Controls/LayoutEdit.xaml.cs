@@ -42,6 +42,9 @@ public partial class LayoutEdit
   // 定数
   //===================================================================  
 
+  /// 再描画間隔: 5000ミリ秒
+  private const double redrawTimerPeriod = 5000;
+
   /// カーソルをまとめたディクショナリ
   private static readonly Dictionary<HitModes, Cursor> HitModesToCursors =
       new Dictionary<HitModes,Cursor> {
@@ -69,7 +72,14 @@ public partial class LayoutEdit
     RenderOptions.SetBitmapScalingMode(this.DrawingGroup, BitmapScalingMode.LowQuality);
 
     // 再描画タイマーの準備
-    this.StartRedrawTimer();
+    this.redrawTimer.Interval = TimeSpan.FromMilliseconds(LayoutEdit.redrawTimerPeriod);
+    this.redrawTimer.Tick += this.redrawTimer_Tick;
+    this.redrawTimer.Start();
+  }
+
+  /// デストラクタ
+  ~LayoutEdit() {
+    this.redrawTimer.Tick -= this.redrawTimer_Tick;
   }
 
   //===================================================================
@@ -243,44 +253,6 @@ public partial class LayoutEdit
   }
 
   //===================================================================
-  // DispatcherTimerによる再描画
-  //===================================================================
-
-  /// 再描画間隔: 5000ミリ秒
-  private const double redrawTimerPeriod = 5000;
-  /// 再描画用DispatcherTimer
-  private DispatcherTimer redrawTimer = new DispatcherTimer();
-
-  /// 再描画タイマー起動
-  private void StartRedrawTimer() {
-    redrawTimer.Interval = TimeSpan.FromMilliseconds(redrawTimerPeriod);
-    redrawTimer.Tick += redrawTimer_Tick;
-    redrawTimer.Start();
-  }
-
-  /// 再描画タイマーコールバック
-  void redrawTimer_Tick(object sender, EventArgs e) {
-    // プレビューが必要なければ更新しない
-    if (!App.Options.LayoutIsExpanded) return;
-    if (!App.Options.LayoutPreview) return;
-    
-    // マウス操作中は更新しない
-    if (this.moveAndSize.IsRunning) return;
-
-    // プレビュー内容更新のためにリクエスト送信
-    App.ScreenCaptureTimer.UpdateRequest(App.Profile);
-
-    // 再描画
-    Debug.WriteLineIf(!(this.LayoutEditImage.ActualWidth <= App.RuntimeOptions.CurrentSampleWidth &&
-                        this.LayoutEditImage.ActualHeight <= App.RuntimeOptions.CurrentSampleHeight),
-                      string.Format("Redraw ({0:F2}, {1:F2})",
-                                    this.LayoutEditImage.ActualWidth,
-                                    this.LayoutEditImage.ActualHeight),
-                      "LayoutEdit");
-    this.BuildDrawingGroup();
-  }
-
-  //===================================================================
   // イベントハンドラ
   //===================================================================
 
@@ -397,6 +369,32 @@ public partial class LayoutEdit
   //-------------------------------------------------------------------
 
   //===================================================================
+  // DispatcherTimerによる再描画
+  //===================================================================
+
+  /// 再描画タイマーコールバック
+  void redrawTimer_Tick(object sender, EventArgs e) {
+    // プレビューが必要なければ更新しない
+    if (!App.Options.LayoutIsExpanded) return;
+    if (!App.Options.LayoutPreview) return;
+    
+    // マウス操作中は更新しない
+    if (this.moveAndSize.IsRunning) return;
+
+    // プレビュー内容更新のためにリクエスト送信
+    App.ScreenCaptureTimer.UpdateRequest(App.Profile);
+
+    // 再描画
+    Debug.WriteLineIf(!(this.LayoutEditImage.ActualWidth <= App.RuntimeOptions.CurrentSampleWidth &&
+                        this.LayoutEditImage.ActualHeight <= App.RuntimeOptions.CurrentSampleHeight),
+                      string.Format("Redraw ({0:F2}, {1:F2})",
+                                    this.LayoutEditImage.ActualWidth,
+                                    this.LayoutEditImage.ActualHeight),
+                      "LayoutEdit");
+    this.BuildDrawingGroup();
+  }
+
+  //===================================================================
   // IUpdateByOptionsの実装
   //===================================================================
 
@@ -467,6 +465,9 @@ public partial class LayoutEdit
   //===================================================================
   // フィールド
   //===================================================================
+
+  /// 再描画用DispatcherTimer
+  private DispatcherTimer redrawTimer = new DispatcherTimer();
 
   /// MoveAndSize
   private MoveAndSize moveAndSize = new MoveAndSize();

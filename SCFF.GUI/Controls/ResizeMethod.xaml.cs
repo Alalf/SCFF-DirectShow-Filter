@@ -27,7 +27,7 @@ using System.Windows.Input;
 using SCFF.Common;
 using SCFF.Common.GUI;
 using SCFF.Common.Profile;
-// 型名が長すぎるので省略
+/// @copydoc SCFF::Common::Profile::SWScaleInputCorrector::Names
 using SWScale = SCFF.Common.Profile.SWScaleInputCorrector.Names;
 
 /// SWScaleパラメータ設定用UserControl

@@ -22,11 +22,27 @@ namespace SCFF.Common {
 
 using System;
 using System.Diagnostics;
+using System.IO;
+using System.Reflection;
 using System.Text;
 using SCFF.Common.Ext;
 
 /// SCFF.Commonモジュール共通で利用する機能
 public static class Utilities {
+  //===================================================================
+  // ファイル入出力用の機能
+  //===================================================================
+
+  /// Optionの読み込み・保存先/Profileのデフォルト出力先を取得する
+  /// @todo(me) 実装。ただし、書き込み可能かどうかの判断が可能かはわからない
+  public static string GetDefaultFilePath {
+    get {
+      // 末尾が\\で終わること
+      var applicationPath = Assembly.GetEntryAssembly().Location;
+      return Path.GetDirectoryName(applicationPath) + @"\";
+    }
+  }
+
   //===================================================================
   // WindowType/Window別の機能
   //===================================================================

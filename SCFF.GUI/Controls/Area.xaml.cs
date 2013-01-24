@@ -29,7 +29,7 @@ using System.Windows.Media;
 using SCFF.Common;
 using SCFF.Common.GUI;
 using SCFF.Common.Profile;
-// 型名が長すぎるので省略
+/// @copydoc SCFF::Common::Profile::ClippingInputCorrector::Names
 using Clipping = SCFF.Common.Profile.ClippingInputCorrector.Names;
 
 /// クリッピング領域設定用UserControl

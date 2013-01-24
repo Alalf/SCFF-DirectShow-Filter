@@ -26,13 +26,14 @@ using System.Diagnostics;
 using System.IO;
 
 /// プロファイル以外のアプリケーション設定のINIファイル入出力機能
+/// @attention リフレクションは使わない
 public static class OptionsINIFile {
   //===================================================================
   // 定数
   //===================================================================
 
   /// INIファイル名
-  private const string OptionsFilePath = "SCFF.Common.Options.ini";
+  private const string OptionsFileName = "SCFF.Common.Options.ini";
   /// INIファイルの先頭に付加するヘッダー
   private const string OptionsHeader =
       "; SCFF-DirectShow-Filter Options Ver.0.1.7";
@@ -42,12 +43,11 @@ public static class OptionsINIFile {
   //===================================================================
 
   /// ファイル出力
-  /// @todo(me) パスを指定して保存を行いたい(現在だとワーキングディレクトリに保存されてしまう)
   /// @param options 保存するOptions
   /// @return 保存が成功したか
   public static bool Save(Options options) {
     try {
-      using (var writer = new StreamWriter(OptionsINIFile.OptionsFilePath)) {
+      using (var writer = new StreamWriter(Utilities.GetDefaultFilePath + OptionsINIFile.OptionsFileName)) {
         writer.WriteLine(OptionsINIFile.OptionsHeader);
         for (int i = 0; i < 5; ++i) {
           writer.WriteLine("RecentProfile{0}={1}", i,
@@ -103,7 +103,7 @@ public static class OptionsINIFile {
     // ファイル読み込み
     var lines = new List<string>();
     try {
-      using (var reader = new StreamReader(OptionsINIFile.OptionsFilePath)) {
+      using (var reader = new StreamReader(Utilities.GetDefaultFilePath + OptionsINIFile.OptionsFileName)) {
         while (!reader.EndOfStream) {
           lines.Add(reader.ReadLine());
         }

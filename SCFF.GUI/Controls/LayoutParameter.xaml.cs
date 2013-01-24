@@ -27,7 +27,7 @@ using System.Windows.Input;
 using SCFF.Common;
 using SCFF.Common.GUI;
 using SCFF.Common.Profile;
-// 型名が長すぎるので省略
+/// @copydoc SCFF::Common::Profile::BoundRelativeInputCorrector::Names
 using BoundRelative = SCFF.Common.Profile.BoundRelativeInputCorrector.Names;
 
 /// 数値を指定してレイアウト配置を調整するためのUserControl

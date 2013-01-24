@@ -27,6 +27,8 @@ using System.Windows.Input;
 using SCFF.Common;
 using SCFF.Common.GUI;
 using SCFF.Common.Profile;
+// 型名が長すぎるので省略
+using SWScale = SCFF.Common.Profile.SWScaleInputCorrector.Names;
 
 /// SWScaleパラメータ設定用UserControl
 public partial class ResizeMethod : UserControl, IBindingProfile {
@@ -47,69 +49,70 @@ public partial class ResizeMethod : UserControl, IBindingProfile {
     }
 
     // HACK!: PlacementTargetが上手く動かないのでここで設定する
-    this.GetToolTip(SWScaleInputCorrector.Names.LumaGBlur).PlacementTarget =
-        this.GetTextBox(SWScaleInputCorrector.Names.LumaGBlur);
-    this.GetToolTip(SWScaleInputCorrector.Names.LumaSharpen).PlacementTarget =
-        this.GetTextBox(SWScaleInputCorrector.Names.LumaSharpen);
-    this.GetToolTip(SWScaleInputCorrector.Names.ChromaHShift).PlacementTarget =
-        this.GetTextBox(SWScaleInputCorrector.Names.ChromaHShift);
-    this.GetToolTip(SWScaleInputCorrector.Names.ChromaGBlur).PlacementTarget =
-        this.GetTextBox(SWScaleInputCorrector.Names.ChromaGBlur);
-    this.GetToolTip(SWScaleInputCorrector.Names.ChromaSharpen).PlacementTarget =
-        this.GetTextBox(SWScaleInputCorrector.Names.ChromaSharpen);
-    this.GetToolTip(SWScaleInputCorrector.Names.ChromaVShift).PlacementTarget =
-        this.GetTextBox(SWScaleInputCorrector.Names.ChromaVShift);
+    this.SetPlacementTarget(SWScale.LumaGBlur);
+    this.SetPlacementTarget(SWScale.LumaSharpen);
+    this.SetPlacementTarget(SWScale.ChromaHShift);
+    this.SetPlacementTarget(SWScale.ChromaGBlur);
+    this.SetPlacementTarget(SWScale.ChromaSharpen);
+    this.SetPlacementTarget(SWScale.ChromaVShift);
   }
 
   //===================================================================
-  // SWScaleInputCorrector.Namesをキーとしたメソッド群
+  // SWScaleをキーとしたメソッド群
   //===================================================================
 
-  /// enum->文字列
-  private string GetSWScaleValueString(SWScaleInputCorrector.Names name) {
-    switch (name) {
-      case SWScaleInputCorrector.Names.LumaGBlur: return StringConverter.GetSWScaleLumaGBlurString(App.Profile.CurrentView);
-      case SWScaleInputCorrector.Names.LumaSharpen: return StringConverter.GetSWScaleLumaSharpenString(App.Profile.CurrentView);
-      case SWScaleInputCorrector.Names.ChromaHShift: return StringConverter.GetSWScaleChromaHShiftString(App.Profile.CurrentView);
-      case SWScaleInputCorrector.Names.ChromaGBlur: return StringConverter.GetSWScaleChromaGBlurString(App.Profile.CurrentView);
-      case SWScaleInputCorrector.Names.ChromaSharpen: return StringConverter.GetSWScaleChromaSharpenString(App.Profile.CurrentView);
-      case SWScaleInputCorrector.Names.ChromaVShift: return StringConverter.GetSWScaleChromaVShiftString(App.Profile.CurrentView);
-      default: Debug.Fail("switch"); throw new System.ArgumentException();
-    }
-  }
-  /// enumと値を指定してProfileを変更
-  private void SetSWScaleValue(SWScaleInputCorrector.Names name, float value) {
-    switch (name) {
-      case SWScaleInputCorrector.Names.LumaGBlur: App.Profile.Current.SetSWScaleLumaGBlur = value; break;
-      case SWScaleInputCorrector.Names.LumaSharpen: App.Profile.Current.SetSWScaleLumaSharpen = value; break;
-      case SWScaleInputCorrector.Names.ChromaHShift: App.Profile.Current.SetSWScaleChromaHShift = value; break;
-      case SWScaleInputCorrector.Names.ChromaGBlur: App.Profile.Current.SetSWScaleChromaGBlur = value; break;
-      case SWScaleInputCorrector.Names.ChromaSharpen: App.Profile.Current.SetSWScaleChromaSharpen = value; break;
-      case SWScaleInputCorrector.Names.ChromaVShift: App.Profile.Current.SetSWScaleChromaVShift = value; break;
-      default: Debug.Fail("switch"); throw new System.ArgumentException();
-    }
+  /// TextBoxとToolTipの位置的な関連付け
+  private void SetPlacementTarget(SWScale name) {
+    this.GetToolTip(name).PlacementTarget = this.GetTextBox(name);
   }
   /// enum->TextBox
-  private TextBox GetTextBox(SWScaleInputCorrector.Names name) {
+  private TextBox GetTextBox(SWScale name) {
     switch (name) {
-      case SWScaleInputCorrector.Names.LumaGBlur: return this.SWScaleLumaGBlur;
-      case SWScaleInputCorrector.Names.LumaSharpen: return this.SWScaleLumaSharpen;
-      case SWScaleInputCorrector.Names.ChromaHShift: return this.SWScaleChromaHShift;
-      case SWScaleInputCorrector.Names.ChromaGBlur: return this.SWScaleChromaGBlur;
-      case SWScaleInputCorrector.Names.ChromaSharpen: return this.SWScaleChromaSharpen;
-      case SWScaleInputCorrector.Names.ChromaVShift: return this.SWScaleChromaVShift;
+      case SWScale.LumaGBlur: return this.SWScaleLumaGBlur;
+      case SWScale.LumaSharpen: return this.SWScaleLumaSharpen;
+      case SWScale.ChromaHShift: return this.SWScaleChromaHShift;
+      case SWScale.ChromaGBlur: return this.SWScaleChromaGBlur;
+      case SWScale.ChromaSharpen: return this.SWScaleChromaSharpen;
+      case SWScale.ChromaVShift: return this.SWScaleChromaVShift;
       default: Debug.Fail("switch"); throw new System.ArgumentException();
     }
   }
   /// enum->ToolTip
-  private ToolTip GetToolTip(SWScaleInputCorrector.Names name) {
+  private ToolTip GetToolTip(SWScale name) {
     switch (name) {
-      case SWScaleInputCorrector.Names.LumaGBlur: return this.SWScaleLumaGBlurToolTip;
-      case SWScaleInputCorrector.Names.LumaSharpen: return this.SWScaleLumaSharpenToolTip;
-      case SWScaleInputCorrector.Names.ChromaHShift: return this.SWScaleChromaHShiftToolTip;
-      case SWScaleInputCorrector.Names.ChromaGBlur: return this.SWScaleChromaGBlurToolTip;
-      case SWScaleInputCorrector.Names.ChromaSharpen: return this.SWScaleChromaSharpenToolTip;
-      case SWScaleInputCorrector.Names.ChromaVShift: return this.SWScaleChromaVShiftToolTip;
+      case SWScale.LumaGBlur: return this.SWScaleLumaGBlurToolTip;
+      case SWScale.LumaSharpen: return this.SWScaleLumaSharpenToolTip;
+      case SWScale.ChromaHShift: return this.SWScaleChromaHShiftToolTip;
+      case SWScale.ChromaGBlur: return this.SWScaleChromaGBlurToolTip;
+      case SWScale.ChromaSharpen: return this.SWScaleChromaSharpenToolTip;
+      case SWScale.ChromaVShift: return this.SWScaleChromaVShiftToolTip;
+      default: Debug.Fail("switch"); throw new System.ArgumentException();
+    }
+  }
+
+  //-------------------------------------------------------------------
+
+  /// enum->文字列
+  private string GetSWScaleValueString(SWScale name) {
+    switch (name) {
+      case SWScale.LumaGBlur: return StringConverter.GetSWScaleLumaGBlurString(App.Profile.CurrentView);
+      case SWScale.LumaSharpen: return StringConverter.GetSWScaleLumaSharpenString(App.Profile.CurrentView);
+      case SWScale.ChromaHShift: return StringConverter.GetSWScaleChromaHShiftString(App.Profile.CurrentView);
+      case SWScale.ChromaGBlur: return StringConverter.GetSWScaleChromaGBlurString(App.Profile.CurrentView);
+      case SWScale.ChromaSharpen: return StringConverter.GetSWScaleChromaSharpenString(App.Profile.CurrentView);
+      case SWScale.ChromaVShift: return StringConverter.GetSWScaleChromaVShiftString(App.Profile.CurrentView);
+      default: Debug.Fail("switch"); throw new System.ArgumentException();
+    }
+  }
+  /// enumと値を指定してProfileを変更
+  private void SetSWScaleValue(SWScale name, float value) {
+    switch (name) {
+      case SWScale.LumaGBlur: App.Profile.Current.SetSWScaleLumaGBlur = value; break;
+      case SWScale.LumaSharpen: App.Profile.Current.SetSWScaleLumaSharpen = value; break;
+      case SWScale.ChromaHShift: App.Profile.Current.SetSWScaleChromaHShift = value; break;
+      case SWScale.ChromaGBlur: App.Profile.Current.SetSWScaleChromaGBlur = value; break;
+      case SWScale.ChromaSharpen: App.Profile.Current.SetSWScaleChromaSharpen = value; break;
+      case SWScale.ChromaVShift: App.Profile.Current.SetSWScaleChromaVShift = value; break;
       default: Debug.Fail("switch"); throw new System.ArgumentException();
     }
   }
@@ -119,22 +122,22 @@ public partial class ResizeMethod : UserControl, IBindingProfile {
   //===================================================================
 
   /// enumを指定してTextBoxのエラー状態解除
-  private void ResetError(SWScaleInputCorrector.Names name) {
+  private void ResetError(SWScale name) {
     TextBoxError.ResetError(this.GetTextBox(name), this.GetToolTip(name));
   }
   /// enumを指定してTextBoxのエラー状態設定
-  private void SetError(SWScaleInputCorrector.Names name, string message = null) {
+  private void SetError(SWScale name, string message = null) {
     TextBoxError.SetError(this.GetTextBox(name), this.GetToolTip(name), message);
   }
   /// enumを指定してTextBoxの警告状態設定
-  private void SetWarning(SWScaleInputCorrector.Names name, string message = null) {
+  private void SetWarning(SWScale name, string message = null) {
     TextBoxError.SetWarning(this.GetTextBox(name), this.GetToolTip(name), message);
   }
 
   //-------------------------------------------------------------------
 
   /// enumを指定してレイアウト要素の内容を変更する
-  private void Change(SWScaleInputCorrector.Names target) {
+  private void Change(SWScale target) {
     // Parse
     float value;
     if (!float.TryParse(this.GetTextBox(target).Text, out value)) {
@@ -169,7 +172,7 @@ public partial class ResizeMethod : UserControl, IBindingProfile {
   }
 
   /// enumを指定してレイアウト要素の内容を訂正後に変更する
-  private void Correct(SWScaleInputCorrector.Names target) {
+  private void Correct(SWScale target) {
     // Parse
     float value;
     if (!float.TryParse(this.GetTextBox(target).Text, out value)) {
@@ -234,62 +237,62 @@ public partial class ResizeMethod : UserControl, IBindingProfile {
   /// SWScaleLumaGBlur: KeyDown
   private void SWScaleLumaGBlur_KeyDown(object sender, KeyEventArgs e) {
     if (e.Key != Key.Return && e.Key != Key.Enter) return;
-    this.Correct(SWScaleInputCorrector.Names.LumaGBlur);
+    this.Correct(SWScale.LumaGBlur);
   }
   /// SWScaleChromaGBlur: KeyDown
   private void SWScaleChromaGBlur_KeyDown(object sender, KeyEventArgs e) {
     if (e.Key != Key.Return && e.Key != Key.Enter) return;
-    this.Correct(SWScaleInputCorrector.Names.ChromaGBlur);
+    this.Correct(SWScale.ChromaGBlur);
   }
   /// SWScaleLumaSharpen: KeyDown
   private void SWScaleLumaSharpen_KeyDown(object sender, KeyEventArgs e) {
     if (e.Key != Key.Return && e.Key != Key.Enter) return;
-    this.Correct(SWScaleInputCorrector.Names.LumaSharpen);
+    this.Correct(SWScale.LumaSharpen);
   }
   /// SWScaleChromaSharpen: KeyDown
   private void SWScaleChromaSharpen_KeyDown(object sender, KeyEventArgs e) {
     if (e.Key != Key.Return && e.Key != Key.Enter) return;
-    this.Correct(SWScaleInputCorrector.Names.ChromaSharpen);
+    this.Correct(SWScale.ChromaSharpen);
   }
   /// SWScaleChromaHShift: KeyDown
   private void SWScaleChromaHShift_KeyDown(object sender, KeyEventArgs e) {
     if (e.Key != Key.Return && e.Key != Key.Enter) return;
-    this.Correct(SWScaleInputCorrector.Names.ChromaHShift);
+    this.Correct(SWScale.ChromaHShift);
   }
   /// SWScaleChromaVShift: KeyDown
   private void SWScaleChromaVShift_KeyDown(object sender, KeyEventArgs e) {
     if (e.Key != Key.Return && e.Key != Key.Enter) return;
-    this.Correct(SWScaleInputCorrector.Names.ChromaVShift);
+    this.Correct(SWScale.ChromaVShift);
   }
 
   /// SWScaleLumaGBlur: LostFocus
   private void SWScaleLumaGBlur_LostFocus(object sender, RoutedEventArgs e) {
-    var target = SWScaleInputCorrector.Names.LumaGBlur;
+    var target = SWScale.LumaGBlur;
     this.OverwriteText(target);
   }
   /// SWScaleChromaGBlur: LostFocus
   private void SWScaleChromaGBlur_LostFocus(object sender, RoutedEventArgs e) {
-    var target = SWScaleInputCorrector.Names.ChromaGBlur;
+    var target = SWScale.ChromaGBlur;
     this.OverwriteText(target);
   }
   /// SWScaleLumaSharpen: LostFocus
   private void SWScaleLumaSharpen_LostFocus(object sender, RoutedEventArgs e) {
-    var target = SWScaleInputCorrector.Names.LumaSharpen;
+    var target = SWScale.LumaSharpen;
     this.OverwriteText(target);
   }
   /// SWScaleChromaSharpen: LostFocus
   private void SWScaleChromaSharpen_LostFocus(object sender, RoutedEventArgs e) {
-    var target = SWScaleInputCorrector.Names.ChromaSharpen;
+    var target = SWScale.ChromaSharpen;
     this.OverwriteText(target);
   }
   /// SWScaleChromaHShift: LostFocus
   private void SWScaleChromaHShift_LostFocus(object sender, RoutedEventArgs e) {
-    var target = SWScaleInputCorrector.Names.ChromaHShift;
+    var target = SWScale.ChromaHShift;
     this.OverwriteText(target);
   }
   /// SWScaleChromaVShift: LostFocus
   private void SWScaleChromaVShift_LostFocus(object sender, RoutedEventArgs e) {
-    var target = SWScaleInputCorrector.Names.ChromaVShift;
+    var target = SWScale.ChromaVShift;
     this.OverwriteText(target);
   }
 
@@ -336,13 +339,13 @@ public partial class ResizeMethod : UserControl, IBindingProfile {
   /// SWScaleLumaGBlur: TextChanged
   private void SWScaleLumaGBlur_TextChanged(object sender, TextChangedEventArgs e) {
     if (!this.CanChangeProfile) return;
-    this.Change(SWScaleInputCorrector.Names.LumaGBlur);
+    this.Change(SWScale.LumaGBlur);
   }
 
   /// SWScaleChromaGBlur: TextChanged
   private void SWScaleChromaGBlur_TextChanged(object sender, TextChangedEventArgs e) {
     if (!this.CanChangeProfile) return;
-    this.Change(SWScaleInputCorrector.Names.ChromaGBlur);
+    this.Change(SWScale.ChromaGBlur);
   }
 
   /// SWScaleLumaSharpen: TextChanged
@@ -350,7 +353,7 @@ public partial class ResizeMethod : UserControl, IBindingProfile {
   /// @param e 使用しない
   private void SWScaleLumaSharpen_TextChanged(object sender, TextChangedEventArgs e) {
     if (!this.CanChangeProfile) return;
-    this.Change(SWScaleInputCorrector.Names.LumaSharpen);
+    this.Change(SWScale.LumaSharpen);
   }
 
   /// SWScaleChromaSharpen: TextChanged
@@ -358,7 +361,7 @@ public partial class ResizeMethod : UserControl, IBindingProfile {
   /// @param e 使用しない
   private void SWScaleChromaSharpen_TextChanged(object sender, TextChangedEventArgs e) {
     if (!this.CanChangeProfile) return;
-    this.Change(SWScaleInputCorrector.Names.ChromaSharpen);
+    this.Change(SWScale.ChromaSharpen);
   }
 
   /// SWScaleChromaHShift: TextChanged
@@ -366,7 +369,7 @@ public partial class ResizeMethod : UserControl, IBindingProfile {
   /// @param e 使用しない
   private void SWScaleChromaHShift_TextChanged(object sender, TextChangedEventArgs e) {
     if (!this.CanChangeProfile) return;
-    this.Change(SWScaleInputCorrector.Names.ChromaHShift);
+    this.Change(SWScale.ChromaHShift);
   }
 
   /// SWScaleChromaVShift: TextChanged
@@ -374,7 +377,7 @@ public partial class ResizeMethod : UserControl, IBindingProfile {
   /// @param e 使用しない
   private void SWScaleChromaVShift_TextChanged(object sender, TextChangedEventArgs e) {
     if (!this.CanChangeProfile) return;
-    this.Change(SWScaleInputCorrector.Names.ChromaVShift);
+    this.Change(SWScale.ChromaVShift);
   }
 
   //===================================================================
@@ -382,7 +385,7 @@ public partial class ResizeMethod : UserControl, IBindingProfile {
   //===================================================================
 
   /// enumを指定して、イベントハンドラの実行なしにTextBox.Textを置き換える
-  private void OverwriteText(SWScaleInputCorrector.Names name) {
+  private void OverwriteText(SWScale name) {
     this.CanChangeProfile = false;
 
     var textBox = this.GetTextBox(name);

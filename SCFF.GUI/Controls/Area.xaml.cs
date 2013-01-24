@@ -20,6 +20,7 @@
 
 namespace SCFF.GUI.Controls {
 
+using System;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
@@ -28,6 +29,8 @@ using System.Windows.Media;
 using SCFF.Common;
 using SCFF.Common.GUI;
 using SCFF.Common.Profile;
+// 型名が長すぎるので省略
+using Clipping = SCFF.Common.Profile.ClippingInputCorrector.Names;
 
 /// クリッピング領域設定用UserControl
 public partial class Area : UserControl, IBindingProfile {
@@ -40,57 +43,60 @@ public partial class Area : UserControl, IBindingProfile {
     InitializeComponent();
     
     // HACK!: PlacementTargetが上手く動かないのでここで設定する
-    this.GetToolTip(ClippingInputCorrector.Names.X).PlacementTarget =
-        this.GetTextBox(ClippingInputCorrector.Names.X);
-    this.GetToolTip(ClippingInputCorrector.Names.Y).PlacementTarget =
-        this.GetTextBox(ClippingInputCorrector.Names.Y);
-    this.GetToolTip(ClippingInputCorrector.Names.Width).PlacementTarget =
-        this.GetTextBox(ClippingInputCorrector.Names.Width);
-    this.GetToolTip(ClippingInputCorrector.Names.Height).PlacementTarget =
-        this.GetTextBox(ClippingInputCorrector.Names.Height);
+    this.SetPlacementTarget(Clipping.X);
+    this.SetPlacementTarget(Clipping.Y);
+    this.SetPlacementTarget(Clipping.Width);
+    this.SetPlacementTarget(Clipping.Height);
   }
 
   //===================================================================
-  // RectPropertiesをキーとしたメソッド群
+  // Clippingをキーとしたメソッド群
   //===================================================================
 
-  /// Rectのプロパティ名->Clipping*文字列
-  private string GetClippingValueString(ClippingInputCorrector.Names name) {
+  /// TextBoxとToolTipの位置的な関連付け
+  private void SetPlacementTarget(Clipping name) {
+    this.GetToolTip(name).PlacementTarget = this.GetTextBox(name);
+  }
+  /// enum->TextBox
+  private TextBox GetTextBox(Clipping name) {
     switch (name) {
-      case ClippingInputCorrector.Names.X: return StringConverter.GetClippingXString(App.Profile.CurrentView);
-      case ClippingInputCorrector.Names.Y: return StringConverter.GetClippingYString(App.Profile.CurrentView);
-      case ClippingInputCorrector.Names.Width: return StringConverter.GetClippingWidthString(App.Profile.CurrentView);
-      case ClippingInputCorrector.Names.Height: return StringConverter.GetClippingHeightString(App.Profile.CurrentView);
+      case Clipping.X: return this.ClippingX;
+      case Clipping.Y: return this.ClippingY;
+      case Clipping.Width: return this.ClippingWidth;
+      case Clipping.Height: return this.ClippingHeight;
       default: Debug.Fail("switch"); throw new System.ArgumentException();
     }
   }
-  /// Rectのプロパティ名と値を指定してClipping*WithoutFitを変更
-  private void SetClippingValue(ClippingInputCorrector.Names name, int value) {
+  /// enum->ToolTip
+  private ToolTip GetToolTip(Clipping name) {
     switch (name) {
-      case ClippingInputCorrector.Names.X: App.Profile.Current.SetClippingXWithoutFit = value; break;
-      case ClippingInputCorrector.Names.Y: App.Profile.Current.SetClippingYWithoutFit = value; break;
-      case ClippingInputCorrector.Names.Width: App.Profile.Current.SetClippingWidthWithoutFit = value; break;
-      case ClippingInputCorrector.Names.Height: App.Profile.Current.SetClippingHeightWithoutFit = value; break;
+      case Clipping.X: return this.ClippingXToolTip;
+      case Clipping.Y: return this.ClippingYToolTip;
+      case Clipping.Width: return this.ClippingWidthToolTip;
+      case Clipping.Height: return this.ClippingHeightToolTip;
       default: Debug.Fail("switch"); throw new System.ArgumentException();
     }
   }
-  /// Rectのプロパティ名->TextBox
-  private TextBox GetTextBox(ClippingInputCorrector.Names name) {
+
+  //-------------------------------------------------------------------
+
+  /// enum->文字列
+  private string GetClippingValueString(Clipping name) {
     switch (name) {
-      case ClippingInputCorrector.Names.X: return this.ClippingX;
-      case ClippingInputCorrector.Names.Y: return this.ClippingY;
-      case ClippingInputCorrector.Names.Width: return this.ClippingWidth;
-      case ClippingInputCorrector.Names.Height: return this.ClippingHeight;
+      case Clipping.X: return StringConverter.GetClippingXString(App.Profile.CurrentView);
+      case Clipping.Y: return StringConverter.GetClippingYString(App.Profile.CurrentView);
+      case Clipping.Width: return StringConverter.GetClippingWidthString(App.Profile.CurrentView);
+      case Clipping.Height: return StringConverter.GetClippingHeightString(App.Profile.CurrentView);
       default: Debug.Fail("switch"); throw new System.ArgumentException();
     }
   }
-  /// Rectのプロパティ名->ToolTip
-  private ToolTip GetToolTip(ClippingInputCorrector.Names name) {
+  /// enumと値を指定してProfileを変更
+  private void SetClippingValue(Clipping name, int value) {
     switch (name) {
-      case ClippingInputCorrector.Names.X: return this.ClippingXToolTip;
-      case ClippingInputCorrector.Names.Y: return this.ClippingYToolTip;
-      case ClippingInputCorrector.Names.Width: return this.ClippingWidthToolTip;
-      case ClippingInputCorrector.Names.Height: return this.ClippingHeightToolTip;
+      case Clipping.X: App.Profile.Current.SetClippingXWithoutFit = value; break;
+      case Clipping.Y: App.Profile.Current.SetClippingYWithoutFit = value; break;
+      case Clipping.Width: App.Profile.Current.SetClippingWidthWithoutFit = value; break;
+      case Clipping.Height: App.Profile.Current.SetClippingHeightWithoutFit = value; break;
       default: Debug.Fail("switch"); throw new System.ArgumentException();
     }
   }
@@ -99,23 +105,23 @@ public partial class Area : UserControl, IBindingProfile {
   // 入力エラー処理
   //===================================================================
 
-  /// Rectのプロパティ名を指定してTextBoxのエラー状態解除
-  private void ResetError(ClippingInputCorrector.Names name) {
+  /// enumを指定してTextBoxのエラー状態解除
+  private void ResetError(Clipping name) {
     TextBoxError.ResetError(this.GetTextBox(name), this.GetToolTip(name));
   }
-  /// Rectのプロパティ名を指定してTextBoxのエラー状態設定
-  private void SetError(ClippingInputCorrector.Names name, string message = null) {
+  /// enumを指定してTextBoxのエラー状態設定
+  private void SetError(Clipping name, string message = null) {
     TextBoxError.SetError(this.GetTextBox(name), this.GetToolTip(name), message);
   }
-  /// Rectのプロパティ名を指定してTextBoxの警告状態設定
-  private void SetWarning(ClippingInputCorrector.Names name, string message = null) {
+  /// enumを指定してTextBoxの警告状態設定
+  private void SetWarning(Clipping name, string message = null) {
     TextBoxError.SetWarning(this.GetTextBox(name), this.GetToolTip(name), message);
   }
 
   //-------------------------------------------------------------------
 
-  /// Rectのプロパティ名を指定してレイアウト要素の内容を変更する
-  private void Change(ClippingInputCorrector.Names target) {
+  /// enumを指定してレイアウト要素の内容を変更する
+  private void Change(Clipping target) {
     var dependent = ClippingInputCorrector.GetDependent(target);
 
     // Parse
@@ -171,8 +177,8 @@ public partial class Area : UserControl, IBindingProfile {
     //---------------------------------------------------------------
   }
 
-  /// Rectのプロパティ名を指定してレイアウト要素の内容を訂正後に変更する
-  private void Correct(ClippingInputCorrector.Names target) {
+  /// enumを指定してレイアウト要素の内容を訂正後に変更する
+  private void Correct(Clipping target) {
     var dependent = ClippingInputCorrector.GetDependent(target);
 
     // Parse
@@ -377,48 +383,48 @@ public partial class Area : UserControl, IBindingProfile {
   /// ClippingX: KeyDown
   private void ClippingX_KeyDown(object sender, KeyEventArgs e) {
     if (e.Key != Key.Return && e.Key != Key.Enter) return;
-    this.Correct(ClippingInputCorrector.Names.X);
+    this.Correct(Clipping.X);
   }
   /// ClippingY: KeyDown
   private void ClippingY_KeyDown(object sender, KeyEventArgs e) {
     if (e.Key != Key.Return && e.Key != Key.Enter) return;
-    this.Correct(ClippingInputCorrector.Names.Y);
+    this.Correct(Clipping.Y);
   }
   /// ClippingWidth: KeyDown
   private void ClippingWidth_KeyDown(object sender, KeyEventArgs e) {
     if (e.Key != Key.Return && e.Key != Key.Enter) return;
-    this.Correct(ClippingInputCorrector.Names.Width);
+    this.Correct(Clipping.Width);
   }
   /// ClippingHeight: KeyDown
   private void ClippingHeight_KeyDown(object sender, KeyEventArgs e) {
     if (e.Key != Key.Return && e.Key != Key.Enter) return;
-    this.Correct(ClippingInputCorrector.Names.Height);
+    this.Correct(Clipping.Height);
   }
 
   /// ClippingX: LostFocus
   private void ClippingX_LostFocus(object sender, RoutedEventArgs e) {
-    var target = ClippingInputCorrector.Names.X;
+    var target = Clipping.X;
     var dependent = ClippingInputCorrector.GetDependent(target);
     this.OverwriteText(target);
     this.ResetError(dependent);
   }
   /// ClippingY: LostFocus
   private void ClippingY_LostFocus(object sender, RoutedEventArgs e) {
-    var target = ClippingInputCorrector.Names.Y;
+    var target = Clipping.Y;
     var dependent = ClippingInputCorrector.GetDependent(target);
     this.OverwriteText(target);
     this.ResetError(dependent);
   }
   /// ClippingWidth: LostFocus
   private void ClippingWidth_LostFocus(object sender, RoutedEventArgs e) {
-    var target = ClippingInputCorrector.Names.Width;
+    var target = Clipping.Width;
     var dependent = ClippingInputCorrector.GetDependent(target);
     this.OverwriteText(target);
     this.ResetError(dependent);
   }
   /// ClippingHeight: LostFocus
   private void ClippingHeight_LostFocus(object sender, RoutedEventArgs e) {
-    var target = ClippingInputCorrector.Names.Height;
+    var target = Clipping.Height;
     var dependent = ClippingInputCorrector.GetDependent(target);
     this.OverwriteText(target);
     this.ResetError(dependent);
@@ -451,30 +457,30 @@ public partial class Area : UserControl, IBindingProfile {
   /// ClippingX: TextChanged
   private void ClippingX_TextChanged(object sender, TextChangedEventArgs e) {
     if (!this.CanChangeProfile) return;
-    this.Change(ClippingInputCorrector.Names.X);
+    this.Change(Clipping.X);
   }
   /// ClippingY: TextChanged
   private void ClippingY_TextChanged(object sender, TextChangedEventArgs e) {
     if (!this.CanChangeProfile) return;
-    this.Change(ClippingInputCorrector.Names.Y);
+    this.Change(Clipping.Y);
   }
   /// ClippingWidth: TextChanged
   private void ClippingWidth_TextChanged(object sender, TextChangedEventArgs e) {
     if (!this.CanChangeProfile) return;
-    this.Change(ClippingInputCorrector.Names.Width);
+    this.Change(Clipping.Width);
   }
   /// ClippingHeight: TextChanged
   private void ClippingHeight_TextChanged(object sender, TextChangedEventArgs e) {
     if (!this.CanChangeProfile) return;
-    this.Change(ClippingInputCorrector.Names.Height);
+    this.Change(Clipping.Height);
   }
 
   //===================================================================
   // IBindingProfileの実装
   //===================================================================
 
-  /// Rectのプロパティ名を指定して、イベントハンドラの実行なしにTextBox.Textを置き換える
-  private void OverwriteText(ClippingInputCorrector.Names name) {
+  /// enumを指定して、イベントハンドラの実行なしにTextBox.Textを置き換える
+  private void OverwriteText(Clipping name) {
     this.CanChangeProfile = false;
 
     var textBox = this.GetTextBox(name);
@@ -520,10 +526,10 @@ public partial class Area : UserControl, IBindingProfile {
     this.ClippingY.Text = StringConverter.GetClippingYString(App.Profile.CurrentView);
     this.ClippingWidth.Text = StringConverter.GetClippingWidthString(App.Profile.CurrentView);
     this.ClippingHeight.Text = StringConverter.GetClippingHeightString(App.Profile.CurrentView);
-    this.ResetError(ClippingInputCorrector.Names.X);
-    this.ResetError(ClippingInputCorrector.Names.Y);
-    this.ResetError(ClippingInputCorrector.Names.Width);
-    this.ResetError(ClippingInputCorrector.Names.Height);
+    this.ResetError(Clipping.X);
+    this.ResetError(Clipping.Y);
+    this.ResetError(Clipping.Width);
+    this.ResetError(Clipping.Height);
 
     this.CanChangeProfile = true;
   }

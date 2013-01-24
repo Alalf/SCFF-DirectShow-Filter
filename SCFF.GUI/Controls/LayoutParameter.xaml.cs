@@ -27,6 +27,8 @@ using System.Windows.Input;
 using SCFF.Common;
 using SCFF.Common.GUI;
 using SCFF.Common.Profile;
+// 型名が長すぎるので省略
+using BoundRelative = SCFF.Common.Profile.BoundRelativeInputCorrector.Names;
 
 /// 数値を指定してレイアウト配置を調整するためのUserControl
 /// @todo(me) InputValidationが甘すぎるので何とかする
@@ -41,57 +43,60 @@ public partial class LayoutParameter
     InitializeComponent();
 
     // HACK!: PlacementTargetが上手く動かないのでここで設定する
-    this.GetToolTip(BoundRelativeInputCorrector.Names.Left).PlacementTarget =
-        this.GetTextBox(BoundRelativeInputCorrector.Names.Left);
-    this.GetToolTip(BoundRelativeInputCorrector.Names.Top).PlacementTarget =
-        this.GetTextBox(BoundRelativeInputCorrector.Names.Top);
-    this.GetToolTip(BoundRelativeInputCorrector.Names.Right).PlacementTarget =
-        this.GetTextBox(BoundRelativeInputCorrector.Names.Right);
-    this.GetToolTip(BoundRelativeInputCorrector.Names.Bottom).PlacementTarget =
-        this.GetTextBox(BoundRelativeInputCorrector.Names.Bottom);
+    this.SetPlacementTarget(BoundRelative.Left);
+    this.SetPlacementTarget(BoundRelative.Top);
+    this.SetPlacementTarget(BoundRelative.Right);
+    this.SetPlacementTarget(BoundRelative.Bottom);
   }
 
   //===================================================================
-  // BoundRelativeInputCorrector.Namesをキーとしたメソッド群
+  // BoundRelativeをキーとしたメソッド群
   //===================================================================
 
-  /// enum->文字列
-  private string GetBoundRelativeValueString(BoundRelativeInputCorrector.Names name) {
-    switch (name) {
-      case BoundRelativeInputCorrector.Names.Left: return StringConverter.GetBoundRelativeLeftString(App.Profile.CurrentView);
-      case BoundRelativeInputCorrector.Names.Top: return StringConverter.GetBoundRelativeTopString(App.Profile.CurrentView);
-      case BoundRelativeInputCorrector.Names.Right: return StringConverter.GetBoundRelativeRightString(App.Profile.CurrentView);
-      case BoundRelativeInputCorrector.Names.Bottom: return StringConverter.GetBoundRelativeBottomString(App.Profile.CurrentView);
-      default: Debug.Fail("switch"); throw new System.ArgumentException();
-    }
-  }
-  /// enumと値を指定してProfileを変更
-  private void SetBoundRelativeValue(BoundRelativeInputCorrector.Names name, double value) {
-    switch (name) {
-      case BoundRelativeInputCorrector.Names.Left: App.Profile.Current.SetBoundRelativeLeft = value; break;
-      case BoundRelativeInputCorrector.Names.Top: App.Profile.Current.SetBoundRelativeTop = value; break;
-      case BoundRelativeInputCorrector.Names.Right: App.Profile.Current.SetBoundRelativeRight = value; break;
-      case BoundRelativeInputCorrector.Names.Bottom: App.Profile.Current.SetBoundRelativeBottom = value; break;
-      default: Debug.Fail("switch"); throw new System.ArgumentException();
-    }
+  /// TextBoxとToolTipの位置的な関連付け
+  private void SetPlacementTarget(BoundRelative name) {
+    this.GetToolTip(name).PlacementTarget = this.GetTextBox(name);
   }
   /// enum->TextBox
-  private TextBox GetTextBox(BoundRelativeInputCorrector.Names name) {
+  private TextBox GetTextBox(BoundRelative name) {
     switch (name) {
-      case BoundRelativeInputCorrector.Names.Left: return this.BoundRelativeLeft;
-      case BoundRelativeInputCorrector.Names.Top: return this.BoundRelativeTop;
-      case BoundRelativeInputCorrector.Names.Right: return this.BoundRelativeRight;
-      case BoundRelativeInputCorrector.Names.Bottom: return this.BoundRelativeBottom;
+      case BoundRelative.Left: return this.BoundRelativeLeft;
+      case BoundRelative.Top: return this.BoundRelativeTop;
+      case BoundRelative.Right: return this.BoundRelativeRight;
+      case BoundRelative.Bottom: return this.BoundRelativeBottom;
       default: Debug.Fail("switch"); throw new System.ArgumentException();
     }
   }
   /// enum->ToolTip
-  private ToolTip GetToolTip(BoundRelativeInputCorrector.Names name) {
+  private ToolTip GetToolTip(BoundRelative name) {
     switch (name) {
-      case BoundRelativeInputCorrector.Names.Left: return this.BoundRelativeLeftToolTip;
-      case BoundRelativeInputCorrector.Names.Top: return this.BoundRelativeTopToolTip;
-      case BoundRelativeInputCorrector.Names.Right: return this.BoundRelativeRightToolTip;
-      case BoundRelativeInputCorrector.Names.Bottom: return this.BoundRelativeBottomToolTip;
+      case BoundRelative.Left: return this.BoundRelativeLeftToolTip;
+      case BoundRelative.Top: return this.BoundRelativeTopToolTip;
+      case BoundRelative.Right: return this.BoundRelativeRightToolTip;
+      case BoundRelative.Bottom: return this.BoundRelativeBottomToolTip;
+      default: Debug.Fail("switch"); throw new System.ArgumentException();
+    }
+  }
+
+  //-------------------------------------------------------------------
+
+  /// enum->文字列
+  private string GetBoundRelativeValueString(BoundRelative name) {
+    switch (name) {
+      case BoundRelative.Left: return StringConverter.GetBoundRelativeLeftString(App.Profile.CurrentView);
+      case BoundRelative.Top: return StringConverter.GetBoundRelativeTopString(App.Profile.CurrentView);
+      case BoundRelative.Right: return StringConverter.GetBoundRelativeRightString(App.Profile.CurrentView);
+      case BoundRelative.Bottom: return StringConverter.GetBoundRelativeBottomString(App.Profile.CurrentView);
+      default: Debug.Fail("switch"); throw new System.ArgumentException();
+    }
+  }
+  /// enumと値を指定してProfileを変更
+  private void SetBoundRelativeValue(BoundRelative name, double value) {
+    switch (name) {
+      case BoundRelative.Left: App.Profile.Current.SetBoundRelativeLeft = value; break;
+      case BoundRelative.Top: App.Profile.Current.SetBoundRelativeTop = value; break;
+      case BoundRelative.Right: App.Profile.Current.SetBoundRelativeRight = value; break;
+      case BoundRelative.Bottom: App.Profile.Current.SetBoundRelativeBottom = value; break;
       default: Debug.Fail("switch"); throw new System.ArgumentException();
     }
   }
@@ -101,22 +106,22 @@ public partial class LayoutParameter
   //===================================================================
 
   /// enumを指定してTextBoxのエラー状態解除
-  private void ResetError(BoundRelativeInputCorrector.Names name) {
+  private void ResetError(BoundRelative name) {
     TextBoxError.ResetError(this.GetTextBox(name), this.GetToolTip(name));
   }
   /// enumを指定してTextBoxのエラー状態設定
-  private void SetError(BoundRelativeInputCorrector.Names name, string message = null) {
+  private void SetError(BoundRelative name, string message = null) {
     TextBoxError.SetError(this.GetTextBox(name), this.GetToolTip(name), message);
   }
   /// enumを指定してTextBoxの警告状態設定
-  private void SetWarning(BoundRelativeInputCorrector.Names name, string message = null) {
+  private void SetWarning(BoundRelative name, string message = null) {
     TextBoxError.SetWarning(this.GetTextBox(name), this.GetToolTip(name), message);
   }
 
   //-------------------------------------------------------------------
 
   /// enumを指定してレイアウト要素の内容を変更する
-  private void Change(BoundRelativeInputCorrector.Names target) {
+  private void Change(BoundRelative target) {
     var dependent = BoundRelativeInputCorrector.GetDependent(target);
 
     // Parse
@@ -173,7 +178,7 @@ public partial class LayoutParameter
   }
 
   /// enumを指定してレイアウト要素の内容を訂正後に変更する
-  private void Correct(BoundRelativeInputCorrector.Names target) {
+  private void Correct(BoundRelative target) {
     var dependent = BoundRelativeInputCorrector.GetDependent(target);
 
     // Parse
@@ -235,48 +240,48 @@ public partial class LayoutParameter
   /// BoundRelativeLeft: KeyDown
   private void BoundRelativeLeft_KeyDown(object sender, KeyEventArgs e) {
     if (e.Key != Key.Return && e.Key != Key.Enter) return;
-    this.Correct(BoundRelativeInputCorrector.Names.Left);
+    this.Correct(BoundRelative.Left);
   }
   /// BoundRelativeTop: KeyDown
   private void BoundRelativeTop_KeyDown(object sender, KeyEventArgs e) {
     if (e.Key != Key.Return && e.Key != Key.Enter) return;
-    this.Correct(BoundRelativeInputCorrector.Names.Top);
+    this.Correct(BoundRelative.Top);
   }
   /// BoundRelativeRight: KeyDown
   private void BoundRelativeRight_KeyDown(object sender, KeyEventArgs e) {
     if (e.Key != Key.Return && e.Key != Key.Enter) return;
-    this.Correct(BoundRelativeInputCorrector.Names.Right);
+    this.Correct(BoundRelative.Right);
   }
   /// BoundRelativeBottom: KeyDown
   private void BoundRelativeBottom_KeyDown(object sender, KeyEventArgs e) {
     if (e.Key != Key.Return && e.Key != Key.Enter) return;
-    this.Correct(BoundRelativeInputCorrector.Names.Bottom);
+    this.Correct(BoundRelative.Bottom);
   }
 
   /// BoundRelativeLeft: LostFocus
   private void BoundRelativeLeft_LostFocus(object sender, RoutedEventArgs e) {
-    var target = BoundRelativeInputCorrector.Names.Left;
+    var target = BoundRelative.Left;
     var dependent = BoundRelativeInputCorrector.GetDependent(target);
     this.OverwriteText(target);
     this.ResetError(dependent);
   }
   /// BoundRelativeTop: LostFocus
   private void BoundRelativeTop_LostFocus(object sender, RoutedEventArgs e) {
-    var target = BoundRelativeInputCorrector.Names.Top;
+    var target = BoundRelative.Top;
     var dependent = BoundRelativeInputCorrector.GetDependent(target);
     this.OverwriteText(target);
     this.ResetError(dependent);
   }
   /// BoundRelativeRight: LostFocus
   private void BoundRelativeRight_LostFocus(object sender, RoutedEventArgs e) {
-    var target = BoundRelativeInputCorrector.Names.Right;
+    var target = BoundRelative.Right;
     var dependent = BoundRelativeInputCorrector.GetDependent(target);
     this.OverwriteText(target);
     this.ResetError(dependent);
   }
   /// BoundRelativeBottom: LostFocus
   private void BoundRelativeBottom_LostFocus(object sender, RoutedEventArgs e) {
-    var target = BoundRelativeInputCorrector.Names.Bottom;
+    var target = BoundRelative.Bottom;
     var dependent = BoundRelativeInputCorrector.GetDependent(target);
     this.OverwriteText(target);
     this.ResetError(dependent);
@@ -293,22 +298,22 @@ public partial class LayoutParameter
   /// BoundRelativeLeft: TextChanged
   private void BoundRelativeLeft_TextChanged(object sender, TextChangedEventArgs e) {
     if (!this.CanChangeProfile) return;
-    this.Change(BoundRelativeInputCorrector.Names.Left);
+    this.Change(BoundRelative.Left);
   }
   /// BoundRelativeTop: TextChanged
   private void BoundRelativeTop_TextChanged(object sender, TextChangedEventArgs e) {
     if (!this.CanChangeProfile) return;
-    this.Change(BoundRelativeInputCorrector.Names.Top);
+    this.Change(BoundRelative.Top);
   }
   /// BoundRelativeRight: TextChanged
   private void BoundRelativeRight_TextChanged(object sender, TextChangedEventArgs e) {
     if (!this.CanChangeProfile) return;
-    this.Change(BoundRelativeInputCorrector.Names.Right);
+    this.Change(BoundRelative.Right);
   }
   /// BoundRelativeBottom: TextChanged
   private void BoundRelativeBottom_TextChanged(object sender, TextChangedEventArgs e) {
     if (!this.CanChangeProfile) return;
-    this.Change(BoundRelativeInputCorrector.Names.Bottom);
+    this.Change(BoundRelative.Bottom);
   }
 
   //===================================================================
@@ -329,7 +334,7 @@ public partial class LayoutParameter
   //===================================================================
 
   /// enumを指定して、イベントハンドラの実行なしにTextBox.Textを置き換える
-  private void OverwriteText(BoundRelativeInputCorrector.Names name) {
+  private void OverwriteText(BoundRelative name) {
     this.CanChangeProfile = false;
 
     var textBox = this.GetTextBox(name);
@@ -388,10 +393,10 @@ public partial class LayoutParameter
     this.BoundRelativeTop.Text = StringConverter.GetBoundRelativeTopString(App.Profile.CurrentView);
     this.BoundRelativeRight.Text = StringConverter.GetBoundRelativeRightString(App.Profile.CurrentView);
     this.BoundRelativeBottom.Text = StringConverter.GetBoundRelativeBottomString(App.Profile.CurrentView);
-    this.ResetError(BoundRelativeInputCorrector.Names.Left);
-    this.ResetError(BoundRelativeInputCorrector.Names.Top);
-    this.ResetError(BoundRelativeInputCorrector.Names.Right);
-    this.ResetError(BoundRelativeInputCorrector.Names.Bottom);
+    this.ResetError(BoundRelative.Left);
+    this.ResetError(BoundRelative.Top);
+    this.ResetError(BoundRelative.Right);
+    this.ResetError(BoundRelative.Bottom);
 
     this.CanChangeProfile = true;
   }

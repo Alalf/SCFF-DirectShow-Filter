@@ -1780,15 +1780,17 @@
 
   <!-- 2013/01/23 Modified by Alalf -->
   <Style TargetType="{x:Type ContextMenu}">
-    <Setter Property="Background" Value="{DynamicResource ControlBackgroundBrush}" />
-    <Setter Property="BorderBrush" Value="{DynamicResource NormalBorderBrush}" />
+    <Setter Property="Background" Value="{DynamicResource LightBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource SolidBorderBrush}" />
+    <Setter Property="BorderThickness" Value="1" />
     <Setter Property="SnapsToDevicePixels" Value="True" />
     <Setter Property="Template">
       <Setter.Value>
         <ControlTemplate TargetType="{x:Type ContextMenu}">
           <Grid>
-            <Border Margin="1" x:Name="Border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" />
-            <StackPanel Background="{TemplateBinding Background}" IsItemsHost="True" ClipToBounds="True"/>
+            <Border Margin="1" x:Name="Border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+              <StackPanel Background="{TemplateBinding Background}" IsItemsHost="True" ClipToBounds="True"/>
+            </Border>
           </Grid>
           <ControlTemplate.Triggers>
             <Trigger Property="IsEnabled" Value="False">
@@ -1809,7 +1811,7 @@
       <Setter.Value>
         <ControlTemplate TargetType="{x:Type Menu}">
           <Grid>
-            <Border Margin="1" x:Name="Border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" />
+            <Border Margin="1" x:Name="Border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}"/>
             <StackPanel Background="{TemplateBinding Background}" IsItemsHost="True" ClipToBounds="True" Orientation="Horizontal" />
           </Grid>
           <ControlTemplate.Triggers>
@@ -1869,11 +1871,8 @@
               </Grid>
               <Popup IsOpen="{Binding Path=IsSubmenuOpen, RelativeSource={RelativeSource TemplatedParent}}" Placement="Right" x:Name="SubMenuPopup" Focusable="false" AllowsTransparency="true" PopupAnimation="{DynamicResource {x:Static SystemParameters.MenuPopupAnimationKey}}">
                 <Grid x:Name="SubMenu">
-                  <Border x:Name="SubMenuBorder" Background="{DynamicResource LightBrush}" BorderThickness="1" Opacity="0.8">
-                    <Border.BorderBrush>
-                      <SolidColorBrush Color="{DynamicResource WhiteColor}" />
-                    </Border.BorderBrush>
-                  </Border>
+                  <!-- 2013/01/24 Modified By Alalf -->
+                  <Border x:Name="SubMenuBorder" BorderBrush="{DynamicResource SolidBorderBrush}" Background="{DynamicResource LightBrush}" BorderThickness="1"/>
                   <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Cycle" />
                 </Grid>
               </Popup>

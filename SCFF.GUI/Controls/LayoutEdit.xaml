@@ -11,7 +11,7 @@
          MouseMove="LayoutEditImage_MouseMove"
          MouseUp="LayoutEditImage_MouseUp">
     <Image.ContextMenu>
-      <ContextMenu x:Name="LayoutEditMenu" FontSize="9" Background="{DynamicResource ControlBackgroundBrush}">
+      <ContextMenu x:Name="LayoutEditMenu" FontSize="9">
         <MenuItem Header="Add" Command="{x:Static local:Commands.AddLayoutElement}"
                   CommandTarget="{Binding Path=PlacementTarget,
                       RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"/>

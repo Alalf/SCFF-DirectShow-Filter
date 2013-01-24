@@ -113,6 +113,8 @@ public partial class LayoutEdit
 
   /// レイアウト要素のヘッダーの生成
   /// @param layoutElement 対象のレイアウト要素
+  /// @param boundRect ヘッダー表示領域
+  /// @param textBrush テキスト描画用ブラシ
   /// @return DrawingContext.DrawTextで描画可能なDrawingVisualオブジェクト
   private FormattedText CreateHeader(ILayoutElementView layoutElement,
       Rect boundRect, Brush textBrush) {

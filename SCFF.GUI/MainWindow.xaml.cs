@@ -519,38 +519,43 @@ public partial class MainWindow
 
   //-------------------------------------------------------------------
 
+  /// @copybrief Commands::AddLayoutElement
+  /// @param sender 使用しない
+  /// @param e 使用しない
   private void OnAddLayoutElement(object sender, ExecutedRoutedEventArgs e) {
     App.Profile.Add();
-
-    //-----------------------------------------------------------------
-    // Notify self
     // tabの選択を変えないといけないので全てに通知
     this.NotifyProfileChanged();
-    // Notify other controls
-    //-----------------------------------------------------------------
   }
 
-  /// @warning CanExecuteは処理負荷が高いのであまり使いたくないがしょうがない
+  /// @copybrief Commands::AddLayoutElement
+  /// @warning CanExecuteは処理負荷が高い
+  /// @param sender 使用しない
+  /// @param e 実行可能かどうかをCanExecuteに設定可能
   private void CanAddLayoutElement(object sender, CanExecuteRoutedEventArgs e) {
     e.CanExecute = App.Profile.CanAdd;
   }
 
+  /// @copybrief Commands::RemoveCurrentLayoutElement
+  /// @param sender 使用しない
+  /// @param e 使用しない
   private void OnRemoveCurrentLayoutElement(object sender, ExecutedRoutedEventArgs e) {
     App.Profile.RemoveCurrent();
-
-    //-----------------------------------------------------------------
-    // Notify self
     // tabの選択を変えないといけないので全てに通知
     this.NotifyProfileChanged();
-    // Notify other controls
-    //-----------------------------------------------------------------
   }
 
-  /// @warning CanExecuteは処理負荷が高いのであまり使いたくないがしょうがない
+  /// @copybrief Commands::RemoveCurrentLayoutElement
+  /// @warning CanExecuteは処理負荷が高い
+  /// @param sender 使用しない
+  /// @param e 実行可能かどうかをCanExecuteに設定可能
   private void CanRemoveCurrentLayoutElement(object sender, CanExecuteRoutedEventArgs e) {
     e.CanExecute = App.Profile.CanRemoveCurrent;
   }
 
+  /// @copybrief Commands::FitCurrentBoundRect
+  /// @param sender 使用しない
+  /// @param e 使用しない
   private void OnFitCurrentBoundRect(object sender, ExecutedRoutedEventArgs e) {
     if (!App.Profile.CurrentView.IsWindowValid) {
       Debug.WriteLine("Invalid Window", "[Command] FitCurrentBoundRect");

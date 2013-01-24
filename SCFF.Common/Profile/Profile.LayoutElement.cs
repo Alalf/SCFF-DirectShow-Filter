@@ -115,20 +115,7 @@ public class LayoutElement : ILayoutElementView, ILayoutElement {
 
   /// @copydoc ILayoutElementView::Window
   public UIntPtr Window {
-    get {
-      switch (this.WindowType) {
-        case WindowTypes.Normal: {
-          return (UIntPtr)this.profile.message.LayoutParameters[this.Index].Window;
-        }
-        case WindowTypes.DesktopListView: {
-          return Utilities.DesktopListViewWindow;
-        }
-        case WindowTypes.Desktop: {
-          return User32.GetDesktopWindow();
-        }
-        default: Debug.Fail("switch"); throw new System.ArgumentException();
-      }
-    }
+    get { return (UIntPtr)this.profile.message.LayoutParameters[this.Index].Window; }
   }
 
   /// @copydoc ILayoutElementView::IsWindowValid
@@ -164,7 +151,7 @@ public class LayoutElement : ILayoutElementView, ILayoutElement {
     this.profile.additionalLayoutParameters[this.Index].WindowType = WindowTypes.Normal;
     this.profile.message.LayoutParameters[this.Index].Window = window.ToUInt64();
 
-    var windowCaption = "*** INVALID WINDOW ***";
+    var windowCaption = "n/a";
     if (window != UIntPtr.Zero && User32.IsWindow(window)) {
       StringBuilder className = new StringBuilder(256);
       User32.GetClassName(window, className, 256);
@@ -181,7 +168,7 @@ public class LayoutElement : ILayoutElementView, ILayoutElement {
     var windowChanged = this.WindowType != WindowTypes.Desktop;
 
     this.profile.additionalLayoutParameters[this.Index].WindowType = WindowTypes.Desktop;
-    this.profile.message.LayoutParameters[this.Index].Window = 0;
+    this.profile.message.LayoutParameters[this.Index].Window = User32.GetDesktopWindow().ToUInt64();
     this.profile.additionalLayoutParameters[this.Index].WindowCaption = "(Desktop)";
 
     if (windowChanged) {
@@ -193,7 +180,7 @@ public class LayoutElement : ILayoutElementView, ILayoutElement {
     var windowChanged = this.WindowType != WindowTypes.DesktopListView;
 
     this.profile.additionalLayoutParameters[this.Index].WindowType = WindowTypes.DesktopListView;
-    this.profile.message.LayoutParameters[this.Index].Window = 0;
+    this.profile.message.LayoutParameters[this.Index].Window = Utilities.DesktopListViewWindow.ToUInt64();
     this.profile.additionalLayoutParameters[this.Index].WindowCaption = "(DesktopListView)";
 
     if (windowChanged) {

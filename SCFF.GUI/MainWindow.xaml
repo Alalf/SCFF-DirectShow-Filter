@@ -91,22 +91,22 @@
                     VerticalAlignment="Center"                    
                     x:Name="WindowTitle" FontSize="10" Content="SCFF DirectShow Filter Ver.*.*.*" />
         <Button     Grid.Column="2"
-                    Style="{DynamicResource CaptionButton}"
+                    Style="{StaticResource CaptionButton}"
                     VerticalAlignment="Center" Height="12" 
                     FontSize="10" Content="0"
                     Command="{x:Static shell:SystemCommands.MinimizeWindowCommand}"/>
         <Button     Grid.Column="3"
-                    Style="{DynamicResource CaptionButton}"
+                    Style="{StaticResource CaptionButton}"
                     VerticalAlignment="Center" Height="12" 
                     FontSize="10" Content="1"
                     Command="{x:Static shell:SystemCommands.MaximizeWindowCommand}"/>
         <Button     Grid.Column="4"
-                    Style="{DynamicResource CaptionButton}"
+                    Style="{StaticResource CaptionButton}"
                     VerticalAlignment="Center" Height="12" 
                     FontSize="10" Content="2"
                     Command="{x:Static shell:SystemCommands.RestoreWindowCommand}"/>
         <Button     Grid.Column="5"
-                    Style="{DynamicResource CaptionButton}"
+                    Style="{StaticResource CaptionButton}"
                     VerticalAlignment="Center" Height="12"
                     FontSize="10" Content="r"
                     Command="{x:Static shell:SystemCommands.CloseWindowCommand}"/>

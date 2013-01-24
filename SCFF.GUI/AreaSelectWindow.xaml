@@ -38,7 +38,7 @@
       <Grid.Resources>
         <ResourceDictionary Source="Resources\CaptionButton.xaml"/>
       </Grid.Resources>
-      <Button Style="{DynamicResource CaptionButton}"
+      <Button Style="{StaticResource CaptionButton}"
               VerticalAlignment="Center" HorizontalAlignment="Right" Height="14"
               FontSize="11" Content="r"
               IsCancel="True"

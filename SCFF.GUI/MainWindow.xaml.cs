@@ -77,6 +77,16 @@ public partial class MainWindow
     // Debug.WriteLine("Activated", "MainWindow");
   }
 
+  /// Drop
+  /// @param e ドラッグアンドドロップされた内容が入っている
+  /// @todo(me) 実装。OnOpenと全く同じなのでそちらに渡したいが・・・
+  protected override void OnDrop(DragEventArgs e) {
+    base.OnDrop(e);
+    string[] files = e.Data.GetData(DataFormats.FileDrop) as string[];
+    if (files == null) return;
+    MessageBox.Show(files[0]);
+  }
+
   //-------------------------------------------------------------------
   // *Changed/Checked/Unchecked以外
   //-------------------------------------------------------------------

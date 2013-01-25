@@ -13,7 +13,8 @@
         Height="565"
         MinWidth="280"
         MinHeight="280" 
-        FontSize="9">
+        FontSize="9"
+        AllowDrop="True">
   <!-- CommandBindings -->
   <Window.CommandBindings>
     <!-- shell:SystemCommands -->

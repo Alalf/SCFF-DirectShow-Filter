@@ -560,6 +560,10 @@ public class LayoutElement : ILayoutElementView, ILayoutElement {
   // Backup
   //=================================================================
 
+  /// @copydoc ILayoutElementView::HasBackedUp
+  public bool HasBackedUp {
+    get { return this.profile.additionalLayoutParameters[this.Index].HasBackedUp; }
+  }
   /// @copydoc ILayoutElementView::BackupScreenClippingX
   public int BackupScreenClippingX {
     get { return this.profile.additionalLayoutParameters[this.Index].BackupScreenClippingX; }
@@ -583,6 +587,7 @@ public class LayoutElement : ILayoutElementView, ILayoutElement {
     this.profile.additionalLayoutParameters[this.Index].BackupScreenClippingY = screenRect.Y;
     this.profile.additionalLayoutParameters[this.Index].BackupClippingWidth = screenRect.Width;
     this.profile.additionalLayoutParameters[this.Index].BackupClippingHeight = screenRect.Height;
+    this.profile.additionalLayoutParameters[this.Index].HasBackedUp = true;
   }
 }
 

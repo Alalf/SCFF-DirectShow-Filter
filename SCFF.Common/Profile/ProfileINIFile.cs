@@ -51,7 +51,11 @@ public static class ProfileINIFile {
     try {
       using (var writer = new StreamWriter(path)) {
         writer.WriteLine(ProfileINIFile.ProfileHeader);
-        
+        writer.WriteLine("Timestamp={0}", profile.Timestamp);
+        writer.WriteLine("LayoutElementCount={0}", profile.LayoutElementCount);
+     
+
+
         return true;
       }
     } catch (Exception) {

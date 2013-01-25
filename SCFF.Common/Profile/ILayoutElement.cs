@@ -52,16 +52,16 @@ public interface ILayoutElement {
   // Area
   //=================================================================
 
-  /// @copydoc SCFF::Common::AdditionalLayoutParameter::Fit
+  /// @copydoc SCFF::Common::Profile::AdditionalLayoutParameter::Fit
   bool SetFit { set; }
 
-  /// @copydoc SCFF::Common::AdditionalLayoutParameter::ClippingXWithoutFit
+  /// @copydoc SCFF::Common::Profile::AdditionalLayoutParameter::ClippingXWithoutFit
   int SetClippingXWithoutFit { set; }
-  /// @copydoc SCFF::Common::AdditionalLayoutParameter::ClippingYWithoutFit
+  /// @copydoc SCFF::Common::Profile::AdditionalLayoutParameter::ClippingYWithoutFit
   int SetClippingYWithoutFit { set; }
-  /// @copydoc SCFF::Common::AdditionalLayoutParameter::ClippingWidthWithoutFit
+  /// @copydoc SCFF::Common::Profile::AdditionalLayoutParameter::ClippingWidthWithoutFit
   int SetClippingWidthWithoutFit { set; }
-  /// @copydoc SCFF::Common::AdditionalLayoutParameter::ClippingHeightWithoutFit
+  /// @copydoc SCFF::Common::Profile::AdditionalLayoutParameter::ClippingHeightWithoutFit
   int SetClippingHeightWithoutFit { set; }
 
   //=================================================================
@@ -106,13 +106,13 @@ public interface ILayoutElement {
   // LayoutParameter
   //=================================================================
 
-  /// @copydoc SCFF::Common::AdditionalLayoutParameter::BoundRelativeLeft
+  /// @copydoc SCFF::Common::Profile::AdditionalLayoutParameter::BoundRelativeLeft
   double SetBoundRelativeLeft { set; }
-  /// @copydoc SCFF::Common::AdditionalLayoutParameter::BoundRelativeTop
+  /// @copydoc SCFF::Common::Profile::AdditionalLayoutParameter::BoundRelativeTop
   double SetBoundRelativeTop { set; }
-  /// @copydoc SCFF::Common::AdditionalLayoutParameter::BoundRelativeRight
+  /// @copydoc SCFF::Common::Profile::AdditionalLayoutParameter::BoundRelativeRight
   double SetBoundRelativeRight { set; }
-  /// @copydoc SCFF::Common::AdditionalLayoutParameter::BoundRelativeBottom
+  /// @copydoc SCFF::Common::Profile::AdditionalLayoutParameter::BoundRelativeBottom
   double SetBoundRelativeBottom { set; }
 
   /// LayoutParameterをサンプル座標系で調整する

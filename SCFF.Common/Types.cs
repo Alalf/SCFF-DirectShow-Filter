@@ -268,45 +268,4 @@ public class RelativeRect : DoubleRect {
   public RelativeRect(double x, double y, double width, double height)
       : base(x, y, width, height) {}
 }
-
-//---------------------------------------------------------------------
-// レイアウトパラメータ
-//---------------------------------------------------------------------
-
-/// SCFF.Interprocess.LayoutParameter以外のレイアウト要素に必要なデータ
-public class AdditionalLayoutParameter {
-  /// Windowタイプ: 標準状態 or 最小化 or 最大化
-  public WindowTypes WindowType { get; set; }
-  /// Window内容を示す文字列(≒Class名)
-  public string WindowCaption { get; set; }
-
-  /// クリッピング領域を自動的にウィンドウサイズに合わせるか
-  public bool Fit { get; set; }
-  /// 相対座標系でのレイアウト要素左上端のX座標
-  public double BoundRelativeLeft { get; set; }
-  /// 相対座標系でのレイアウト要素左上端のY座標
-  public double BoundRelativeTop { get; set; }
-  /// 相対座標系でのレイアウト要素右下端のX座標
-  public double BoundRelativeRight { get; set; }
-  /// 相対座標系でのレイアウト要素右下端のY座標
-  public double BoundRelativeBottom { get; set; }
-
-  /// Fit=Falseの時のクリッピング領域左上端のX座標
-  public int ClippingXWithoutFit { get; set; }
-  /// Fit=Falseの時のクリッピング領域左上端のY座標
-  public int ClippingYWithoutFit { get; set; }
-  /// Fit=Falseの時のクリッピング領域の幅
-  public int ClippingWidthWithoutFit { get; set; }
-  /// Fit=Falseの時のクリッピング領域の高さ
-  public int ClippingHeightWithoutFit { get; set; }
-
-  /// 保存用: Screen座標系でのクリッピング領域左上端のX座標
-  public int BackupScreenClippingX { get; set; }
-  /// 保存用: Screen座標系でのクリッピング領域左上端のY座標
-  public int BackupScreenClippingY { get; set; }
-  /// 保存用: クリッピング領域の幅
-  public int BackupClippingWidth { get; set; }
-  /// 保存用: クリッピング領域の高さ
-  public int BackupClippingHeight { get; set; }
-}
 }   // namespace SCFF.Common

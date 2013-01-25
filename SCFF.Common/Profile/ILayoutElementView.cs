@@ -35,25 +35,25 @@ public interface ILayoutElementView {
   UIntPtr Window { get; }
   /// 正常なWindowハンドルかどうか
   bool IsWindowValid { get; }
-  /// @copydoc SCFF::Common::AdditionalLayoutParameter::WindowType
+  /// @copydoc SCFF::Common::Profile::AdditionalLayoutParameter::WindowType
   WindowTypes WindowType { get; }
-  /// @copydoc SCFF::Common::AdditionalLayoutParameter::WindowCaption
+  /// @copydoc SCFF::Common::Profile::AdditionalLayoutParameter::WindowCaption
   string WindowCaption { get; }
 
   //=================================================================
   // Area
   //=================================================================
 
-  /// @copydoc SCFF::Common::AdditionalLayoutParameter::Fit
+  /// @copydoc SCFF::Common::Profile::AdditionalLayoutParameter::Fit
   bool Fit { get; }
 
-  /// @copydoc SCFF::Common::AdditionalLayoutParameter::ClippingXWithoutFit
+  /// @copydoc SCFF::Common::Profile::AdditionalLayoutParameter::ClippingXWithoutFit
   int ClippingXWithoutFit { get; }
-  /// @copydoc SCFF::Common::AdditionalLayoutParameter::ClippingYWithoutFit
+  /// @copydoc SCFF::Common::Profile::AdditionalLayoutParameter::ClippingYWithoutFit
   int ClippingYWithoutFit { get; }
-  /// @copydoc SCFF::Common::AdditionalLayoutParameter::ClippingWidthWithoutFit
+  /// @copydoc SCFF::Common::Profile::AdditionalLayoutParameter::ClippingWidthWithoutFit
   int ClippingWidthWithoutFit { get; }
-  /// @copydoc SCFF::Common::AdditionalLayoutParameter::ClippingHeightWithoutFit
+  /// @copydoc SCFF::Common::Profile::AdditionalLayoutParameter::ClippingHeightWithoutFit
   int ClippingHeightWithoutFit { get; }
 
   /// Fitオプションを考慮したクリッピング領域左上端のX座標
@@ -111,13 +111,13 @@ public interface ILayoutElementView {
   // LayoutParameter
   //=================================================================
 
-  /// @copydoc SCFF::Common::AdditionalLayoutParameter::BoundRelativeLeft
+  /// @copydoc SCFF::Common::Profile::AdditionalLayoutParameter::BoundRelativeLeft
   double BoundRelativeLeft { get; }
-  /// @copydoc SCFF::Common::AdditionalLayoutParameter::BoundRelativeTop
+  /// @copydoc SCFF::Common::Profile::AdditionalLayoutParameter::BoundRelativeTop
   double BoundRelativeTop { get; }
-  /// @copydoc SCFF::Common::AdditionalLayoutParameter::BoundRelativeRight
+  /// @copydoc SCFF::Common::Profile::AdditionalLayoutParameter::BoundRelativeRight
   double BoundRelativeRight { get; }
-  /// @copydoc SCFF::Common::AdditionalLayoutParameter::BoundRelativeBottom
+  /// @copydoc SCFF::Common::Profile::AdditionalLayoutParameter::BoundRelativeBottom
   double BoundRelativeBottom { get; }
 
   /// 相対座標系でのレイアウト要素の幅
@@ -152,13 +152,15 @@ public interface ILayoutElementView {
   // Backup
   //=================================================================
 
-  /// @copydoc SCFF::Common::AdditionalLayoutParameter::BackupScreenClippingX
+  /// @copydoc SCFF::Common::Profile::AdditionalLayoutParameter::HasBackedUp
+  bool HasBackedUp { get; }
+  /// @copydoc SCFF::Common::Profile::AdditionalLayoutParameter::BackupScreenClippingX
   int BackupScreenClippingX { get; }
-  /// @copydoc SCFF::Common::AdditionalLayoutParameter::BackupScreenClippingY
+  /// @copydoc SCFF::Common::Profile::AdditionalLayoutParameter::BackupScreenClippingY
   int BackupScreenClippingY { get;} 
-  /// @copydoc SCFF::Common::AdditionalLayoutParameter::BackupClippingWidth
+  /// @copydoc SCFF::Common::Profile::AdditionalLayoutParameter::BackupClippingWidth
   int BackupClippingWidth { get; }
-  /// @copydoc SCFF::Common::AdditionalLayoutParameter::BackupClippingHeight
+  /// @copydoc SCFF::Common::Profile::AdditionalLayoutParameter::BackupClippingHeight
   int BackupClippingHeight { get; }
 }
 }   // namespace SCFF.Common.Profile

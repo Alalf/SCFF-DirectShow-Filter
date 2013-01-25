@@ -159,8 +159,8 @@ public static class Constants {
   };
 
   /// SWScaleFlags->Index
-  public static readonly Dictionary<SWScaleFlags, int> ResizeMethodIndexes =
-      new Dictionary<SWScaleFlags, int> {
+  public static readonly Dictionary<SWScaleFlags,int> ResizeMethodIndexes =
+      new Dictionary<SWScaleFlags,int> {
     {SWScaleFlags.FastBilinear, 0},
     {SWScaleFlags.Bilinear, 1},
     {SWScaleFlags.Bicubic, 2},

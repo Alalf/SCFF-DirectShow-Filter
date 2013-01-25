@@ -46,7 +46,7 @@ public partial class LayoutEdit
   private const double redrawTimerPeriod = 5000;
 
   /// カーソルをまとめたディクショナリ
-  private static readonly Dictionary<HitModes, Cursor> HitModesToCursors =
+  private static readonly Dictionary<HitModes,Cursor> HitModesToCursors =
       new Dictionary<HitModes,Cursor> {
     {HitModes.Neutral, null},
     {HitModes.Move, Cursors.SizeAll},

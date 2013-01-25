@@ -305,7 +305,7 @@ public class ScreenCaptureTimer : IDisposable {
   private bool isRunning = false;
   
   /// 共有(自R/他W): リクエストと結果をまとめたディクショナリ
-  private Dictionary<ScreenCaptureRequest, BitmapSource> cache =
-      new Dictionary<ScreenCaptureRequest, BitmapSource>();
+  private Dictionary<ScreenCaptureRequest,BitmapSource> cache =
+      new Dictionary<ScreenCaptureRequest,BitmapSource>();
 }
 }   // namespace SCFF.GUI.Controls

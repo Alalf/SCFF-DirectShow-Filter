@@ -21,6 +21,7 @@
 namespace SCFF.Common {
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
@@ -41,6 +42,47 @@ public static class Utilities {
       var applicationPath = Assembly.GetEntryAssembly().Location;
       return Path.GetDirectoryName(applicationPath) + @"\";
     }
+  }
+
+  /// INIファイル(セクション機能は無し)読み込み
+  public static Dictionary<string,string> LoadDictionaryFromINIFile(string path) {
+    var labelToRawData = new Dictionary<string,string>();
+
+    // テキストファイルの読み込み
+    var lines = new List<string>();
+    try {
+      using (var reader = new StreamReader(path)) {
+        while (!reader.EndOfStream) {
+          lines.Add(reader.ReadLine());
+        }
+      }
+    } catch (Exception) {
+      Debug.WriteLine("Cannot read file", "LoadDictionaryFromINIFile");
+      return labelToRawData;
+    }
+
+    // 読み込んだデータを*=*でSplit
+    var separator = new char[1] {'='};
+    foreach (var line in lines) {
+      if (line.Length == 0 || line[0] == ';' || line[0] == '[') {
+        // 空行、コメント行、セクション記述行は読み飛ばす
+        continue;
+      }
+
+      var splitIndex = line.IndexOf('=');
+      if (splitIndex == -1) {
+        // '='が見つからなければ読みとばす
+        continue;
+      } else if (splitIndex == line.Length - 1) {
+        // 空文字列なので読み飛ばす
+        continue;
+      }
+      var label = line.Substring(0, splitIndex).Trim();
+      var rawData = line.Substring(splitIndex+1);
+      labelToRawData.Add(label, rawData);
+    }
+
+    return labelToRawData;
   }
 
   //===================================================================

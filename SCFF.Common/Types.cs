@@ -201,7 +201,7 @@ public class SampleRect : IntRect {
   /// コンストラクタ
   public SampleRect(int x, int y, int width, int height)
       : base(x, y, width, height) {}
-  /// 四捨五入補正つきstaticコンストラクタ
+  /// 補正つきstaticコンストラクタ
   /// @param x Doubleのx
   /// @param y Doubleのy
   /// @param width DoubleのWidth

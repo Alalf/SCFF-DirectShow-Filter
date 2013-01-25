@@ -47,7 +47,8 @@ public static class OptionsINIFile {
   /// @return 保存が成功したか
   public static bool Save(Options options) {
     try {
-      using (var writer = new StreamWriter(Utilities.GetDefaultFilePath + OptionsINIFile.OptionsFileName)) {
+      var path = Utilities.GetDefaultFilePath + OptionsINIFile.OptionsFileName;
+      using (var writer = new StreamWriter(path)) {
         writer.WriteLine(OptionsINIFile.OptionsHeader);
         for (int i = 0; i < 5; ++i) {
           writer.WriteLine("RecentProfile{0}={1}", i,
@@ -99,51 +100,17 @@ public static class OptionsINIFile {
   /// 存在しない場合は勝手にデフォルト値が読み込まれる・・・はず
   /// @param[out] options ファイルから入力したデータの設定先
   /// @return 正常終了
-  public static bool Load(Options options) {
-    // ファイル読み込み
-    var lines = new List<string>();
-    try {
-      using (var reader = new StreamReader(Utilities.GetDefaultFilePath + OptionsINIFile.OptionsFileName)) {
-        while (!reader.EndOfStream) {
-          lines.Add(reader.ReadLine());
-        }
-      }
-    } catch (Exception) {
-      Debug.WriteLine("Cannot read options", "OptionsINIFile.Load");
-      return false;
-    }
+  public static void Load(Options options) {
+    // ファイル->ディクショナリ
+    var path = Utilities.GetDefaultFilePath + OptionsINIFile.OptionsFileName;
+    var labelToRawData = Utilities.LoadDictionaryFromINIFile(path);
 
-    // 読み込んだデータを*=*でSplit
-    var separator = new char[1] {'='};
-    var labelToRawData = new Dictionary<string, string>();
-    foreach (var line in lines) {
-      if (line.Length == 0 || line[0] == ';' || line[0] == '[') {
-        // 空行、コメント行、セクション記述行は読み飛ばす
-        continue;
-      }
-
-      var splitIndex = line.IndexOf('=');
-      if (splitIndex == -1) {
-        // '='が見つからなければ読みとばす
-        continue;
-      } else if (splitIndex == line.Length - 1) {
-        // 空文字列なので読み飛ばす
-        continue;
-      }
-      var label = line.Substring(0, splitIndex).Trim();
-      var rawData = line.Substring(splitIndex+1);
-      labelToRawData.Add(label, rawData);
-    }
-
-    // ディクショナリを参考にしながらデータを設定
+    // ディクショナリ->Options
     OptionsINIFile.LoadFromDictionary(labelToRawData, options);
-
-    return true;
   }
 
   /// 辞書から読み込む
-  private static void LoadFromDictionary(
-      Dictionary<string, string> labelToRawData, Options options) {
+  private static void LoadFromDictionary(Dictionary<string,string> labelToRawData, Options options) {
     // 使いまわすので注意
     string rawData;
 

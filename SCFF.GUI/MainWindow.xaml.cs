@@ -28,6 +28,7 @@ using Microsoft.Win32;
 using Microsoft.Windows.Shell;
 using SCFF.Common;
 using SCFF.Common.GUI;
+using SCFF.Common.Profile;
 
 /// MainWindowのコードビハインド
 public partial class MainWindow
@@ -415,12 +416,15 @@ public partial class MainWindow
   private void OnSave(object sender, ExecutedRoutedEventArgs e) {
     /// @todo(me) すでに保存されていない場合はダイアログをだす
     var save = new SaveFileDialog();
+    save.InitialDirectory = Utilities.GetDefaultFilePath;
+    save.FileName = "hoge";
     save.Title = "SCFF.GUI";
-    save.Filter = "SCFF.GUI Profile|*.SCFF.GUI.profile";
+    save.Filter = "SCFF Profile|*" + ProfileINIFile.ProfileExtension;
     var saveResult = save.ShowDialog();
     if (saveResult.HasValue && (bool)saveResult) {
+      ProfileINIFile.Save(App.Profile, save.FileName);
       /// @todo(me) 実装
-      MessageBox.Show(save.FileName);
+
       App.Options.AddRecentProfile(save.FileName);
       this.MainMenu.OnOptionsChanged();
     }

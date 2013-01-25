@@ -30,10 +30,11 @@ public static class ProfileINIFile {
   // 定数
   //===================================================================
 
-  /// INIファイル名のPrefix
-  private const string ProfilePathPrefix = "SCFF.Common.Profile.";
-  /// INIファイル名のSuffix(=拡張子)
-  private const string ProfilePathSuffix = ".ini";
+  /// INIファイルの拡張子
+  public const string ProfileExtension = ".scffprofile";
+
+  //-------------------------------------------------------------------
+
   /// INIファイルの先頭に付加するヘッダー
   private const string ProfileHeader =
       "; SCFF-DirectShow-Filter Options Ver.0.1.7";
@@ -43,18 +44,14 @@ public static class ProfileINIFile {
   //===================================================================
 
   /// ファイル出力
-  /// @param options 保存するOptions
+  /// @param profile 保存するProfile
+  /// @param path 保存先
   /// @return 保存が成功したか
-  public static bool Save(Profile profile, string profileName) {
+  public static bool Save(Profile profile, string path) {
     try {
-      var path = string.Format("{0}{1}{2}{3}",
-          Utilities.GetDefaultFilePath,
-          ProfileINIFile.ProfilePathPrefix,
-          profileName,
-          ProfileINIFile.ProfilePathSuffix);
       using (var writer = new StreamWriter(path)) {
         writer.WriteLine(ProfileINIFile.ProfileHeader);
-
+        
         return true;
       }
     } catch (Exception) {

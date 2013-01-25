@@ -443,6 +443,7 @@ public class LayoutElement : ILayoutElementView, ILayoutElement {
     }
 
     // サンプル座標系での領域を求める
+    /// @todo(me) Fitの連打結果が安定しないのはCalculateLayoutのせいかも？
     var boundRect = this.GetBoundRect(sampleWidth, sampleHeight);
     int x, y, width, height;
     Imaging.Utilities.CalculateLayout(
@@ -452,31 +453,15 @@ public class LayoutElement : ILayoutElementView, ILayoutElement {
         this.Stretch, this.KeepAspectRatio,
         out x, out y, out width, out height);
 
-    // 相対座標系に直す
-    var nextRelativeLeft = (double)x / sampleWidth;
-    var nextRelativeTop = (double)y / sampleHeight;
-    var nextRelativeRight = (double)(x + width) / sampleWidth;
-    var nextRelativeBottom = (double)(y + height) / sampleHeight;
+    // 1ピクセルあたりの相対値を求める
+    var relativeXPerPixel = 1.0 / sampleWidth;
+    var relativeYPerPixel = 1.0 / sampleHeight;
 
-    // 調整量を計算する
-    var deltaHorizontal = sampleWidth *
-        (Math.Abs(nextRelativeLeft - this.BoundRelativeLeft) +
-          Math.Abs(nextRelativeRight - this.BoundRelativeRight));
-    var deltaVertical = sampleHeight *
-        (Math.Abs(nextRelativeTop - this.BoundRelativeTop) +
-          Math.Abs(nextRelativeBottom - this.BoundRelativeBottom));
-
-    // 相対座標系に戻してProfileに反映
-    if (deltaHorizontal < 2.0 && deltaVertical < 2.0) {
-      // ただし、調整量が左右方向に2ピクセル未満かつ上下方向に2ピクセル未満の場合は調整しない
-      Debug.WriteLine("Deference is too small", "LayoutElement.FitBoundRelativeRect");
-      return;
-    }
-
-    this.SetBoundRelativeLeft   = nextRelativeLeft;
-    this.SetBoundRelativeRight  = nextRelativeRight;
-    this.SetBoundRelativeTop    = nextRelativeTop;
-    this.SetBoundRelativeBottom = nextRelativeBottom;
+    // Profileに反映
+    this.SetBoundRelativeLeft   = x * relativeXPerPixel;
+    this.SetBoundRelativeTop    = y * relativeYPerPixel;
+    this.SetBoundRelativeRight  = (x + width) * relativeXPerPixel;
+    this.SetBoundRelativeBottom = (y + height) * relativeYPerPixel;
   }
 
   //=================================================================

@@ -54,8 +54,10 @@ public static class Utilities {
       newWidth = boundWidth;
       var actualHeight = boundWidth / inputAspect;
       var actualPaddingHeight = (boundHeight - actualHeight) / 2.0;
-      newY = (int)Math.Round(boundY + actualPaddingHeight);
-      newHeight = (int)Math.Round(boundY + actualPaddingHeight + actualHeight) - newY;
+      // floor
+      newY = boundY + (int)actualPaddingHeight;
+      // ceil
+      newHeight = (int)Math.Ceiling(actualHeight);
     } else {
       // B. 境界よりも元が縦長(!isLetterboxing = isPillarboxing)
       //  - heightを境界にあわせる
@@ -64,8 +66,10 @@ public static class Utilities {
       newHeight = boundHeight;
       var actualWidth = boundHeight * inputAspect;
       var actualPaddingWidth = (boundWidth - actualWidth) / 2.0;
-      newX = (int)Math.Round(boundX + actualPaddingWidth);
-      newWidth = (int)Math.Round(boundX + actualPaddingWidth + actualWidth) - newX;
+      // floor
+      newX = boundX + (int)actualPaddingWidth;
+      // ceil
+      newWidth = (int)Math.Ceiling(actualWidth);
     }
     Debug.Assert(boundX <= newX && newX + newWidth <= boundX + boundWidth &&
                  boundY <= newY && newY + newHeight <= boundY + boundHeight);
@@ -77,8 +81,9 @@ public static class Utilities {
                           out int newX, out int newY, out int newWidth, out int newHeight) {
     var actualPaddingWidth = (boundWidth - inputWidth) / 2.0;
     var actualPaddingHeight = (boundHeight - inputHeight) / 2.0;
-    newX = (int)Math.Round(boundX + actualPaddingWidth);
-    newY = (int)Math.Round(boundY + actualPaddingHeight);
+    // floor
+    newX = boundX + (int)actualPaddingWidth;
+    newY = boundY + (int)actualPaddingHeight;
     newWidth = inputWidth;
     newHeight = inputHeight;
     Debug.Assert(boundX <= newX && newX + newWidth <= boundX + boundWidth &&

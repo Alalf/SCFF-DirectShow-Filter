@@ -209,10 +209,12 @@ public class SampleRect : IntRect {
   /// @return サンプル座標系のRect(プロパティは整数)
   public static SampleRect FromDouble(double x, double y, double width, double height) {
     int newX, newY, newWidth, newHeight;
-    newX = (int)Math.Round(x);
-    newY = (int)Math.Round(y);
-    newWidth = (int)Math.Round(width);
-    newHeight = (int)Math.Round(height);
+    // floor
+    newX = (int)x;
+    newY = (int)y;
+    // ceil
+    newWidth = (int)Math.Ceiling(width);
+    newHeight = (int)Math.Ceiling(height);
     return new SampleRect(newX, newY, newWidth, newHeight);
   }
 }

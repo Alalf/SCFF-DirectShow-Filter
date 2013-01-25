@@ -24,6 +24,8 @@ extern "C" {
 #include <libavcodec/avcodec.h>
 }
 
+#include <cmath>
+
 #include "scff_imaging/debug.h"
 #include "scff_imaging/imaging_types.h"
 #include "scff_imaging/avpicture_image.h"
@@ -287,11 +289,10 @@ static void Letterbox(int bound_x, int bound_y,
     *new_width = bound_width;
     const double actual_height = bound_width / input_aspect;
     const double actual_padding_height = (bound_height - actual_height) / 2.0;
-    // round
-    *new_y = static_cast<int>(bound_y + actual_padding_height + 0.5);
-    *new_height =
-        static_cast<int>(bound_y + actual_padding_height + actual_height + 0.5)
-            - *new_y;
+    // floor
+    *new_y = bound_y + static_cast<int>(actual_padding_height);
+    // ceil
+    *new_height = static_cast<int>(std::ceil(actual_height));
   } else {
     // B. 境界よりも元が縦長(!is_letterboxing = isPillarboxing)
     //  - heightを境界にあわせる
@@ -300,11 +301,10 @@ static void Letterbox(int bound_x, int bound_y,
     *new_height = bound_height;
     const double actual_width = bound_height * input_aspect;
     const double actual_padding_width = (bound_width - actual_width) / 2.0;
-    // round
-    *new_x = static_cast<int>(bound_x + actual_padding_width + 0.5);
-    *new_width =
-        static_cast<int>(bound_x + actual_padding_width + actual_width + 0.5)
-            - *new_x;
+    // floor
+    *new_x = bound_x + static_cast<int>(actual_padding_width);
+    // ceil
+    *new_width = static_cast<int>(std::ceil(actual_width));
   }
   ASSERT(bound_x <= *new_x && *new_x + *new_width <= bound_x + bound_width &&
          bound_y <= *new_y && *new_y + *new_height <= bound_y + bound_height);
@@ -318,9 +318,9 @@ static void Pad(int bound_x, int bound_y,
                 int *new_width, int *new_height) {
   const double actual_padding_width = (bound_width - input_width) / 2.0;
   const double actual_padding_height = (bound_height - input_height) / 2.0;
-  // round
-  *new_x = static_cast<int>(bound_x + actual_padding_width + 0.5);
-  *new_y = static_cast<int>(bound_y + actual_padding_height + 0.5);
+  // floor
+  *new_x = bound_x + static_cast<int>(actual_padding_width);
+  *new_y = bound_y + static_cast<int>(actual_padding_height);
   *new_width = input_width;
   *new_height = input_height;
   ASSERT(bound_x <= *new_x && *new_x + *new_width <= bound_x + bound_width &&

@@ -21,120 +21,161 @@
 /// scff_imagingモジュールの C# 版(オリジナルは C++ )
 namespace SCFF.Common.Imaging {
 
+using System;
 using System.Diagnostics;
 
 /// 画像の操作に便利な関数をまとめたクラス
 /// (scff_imaging/utilities.ccとhの移植版)
 /// @attention C#では関数をまとめる為に名前空間は使えない
-/// @warning WPFでは座標のほとんどが整数型ではなく浮動小数点型
 public static class Utilities {
+  /// 境界に合わせる
+  private static void Fit(int boundX, int boundY, int boundWidth, int boundHeight,
+                          out int newX, out int newY, out int newWidth, out int newHeight) {
+    newX = boundX;
+    newY = boundY;
+    newWidth = boundWidth;
+    newHeight = boundHeight;
+  }
+
+  /// 比率を維持したまま拡大・縮小する
+  private static void Letterbox(int boundX, int boundY, int boundWidth, int boundHeight,
+                                int inputWidth, int inputHeight,
+                                out int newX, out int newY, out int newWidth, out int newHeight) {
+    // アスペクト比の計算
+    var boundAspect = (double)boundWidth / boundHeight;
+    var inputAspect = (double)inputWidth / inputHeight;
+    var isLetterboxing = (inputAspect >= boundAspect);
+
+    if (isLetterboxing) {
+      // A. 境界よりも元が横長(isLetterboxing)
+      //  - widthを境界にあわせる
+      //  - heightの倍率はwidthの引き伸ばし比率で求められる
+      newX = boundX;
+      newWidth = boundWidth;
+      var actualHeight = boundWidth / inputAspect;
+      var actualPaddingHeight = (boundHeight - actualHeight) / 2.0;
+      newY = (int)Math.Round(boundY + actualPaddingHeight);
+      newHeight = (int)Math.Round(boundY + actualPaddingHeight + actualHeight) - newY;
+    } else {
+      // B. 境界よりも元が縦長(!isLetterboxing = isPillarboxing)
+      //  - heightを境界にあわせる
+      //  - widthの倍率はheightの引き伸ばし比率で求められる
+      newY = boundY;
+      newHeight = boundHeight;
+      var actualWidth = boundHeight * inputAspect;
+      var actualPaddingWidth = (boundWidth - actualWidth) / 2.0;
+      newX = (int)Math.Round(boundX + actualPaddingWidth);
+      newWidth = (int)Math.Round(boundX + actualPaddingWidth + actualWidth) - newX;
+    }
+    Debug.Assert(boundX <= newX && newX + newWidth <= boundX + boundWidth &&
+                 boundY <= newY && newY + newHeight <= boundY + boundHeight);
+  }
+
+  /// 拡大縮小はせずパディングだけ行う
+  private static void Pad(int boundX, int boundY, int boundWidth, int boundHeight,
+                          int inputWidth, int inputHeight,
+                          out int newX, out int newY, out int newWidth, out int newHeight) {
+    var actualPaddingWidth = (boundWidth - inputWidth) / 2.0;
+    var actualPaddingHeight = (boundHeight - inputHeight) / 2.0;
+    newX = (int)Math.Round(boundX + actualPaddingWidth);
+    newY = (int)Math.Round(boundY + actualPaddingHeight);
+    newWidth = inputWidth;
+    newHeight = inputHeight;
+    Debug.Assert(boundX <= newX && newX + newWidth <= boundX + boundWidth &&
+                 boundY <= newY && newY + newHeight <= boundY + boundHeight);
+  }
+
   /// 境界の座標系と同じ座標系の新しい配置を計算する
-  public static bool CalculateLayout(int boundX, int boundY,
-      int boundWidth, int boundHeight,
-      int inputWidth, int inputHeight,
-      bool stretch, bool keepAspectRatio,
-      out int newX, out int newY,
-      out int newWidth, out int newHeight) {
+  public static void CalculateLayout(int boundX, int boundY, int boundWidth, int boundHeight,
+                                     int inputWidth, int inputHeight,
+                                     bool stretch, bool keepAspectRatio,
+                                     out int newX, out int newY, out int newWidth, out int newHeight) {
     // 高さと幅はかならず0より上
     Debug.Assert(inputWidth > 0 && inputHeight > 0 &&
                  boundWidth > 0 && boundHeight > 0,
                  "Invalid parameters");
 
-    // 高さ、幅が境界と一致しているか？
-    if (inputWidth == boundWidth && inputHeight == boundHeight) {
-      // サイズが完全に同じならば何もしなくてもよい
-      newX = boundX;
-      newY = boundY;
-      newWidth = boundWidth;
-      newHeight = boundHeight;
-      return true;
+    // - 1. 高さと幅が同じ(sameSize)
+    // - 2. 高さと幅が共に境界より小さい(!sameSize && needExpand)
+    //   - 2.1 拡大しない(needExpand && !stretch)
+    //   - 2.2 拡大する(needExpand && stretch)
+    //     - 2.2.1 アスペクト比維持しない(... && !keepAspectRatio)
+    //     - 2.2.2 アスペクト比維持(... && keepAspectRatio)
+    //       - 2.2.2.1 境界よりも元が横長(... && isLetterboxing)
+    //       - 2.2.2.2 境界よりも元が縦長(... && !isLetterboxing)
+    // - 3. 上記以外(!sameSize && !needExpand)
+    //   - 3.1 アスペクト比維持しない(... && !keepAspectRatio)
+    //   - 3.2 アスペクト比維持(... && keepAspectRatio)
+    //     - 3.2.1 境界よりも元が横長(... && isLetterboxing)
+    //     - 3.2.2 境界よりも元が縦長(... && !isLetterboxing)
+
+    // 条件分岐用変数
+    var sameSize = (inputWidth == boundWidth && inputHeight == boundHeight);
+    var needExpand = (inputWidth <= boundWidth && inputHeight <= boundHeight);
+
+    // 1. 高さと幅が同じ(sameSize)
+    if (sameSize) {
+      Utilities.Fit(boundX, boundY, boundWidth, boundHeight,
+                    out newX, out newY, out newWidth, out newHeight);
+      return;
     }
 
-    // 高さと幅の比率を求めておく
-    var boundAspect = (double)boundWidth / boundHeight;
-    var inputAspect = (double)inputWidth / inputHeight;
-
-    // inputのサイズがboundより完全に小さいかどうか
-    bool needExpand = inputWidth <= boundWidth &&
-                      inputHeight <= boundHeight;
-
-    // オプションごとに条件分岐
-    if ((!keepAspectRatio && needExpand && stretch) ||
-        (!keepAspectRatio && !needExpand)) {
-      // 境界と一致させる
-      newX = boundX;
-      newY = boundY;
-      newWidth = boundWidth;
-      newHeight = boundHeight;
-    } else if ((keepAspectRatio && needExpand && stretch) ||
-               (keepAspectRatio && !needExpand)) {
-      // アスペクト比維持しつつ拡大縮小:
-      if (inputAspect >= boundAspect) {
-        // 入力のほうが横長
-        //    = widthを境界にあわせる
-        //    = heightの倍率はwidthの引き伸ばし比率で求められる
-        newWidth = boundWidth;
-        newHeight = inputHeight * boundWidth / inputWidth;
-        Debug.Assert(newHeight <= boundHeight);
-        newX = boundX;
-        var paddingHeight = (boundHeight - newHeight) / 2;
-        newY = boundY + paddingHeight;
-      } else {
-        // 出力のほうが横長
-        //    = heightを境界にあわせる
-        //    = widthの倍率はheightの引き伸ばし比率で求められる
-        newHeight = boundHeight;
-        newWidth = inputWidth * boundHeight / inputHeight;
-        Debug.Assert(newWidth <= boundWidth);
-        newY = boundY;
-        var paddingWidth = (boundWidth - newWidth) / 2;
-        newX = boundX + paddingWidth;
+    // 2. 高さと幅が共に境界より小さい
+    if (needExpand) {
+      // 2.1. 拡大しない(!stretch)
+      if (!stretch) {  
+        Utilities.Pad(boundX, boundY, boundWidth, boundHeight,
+                      inputWidth, inputHeight,
+                      out newX, out newY, out newWidth, out newHeight);
+        return;
       }
-    } else if (needExpand && !stretch) {
-      // パディングを入れる
-      var paddingWidth = (boundWidth - inputWidth) / 2;
-      var paddingHeight = (boundHeight - inputHeight) / 2;
-      newX = boundX + paddingWidth;
-      newY = boundY + paddingHeight;
-      newWidth = inputWidth;
-      newHeight = inputHeight;
-    } else {
-      Debug.Assert(false, "Fail");
-      newX = -1;
-      newY = -1;
-      newWidth = -1;
-      newHeight = -1;
-      return false;
+      // 2.2. 拡大する(else)
+      if (!keepAspectRatio) {
+        // 2.2.1. アスペクト比維持しない(!keepAspectRatio)
+        Utilities.Fit(boundX, boundY, boundWidth, boundHeight,
+                      out newX, out newY, out newWidth, out newHeight);
+        return;
+      }
+      // 2.2.2. アスペクト比維持(else)
+      // 2.2.2.1 境界よりも元が横長(... && isLetterboxing)
+      // 2.2.2.2 境界よりも元が縦長(... && !isLetterboxing)
+      Utilities.Letterbox(boundX, boundY, boundWidth, boundHeight,
+                          inputWidth, inputHeight,
+                          out newX, out newY, out newWidth, out newHeight);
+      return;
     }
 
-    return true;
+    // 3. 上記以外(else=高さか幅のどちらかが境界より大きい)
+    if (!keepAspectRatio) {
+      // 3.1. アスペクト比維持しない(!keepAspectRatio)
+      Utilities.Fit(boundX, boundY, boundWidth, boundHeight,
+                    out newX, out newY, out newWidth, out newHeight);
+      return;
+    }
+    // 3.2. アスペクト比維持(else)
+    // 3.2.1 境界よりも元が横長(... && isLetterboxing)
+    // 3.2.2 境界よりも元が縦長(... && !isLetterboxing)
+    Utilities.Letterbox(boundX, boundY, boundWidth, boundHeight,
+                        inputWidth, inputHeight,
+                        out newX, out newY, out newWidth, out newHeight);
   }
 
   /// 幅と高さから拡大縮小した場合のパディングサイズを求める
-  public static bool CalculatePaddingSize(int boundWidth, int boundHeight,
-      int inputWidth, int inputHeight,
-      bool stretch, bool keepAspectRatio,
-      out int paddingTop, out int paddingBottom,
-      out int paddingLeft, out int paddingRight) {
+  public static void CalculatePaddingSize(int boundWidth, int boundHeight, int inputWidth, int inputHeight,
+                                          bool stretch, bool keepAspectRatio,
+                                          out int paddingTop, out int paddingBottom, out int paddingLeft, out int paddingRight) {
+    // 領域の計算
     int newX, newY, newWidth, newHeight;
-    // 座標系はbound領域内
-    bool error = Utilities.CalculateLayout(0, 0, boundWidth, boundHeight,
-        inputWidth, inputHeight,
-        stretch, keepAspectRatio,
-        out newX,  out newY, out newWidth, out newHeight);
-    if (error != true) {
-      Debug.Assert(false, "Fail");
-      paddingLeft = -1;
-      paddingRight = -1;
-      paddingTop = -1;
-      paddingBottom = -1;
-      return error;
-    }
+    Utilities.CalculateLayout(0, 0, boundWidth, boundHeight,
+                              inputWidth, inputHeight,
+                              stretch, keepAspectRatio,
+                              out newX, out newY, out newWidth, out newHeight);
+    
+    // パディングサイズの計算
     paddingLeft = newX;
     paddingTop = newY;
     paddingRight = boundWidth - (newX + newWidth);
     paddingBottom = boundHeight - (newY + newHeight);
-    return true;
   }
 }
 }   // namespace SCFF.Common.Imaging

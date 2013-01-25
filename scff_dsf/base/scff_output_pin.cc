@@ -20,8 +20,7 @@
 
 #include "base/scff_output_pin.h"
 
-#include <math.h>
-
+#include <cmath>
 #include <algorithm>
 
 #include "base/constants.h"

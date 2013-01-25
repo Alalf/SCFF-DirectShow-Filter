@@ -82,7 +82,7 @@ ErrorCodes NativeLayout::Init() {
 
   if (utilities::CanUseDrawUtils(GetOutputImage()->pixel_format())) {
     // パディングサイズの計算
-    const bool no_error = utilities::CalculatePaddingSize(
+    utilities::CalculatePaddingSize(
         GetOutputImage()->width(),
         GetOutputImage()->height(),
         captured_width,
@@ -91,7 +91,6 @@ ErrorCodes NativeLayout::Init() {
         parameter_.keep_aspect_ratio,
         &padding_top, &padding_bottom,
         &padding_left, &padding_right);
-    ASSERT(no_error);
 
     // パディング分だけサイズを小さくする
     converted_width -= padding_left + padding_right;

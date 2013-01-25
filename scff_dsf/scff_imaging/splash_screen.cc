@@ -76,7 +76,7 @@ ErrorCodes SplashScreen::Init() {
 
   if (utilities::CanUseDrawUtils(GetOutputImage()->pixel_format())) {
     // パディングサイズの計算
-    const bool no_error = utilities::CalculatePaddingSize(
+    utilities::CalculatePaddingSize(
         GetOutputImage()->width(),
         GetOutputImage()->height(),
         resource_width,
@@ -84,7 +84,6 @@ ErrorCodes SplashScreen::Init() {
         false, true,
         &padding_top, &padding_bottom,
         &padding_left, &padding_right);
-    ASSERT(no_error);
 
     // パディング分だけサイズを小さくする
     converted_width -= padding_left + padding_right;

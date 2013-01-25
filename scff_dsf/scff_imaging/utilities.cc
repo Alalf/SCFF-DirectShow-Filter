@@ -259,7 +259,75 @@ bool Contains(int bound_x, int bound_y,
          bottom <= bound_bottom;
 }
 
-bool CalculateLayout(int bound_x, int bound_y,
+/// 境界に合わせる
+static void Fit(int bound_x, int bound_y, int bound_width, int bound_height,
+                int *new_x, int *new_y, int *new_width, int *new_height) {
+  *new_x = bound_x;
+  *new_y = bound_y;
+  *new_width = bound_width;
+  *new_height = bound_height;
+}
+
+/// 比率を維持したまま拡大・縮小する
+static void Letterbox(int bound_x, int bound_y,
+                      int bound_width, int bound_height,
+                      int input_width, int input_height,
+                      int *new_x, int *new_y,
+                      int *new_width, int *new_height) {
+  // アスペクト比の計算
+  const double bound_aspect = static_cast<double>(bound_width) / bound_height;
+  const double input_aspect = static_cast<double>(input_width) / input_height;
+  const bool is_letterboxing = (input_aspect >= bound_aspect);
+
+  if (is_letterboxing) {
+    // A. 境界よりも元が横長(is_letterboxing)
+    //  - widthを境界にあわせる
+    //  - heightの倍率はwidthの引き伸ばし比率で求められる
+    *new_x = bound_x;
+    *new_width = bound_width;
+    const double actual_height = bound_width / input_aspect;
+    const double actual_padding_height = (bound_height - actual_height) / 2.0;
+    // round
+    *new_y = static_cast<int>(bound_y + actual_padding_height + 0.5);
+    *new_height =
+        static_cast<int>(bound_y + actual_padding_height + actual_height + 0.5)
+            - *new_y;
+  } else {
+    // B. 境界よりも元が縦長(!is_letterboxing = isPillarboxing)
+    //  - heightを境界にあわせる
+    //  - widthの倍率はheightの引き伸ばし比率で求められる
+    *new_y = bound_y;
+    *new_height = bound_height;
+    const double actual_width = bound_height * input_aspect;
+    const double actual_padding_width = (bound_width - actual_width) / 2.0;
+    // round
+    *new_x = static_cast<int>(bound_x + actual_padding_width + 0.5);
+    *new_width =
+        static_cast<int>(bound_x + actual_padding_width + actual_width + 0.5)
+            - *new_x;
+  }
+  ASSERT(bound_x <= *new_x && *new_x + *new_width <= bound_x + bound_width &&
+         bound_y <= *new_y && *new_y + *new_height <= bound_y + bound_height);
+}
+
+/// 拡大縮小はせずパディングだけ行う
+static void Pad(int bound_x, int bound_y,
+                int bound_width, int bound_height,
+                int input_width, int input_height,
+                int *new_x, int *new_y,
+                int *new_width, int *new_height) {
+  const double actual_padding_width = (bound_width - input_width) / 2.0;
+  const double actual_padding_height = (bound_height - input_height) / 2.0;
+  // round
+  *new_x = static_cast<int>(bound_x + actual_padding_width + 0.5);
+  *new_y = static_cast<int>(bound_y + actual_padding_height + 0.5);
+  *new_width = input_width;
+  *new_height = input_height;
+  ASSERT(bound_x <= *new_x && *new_x + *new_width <= bound_x + bound_width &&
+         bound_y <= *new_y && *new_y + *new_height <= bound_y + bound_height);
+}
+
+void CalculateLayout(int bound_x, int bound_y,
                      int bound_width, int bound_height,
                      int input_width, int input_height,
                      bool stretch, bool keep_aspect_ratio,
@@ -269,93 +337,90 @@ bool CalculateLayout(int bound_x, int bound_y,
   ASSERT(input_width > 0 && input_height > 0 &&
          bound_width > 0 && bound_height > 0);
 
-  // 高さ、幅が境界と一致しているか？
-  if (input_width == bound_width && input_height == bound_height) {
-    // サイズが完全に同じならば何もしなくてもよい
-    *new_x = bound_x;
-    *new_y = bound_y;
-    *new_width = bound_width;
-    *new_height = bound_height;
-    return true;
+  // - 1. 高さと幅が同じ(same_size)
+  // - 2. 高さと幅が共に境界より小さい(!same_size && need_expand)
+  //   - 2.1 拡大しない(need_expand && !stretch)
+  //   - 2.2 拡大する(need_expand && stretch)
+  //     - 2.2.1 アスペクト比維持しない(... && !keep_aspect_ratio)
+  //     - 2.2.2 アスペクト比維持(... && keep_aspect_ratio)
+  //       - 2.2.2.1 境界よりも元が横長(... && is_letterboxing)
+  //       - 2.2.2.2 境界よりも元が縦長(... && !is_letterboxing)
+  // - 3. 上記以外(!same_size && !need_expand)
+  //   - 3.1 アスペクト比維持しない(... && !keep_aspect_ratio)
+  //   - 3.2 アスペクト比維持(... && keep_aspect_ratio)
+  //     - 3.2.1 境界よりも元が横長(... && is_letterboxing)
+  //     - 3.2.2 境界よりも元が縦長(... && !is_letterboxing)
+
+  // 条件分岐用変数
+  const bool same_size = (input_width == bound_width &&
+                          input_height == bound_height);
+  const bool need_expand = (input_width <= bound_width &&
+                            input_height <= bound_height);
+
+  // 1. 高さと幅が同じ(same_size)
+  if (same_size) {
+    Fit(bound_x, bound_y, bound_width, bound_height,
+        new_x, new_y, new_width, new_height);
+    return;
   }
 
-  // 高さと幅の比率を求めておく
-  const double bound_aspect = static_cast<double>(bound_width) / bound_height;
-  const double input_aspect = static_cast<double>(input_width) / input_height;
-
-  // inputのサイズがboundより完全に小さいかどうか
-  const bool need_expand = input_width <= bound_width &&
-                           input_height <= bound_height;
-
-  // オプションごとに条件分岐
-  if (!keep_aspect_ratio && need_expand && stretch ||
-      !keep_aspect_ratio && !need_expand) {
-    // 境界と一致させる
-    *new_x = bound_x;
-    *new_y = bound_y;
-    *new_width = bound_width;
-    *new_height = bound_height;
-  } else if (keep_aspect_ratio && need_expand && stretch ||
-             keep_aspect_ratio && !need_expand) {
-    // アスペクト比維持しつつ拡大縮小:
-    if (input_aspect >= bound_aspect) {
-      // 入力のほうが横長
-      //    = widthを境界にあわせる
-      //    = heightの倍率はwidthの引き伸ばし比率で求められる
-      *new_width = bound_width;
-      *new_height = input_height * bound_width / input_width;
-      ASSERT(*new_height <= bound_height);
-      *new_x = bound_x;
-      const int padding_height = (bound_height - *new_height) / 2;
-      *new_y = bound_y + padding_height;
-    } else {
-      // 出力のほうが横長
-      //    = heightを境界にあわせる
-      //    = widthの倍率はheightの引き伸ばし比率で求められる
-      *new_height = bound_height;
-      *new_width = input_width * bound_height / input_height;
-      ASSERT(*new_width <= bound_width);
-      *new_y = bound_y;
-      const int padding_width = (bound_width - *new_width) / 2;
-      *new_x = bound_x + padding_width;
+  // 2. 高さと幅が共に境界より小さい
+  if (need_expand) {
+    // 2.1. 拡大しない(!stretch)
+    if (!stretch) {
+      Pad(bound_x, bound_y, bound_width, bound_height,
+          input_width, input_height,
+          new_x, new_y, new_width, new_height);
+      return;
     }
-  } else if (need_expand && !stretch) {
-    // パディングを入れる
-    const int padding_width = (bound_width - input_width) / 2;
-    const int padding_height = (bound_height - input_height) / 2;
-    *new_x = bound_x + padding_width;
-    *new_y = bound_y + padding_height;
-    *new_width = input_width;
-    *new_height = input_height;
-  } else {
-    ASSERT(false);
-    return false;
+    // 2.2. 拡大する(else)
+    if (!keep_aspect_ratio) {
+      // 2.2.1. アスペクト比維持しない(!keep_aspect_ratio)
+      Fit(bound_x, bound_y, bound_width, bound_height,
+          new_x, new_y, new_width, new_height);
+      return;
+    }
+    // 2.2.2. アスペクト比維持(else)
+    // 2.2.2.1 境界よりも元が横長(... && is_letterboxing)
+    // 2.2.2.2 境界よりも元が縦長(... && !is_letterboxing)
+    Letterbox(bound_x, bound_y, bound_width, bound_height,
+              input_width, input_height,
+              new_x, new_y, new_width, new_height);
+    return;
   }
 
-  return true;
+  // 3. 上記以外(else=高さか幅のどちらかが境界より大きい)
+  if (!keep_aspect_ratio) {
+    // 3.1. アスペクト比維持しない(!keep_aspect_ratio)
+    Fit(bound_x, bound_y, bound_width, bound_height,
+        new_x, new_y, new_width, new_height);
+    return;
+  }
+  // 3.2. アスペクト比維持(else)
+  // 3.2.1 境界よりも元が横長(... && is_letterboxing)
+  // 3.2.2 境界よりも元が縦長(... && !is_letterboxing)
+  Letterbox(bound_x, bound_y, bound_width, bound_height,
+            input_width, input_height,
+            new_x, new_y, new_width, new_height);
 }
 
-bool CalculatePaddingSize(int bound_width, int bound_height,
+void CalculatePaddingSize(int bound_width, int bound_height,
                           int input_width, int input_height,
                           bool stretch, bool keep_aspect_ratio,
                           int *padding_top, int *padding_bottom,
                           int *padding_left, int *padding_right) {
+  // 領域の計算
   int new_x, new_y, new_width, new_height;
-  // 座標系はbound領域内
-  const bool error =
-      CalculateLayout(0, 0, bound_width, bound_height,
-                      input_width, input_height,
-                      stretch, keep_aspect_ratio,
-                      &new_x, &new_y, &new_width, &new_height);
-  if (error != true) {
-    ASSERT(false);
-    return error;
-  }
+  CalculateLayout(0, 0, bound_width, bound_height,
+                  input_width, input_height,
+                  stretch, keep_aspect_ratio,
+                  &new_x, &new_y, &new_width, &new_height);
+
+  // パディングサイズの計算
   *padding_left = new_x;
   *padding_top = new_y;
   *padding_right = bound_width - (new_x + new_width);
   *padding_bottom = bound_height - (new_y + new_height);
-  return true;
 }
 
 void GetWindowRectangle(HWND window, int *x, int *y,

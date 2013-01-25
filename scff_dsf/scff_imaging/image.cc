@@ -58,7 +58,8 @@ int Image::height() const {
 }
 
 //-------------------------------------------------------------------
-ErrorCodes Image::Create(ImagePixelFormats pixel_format, int width, int height) {
+ErrorCodes Image::Create(ImagePixelFormats pixel_format,
+                         int width, int height) {
   ASSERT(IsEmpty());
   pixel_format_ = pixel_format;
   width_ = width;

@@ -87,7 +87,7 @@ ErrorCodes ComplexLayout::InitByIndex(int index) {
   int virtual_padding_bottom = 0;
   int virtual_padding_left = 0;
   int virtual_padding_right = 0;
-  const bool no_error = utilities::CalculatePaddingSize(
+  utilities::CalculatePaddingSize(
       parameters_[index].bound_width,
       parameters_[index].bound_height,
       parameters_[index].clipping_width,
@@ -96,7 +96,6 @@ ErrorCodes ComplexLayout::InitByIndex(int index) {
       parameters_[index].keep_aspect_ratio,
       &virtual_padding_top, &virtual_padding_bottom,
       &virtual_padding_left, &virtual_padding_right);
-  ASSERT(no_error);
 
   // 描画する原点の座標を計算
   element_x_[index] = parameters_[index].bound_x + virtual_padding_left;

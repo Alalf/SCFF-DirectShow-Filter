@@ -53,7 +53,8 @@ const int kSupportedPixelFormatsCount =
   1;
 #else
   /// @attention enum->int
-  static_cast<int>(scff_imaging::ImagePixelFormats::kSupportedPixelFormatsCount);
+  static_cast<int>(
+      scff_imaging::ImagePixelFormats::kSupportedPixelFormatsCount);
 #endif
 
 /// @warning 最初の1個はSetFormat用

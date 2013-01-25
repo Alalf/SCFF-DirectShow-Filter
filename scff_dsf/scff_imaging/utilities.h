@@ -100,7 +100,7 @@ bool Contains(int bound_x, int bound_y,
               int x, int y, int width, int height);
 
 /// 境界の座標系と同じ座標系の新しい配置を計算する
-bool CalculateLayout(int bound_x, int bound_y,
+void CalculateLayout(int bound_x, int bound_y,
                      int bound_width, int bound_height,
                      int input_width, int input_height,
                      bool stretch, bool keep_aspect_ratio,
@@ -108,7 +108,7 @@ bool CalculateLayout(int bound_x, int bound_y,
                      int *new_width, int *new_height);
 
 /// 幅と高さから拡大縮小した場合のパディングサイズを求める
-bool CalculatePaddingSize(int bound_width, int bound_height,
+void CalculatePaddingSize(int bound_width, int bound_height,
                           int input_width, int input_height,
                           bool stretch, bool keep_aspect_ratio,
                           int *padding_top, int *padding_bottom,

@@ -21,6 +21,7 @@
 namespace SCFF.Common.Profile {
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 
@@ -105,6 +106,30 @@ public static class ProfileINIFile {
   // ファイル入力
   //===================================================================
 
+  /// ファイル入力
+  public static void Load(Profile profile, string path) {
+    // ファイル->ディクショナリ
+    var labelToRawData = Utilities.LoadDictionaryFromINIFile(path);
 
+    // Profileのクリア
+    profile.RestoreDefault();
+
+    // ディクショナリ->Profile
+    ProfileINIFile.LoadFromDictionary(labelToRawData, profile);
+  }
+
+  private static void LoadFromDictionary(Dictionary<string, string> labelToRawData, Profile profile) {
+    // 使いまわすので注意
+    string stringValue;
+    int intValue;
+    double doubleValue;
+    float floatValue;
+
+    // Dictionaryを調べながら値を設定する
+    if (labelToRawData.TryGetInt("LayoutElementCount", out intValue)) {
+      profile.LayoutElementCount = intValue;
+    }
+
+  }
 }
 }   // namespace SCFF.Common.Profile

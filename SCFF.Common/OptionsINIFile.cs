@@ -112,154 +112,93 @@ public static class OptionsINIFile {
   /// 辞書から読み込む
   private static void LoadFromDictionary(Dictionary<string,string> labelToRawData, Options options) {
     // 使いまわすので注意
-    string rawData;
+    string stringValue;
+    double doubleValue;
+    bool boolValue;
 
     // Dictionaryを調べながら値を設定する
     string prefix = "RecentProfile";
     for (int i = 0; i < 5; ++i) {
-      if (labelToRawData.TryGetValue(prefix + i, out rawData)) {
-        options.SetRecentProfile(i, rawData);
+      if (labelToRawData.TryGetValue(prefix + i, out stringValue)) {
+        options.SetRecentProfile(i, stringValue);
       }
     }
-    if (labelToRawData.TryGetValue("FFmpegPath", out rawData)) {
-      options.FFmpegPath = rawData;
+    if (labelToRawData.TryGetValue("FFmpegPath", out stringValue)) {
+      options.FFmpegPath = stringValue;
     }
-    if (labelToRawData.TryGetValue("FFmpegArguments", out rawData)) {
-      options.FFmpegArguments = rawData;
+    if (labelToRawData.TryGetValue("FFmpegArguments", out stringValue)) {
+      options.FFmpegArguments = stringValue;
     }
-    if (labelToRawData.TryGetValue("TmpLeft", out rawData)) {
-      double parsedData;
-      if (double.TryParse(rawData, out parsedData)) {
-        options.TmpLeft = parsedData;
-      }
+    if (labelToRawData.TryGetDouble("TmpLeft", out doubleValue)) {
+      options.TmpLeft = doubleValue;
     }
-    if (labelToRawData.TryGetValue("TmpTop", out rawData)) {
-      double parsedData;
-      if (double.TryParse(rawData, out parsedData)) {
-        options.TmpTop = parsedData;
-      }
+    if (labelToRawData.TryGetDouble("TmpTop", out doubleValue)) {
+      options.TmpTop = doubleValue;
     }
 
-    if (labelToRawData.TryGetValue("TmpNormalWidth", out rawData)) {
-      double parsedData;
-      if (double.TryParse(rawData, out parsedData)) {
-        options.TmpNormalWidth = parsedData;
-      }
+    if (labelToRawData.TryGetDouble("TmpNormalWidth", out doubleValue)) {
+      options.TmpNormalWidth = doubleValue;
     }
-    if (labelToRawData.TryGetValue("TmpNormalHeight", out rawData)) {
-      double parsedData;
-      if (double.TryParse(rawData, out parsedData)) {
-        options.TmpNormalHeight = parsedData;
-      }
+    if (labelToRawData.TryGetDouble("TmpNormalHeight", out doubleValue)) {
+      options.TmpNormalHeight = doubleValue;
     }
-    if (labelToRawData.TryGetValue("TmpNormalLayoutWidth", out rawData)) {
-      double parsedData;
-      if (double.TryParse(rawData, out parsedData)) {
-        options.TmpNormalLayoutWidth = parsedData;
-      }
+    if (labelToRawData.TryGetDouble("TmpNormalLayoutWidth", out doubleValue)) {
+      options.TmpNormalLayoutWidth = doubleValue;
     }
-    if (labelToRawData.TryGetValue("TmpNormalLayoutHeight", out rawData)) {
-      double parsedData;
-      if (double.TryParse(rawData, out parsedData)) {
-        options.TmpNormalLayoutHeight = parsedData;
-      }
+    if (labelToRawData.TryGetDouble("TmpNormalLayoutHeight", out doubleValue)) {
+      options.TmpNormalLayoutHeight = doubleValue;
     }
-    if (labelToRawData.TryGetValue("TmpCompactWidth", out rawData)) {
-      double parsedData;
-      if (double.TryParse(rawData, out parsedData)) {
-        options.TmpCompactWidth = parsedData;
-      }
+    if (labelToRawData.TryGetDouble("TmpCompactWidth", out doubleValue)) {
+      options.TmpCompactWidth = doubleValue;
     }
-    if (labelToRawData.TryGetValue("TmpCompactHeight", out rawData)) {
-      double parsedData;
-      if (double.TryParse(rawData, out parsedData)) {
-        options.TmpCompactHeight = parsedData;
-      }
+    if (labelToRawData.TryGetDouble("TmpCompactHeight", out doubleValue)) {
+      options.TmpCompactHeight = doubleValue;
     }
-    if (labelToRawData.TryGetValue("TmpCompactLayoutWidth", out rawData)) {
-      double parsedData;
-      if (double.TryParse(rawData, out parsedData)) {
-        options.TmpCompactLayoutWidth = parsedData;
-      }
+    if (labelToRawData.TryGetDouble("TmpCompactLayoutWidth", out doubleValue)) {
+      options.TmpCompactLayoutWidth = doubleValue;
     }
-    if (labelToRawData.TryGetValue("TmpCompactLayoutHeight", out rawData)) {
-      double parsedData;
-      if (double.TryParse(rawData, out parsedData)) {
-        options.TmpCompactLayoutHeight = parsedData;
-      }
+    if (labelToRawData.TryGetDouble("TmpCompactLayoutHeight", out doubleValue)) {
+      options.TmpCompactLayoutHeight = doubleValue;
     }
 
-    if (labelToRawData.TryGetValue("TmpWindowState", out rawData)) {
-      WindowState parsedData;
-      if (Enum.TryParse<WindowState>(rawData, out parsedData)) {
-        options.TmpWindowState = parsedData;
+    if (labelToRawData.TryGetValue("TmpWindowState", out stringValue)) {
+      WindowState enumValue;
+      if (Enum.TryParse<WindowState>(stringValue, out enumValue)) {
+        options.TmpWindowState = enumValue;
       }
     }
-    if (labelToRawData.TryGetValue("AreaIsExpanded", out rawData)) {
-      bool parsedData;
-      if (bool.TryParse(rawData, out parsedData)) {
-        options.AreaIsExpanded = parsedData;
-      }
+    if (labelToRawData.TryGetBool("AreaIsExpanded", out boolValue)) {
+      options.AreaIsExpanded = boolValue;
     }
-    if (labelToRawData.TryGetValue("OptionsIsExpanded", out rawData)) {
-      bool parsedData;
-      if (bool.TryParse(rawData, out parsedData)) {
-        options.OptionsIsExpanded = parsedData;
-      }
+    if (labelToRawData.TryGetBool("OptionsIsExpanded", out boolValue)) {
+      options.OptionsIsExpanded = boolValue;
     }
-    if (labelToRawData.TryGetValue("ResizeMethodIsExpanded", out rawData)) {
-      bool parsedData;
-      if (bool.TryParse(rawData, out parsedData)) {
-        options.ResizeMethodIsExpanded = parsedData;
-      }
+    if (labelToRawData.TryGetBool("ResizeMethodIsExpanded", out boolValue)) {
+      options.ResizeMethodIsExpanded = boolValue;
     }
-    if (labelToRawData.TryGetValue("LayoutIsExpanded", out rawData)) {
-      bool parsedData;
-      if (bool.TryParse(rawData, out parsedData)) {
-        options.LayoutIsExpanded = parsedData;
-      }
+    if (labelToRawData.TryGetBool("LayoutIsExpanded", out boolValue)) {
+      options.LayoutIsExpanded = boolValue;
     }
-    if (labelToRawData.TryGetValue("AutoApply", out rawData)) {
-      bool parsedData;
-      if (bool.TryParse(rawData, out parsedData)) {
-        options.AutoApply = parsedData;
-      }
+    if (labelToRawData.TryGetBool("AutoApply", out boolValue)) {
+      options.AutoApply = boolValue;
     }
-    if (labelToRawData.TryGetValue("LayoutPreview", out rawData)) {
-      bool parsedData;
-      if (bool.TryParse(rawData, out parsedData)) {
-        options.LayoutPreview = parsedData;
-      }
+    if (labelToRawData.TryGetBool("LayoutPreview", out boolValue)) {
+      options.LayoutPreview = boolValue;
     }
-    if (labelToRawData.TryGetValue("LayoutBorder", out rawData)) {
-      bool parsedData;
-      if (bool.TryParse(rawData, out parsedData)) {
-        options.LayoutBorder = parsedData;
-      }
+    if (labelToRawData.TryGetBool("LayoutBorder", out boolValue)) {
+      options.LayoutBorder = boolValue;
     }
-    if (labelToRawData.TryGetValue("LayoutSnap", out rawData)) {
-      bool parsedData;
-      if (bool.TryParse(rawData, out parsedData)) {
-        options.LayoutSnap = parsedData;
-      }
+    if (labelToRawData.TryGetBool("LayoutSnap", out boolValue)) {
+      options.LayoutSnap = boolValue;
     }
-    if (labelToRawData.TryGetValue("CompactView", out rawData)) {
-      bool parsedData;
-      if (bool.TryParse(rawData, out parsedData)) {
-        options.CompactView = parsedData;
-      }
+    if (labelToRawData.TryGetBool("CompactView", out boolValue)) {
+      options.CompactView = boolValue;
     }
-    if (labelToRawData.TryGetValue("ForceAeroOn", out rawData)) {
-      bool parsedData;
-      if (bool.TryParse(rawData, out parsedData)) {
-        options.ForceAeroOn = parsedData;
-      }
+    if (labelToRawData.TryGetBool("ForceAeroOn", out boolValue)) {
+      options.ForceAeroOn = boolValue;
     }
-    if (labelToRawData.TryGetValue("RestoreLastProfile", out rawData)) {
-      bool parsedData;
-      if (bool.TryParse(rawData, out parsedData)) {
-        options.RestoreLastProfile = parsedData;
-      }
+    if (labelToRawData.TryGetBool("RestoreLastProfile", out boolValue)) {
+      options.RestoreLastProfile = boolValue;
     }
   }
 }

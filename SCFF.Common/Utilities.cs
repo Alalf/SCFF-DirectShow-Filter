@@ -85,6 +85,50 @@ public static class Utilities {
     return labelToRawData;
   }
 
+  /// ディクショナリからintを読み込む
+  public static bool TryGetInt(this Dictionary<string,string> labelToRawData,
+                               string label, out int parsedData) {
+    parsedData = 0;
+    string rawData;
+    if (labelToRawData.TryGetValue(label, out rawData)) {
+      return int.TryParse(rawData, out parsedData);
+    }
+    return false;
+  }
+
+  /// ディクショナリからdoubleを読み込む
+  public static bool TryGetDouble(this Dictionary<string,string> labelToRawData,
+                                  string label, out double parsedData) {
+    parsedData = 0.0;
+    string rawData;
+    if (labelToRawData.TryGetValue(label, out rawData)) {
+      return double.TryParse(rawData, out parsedData);
+    }
+    return false;
+  }
+
+  /// ディクショナリからfloatを読み込む
+  public static bool TryGetFloat(this Dictionary<string,string> labelToRawData,
+                                 string label, out float parsedData) {
+    parsedData = 0.0F;
+    string rawData;
+    if (labelToRawData.TryGetValue(label, out rawData)) {
+      return float.TryParse(rawData, out parsedData);
+    }
+    return false;
+  }
+
+  /// ディクショナリからboolを読み込む
+  public static bool TryGetBool(this Dictionary<string,string> labelToRawData,
+                                string label, out bool parsedData) {
+    parsedData = false;
+    string rawData;
+    if (labelToRawData.TryGetValue(label, out rawData)) {
+      return bool.TryParse(rawData, out parsedData);
+    }
+    return false;
+  }
+
   //===================================================================
   // WindowType/Window別の機能
   //===================================================================

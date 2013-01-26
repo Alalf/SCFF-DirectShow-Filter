@@ -134,5 +134,17 @@ public interface ILayoutElement {
 
   /// Backup*をすべて更新
   void UpdateBackupParameters();
+  /// BackupからWindow/Clipping*を設定
+  void RestoreBackupParameters();
+  /// @copydoc SCFF::Common::Profile::AdditionalLayoutParameter::HasBackedUp
+  bool SetHasBackedUp { set; }
+  /// @copydoc SCFF::Common::Profile::AdditionalLayoutParameter::BackupScreenClippingX
+  int SetBackupScreenClippingX { set; }
+  /// @copydoc SCFF::Common::Profile::AdditionalLayoutParameter::BackupScreenClippingY
+  int SetBackupScreenClippingY { set; }
+  /// @copydoc SCFF::Common::Profile::AdditionalLayoutParameter::BackupClippingWidth
+  int SetBackupClippingWidth { set; }
+  /// @copydoc SCFF::Common::Profile::AdditionalLayoutParameter::BackupClippingHeight
+  int SetBackupClippingHeight { set; }
 }
 }   // namespace SCFF.Common.Profile

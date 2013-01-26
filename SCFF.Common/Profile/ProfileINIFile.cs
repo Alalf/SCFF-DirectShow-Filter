@@ -56,6 +56,8 @@ public static class ProfileINIFile {
         writer.WriteLine("CurrentIndex={0}", profile.CurrentIndex);
         foreach (var layoutElement in profile) {
           var index = layoutElement.Index;
+          writer.WriteLine("[LayoutElement{0}]", index);
+
           // TargetWindow
           writer.WriteLine("Window{0}={1}", index, layoutElement.Window);
           writer.WriteLine("WindowType{0}={1}", index, layoutElement.WindowType);
@@ -124,12 +126,140 @@ public static class ProfileINIFile {
     int intValue;
     double doubleValue;
     float floatValue;
+    bool boolValue;
 
     // Dictionaryを調べながら値を設定する
     if (labelToRawData.TryGetInt("LayoutElementCount", out intValue)) {
       profile.LayoutElementCount = intValue;
     }
+    // 必要な分だけレイアウト要素を追加する
+    for (int i = 0; i < profile.LayoutElementCount; ++i) {
+      profile.Add();
+    }
 
+    if (labelToRawData.TryGetInt("CurrentIndex", out intValue)) {
+      profile.CurrentIndex = intValue;
+    }
+    
+    for (int i = 0; i < profile.LayoutElementCount; ++i) {
+      var layoutElement = profile.GetLayoutElement(i);
+
+      // TargetWindow
+      WindowTypes windowTypes;
+      if (labelToRawData.TryGetValue("WindowType" + i, out stringValue)) {
+        if (Enum.TryParse<WindowTypes>(stringValue, out windowTypes)) {
+          switch (windowTypes) {
+            case WindowTypes.Normal: {
+              UIntPtr uintptrValue;
+              if (labelToRawData.TryGetUIntPtr("Window" + i, out uintptrValue)) {
+                layoutElement.SetWindow(uintptrValue);
+              }
+              break;
+            }
+            case WindowTypes.DesktopListView: {
+              layoutElement.SetWindowToDesktopListView();
+              break;
+            }
+            case WindowTypes.Desktop: {
+              layoutElement.SetWindowToDesktop();
+              break;
+            }
+          }
+        }
+      }
+
+      // Area
+      if (labelToRawData.TryGetBool("Fit" + i, out boolValue)) {
+        layoutElement.SetFit = boolValue;
+      }
+      if (labelToRawData.TryGetInt("ClippingXWithoutFit" + i, out intValue)) {
+        layoutElement.SetClippingXWithoutFit = intValue;
+      }
+      if (labelToRawData.TryGetInt("ClippingYWithoutFit" + i, out intValue)) {
+        layoutElement.SetClippingYWithoutFit = intValue;
+      }
+      if (labelToRawData.TryGetInt("ClippingWidthWithoutFit" + i, out intValue)) {
+        layoutElement.SetClippingWidthWithoutFit = intValue;
+      }
+      if (labelToRawData.TryGetInt("ClippingHeightWithoutFit" + i, out intValue)) {
+        layoutElement.SetClippingHeightWithoutFit = intValue;
+      }
+      // Options
+      if (labelToRawData.TryGetBool("ShowCursor" + i, out boolValue)) {
+        layoutElement.SetShowCursor = boolValue;
+      }
+      if (labelToRawData.TryGetBool("ShowLayeredWindow" + i, out boolValue)) {
+        layoutElement.SetShowLayeredWindow = boolValue;
+      }
+      if (labelToRawData.TryGetBool("Stretch" + i, out boolValue)) {
+        layoutElement.SetStretch = boolValue;
+      }
+      if (labelToRawData.TryGetBool("KeepAspectRatio" + i, out boolValue)) {
+        layoutElement.SetKeepAspectRatio = boolValue;
+      }
+      RotateDirections rotateDirections;
+      if (labelToRawData.TryGetEnum<RotateDirections>("RotateDirection" + i, out rotateDirections)) {
+        layoutElement.SetRotateDirection = rotateDirections;
+      }
+      // ResizeMethod
+      SWScaleFlags swscaleFlags;
+      if (labelToRawData.TryGetEnum<SWScaleFlags>("SWScaleFlags" + i, out swscaleFlags)) {
+        layoutElement.SetSWScaleFlags = swscaleFlags;
+      }
+      if (labelToRawData.TryGetBool("SWScaleAccurateRnd" + i, out boolValue)) {
+        layoutElement.SetSWScaleAccurateRnd = boolValue;
+      }
+      if (labelToRawData.TryGetBool("SWScaleIsFilterEnabled" + i, out boolValue)) {
+        layoutElement.SetSWScaleIsFilterEnabled = boolValue;
+      }
+      if (labelToRawData.TryGetFloat("SWScaleLumaGBlur" + i, out floatValue)) {
+        layoutElement.SetSWScaleLumaGBlur = floatValue;
+      }
+      if (labelToRawData.TryGetFloat("SWScaleChromaGBlur" + i, out floatValue)) {
+        layoutElement.SetSWScaleChromaGBlur = floatValue;
+      }
+      if (labelToRawData.TryGetFloat("SWScaleLumaSharpen" + i, out floatValue)) {
+        layoutElement.SetSWScaleLumaSharpen = floatValue;
+      }
+      if (labelToRawData.TryGetFloat("SWScaleChromaSharpen" + i, out floatValue)) {
+        layoutElement.SetSWScaleChromaSharpen = floatValue;
+      }
+      if (labelToRawData.TryGetFloat("SWScaleChromaHShift" + i, out floatValue)) {
+        layoutElement.SetSWScaleChromaHShift = floatValue;
+      }
+      if (labelToRawData.TryGetFloat("SWScaleChromaVShift" + i, out floatValue)) {
+        layoutElement.SetSWScaleChromaVShift = floatValue;
+      }
+      // LayoutParameter
+      if (labelToRawData.TryGetDouble("BoundRelativeLeft" + i, out doubleValue)) {
+        layoutElement.SetBoundRelativeLeft = doubleValue;
+      }
+      if (labelToRawData.TryGetDouble("BoundRelativeTop" + i, out doubleValue)) {
+        layoutElement.SetBoundRelativeTop = doubleValue;
+      }
+      if (labelToRawData.TryGetDouble("BoundRelativeRight" + i, out doubleValue)) {
+        layoutElement.SetBoundRelativeRight = doubleValue;
+      }
+      if (labelToRawData.TryGetDouble("BoundRelativeBottom" + i, out doubleValue)) {
+        layoutElement.SetBoundRelativeBottom = doubleValue;
+      }
+      // Backup
+      if (labelToRawData.TryGetBool("HasBackedUp" + i, out boolValue)) {
+        layoutElement.SetHasBackedUp = boolValue;
+      }
+      if (labelToRawData.TryGetInt("BackupScreenClippingX" + i, out intValue)) {
+        layoutElement.SetBackupScreenClippingX = intValue;
+      }
+      if (labelToRawData.TryGetInt("BackupScreenClippingY" + i, out intValue)) {
+        layoutElement.SetBackupScreenClippingY = intValue;
+      }
+      if (labelToRawData.TryGetInt("BackupClippingWidth" + i, out intValue)) {
+        layoutElement.SetBackupClippingWidth = intValue;
+      }
+      if (labelToRawData.TryGetInt("BackupClippingHeight" + i, out intValue)) {
+        layoutElement.SetBackupClippingHeight = intValue;
+      }
+    }
   }
 }
 }   // namespace SCFF.Common.Profile

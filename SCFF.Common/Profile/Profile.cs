@@ -99,6 +99,11 @@ public partial class Profile {
     }
   }
 
+  /// レイアウト要素を編集モードで返す
+  internal ILayoutElement GetLayoutElement(int index) {
+    return this.layoutElements[index];
+  }
+
   //-------------------------------------------------------------------
   // デフォルトに戻す
   //-------------------------------------------------------------------

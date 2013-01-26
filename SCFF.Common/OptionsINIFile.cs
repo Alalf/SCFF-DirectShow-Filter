@@ -161,11 +161,9 @@ public static class OptionsINIFile {
       options.TmpCompactLayoutHeight = doubleValue;
     }
 
-    if (labelToRawData.TryGetValue("TmpWindowState", out stringValue)) {
-      WindowState enumValue;
-      if (Enum.TryParse<WindowState>(stringValue, out enumValue)) {
-        options.TmpWindowState = enumValue;
-      }
+    WindowState windowState;
+    if (labelToRawData.TryGetEnum<WindowState>("TmpWindowState", out windowState)) {
+      options.TmpWindowState = windowState;
     }
     if (labelToRawData.TryGetBool("AreaIsExpanded", out boolValue)) {
       options.AreaIsExpanded = boolValue;

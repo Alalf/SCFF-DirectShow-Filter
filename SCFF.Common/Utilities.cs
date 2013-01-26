@@ -88,45 +88,55 @@ public static class Utilities {
   /// ディクショナリからintを読み込む
   public static bool TryGetInt(this Dictionary<string,string> labelToRawData,
                                string label, out int parsedData) {
-    parsedData = 0;
-    string rawData;
-    if (labelToRawData.TryGetValue(label, out rawData)) {
-      return int.TryParse(rawData, out parsedData);
-    }
-    return false;
+    parsedData = default(int);
+    if (!labelToRawData.ContainsKey(label)) return false;
+    return int.TryParse(labelToRawData[label], out parsedData);
   }
 
   /// ディクショナリからdoubleを読み込む
   public static bool TryGetDouble(this Dictionary<string,string> labelToRawData,
                                   string label, out double parsedData) {
-    parsedData = 0.0;
-    string rawData;
-    if (labelToRawData.TryGetValue(label, out rawData)) {
-      return double.TryParse(rawData, out parsedData);
-    }
-    return false;
+    parsedData = default(double);
+    if (!labelToRawData.ContainsKey(label)) return false;
+    return double.TryParse(labelToRawData[label], out parsedData);
   }
 
   /// ディクショナリからfloatを読み込む
   public static bool TryGetFloat(this Dictionary<string,string> labelToRawData,
                                  string label, out float parsedData) {
-    parsedData = 0.0F;
-    string rawData;
-    if (labelToRawData.TryGetValue(label, out rawData)) {
-      return float.TryParse(rawData, out parsedData);
-    }
-    return false;
+    parsedData = default(float);
+    if (!labelToRawData.ContainsKey(label)) return false;
+    return float.TryParse(labelToRawData[label], out parsedData);
   }
 
   /// ディクショナリからboolを読み込む
   public static bool TryGetBool(this Dictionary<string,string> labelToRawData,
                                 string label, out bool parsedData) {
-    parsedData = false;
-    string rawData;
-    if (labelToRawData.TryGetValue(label, out rawData)) {
-      return bool.TryParse(rawData, out parsedData);
+    parsedData = default(bool);
+    if (!labelToRawData.ContainsKey(label)) return false;
+    return bool.TryParse(labelToRawData[label], out parsedData);
+  }
+
+  /// ディクショナリからUIntPtrを読み込む
+  public static bool TryGetUIntPtr(this Dictionary<string,string> labelToRawData,
+                                   string label, out UIntPtr parsedData) {
+    parsedData = default(UIntPtr);
+    if (!labelToRawData.ContainsKey(label)) return false;
+    UInt64 uint64Data;
+    if (UInt64.TryParse(labelToRawData[label], out uint64Data)) {
+      parsedData = (UIntPtr)uint64Data;
+      return true;
     }
     return false;
+  }
+
+  /// ディクショナリからEnum<T>を読み込む
+  public static bool TryGetEnum<TEnum>(this Dictionary<string,string> labelToRawData,
+                                       string label, out TEnum parsedData) where TEnum : struct { 
+    parsedData = default(TEnum);
+    Debug.Assert(typeof(TEnum).IsEnum);
+    if (!labelToRawData.ContainsKey(label)) return false;
+    return Enum.TryParse<TEnum>(labelToRawData[label], out parsedData);
   }
 
   //===================================================================

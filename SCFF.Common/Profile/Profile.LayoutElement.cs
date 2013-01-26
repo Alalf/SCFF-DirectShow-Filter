@@ -568,13 +568,42 @@ public class LayoutElement : ILayoutElementView, ILayoutElement {
   /// @copydoc ILayoutElement::UpdateBackupParameters
   public void UpdateBackupParameters() {
     var screenRect = this.ScreenClippingRectWithFit;
-    this.profile.additionalLayoutParameters[this.Index].BackupScreenClippingX = screenRect.X;
-    this.profile.additionalLayoutParameters[this.Index].BackupScreenClippingY = screenRect.Y;
-    this.profile.additionalLayoutParameters[this.Index].BackupClippingWidth = screenRect.Width;
-    this.profile.additionalLayoutParameters[this.Index].BackupClippingHeight = screenRect.Height;
-    this.profile.additionalLayoutParameters[this.Index].HasBackedUp = true;
+    this.SetBackupScreenClippingX = screenRect.X;
+    this.SetBackupScreenClippingY = screenRect.Y;
+    this.SetBackupClippingWidth = screenRect.Width;
+    this.SetBackupClippingHeight = screenRect.Height;
+    this.SetHasBackedUp = true;
+  }
+  /// @copydoc ILayoutElement::UpdateBackupParameters
+  public void RestoreBackupParameters() {
+    Debug.Assert(!this.IsWindowValid);
+    this.SetWindowToDesktop();
+    this.SetFit = false;
+    this.SetClippingXWithoutFit = this.BackupScreenClippingX;
+    this.SetClippingYWithoutFit = this.BackupScreenClippingY;
+    this.SetClippingWidthWithoutFit = this.BackupClippingWidth;
+    this.SetClippingHeightWithoutFit = this.BackupClippingHeight;
+  }
+  /// @copydoc ILayoutElement::SetHasBackedUp
+  public bool SetHasBackedUp {
+    set { this.profile.additionalLayoutParameters[this.Index].HasBackedUp = value; }
+  }
+  /// @copydoc ILayoutElement::SetBackupScreenClippingX
+  public int SetBackupScreenClippingX {
+    set { this.profile.additionalLayoutParameters[this.Index].BackupScreenClippingX = value; }
+  }
+  /// @copydoc ILayoutElement::SetBackupScreenClippingY
+  public int SetBackupScreenClippingY {
+    set { this.profile.additionalLayoutParameters[this.Index].BackupScreenClippingY = value; }
+  }
+  /// @copydoc ILayoutElement::SetBackupClippingWidth
+  public int SetBackupClippingWidth {
+    set { this.profile.additionalLayoutParameters[this.Index].BackupClippingWidth = value; }
+  }
+  /// @copydoc ILayoutElement::SetBackupClippingHeight
+  public int SetBackupClippingHeight {
+    set { this.profile.additionalLayoutParameters[this.Index].BackupClippingHeight = value; }
   }
 }
-
 }   // (outerclass) SCFF.Common.Profile.Profile
 }   // namespace SCFF.Common.Profile

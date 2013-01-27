@@ -35,7 +35,8 @@ public class MoveAndSize {
                     RelativePoint mousePoint, SnapGuide snapGuide) {
     this.Target = target;
     this.HitMode = hitMode;
-    this.MouseOffset = new RelativeMouseOffset(this.Target, mousePoint);
+    this.MousePoint = mousePoint;
+    this.MouseOffset = new RelativeMouseOffset(this.Target, this.MousePoint);
     this.OriginalLTRB = new RelativeLTRB(this.Target.BoundRelativeLeft,
                                          this.Target.BoundRelativeTop,
                                          this.Target.BoundRelativeRight,
@@ -43,19 +44,24 @@ public class MoveAndSize {
     this.SnapGuide = snapGuide;
   }
 
+  /// 現在のマウス座標を更新
+  public void UpdateMousePoint(RelativePoint mousePoint) {
+    this.MousePoint = mousePoint;
+  }
+
   /// 処理
-  public RelativeLTRB Do(RelativePoint mousePoint, bool keepAspectRatio) {
+  public RelativeLTRB Do(bool keepAspectRatio) {
     Debug.Assert(this.IsRunning);
 
     // 現在のマウスポイントに合わせて処理を実行
     if (this.HitMode == HitModes.Move) {
-      return this.Move(mousePoint);
+      return this.Move();
     } else if (keepAspectRatio &&
                (this.HitMode == HitModes.SizeNE || this.HitMode == HitModes.SizeNW ||
                 this.HitMode == HitModes.SizeSE || this.HitMode == HitModes.SizeSW)) {
-      return this.SizeWithKeepAspectRatio(mousePoint);
+      return this.SizeWithKeepAspectRatio();
     } else {
-      return this.Size(mousePoint);
+      return this.Size();
     }
   }
 
@@ -63,6 +69,7 @@ public class MoveAndSize {
   public void End() {
     this.Target = null;
     this.HitMode = HitModes.Neutral;
+    this.MousePoint = null;
     this.MouseOffset = null;
     this.OriginalLTRB = null;
     this.SnapGuide = null;
@@ -73,13 +80,13 @@ public class MoveAndSize {
   //===================================================================
 
   /// レイアウト要素を移動する
-  public RelativeLTRB Move(RelativePoint mousePoint) {
+  public RelativeLTRB Move() {
     var width = this.Target.BoundRelativeWidth;
     var height = this.Target.BoundRelativeHeight;
 
     // 初期値
-    var nextLeft = mousePoint.X - this.MouseOffset.Left;
-    var nextTop = mousePoint.Y - this.MouseOffset.Top;
+    var nextLeft = this.MousePoint.X - this.MouseOffset.Left;
+    var nextTop = this.MousePoint.Y - this.MouseOffset.Top;
     var nextRight = nextLeft + width;
     var nextBottom = nextTop + height;
 
@@ -143,7 +150,7 @@ public class MoveAndSize {
   //===================================================================
 
   /// レイアウト要素を比率を維持したまま拡大縮小する
-  public RelativeLTRB SizeWithKeepAspectRatio(RelativePoint mousePoint) {
+  public RelativeLTRB SizeWithKeepAspectRatio() {
     Debug.Assert(this.HitMode == HitModes.SizeNW || this.HitMode == HitModes.SizeNE ||
                  this.HitMode == HitModes.SizeSW || this.HitMode == HitModes.SizeSE);
 
@@ -158,7 +165,7 @@ public class MoveAndSize {
       case HitModes.SizeNW:
       case HitModes.SizeNE: {
         // Top
-        var tryNextTop = mousePoint.Y - this.MouseOffset.Top;
+        var tryNextTop = this.MousePoint.Y - this.MouseOffset.Top;
         if (this.UseSnapGuide) this.SnapGuide.TryVerticalSnap(ref tryNextTop);
         if (tryNextTop < 0.0) tryNextTop = 0.0;
         var topUpperBound = nextBottom - Constants.MinimumBoundRelativeSize;
@@ -169,7 +176,7 @@ public class MoveAndSize {
       case HitModes.SizeSW:
       case HitModes.SizeSE: {
         // Bottom
-        var tryNextBottom = mousePoint.Y - this.MouseOffset.Bottom;
+        var tryNextBottom = this.MousePoint.Y - this.MouseOffset.Bottom;
         if (this.UseSnapGuide) this.SnapGuide.TryVerticalSnap(ref tryNextBottom);
         if (tryNextBottom > 1.0) tryNextBottom = 1.0;
         var bottomLowerBound = nextTop + Constants.MinimumBoundRelativeSize;
@@ -235,7 +242,7 @@ public class MoveAndSize {
   }
 
   /// レイアウト要素を拡大縮小する
-  public RelativeLTRB Size(RelativePoint mousePoint) {
+  public RelativeLTRB Size() {
     Debug.Assert(this.HitMode != HitModes.Move);
 
     // 初期値
@@ -250,7 +257,7 @@ public class MoveAndSize {
       case HitModes.SizeNW:
       case HitModes.SizeNE: {
         // Top
-        var tryNextTop = mousePoint.Y - this.MouseOffset.Top;
+        var tryNextTop = this.MousePoint.Y - this.MouseOffset.Top;
         if (this.UseSnapGuide) this.SnapGuide.TryVerticalSnap(ref tryNextTop);
         if (tryNextTop < 0.0) tryNextTop = 0.0;
         var topUpperBound = nextBottom - Constants.MinimumBoundRelativeSize;
@@ -262,7 +269,7 @@ public class MoveAndSize {
       case HitModes.SizeSW:
       case HitModes.SizeSE: {
         // Bottom
-        var tryNextBottom = mousePoint.Y - this.MouseOffset.Bottom;
+        var tryNextBottom = this.MousePoint.Y - this.MouseOffset.Bottom;
         if (this.UseSnapGuide) this.SnapGuide.TryVerticalSnap(ref tryNextBottom);
         if (tryNextBottom > 1.0) tryNextBottom = 1.0;
         var bottomLowerBound = nextTop + Constants.MinimumBoundRelativeSize;
@@ -278,7 +285,7 @@ public class MoveAndSize {
       case HitModes.SizeW:
       case HitModes.SizeSW: {
         // Left
-        var tryNextLeft = mousePoint.X - this.MouseOffset.Left;
+        var tryNextLeft = this.MousePoint.X - this.MouseOffset.Left;
         if (this.UseSnapGuide) this.SnapGuide.TryHorizontalSnap(ref tryNextLeft);
         if (tryNextLeft < 0.0) tryNextLeft = 0.0;
         var leftUpperBound = nextRight - Constants.MinimumBoundRelativeSize;
@@ -290,7 +297,7 @@ public class MoveAndSize {
       case HitModes.SizeE:
       case HitModes.SizeSE: {
         // Right
-        var tryNextRight = mousePoint.X - this.MouseOffset.Right;
+        var tryNextRight = this.MousePoint.X - this.MouseOffset.Right;
         if (this.UseSnapGuide) this.SnapGuide.TryHorizontalSnap(ref tryNextRight);
         if (tryNextRight > 1.0) tryNextRight = 1.0;
         var rightLowerBound = nextLeft + Constants.MinimumBoundRelativeSize;
@@ -335,6 +342,9 @@ public class MoveAndSize {
 
   /// 動作開始時のLTRB
   public RelativeLTRB OriginalLTRB { get; set; }
+
+  /// 動作中のマウス座標
+  private RelativePoint MousePoint { get; set; }
 
   /// スナップガイド
   private SnapGuide SnapGuide { get; set; }

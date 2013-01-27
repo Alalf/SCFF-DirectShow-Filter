@@ -332,7 +332,8 @@ public partial class LayoutEdit
     }
 
     // Move or Size
-    var nextLTRB = this.moveAndSize.Do(relativeMousePoint, Keyboard.Modifiers == ModifierKeys.Shift);
+    this.moveAndSize.UpdateMousePoint(relativeMousePoint);
+    var nextLTRB = this.moveAndSize.Do(Keyboard.Modifiers == ModifierKeys.Shift);
       
     // Profileを更新
     App.Profile.Current.Open();

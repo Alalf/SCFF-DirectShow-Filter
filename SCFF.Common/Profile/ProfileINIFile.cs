@@ -37,8 +37,7 @@ public static class ProfileINIFile {
   //-------------------------------------------------------------------
 
   /// INIファイルの先頭に付加するヘッダー
-  private const string ProfileHeader =
-      "; SCFF-DirectShow-Filter Options Ver.0.1.7";
+  private const string ProfileHeader = "; " + Constants.SCFFVersion;
 
   //===================================================================
   // ファイル出力
@@ -129,20 +128,26 @@ public static class ProfileINIFile {
     bool boolValue;
 
     // Dictionaryを調べながら値を設定する
+    var originalLayoutElementCount = profile.LayoutElementCount;
     if (labelToRawData.TryGetInt("LayoutElementCount", out intValue)) {
+      // 範囲チェック
+      intValue = intValue < 1 ? 1 : intValue;
+      intValue = intValue > Constants.MaxLayoutElementCount
+          ? Constants.MaxLayoutElementCount
+          : intValue;
       profile.LayoutElementCount = intValue;
-    }
-    // 必要な分だけレイアウト要素を追加する
-    for (int i = 0; i < profile.LayoutElementCount; ++i) {
-      profile.Add();
     }
 
     if (labelToRawData.TryGetInt("CurrentIndex", out intValue)) {
-      profile.CurrentIndex = intValue;
+      //　範囲チェック
+      if (0 <= intValue && intValue < profile.LayoutElementCount) {
+        profile.CurrentIndex = intValue;
+      }
     }
     
     for (int i = 0; i < profile.LayoutElementCount; ++i) {
       var layoutElement = profile.GetLayoutElement(i);
+      layoutElement.RestoreDefault();
 
       // TargetWindow
       WindowTypes windowTypes;

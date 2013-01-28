@@ -135,6 +135,10 @@ public class LayoutElement : ILayoutElementView, ILayoutElement {
 
   /// Clipping*WithoutFitの補正
   private void FixClippingWithoutFit() {
+    if (!this.IsWindowValid) {
+      Debug.WriteLine("Invalid Window", "FixClippingWithoutFit");
+      return;
+    }
     var windowRect = Utilities.GetWindowRect(this.WindowType, this.Window);
     this.SetClippingXWithoutFit = windowRect.X;
     this.SetClippingYWithoutFit = windowRect.Y;

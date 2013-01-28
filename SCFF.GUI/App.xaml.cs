@@ -72,6 +72,57 @@ public partial class App : Application {
   }
 
   //===================================================================
+  // Profile/Options/RuntimeOptionsを利用したNew/Open/Save/SaveAs
+  //===================================================================
+
+  /// プロファイル新規作成
+  public static void NewProfile() {
+    // Profile
+    App.Profile.RestoreDefault();
+
+    // RuntimeOptions
+    App.RuntimeOptions.ProfilePath = string.Empty;
+    App.RuntimeOptions.LastSavedTimestamp = -1L;
+    App.RuntimeOptions.LastAppliedTimestamp = -1L;
+  }
+
+  /// プロファイルの保存
+  public static bool SaveProfile(string path) {
+    // Profile
+    var result = ProfileINIFile.Save(App.Profile, path);
+    if (!result) return false;
+
+    // Options
+    App.Options.AddRecentProfile(path);
+
+    // RuntimeOptions
+    App.RuntimeOptions.ProfilePath = path;
+    App.RuntimeOptions.LastSavedTimestamp = App.Profile.Timestamp;
+    return true;
+  }
+
+  /// プロファイルを開く
+  public static void OpenProfile(string path) {
+    // Profile
+    ProfileINIFile.Load(App.Profile, path);
+
+    // RuntimeOptions
+    App.RuntimeOptions.ProfilePath = path;
+    App.RuntimeOptions.LastSavedTimestamp = App.Profile.Timestamp;
+    App.RuntimeOptions.LastAppliedTimestamp = -1L;
+  }
+
+  /// プロファイルが変更されたか
+  public static bool IsProfileModified {
+    get { return (App.RuntimeOptions.LastSavedTimestamp != App.Profile.Timestamp); }
+  }
+
+  /// プロファイルが前回のApply移行に変更されたか
+  public static bool IsProfileModifiedFromApply {
+    get { return (App.RuntimeOptions.LastAppliedTimestamp != App.Profile.Timestamp); }
+  }
+
+  //===================================================================
   // イベントハンドラ
   //===================================================================
 
@@ -85,10 +136,12 @@ public partial class App : Application {
 
     // Profile
     if (App.Options.RestoreLastProfile) {
-      /// @todo(me) プロファイル読み込み
-      App.Profile.RestoreDefault();
+      var lastProfilePath = App.Options.GetRecentProfile(0);
+      if (lastProfilePath != string.Empty && System.IO.File.Exists(lastProfilePath)) {
+        App.OpenProfile(lastProfilePath);
+      }
     } else {
-      App.Profile.RestoreDefault();
+      App.NewProfile();
     }
   }
 

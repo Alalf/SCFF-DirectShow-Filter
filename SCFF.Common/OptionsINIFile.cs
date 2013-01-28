@@ -35,8 +35,7 @@ public static class OptionsINIFile {
   /// INIファイル名
   private const string OptionsFileName = "SCFF.Common.Options.ini";
   /// INIファイルの先頭に付加するヘッダー
-  private const string OptionsHeader =
-      "; SCFF-DirectShow-Filter Options Ver.0.1.7";
+  private const string OptionsHeader = "; " + Constants.SCFFVersion;
 
   //===================================================================
   // ファイル出力

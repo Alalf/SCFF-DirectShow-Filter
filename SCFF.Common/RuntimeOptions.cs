@@ -35,7 +35,8 @@ public class RuntimeOptions {
   /// コンストラクタ
   public RuntimeOptions() {
     this.ProfilePath = string.Empty;
-    this.LastModifiedTimestamp = -1L;
+    this.LastSavedTimestamp = -1L;
+    this.LastAppliedTimestamp = -1L;
     this.SelectedEntryIndex = -1;
 
     // directoryはentriesの初期化がされていないのでここでやる
@@ -46,13 +47,32 @@ public class RuntimeOptions {
   // プロパティ
   //===================================================================
 
-  /// 現在編集中のプロパティのフルパス
+  /// 現在編集中のProfileのフルパス
   public string ProfilePath { get; set; }
-  /// 最後の保存した時のタイムスタンプ
-  public Int64 LastModifiedTimestamp { get; set; }
+
+  /// 最後に保存した時のタイムスタンプ
+  public Int64 LastSavedTimestamp { get; set; }
+
+  /// 最後にApplyしたときのタイムスタンプ
+  public Int64 LastAppliedTimestamp { get; set; }
 
   /// 現在選択中のエントリ(選択なしは-1)
   public int SelectedEntryIndex { get; set; }
+
+  //-------------------------------------------------------------------
+
+  /// 現在編集中のProfileの名前
+  public string ProfileName {
+    get {
+      if (this.ProfilePath == string.Empty) {
+        return "Untitled";
+      } else {
+        return System.IO.Path.GetFileNameWithoutExtension(this.ProfilePath);
+      }
+    }
+  }
+  /// 現在編集中のProfileがファイルに保存されているかかどうか
+  public bool HasProfileSaved { get { return (this.ProfilePath != string.Empty); } }
 
   /// 現在選択中のプロセスID
   public UInt32 CurrentProcessID {

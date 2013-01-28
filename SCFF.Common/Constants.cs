@@ -29,6 +29,9 @@ public static class Constants {
   // 定数
   //===================================================================
 
+  /// アプリケーション名＋バージョン表記
+  public const string SCFFVersion = "SCFF DirectShow Filter Ver.0.1.7";
+
   /// 最大レイアウト要素数
   public const int MaxLayoutElementCount =
       Interprocess.MaxComplexLayoutElements;

@@ -315,15 +315,10 @@ public partial class MainWindow
   /// @copydoc Common::GUI::IBindingRuntimeOptions::OnRuntimeOptionsChanged
   public void OnRuntimeOptionsChanged() {
     this.CanChangeRuntimeOptions = false;
-    /// @todo System.Reflection.Assembly.GetExecutingAssembly().GetName().Versionを使うか？
-    ///       しかしどう見てもこれ実行時に決まる値で気持ち悪いな・・・
-    var commonTitle = "SCFF DirectShow Filter Ver.0.1.7";
-    if (App.RuntimeOptions.ProfilePath != string.Empty) {
-      var profileName = Path.GetFileNameWithoutExtension(App.RuntimeOptions.ProfilePath);
-      this.WindowTitle.Content = string.Format("{0} - {1}", profileName, commonTitle);
-    } else {
-      this.WindowTitle.Content = commonTitle;
-    }
+
+    this.WindowTitle.Content = string.Format("{0} - {1}",
+        App.RuntimeOptions.ProfileName, Constants.SCFFVersion);
+
     this.CanChangeRuntimeOptions = true;
   }
 
@@ -379,34 +374,74 @@ public partial class MainWindow
   // ApplicationCommands
   //-------------------------------------------------------------------
 
+  private void NewProfile() {
+    App.NewProfile();
+    this.NotifyProfileChanged();
+    this.OnRuntimeOptionsChanged();
+  }
+
+  private bool SaveProfile(string path) {
+    var result = App.SaveProfile(path);
+    if (!result) return false;
+    this.MainMenu.OnOptionsChanged();
+    this.OnRuntimeOptionsChanged();
+    return true;
+  }
+
+  private void OpenProfile(string path) {
+    App.OpenProfile(path);
+    this.NotifyProfileChanged();
+    this.OnRuntimeOptionsChanged();
+  }
+
+  private bool ShowSaveDialog(out string path) {
+    var dialog = new SaveFileDialog();
+    dialog.InitialDirectory = Utilities.GetDefaultFilePath;
+    dialog.FileName = App.RuntimeOptions.ProfileName;
+    dialog.Title = "SCFF.GUI";
+    dialog.Filter = "SCFF Profile|*" + ProfileINIFile.ProfileExtension;
+    var saveResult = dialog.ShowDialog();
+    if (saveResult.HasValue && (bool)saveResult) {
+      path = dialog.FileName;
+      return true;
+    }
+    path = string.Empty;
+    return false;
+  }
+
   /// New
   /// @param sender 使用しない
   /// @param e 使用しない
   private void OnNew(object sender, ExecutedRoutedEventArgs e) {
-    var result = MessageBox.Show("Do you want to save changes?",
+    if (!App.IsProfileModified) {
+      // 最後に保存された状態から変更されていない場合は確認せずに新規プロファイルを作成する
+      this.NewProfile();
+      return;
+    }
+
+    var message = string.Format("Do you want to save changes to {0}?",
+                                App.RuntimeOptions.ProfileName);
+    var result = MessageBox.Show(message,
                                  "SCFF.GUI",
                                  MessageBoxButton.YesNoCancel,
                                  MessageBoxImage.Warning,
                                  MessageBoxResult.Yes);
     switch (result) {
       case MessageBoxResult.No: {
-        App.Profile.RestoreDefault();
-        this.NotifyProfileChanged();
+        this.NewProfile();
         break;
       }
       case MessageBoxResult.Yes: {
-        var save = new SaveFileDialog();
-        save.Title = "SCFF.GUI";
-        save.Filter = "SCFF.GUI Profile|*.SCFF.GUI.profile";
-        var saveResult = save.ShowDialog();
-        if (saveResult.HasValue && (bool)saveResult) {
-          /// @todo(me) 実装
-          MessageBox.Show(save.FileName);
-          App.Options.AddRecentProfile(save.FileName);
-          this.MainMenu.OnOptionsChanged();
-
-          App.Profile.RestoreDefault();
-          this.NotifyProfileChanged();
+        string path;
+        if (this.ShowSaveDialog(out path)) {
+          var saveResult = this.SaveProfile(path);
+          if (saveResult) return;
+          // 保存失敗
+          var errorMessage = string.Format("Cannot save the profile to {0}.",
+                                            App.RuntimeOptions.ProfileName);
+          MessageBox.Show(errorMessage, "SCFF.GUI",
+                          MessageBoxButton.OK,
+                          MessageBoxImage.Error);
         }
         break;
       }
@@ -424,19 +459,18 @@ public partial class MainWindow
   /// @param sender 使用しない
   /// @param e 使用しない
   private void OnSave(object sender, ExecutedRoutedEventArgs e) {
-    /// @todo(me) すでに保存されていない場合はダイアログをだす
-    var save = new SaveFileDialog();
-    save.InitialDirectory = Utilities.GetDefaultFilePath;
-    save.FileName = "hoge";
-    save.Title = "SCFF.GUI";
-    save.Filter = "SCFF Profile|*" + ProfileINIFile.ProfileExtension;
-    var saveResult = save.ShowDialog();
-    if (saveResult.HasValue && (bool)saveResult) {
-      ProfileINIFile.Save(App.Profile, save.FileName);
-      /// @todo(me) 実装
-
-      App.Options.AddRecentProfile(save.FileName);
+    if (App.RuntimeOptions.HasProfileSaved) {
+      App.SaveProfile(App.RuntimeOptions.ProfilePath);
       this.MainMenu.OnOptionsChanged();
+      this.OnRuntimeOptionsChanged();
+      return;
+    }
+
+    string path;
+    if (this.ShowSaveDialog(out path)) {
+      App.SaveProfile(path);
+      this.MainMenu.OnOptionsChanged();
+      this.OnRuntimeOptionsChanged();
     }
   }
 

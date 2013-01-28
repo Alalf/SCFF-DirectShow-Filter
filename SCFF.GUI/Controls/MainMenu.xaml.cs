@@ -83,7 +83,7 @@ public partial class MainMenu : UserControl, IBindingOptions {
   /// @param sender 使用しない
   /// @param e 使用しない
   private void RestoreLastProfile_Click(object sender, RoutedEventArgs e) {
-    App.Options.RestoreLastProfile = this.CompactView.IsChecked;
+    App.Options.RestoreLastProfile = this.RestoreLastProfile.IsChecked;
   }
 
   /// RecentProfile1: Click

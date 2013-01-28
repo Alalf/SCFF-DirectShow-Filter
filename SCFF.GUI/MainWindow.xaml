@@ -4,7 +4,8 @@
         xmlns:shell="http://schemas.microsoft.com/winfx/2006/xaml/presentation/shell"
         xmlns:localControls="clr-namespace:SCFF.GUI.Controls"
         xmlns:local="clr-namespace:SCFF.GUI"
-        Title="SCFF DirectShow Filter Ver.0.1.7"
+        xmlns:common="clr-namespace:SCFF.Common"
+        Title="SCFF VERSION"
         SnapsToDevicePixels="True"
         Background="{DynamicResource WindowBackgroundBrush}"
         Icon="Images/app.ico"
@@ -90,7 +91,7 @@
                     Fill="#FF003B00" />
         <Label      Grid.Column="1"
                     VerticalAlignment="Center"                    
-                    x:Name="WindowTitle" FontSize="10" Content="SCFF DirectShow Filter Ver.*.*.*" />
+                    x:Name="WindowTitle" FontSize="10" Content="SCFF VERSION" />
         <Button     Grid.Column="2"
                     Style="{StaticResource CaptionButton}"
                     VerticalAlignment="Center" Height="12" 

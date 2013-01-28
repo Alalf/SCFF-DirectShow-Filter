@@ -54,6 +54,12 @@ public partial class MainWindow
   protected override void OnClosing(System.ComponentModel.CancelEventArgs e) {
     base.OnClosing(e);
 
+    if (App.IsProfileModified) {
+      /// @todo(me) 実装
+      e.Cancel = true;
+      return;
+    }
+
     this.SaveTemporaryOptions();
   }
 
@@ -79,12 +85,14 @@ public partial class MainWindow
 
   /// Drop
   /// @param e ドラッグアンドドロップされた内容が入っている
-  /// @todo(me) 実装。OnOpenと全く同じなのでそちらに渡したいが・・・
   protected override void OnDrop(DragEventArgs e) {
     base.OnDrop(e);
     string[] files = e.Data.GetData(DataFormats.FileDrop) as string[];
     if (files == null) return;
-    MessageBox.Show(files[0]);
+
+    // ApplicationCommans.Openコマンドを実行
+    var path = files[0];
+    ApplicationCommands.Open.Execute(path, this);
   }
 
   //-------------------------------------------------------------------

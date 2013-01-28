@@ -23,6 +23,7 @@ namespace SCFF.GUI.Controls {
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using SCFF.Common;
 using SCFF.Common.GUI;
 
@@ -90,35 +91,35 @@ public partial class MainMenu : UserControl, IBindingOptions {
   /// @param sender 使用しない
   /// @param e 使用しない
   private void RecentProfile1_Click(object sender, RoutedEventArgs e) {
-    /// @todo(me) 実装
+    ApplicationCommands.Open.Execute(App.Options.GetRecentProfile(0), this);
   }
 
   /// RecentProfile2: Click
   /// @param sender 使用しない
   /// @param e 使用しない
   private void RecentProfile2_Click(object sender, RoutedEventArgs e) {
-    /// @todo(me) 実装
+    ApplicationCommands.Open.Execute(App.Options.GetRecentProfile(1), this);
   }
 
   /// RecentProfile3: Click
   /// @param sender 使用しない
   /// @param e 使用しない
   private void RecentProfile3_Click(object sender, RoutedEventArgs e) {
-    /// @todo(me) 実装
+    ApplicationCommands.Open.Execute(App.Options.GetRecentProfile(2), this);
   }
 
   /// RecentProfile4: Click
   /// @param sender 使用しない
   /// @param e 使用しない
   private void RecentProfile4_Click(object sender, RoutedEventArgs e) {
-    /// @todo(me) 実装 
+    ApplicationCommands.Open.Execute(App.Options.GetRecentProfile(3), this);
   }
 
   /// RecentProfile5: Click
   /// @param sender 使用しない
   /// @param e 使用しない
   private void RecentProfile5_Click(object sender, RoutedEventArgs e) {
-    /// @todo(me) 実装 
+    ApplicationCommands.Open.Execute(App.Options.GetRecentProfile(4), this);
   }
 
   //-------------------------------------------------------------------

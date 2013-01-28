@@ -108,18 +108,20 @@ public static class ProfileINIFile {
   //===================================================================
 
   /// ファイル入力
-  public static void Load(Profile profile, string path) {
+  public static bool Load(Profile profile, string path) {
     // ファイル->ディクショナリ
-    var labelToRawData = Utilities.LoadDictionaryFromINIFile(path);
+    Dictionary<string,string> labelToRawData;
+    var fileResult = Utilities.LoadDictionaryFromINIFile(path, out labelToRawData);
+    if (!fileResult) return false;
 
+    // ディクショナリ->Profile
+    return ProfileINIFile.LoadFromDictionary(labelToRawData, profile);
+  }
+
+  private static bool LoadFromDictionary(Dictionary<string, string> labelToRawData, Profile profile) {
     // Profileのクリア
     profile.RestoreDefault();
 
-    // ディクショナリ->Profile
-    ProfileINIFile.LoadFromDictionary(labelToRawData, profile);
-  }
-
-  private static void LoadFromDictionary(Dictionary<string, string> labelToRawData, Profile profile) {
     // 使いまわすので注意
     string stringValue;
     int intValue;
@@ -131,18 +133,19 @@ public static class ProfileINIFile {
     var originalLayoutElementCount = profile.LayoutElementCount;
     if (labelToRawData.TryGetInt("LayoutElementCount", out intValue)) {
       // 範囲チェック
-      intValue = intValue < 1 ? 1 : intValue;
-      intValue = intValue > Constants.MaxLayoutElementCount
-          ? Constants.MaxLayoutElementCount
-          : intValue;
+      if (intValue < 1 ||
+          Constants.MaxLayoutElementCount < intValue) {
+        return false;
+      }
       profile.LayoutElementCount = intValue;
     }
 
     if (labelToRawData.TryGetInt("CurrentIndex", out intValue)) {
       //　範囲チェック
-      if (0 <= intValue && intValue < profile.LayoutElementCount) {
-        profile.CurrentIndex = intValue;
+      if (intValue < 0 || profile.LayoutElementCount <= intValue) {
+        return false;
       }
+      profile.CurrentIndex = intValue;
     }
     
     for (int i = 0; i < profile.LayoutElementCount; ++i) {
@@ -265,6 +268,8 @@ public static class ProfileINIFile {
         layoutElement.SetBackupClippingHeight = intValue;
       }
     }
+
+    return true;
   }
 }
 }   // namespace SCFF.Common.Profile

@@ -99,17 +99,19 @@ public static class OptionsINIFile {
   /// 存在しない場合は勝手にデフォルト値が読み込まれる・・・はず
   /// @param[out] options ファイルから入力したデータの設定先
   /// @return 正常終了
-  public static void Load(Options options) {
+  public static bool Load(Options options) {
     // ファイル->ディクショナリ
     var path = Utilities.GetDefaultFilePath + OptionsINIFile.OptionsFileName;
-    var labelToRawData = Utilities.LoadDictionaryFromINIFile(path);
+    Dictionary<string,string> labelToRawData;
+    var fileResult = Utilities.LoadDictionaryFromINIFile(path, out labelToRawData);
+    if (!fileResult) return false;
 
     // ディクショナリ->Options
-    OptionsINIFile.LoadFromDictionary(labelToRawData, options);
+    return OptionsINIFile.LoadFromDictionary(labelToRawData, options);
   }
 
   /// 辞書から読み込む
-  private static void LoadFromDictionary(Dictionary<string,string> labelToRawData, Options options) {
+  private static bool LoadFromDictionary(Dictionary<string,string> labelToRawData, Options options) {
     // 使いまわすので注意
     string stringValue;
     double doubleValue;
@@ -197,6 +199,8 @@ public static class OptionsINIFile {
     if (labelToRawData.TryGetBool("RestoreLastProfile", out boolValue)) {
       options.RestoreLastProfile = boolValue;
     }
+
+    return true;
   }
 }
 }   // namespace SCFF.Common

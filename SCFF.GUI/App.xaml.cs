@@ -102,14 +102,16 @@ public partial class App : Application {
   }
 
   /// プロファイルを開く
-  public static void OpenProfile(string path) {
+  public static bool OpenProfile(string path) {
     // Profile
-    ProfileINIFile.Load(App.Profile, path);
+    var result = ProfileINIFile.Load(App.Profile, path);
+    if (!result) return false;
 
     // RuntimeOptions
     App.RuntimeOptions.ProfilePath = path;
     App.RuntimeOptions.LastSavedTimestamp = App.Profile.Timestamp;
     App.RuntimeOptions.LastAppliedTimestamp = -1L;
+    return true;
   }
 
   /// プロファイルが変更されたか

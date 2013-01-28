@@ -317,7 +317,8 @@ public partial class MainWindow
     this.CanChangeRuntimeOptions = false;
 
     this.WindowTitle.Content = string.Format("{0} - {1}",
-        App.RuntimeOptions.ProfileName, Constants.SCFFVersion);
+        App.RuntimeOptions.ProfileName,
+        Constants.SCFFVersion);
 
     this.CanChangeRuntimeOptions = true;
   }
@@ -383,10 +384,29 @@ public partial class MainWindow
   private bool SaveProfile(string path) {
     var result = App.SaveProfile(path);
     if (!result) return false;
+
     this.MainMenu.OnOptionsChanged();
     this.OnRuntimeOptionsChanged();
     return true;
   }
+
+  /// 保存失敗時のダイアログを表示
+  private void ShowSaveFailedDialog(string path) {
+    var errorMessage = string.Format("Cannot save the profile to {0}.",
+                                      path);
+    MessageBox.Show(errorMessage, "SCFF.GUI",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+  }
+  /// 読み込み失敗時のダイアログを表示
+  private void ShowOpenFailedDialog(string path) {
+    var errorMessage = string.Format("Cannot open the profile: {0}.",
+                                     path);
+    MessageBox.Show(errorMessage, "SCFF.GUI",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+  }
+
 
   private void OpenProfile(string path) {
     App.OpenProfile(path);
@@ -400,8 +420,8 @@ public partial class MainWindow
     dialog.FileName = App.RuntimeOptions.ProfileName;
     dialog.Title = "SCFF.GUI";
     dialog.Filter = "SCFF Profile|*" + ProfileINIFile.ProfileExtension;
-    var saveResult = dialog.ShowDialog();
-    if (saveResult.HasValue && (bool)saveResult) {
+    var result = dialog.ShowDialog();
+    if (result.HasValue && (bool)result) {
       path = dialog.FileName;
       return true;
     }
@@ -409,42 +429,73 @@ public partial class MainWindow
     return false;
   }
 
+  private bool ShowOpenDialog(out string path) {
+    var dialog = new OpenFileDialog();
+    dialog.InitialDirectory = Utilities.GetDefaultFilePath;
+    dialog.Title = "SCFF.GUI";
+    dialog.Filter = "SCFF Profile|*" + ProfileINIFile.ProfileExtension;
+    var result = dialog.ShowDialog();
+    if (result.HasValue && (bool)result) {
+      path = dialog.FileName;
+      return true;
+    }
+    path = string.Empty;
+    return false;
+  }
+
+  private MessageBoxResult ShowSaveChangesDialog() {
+    var message = string.Format("Do you want to save changes to {0}?",
+                                App.RuntimeOptions.ProfileName);
+    return MessageBox.Show(message,
+                           "SCFF.GUI",
+                           MessageBoxButton.YesNoCancel,
+                           MessageBoxImage.Warning,
+                           MessageBoxResult.Yes);
+  }
+
   /// New
   /// @param sender 使用しない
   /// @param e 使用しない
   private void OnNew(object sender, ExecutedRoutedEventArgs e) {
+    // ダーティフラグがたっていなければそのまま新規作成
     if (!App.IsProfileModified) {
-      // 最後に保存された状態から変更されていない場合は確認せずに新規プロファイルを作成する
       this.NewProfile();
       return;
     }
 
-    var message = string.Format("Do you want to save changes to {0}?",
-                                App.RuntimeOptions.ProfileName);
-    var result = MessageBox.Show(message,
-                                 "SCFF.GUI",
-                                 MessageBoxButton.YesNoCancel,
-                                 MessageBoxImage.Warning,
-                                 MessageBoxResult.Yes);
+    // ダーティフラグが立っている場合は、現在編集中のプロファイルを保存するか確認
+    var result = this.ShowSaveChangesDialog();
     switch (result) {
       case MessageBoxResult.No: {
+        // 保存せずに新規作成
         this.NewProfile();
-        break;
+        return;
       }
       case MessageBoxResult.Yes: {
-        string path;
-        if (this.ShowSaveDialog(out path)) {
-          var saveResult = this.SaveProfile(path);
-          if (saveResult) return;
-          // 保存失敗
-          var errorMessage = string.Format("Cannot save the profile to {0}.",
-                                            App.RuntimeOptions.ProfileName);
-          MessageBox.Show(errorMessage, "SCFF.GUI",
-                          MessageBoxButton.OK,
-                          MessageBoxImage.Error);
-        }
+        // nop
         break;
       }
+      case MessageBoxResult.Cancel: {
+        // 新規作成をキャンセル
+        return;
+      }
+      default: Debug.Fail("switch"); throw new System.ArgumentException();
+    }
+
+    // 現在編集中のファイルを保存する場合。そのまま保存
+    string path = null;
+    if (App.RuntimeOptions.HasProfileSaved) {
+      path = App.RuntimeOptions.ProfilePath;
+    } else {
+      var dialogResult = this.ShowSaveDialog(out path);
+      // ファイルが選択されなければ何もしない
+      if (!dialogResult) return;
+    }
+
+    // 保存
+    var saveResult = this.SaveProfile(path);
+    if (!saveResult) {
+      this.ShowSaveFailedDialog(path);
     }
   }
 
@@ -452,7 +503,21 @@ public partial class MainWindow
   /// @param sender 使用しない
   /// @param e 使用しない
   private void OnOpen(object sender, ExecutedRoutedEventArgs e) {
-    /// @todo(me) Newと似たコードが必要だがかなりめんどくさい。あとでかく
+    string path;
+    if (e.Parameter is string) {
+      path = e.Parameter as string;
+    } else {
+      var result = this.ShowOpenDialog(out path);
+      if (!result) return;
+    }
+    if (!File.Exists(path)) {
+      this.ShowOpenFailedDialog(path);
+      return;
+    }
+
+
+
+    this.OpenProfile(path);
   }
 
   /// Save
@@ -460,17 +525,13 @@ public partial class MainWindow
   /// @param e 使用しない
   private void OnSave(object sender, ExecutedRoutedEventArgs e) {
     if (App.RuntimeOptions.HasProfileSaved) {
-      App.SaveProfile(App.RuntimeOptions.ProfilePath);
-      this.MainMenu.OnOptionsChanged();
-      this.OnRuntimeOptionsChanged();
+      this.SaveProfile(App.RuntimeOptions.ProfilePath);
       return;
     }
 
     string path;
     if (this.ShowSaveDialog(out path)) {
-      App.SaveProfile(path);
-      this.MainMenu.OnOptionsChanged();
-      this.OnRuntimeOptionsChanged();
+      this.SaveProfile(path);
     }
   }
 
@@ -478,15 +539,9 @@ public partial class MainWindow
   /// @param sender 使用しない
   /// @param e 使用しない
   private void OnSaveAs(object sender, ExecutedRoutedEventArgs e) {
-    var save = new SaveFileDialog();
-    save.Title = "SCFF.GUI";
-    save.Filter = "SCFF.GUI Profile|*.SCFF.GUI.profile";
-    var saveResult = save.ShowDialog();
-    if (saveResult.HasValue && (bool)saveResult) {
-      /// @todo(me) 実装
-      MessageBox.Show(save.FileName);
-      App.Options.AddRecentProfile(save.FileName);
-      this.MainMenu.OnOptionsChanged();
+    string path;
+    if (this.ShowSaveDialog(out path)) {
+      this.SaveProfile(path);
     }
   }
 

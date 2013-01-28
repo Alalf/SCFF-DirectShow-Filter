@@ -45,8 +45,9 @@ public static class Utilities {
   }
 
   /// INIファイル(セクション機能は無し)読み込み
-  public static Dictionary<string,string> LoadDictionaryFromINIFile(string path) {
-    var labelToRawData = new Dictionary<string,string>();
+  public static bool LoadDictionaryFromINIFile(string path,
+      out Dictionary<string,string> labelToRawData) {
+    labelToRawData = null;
 
     // テキストファイルの読み込み
     var lines = new List<string>();
@@ -58,8 +59,11 @@ public static class Utilities {
       }
     } catch (Exception) {
       Debug.WriteLine("Cannot read file", "LoadDictionaryFromINIFile");
-      return labelToRawData;
+      return false;
     }
+
+    // ディクショナリの作成
+    labelToRawData = new Dictionary<string,string>();
 
     // 読み込んだデータを*=*でSplit
     var separator = new char[1] {'='};
@@ -82,7 +86,7 @@ public static class Utilities {
       labelToRawData.Add(label, rawData);
     }
 
-    return labelToRawData;
+    return true;;
   }
 
   /// ディクショナリからintを読み込む

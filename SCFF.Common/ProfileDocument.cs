@@ -73,7 +73,7 @@ public class ProfileDocument {
     // RuntimeOptions
     this.RuntimeOptions.ProfilePath = string.Empty;
     this.RuntimeOptions.ProfileName = string.Empty;
-    this.RuntimeOptions.LastSavedTimestamp = -1L;
+    this.RuntimeOptions.LastSavedTimestamp = this.Profile.Timestamp;
     this.RuntimeOptions.LastAppliedTimestamp = -1L;
   }
 

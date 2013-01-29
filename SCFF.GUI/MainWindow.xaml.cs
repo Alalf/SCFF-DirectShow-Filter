@@ -54,47 +54,8 @@ public partial class MainWindow
   }
 
   //===================================================================
-  // ProfileDocumentの操作
+  // ProfileDocument: New/Close/Save/Open
   //===================================================================
-
-  /// ProfileDocumentの作成
-  private void NewProfileDocument() {
-    App.ProfileDocument.New();
-    // RuntimeOptions
-    this.OnRuntimeOptionsChanged();
-    // Propfile
-    this.NotifyProfileChanged();
-  }
-
-  /// ProfileDocumentの読み込み
-  private bool OpenProfileDocument(string path) {
-    var result = App.ProfileDocument.Open(path);
-    if (!result) return false;
-
-    // Options
-    this.MainMenu.OnOptionsChanged();
-    // RuntimeOptions
-    this.OnRuntimeOptionsChanged();
-    // Profile
-    this.NotifyProfileChanged();
-    return true;
-  }
-
-  /// ProfileDocumentの保存
-  private bool SaveProfileDocument(string path) {
-    var result = App.ProfileDocument.Save(path);
-    if (!result) return false;
-
-    // Options
-    this.MainMenu.OnOptionsChanged();
-    // RuntimeOptions
-    this.OnRuntimeOptionsChanged();
-    return true;
-  }
-
-  //-------------------------------------------------------------------
-  // UserInterface
-  //-------------------------------------------------------------------
 
   /// Profileを閉じる
   private bool CloseProfile() {
@@ -121,7 +82,46 @@ public partial class MainWindow
   /// Profileの新規作成
   private bool NewProfile() {
     if (!this.CloseProfile()) return false;
-    this.NewProfileDocument();
+
+    App.ProfileDocument.New();
+    // RuntimeOptions
+    this.OnRuntimeOptionsChanged();
+    // Propfile
+    this.NotifyProfileChanged();
+    return true;
+  }
+
+  /// Profileの読み込み
+  private bool OpenProfile(string path) {
+    if (!this.CloseProfile()) return false;
+    
+    // ファイル名が指定されていない場合はダイアログを表示する
+    if (path == null || path == string.Empty) {
+      var dialog = new OpenFileDialog();
+      dialog.Title = "SCFF.GUI";
+      dialog.Filter = "SCFF Profile|*" + ProfileINIFile.ProfileExtension;
+      if (App.ProfileDocument.HasSaved) {
+        dialog.InitialDirectory = Path.GetDirectoryName(App.RuntimeOptions.ProfilePath);
+      } else {
+        dialog.InitialDirectory = Utilities.GetDefaultFilePath;
+      }
+      var result = dialog.ShowDialog(this);
+      if (result.HasValue && (bool)result) {
+        path = dialog.FileName;
+      } else {
+        return false;
+      }
+    }
+    // データの読み込み
+    var openResult = App.ProfileDocument.Open(path);
+    if (!openResult) return false;
+
+    // Options
+    this.MainMenu.OnOptionsChanged();
+    // RuntimeOptions
+    this.OnRuntimeOptionsChanged();
+    // Profile
+    this.NotifyProfileChanged();
     return true;
   }
 
@@ -156,32 +156,14 @@ public partial class MainWindow
       }
     }
     // データの書き込み
-    return this.SaveProfileDocument(path);
-  }
+    var saveResult = App.ProfileDocument.Save(path);
+    if (!saveResult) return false;
 
-  /// Profileの読み込み
-  private bool OpenProfile(string path) {
-    if (!this.CloseProfile()) return false;
-    
-    // ファイル名が指定されていない場合はダイアログを表示する
-    if (path == null || path == string.Empty) {
-      var dialog = new OpenFileDialog();
-      dialog.Title = "SCFF.GUI";
-      dialog.Filter = "SCFF Profile|*" + ProfileINIFile.ProfileExtension;
-      if (App.ProfileDocument.HasSaved) {
-        dialog.InitialDirectory = Path.GetDirectoryName(App.RuntimeOptions.ProfilePath);
-      } else {
-        dialog.InitialDirectory = Utilities.GetDefaultFilePath;
-      }
-      var result = dialog.ShowDialog(this);
-      if (result.HasValue && (bool)result) {
-        path = dialog.FileName;
-      } else {
-        return false;
-      }
-    }
-    // データの読み込み
-    return this.OpenProfileDocument(path);
+    // Options
+    this.MainMenu.OnOptionsChanged();
+    // RuntimeOptions
+    this.OnRuntimeOptionsChanged();
+    return true;
   }
 
   //===================================================================

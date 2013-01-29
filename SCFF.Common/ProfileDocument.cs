@@ -43,10 +43,20 @@ public class ProfileDocument {
   // メソッド
   //===================================================================
 
-  public void Init() {
+  /// Argsからの読み込み/LastProfile/新規作成から選んでProfileを読み込む
+  public void Init(string path) {
+    if (path != null && path != string.Empty &&
+        System.IO.File.Exists(path) &&
+        Path.GetExtension(path) == ProfileINIFile.ProfileExtension) {
+      this.Open(path);
+      return;
+    }
+
     if (this.Options.RestoreLastProfile) {
       var lastProfilePath = this.Options.GetRecentProfile(0);
-      if (lastProfilePath != string.Empty && System.IO.File.Exists(lastProfilePath)) {
+      if (lastProfilePath != null && lastProfilePath != string.Empty &&
+          System.IO.File.Exists(lastProfilePath) &&
+          Path.GetExtension(lastProfilePath) == ProfileINIFile.ProfileExtension) {
         this.Open(lastProfilePath);
         return;
       }
@@ -55,7 +65,7 @@ public class ProfileDocument {
     this.New();
   }
 
-  /// プロファイル新規作成
+  /// Profileの新規作成
   public void New() {
     // Profile
     this.Profile.RestoreDefault();
@@ -67,7 +77,7 @@ public class ProfileDocument {
     this.RuntimeOptions.LastAppliedTimestamp = -1L;
   }
 
-  /// プロファイルの保存
+  /// Profileの保存
   public bool Save(string path) {
     // Profile
     var result = ProfileINIFile.Save(this.Profile, path);
@@ -84,7 +94,7 @@ public class ProfileDocument {
     return true;
   }
 
-  /// プロファイルを開く
+  /// Profileを読み込む
   public bool Open(string path) {
     // Profile
     var result = ProfileINIFile.Load(this.Profile, path);
@@ -109,8 +119,7 @@ public class ProfileDocument {
   /// 現在編集中のProfileがファイルに保存されているかかどうか
   public bool HasSaved {
     get {
-      return (this.RuntimeOptions.ProfilePath != null &&
-              this.RuntimeOptions.ProfilePath != string.Empty);
+      return (this.RuntimeOptions.ProfilePath != string.Empty);
     }
   }
 
@@ -142,17 +151,13 @@ public class ProfileDocument {
     }
   }
 
-  /// ファイル名
-  public string FileName {
-    get {
-      return this.HasSaved ? this.RuntimeOptions.ProfileName : "Untitled";
-    }
-  }
-
   //-------------------------------------------------------------------
 
+  /// Optionsへの参照
   private Options Options { get; set; }
+  /// RuntimeOptionsへの参照
   private RuntimeOptions RuntimeOptions { get; set; }
+  /// Profileへの参照
   private Profile.Profile Profile { get; set; }
 }
 }   // namespace SCFF.Common

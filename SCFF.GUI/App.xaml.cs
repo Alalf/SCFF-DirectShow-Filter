@@ -81,7 +81,8 @@ public partial class App : Application {
     OptionsINIFile.Load(App.Options);
 
     // Profile
-    App.ProfileDocument.Init();
+    var path = e.Args.Length > 0 ? e.Args[0] : null;
+    App.ProfileDocument.Init(path);
   }
 
   /// Exit: アプリケーション終了時

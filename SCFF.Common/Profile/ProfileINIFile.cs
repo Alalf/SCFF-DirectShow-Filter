@@ -118,6 +118,7 @@ public static class ProfileINIFile {
     return ProfileINIFile.LoadFromDictionary(labelToRawData, profile);
   }
 
+  /// 辞書から読み込む
   private static bool LoadFromDictionary(Dictionary<string, string> labelToRawData, Profile profile) {
     // Profileのクリア
     profile.RestoreDefault();

@@ -31,6 +31,64 @@ using SCFF.Common.Ext;
 /// SCFF.Commonモジュール共通で利用する機能
 public static class Utilities {
   //===================================================================
+  // ファイルパスの短縮
+  //===================================================================
+
+  /// 短縮した後の長さ
+  private static int CalcShortPathLength(string pathRoot,
+      List<string> directoryList, bool shortened, string fileName) {
+    var length = pathRoot.Length;
+    if (shortened) length += "...\\".Length;
+    foreach (var i in directoryList) {
+      if (i == string.Empty) continue;
+      length += i.Length + 1;   // '\\'.Length = 1
+    }
+    length += fileName.Length;
+    return length;
+  }
+
+  /// 短縮パスを文字列に直す
+  private static string BuildShortPath(string pathRoot,
+      List<string> directoryList, bool shortened, string fileName) {
+    var builder = new StringBuilder();
+    builder.Append(pathRoot);
+    if (shortened) builder.Append("...\\");
+    foreach (var i in directoryList) {
+      if (i == string.Empty) continue;
+      builder.Append(i);
+      builder.Append('\\');
+    }
+    builder.Append(fileName);
+    return builder.ToString();
+  }
+
+  /// 最大文字数(目安)を指定して短縮パスを得る
+  public static string GetShortPath(string path, int length) {
+    var fileName = Path.GetFileName(path);
+    var pathRoot = Path.GetPathRoot(path);
+    var directoryPath = Path.GetDirectoryName(path).Substring(pathRoot.Length);
+    var directoryList = new List<string>(directoryPath.Split('\\'));
+
+    // 短縮が必要ない場合はそのまま文字列にして返す
+    var currentLength = Utilities.CalcShortPathLength(pathRoot, directoryList, false, fileName);
+    if (currentLength <= length) {
+      // 正常な結果なので文字列に戻して返す
+      return Utilities.BuildShortPath(pathRoot, directoryList, false, fileName);
+    }
+
+    // 短縮開始
+    do {
+      directoryList.RemoveAt(0);
+      var shortenedLength = Utilities.CalcShortPathLength(pathRoot, directoryList, true, fileName);
+      if (shortenedLength <= length) {
+        return Utilities.BuildShortPath(pathRoot, directoryList, true, fileName);
+      }
+    } while (directoryList.Count > 0);
+
+    return Utilities.BuildShortPath(pathRoot, directoryList, true, fileName);
+  }
+
+  //===================================================================
   // ファイル入出力用の機能
   //===================================================================
 

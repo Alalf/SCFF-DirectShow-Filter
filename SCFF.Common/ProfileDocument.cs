@@ -48,10 +48,11 @@ public class ProfileDocument {
       var lastProfilePath = this.Options.GetRecentProfile(0);
       if (lastProfilePath != string.Empty && System.IO.File.Exists(lastProfilePath)) {
         this.Open(lastProfilePath);
+        return;
       }
-    } else {
-      this.New();
     }
+    
+    this.New();
   }
 
   /// プロファイル新規作成
@@ -89,18 +90,15 @@ public class ProfileDocument {
     var result = ProfileINIFile.Load(this.Profile, path);
     if (!result) return false;
 
+    // Options
+    this.Options.AddRecentProfile(path);
+
     // RuntimeOptions
     this.RuntimeOptions.ProfilePath = path;
     this.RuntimeOptions.ProfileName = Path.GetFileNameWithoutExtension(path);
     this.RuntimeOptions.LastSavedTimestamp = this.Profile.Timestamp;
     this.RuntimeOptions.LastAppliedTimestamp = -1L;
 
-    return true;
-  }
-
-  /// 閉じる
-  public bool Close() {
-    /// @todo(me) 実装
     return true;
   }
 

@@ -66,13 +66,19 @@ public partial class Profile {
   // 外部インタフェース
   //===================================================================
 
-  /// メンバ配列を空にする
-  /// @pre メンバ配列自体は生成済み(not null)
-  private void ClearArrays() {
-    /// 配列をクリア
-    var length = Constants.MaxLayoutElementCount;
-    Array.Clear(this.message.LayoutParameters, 0, length);
-    Array.Clear(this.additionalLayoutParameters, 0, length);
+  //-------------------------------------------------------------------
+  // イベント
+  //-------------------------------------------------------------------
+
+  /// イベント: 変更時
+  /// @warning Profile.CurrentIndexでは発生しない
+  public event EventHandler OnChanged;
+
+  /// イベントハンドラの実行
+  public void RaiseChanged() {
+    var handler = this.OnChanged;
+    if (handler == null) return;
+    handler(this, EventArgs.Empty);
   }
 
   //-------------------------------------------------------------------
@@ -108,6 +114,15 @@ public partial class Profile {
   // デフォルトに戻す
   //-------------------------------------------------------------------
 
+  /// メンバ配列を空にする
+  /// @pre メンバ配列自体は生成済み(not null)
+  private void ClearArrays() {
+    /// 配列をクリア
+    var length = Constants.MaxLayoutElementCount;
+    Array.Clear(this.message.LayoutParameters, 0, length);
+    Array.Clear(this.additionalLayoutParameters, 0, length);
+  }
+
   /// デフォルトに戻す
   /// @post タイムスタンプ更新
   public void RestoreDefault() {
@@ -121,7 +136,7 @@ public partial class Profile {
     this.CurrentIndex = 0;
     this.Current.Open();
     this.Current.RestoreDefault();
-    this.Current.Close();
+    this.Current.Close(); // RaiseChanged
   }
 
   //-------------------------------------------------------------------
@@ -144,7 +159,7 @@ public partial class Profile {
     this.CurrentIndex = nextIndex;
     this.Current.Open();
     this.Current.RestoreDefault();
-    this.Current.Close();
+    this.Current.Close(); // RaiseChanged
   }
 
   //-------------------------------------------------------------------
@@ -188,6 +203,9 @@ public partial class Profile {
     } else {
       this.CurrentIndex = removedIndex - 1;
     }
+
+    // 変更イベントの発生
+    this.RaiseChanged();
   }
 
   //===================================================================

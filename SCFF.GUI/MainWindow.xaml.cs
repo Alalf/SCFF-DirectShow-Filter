@@ -44,6 +44,13 @@ public partial class MainWindow
     this.NotifyOptionsChanged();
     this.NotifyRuntimeOptionsChanged();
     this.NotifyProfileChanged();
+
+    App.Profile.OnChanged += this.OnProfileChanged;
+  }
+
+  /// デストラクタ
+  ~MainWindow() {
+    App.Profile.OnChanged -= this.OnProfileChanged;
   }
 
   //===================================================================
@@ -93,6 +100,15 @@ public partial class MainWindow
     // ApplicationCommans.Openコマンドを実行
     var path = files[0];
     ApplicationCommands.Open.Execute(path, this);
+  }
+
+
+  /// Profile.OnChanged
+  /// @param e 使用しない
+  private void OnProfileChanged(object sender, System.EventArgs e) {
+    /// @todo(me) 実装
+    this.OnRuntimeOptionsChanged();
+    //Debug.Write("c");
   }
 
   //-------------------------------------------------------------------
@@ -388,6 +404,13 @@ public partial class MainWindow
     this.OnRuntimeOptionsChanged();
   }
 
+  private void OpenProfile(string path) {
+    App.ProfileDocument.Open(path);
+    this.NotifyProfileChanged();
+    this.MainMenu.OnOptionsChanged();
+    this.OnRuntimeOptionsChanged();
+  }
+
   private bool SaveProfile(string path) {
     var result = App.ProfileDocument.Save(path);
     if (!result) return false;
@@ -412,13 +435,6 @@ public partial class MainWindow
     MessageBox.Show(errorMessage, "SCFF.GUI",
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
-  }
-
-
-  private void OpenProfile(string path) {
-    App.ProfileDocument.Open(path);
-    this.NotifyProfileChanged();
-    this.OnRuntimeOptionsChanged();
   }
 
   private bool ShowSaveDialog(out string path) {

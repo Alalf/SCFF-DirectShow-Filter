@@ -138,8 +138,10 @@ public partial class MainMenu : UserControl, IBindingOptions {
   private void UpdateRecentProfiles() {
     for (int i = 0; i < Constants.RecentProfilesLength; ++i ) {
       var isEmpty = (App.Options.GetRecentProfile(i) == string.Empty);
-      var header = string.Format("{0} {1}(_{0})",
-          i+1, (isEmpty ? "" : App.Options.GetRecentProfile(i)));
+      var shortPath = isEmpty
+          ? ""
+          : Utilities.GetShortPath(App.Options.GetRecentProfile(i), 60);        
+      var header = string.Format("{0} {1}(_{0})", i+1, shortPath);
 
       this.GetMenuItem(i).IsEnabled = !isEmpty;
       this.GetMenuItem(i).Header = header;

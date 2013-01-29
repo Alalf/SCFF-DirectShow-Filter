@@ -75,6 +75,7 @@ public class LayoutElement : ILayoutElementView, ILayoutElement {
   /// @copydoc ILayoutElement::Close
   public void Close() {
     this.profile.UpdateTimestamp();
+    this.profile.RaiseChanged();
   }
 
   /// @copydoc ILayoutElement::RestoreDefault

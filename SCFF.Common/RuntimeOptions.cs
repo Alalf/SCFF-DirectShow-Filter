@@ -35,6 +35,7 @@ public class RuntimeOptions {
   /// コンストラクタ
   public RuntimeOptions() {
     this.ProfilePath = string.Empty;
+    this.ProfileName = string.Empty;
     this.LastSavedTimestamp = -1L;
     this.LastAppliedTimestamp = -1L;
     this.SelectedEntryIndex = -1;
@@ -50,6 +51,9 @@ public class RuntimeOptions {
   /// 現在編集中のProfileのフルパス
   public string ProfilePath { get; set; }
 
+  /// 現在編集中のProfile名
+  public string ProfileName { get; set; }
+
   /// 最後に保存した時のタイムスタンプ
   public Int64 LastSavedTimestamp { get; set; }
 
@@ -60,19 +64,6 @@ public class RuntimeOptions {
   public int SelectedEntryIndex { get; set; }
 
   //-------------------------------------------------------------------
-
-  /// 現在編集中のProfileの名前
-  public string ProfileName {
-    get {
-      if (this.ProfilePath == string.Empty) {
-        return "Untitled";
-      } else {
-        return System.IO.Path.GetFileNameWithoutExtension(this.ProfilePath);
-      }
-    }
-  }
-  /// 現在編集中のProfileがファイルに保存されているかかどうか
-  public bool HasProfileSaved { get { return (this.ProfilePath != string.Empty); } }
 
   /// 現在選択中のプロセスID
   public UInt32 CurrentProcessID {

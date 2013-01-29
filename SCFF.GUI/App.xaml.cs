@@ -33,95 +33,39 @@ public partial class App : Application {
   //===================================================================
 
   /// Singleton: アプリケーション設定
-  private static Options options = new Options();
-  /// アプリケーション設定を取得
-  public static Options Options {
-    get { return App.options; }
-  }
-
+  public static Options Options { get; private set; }
   /// Singleton: アプリケーション実行時設定
-  private static RuntimeOptions runtimeOptions = new RuntimeOptions();
-  /// アプリケーション実行時設定を取得
-  public static RuntimeOptions RuntimeOptions {
-    get { return App.runtimeOptions; }
-  }
-
+  public static RuntimeOptions RuntimeOptions { get; private set; }
   /// Singleton: 現在編集中のプロファイル
-  private static Profile profile = new Profile();
-  /// 現在編集中のプロファイルを取得
-  public static Profile Profile {
-    get { return App.profile; }
-  }
+  public static Profile Profile { get; private set; }
+
+  /// Singleton: プロファイルドキュメント
+  public static ProfileDocument ProfileDocument { get; private set; }
 
   /// Singleton: スクリーンキャプチャ用タイマー
-  private static ScreenCaptureTimer screenCaptureTimer = new ScreenCaptureTimer();
-  /// スクリーンキャプチャ用タイマー
-  public static ScreenCaptureTimer ScreenCaptureTimer {
-    get { return App.screenCaptureTimer; }
-  }
+  public static ScreenCaptureTimer ScreenCaptureTimer { get; private set; }
 
-  //===================================================================
+  //-------------------------------------------------------------------
   // 非マネージドリソース
-  //===================================================================
+  //-------------------------------------------------------------------
   
   /// Singleton: NullPen
-  private static NullPen nullPen = new NullPen();
-  /// NullPen
-  public static NullPen NullPen {
-    get { return App.nullPen; }
-  }
+  public static NullPen NullPen { get; private set; }
 
-  //===================================================================
-  // Profile/Options/RuntimeOptionsを利用したNew/Open/Save/SaveAs
-  //===================================================================
+  //-------------------------------------------------------------------
+  
+  /// staticコンストラクタ
+  static App() {
+    App.Options = new Options();
+    App.RuntimeOptions = new RuntimeOptions();
+    App.Profile = new Profile();
 
-  /// プロファイル新規作成
-  public static void NewProfile() {
-    // Profile
-    App.Profile.RestoreDefault();
+    App.ProfileDocument = new ProfileDocument(
+        App.Options, App.RuntimeOptions, App.Profile);
 
-    // RuntimeOptions
-    App.RuntimeOptions.ProfilePath = string.Empty;
-    App.RuntimeOptions.LastSavedTimestamp = -1L;
-    App.RuntimeOptions.LastAppliedTimestamp = -1L;
-  }
-
-  /// プロファイルの保存
-  public static bool SaveProfile(string path) {
-    // Profile
-    var result = ProfileINIFile.Save(App.Profile, path);
-    if (!result) return false;
-
-    // Options
-    App.Options.AddRecentProfile(path);
-
-    // RuntimeOptions
-    App.RuntimeOptions.ProfilePath = path;
-    App.RuntimeOptions.LastSavedTimestamp = App.Profile.Timestamp;
-    return true;
-  }
-
-  /// プロファイルを開く
-  public static bool OpenProfile(string path) {
-    // Profile
-    var result = ProfileINIFile.Load(App.Profile, path);
-    if (!result) return false;
-
-    // RuntimeOptions
-    App.RuntimeOptions.ProfilePath = path;
-    App.RuntimeOptions.LastSavedTimestamp = App.Profile.Timestamp;
-    App.RuntimeOptions.LastAppliedTimestamp = -1L;
-    return true;
-  }
-
-  /// プロファイルが変更されたか
-  public static bool IsProfileModified {
-    get { return (App.RuntimeOptions.LastSavedTimestamp != App.Profile.Timestamp); }
-  }
-
-  /// プロファイルが前回のApply移行に変更されたか
-  public static bool IsProfileModifiedFromApply {
-    get { return (App.RuntimeOptions.LastAppliedTimestamp != App.Profile.Timestamp); }
+    App.ScreenCaptureTimer = new ScreenCaptureTimer();
+    
+    App.NullPen = new NullPen();
   }
 
   //===================================================================
@@ -137,14 +81,7 @@ public partial class App : Application {
     OptionsINIFile.Load(App.Options);
 
     // Profile
-    if (App.Options.RestoreLastProfile) {
-      var lastProfilePath = App.Options.GetRecentProfile(0);
-      if (lastProfilePath != string.Empty && System.IO.File.Exists(lastProfilePath)) {
-        App.OpenProfile(lastProfilePath);
-      }
-    } else {
-      App.NewProfile();
-    }
+    App.ProfileDocument.Init();
   }
 
   /// Exit: アプリケーション終了時

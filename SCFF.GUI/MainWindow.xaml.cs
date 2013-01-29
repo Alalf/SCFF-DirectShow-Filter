@@ -54,7 +54,7 @@ public partial class MainWindow
   protected override void OnClosing(System.ComponentModel.CancelEventArgs e) {
     base.OnClosing(e);
 
-    if (App.IsProfileModified) {
+    if (App.ProfileDocument.HasModified) {
       /// @todo(me) 実装
       e.Cancel = true;
       return;
@@ -324,9 +324,8 @@ public partial class MainWindow
   public void OnRuntimeOptionsChanged() {
     this.CanChangeRuntimeOptions = false;
 
-    this.WindowTitle.Content = string.Format("{0} - {1}",
-        App.RuntimeOptions.ProfileName,
-        Constants.SCFFVersion);
+    this.WindowTitle.Content = App.ProfileDocument.Title;
+    this.Title = App.ProfileDocument.Title;
 
     this.CanChangeRuntimeOptions = true;
   }
@@ -384,13 +383,13 @@ public partial class MainWindow
   //-------------------------------------------------------------------
 
   private void NewProfile() {
-    App.NewProfile();
+    App.ProfileDocument.New();
     this.NotifyProfileChanged();
     this.OnRuntimeOptionsChanged();
   }
 
   private bool SaveProfile(string path) {
-    var result = App.SaveProfile(path);
+    var result = App.ProfileDocument.Save(path);
     if (!result) return false;
 
     this.MainMenu.OnOptionsChanged();
@@ -417,7 +416,7 @@ public partial class MainWindow
 
 
   private void OpenProfile(string path) {
-    App.OpenProfile(path);
+    App.ProfileDocument.Open(path);
     this.NotifyProfileChanged();
     this.OnRuntimeOptionsChanged();
   }
@@ -425,7 +424,7 @@ public partial class MainWindow
   private bool ShowSaveDialog(out string path) {
     var dialog = new SaveFileDialog();
     dialog.InitialDirectory = Utilities.GetDefaultFilePath;
-    dialog.FileName = App.RuntimeOptions.ProfileName;
+    dialog.FileName = App.ProfileDocument.FileName;
     dialog.Title = "SCFF.GUI";
     dialog.Filter = "SCFF Profile|*" + ProfileINIFile.ProfileExtension;
     var result = dialog.ShowDialog();
@@ -453,7 +452,7 @@ public partial class MainWindow
 
   private MessageBoxResult ShowSaveChangesDialog() {
     var message = string.Format("Do you want to save changes to {0}?",
-                                App.RuntimeOptions.ProfileName);
+                                App.ProfileDocument.FileName);
     return MessageBox.Show(message,
                            "SCFF.GUI",
                            MessageBoxButton.YesNoCancel,
@@ -466,7 +465,7 @@ public partial class MainWindow
   /// @param e 使用しない
   private void OnNew(object sender, ExecutedRoutedEventArgs e) {
     // ダーティフラグがたっていなければそのまま新規作成
-    if (!App.IsProfileModified) {
+    if (!App.ProfileDocument.HasModified) {
       this.NewProfile();
       return;
     }
@@ -492,7 +491,7 @@ public partial class MainWindow
 
     // 現在編集中のファイルを保存する場合。そのまま保存
     string path = null;
-    if (App.RuntimeOptions.HasProfileSaved) {
+    if (App.ProfileDocument.HasSaved) {
       path = App.RuntimeOptions.ProfilePath;
     } else {
       var dialogResult = this.ShowSaveDialog(out path);
@@ -532,7 +531,7 @@ public partial class MainWindow
   /// @param sender 使用しない
   /// @param e 使用しない
   private void OnSave(object sender, ExecutedRoutedEventArgs e) {
-    if (App.RuntimeOptions.HasProfileSaved) {
+    if (App.ProfileDocument.HasSaved) {
       this.SaveProfile(App.RuntimeOptions.ProfilePath);
       return;
     }

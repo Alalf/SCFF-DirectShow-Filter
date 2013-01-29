@@ -53,7 +53,6 @@ public partial class MainWindow
     App.Profile.OnChanged -= this.OnProfileChanged;
   }
 
-
   //===================================================================
   // ProfileDocumentの操作
   //===================================================================

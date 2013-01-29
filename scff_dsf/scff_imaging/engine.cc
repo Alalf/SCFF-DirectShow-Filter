@@ -423,17 +423,23 @@ void Engine::Update() {
 
   if (last_update_image_ == ImageIndexes::kFront) {
     layout_->SwapOutputImage(&back_image_);
-    if (need_clear_back_image_) {
-      Clear(&back_image_);
-      need_clear_back_image_ = false;
+    {
+      CAutoLock lock(&m_WorkerLock);
+      if (need_clear_back_image_) {
+        Clear(&back_image_);
+        need_clear_back_image_ = false;
+      }
     }
     Run();
     last_update_image_ = ImageIndexes::kBack;
   } else if (last_update_image_ == ImageIndexes::kBack) {
     layout_->SwapOutputImage(&front_image_);
-    if (need_clear_front_image_) {
-      Clear(&front_image_);
-      need_clear_front_image_ = false;
+    {
+      CAutoLock lock(&m_WorkerLock);
+      if (need_clear_front_image_) {
+        Clear(&front_image_);
+        need_clear_front_image_ = false;
+      }
     }
     Run();
     last_update_image_ = ImageIndexes::kFront;

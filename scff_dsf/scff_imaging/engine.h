@@ -140,6 +140,11 @@ class Engine : public CAMThread, public Layout {
   AVPictureImage splash_image_;
   //-------------------------------------------------------------------
 
+  /// フロントイメージの消去が必要
+  bool need_clear_front_image_;
+  /// バックイメージの消去が必要
+  bool need_clear_back_image_;
+
   /// イメージのピクセルフォーマット
   const ImagePixelFormats output_pixel_format_;
   /// イメージの幅

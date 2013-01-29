@@ -95,10 +95,15 @@ public partial class MainWindow
   protected override void OnDrop(DragEventArgs e) {
     base.OnDrop(e);
     string[] files = e.Data.GetData(DataFormats.FileDrop) as string[];
-    if (files == null) return;
+    if (files == null) {
+      return;
+    }
+    var path = files[0];
+    if (Path.GetExtension(path) != ProfileINIFile.ProfileExtension) {
+      return;
+    }
 
     // ApplicationCommans.Openコマンドを実行
-    var path = files[0];
     ApplicationCommands.Open.Execute(path, this);
   }
 

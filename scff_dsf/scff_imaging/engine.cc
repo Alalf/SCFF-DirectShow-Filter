@@ -195,7 +195,7 @@ ErrorCodes Engine::Accept(Request *request) {
 //-------------------------------------------------------------------
 
 /// @attention エラー発生中に追加の処理を行うのはEngineだけ
-ErrorCodes Engine::CopyFrontImage(BYTE *sample, DWORD data_size) {
+ErrorCodes Engine::CopyCurrentImage(BYTE *sample, DWORD data_size) {
   /// @attention processorのポインタがnullptrであることはエラーではない
 
   // Engine自体にエラーが発生していたら0クリア

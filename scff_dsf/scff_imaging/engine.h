@@ -43,8 +43,8 @@ class Engine : public CAMThread, public Layout {
   ErrorCodes Accept(Request *request);
   //-------------------------------------------------------------------
 
-  /// フロントイメージをサンプルにコピー
-  ErrorCodes CopyFrontImage(BYTE *sample, DWORD data_size);
+  /// カレントイメージをサンプルにコピー
+  ErrorCodes CopyCurrentImage(BYTE *sample, DWORD data_size);
 
   //-------------------------------------------------------------------
   // ダブルディスパッチ用

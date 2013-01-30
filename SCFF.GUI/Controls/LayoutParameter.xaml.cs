@@ -27,6 +27,7 @@ using System.Windows.Input;
 using SCFF.Common;
 using SCFF.Common.GUI;
 using SCFF.Common.Profile;
+using SCFF.Interprocess;
 /// @copydoc SCFF::Common::Profile::BoundRelativeInputCorrector::Names
 using BoundRelative = SCFF.Common.Profile.BoundRelativeInputCorrector.Names;
 

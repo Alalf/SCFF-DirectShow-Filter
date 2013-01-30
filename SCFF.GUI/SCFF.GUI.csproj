@@ -223,6 +223,10 @@
       <Project>{2e0258f9-f198-4b4c-9984-f949d26434cc}</Project>
       <Name>SCFF.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SCFF.Interprocess\SCFF.Interprocess.csproj">
+      <Project>{b0eb2e38-d3d9-4a69-8c40-d41b9d5e43db}</Project>
+      <Name>SCFF.Interprocess</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">

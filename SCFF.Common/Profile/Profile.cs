@@ -23,6 +23,7 @@ namespace SCFF.Common.Profile {
 
 using System;
 using System.Collections.Generic;
+using SCFF.Interprocess;
 
 /// レイアウト設定などをまとめたプロファイル
 public partial class Profile {
@@ -32,7 +33,7 @@ public partial class Profile {
 
   /// カーソルの初期化
   private void BuildLayoutElements() {
-    var length = Constants.MaxLayoutElementCount;
+    const int length = Interprocess.MaxComplexLayoutElements;
     this.layoutElements = new LayoutElement[length];
     for (int i = 0; i < length; ++i) {
       this.layoutElements[i] = new LayoutElement(this, i);
@@ -43,8 +44,8 @@ public partial class Profile {
   /// @warning コンストラクタでは実際の値の読み込みなどは行わない
   public Profile() {
     // 配列の初期化
-    var length = Constants.MaxLayoutElementCount;
-    this.message.LayoutParameters = new Interprocess.LayoutParameter[length];
+    const int length = Interprocess.MaxComplexLayoutElements;
+    this.message.LayoutParameters = new LayoutParameter[length];
     this.additionalLayoutParameters = new AdditionalLayoutParameter[length];
     
     // カーソルの初期化
@@ -56,8 +57,7 @@ public partial class Profile {
   /// @param sampleHeight サンプルの高さ
   /// @param forceNullLayout 強制的にスプラッシュを表示させるか
   /// @return 共有メモリにそのまま設定可能なMessage
-  public Interprocess.Message ToMessage(int sampleWidth, int sampleHeight,
-                                        bool forceNullLayout) {
+  public Message ToMessage(int sampleWidth, int sampleHeight, bool forceNullLayout) {
     /// @todo(me) 実装する。ただしこれは仮想メモリ出力用イテレータの機能な気がする
     throw new NotImplementedException();
   }
@@ -118,7 +118,7 @@ public partial class Profile {
   /// @pre メンバ配列自体は生成済み(not null)
   private void ClearArrays() {
     /// 配列をクリア
-    var length = Constants.MaxLayoutElementCount;
+    const int length = Interprocess.MaxComplexLayoutElements;
     Array.Clear(this.message.LayoutParameters, 0, length);
     Array.Clear(this.additionalLayoutParameters, 0, length);
   }
@@ -145,7 +145,7 @@ public partial class Profile {
 
   /// レイアウト要素を追加可能か
   public bool CanAdd {
-    get { return this.message.LayoutElementCount < Constants.MaxLayoutElementCount; }
+    get { return this.message.LayoutElementCount < Interprocess.MaxComplexLayoutElements; }
   }
 
   /// レイアウト要素を追加
@@ -177,7 +177,7 @@ public partial class Profile {
     // ややこしいので良く考えて書くこと！
     // とりあえず一番簡単なのは全部コピーして全部に書き戻すことだろう
     // また、全体的にスレッドセーフではないとおもうので何とかしたいところ
-    var layoutParameterList = new List<Interprocess.LayoutParameter>();
+    var layoutParameterList = new List<LayoutParameter>();
     var additionalLayoutPararameterList = new List<AdditionalLayoutParameter>();
 
     var removedIndex = this.CurrentIndex;
@@ -247,7 +247,7 @@ public partial class Profile {
   ///
   /// 大半の情報はこのmessage内部にあるが、messageの中身は実行時のみ有効な値が含まれている
   /// (UIntPtr windowなど)。このために、messageとは別にいくらかの情報を追加して保存しなければならない。
-  private Interprocess.Message message = new Interprocess.Message();
+  private Message message = new Message();
 
   /// 追加レイアウトパラメータをまとめた配列
   /// @attention messageLayoutParametersにあわせて非初期化済みにした

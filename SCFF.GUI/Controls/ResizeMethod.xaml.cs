@@ -329,7 +329,7 @@ public partial class ResizeMethod : UserControl, IBindingProfile {
   /// SWScaleFlags: SelectionChanged
   private void SWScaleFlags_SelectionChanged(object sender, SelectionChangedEventArgs e) {
     if (!this.CanChangeProfile) return;
-    SWScaleFlags flags = Constants.ResizeMethodArray[this.SWScaleFlags.SelectedIndex];
+    var flags = Constants.ResizeMethodArray[this.SWScaleFlags.SelectedIndex];
 
     App.Profile.Current.Open();
     App.Profile.Current.SetSWScaleFlags = flags;

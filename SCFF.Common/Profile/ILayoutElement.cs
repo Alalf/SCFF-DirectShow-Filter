@@ -21,6 +21,7 @@
 namespace SCFF.Common.Profile {
 
 using System;
+using SCFF.Interprocess;
 
 /// プロファイル内を編集するためのカーソルクラスインタフェース
 ///

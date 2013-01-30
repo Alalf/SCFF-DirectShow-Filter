@@ -1364,6 +1364,10 @@
   </ControlTemplate>
 
   <Style d:IsControlPart="True" TargetType="{x:Type ComboBoxItem}">
+    <!-- 2013/01/31 Modified by Alalf -->
+    <Setter Property="HorizontalContentAlignment" Value="Left" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+
     <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
     <Setter Property="SnapsToDevicePixels" Value="true" />
     <Setter Property="Template">

@@ -24,6 +24,7 @@ using System;
 using System.Diagnostics;
 using System.Text;
 using SCFF.Common.Ext;
+using SCFF.Interprocess;
 
 public partial class Profile {
 
@@ -82,8 +83,8 @@ public class LayoutElement : ILayoutElementView, ILayoutElement {
   /// @todo(me) インスタンスを生成する形でゼロクリアしているが非効率的？
   public void RestoreDefault() {
     // newで参照型をゼロクリア
-    var layoutParameter = new Interprocess.LayoutParameter();
-    layoutParameter.SWScaleConfig = new Interprocess.SWScaleConfig();
+    var layoutParameter = new LayoutParameter();
+    layoutParameter.SWScaleConfig = new SWScaleConfig();
     this.profile.message.LayoutParameters[this.Index] = layoutParameter;
     this.profile.additionalLayoutParameters[this.Index] = new AdditionalLayoutParameter();
 

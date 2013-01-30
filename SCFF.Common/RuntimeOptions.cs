@@ -21,6 +21,7 @@
 namespace SCFF.Common {
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using SCFF.Interprocess;
 
@@ -38,8 +39,9 @@ public class RuntimeOptions {
     this.ProfileName = string.Empty;
     this.LastSavedTimestamp = -1L;
     this.LastAppliedTimestamp = -1L;
-    this.SelectedEntryIndex = -1;
 
+    this.SelectedEntryIndex = -1;
+    this.EntryStringList = new List<string>();
     // directoryはentriesの初期化がされていないのでここでやる
     this.directory.Entries = new Entry[Interprocess.MaxEntry];
   }
@@ -62,16 +64,28 @@ public class RuntimeOptions {
   /// @warning DateTime.UTCNow.Ticksを格納するので負の数にはなりえない
   public Int64 LastAppliedTimestamp { get; set; }
 
+  //-------------------------------------------------------------------
+
   /// 現在選択中のエントリ(選択なしは-1)
   public int SelectedEntryIndex { get; set; }
+
+  /// 現在共有メモリ上にあるエントリを文字列化したリスト
+  public List<string> EntryStringList { get; private set; }
 
   //-------------------------------------------------------------------
 
   /// 現在選択中のプロセスID
   public UInt32 CurrentProcessID {
     get {
-      Debug.Assert(this.SelectedEntryIndex >= 0);
+      if (this.SelectedEntryIndex < 0) return 0;
       return this.directory.Entries[this.SelectedEntryIndex].ProcessID;
+    }
+  }
+  /// 現在選択中のピクセルフォーマット
+  public ImagePixelFormats CurrentSamplePixelFormat {
+    get {
+      if (this.SelectedEntryIndex < 0) return ImagePixelFormats.IYUV;
+      return (ImagePixelFormats)this.directory.Entries[this.SelectedEntryIndex].SamplePixelFormat;
     }
   }
   /// 現在選択中のプロセスが要求するサンプル幅
@@ -93,21 +107,38 @@ public class RuntimeOptions {
   // アクセサ
   //===================================================================
 
-  public void Refresh() {
-    /// @todo(me) テスト中なのであとで仮想メモリに書き換える
-    if (this.SelectedEntryIndex == -1) {
-      this.directory.Entries[0] = new Entry() {
-        ProcessName = "DUMMY",
-        ProcessID = 0,
-        FPS = 30,
-        SampleWidth = 640,
-        SampleHeight = 480,
-        SamplePixelFormat = (int)ImagePixelFormats.RGB0
-      };
-      this.SelectedEntryIndex = 0;
-    } else {
-      this.directory.Entries[0] = new Entry();
+  public void RefreshDirectory(Interprocess interprocess) {
+    // 共有メモリにアクセス
+    interprocess.InitDirectory();
+    interprocess.GetDirectory(out this.directory);
+
+    // EntryStringListを更新
+    this.EntryStringList.Clear();
+    foreach (var entry in this.directory.Entries) {
+      if (entry.ProcessID == 0) continue;
+      var entryString = string.Format("[{0}] {1} ({2} {3}x{4} {5:F0}fps)",
+          entry.ProcessID,
+          entry.ProcessName,
+          (ImagePixelFormats)entry.SamplePixelFormat,
+          entry.SampleWidth, entry.SampleHeight,
+          entry.FPS);
+      this.EntryStringList.Add(entryString);
+    }
+
+    // EntrySelectedIndexを更新
+    if (this.EntryStringList.Count == 0) {
       this.SelectedEntryIndex = -1;
+      return;
+    }
+
+    // SelectedEntryIndexが更新後も有効ならそのまま保持する
+    /// @todo(me) プロセスIDが同じものを選択し続けるほうが正しい動作
+    if (0 <= this.SelectedEntryIndex &&
+        this.SelectedEntryIndex < this.EntryStringList.Count) {
+      // リストの長さの中に納まっている場合は変更しない
+      // nop
+    } else {
+      this.SelectedEntryIndex = 0;
     }
   }
 

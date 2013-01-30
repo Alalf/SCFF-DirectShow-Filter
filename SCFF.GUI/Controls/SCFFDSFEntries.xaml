@@ -15,11 +15,8 @@
     </Grid.RowDefinitions>
     <ComboBox VerticalAlignment="Center" Height="20" Margin="5,0"
               IsEnabled="False"
-              x:Name="Processes">
-      <ComboBoxItem>Process1</ComboBoxItem>
-      <ComboBoxItem>Process2</ComboBoxItem>
-      <ComboBoxItem>Process3</ComboBoxItem>
-    </ComboBox>
+              x:Name="Processes"
+              SelectionChanged="Processes_SelectionChanged"/>
     <Button Grid.Column="1"
             VerticalAlignment="Center" Height="20" Margin="0,0,5,0"
             x:Name="Refresh" Content="Refresh" 

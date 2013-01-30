@@ -25,12 +25,16 @@ using System.Windows;
 using SCFF.Common;
 using SCFF.Common.GUI;
 using SCFF.Common.Profile;
+using SCFF.Interprocess;
 
 /// Applicationクラス
 public partial class App : Application {
   //===================================================================
   // シングルトン
   //===================================================================
+
+  /// Singleton: 共有メモリアクセス用オブジェクト
+  public static Interprocess Interprocess { get; private set; }
 
   /// Singleton: アプリケーション設定
   public static Options Options { get; private set; }
@@ -56,6 +60,8 @@ public partial class App : Application {
   
   /// staticコンストラクタ
   static App() {
+    App.Interprocess = new Interprocess();
+
     App.Options = new Options();
     App.RuntimeOptions = new RuntimeOptions();
     App.Profile = new Profile();
@@ -66,6 +72,9 @@ public partial class App : Application {
     App.ScreenCaptureTimer = new ScreenCaptureTimer();
     
     App.NullPen = new NullPen();
+
+    // 1回仮想メモリから読み込み
+    App.RuntimeOptions.RefreshDirectory(App.Interprocess);
   }
 
   //===================================================================

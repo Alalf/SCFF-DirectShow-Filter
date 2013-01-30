@@ -24,6 +24,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using SCFF.Interprocess;
 
 /// プロファイルのINIファイル入出力機能
 public static class ProfileINIFile {
@@ -135,7 +136,7 @@ public static class ProfileINIFile {
     if (labelToRawData.TryGetInt("LayoutElementCount", out intValue)) {
       // 範囲チェック
       if (intValue < 1 ||
-          Constants.MaxLayoutElementCount < intValue) {
+          Interprocess.MaxComplexLayoutElements < intValue) {
         return false;
       }
       profile.LayoutElementCount = intValue;

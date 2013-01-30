@@ -41,36 +41,6 @@ public enum WindowTypes {
   Desktop,          ///< ルートWindow
 }
 
-/// @copydoc SCFF::Interprocess::LayoutTypes
-public enum LayoutTypes {
-  NullLayout    = Interprocess.LayoutTypes.NullLayout,
-  NativeLayout  = Interprocess.LayoutTypes.NativeLayout,
-  ComplexLayout = Interprocess.LayoutTypes.ComplexLayout
-}
-
-/// @copydoc SCFF::Interprocess::SWScaleFlags
-public enum SWScaleFlags {
-  FastBilinear  = Interprocess.SWScaleFlags.FastBilinear,
-  Bilinear      = Interprocess.SWScaleFlags.Bilinear,
-  Bicubic       = Interprocess.SWScaleFlags.Bicubic,
-  X             = Interprocess.SWScaleFlags.X,
-  Point         = Interprocess.SWScaleFlags.Point,
-  Area          = Interprocess.SWScaleFlags.Area,
-  Bicublin      = Interprocess.SWScaleFlags.Bicublin,
-  Gauss         = Interprocess.SWScaleFlags.Gauss,
-  Sinc          = Interprocess.SWScaleFlags.Sinc,
-  Lanczos       = Interprocess.SWScaleFlags.Lanczos,
-  Spline        = Interprocess.SWScaleFlags.Spline
-}
-
-/// @copydoc SCFF::Interprocess::RotateDirections
-public enum RotateDirections {
-  NoRotate      = Interprocess.RotateDirections.NoRotate,
-  Degrees90     = Interprocess.RotateDirections.Degrees90,
-  Degrees180    = Interprocess.RotateDirections.Degrees180,
-  Degrees270    = Interprocess.RotateDirections.Degrees270,
-}
-
 //=====================================================================
 // クラス・構造体
 //=====================================================================

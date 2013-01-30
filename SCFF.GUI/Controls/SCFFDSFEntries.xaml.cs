@@ -20,6 +20,7 @@
 
 namespace SCFF.GUI.Controls {
 
+using System.Diagnostics;
 using System.Windows.Controls;
 using SCFF.Common.GUI;
 
@@ -46,11 +47,11 @@ public partial class SCFFDSFEntries : UserControl, IBindingRuntimeOptions {
   /// @param sender 使用しない
   /// @param e 使用しない
   private void Refresh_Click(object sender, System.Windows.RoutedEventArgs e) {
-    /// @todo(me) プロセスリストを読み込み
-    App.RuntimeOptions.Refresh();
+    App.RuntimeOptions.RefreshDirectory(App.Interprocess);
 
     //-----------------------------------------------------------------
     // Notify self
+    this.OnRuntimeOptionsChanged();
     // Notify other controls
     Commands.SampleSizeChanged.Execute(null, this);
     //-----------------------------------------------------------------
@@ -64,6 +65,18 @@ public partial class SCFFDSFEntries : UserControl, IBindingRuntimeOptions {
   // *Changed/Collapsed/Expanded
   //-------------------------------------------------------------------
 
+  /// Processes: SelectionChanged
+  private void Processes_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+    if (!this.CanChangeRuntimeOptions) return;
+    App.RuntimeOptions.SelectedEntryIndex = this.Processes.SelectedIndex;
+
+    //-----------------------------------------------------------------
+    // Notify self
+    // Notify other controls
+    Commands.SampleSizeChanged.Execute(null, this);
+    //-----------------------------------------------------------------
+  }
+
   //===================================================================
   // IBindingRuntimeOptionsの実装
   //===================================================================
@@ -74,7 +87,24 @@ public partial class SCFFDSFEntries : UserControl, IBindingRuntimeOptions {
   public void OnRuntimeOptionsChanged() {
     this.CanChangeRuntimeOptions = false;
 
-    //// @todo(me) 仮想メモリからの読み込み
+    // コンボボックスの更新
+    this.Processes.Items.Clear();
+    foreach (var entry in App.RuntimeOptions.EntryStringList) {
+      var item = new ComboBoxItem();
+      item.Content = entry;
+      this.Processes.Items.Add(item.Content);
+    }
+
+    // SelectedIndexの調整
+    if (this.Processes.Items.Count == 0) {
+      this.Processes.IsEnabled = false;
+      this.Processes.SelectedIndex = -1;
+    } else {
+      this.Processes.IsEnabled = true;
+      Debug.Assert(0 <= App.RuntimeOptions.SelectedEntryIndex &&
+                   App.RuntimeOptions.SelectedEntryIndex < this.Processes.Items.Count);
+      this.Processes.SelectedIndex = App.RuntimeOptions.SelectedEntryIndex;
+    }
 
     this.CanChangeRuntimeOptions = true;
   }

@@ -133,10 +133,13 @@ public class RuntimeOptions {
     this.EntryStringList.Clear();
     foreach (var entry in this.directory.Entries) {
       if (entry.ProcessID == 0) continue;
+      var pixelFormatString =
+          Constants.ImagePixelFormatLabels[(ImagePixelFormats)entry.SamplePixelFormat];
+
       var entryString = string.Format("[{0}] {1} ({2} {3}x{4} {5:F0}fps)",
           entry.ProcessID,
           entry.ProcessName,
-          (ImagePixelFormats)entry.SamplePixelFormat,
+          pixelFormatString,
           entry.SampleWidth, entry.SampleHeight,
           entry.FPS);
       this.EntryStringList.Add(entryString);

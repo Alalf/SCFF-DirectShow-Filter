@@ -27,6 +27,7 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 using SCFF.Common.Ext;
+using SCFF.Interprocess;
 
 /// SCFF.Commonモジュール共通で利用する機能
 public static class Utilities {
@@ -150,7 +151,7 @@ public static class Utilities {
   /// ディクショナリからintを読み込む
   public static bool TryGetInt(this Dictionary<string,string> labelToRawData,
                                string label, out int parsedData) {
-    parsedData = default(int);
+    parsedData = 0;
     if (!labelToRawData.ContainsKey(label)) return false;
     return int.TryParse(labelToRawData[label], out parsedData);
   }
@@ -158,7 +159,7 @@ public static class Utilities {
   /// ディクショナリからdoubleを読み込む
   public static bool TryGetDouble(this Dictionary<string,string> labelToRawData,
                                   string label, out double parsedData) {
-    parsedData = default(double);
+    parsedData = 0.0;
     if (!labelToRawData.ContainsKey(label)) return false;
     return double.TryParse(labelToRawData[label], out parsedData);
   }
@@ -166,7 +167,7 @@ public static class Utilities {
   /// ディクショナリからfloatを読み込む
   public static bool TryGetFloat(this Dictionary<string,string> labelToRawData,
                                  string label, out float parsedData) {
-    parsedData = default(float);
+    parsedData = 0.0F;
     if (!labelToRawData.ContainsKey(label)) return false;
     return float.TryParse(labelToRawData[label], out parsedData);
   }
@@ -174,7 +175,7 @@ public static class Utilities {
   /// ディクショナリからboolを読み込む
   public static bool TryGetBool(this Dictionary<string,string> labelToRawData,
                                 string label, out bool parsedData) {
-    parsedData = default(bool);
+    parsedData = false;
     if (!labelToRawData.ContainsKey(label)) return false;
     return bool.TryParse(labelToRawData[label], out parsedData);
   }
@@ -182,7 +183,7 @@ public static class Utilities {
   /// ディクショナリからUIntPtrを読み込む
   public static bool TryGetUIntPtr(this Dictionary<string,string> labelToRawData,
                                    string label, out UIntPtr parsedData) {
-    parsedData = default(UIntPtr);
+    parsedData = UIntPtr.Zero;
     if (!labelToRawData.ContainsKey(label)) return false;
     UInt64 uint64Data;
     if (UInt64.TryParse(labelToRawData[label], out uint64Data)) {
@@ -192,13 +193,54 @@ public static class Utilities {
     return false;
   }
 
-  /// ディクショナリからEnum<T>を読み込む
-  public static bool TryGetEnum<TEnum>(this Dictionary<string,string> labelToRawData,
-                                       string label, out TEnum parsedData) where TEnum : struct { 
-    parsedData = default(TEnum);
-    Debug.Assert(typeof(TEnum).IsEnum);
-    if (!labelToRawData.ContainsKey(label)) return false;
-    return Enum.TryParse<TEnum>(labelToRawData[label], out parsedData);
+  //-------------------------------------------------------------------
+
+  /// ディクショナリからWindowStateを読み込む
+  public static bool TryGetWindowState(this Dictionary<string,string> labelToRawData,
+                                       string label, out WindowState parsedData) {
+    int intData;
+    if (labelToRawData.TryGetInt(label, out intData)) {
+      parsedData = (WindowState)intData;
+      return true;
+    }
+    parsedData = WindowState.Normal;
+    return false;
+  }
+
+  /// ディクショナリからRotateDirectionsを読み込む
+  public static bool TryGetRotateDirections(this Dictionary<string,string> labelToRawData,
+                                            string label, out RotateDirections parsedData) {
+    int intData;
+    if (labelToRawData.TryGetInt(label, out intData)) {
+      parsedData = (RotateDirections)intData;
+      return true;
+    }
+    parsedData = RotateDirections.NoRotate;
+    return false;
+  }
+
+  /// ディクショナリからSWScaleFlagsを読み込む
+  public static bool TryGetSWScaleFlags(this Dictionary<string,string> labelToRawData,
+                                        string label, out SWScaleFlags parsedData) {
+    int intData;
+    if (labelToRawData.TryGetInt(label, out intData)) {
+      parsedData = (SWScaleFlags)intData;
+      return true;
+    }
+    parsedData = SWScaleFlags.FastBilinear;
+    return false;
+  }
+
+  /// ディクショナリからWindowTypesを読み込む
+  public static bool TryGetWindowTypes(this Dictionary<string,string> labelToRawData,
+                                        string label, out WindowTypes parsedData) {
+    int intData;
+    if (labelToRawData.TryGetInt(label, out intData)) {
+      parsedData = (WindowTypes)intData;
+      return true;
+    }
+    parsedData = WindowTypes.Desktop;
+    return false;
   }
 
   //===================================================================

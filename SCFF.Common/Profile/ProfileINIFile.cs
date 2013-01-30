@@ -60,7 +60,7 @@ public static class ProfileINIFile {
 
           // TargetWindow
           writer.WriteLine("Window{0}={1}", index, layoutElement.Window);
-          writer.WriteLine("WindowType{0}={1}", index, layoutElement.WindowType);
+          writer.WriteLine("WindowType{0}={1}", index, (int)layoutElement.WindowType);
           // Area
           writer.WriteLine("Fit{0}={1}", index, layoutElement.Fit);
           writer.WriteLine("ClippingXWithoutFit{0}={1}", index, layoutElement.ClippingXWithoutFit);
@@ -72,9 +72,9 @@ public static class ProfileINIFile {
           writer.WriteLine("ShowLayeredWindow{0}={1}", index, layoutElement.ShowLayeredWindow);
           writer.WriteLine("Stretch{0}={1}", index, layoutElement.Stretch);
           writer.WriteLine("KeepAspectRatio{0}={1}", index, layoutElement.KeepAspectRatio);
-          writer.WriteLine("RotateDirection{0}={1}", index, layoutElement.RotateDirection);
+          writer.WriteLine("RotateDirection{0}={1}", index, (int)layoutElement.RotateDirection);
           // ResizeMethod
-          writer.WriteLine("SWScaleFlags{0}={1}", index, layoutElement.SWScaleFlags);
+          writer.WriteLine("SWScaleFlags{0}={1}", index, (int)layoutElement.SWScaleFlags);
           writer.WriteLine("SWScaleAccurateRnd{0}={1}", index, layoutElement.SWScaleAccurateRnd);
           writer.WriteLine("SWScaleIsFilterEnabled{0}={1}", index, layoutElement.SWScaleIsFilterEnabled);
           writer.WriteLine("SWScaleLumaGBlur{0}={1}", index, layoutElement.SWScaleLumaGBlur);
@@ -125,7 +125,6 @@ public static class ProfileINIFile {
     profile.RestoreDefault();
 
     // 使いまわすので注意
-    string stringValue;
     int intValue;
     double doubleValue;
     float floatValue;
@@ -156,24 +155,22 @@ public static class ProfileINIFile {
 
       // TargetWindow
       WindowTypes windowTypes;
-      if (labelToRawData.TryGetValue("WindowType" + i, out stringValue)) {
-        if (Enum.TryParse<WindowTypes>(stringValue, out windowTypes)) {
-          switch (windowTypes) {
-            case WindowTypes.Normal: {
-              UIntPtr uintptrValue;
-              if (labelToRawData.TryGetUIntPtr("Window" + i, out uintptrValue)) {
-                layoutElement.SetWindow(uintptrValue);
-              }
-              break;
+      if (labelToRawData.TryGetWindowTypes("WindowType" + i, out windowTypes)) {
+        switch (windowTypes) {
+          case WindowTypes.Normal: {
+            UIntPtr uintptrValue;
+            if (labelToRawData.TryGetUIntPtr("Window" + i, out uintptrValue)) {
+              layoutElement.SetWindow(uintptrValue);
             }
-            case WindowTypes.DesktopListView: {
-              layoutElement.SetWindowToDesktopListView();
-              break;
-            }
-            case WindowTypes.Desktop: {
-              layoutElement.SetWindowToDesktop();
-              break;
-            }
+            break;
+          }
+          case WindowTypes.DesktopListView: {
+            layoutElement.SetWindowToDesktopListView();
+            break;
+          }
+          case WindowTypes.Desktop: {
+            layoutElement.SetWindowToDesktop();
+            break;
           }
         }
       }
@@ -208,12 +205,12 @@ public static class ProfileINIFile {
         layoutElement.SetKeepAspectRatio = boolValue;
       }
       RotateDirections rotateDirections;
-      if (labelToRawData.TryGetEnum<RotateDirections>("RotateDirection" + i, out rotateDirections)) {
+      if (labelToRawData.TryGetRotateDirections("RotateDirection" + i, out rotateDirections)) {
         layoutElement.SetRotateDirection = rotateDirections;
       }
       // ResizeMethod
       SWScaleFlags swscaleFlags;
-      if (labelToRawData.TryGetEnum<SWScaleFlags>("SWScaleFlags" + i, out swscaleFlags)) {
+      if (labelToRawData.TryGetSWScaleFlags("SWScaleFlags" + i, out swscaleFlags)) {
         layoutElement.SetSWScaleFlags = swscaleFlags;
       }
       if (labelToRawData.TryGetBool("SWScaleAccurateRnd" + i, out boolValue)) {

@@ -67,7 +67,7 @@ public static class OptionsINIFile {
         writer.WriteLine("TmpCompactLayoutWidth={0}", options.TmpCompactLayoutWidth);
         writer.WriteLine("TmpCompactLayoutHeight={0}", options.TmpCompactLayoutHeight);
 
-        writer.WriteLine("TmpWindowState={0}", options.TmpWindowState);
+        writer.WriteLine("TmpWindowState={0}", (int)options.TmpWindowState);
         writer.WriteLine("AreaIsExpanded={0}", options.AreaIsExpanded);
         writer.WriteLine("OptionsIsExpanded={0}", options.OptionsIsExpanded);
         writer.WriteLine("ResizeMethodIsExpanded={0}",
@@ -163,7 +163,7 @@ public static class OptionsINIFile {
     }
 
     WindowState windowState;
-    if (labelToRawData.TryGetEnum<WindowState>("TmpWindowState", out windowState)) {
+    if (labelToRawData.TryGetWindowState("TmpWindowState", out windowState)) {
       options.TmpWindowState = windowState;
     }
     if (labelToRawData.TryGetBool("AreaIsExpanded", out boolValue)) {

@@ -123,6 +123,23 @@ public static class Constants {
   //===================================================================
 
   //-------------------------------------------------------------------
+  // ImagePixelFormats
+  //-------------------------------------------------------------------
+
+  /// ImagePixelFormats->ImagePixelFormatsの名前
+  public static readonly Dictionary<ImagePixelFormats,string> ImagePixelFormatLabels
+    = new Dictionary<ImagePixelFormats,string> {
+    {ImagePixelFormats.InvalidPixelFormat, "InvalidPixelFormat"},
+    {ImagePixelFormats.I420, "I420"},
+    {ImagePixelFormats.IYUV, "IYUV"},
+    {ImagePixelFormats.YV12, "YV12"},
+    {ImagePixelFormats.UYVY, "UYVY"},
+    {ImagePixelFormats.YUY2, "YUY2"},
+    {ImagePixelFormats.RGB0, "RGB0"},
+    {ImagePixelFormats.SupportedPixelFormatsCount, "SupportedPixelFormatsCount"}
+  };
+
+  //-------------------------------------------------------------------
   // ResizeMethod
   //-------------------------------------------------------------------
 

@@ -30,6 +30,16 @@ using SCFF.Interprocess;
 /// プロセスリストの管理や現在編集中のプレビューのサイズなどはこれで保持すること
 public class RuntimeOptions {
   //===================================================================
+  // 定数
+  //===================================================================
+  
+  /// 不正なタイムスタンプ
+  public const Int64 InvalidTimestamp = -1L;
+
+  /// 不正な選択
+  public const int InvalidSelection = -1;
+
+  //===================================================================
   // コンストラクタ
   //===================================================================
 
@@ -37,10 +47,10 @@ public class RuntimeOptions {
   public RuntimeOptions() {
     this.ProfilePath = string.Empty;
     this.ProfileName = string.Empty;
-    this.LastSavedTimestamp = -1L;
-    this.LastAppliedTimestamp = -1L;
+    this.LastSavedTimestamp = RuntimeOptions.InvalidTimestamp;
+    this.LastAppliedTimestamp = RuntimeOptions.InvalidTimestamp;
 
-    this.SelectedEntryIndex = -1;
+    this.SelectedEntryIndex = RuntimeOptions.InvalidSelection;
     this.EntryStringList = new List<string>();
     // directoryはentriesの初期化がされていないのでここでやる
     this.directory.Entries = new Entry[Interprocess.MaxEntry];
@@ -74,31 +84,37 @@ public class RuntimeOptions {
 
   //-------------------------------------------------------------------
 
+  /// Directoryが空か
+  /// @warning 直接Directoryを参照せず、SelectedEntryIndexが不正かで判断している
+  public bool IsDirectoryEmpty {
+    get { return (this.SelectedEntryIndex == RuntimeOptions.InvalidSelection); }
+  }
+
   /// 現在選択中のプロセスID
   public UInt32 CurrentProcessID {
     get {
-      if (this.SelectedEntryIndex < 0) return 0;
+      if (this.IsDirectoryEmpty) return 0;
       return this.directory.Entries[this.SelectedEntryIndex].ProcessID;
     }
   }
   /// 現在選択中のピクセルフォーマット
   public ImagePixelFormats CurrentSamplePixelFormat {
     get {
-      if (this.SelectedEntryIndex < 0) return ImagePixelFormats.IYUV;
+      if (this.IsDirectoryEmpty) return ImagePixelFormats.IYUV;
       return (ImagePixelFormats)this.directory.Entries[this.SelectedEntryIndex].SamplePixelFormat;
     }
   }
   /// 現在選択中のプロセスが要求するサンプル幅
   public int CurrentSampleWidth {
     get {
-      if (this.SelectedEntryIndex < 0) return Constants.DummySampleWidth;
+      if (this.IsDirectoryEmpty) return Constants.DummySampleWidth;
       return this.directory.Entries[this.SelectedEntryIndex].SampleWidth;
     }
   }
   /// 現在選択中のプロセスが要求するサンプル高さ
   public int CurrentSampleHeight {
     get {
-      if (this.SelectedEntryIndex < 0) return Constants.DummySampleHeight;
+      if (this.IsDirectoryEmpty) return Constants.DummySampleHeight;
       return this.directory.Entries[this.SelectedEntryIndex].SampleHeight;
     }
   }
@@ -107,6 +123,7 @@ public class RuntimeOptions {
   // アクセサ
   //===================================================================
 
+  /// 共有メモリアクセスオブジェクトからDirectoryを読み込む
   public void RefreshDirectory(Interprocess interprocess) {
     // 共有メモリにアクセス
     interprocess.InitDirectory();
@@ -127,7 +144,7 @@ public class RuntimeOptions {
 
     // EntrySelectedIndexを更新
     if (this.EntryStringList.Count == 0) {
-      this.SelectedEntryIndex = -1;
+      this.SelectedEntryIndex = RuntimeOptions.InvalidSelection;
       return;
     }
 

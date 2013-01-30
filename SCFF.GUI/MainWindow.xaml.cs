@@ -57,6 +57,29 @@ public partial class MainWindow
   // ProfileDocument: New/Close/Save/Open
   //===================================================================
 
+  /// 保存失敗時のダイアログを表示
+  private void ShowSaveFailedDialog(string path) {
+    var errorMessage = "Couldn't save the profile";
+    if (path != null && path != string.Empty) {
+      errorMessage = string.Format("Couldn't save the profile to {0}.", path);
+    }
+    MessageBox.Show(errorMessage, "SCFF.GUI",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+  }
+  /// 読み込み失敗時のダイアログを表示
+  private void ShowOpenFailedDialog(string path) {
+    var errorMessage = "Couldn't open the profile";
+    if (path != null && path != string.Empty) {
+      errorMessage = string.Format("Couldn't open the profile from {0}.", path);
+    }
+    MessageBox.Show(errorMessage, "SCFF.GUI",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+  }
+
+  //-------------------------------------------------------------------
+
   /// Profileを閉じる
   private bool CloseProfile() {
     // 編集がされていなければそのまま[閉じる]ことが可能
@@ -114,7 +137,10 @@ public partial class MainWindow
     }
     // データの読み込み
     var openResult = App.ProfileDocument.Open(path);
-    if (!openResult) return false;
+    if (!openResult) {
+      this.ShowOpenFailedDialog(path);
+      return false;
+    }
 
     // Options
     this.MainMenu.OnOptionsChanged();
@@ -157,7 +183,10 @@ public partial class MainWindow
     }
     // データの書き込み
     var saveResult = App.ProfileDocument.Save(path);
-    if (!saveResult) return false;
+    if (!saveResult) {
+      this.ShowSaveFailedDialog(path);
+      return false;
+    }
 
     // Options
     this.MainMenu.OnOptionsChanged();

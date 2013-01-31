@@ -72,9 +72,6 @@ public partial class App : Application {
     App.ScreenCaptureTimer = new ScreenCaptureTimer();
     
     App.NullPen = new NullPen();
-
-    // 1回仮想メモリから読み込み
-    App.RuntimeOptions.RefreshDirectory(App.Interprocess);
   }
 
   //===================================================================
@@ -86,8 +83,25 @@ public partial class App : Application {
   protected override void OnStartup(StartupEventArgs e) {
     base.OnStartup(e);
 
+    // SCFF DirectShow Filterがインストールされているか
+    string message;
+    var result = Utilities.CheckSCFFDSFInstalled(out message);
+    if (!result) {
+      MessageBox.Show(message, "SCFF.GUI",
+                      MessageBoxButton.OK,
+                      MessageBoxImage.Error);
+    }
+
+    /// @todo(me) WPFではカラーチェックを簡単にやる方法が見つからなかったので要調査
+
     // Options
     OptionsINIFile.Load(App.Options);
+
+    // RuntimeOptions
+    App.RuntimeOptions.RefreshDirectory(App.Interprocess);
+
+    // 起動時にAeroがOnだったかを記録
+    App.RuntimeOptions.SaveStartupAeroState();
 
     // Profile
     var path = e.Args.Length > 0 ? e.Args[0] : null;
@@ -100,6 +114,9 @@ public partial class App : Application {
     base.OnExit(e);
 
     // Profileの保存は明示的にMainWindow上で行うのでここでは何もしない
+
+    // RuntimeOptions
+    App.RuntimeOptions.RestoreStartupAeroState();
 
     // Options
     OptionsINIFile.Save(App.Options);

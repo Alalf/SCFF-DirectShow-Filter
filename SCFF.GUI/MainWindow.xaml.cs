@@ -392,18 +392,12 @@ public partial class MainWindow
 
   /// AeroをON/OFF
   private void SetAero() {
-    if (!this.CanUseAero()) return;
+    if (!App.RuntimeOptions.CanSetAero) return;
     if (App.Options.ForceAeroOn) {
-      // @todo(me) 実装
+      App.RuntimeOptions.SetAeroOn();
     } else {
-      // @todo(me) 実装
+      App.RuntimeOptions.SetAeroOff();
     }
-  }
-
-  /// AeroのON/OFFが可能か
-  private bool CanUseAero() {
-    // @todo(me) 実装
-    return true;
   }
 
   // 1. Normal        : !LayoutIsExpanded && !CompactView
@@ -790,8 +784,6 @@ public partial class MainWindow
   /// @param sender 使用しない
   /// @param e 使用しない
   private void OnSetAero(object sender, ExecutedRoutedEventArgs e) {
-    if (!CanUseAero()) return;
-
     App.Options.ForceAeroOn = (bool)e.Parameter;
     Debug.WriteLine("Execute", "[Command] SetAero");
     this.SetAero();

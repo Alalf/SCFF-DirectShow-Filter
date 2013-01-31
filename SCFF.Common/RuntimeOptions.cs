@@ -23,6 +23,7 @@ namespace SCFF.Common {
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using SCFF.Common.Ext;
 using SCFF.Interprocess;
 
 /// アプリケーションの実行時設定
@@ -53,7 +54,7 @@ public class RuntimeOptions {
     this.SelectedEntryIndex = RuntimeOptions.InvalidSelection;
     this.EntryList = new List<Entry>();
 
-
+    this.WasAeroOnWhenStartup = false;
   }
 
   //===================================================================
@@ -85,7 +86,65 @@ public class RuntimeOptions {
   //-------------------------------------------------------------------
 
   /// 起動時にAeroがOnだったか
+  private bool WasAeroOnWhenStartup { get; set; }
 
+  /// DWMAPI.DLLが利用可能かどうか
+  private bool CanUseAero {
+    get {
+      // Vista以降なら利用可能
+      return (Environment.OSVersion.Platform == PlatformID.Win32NT &&
+              Environment.OSVersion.Version.Major >= 6);
+    }
+  }
+
+  public bool CanSetAero {
+    get {
+      return this.CanUseAero && this.WasAeroOnWhenStartup;
+    }
+  }
+
+  public void SaveStartupAeroState() {
+    if (!this.CanUseAero) {
+      this.WasAeroOnWhenStartup = false;
+      return;
+    }
+
+    bool isAeroOn;
+    DWMAPI.DwmIsCompositionEnabled(out isAeroOn);
+    this.WasAeroOnWhenStartup = isAeroOn;
+  }
+
+  /// Dwmapi.dllを利用してAeroをOnに
+  public void SetAeroOn() {
+    if (!this.CanUseAero) return;
+   
+    bool isAeroOnNow;
+    DWMAPI.DwmIsCompositionEnabled(out isAeroOnNow);
+    if (!isAeroOnNow) {
+      DWMAPI.DwmEnableComposition(DWMAPI.DWM_EC_ENABLECOMPOSITION);
+    }
+  }
+
+  /// Dwmapi.dllを利用してAeroをOffに
+  public void SetAeroOff() {
+    if (!this.CanUseAero) return;
+   
+    bool isAeroOnNow;
+    DWMAPI.DwmIsCompositionEnabled(out isAeroOnNow);
+    if (isAeroOnNow) {
+      DWMAPI.DwmEnableComposition(DWMAPI.DWM_EC_DISABLECOMPOSITION);
+    }
+  }
+
+  /// AeroをOffにしていたらOnに戻す
+  public void RestoreStartupAeroState() {
+    if (!this.CanUseAero) return;
+    if (this.WasAeroOnWhenStartup) {
+      this.SetAeroOn();
+    } else {
+      this.SetAeroOff();
+    }
+  }
 
   //-------------------------------------------------------------------
 

@@ -85,13 +85,15 @@ public static class BoundRelativeInputCorrector {
     var result = TryResult.NothingChanged;
 
     // highのチェック
+    /// @todo(me) 浮動小数点数の比較
     Debug.Assert(0.0 + sizeLowerBound <= high && high <= 1.0);
 
     // 上限・下限の補正
+    /// @attention 浮動小数点数の比較
     if (low < 0.0) {
       low = 0.0;
       result |= TryResult.TargetChanged;
-    } else if (1.0 < low + sizeLowerBound) {
+    } else if (1.0 - sizeLowerBound < low) {
       low = 1.0 - sizeLowerBound;
       result |= TryResult.TargetChanged;
     }
@@ -103,9 +105,6 @@ public static class BoundRelativeInputCorrector {
     }
 
     // 出力
-    Debug.Assert(0.0 <= low &&
-                 sizeLowerBound <= high - low &&
-                 high <= 1.0);
     changed = onX
         ? new RelativeLTRB(low, original.Top, high, original.Bottom)
         : new RelativeLTRB(original.Left, low, original.Right, high);
@@ -131,9 +130,11 @@ public static class BoundRelativeInputCorrector {
     var result = TryResult.NothingChanged;
 
     // lowのチェック
+    /// @todo(me) 浮動小数点数の比較
     Debug.Assert(0.0 <= low && low <= 1.0 - sizeLowerBound);
 
     // 上限・下限の補正
+    /// @attention 浮動小数点数の比較
     if (high < 0.0 + sizeLowerBound) {
       high = 0.0 + sizeLowerBound;
       result |= TryResult.TargetChanged;
@@ -149,9 +150,6 @@ public static class BoundRelativeInputCorrector {
     }
 
     // 出力
-    Debug.Assert(0.0 <= low &&
-                 sizeLowerBound <= high - low &&
-                 high <= 1.0);
     changed = onX
         ? new RelativeLTRB(low, original.Top, high, original.Bottom)
         : new RelativeLTRB(original.Left, low, original.Right, high);

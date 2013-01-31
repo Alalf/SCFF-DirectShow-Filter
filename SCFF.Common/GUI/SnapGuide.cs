@@ -59,7 +59,8 @@ public class SnapGuide {
     do {
       var lowerBound = guide.Value - Constants.BorderRelativeThickness;
       var upperBound = guide.Value + Constants.BorderRelativeThickness;
-      if (lowerBound <= original && original <= upperBound) {
+      /// @attention 浮動小数点数の比較
+      if (lowerBound < original && original < upperBound) {
         original = guide.Value;
         if (guide != this.verticalSnapGuides.First) {
           // キャッシング: ガイドを削除して先頭につめなおす
@@ -86,7 +87,8 @@ public class SnapGuide {
     do {
       var lowerBound = guide.Value - Constants.BorderRelativeThickness;
       var upperBound = guide.Value + Constants.BorderRelativeThickness;
-      if (lowerBound <= original && original <= upperBound) {
+      /// @attention 浮動小数点数の比較
+      if (lowerBound < original && original < upperBound) {
         original = guide.Value;
         if (guide != this.horizontalSnapGuides.First) {
           // キャッシング: ガイドを削除して先頭につめなおす

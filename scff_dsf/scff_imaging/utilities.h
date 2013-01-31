@@ -94,6 +94,9 @@ bool IsSupportedPixelFormat(const BITMAPINFOHEADER &info_header);
 // レイアウト
 //-------------------------------------------------------------------
 
+/// 配置計算用の許容誤差
+extern const double kEpsilon;
+
 /// 指定された範囲（同じ座標系）が中に含まれているか
 bool Contains(int bound_x, int bound_y,
               int bound_width, int bound_height,

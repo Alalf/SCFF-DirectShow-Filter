@@ -162,6 +162,7 @@ public class DoubleRect {
   public double Bottom { get { return this.Y + this.Height; } }
 
   /// 含有判定
+  /// @todo(me) 浮動小数点数の比較
   public bool Contains(DoublePoint point) {
     return this.X <= point.X && point.X <= this.Right &&
            this.Y <= point.Y && point.Y <= this.Bottom;
@@ -177,22 +178,6 @@ public class SampleRect : IntRect {
   /// コンストラクタ
   public SampleRect(int x, int y, int width, int height)
       : base(x, y, width, height) {}
-  /// 補正つきstaticコンストラクタ
-  /// @param x Doubleのx
-  /// @param y Doubleのy
-  /// @param width DoubleのWidth
-  /// @param height DoubleのHeight
-  /// @return サンプル座標系のRect(プロパティは整数)
-  public static SampleRect FromDouble(double x, double y, double width, double height) {
-    int newX, newY, newWidth, newHeight;
-    // floor
-    newX = (int)x;
-    newY = (int)y;
-    // ceil
-    newWidth = (int)Math.Ceiling(width);
-    newHeight = (int)Math.Ceiling(height);
-    return new SampleRect(newX, newY, newWidth, newHeight);
-  }
 }
 
 //---------------------------------------------------------------------
@@ -237,13 +222,19 @@ public class RelativePoint : DoublePoint {
 public class RelativeLTRB : DoubleLTRB {
   /// コンストラクタ
   public RelativeLTRB(double left, double top, double right, double bottom)
-      : base(left, top, right, bottom) {}
+      : base(left, top, right, bottom) {
+    /// @todo(me) 浮動小数点数の比較
+    ///           Debug.Assert書く
+  }
 }
 
 /// ([0-1], [0-1])の相対座標系に収まるRect
 public class RelativeRect : DoubleRect {
   /// コンストラクタ
   public RelativeRect(double x, double y, double width, double height)
-      : base(x, y, width, height) {}
+      : base(x, y, width, height) {
+    /// @todo(me) 浮動小数点数の比較
+    ///           Debug.Assert書く
+  }
 }
 }   // namespace SCFF.Common

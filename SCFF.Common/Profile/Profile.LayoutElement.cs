@@ -469,24 +469,17 @@ public class LayoutElement : ILayoutElementView, ILayoutElement {
 
     // サンプル座標系での領域を求める
     /// @todo(me) Fitの連打結果が安定しないのはCalculateLayoutのせいかも？
-    var boundRect = this.GetBoundRect(sampleWidth, sampleHeight);
-    int x, y, width, height;
-    Imaging.Utilities.CalculateLayout(
-        boundRect.X, boundRect.Y,
-        boundRect.Width, boundRect.Height,
-        this.ClippingWidthWithFit, this.ClippingHeightWithFit,
-        this.Stretch, this.KeepAspectRatio,
-        out x, out y, out width, out height);
+    var actualBoundRect = this.GetActualBoundRect(sampleWidth, sampleHeight);
 
     // 1ピクセルあたりの相対値を求める
     var relativeXPerPixel = 1.0 / sampleWidth;
     var relativeYPerPixel = 1.0 / sampleHeight;
 
     // Profileに反映
-    this.SetBoundRelativeLeft   = x * relativeXPerPixel;
-    this.SetBoundRelativeTop    = y * relativeYPerPixel;
-    this.SetBoundRelativeRight  = (x + width) * relativeXPerPixel;
-    this.SetBoundRelativeBottom = (y + height) * relativeYPerPixel;
+    this.SetBoundRelativeLeft   = actualBoundRect.X * relativeXPerPixel;
+    this.SetBoundRelativeTop    = actualBoundRect.Y * relativeYPerPixel;
+    this.SetBoundRelativeRight  = actualBoundRect.Right * relativeXPerPixel;
+    this.SetBoundRelativeBottom = actualBoundRect.Bottom * relativeYPerPixel;
   }
 
   //=================================================================
@@ -545,11 +538,20 @@ public class LayoutElement : ILayoutElementView, ILayoutElement {
 
   /// @copydoc ILayoutElementView::GetBoundRect
   public SampleRect GetBoundRect(int sampleWidth, int sampleHeight) {
-    return SampleRect.FromDouble(
-      this.BoundRelativeLeft * sampleWidth,
-      this.BoundRelativeTop * sampleHeight,
-      this.BoundRelativeWidth * sampleWidth,
-      this.BoundRelativeHeight * sampleHeight);
+    var realX = this.BoundRelativeLeft * sampleWidth;
+    var realY = this.BoundRelativeTop * sampleHeight;
+    var realWidth = this.BoundRelativeWidth * sampleWidth;
+    var realHeight = this.BoundRelativeHeight * sampleHeight;
+
+    /// @attention 切捨て・切り上げ計算をここでしている
+    // floor
+    var x = (int)(realX + Imaging.Utilities.Epsilon);
+    var y = (int)(realY + Imaging.Utilities.Epsilon);
+    // ceil
+    var width = (int)Math.Ceiling(realWidth - Imaging.Utilities.Epsilon);
+    var height = (int)Math.Ceiling(realHeight - Imaging.Utilities.Epsilon);
+
+    return new SampleRect(x, y, width, height);
   }
   /// @copydoc ILayoutElementView::GetActualBoundRect
   public SampleRect GetActualBoundRect(int sampleWidth, int sampleHeight) {
@@ -562,7 +564,6 @@ public class LayoutElement : ILayoutElementView, ILayoutElement {
         this.ClippingWidthWithFit, this.ClippingHeightWithFit,
         this.Stretch, this.KeepAspectRatio,
         out x, out y, out width, out height);
-    /// @attention 切捨て・切り上げ計算をここでしている
     return new SampleRect(x, y, width, height);
   }
 

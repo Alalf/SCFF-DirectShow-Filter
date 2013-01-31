@@ -137,7 +137,7 @@ public class Options {
   /// プロファイルパスリストのindex番目を取得する
   public string GetRecentProfile(int index) {
     // 上下逆に変換
-    int reverseIndex = Constants.RecentProfilesLength - index - 1;
+    var reverseIndex = Constants.RecentProfilesLength - index - 1;
     Debug.Assert(0 <= reverseIndex && reverseIndex < Constants.RecentProfilesLength);
     return this.reverseRecentProfiles[reverseIndex];
   }
@@ -169,7 +169,7 @@ public class Options {
   /// プロファイルパスリストに直接indexを指定してパスを設定する
   internal void SetRecentProfile(int index, string profile) {
     // 上下逆に変換
-    int reverseIndex = Constants.RecentProfilesLength - index - 1;
+    var reverseIndex = Constants.RecentProfilesLength - index - 1;
     Debug.Assert(0 <= reverseIndex && reverseIndex < Constants.RecentProfilesLength);
     this.reverseRecentProfiles[reverseIndex] = profile;
   }

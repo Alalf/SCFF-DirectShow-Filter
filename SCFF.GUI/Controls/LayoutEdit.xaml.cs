@@ -387,8 +387,9 @@ public partial class LayoutEdit
     App.ScreenCaptureTimer.UpdateRequest(App.Profile);
 
     // 再描画
-    Debug.WriteLineIf(!(this.LayoutEditImage.ActualWidth <= App.RuntimeOptions.CurrentSampleWidth &&
-                        this.LayoutEditImage.ActualHeight <= App.RuntimeOptions.CurrentSampleHeight),
+    /// @attention 浮動小数点数の比較
+    Debug.WriteLineIf(this.LayoutEditImage.ActualWidth > App.RuntimeOptions.CurrentSampleWidth ||
+                      this.LayoutEditImage.ActualHeight > App.RuntimeOptions.CurrentSampleHeight,
                       string.Format("Redraw ({0:F2}, {1:F2})",
                                     this.LayoutEditImage.ActualWidth,
                                     this.LayoutEditImage.ActualHeight),

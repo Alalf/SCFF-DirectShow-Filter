@@ -68,6 +68,8 @@ public static class SWScaleInputCorrector {
       }
       default: Debug.Fail("switch"); throw new System.ArgumentException();
     }
+    
+    /// @attention 浮動小数点数の比較
     if (value < lowerBound) {
       changed = lowerBound;
       return false;

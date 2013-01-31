@@ -239,6 +239,9 @@ bool IsSupportedPixelFormat(const BITMAPINFOHEADER &info_header) {
 // レイアウト
 //-------------------------------------------------------------------
 
+/// 配置計算用の許容誤差
+const double kEpsilon = 0.0001;
+
 bool Contains(int bound_x, int bound_y,
               int bound_width, int bound_height,
               int x, int y, int width, int height) {
@@ -290,9 +293,9 @@ static void Letterbox(int bound_x, int bound_y,
     const double actual_height = bound_width / input_aspect;
     const double actual_padding_height = (bound_height - actual_height) / 2.0;
     // floor
-    *new_y = bound_y + static_cast<int>(actual_padding_height);
+    *new_y = bound_y + static_cast<int>(actual_padding_height + kEpsilon);
     // ceil
-    *new_height = static_cast<int>(std::ceil(actual_height));
+    *new_height = static_cast<int>(std::ceil(actual_height - kEpsilon));
   } else {
     // B. 境界よりも元が縦長(!is_letterboxing = isPillarboxing)
     //  - heightを境界にあわせる
@@ -302,9 +305,9 @@ static void Letterbox(int bound_x, int bound_y,
     const double actual_width = bound_height * input_aspect;
     const double actual_padding_width = (bound_width - actual_width) / 2.0;
     // floor
-    *new_x = bound_x + static_cast<int>(actual_padding_width);
+    *new_x = bound_x + static_cast<int>(actual_padding_width + kEpsilon);
     // ceil
-    *new_width = static_cast<int>(std::ceil(actual_width));
+    *new_width = static_cast<int>(std::ceil(actual_width - kEpsilon));
   }
   ASSERT(bound_x <= *new_x && *new_x + *new_width <= bound_x + bound_width &&
          bound_y <= *new_y && *new_y + *new_height <= bound_y + bound_height);
@@ -319,8 +322,8 @@ static void Pad(int bound_x, int bound_y,
   const double actual_padding_width = (bound_width - input_width) / 2.0;
   const double actual_padding_height = (bound_height - input_height) / 2.0;
   // floor
-  *new_x = bound_x + static_cast<int>(actual_padding_width);
-  *new_y = bound_y + static_cast<int>(actual_padding_height);
+  *new_x = bound_x + static_cast<int>(actual_padding_width + kEpsilon);
+  *new_y = bound_y + static_cast<int>(actual_padding_height + kEpsilon);
   *new_width = input_width;
   *new_height = input_height;
   ASSERT(bound_x <= *new_x && *new_x + *new_width <= bound_x + bound_width &&

@@ -119,6 +119,7 @@ public class MoveAndSize {
     }
 
     // 一気に補正
+    /// @attention 浮動小数点数の比較
     if (nextLeft < 0.0 && 1.0 < nextRight) {
       nextLeft = 0.0;
       nextRight = 1.0;
@@ -126,7 +127,7 @@ public class MoveAndSize {
     } else if (nextLeft < 0.0) {
       nextLeft = 0.0;
       nextRight = nextLeft + width;
-    } else if (nextRight > 1.0) {
+    } else if (1.0 < nextRight) {
       nextRight = 1.0;
       nextLeft = nextRight - width;
     } 
@@ -137,7 +138,7 @@ public class MoveAndSize {
     } else if (nextTop < 0.0) {
       nextTop = 0.0;
       nextBottom = nextTop + height;
-    } else if (nextBottom > 1.0) {
+    } else if (1.0 < nextBottom) {
       nextBottom = 1.0;
       nextTop = nextBottom - height;
     }
@@ -161,6 +162,7 @@ public class MoveAndSize {
     var nextBottom = this.Target.BoundRelativeBottom;
 
     // Top/Bottom
+    /// @attention 浮動小数点数の比較
     switch (this.HitMode) {
       case HitModes.SizeNW:
       case HitModes.SizeNE: {
@@ -169,7 +171,7 @@ public class MoveAndSize {
         if (this.UseSnapGuide) this.SnapGuide.TryVerticalSnap(ref tryNextTop);
         if (tryNextTop < 0.0) tryNextTop = 0.0;
         var topUpperBound = nextBottom - Constants.MinimumBoundRelativeSize;
-        if (tryNextTop > topUpperBound) tryNextTop = topUpperBound;
+        if (topUpperBound < tryNextTop) tryNextTop = topUpperBound;
         nextTop = tryNextTop;
         break;
       }
@@ -178,7 +180,7 @@ public class MoveAndSize {
         // Bottom
         var tryNextBottom = this.MousePoint.Y - this.MouseOffset.Bottom;
         if (this.UseSnapGuide) this.SnapGuide.TryVerticalSnap(ref tryNextBottom);
-        if (tryNextBottom > 1.0) tryNextBottom = 1.0;
+        if (1.0 < tryNextBottom) tryNextBottom = 1.0;
         var bottomLowerBound = nextTop + Constants.MinimumBoundRelativeSize;
         if (tryNextBottom < bottomLowerBound) tryNextBottom = bottomLowerBound;
         nextBottom = tryNextBottom;
@@ -187,6 +189,7 @@ public class MoveAndSize {
     }
 
     // Left/Right
+    /// @attention 浮動小数点数の比較
     switch (this.HitMode) {
       case HitModes.SizeNW:
       case HitModes.SizeSW: {
@@ -208,7 +211,7 @@ public class MoveAndSize {
           }
         }
         var leftUpperBound = nextRight - Constants.MinimumBoundRelativeSize;
-        if (tryNextLeft > leftUpperBound) tryNextLeft = leftUpperBound;
+        if (leftUpperBound < tryNextLeft) tryNextLeft = leftUpperBound;
         nextLeft = tryNextLeft;
         break;
       }
@@ -223,7 +226,7 @@ public class MoveAndSize {
             nextBottom = nextTop + ((tryNextRight - nextLeft) / this.OriginalAspectRatio);
           }
         }
-        if (tryNextRight > 1.0) {
+        if (1.0 < tryNextRight) {
           tryNextRight = 1.0;
           if (this.HitMode == HitModes.SizeNE) {
             nextTop = nextBottom - ((tryNextRight - nextLeft) / this.OriginalAspectRatio);
@@ -252,6 +255,7 @@ public class MoveAndSize {
     var nextBottom = this.Target.BoundRelativeBottom;
 
     // Top/Bottom
+    /// @attention 浮動小数点数の比較
     switch (this.HitMode) {
       case HitModes.SizeN:
       case HitModes.SizeNW:
@@ -261,7 +265,7 @@ public class MoveAndSize {
         if (this.UseSnapGuide) this.SnapGuide.TryVerticalSnap(ref tryNextTop);
         if (tryNextTop < 0.0) tryNextTop = 0.0;
         var topUpperBound = nextBottom - Constants.MinimumBoundRelativeSize;
-        if (tryNextTop > topUpperBound) tryNextTop = topUpperBound;
+        if (topUpperBound < tryNextTop) tryNextTop = topUpperBound;
         nextTop = tryNextTop;
         break;
       }
@@ -271,7 +275,7 @@ public class MoveAndSize {
         // Bottom
         var tryNextBottom = this.MousePoint.Y - this.MouseOffset.Bottom;
         if (this.UseSnapGuide) this.SnapGuide.TryVerticalSnap(ref tryNextBottom);
-        if (tryNextBottom > 1.0) tryNextBottom = 1.0;
+        if (1.0 < tryNextBottom) tryNextBottom = 1.0;
         var bottomLowerBound = nextTop + Constants.MinimumBoundRelativeSize;
         if (tryNextBottom < bottomLowerBound) tryNextBottom = bottomLowerBound;
         nextBottom = tryNextBottom;
@@ -280,6 +284,7 @@ public class MoveAndSize {
     }
 
     // Left/Right
+    /// @attention 浮動小数点数の比較
     switch (this.HitMode) {
       case HitModes.SizeNW:
       case HitModes.SizeW:
@@ -289,7 +294,7 @@ public class MoveAndSize {
         if (this.UseSnapGuide) this.SnapGuide.TryHorizontalSnap(ref tryNextLeft);
         if (tryNextLeft < 0.0) tryNextLeft = 0.0;
         var leftUpperBound = nextRight - Constants.MinimumBoundRelativeSize;
-        if (tryNextLeft > leftUpperBound) tryNextLeft = leftUpperBound;
+        if (leftUpperBound < tryNextLeft) tryNextLeft = leftUpperBound;
         nextLeft = tryNextLeft;
         break;
       }
@@ -299,7 +304,7 @@ public class MoveAndSize {
         // Right
         var tryNextRight = this.MousePoint.X - this.MouseOffset.Right;
         if (this.UseSnapGuide) this.SnapGuide.TryHorizontalSnap(ref tryNextRight);
-        if (tryNextRight > 1.0) tryNextRight = 1.0;
+        if (1.0 < tryNextRight) tryNextRight = 1.0;
         var rightLowerBound = nextLeft + Constants.MinimumBoundRelativeSize;
         if (tryNextRight < rightLowerBound) tryNextRight = rightLowerBound;
         nextRight = tryNextRight;

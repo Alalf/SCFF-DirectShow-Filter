@@ -88,27 +88,28 @@ public static class HitTest {
                      Constants.BorderRelativeThickness;
     
     // X座標→Y座標
-    if (mousePoint.X <= borderWRight) {         // W
-      if (mousePoint.Y <= borderNBottom) {      // N
+    /// @attention 浮動小数点数の比較
+    if (mousePoint.X < borderWRight) {          // W
+      if (mousePoint.Y < borderNBottom) {       // N
         return HitModes.SizeNW;
-      } else if (mousePoint.Y <= borderSTop) {  // (N)-(S)
+      } else if (mousePoint.Y < borderSTop) {   // (N)-(S)
         return HitModes.SizeW;
       } else {                                  // S
         return HitModes.SizeSW;
       }
-    } else if (mousePoint.X <= borderELeft) {   // (W)-(E)
-      if (mousePoint.Y <= borderNBottom) {      // N
+    } else if (mousePoint.X < borderELeft) {    // (W)-(E)
+      if (mousePoint.Y < borderNBottom) {       // N
         return HitModes.SizeN;
-      } else if (mousePoint.Y <= borderSTop) {  // (N)-(S)
+      } else if (mousePoint.Y < borderSTop) {   // (N)-(S)
         Debug.Fail("Move?", "HitTest.GetHitMode");
         return HitModes.Move;
       } else {                                  // S
         return HitModes.SizeS;
       }
     } else {                                    // E
-      if (mousePoint.Y <= borderNBottom) {      // N
+      if (mousePoint.Y < borderNBottom) {       // N
         return HitModes.SizeNE;
-      } else if (mousePoint.Y <= borderSTop) {  // (N)-(S)
+      } else if (mousePoint.Y < borderSTop) {   // (N)-(S)
         return HitModes.SizeE;
       } else {                                  // S
         return HitModes.SizeSE;

@@ -61,8 +61,8 @@ ErrorCodes Scale::Init() {
 
   /// @warning xxx_sharpenの値は1.00にするとDiv0Errorで落ちるので少しだけずらす
   /// @todo(me) 要調査
-  /// @todo(me) 浮動小数点の比較
-  const float epsilon = 0.001F;
+  /// @attention 浮動小数点数の比較
+  const float epsilon = 0.0001F;
   float luma_sharpen = swscale_config_.luma_sharpen;
   float chroma_sharpen = swscale_config_.chroma_sharpen;
   if (fabs(luma_sharpen - 1.0F) < epsilon) luma_sharpen = 1.0F + epsilon;

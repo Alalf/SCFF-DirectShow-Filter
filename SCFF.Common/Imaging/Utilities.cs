@@ -28,6 +28,17 @@ using System.Diagnostics;
 /// (scff_imaging/utilities.ccとhの移植版)
 /// @attention C#では関数をまとめる為に名前空間は使えない
 public static class Utilities {
+  //===================================================================
+  // 定数
+  //===================================================================
+
+  /// 浮動小数点数の許容誤差
+  public const double Epsilon = 0.0001;
+
+  //===================================================================
+  // メソッド
+  //===================================================================
+
   /// 境界に合わせる
   private static void Fit(int boundX, int boundY, int boundWidth, int boundHeight,
                           out int newX, out int newY, out int newWidth, out int newHeight) {
@@ -55,9 +66,9 @@ public static class Utilities {
       var actualHeight = boundWidth / inputAspect;
       var actualPaddingHeight = (boundHeight - actualHeight) / 2.0;
       // floor
-      newY = boundY + (int)actualPaddingHeight;
+      newY = boundY + (int)(actualPaddingHeight + Utilities.Epsilon);
       // ceil
-      newHeight = (int)Math.Ceiling(actualHeight);
+      newHeight = (int)Math.Ceiling(actualHeight - Utilities.Epsilon);
     } else {
       // B. 境界よりも元が縦長(!isLetterboxing = isPillarboxing)
       //  - heightを境界にあわせる
@@ -67,9 +78,9 @@ public static class Utilities {
       var actualWidth = boundHeight * inputAspect;
       var actualPaddingWidth = (boundWidth - actualWidth) / 2.0;
       // floor
-      newX = boundX + (int)actualPaddingWidth;
+      newX = boundX + (int)(actualPaddingWidth + Utilities.Epsilon);
       // ceil
-      newWidth = (int)Math.Ceiling(actualWidth);
+      newWidth = (int)Math.Ceiling(actualWidth - Utilities.Epsilon);
     }
     Debug.Assert(boundX <= newX && newX + newWidth <= boundX + boundWidth &&
                  boundY <= newY && newY + newHeight <= boundY + boundHeight);
@@ -82,8 +93,8 @@ public static class Utilities {
     var actualPaddingWidth = (boundWidth - inputWidth) / 2.0;
     var actualPaddingHeight = (boundHeight - inputHeight) / 2.0;
     // floor
-    newX = boundX + (int)actualPaddingWidth;
-    newY = boundY + (int)actualPaddingHeight;
+    newX = boundX + (int)(actualPaddingWidth + Epsilon);
+    newY = boundY + (int)(actualPaddingHeight + Epsilon);
     newWidth = inputWidth;
     newHeight = inputHeight;
     Debug.Assert(boundX <= newX && newX + newWidth <= boundX + boundWidth &&

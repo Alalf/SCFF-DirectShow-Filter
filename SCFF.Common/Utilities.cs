@@ -32,6 +32,23 @@ using SCFF.Interprocess;
 /// SCFF.Commonモジュール共通で利用する機能
 public static class Utilities {
   //===================================================================
+  // プロセスの生存確認
+  //===================================================================
+
+  /// プロセスの生存確認
+  /// @param processID プロセスID
+  /// @return 生存しているか
+  public static bool IsProcessAlive(UInt32 processID) {
+    try {
+      /// @warning DWORD->int変換！オーバーフローの可能性あり
+      Process.GetProcessById((int)processID);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  //===================================================================
   // ファイルパスの短縮
   //===================================================================
 

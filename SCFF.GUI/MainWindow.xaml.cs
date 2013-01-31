@@ -79,9 +79,18 @@ public partial class MainWindow
                     MessageBoxImage.Error);
   }
   /// 共有メモリ設定失敗時のダイアログを表示
-  private void ShowSendFailedDialog(ValidationErrors errors = null) {
+  private void ShowSendFailedDialog(string message) {
     var errorMessage = new StringBuilder();
-    errorMessage.AppendLine("Couldn't send the profile to shared memory.");
+    errorMessage.AppendLine("Couldn't send the profile to shared memory: ");
+    errorMessage.AppendLine("  - " + message);
+    MessageBox.Show(errorMessage.ToString(), "SCFF.GUI",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+  }
+  /// 共有メモリ設定失敗時のダイアログを表示
+  private void ShowSendFailedDialog(ValidationErrors errors) {
+    var errorMessage = new StringBuilder();
+    errorMessage.AppendLine("Couldn't send the profile to shared memory: ");
     if (errors != null) {
       foreach (var error in errors) {
         errorMessage.AppendLine("  - " + error.Message);
@@ -220,6 +229,13 @@ public partial class MainWindow
 
   /// Profileの共有メモリへの書き込み
   private void SendProfile(bool quiet, bool forceNullLayout) {
+    // 送る先のプロセスが存在しているか
+    var processID = App.RuntimeOptions.CurrentProcessID;
+    if (!Utilities.IsProcessAlive(processID)) {
+      if (!quiet) this.ShowSendFailedDialog("Couldn't find process: " + processID);
+      return;
+    }
+
     // 検証
     var errors = App.ProfileDocument.Validate();
     if (!errors.IsNoError) {
@@ -229,7 +245,7 @@ public partial class MainWindow
     // 共有メモリに書き込み
     var result = App.ProfileDocument.SendMessage(App.Interprocess, forceNullLayout);
     if (!result) {
-      if (!quiet) this.ShowSendFailedDialog(null);
+      if (!quiet) this.ShowSendFailedDialog("Couldn't access shared memory.");
       return;
     }
 

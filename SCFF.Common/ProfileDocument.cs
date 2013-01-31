@@ -126,13 +126,6 @@ public class ProfileDocument {
   /// @param forceNullLayout Splash画像を表示させる
   /// @return 共有メモリに書き込み成功
   public bool SendMessage(Interprocess interprocess, bool forceNullLayout) {
-    try {
-      /// @warning DWORD->int変換！オーバーフローの可能性あり
-      Process.GetProcessById((int)this.RuntimeOptions.CurrentProcessID);
-    } catch {
-      return false;
-    }
-
     Message message;
     if (forceNullLayout) {
       message.LayoutParameters = new LayoutParameter[Interprocess.MaxComplexLayoutElements];

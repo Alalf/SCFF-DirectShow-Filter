@@ -264,20 +264,6 @@ public static class Utilities {
   // WindowType/Window別の機能
   //===================================================================
 
-  /// Windowハンドルが正常かどうか
-  public static bool IsWindowValid(WindowTypes windowType, UIntPtr window) {
-    switch(windowType) {
-      case WindowTypes.Normal: {
-        return (window != UIntPtr.Zero && User32.IsWindow(window));
-      }
-      case WindowTypes.DesktopListView:
-      case WindowTypes.Desktop: {
-        return true;
-      }
-      default: Debug.Fail("switch"); throw new System.ArgumentException();
-    }
-  }
-
   /// WindowのClient座標系での領域を返す
   /// @warning windowType == Desktop時のみ、左上端がマイナス座標になる可能性がある
   /// @param windowType Windowタイプ
@@ -286,7 +272,7 @@ public static class Utilities {
   public static ClientRect GetWindowRect(WindowTypes windowType, UIntPtr window) {
     switch (windowType) {
       case WindowTypes.Normal: {
-        Debug.Assert(Utilities.IsWindowValid(windowType, window),
+        Debug.Assert(window != UIntPtr.Zero && User32.IsWindow(window),
                      "Invalid Window", "GetWindowRect");
         User32.RECT windowRect;
         User32.GetClientRect(window, out windowRect);
@@ -312,7 +298,7 @@ public static class Utilities {
   public static ScreenPoint ClientToScreen(WindowTypes windowType, UIntPtr window, int clientX, int clientY) {
     switch (windowType) {
       case WindowTypes.Normal: {
-        Debug.Assert(Utilities.IsWindowValid(windowType, window),
+        Debug.Assert(window != UIntPtr.Zero && User32.IsWindow(window),
                      "Invalid Window", "ClientToScreen");
         User32.POINT windowPoint = new User32.POINT { X = clientX, Y = clientY };
         User32.ClientToScreen(window, ref windowPoint);

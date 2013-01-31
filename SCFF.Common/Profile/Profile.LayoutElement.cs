@@ -122,7 +122,7 @@ public class LayoutElement : ILayoutElementView, ILayoutElement {
 
   /// @copydoc ILayoutElementView::IsWindowValid
   public bool IsWindowValid {
-    get { return Utilities.IsWindowValid(this.WindowType, this.Window); }
+    get { return (this.Window != UIntPtr.Zero && User32.IsWindow(this.Window)); }
   }
 
   /// @copydoc ILayoutElementView::WindowType

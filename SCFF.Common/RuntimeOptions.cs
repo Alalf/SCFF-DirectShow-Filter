@@ -52,6 +52,8 @@ public class RuntimeOptions {
 
     this.SelectedEntryIndex = RuntimeOptions.InvalidSelection;
     this.EntryList = new List<Entry>();
+
+
   }
 
   //===================================================================
@@ -79,6 +81,11 @@ public class RuntimeOptions {
 
   /// エントリのリスト
   private List<Entry> EntryList { get; set; }
+
+  //-------------------------------------------------------------------
+
+  /// 起動時にAeroがOnだったか
+
 
   //-------------------------------------------------------------------
 

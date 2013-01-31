@@ -78,6 +78,19 @@ public partial class MainWindow
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
   }
+  /// 共有メモリ設定失敗時のダイアログを表示
+  private void ShowSendFailedDialog(ValidationErrors errors = null) {
+    var errorMessage = new StringBuilder();
+    errorMessage.AppendLine("Couldn't send the profile to shared memory.");
+    if (errors != null) {
+      foreach (var error in errors) {
+        errorMessage.AppendLine("  - " + error.Message);
+      }
+    }
+    MessageBox.Show(errorMessage.ToString(), "SCFF.GUI",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+  }
 
   //-------------------------------------------------------------------
 
@@ -207,21 +220,16 @@ public partial class MainWindow
 
   /// Profileの共有メモリへの書き込み
   private void SendProfile(bool quiet, bool forceNullLayout) {
+    // 検証
     var errors = App.ProfileDocument.Validate();
     if (!errors.IsNoError) {
-      if (!quiet) {
-        var errorMessage = new StringBuilder();
-        foreach (var error in errors) {
-          errorMessage.AppendLine(error.Message);
-        }
-        MessageBox.Show(errorMessage.ToString());
-      }
+      if (!quiet) this.ShowSendFailedDialog(errors);
       return;
     }
+    // 共有メモリに書き込み
     var result = App.ProfileDocument.SendMessage(App.Interprocess, forceNullLayout);
-    if (!result && !quiet) {
-      /// @todo(me) ちゃんとエラーを表示する
-      MessageBox.Show("Error occured");
+    if (!result) {
+      if (!quiet) this.ShowSendFailedDialog(null);
       return;
     }
 

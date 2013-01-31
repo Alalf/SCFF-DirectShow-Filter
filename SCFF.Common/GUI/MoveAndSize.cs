@@ -80,6 +80,7 @@ public class MoveAndSize {
   //===================================================================
 
   /// レイアウト要素を移動する
+  /// @return 移動後のLTRB
   public RelativeLTRB Move() {
     var width = this.Target.BoundRelativeWidth;
     var height = this.Target.BoundRelativeHeight;
@@ -151,6 +152,7 @@ public class MoveAndSize {
   //===================================================================
 
   /// レイアウト要素を比率を維持したまま拡大縮小する
+  /// @return 拡大縮小後のLTRB
   public RelativeLTRB SizeWithKeepAspectRatio() {
     Debug.Assert(this.HitMode == HitModes.SizeNW || this.HitMode == HitModes.SizeNE ||
                  this.HitMode == HitModes.SizeSW || this.HitMode == HitModes.SizeSE);
@@ -245,6 +247,7 @@ public class MoveAndSize {
   }
 
   /// レイアウト要素を拡大縮小する
+  /// @return 拡大縮小後のLTRB
   public RelativeLTRB Size() {
     Debug.Assert(this.HitMode != HitModes.Move);
 

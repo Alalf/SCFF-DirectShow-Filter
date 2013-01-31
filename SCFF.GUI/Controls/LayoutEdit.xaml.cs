@@ -375,6 +375,8 @@ public partial class LayoutEdit
   //===================================================================
 
   /// 再描画タイマーコールバック
+  /// @param sender 使用しない
+  /// @param e 使用しない
   void redrawTimer_Tick(object sender, EventArgs e) {
     // プレビューが必要なければ更新しない
     if (!App.Options.LayoutIsExpanded) return;

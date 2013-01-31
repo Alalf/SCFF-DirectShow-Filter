@@ -162,6 +162,8 @@ public class DoubleRect {
   public double Bottom { get { return this.Y + this.Height; } }
 
   /// 含有判定
+  /// @param point 判定対象のPoint
+  /// @return 含有しているか
   /// @todo(me) 浮動小数点数の比較
   public bool Contains(DoublePoint point) {
     return this.X <= point.X && point.X <= this.Right &&
@@ -221,6 +223,10 @@ public class RelativePoint : DoublePoint {
 /// ([0-1], [0-1])の相対座標系内の領域を示すLTRB
 public class RelativeLTRB : DoubleLTRB {
   /// コンストラクタ
+  /// @param left left
+  /// @param top top
+  /// @param right right
+  /// @param bottom bottom
   public RelativeLTRB(double left, double top, double right, double bottom)
       : base(left, top, right, bottom) {
     /// @todo(me) 浮動小数点数の比較
@@ -231,6 +237,10 @@ public class RelativeLTRB : DoubleLTRB {
 /// ([0-1], [0-1])の相対座標系に収まるRect
 public class RelativeRect : DoubleRect {
   /// コンストラクタ
+  /// @param x x
+  /// @param y y
+  /// @param width width
+  /// @param height height
   public RelativeRect(double x, double y, double width, double height)
       : base(x, y, width, height) {
     /// @todo(me) 浮動小数点数の比較

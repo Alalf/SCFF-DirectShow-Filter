@@ -97,12 +97,14 @@ public class RuntimeOptions {
     }
   }
 
+  /// Aeroの状態を変更可能か
   public bool CanSetAero {
     get {
       return this.CanUseAero && this.WasAeroOnWhenStartup;
     }
   }
 
+  /// 起動時のAeroの状態を保存
   public void SaveStartupAeroState() {
     if (!this.CanUseAero) {
       this.WasAeroOnWhenStartup = false;

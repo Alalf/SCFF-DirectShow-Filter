@@ -44,6 +44,10 @@ public static class SWScaleInputCorrector {
   //=================================================================
 
   /// レイアウト要素のSWScale*の変更を試みる
+  /// @param target 変更箇所
+  /// @param value 変更値
+  /// @param[out] changed 変更後、制約を満たす形に訂正された値
+  /// @return 訂正された
   public static bool TryChange(Names target, float value, out float changed) {
     float lowerBound = 0.0F;
     float upperBound = 0.0F;

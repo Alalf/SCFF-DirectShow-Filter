@@ -307,7 +307,7 @@ public partial class MainWindow
   /// @param sender 使用しない
   /// @param e 使用しない
   private void OnProfileChanged(object sender, System.EventArgs e) {
-    if (App.Options.AutoApply) {
+    if (App.Options.AutoApply && !App.RuntimeOptions.IsEntryListEmpty) {
       this.SendProfile(true, false);
     }
 
@@ -763,6 +763,7 @@ public partial class MainWindow
 
   /// @copybrief Commands::SendProfile
   private void OnSendProfile(object sender, ExecutedRoutedEventArgs e) {
+    if (App.RuntimeOptions.IsEntryListEmpty) return;
     this.SendProfile(false, false);
   }
   /// @copybrief Commands::SendProfile
@@ -771,6 +772,7 @@ public partial class MainWindow
   }
   /// @copybrief Commands::SendNullProfile
   private void OnSendNullProfile(object sender, ExecutedRoutedEventArgs e) {
+    if (App.RuntimeOptions.IsEntryListEmpty) return;
     this.SendProfile(false, true);
   }
   /// @copybrief Commands::SendNullProfile

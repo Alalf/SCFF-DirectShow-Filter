@@ -215,6 +215,7 @@ scff_imaging::Request* SCFFMonitor::CreateRequest() {
       static_cast<double>(now - last_polling_clock_) / CLOCKS_PER_SEC;
 
   // ポーリングはkSCFFMonitorPollingInterval秒に1回である
+  /// @todo(me) 浮動小数点の比較
   if (erapsed_time_from_last_polling < kSCFFMonitorPollingInterval) {
     return nullptr;
   }

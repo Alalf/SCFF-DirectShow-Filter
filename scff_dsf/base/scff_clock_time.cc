@@ -100,6 +100,7 @@ REFERENCE_TIME SCFFClockTime::GetNow(REFERENCE_TIME filter_zero) {
   system_clock_->GetTime(&system_now);
   const double system_delta_sec =
       static_cast<double>(system_now - system_cursor_) / UNITS;
+  /// @todo(me) 浮動小数点の比較
   if (system_delta_sec > 60.0) {
     // 1分ごとにzero_を計算しなおす
     system_cursor_ = system_now;

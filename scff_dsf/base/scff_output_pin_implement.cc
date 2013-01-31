@@ -260,6 +260,7 @@ STDMETHODIMP SCFFOutputPin::GetLatency(REFERENCE_TIME *latency) {
             TEXT("SCFFOutputPin: GetLatency")));
 
   /// @todo(me) 値が不正確。固定値ではないはず。
+  /// @todo(me) 浮動小数点の比較
   if (fps_ > 0.0) {
     *latency = ToFrameInterval(fps_);
   } else {

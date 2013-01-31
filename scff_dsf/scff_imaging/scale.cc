@@ -58,11 +58,21 @@ ErrorCodes Scale::Init() {
   ASSERT(GetInputImage()->pixel_format() == ImagePixelFormats::kRGB0);
 
   // 拡大縮小時のフィルタを作成
+
+  /// @warning xxx_sharpenの値は1.00にするとDiv0Errorで落ちるので少しだけずらす
+  /// @todo(me) 要調査
+  /// @todo(me) 浮動小数点の比較
+  const float epsilon = 0.001F;
+  float luma_sharpen = swscale_config_.luma_sharpen;
+  float chroma_sharpen = swscale_config_.chroma_sharpen;
+  if (fabs(luma_sharpen - 1.0F) < epsilon) luma_sharpen = 1.0F + epsilon;
+  if (fabs(chroma_sharpen - 1.0F) < epsilon) chroma_sharpen = 1.0F + epsilon;
+
   SwsFilter *filter = sws_getDefaultFilter(
       swscale_config_.luma_gblur,
       swscale_config_.chroma_gblur,
-      swscale_config_.luma_sharpen,
-      swscale_config_.chroma_sharpen,
+      luma_sharpen,
+      chroma_sharpen,
       swscale_config_.chroma_hshift,
       swscale_config_.chroma_vshift,
       0);

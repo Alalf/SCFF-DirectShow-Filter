@@ -44,13 +44,16 @@ public struct ValidationError {
 
 /// 検証エラーをまとめたクラス
 public class ValidationErrors : List<ValidationError> {
+  /// エラーが検出されなかった
   public bool IsNoError {
     get { return (this.Count == 0); }
   }
+  /// TargetWindowに関するエラーを追加
   public void AddTargetWindowError(string message) {
     var error = new ValidationError(ValidationErrorTypes.TargetWindowError, message);
     this.Add(error);
   }
+  /// Areaに関するエラーを追加
   public void AddAreaError(string message) {
     var error = new ValidationError(ValidationErrorTypes.AreaError, message);
     this.Add(error);

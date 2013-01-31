@@ -142,6 +142,7 @@ public class RuntimeOptions {
   //===================================================================
 
   /// 共有メモリアクセスオブジェクトからDirectoryを読み込む
+  /// @param interprocess 共有メモリアクセス用オブジェクト
   public void RefreshDirectory(Interprocess interprocess) {
     // 共有メモリにアクセス
     var initResult = interprocess.InitDirectory();

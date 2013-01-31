@@ -122,6 +122,9 @@ public class ProfileDocument {
 
   /// Profileを共有メモリに書き込み
   /// @pre Validate済み
+  /// @param interprocess 共有メモリアクセス用オブジェクト
+  /// @param forceNullLayout Splash画像を表示させる
+  /// @return 共有メモリに書き込み成功
   public bool SendMessage(Interprocess interprocess, bool forceNullLayout) {
     try {
       /// @warning DWORD->int変換！オーバーフローの可能性あり

@@ -751,18 +751,19 @@ public partial class MainWindow
 
   //-------------------------------------------------------------------
 
+  /// @copybrief Commands::SendProfile
   private void OnSendProfile(object sender, ExecutedRoutedEventArgs e) {
     this.SendProfile(false, false);
   }
-
+  /// @copybrief Commands::SendProfile
   private void CanSendProfile(object sender, CanExecuteRoutedEventArgs e) {
     e.CanExecute = !App.RuntimeOptions.IsEntryListEmpty;
   }
-
+  /// @copybrief Commands::SendNullProfile
   private void OnSendNullProfile(object sender, ExecutedRoutedEventArgs e) {
     this.SendProfile(false, true);
   }
-
+  /// @copybrief Commands::SendNullProfile
   private void CanSendNullProfile(object sender, CanExecuteRoutedEventArgs e) {
     e.CanExecute = !App.RuntimeOptions.IsEntryListEmpty;
   }

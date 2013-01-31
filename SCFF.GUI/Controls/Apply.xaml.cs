@@ -74,9 +74,9 @@ public partial class Apply : UserControl, IBindingOptions, IBindingRuntimeOption
   // IBindingRuntimeOptionsの実装
   //===================================================================
 
-  /// @copydoc Common::GUI::IBindingOptions::CanChangeRuntimeOptions
+  /// @copydoc Common::GUI::IBindingRuntimeOptions::CanChangeRuntimeOptions
   public bool CanChangeRuntimeOptions { get; private set; }
-  /// @copydoc Common::GUI::IBindingOptions::OnRuntimeOptionsChanged
+  /// @copydoc Common::GUI::IBindingRuntimeOptions::OnRuntimeOptionsChanged
   public void OnRuntimeOptionsChanged() {
     this.CanChangeRuntimeOptions = false;
     if (App.ProfileDocument.HasModifiedFromLastApply) {

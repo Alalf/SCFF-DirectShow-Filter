@@ -59,7 +59,6 @@ public partial class Profile {
   /// サンプルの幅と高さを指定してmessageを生成する
   /// @param sampleWidth サンプルの幅
   /// @param sampleHeight サンプルの高さ
-  /// @param forceNullLayout 強制的にスプラッシュを表示させるか
   /// @return 共有メモリにそのまま設定可能なMessage
   public Message ToMessage(int sampleWidth, int sampleHeight) {
     // this.messageで最新の情報になっていない部分を編集する

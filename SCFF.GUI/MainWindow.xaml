@@ -57,6 +57,12 @@
                     CanExecute="CanRemoveCurrentLayoutElement"/>
     <CommandBinding Command="{x:Static local:Commands.FitCurrentBoundRect}"
                     Executed="OnFitCurrentBoundRect"/>
+    <CommandBinding Command="{x:Static local:Commands.SendProfile}"
+                    Executed="OnSendProfile"
+                    CanExecute="CanSendProfile"/>
+    <CommandBinding Command="{x:Static local:Commands.SendNullProfile}"
+                    Executed="OnSendNullProfile"
+                    CanExecute="CanSendNullProfile"/>
     <CommandBinding Command="{x:Static local:Commands.SetAero}"
                     Executed="OnSetAero"/>
     <CommandBinding Command="{x:Static local:Commands.SetCompactView}"

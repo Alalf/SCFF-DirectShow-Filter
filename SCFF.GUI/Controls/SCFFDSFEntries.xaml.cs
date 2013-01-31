@@ -22,6 +22,7 @@ namespace SCFF.GUI.Controls {
 
 using System.Diagnostics;
 using System.Windows.Controls;
+using SCFF.Common;
 using SCFF.Common.GUI;
 
 /// SCFFDSFエントリを仮想メモリから読み込み・表示・選択するためのUserControl
@@ -89,9 +90,9 @@ public partial class SCFFDSFEntries : UserControl, IBindingRuntimeOptions {
 
     // コンボボックスの更新
     this.Processes.Items.Clear();
-    foreach (var entry in App.RuntimeOptions.EntryStringList) {
+    foreach (var entryString in App.RuntimeOptions.EntryStringList) {
       var item = new ComboBoxItem();
-      item.Content = entry;
+      item.Content = entryString;
       this.Processes.Items.Add(item.Content);
     }
 

@@ -22,6 +22,7 @@ namespace SCFF.GUI {
 
 using System.Diagnostics;
 using System.IO;
+using System.Text;
 using System.Windows;
 using System.Windows.Input;
 using Microsoft.Win32;
@@ -54,7 +55,7 @@ public partial class MainWindow
   }
 
   //===================================================================
-  // ProfileDocument: New/Close/Save/Open
+  // ProfileDocument: New/Close/Save/Open/SendProfile
   //===================================================================
 
   /// 保存失敗時のダイアログを表示
@@ -107,10 +108,14 @@ public partial class MainWindow
     if (!this.CloseProfile()) return false;
 
     App.ProfileDocument.New();
-    // RuntimeOptions
+
+    //-----------------------------------------------------------------
+    // Notify self
     this.OnRuntimeOptionsChanged();
-    // Propfile
+    // Notify other controls
     this.NotifyProfileChanged();
+    //-----------------------------------------------------------------
+
     return true;
   }
 
@@ -142,12 +147,14 @@ public partial class MainWindow
       return false;
     }
 
-    // Options
-    this.MainMenu.OnOptionsChanged();
-    // RuntimeOptions
+    //-----------------------------------------------------------------
+    // Notify self
     this.OnRuntimeOptionsChanged();
-    // Profile
+    // Notify other controls
+    this.MainMenu.OnOptionsChanged();
     this.NotifyProfileChanged();
+    //-----------------------------------------------------------------
+    
     return true;
   }
 
@@ -188,11 +195,41 @@ public partial class MainWindow
       return false;
     }
 
-    // Options
-    this.MainMenu.OnOptionsChanged();
-    // RuntimeOptions
+    //-----------------------------------------------------------------
+    // Notify self
     this.OnRuntimeOptionsChanged();
+    // Notify other controls
+    this.MainMenu.OnOptionsChanged();
+    //-----------------------------------------------------------------
+
     return true;
+  }
+
+  /// Profileの共有メモリへの書き込み
+  private void SendProfile(bool quiet, bool forceNullLayout) {
+    var errors = App.ProfileDocument.Validate();
+    if (!errors.IsNoError) {
+      if (!quiet) {
+        var errorMessage = new StringBuilder();
+        foreach (var error in errors) {
+          errorMessage.AppendLine(error.Message);
+        }
+        MessageBox.Show(errorMessage.ToString());
+      }
+      return;
+    }
+    var result = App.ProfileDocument.SendMessage(App.Interprocess, forceNullLayout);
+    if (!result && !quiet) {
+      /// @todo(me) ちゃんとエラーを表示する
+      MessageBox.Show("Error occured");
+      return;
+    }
+
+    //-----------------------------------------------------------------
+    // Notify self
+    // Notify other controls
+    this.Apply.OnRuntimeOptionsChanged();
+    //-----------------------------------------------------------------
   }
 
   //===================================================================
@@ -246,9 +283,12 @@ public partial class MainWindow
   /// @param sender 使用しない
   /// @param e 使用しない
   private void OnProfileChanged(object sender, System.EventArgs e) {
-    /// @todo(me) 実装
+    if (App.Options.AutoApply) {
+      this.SendProfile(true, false);
+    }
+
     this.OnRuntimeOptionsChanged();
-    //Debug.Write("c");
+    this.Apply.OnRuntimeOptionsChanged();
   }
 
   //-------------------------------------------------------------------
@@ -469,6 +509,7 @@ public partial class MainWindow
   /// thisを含むすべての子コントロールにRuntimeOptionsChangedイベント発生を伝える
   public void NotifyRuntimeOptionsChanged() {
     this.OnRuntimeOptionsChanged();
+    this.Apply.OnRuntimeOptionsChanged();
     this.LayoutEdit.OnRuntimeOptionsChanged();
     this.LayoutParameter.OnRuntimeOptionsChanged();
     this.SCFFEntries.OnRuntimeOptionsChanged();
@@ -698,6 +739,24 @@ public partial class MainWindow
     this.LayoutParameter.OnCurrentLayoutElementChanged();
     this.LayoutEdit.OnCurrentLayoutElementChanged();
     //-----------------------------------------------------------------
+  }
+
+  //-------------------------------------------------------------------
+
+  private void OnSendProfile(object sender, ExecutedRoutedEventArgs e) {
+    this.SendProfile(false, false);
+  }
+
+  private void CanSendProfile(object sender, CanExecuteRoutedEventArgs e) {
+    e.CanExecute = !App.RuntimeOptions.IsEntryListEmpty;
+  }
+
+  private void OnSendNullProfile(object sender, ExecutedRoutedEventArgs e) {
+    this.SendProfile(false, true);
+  }
+
+  private void CanSendNullProfile(object sender, CanExecuteRoutedEventArgs e) {
+    e.CanExecute = !App.RuntimeOptions.IsEntryListEmpty;
   }
 
   //-------------------------------------------------------------------

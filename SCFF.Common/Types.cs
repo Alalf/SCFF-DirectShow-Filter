@@ -99,6 +99,12 @@ public class IntRect {
     this.Width = newRight - newX;
     this.Height = newBottom - newY;
   }
+
+  /// 含有判定
+  public bool Contains(IntRect other) {
+    return this.X <= other.X && other.Right <= this.Right &&
+           this.Y <= other.Y && other.Bottom <= this.Bottom;
+  }
 }
 
 /// WindowsのRectが使えないので自前で用意したPoint<double>

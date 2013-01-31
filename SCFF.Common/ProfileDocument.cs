@@ -20,8 +20,11 @@
 
 namespace SCFF.Common {
 
+using System;
+using System.Diagnostics;
 using System.IO;
 using SCFF.Common.Profile;
+using SCFF.Interprocess;
 
 /// Options,RuntimeOptions.ProfileをまとめるFacadeクラス
 /// @warning Facadeクラスなのでメンバは参照のみに限ること
@@ -109,6 +112,43 @@ public class ProfileDocument {
     this.RuntimeOptions.LastSavedTimestamp = this.Profile.Timestamp;
     this.RuntimeOptions.LastAppliedTimestamp = RuntimeOptions.InvalidTimestamp;
 
+    return true;
+  }
+
+  /// Profileを検証
+  public ValidationErrors Validate() {
+    return Validator.ValidateProfile(this.Profile);
+  } 
+
+  /// Profileを共有メモリに書き込み
+  /// @pre Validate済み
+  public bool SendMessage(Interprocess interprocess, bool forceNullLayout) {
+    try {
+      /// @warning DWORD->int変換！オーバーフローの可能性あり
+      Process.GetProcessById((int)this.RuntimeOptions.CurrentProcessID);
+    } catch {
+      return false;
+    }
+
+    Message message;
+    if (forceNullLayout) {
+      message.LayoutParameters = new LayoutParameter[Interprocess.MaxComplexLayoutElements];
+      message.LayoutType = (int)LayoutTypes.NullLayout;
+      message.LayoutElementCount = 0;
+    } else {
+      message = this.Profile.ToMessage(this.RuntimeOptions.CurrentSampleWidth,
+                                       this.RuntimeOptions.CurrentSampleHeight);
+    }
+    /// @todo(me) もう少し一貫した対応策があるかもしれない
+    // 現在時刻で上書き
+    message.Timestamp = DateTime.UtcNow.Ticks;
+    var initResult = interprocess.InitMessage(this.RuntimeOptions.CurrentProcessID);
+    if (!initResult) return false;
+    var sendResult = interprocess.SendMessage(message);
+    if (!sendResult) return false;
+
+    // タイムスタンプ更新
+    this.RuntimeOptions.LastAppliedTimestamp = this.Profile.Timestamp;
     return true;
   }
 

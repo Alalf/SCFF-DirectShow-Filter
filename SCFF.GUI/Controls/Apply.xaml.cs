@@ -25,7 +25,7 @@ using System.Windows.Controls;
 using SCFF.Common.GUI;
 
 /// Splash/ApplyボタンとAutoApplyチェックボックスを管理するためのUserControl
-public partial class Apply : UserControl, IBindingOptions {
+public partial class Apply : UserControl, IBindingOptions, IBindingRuntimeOptions {
   //===================================================================
   // コンストラクタ/Dispose/デストラクタ
   //===================================================================
@@ -68,6 +68,23 @@ public partial class Apply : UserControl, IBindingOptions {
     this.CanChangeOptions = false;
     this.AutoApply.IsChecked = App.Options.AutoApply;
     this.CanChangeOptions = true;
+  }
+
+  //===================================================================
+  // IBindingRuntimeOptionsの実装
+  //===================================================================
+
+  /// @copydoc Common::GUI::IBindingOptions::CanChangeRuntimeOptions
+  public bool CanChangeRuntimeOptions { get; private set; }
+  /// @copydoc Common::GUI::IBindingOptions::OnRuntimeOptionsChanged
+  public void OnRuntimeOptionsChanged() {
+    this.CanChangeRuntimeOptions = false;
+    if (App.ProfileDocument.HasModifiedFromLastApply) {
+      this.ApplyProfile.Tag = "Emphasize";
+    } else {
+      this.ApplyProfile.Tag = null;
+    }
+    this.CanChangeRuntimeOptions = true;
   }
 }
 }   // namespace SCFF.GUI.Controls

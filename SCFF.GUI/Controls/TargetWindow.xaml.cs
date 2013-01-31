@@ -130,7 +130,7 @@ public partial class TargetWindow : UserControl, IBindingProfile {
   /// @param sender 使用しない
   /// @param e 使用しない
   private void DragHere_PreviewMouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e) {
-    this.DragHere.Tag = "IsDragging";
+    this.DragHere.Tag = "Emphasize";
 
     this.dragHereMode = true;
     this.currentTargetWindow = UIntPtr.Zero;

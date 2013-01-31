@@ -61,6 +61,11 @@ public static class Commands {
   /// 現在編集中のレイアウト要素の境界を取り込み内容に合わせて調整する
   public static readonly RoutedCommand FitCurrentBoundRect = new RoutedCommand();
   
+  /// プロファイルを共有メモリに書き込み
+  public static readonly RoutedCommand SendProfile = new RoutedCommand();
+  /// NullLayoutプロファイルを共有メモリに書き込み
+  public static readonly RoutedCommand SendNullProfile = new RoutedCommand();
+
   /// AeroのON/OFF
   public static readonly RoutedCommand SetAero = new RoutedCommand();
   /// コンパクト表示の切り替え

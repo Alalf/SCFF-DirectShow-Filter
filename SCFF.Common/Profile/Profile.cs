@@ -52,14 +52,30 @@ public partial class Profile {
     this.BuildLayoutElements();
   }
 
+  //===================================================================
+  // Validate/SendMessage
+  //===================================================================
+
   /// サンプルの幅と高さを指定してmessageを生成する
   /// @param sampleWidth サンプルの幅
   /// @param sampleHeight サンプルの高さ
   /// @param forceNullLayout 強制的にスプラッシュを表示させるか
   /// @return 共有メモリにそのまま設定可能なMessage
-  public Message ToMessage(int sampleWidth, int sampleHeight, bool forceNullLayout) {
-    /// @todo(me) 実装する。ただしこれは仮想メモリ出力用イテレータの機能な気がする
-    throw new NotImplementedException();
+  public Message ToMessage(int sampleWidth, int sampleHeight) {
+    // this.messageで最新の情報になっていない部分を編集する
+    this.message.LayoutType = (int)this.LayoutType;
+    for (int i = 0; i < this.LayoutElementCount; ++i) {
+      var boundRect = this.layoutElements[i].GetBoundRect(sampleWidth, sampleHeight);
+      this.message.LayoutParameters[i].BoundX = boundRect.X;
+      this.message.LayoutParameters[i].BoundY = boundRect.Y;
+      this.message.LayoutParameters[i].BoundWidth = boundRect.Width;
+      this.message.LayoutParameters[i].BoundHeight = boundRect.Height;
+      this.message.LayoutParameters[i].ClippingX = this.layoutElements[i].ClippingXWithFit;
+      this.message.LayoutParameters[i].ClippingY = this.layoutElements[i].ClippingYWithFit;
+      this.message.LayoutParameters[i].ClippingWidth = this.layoutElements[i].ClippingWidthWithFit;
+      this.message.LayoutParameters[i].ClippingHeight = this.layoutElements[i].ClippingHeightWithFit;
+    }
+    return this.message;
   }
 
   //===================================================================

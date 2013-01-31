@@ -75,8 +75,8 @@ Engine::Engine(ImagePixelFormats output_pixel_format,
                int output_width, int output_height, double output_fps)
     : CAMThread(),
       Layout(),
-      need_clear_front_image_(true),
-      need_clear_back_image_(true),
+      need_clear_front_image_(false),
+      need_clear_back_image_(false),
       output_pixel_format_(output_pixel_format),
       output_width_(output_width),
       output_height_(output_height),
@@ -140,6 +140,10 @@ ErrorCodes Engine::Init() {
   if (error_splash_image != ErrorCodes::kNoError) {
     return ErrorOccured(error_splash_image);
   }
+
+  // フロントイメージとバックイメージをクリア
+  Clear(&front_image_);
+  Clear(&back_image_);
 
   // 一時的にスプラッシュスクリーンプロセッサを作ってイメージを生成しておく
   SplashScreen splash_screen;

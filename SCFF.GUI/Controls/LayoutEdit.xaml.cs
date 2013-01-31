@@ -312,6 +312,9 @@ public partial class LayoutEdit
 
     // マウスキャプチャー開始
     image.CaptureMouse();
+
+    // Profileを更新
+    App.Profile.Current.Open();
   }
 
   /// LayoutEditImage: MouseMove
@@ -335,13 +338,10 @@ public partial class LayoutEdit
     this.moveAndSize.UpdateMousePoint(relativeMousePoint);
     var nextLTRB = this.moveAndSize.Do(Keyboard.Modifiers == ModifierKeys.Shift);
       
-    // Profileを更新
-    App.Profile.Current.Open();
     App.Profile.Current.SetBoundRelativeLeft = nextLTRB.Left;
     App.Profile.Current.SetBoundRelativeTop = nextLTRB.Top;
     App.Profile.Current.SetBoundRelativeRight = nextLTRB.Right;
     App.Profile.Current.SetBoundRelativeBottom = nextLTRB.Bottom;
-    App.Profile.Current.Close();
 
     //-----------------------------------------------------------------
     // Notify self
@@ -359,6 +359,7 @@ public partial class LayoutEdit
     if (!this.moveAndSize.IsRunning) return;
     this.moveAndSize.End();
     this.LayoutEditImage.ReleaseMouseCapture();
+    App.Profile.Current.Close();
   }
 
   //-------------------------------------------------------------------

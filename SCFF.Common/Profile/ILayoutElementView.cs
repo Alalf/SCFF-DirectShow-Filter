@@ -70,6 +70,9 @@ public interface ILayoutElementView {
   /// @pre IsWindowValid == True
   int ClippingHeightWithFit { get; }
 
+  /// クリッピング領域が正常か
+  bool IsClippingParametersValid { get; }
+
   //=================================================================
   // Options
   //=================================================================

@@ -269,6 +269,25 @@ public class LayoutElement : ILayoutElementView, ILayoutElement {
     set { this.profile.additionalLayoutParameters[this.Index].ClippingHeightWithoutFit = value; }
   }
 
+  /// @copydoc ILayoutElement::IsClippingParametersValid
+  public bool IsClippingParametersValid {
+    get {
+      /// @todo(me) まだValidateのチェックが甘い。
+      Debug.Assert(this.IsWindowValid);
+      if (this.Fit) return true;
+      var windowRect = Utilities.GetWindowRect(this.WindowType, this.Window);
+      var clippingRect = new ClientRect(this.ClippingXWithoutFit,
+                                        this.ClippingYWithoutFit,
+                                        this.ClippingWidthWithoutFit,
+                                        this.ClippingHeightWithoutFit);
+      if (windowRect.Width <= 0 || windowRect.Height <= 0 ||
+          clippingRect.Width <= 0 || clippingRect.Width <= 0) {
+        return false;
+      }
+      return windowRect.Contains(clippingRect);
+    }
+  }
+
   //=================================================================
   // Options
   //=================================================================

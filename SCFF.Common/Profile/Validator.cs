@@ -22,7 +22,7 @@ namespace SCFF.Common.Profile {
 
 using System.Collections.Generic;
 
-/// 検証エラータイプ
+  /// 検証エラータイプ
 public enum ValidationErrorTypes {
   TargetWindowError,  ///< ターゲットWindowに関するエラー
   AreaError           ///< Clipping領域に関するエラー
@@ -30,6 +30,12 @@ public enum ValidationErrorTypes {
 
 /// 検証エラー
 public struct ValidationError {
+  /// コンストラクタ
+  public ValidationError(ValidationErrorTypes type, string message) : this() {
+    this.Type = type;
+    this.Message = message;
+  }
+
   /// 検証エラータイプ
   public ValidationErrorTypes Type { get; set; }
   /// エラーメッセージ
@@ -37,39 +43,18 @@ public struct ValidationError {
 }
 
 /// 検証エラーをまとめたクラス
-public class ValidationErrors {
-  // コンストラクタ
-  public ValidationErrors() {
-    // nop
-  }
-
-  /// Clear
-  public void Clear() {
-    this.errors.Clear();
-  }
-
-  /// Add
-  public void Add(int index, ValidationError error) {
-    this.errors.Add(index, error);
-  }
-
-  /// 参照
-  /// @param index レイアウト要素のIndex
-  /// @return エラーが無ければnullがかえる
-  public ValidationError GetError(int index) {
-    ValidationError result;
-    this.errors.TryGetValue(index, out result);
-    return result;
-  }
-
-  /// エラーがないかどうか
+public class ValidationErrors : List<ValidationError> {
   public bool IsNoError {
-    get { return this.errors.Count == 0; }
+    get { return (this.Count == 0); }
   }
-
-  /// Index->ValidationErrorのディクショナリ
-  private Dictionary<int,ValidationError> errors =
-      new Dictionary<int,ValidationError>();
+  public void AddTargetWindowError(string message) {
+    var error = new ValidationError(ValidationErrorTypes.TargetWindowError, message);
+    this.Add(error);
+  }
+  public void AddAreaError(string message) {
+    var error = new ValidationError(ValidationErrorTypes.AreaError, message);
+    this.Add(error);
+  }
 }
 
 /// 検証メソッドをまとめたstaticクラス
@@ -79,7 +64,21 @@ public static class Validator {
   /// @return 検証エラーリスト
   private static ValidationErrors ValidateLayoutElement(ILayoutElementView layoutElement) {
     var result = new ValidationErrors();
-    /// @todo(me) 実装
+    
+    // TargetWindow
+    if (!layoutElement.IsWindowValid) {
+      var message = string.Format("Layout{0}: Specified window is invalid", layoutElement.Index + 1);
+      result.AddTargetWindowError(message);
+      return result;
+    }
+
+    // Area
+    if (!layoutElement.IsClippingParametersValid) {
+      var message = string.Format("Layout{0}: Clipping parameters are invalid", layoutElement.Index + 1);
+      result.AddAreaError(message);
+      return result;
+    }
+
     return result;
   }
 
@@ -88,7 +87,9 @@ public static class Validator {
   /// @return 検証エラーリスト
   public static ValidationErrors ValidateProfile(Profile profile) {
     var result = new ValidationErrors();
-    /// @todo(me) 実装
+    foreach (var layoutElement in profile) {
+      result.AddRange(Validator.ValidateLayoutElement(layoutElement));
+    }
     return result;
   }
 }

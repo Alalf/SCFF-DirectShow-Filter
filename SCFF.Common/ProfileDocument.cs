@@ -148,7 +148,11 @@ public class ProfileDocument {
     if (!sendResult) return false;
 
     // タイムスタンプ更新
-    this.RuntimeOptions.LastAppliedTimestamp = this.Profile.Timestamp;
+    if (forceNullLayout) {
+      this.RuntimeOptions.LastAppliedTimestamp = RuntimeOptions.InvalidTimestamp;
+    } else {
+      this.RuntimeOptions.LastAppliedTimestamp = this.Profile.Timestamp;
+    }
     return true;
   }
 

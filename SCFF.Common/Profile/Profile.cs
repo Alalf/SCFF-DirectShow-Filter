@@ -139,19 +139,17 @@ public partial class Profile {
   }
 
   /// デフォルトに戻す
-  /// @post タイムスタンプ更新
+  /// @post タイムスタンプ更新するがRaiseChangedは発生させない
   public void RestoreDefault() {
     this.ClearArrays();
     
     // Profileのプロパティの初期化
     this.LayoutElementCount = 1;
-    // this.UpdateTimestamp();
+    this.UpdateTimestamp();
 
     // currentの生成
     this.CurrentIndex = 0;
-    this.Current.Open();
     this.Current.RestoreDefault();
-    this.Current.Close(); // RaiseChanged
   }
 
   //-------------------------------------------------------------------
@@ -168,13 +166,13 @@ public partial class Profile {
   public void Add() {
     var nextIndex = this.LayoutElementCount;
     ++this.LayoutElementCount;
-    // this.UpdateTimestamp();
+    this.UpdateTimestamp();
 
     // currentを新たに生成したものに切り替える
     this.CurrentIndex = nextIndex;
-    this.Current.Open();
     this.Current.RestoreDefault();
-    this.Current.Close(); // RaiseChanged
+
+    this.RaiseChanged();
   }
 
   //-------------------------------------------------------------------

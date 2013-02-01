@@ -134,6 +134,7 @@ public partial class MainWindow
     //-----------------------------------------------------------------
     // Notify self
     this.OnRuntimeOptionsChanged();
+    this.Apply.OnRuntimeOptionsChanged();
     // Notify other controls
     this.NotifyProfileChanged();
     //-----------------------------------------------------------------
@@ -172,6 +173,7 @@ public partial class MainWindow
     //-----------------------------------------------------------------
     // Notify self
     this.OnRuntimeOptionsChanged();
+    this.Apply.OnRuntimeOptionsChanged();
     // Notify other controls
     this.MainMenu.OnOptionsChanged();
     this.NotifyProfileChanged();

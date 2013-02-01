@@ -78,6 +78,8 @@ public class ProfileDocument {
     this.RuntimeOptions.ProfileName = string.Empty;
     this.RuntimeOptions.LastSavedTimestamp = this.Profile.Timestamp;
     this.RuntimeOptions.LastAppliedTimestamp = RuntimeOptions.InvalidTimestamp;
+
+    this.Profile.RaiseChanged();
   }
 
   /// Profileの保存
@@ -111,6 +113,8 @@ public class ProfileDocument {
     this.RuntimeOptions.ProfileName = Path.GetFileNameWithoutExtension(path);
     this.RuntimeOptions.LastSavedTimestamp = this.Profile.Timestamp;
     this.RuntimeOptions.LastAppliedTimestamp = RuntimeOptions.InvalidTimestamp;
+
+    this.Profile.RaiseChanged();
 
     return true;
   }

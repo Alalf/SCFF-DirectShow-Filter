@@ -239,10 +239,12 @@ public partial class MainWindow
     }
 
     // 検証
-    var errors = App.ProfileDocument.Validate();
-    if (!errors.IsNoError) {
-      if (!quiet) this.ShowSendFailedDialog(errors);
-      return;
+    if (!forceNullLayout) {
+      var errors = App.ProfileDocument.Validate();
+      if (!errors.IsNoError) {
+        if (!quiet) this.ShowSendFailedDialog(errors);
+        return;
+      }
     }
     // 共有メモリに書き込み
     var result = App.ProfileDocument.SendMessage(App.Interprocess, forceNullLayout);

@@ -135,25 +135,8 @@ public class LayoutElement : ILayoutElementView, ILayoutElement {
     get { return this.profile.additionalLayoutParameters[this.Index].WindowCaption; }
   }
 
-  /// Clipping*WithoutFitの補正
-  private void FixClippingWithoutFit() {
-    if (!this.IsWindowValid) {
-      Debug.WriteLine("Invalid Window", "FixClippingWithoutFit");
-      return;
-    }
-    var windowRect = Utilities.GetWindowRect(this.WindowType, this.Window);
-    this.SetClippingXWithoutFit = windowRect.X;
-    this.SetClippingYWithoutFit = windowRect.Y;
-    this.SetClippingWidthWithoutFit =
-        Math.Min(this.ClippingWidthWithoutFit, windowRect.Width);
-    this.SetClippingHeightWithoutFit =
-        Math.Min(this.ClippingHeightWithoutFit, windowRect.Height);
-  }
-
   /// @copydoc ILayoutElement::SetWindow
   public void SetWindow(UIntPtr window) {
-    var windowChanged = this.WindowType != WindowTypes.Normal;
-
     this.profile.additionalLayoutParameters[this.Index].WindowType = WindowTypes.Normal;
     this.profile.message.LayoutParameters[this.Index].Window = window.ToUInt64();
 
@@ -164,34 +147,18 @@ public class LayoutElement : ILayoutElementView, ILayoutElement {
       windowCaption = className.ToString();
     }
     this.profile.additionalLayoutParameters[this.Index].WindowCaption = windowCaption;
-
-    if (windowChanged) {
-      this.FixClippingWithoutFit();
-    }
   }
   /// @copydoc ILayoutElement::SetWindowToDesktop
   public void SetWindowToDesktop() {
-    var windowChanged = this.WindowType != WindowTypes.Desktop;
-
     this.profile.additionalLayoutParameters[this.Index].WindowType = WindowTypes.Desktop;
     this.profile.message.LayoutParameters[this.Index].Window = User32.GetDesktopWindow().ToUInt64();
     this.profile.additionalLayoutParameters[this.Index].WindowCaption = "(Desktop)";
-
-    if (windowChanged) {
-      this.FixClippingWithoutFit();
-    }
   }
   /// @copydoc ILayoutElement::SetWindowToDesktopListView
   public void SetWindowToDesktopListView() {
-    var windowChanged = this.WindowType != WindowTypes.DesktopListView;
-
     this.profile.additionalLayoutParameters[this.Index].WindowType = WindowTypes.DesktopListView;
     this.profile.message.LayoutParameters[this.Index].Window = Utilities.DesktopListViewWindow.ToUInt64();
     this.profile.additionalLayoutParameters[this.Index].WindowCaption = "(DesktopListView)";
-
-    if (windowChanged) {
-      this.FixClippingWithoutFit();
-    }
   }
 
   //=================================================================

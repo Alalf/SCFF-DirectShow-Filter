@@ -22,7 +22,6 @@
 //---------------------------------------------------------------------
 // 2012/12/02 modified by Alalf
 #include <libavfilter/formats.h>
-//#include <libavfilter/internal.h>
 extern "C" {
 #include <libavutil/avassert.h>
 #include <libavutil/channel_layout.h>
@@ -32,6 +31,7 @@ extern "C" {
 #include <libavutil/parseutils.h>
 #include <libavfilter/avfilter.h>
 }
+//#include <libavfilter/internal.h>
 //---------------------------------------------------------------------
 
 #define KNOWN(l) (!FF_LAYOUT2COUNT(l)) /* for readability */

@@ -349,6 +349,7 @@ int ff_add_format(AVFilterFormats **avff, int64_t fmt)
     // 2012/06/30 modified by Alalf
     ADD_FORMAT(AVFilterFormats, avff, fmt, int, formats, format_count);
     //---------------------------------------------------------------------
+    return 0;
 }
 
 int ff_add_channel_layout(AVFilterChannelLayouts **l, uint64_t channel_layout)

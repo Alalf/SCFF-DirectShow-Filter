@@ -66,7 +66,7 @@ public static class StringConverter {
   // Window
   //=================================================================
 
-  /// ウィンドウ名
+  /// 表示用のウィンドウ名を取得
   public static string GetWindowCaption(ILayoutElementView layoutElement) {
     if (layoutElement.IsWindowValid) {
       return layoutElement.WindowCaption;

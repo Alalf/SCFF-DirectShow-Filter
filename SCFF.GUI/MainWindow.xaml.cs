@@ -253,6 +253,8 @@ public partial class MainWindow
       return;
     }
 
+    // 同じタイミングで
+
     //-----------------------------------------------------------------
     // Notify self
     // Notify other controls

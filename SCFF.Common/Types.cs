@@ -114,7 +114,7 @@ public class DoublePoint {
     this.X = x;
     this.Y = y;
   }
-  /// x座標
+  /// X座標
   public double X { get; private set; }
   /// Y座標
   public double Y { get; private set; }
@@ -183,10 +183,10 @@ public class SampleRect : IntRect {
 }
 
 //---------------------------------------------------------------------
-// クライアント座標系のPoint/Rect etc.
+// Client座標系のPoint/Rect etc.
 //---------------------------------------------------------------------
 
-/// クライアント座標系のRect
+/// Client座標系のRect
 public class ClientRect : IntRect {
   /// コンストラクタ
   public ClientRect(int x, int y, int width, int height)
@@ -194,16 +194,16 @@ public class ClientRect : IntRect {
 }
 
 //---------------------------------------------------------------------
-// スクリーン座標系のPoint/Rect etc.
+// Screen座標系のPoint/Rect etc.
 //---------------------------------------------------------------------
 
-/// スクリーン座標系のPoint
+/// Screen座標系のPoint
 public class ScreenPoint : IntPoint {
   /// コンストラクタ
   public ScreenPoint(int x, int y) : base(x, y) {}
 }
 
-/// スクリーン座標系のRect
+/// Screen座標系のRect
 public class ScreenRect : IntRect {
   /// コンストラクタ
   public ScreenRect(int x, int y, int width, int height)

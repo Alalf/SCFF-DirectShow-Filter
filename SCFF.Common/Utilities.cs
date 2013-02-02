@@ -394,12 +394,12 @@ public static class Utilities {
         return new ScreenPoint(windowPoint.X, windowPoint.Y);
       }
       case WindowTypes.DesktopListView: {
-        //　仮想スクリーン座標なので補正を戻す
+        //　VirtualScreen座標なので補正を戻す
         return new ScreenPoint(clientX + User32.GetSystemMetrics(User32.SM_XVIRTUALSCREEN),
                                clientY + User32.GetSystemMetrics(User32.SM_YVIRTUALSCREEN));
       }
       case WindowTypes.Desktop: {
-        // スクリーン座標系なのでそのまま返す
+        // Screen座標系なのでそのまま返す
         return new ScreenPoint(clientX, clientY);
       }
       default: Debug.Fail("switch"); throw new System.ArgumentException();

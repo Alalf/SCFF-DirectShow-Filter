@@ -25,7 +25,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using SCFF.Common.Profile;
 
-/// 与えられたマウス座標([0-1], [0-1])からレイアウト要素のIndexとHitModesを取得
+/// 与えられたマウス座標(相対座標系)からレイアウト要素のIndexとHitModesを取得
 public static class HitTest {
   //===================================================================
   // ヒットテスト用RelativeRectの生成
@@ -63,9 +63,9 @@ public static class HitTest {
   // ヒットモード計算
   //===================================================================
 
-  /// レイアウト要素とマウス相対座標からHitModesを調べる
+  /// レイアウト要素とマウス座標(相対座標系)からHitModesを調べる
   /// @param layoutElement レイアウト要素
-  /// @param mousePoint layoutElement内のマウス相対座標
+  /// @param mousePoint マウス座標(相対座標系)
   /// @return HitModes.SizeXXXのいずれか
   private static HitModes GetHitMode(ILayoutElementView layoutElement,
       RelativePoint mousePoint) {

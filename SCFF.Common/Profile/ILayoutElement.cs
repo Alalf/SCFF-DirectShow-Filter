@@ -125,7 +125,7 @@ public interface ILayoutElement {
   // Screen
   //=================================================================
 
-  /// スクリーン座標系のRectとIntersectを取り、新しいClipping領域に設定する。
+  /// Screen座標系のRectとIntersectを取り、新しいClipping領域に設定する。
   /// @param nextScreenRect 新しいClipping領域(Intersect前)
   void SetClippingRectByScreenRect(ScreenRect nextScreenRect);
 

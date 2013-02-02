@@ -97,8 +97,8 @@ public partial class TargetWindow : UserControl, IBindingProfile {
 
   //-------------------------------------------------------------------
 
-  /// 現在のターゲットウィンドウをXORで塗りつぶす
-  private void XorTargetRect() {
+  /// 現在の対象ウィンドウのClient領域をXORで塗りつぶす
+  private void XorTargetWindowRect() {
     User32.RECT currentTargetRect;
     User32.GetClientRect(this.currentTargetWindow, out currentTargetRect);
     
@@ -113,11 +113,11 @@ public partial class TargetWindow : UserControl, IBindingProfile {
     GDI32.SetROP2(this.currentTargetDC, originalDrawMode);
   }
 
-  /// 現在のターゲットの塗りつぶしを解除する
+  /// 現在の対象Windowの塗りつぶし(XOR)を解除する
   private void ClearTargetRect() {
     if (this.currentTargetWindow != UIntPtr.Zero) {
       // 取り込み対象範囲のXOR描画(もともとXORされていたので元に戻る)
-      this.XorTargetRect();
+      this.XorTargetWindowRect();
     }
     // DCを破棄
     if (this.currentTargetDC != IntPtr.Zero) {
@@ -163,15 +163,15 @@ public partial class TargetWindow : UserControl, IBindingProfile {
       return;
     }
 
-    // ウィンドウが異なる場合、枠線を描画していたウィンドウをアップデートして枠線を消しておく
+    // ウィンドウが異なる場合、枠線を描画していたウィンドウの枠線を消しておく
     this.ClearTargetRect();
 
-    // 現在処理中のウィンドウを更新
+    // 現在の対象ウィンドウを更新
     this.currentTargetWindow = nextTargetWindow;
     this.currentTargetDC = User32.GetDC(this.currentTargetWindow);
 
     // 取り込み対象範囲の描画
-    this.XorTargetRect();
+    this.XorTargetWindowRect();
   }
 
   /// DragHere: PreviewMouseUp
@@ -184,7 +184,7 @@ public partial class TargetWindow : UserControl, IBindingProfile {
     this.dragHereMode = false;
     this.ClearTargetRect();
 
-    // マウスカーソルからウィンドウを取得
+    // マウス座標(Screen座標系)からWindowを取得
     var screenPoint = this.DragHere.PointToScreen(e.GetPosition(this.DragHere));
     UIntPtr nextTargetWindow = User32.WindowFromPoint((int)screenPoint.X, (int)screenPoint.Y);
 

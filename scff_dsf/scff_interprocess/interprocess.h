@@ -191,9 +191,9 @@ struct LayoutParameter {
   int32_t bound_height;
   /// キャプチャを行う対象となるウィンドウ
   uint64_t window;
-  /// 取り込み範囲の開始X座標
+  /// 取り込み範囲左上端のX座標
   int32_t clipping_x;
-  /// 取り込み範囲の開始y座標
+  /// 取り込み範囲左上端のY座標
   int32_t clipping_y;
   /// 取り込み範囲の幅
   int32_t clipping_width;

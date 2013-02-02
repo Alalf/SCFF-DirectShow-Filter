@@ -468,7 +468,6 @@ public class LayoutElement : ILayoutElementView, ILayoutElement {
     }
 
     // サンプル座標系での領域を求める
-    /// @todo(me) Fitの連打結果が安定しないのはCalculateLayoutのせいかも？
     var actualBoundRect = this.GetActualBoundRect(sampleWidth, sampleHeight);
 
     // 1ピクセルあたりの相対値を求める
@@ -500,7 +499,7 @@ public class LayoutElement : ILayoutElementView, ILayoutElement {
   public void SetClippingRectByScreenRect(ScreenRect nextScreenRect) {
     Debug.Assert(this.IsWindowValid, "Invalid Window", "LayoutElement.SetClippingRectByScreenRect");
 
-    // ウィンドウの領域とIntersectをとる
+    // Screen座標系でのウィンドウのクライアント領域とIntersectをとる
     var boundScreenRect = Utilities.GetWindowScreenRect(this.WindowType, this.Window);
     if (!nextScreenRect.IntersectsWith(boundScreenRect)) {
       Debug.WriteLine("No Intersection", "LayoutElement.SetClippingRectByScreenRect");

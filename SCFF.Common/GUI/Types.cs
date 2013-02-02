@@ -48,7 +48,7 @@ public enum HitModes {
 // クラス・構造体
 //=====================================================================
 
-/// 相対マウス座標([0-1], [0-1])がレイアウト要素の上下左右とどれだけ離れているか
+/// マウス座標(相対座標系)がレイアウト要素の上下左右とどれだけ離れているか
 public class RelativeMouseOffset : RelativeLTRB {
   /// コンストラクタ
   public RelativeMouseOffset(ILayoutElementView layoutElement,

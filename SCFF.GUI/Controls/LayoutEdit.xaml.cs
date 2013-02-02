@@ -33,9 +33,6 @@ using SCFF.Common.GUI;
 using SCFF.Common.Profile;
 
 /// WYSIWYGレイアウト編集用UserControl
-///
-/// LayoutEditImage内の座標系は([0-1]*Scale,[0-1]*Scale)で固定（プレビューのサイズに依存しない）
-/// 逆に言うと依存させてはいけない
 public partial class LayoutEdit
     : UserControl, IBindingProfile, IBindingOptions, IBindingRuntimeOptions {
   //===================================================================
@@ -260,7 +257,7 @@ public partial class LayoutEdit
   // *Changed/Checked/Unchecked以外
   //-------------------------------------------------------------------
 
-  /// マウス座標(image座標系)を(0.0-1.0, 0.0-1.0)のRelativePointに変換
+  /// マウス座標(LayoutEditImageのClient座標系)をサンプルサイズに対する相対座標系に変換
   private RelativePoint GetRelativeMousePoint(IInputElement image, MouseEventArgs e) {
     var mousePoint = e.GetPosition(image);
     var relativeX = mousePoint.X / App.RuntimeOptions.CurrentSampleWidth;

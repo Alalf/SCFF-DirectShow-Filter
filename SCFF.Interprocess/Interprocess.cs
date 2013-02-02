@@ -157,23 +157,23 @@ public struct SWScaleConfig {
 /// @sa scff_imaging::ScreenCaptureParameter
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public struct LayoutParameter {
-  /// サンプル内の原点のX座標
+  /// サンプル内配置左上端のX座標
   /// @warning NullLayout,NativeLayoutでは無視される
   public Int32 BoundX;
-  /// サンプル内の原点のY座標
+  /// サンプル内配置左上端のY座標
   /// @warning NullLayout,NativeLayoutでは無視される
   public Int32 BoundY;
-  /// サンプル内の幅
+  /// サンプル内配置の幅
   /// @warning NullLayout,NativeLayoutでは無視される
   public Int32 BoundWidth;
-  /// サンプル内の高さ
+  /// サンプル内配置の高さ
   /// @warning NullLayout,NativeLayoutでは無視される
   public Int32 BoundHeight;
   /// キャプチャを行う対象となるWindow
   public UInt64 Window;
-  /// 取り込み範囲の開始X座標
+  /// 取り込み範囲左上端のX座標
   public Int32 ClippingX;
-  /// 取り込み範囲の開始Y座標
+  /// 取り込み範囲左上端のY座標
   public Int32 ClippingY;
   /// 取り込み範囲の幅
   public Int32 ClippingWidth;

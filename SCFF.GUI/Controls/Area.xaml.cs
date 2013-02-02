@@ -348,6 +348,7 @@ public partial class Area : UserControl, IBindingProfile {
       }
     }
     App.Profile.Current.SetClippingRectByScreenRect(nextScreenRect);
+    App.Profile.Current.ClearBackupParameters();
     App.Profile.Current.Close();
 
     //-----------------------------------------------------------------

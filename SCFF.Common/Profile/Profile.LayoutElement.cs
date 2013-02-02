@@ -109,6 +109,9 @@ public class LayoutElement : ILayoutElementView, ILayoutElement {
         Constants.MinimumBoundRelativeSize * this.Index;
     this.SetBoundRelativeRight = 1.0;
     this.SetBoundRelativeBottom = 1.0;
+
+    // バックアップパラメータの消去
+    this.ClearBackupParameters();
   }
 
   //=================================================================
@@ -609,6 +612,14 @@ public class LayoutElement : ILayoutElementView, ILayoutElement {
     this.SetClippingYWithoutFit = this.BackupScreenClippingY;
     this.SetClippingWidthWithoutFit = this.BackupClippingWidth;
     this.SetClippingHeightWithoutFit = this.BackupClippingHeight;
+  }
+  /// @copydoc ILayoutElement::ClearBackupParameters
+  public void ClearBackupParameters() {
+    this.SetBackupScreenClippingX = 0;
+    this.SetBackupScreenClippingY = 0;
+    this.SetBackupClippingWidth = 1;
+    this.SetBackupClippingHeight = 1;
+    this.SetHasBackedUp = false;
   }
   /// @copydoc ILayoutElement::SetHasBackedUp
   public bool SetHasBackedUp {

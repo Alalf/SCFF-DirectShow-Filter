@@ -137,6 +137,9 @@ public interface ILayoutElement {
   void UpdateBackupParameters();
   /// BackupからWindow/Clipping*を設定
   void RestoreBackupParameters();
+  /// Backup*をクリア
+  void ClearBackupParameters();
+
   /// @copydoc SCFF::Common::Profile::AdditionalLayoutParameter::HasBackedUp
   bool SetHasBackedUp { set; }
   /// @copydoc SCFF::Common::Profile::AdditionalLayoutParameter::BackupScreenClippingX

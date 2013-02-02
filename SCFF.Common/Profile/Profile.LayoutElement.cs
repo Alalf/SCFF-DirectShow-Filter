@@ -109,9 +109,6 @@ public class LayoutElement : ILayoutElementView, ILayoutElement {
         Constants.MinimumBoundRelativeSize * this.Index;
     this.SetBoundRelativeRight = 1.0;
     this.SetBoundRelativeBottom = 1.0;
-
-    // バックアップパラメータの消去
-    this.ClearBackupParameters();
   }
 
   //=================================================================

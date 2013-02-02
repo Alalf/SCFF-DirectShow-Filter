@@ -87,6 +87,14 @@ public partial class MainMenu : UserControl, IBindingOptions {
     App.Options.RestoreLastProfile = this.RestoreLastProfile.IsChecked;
   }
 
+  /// RestoreMissingWindowWhenOpeningProfile: Click
+  /// @param sender 使用しない
+  /// @param e 使用しない
+  private void RestoreMissingWindowWhenOpeningProfile_Click(object sender, RoutedEventArgs e) {
+    App.Options.RestoreMissingWindowWhenOpeningProfile =
+        this.RestoreMissingWindowWhenOpeningProfile.IsChecked;
+  }
+
   /// RecentProfile1: Click
   /// @param sender 使用しない
   /// @param e 使用しない
@@ -156,6 +164,8 @@ public partial class MainMenu : UserControl, IBindingOptions {
     this.CompactView.IsChecked = App.Options.CompactView;
     this.ForceAeroOn.IsChecked = App.Options.ForceAeroOn;
     this.RestoreLastProfile.IsChecked = App.Options.RestoreLastProfile;
+    this.RestoreMissingWindowWhenOpeningProfile.IsChecked =
+        App.Options.RestoreMissingWindowWhenOpeningProfile;
     this.CanChangeOptions = true;
   }
 }

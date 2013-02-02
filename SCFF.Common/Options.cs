@@ -64,6 +64,7 @@ public class Options {
     this.CompactView = false;
     this.ForceAeroOn = false;
     this.RestoreLastProfile = true;
+    this.RestoreMissingWindowWhenOpeningProfile = true;
   }
 
   //===================================================================
@@ -129,6 +130,8 @@ public class Options {
   public bool ForceAeroOn { get; set; }
   /// 最後に使用したプロファイルを起動時に読み込む
   public bool RestoreLastProfile { get; set; }
+  /// プロファイル読み込み時にWindowが存在していないとき、デスクトップ取り込みに切り替える
+  public bool RestoreMissingWindowWhenOpeningProfile { get; set; }
 
   //===================================================================
   // アクセサ

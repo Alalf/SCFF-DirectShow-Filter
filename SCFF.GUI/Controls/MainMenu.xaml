@@ -61,6 +61,10 @@
                 IsCheckable="True"
                 x:Name="RestoreLastProfile"
                 Click="RestoreLastProfile_Click" />
+      <MenuItem Header="Restore missing window when opening profile"
+                IsCheckable="True"
+                x:Name="RestoreMissingWindowWhenOpeningProfile"
+                Click="RestoreMissingWindowWhenOpeningProfile_Click"/>
     </MenuItem>
   </Menu>
 </UserControl>

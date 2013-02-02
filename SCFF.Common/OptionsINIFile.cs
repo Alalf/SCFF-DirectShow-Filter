@@ -80,6 +80,8 @@ public static class OptionsINIFile {
         writer.WriteLine("CompactView={0}", options.CompactView);
         writer.WriteLine("ForceAeroOn={0}", options.ForceAeroOn);
         writer.WriteLine("RestoreLastProfile={0}", options.RestoreLastProfile);
+        writer.WriteLine("RestoreMissingWindowWhenOpeningProfile={0}",
+                         options.RestoreMissingWindowWhenOpeningProfile);
         return true;
       }
     } catch (Exception) {
@@ -198,6 +200,9 @@ public static class OptionsINIFile {
     }
     if (labelToRawData.TryGetBool("RestoreLastProfile", out boolValue)) {
       options.RestoreLastProfile = boolValue;
+    }
+    if (labelToRawData.TryGetBool("RestoreMissingWindowWhenOpeningProfile", out boolValue)) {
+      options.RestoreMissingWindowWhenOpeningProfile = boolValue;
     }
 
     return true;

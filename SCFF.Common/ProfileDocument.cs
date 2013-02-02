@@ -106,7 +106,9 @@ public class ProfileDocument {
     if (!result) return false;
 
     // バックアップパラメータの復元
-    this.Profile.RestoreBackupParameters();
+    if (this.Options.RestoreMissingWindowWhenOpeningProfile) {
+      this.Profile.RestoreBackupParameters();
+    }
 
     // Options
     this.Options.AddRecentProfile(path);

@@ -23,6 +23,7 @@ namespace SCFF.Common.Profile {
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using SCFF.Interprocess;
 
 /// レイアウト設定などをまとめたプロファイル
@@ -50,6 +51,28 @@ public partial class Profile {
     
     // カーソルの初期化
     this.BuildLayoutElements();
+  }
+
+  //===================================================================
+  // LayoutElementsの一括更新
+  //===================================================================
+
+  public void UpdateBackupParameters() {
+    for (int i = 0; i < this.LayoutElementCount; ++i) {
+      var layoutElement = this.layoutElements[i];
+      if (layoutElement.WindowType != WindowTypes.Normal) continue;
+      Debug.Assert(layoutElement.IsWindowValid);
+      layoutElement.UpdateBackupParameters();
+    }
+  }
+  public void RestoreBackupParameters() {
+    for (int i = 0; i < this.LayoutElementCount; ++i) {
+      var layoutElement = this.layoutElements[i];
+      if (layoutElement.WindowType == WindowTypes.Normal &&
+          !layoutElement.IsWindowValid) {
+        layoutElement.RestoreBackupParameters();
+      }
+    }
   }
 
   //===================================================================

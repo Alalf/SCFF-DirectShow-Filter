@@ -105,6 +105,9 @@ public class ProfileDocument {
     var result = ProfileINIFile.Load(this.Profile, path);
     if (!result) return false;
 
+    // バックアップパラメータの復元
+    this.Profile.RestoreBackupParameters();
+
     // Options
     this.Options.AddRecentProfile(path);
 
@@ -146,6 +149,9 @@ public class ProfileDocument {
     if (!initResult) return false;
     var sendResult = interprocess.SendMessage(message);
     if (!sendResult) return false;
+
+    // バックアップを更新
+    this.Profile.UpdateBackupParameters();
 
     // タイムスタンプ更新
     if (forceNullLayout) {

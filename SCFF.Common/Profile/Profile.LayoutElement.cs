@@ -601,6 +601,7 @@ public class LayoutElement : ILayoutElementView, ILayoutElement {
   }
   /// @copydoc ILayoutElement::UpdateBackupParameters
   public void RestoreBackupParameters() {
+    if (!this.HasBackedUp) return;
     Debug.Assert(!this.IsWindowValid);
     this.SetWindowToDesktop();
     this.SetFit = false;

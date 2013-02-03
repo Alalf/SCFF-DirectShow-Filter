@@ -94,22 +94,22 @@ public partial class LayoutEdit
     // framePen/textBrush
     switch (layoutElement.WindowType) {
       case WindowTypes.Normal: {
-        framePen = isCurrent ? BrushesAndPens.CurrentNormalPen
-                             : BrushesAndPens.NormalPen;
+        framePen  = isCurrent ? BrushesAndPens.CurrentNormalPen
+                              : BrushesAndPens.NormalPen;
         textBrush = isCurrent ? BrushesAndPens.CurrentNormalBrush
                               : BrushesAndPens.NormalBrush;
         break;
       }
       case WindowTypes.DesktopListView: {
-        framePen = isCurrent ? BrushesAndPens.CurrentDesktopListViewPen
-                             : BrushesAndPens.DesktopListViewPen;
+        framePen  = isCurrent ? BrushesAndPens.CurrentDesktopListViewPen
+                              : BrushesAndPens.DesktopListViewPen;
         textBrush = isCurrent ? BrushesAndPens.CurrentDesktopListViewBrush
                               : BrushesAndPens.DesktopListViewBrush;
         break;
       }
       case WindowTypes.Desktop: {
-        framePen = isCurrent ? BrushesAndPens.CurrentDesktopPen
-                             : BrushesAndPens.DesktopPen;
+        framePen  = isCurrent ? BrushesAndPens.CurrentDesktopPen
+                              : BrushesAndPens.DesktopPen;
         textBrush = isCurrent ? BrushesAndPens.CurrentDesktopBrush
                               : BrushesAndPens.DesktopBrush;
         break;

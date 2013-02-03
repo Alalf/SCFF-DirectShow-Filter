@@ -254,8 +254,11 @@ public class Interprocess {
     this.viewOfMessage = null;
     this.mutexMessage = null;
 
-    this.sizeOfDirectory = Marshal.SizeOf(typeof(Directory));
-    this.sizeOfMessage = Marshal.SizeOf(typeof(Message));
+    this.directoryType = typeof(Directory);
+    this.messageType = typeof(Message);
+
+    this.sizeOfDirectory = Marshal.SizeOf(this.directoryType);
+    this.sizeOfMessage = Marshal.SizeOf(this.messageType);
 
     Trace.WriteLine("****Interprocess: NEW");
   }
@@ -343,7 +346,7 @@ public class Interprocess {
     byte[] buffer = new byte[this.sizeOfDirectory];
     this.viewOfDirectory.Read(buffer, 0, this.sizeOfDirectory);
     GCHandle gch = GCHandle.Alloc(buffer, GCHandleType.Pinned);
-    return (Directory)Marshal.PtrToStructure(gch.AddrOfPinnedObject(), typeof(Directory));
+    return (Directory)Marshal.PtrToStructure(gch.AddrOfPinnedObject(), this.directoryType);
   }
 
   /// Directoryを書き込む
@@ -435,7 +438,7 @@ public class Interprocess {
     byte[] buffer = new byte[this.sizeOfMessage];
     this.viewOfMessage.Read(buffer, 0, this.sizeOfMessage);
     GCHandle gch = GCHandle.Alloc(buffer, GCHandleType.Pinned);
-    return (Message)Marshal.PtrToStructure(gch.AddrOfPinnedObject(), typeof(Message));
+    return (Message)Marshal.PtrToStructure(gch.AddrOfPinnedObject(), this.messageType);
   }
 
   /// Messageを書き込む
@@ -613,6 +616,11 @@ public class Interprocess {
   //===================================================================
   // フィールド
   //===================================================================
+
+  /// Directoryのタイプ
+  private Type directoryType;
+  /// Messageのタイプ
+  private Type messageType;
 
   /// Directoryのサイズ
   private int sizeOfDirectory;

@@ -141,9 +141,10 @@ ErrorCodes Engine::Init() {
     return ErrorOccured(error_splash_image);
   }
 
-  // フロントイメージとバックイメージをクリア
+  // すべてのイメージをクリア
   Clear(&front_image_);
   Clear(&back_image_);
+  Clear(&splash_image_);
 
   // 一時的にスプラッシュスクリーンプロセッサを作ってイメージを生成しておく
   SplashScreen splash_screen;

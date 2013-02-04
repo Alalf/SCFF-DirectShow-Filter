@@ -17,3 +17,5 @@
 *.Cache
 /doxysearch.db
 /doxygen_warnings.log
+*.pfx
+*/publish

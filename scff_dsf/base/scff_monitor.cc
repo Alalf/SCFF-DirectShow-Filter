@@ -30,8 +30,9 @@
 //=====================================================================
 
 SCFFMonitor::SCFFMonitor()
-    : last_polling_clock_(-1),        // ありえない値
-      last_message_timestamp_(-1LL) {   // ありえない値
+    : last_polling_clock_(-1),          // ありえない値
+      last_message_timestamp_(-1LL),    // ありえない値
+      last_layout_error_state_(false) { ///< @attention Splash状態がスタートだがエラーなし扱い
   MyDbgLog((LOG_MEMORY, kDbgNewDelete, TEXT("NEW SCFFMonitor")));
 }
 
@@ -50,7 +51,8 @@ bool SCFFMonitor::Init(scff_imaging::ImagePixelFormats pixel_format,
   // interprocessオブジェクトの初期化
   const bool success_directory = interprocess_.InitDirectory();
   const bool success_message = interprocess_.InitMessage(process_id);
-  ASSERT(success_directory && success_message);
+  const bool success_error_event = interprocess_.InitErrorEvent(process_id);
+  ASSERT(success_directory && success_message && success_error_event);
 
   // エントリの追加
   scff_interprocess::Entry entry;
@@ -72,6 +74,25 @@ bool SCFFMonitor::Init(scff_imaging::ImagePixelFormats pixel_format,
   last_message_timestamp_ = -1;
 
   return true;
+}
+
+void SCFFMonitor::CheckLayoutError(scff_imaging::ErrorCodes error_code) {
+  switch (error_code) {
+    case scff_imaging::ErrorCodes::kNoError:
+    case scff_imaging::ErrorCodes::kProcessorUninitializedError: {
+      last_layout_error_state_ = false;
+      break;
+    }
+    default: {
+      if (!last_layout_error_state_) {
+        // 非エラー→エラーに切り替わった時のみシグナルを送る
+        MyDbgLog((LOG_ERROR, kDbgImportant, TEXT("SCFFMonitor: Raise Error Event")));
+        interprocess_.RaiseErrorEvent();
+      }
+      last_layout_error_state_ = true;
+      break;
+    }
+  }
 }
 
 //---------------------------------------------------------------------

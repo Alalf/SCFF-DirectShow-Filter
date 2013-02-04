@@ -241,6 +241,9 @@ public class Interprocess {
   /// Messageの保護用Mutex名の接頭辞
   private const string MessageMutexNamePrefix = "mutex_scff_v1_message_";
 
+  /// イベント名の接頭辞
+  private const string ErrorEventNamePrefix = "scff_v1_error_event_";
+
   //===================================================================
   // コンストラクタ/デストラクタ
   //===================================================================
@@ -253,6 +256,7 @@ public class Interprocess {
     this.message = null;
     this.viewOfMessage = null;
     this.mutexMessage = null;
+    this.errorEvent = null;
 
     this.directoryType = typeof(Directory);
     this.messageType = typeof(Message);
@@ -268,6 +272,7 @@ public class Interprocess {
     // 解放忘れがないように
     this.ReleaseDirectory();
     this.ReleaseMessage();
+    this.ReleaseErrorEvent();
     Trace.WriteLine("****Interprocess: DELETE");
   }
 
@@ -452,6 +457,49 @@ public class Interprocess {
   }
 
   //===================================================================
+  // ErrorEvent
+  //===================================================================
+
+  public bool InitErrorEvent(UInt32 processID) {
+    // 念のため解放
+    ReleaseErrorEvent();
+
+    // イベントの名前
+    string errorEventName = ErrorEventNamePrefix + processID;
+            
+    // イベント(ErrorEvent<process_id>)の作成
+    bool createdNew;
+    var tmpErrorEvent = new EventWaitHandle(false, EventResetMode.AutoReset,
+                                            errorEventName, out createdNew);
+    if (tmpErrorEvent == null) {
+      // イベント作成失敗
+      return false;
+    }
+
+    // 最初にEventを作成した場合は…なにもしなくていい
+    if (createdNew) {
+      // nop
+    }
+
+    // メンバ変数に設定
+    this.errorEvent = tmpErrorEvent;
+
+    Trace.WriteLine("****Interprocess: InitErrorEvent Done");
+    return true;
+  }
+
+  public bool IsErrorEventInitialized() {
+    return errorEvent != null;
+  }
+
+  public void ReleaseErrorEvent() {
+    if (errorEvent != null) {
+      errorEvent.Dispose();
+      errorEvent = null;
+    }
+  }
+
+  //===================================================================
   // for SCFF DirectShow Filter
   //===================================================================
 
@@ -562,6 +610,26 @@ public class Interprocess {
     return true;
   }
 
+  /// エラーイベントをシグナル状態にする
+  public bool RaiseErrorEvent() {
+    // 初期化されていなければ失敗
+    if (!IsErrorEventInitialized()) {
+      Trace.WriteLine("****Interprocess: RaiseErrorEvent FAILED");
+      return false;
+    }
+
+    Trace.WriteLine("****Interprocess: RaiseErrorEvent");
+
+    // シグナルを送る
+    var errorSetEvent = errorEvent.Set();
+    if (!errorSetEvent) {
+      Trace.WriteLine("****Interprocess: SetEvent FAILED");
+      return false;
+    }
+
+    return true;
+  }
+
   //===================================================================
   // for SCFF GUI Client
   //===================================================================
@@ -613,6 +681,25 @@ public class Interprocess {
     return true;
   }
 
+  /// エラーイベントを待機する
+  public bool WaitUntilErrorEventOccured() {
+    // 初期化されていなければ失敗
+    if (!this.IsErrorEventInitialized()) {
+      Trace.WriteLine("****Interprocess: WaitUntilErrorEventOccured FAILED");
+      return false;
+    }
+
+    Trace.WriteLine("****Interprocess: WaitUntilErrorEventOccured");
+
+    // シグナル状態になるまで待機
+    var errorWaitOne = this.errorEvent.WaitOne(Timeout.Infinite);
+    if (!errorWaitOne) {
+      Trace.WriteLine("****Interprocess: WaitUntilErrorEventOccured FAILED");
+      return false;
+    }
+    return true;
+  }
+
   //===================================================================
   // フィールド
   //===================================================================
@@ -640,5 +727,8 @@ public class Interprocess {
   private MemoryMappedViewStream viewOfMessage;
   /// Mutex: Message
   private Mutex mutexMessage;
+
+  ///　イベント: ErrorEvent
+  private EventWaitHandle errorEvent;
 }
 }   // namespace SCFF.Interprocess

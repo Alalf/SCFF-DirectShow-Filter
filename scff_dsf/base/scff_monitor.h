@@ -39,6 +39,8 @@ class SCFFMonitor {
   bool Init(scff_imaging::ImagePixelFormats pixel_format,
             int width, int height, double fps);
 
+  /// 現在のEngineのレイアウトのエラーコードをmonitorに渡す
+  void CheckLayoutError(scff_imaging::ErrorCodes layout_error_code);
   /// リクエストがあるかどうか調べ、あれば実体を、なければnullptrを返す
   scff_imaging::Request* CreateRequest();
   /// 使い終わったリクエストを解放する
@@ -53,6 +55,9 @@ class SCFFMonitor {
 
   /// 最後に受信したSCFFMessageのタイムスタンプ
   int64_t last_message_timestamp_;
+
+  /// 前回チェックした際にエラー状態になっていたか
+  bool last_layout_error_state_;
 };
 
 #endif  // SCFF_DSF_BASE_SCFF_MONITOR_H_

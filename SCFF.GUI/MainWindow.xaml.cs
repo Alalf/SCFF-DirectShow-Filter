@@ -23,6 +23,8 @@ namespace SCFF.GUI {
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+//using System.Threading;
+//using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using Microsoft.Win32;
@@ -252,6 +254,18 @@ public partial class MainWindow
       if (!quiet) this.ShowSendFailedDialog("Couldn't access shared memory.");
       return;
     }
+    /// @todo(me) エラーチェック
+    ///           どうやってTaskを終了したらいいんだろう……
+    ///           このままだとThreadがえんえん作られ続けるのだが・・・
+    //
+    /*
+    var errorCheckTask = Task.Factory.StartNew(() => {
+      Debug.WriteLine("ErrorCheck: Start");
+      App.Interprocess.InitErrorEvent(App.RuntimeOptions.CurrentProcessID);
+      App.Interprocess.WaitUntilErrorEventOccured();
+      MessageBox.Show("[SCFF DirectShow Filter] Error occured");
+    });
+    */
 
     //-----------------------------------------------------------------
     // Notify self

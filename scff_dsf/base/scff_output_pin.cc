@@ -502,6 +502,9 @@ HRESULT SCFFOutputPin::DoBufferProcessingLoop(void) {
         continue;
       }
 
+      // Engineのレイアウトのエラーコードを渡す
+      monitor.CheckLayoutError(engine.GetCurrentLayoutError());
+
       // Requestを生成してEngineに受け渡す
       request = monitor.CreateRequest();
       engine.Accept(request);

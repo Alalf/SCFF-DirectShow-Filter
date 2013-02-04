@@ -60,6 +60,8 @@ class Engine : public CAMThread, public Layout {
   void SetLayoutParameters(
       int element_count,
       const LayoutParameter (&parameters)[kMaxProcessorSize]);
+  /// レイアウトプロセッサに異常が発生している場合NoError以外を返す
+  ErrorCodes GetCurrentLayoutError();
   //-------------------------------------------------------------------
 
  private:
@@ -117,8 +119,6 @@ class Engine : public CAMThread, public Layout {
   /// @return 発生したエラーコード
   /// @attention エラーがいったんおきたら解除は不可能
   ErrorCodes LayoutErrorOccured(ErrorCodes error_code);
-  /// レイアウトプロセッサに異常が発生している場合NoError以外を返す
-  ErrorCodes GetCurrentLayoutError();
 
   /// レイアウトパラメータの要素数
   int element_count_;

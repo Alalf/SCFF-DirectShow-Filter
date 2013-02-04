@@ -72,6 +72,9 @@ static const char kMessageNamePrefix[] = "scff_v1_message_";
 /// Messageの保護用Mutex名の接頭辞
 static const char kMessageMutexNamePrefix[] = "mutex_scff_v1_message_";
 
+/// イベント名の接頭辞
+static const TCHAR kErrorEventNamePrefix[] = TEXT("scff_v1_error_event_");
+
 //---------------------------------------------------------------------
 
 /// レイアウトの種類
@@ -251,6 +254,11 @@ class Interprocess {
   /// Messageの初期化が成功したか
   bool IsMessageInitialized();
 
+  /// ErrorEvent初期化
+  bool InitErrorEvent(uint32_t process_id);
+  /// ErrorEventの初期化
+  bool IsErrorEventInitialized();
+
   //-------------------------------------------------------------------
   // for SCFF DirectShow Filter
   //-------------------------------------------------------------------
@@ -261,6 +269,8 @@ class Interprocess {
   /// メッセージを受け取る
   /// @pre 事前にInitMessageが実行されている必要がある
   bool ReceiveMessage(Message *message);
+  /// エラーイベントをシグナル状態にする
+  bool RaiseErrorEvent();
   //-------------------------------------------------------------------
 
   /// ディレクトリを取得する
@@ -268,12 +278,16 @@ class Interprocess {
   /// メッセージを作成する
   /// @pre 事前にInitMessageが実行されている必要がある
   bool SendMessage(const Message &message);
+  /// エラーイベントを待機する
+  bool WaitUntilErrorEventOccured();
 
  private:
   /// Directory解放
   void ReleaseDirectory();
   /// Message解放
   void ReleaseMessage();
+  /// ErrorEvent解放
+  void ReleaseErrorEvent();
 
   /// 共有メモリ: Directory
   HANDLE directory_;
@@ -288,6 +302,9 @@ class Interprocess {
   LPVOID view_of_message_;
   /// Mutex: Message
   HANDLE mutex_message_;
+
+  /// イベント: ErrorEvent
+  HANDLE error_event_;
 };
 }   // namespace scff_interprocess
 

@@ -23,6 +23,7 @@
 #include "scff_interprocess/interprocess.h"
 
 #include <stdio.h>
+#include <tchar.h>
 
 namespace scff_interprocess {
 
@@ -36,7 +37,8 @@ Interprocess::Interprocess()
       mutex_directory_(nullptr),
       message_(nullptr),
       view_of_message_(nullptr),
-      mutex_message_(nullptr) {
+      mutex_message_(nullptr),
+      error_event_(nullptr) {
   // nop
   OutputDebugString(TEXT("****Interprocess: NEW\n"));
 }
@@ -44,6 +46,7 @@ Interprocess::Interprocess()
 Interprocess::~Interprocess() {
   OutputDebugString(TEXT("****Interprocess: DELETE\n"));
   // 解放忘れがないように
+  ReleaseErrorEvent();
   ReleaseMessage();
   ReleaseDirectory();
 }
@@ -230,6 +233,50 @@ void Interprocess::ReleaseMessage() {
   }
 }
 
+//---------------------------------------------------------------------
+
+bool Interprocess::InitErrorEvent(uint32_t process_id) {
+  // 念のため解放
+  ReleaseErrorEvent();
+
+  // イベントの名前
+  TCHAR error_event_name[256];
+  ZeroMemory(error_event_name, sizeof(error_event_name));
+  _stprintf_s(error_event_name,
+              256, TEXT("%s%d"),
+              kErrorEventNamePrefix, process_id);
+            
+  // イベント(ErrorEvent<process_id>)の作成
+  HANDLE tmp_error_event = CreateEvent(nullptr, FALSE, FALSE, error_event_name);
+  if (tmp_error_event == nullptr) {
+    // イベント作成失敗
+    return false;
+  }
+  DWORD error_create_event = GetLastError();
+
+  // 最初にEventを作成した場合は…なにもしなくていい
+  if (error_create_event != ERROR_ALREADY_EXISTS) {
+    // nop
+  }
+
+  // メンバ変数に設定
+  error_event_ = tmp_error_event;
+
+  OutputDebugString(TEXT("****Interprocess: InitErrorEvent Done\n"));
+  return true;
+}
+
+bool Interprocess::IsErrorEventInitialized() {
+  return error_event_ != nullptr;
+}
+
+void Interprocess::ReleaseErrorEvent() {
+  if (error_event_ != nullptr) {
+    CloseHandle(error_event_);
+    error_event_ = nullptr;
+  }
+}
+
 //-------------------------------------------------------------------
 // for SCFF DirectShow Filter
 //-------------------------------------------------------------------
@@ -318,6 +365,25 @@ bool Interprocess::ReceiveMessage(Message *message) {
   return true;
 }
 
+bool Interprocess::RaiseErrorEvent() {
+  // 初期化されていなければ失敗
+  if (!IsErrorEventInitialized()) {
+    OutputDebugString(TEXT("****Interprocess: RaiseErrorEvent FAILED\n"));
+    return false;
+  }
+
+  OutputDebugString(TEXT("****Interprocess: RaiseErrorEvent\n"));
+
+  // シグナルを送る
+  BOOL error_set_event = SetEvent(error_event_);
+  if (!error_set_event) {
+    OutputDebugString(TEXT("****Interprocess: SetEvent FAILED\n"));
+    return false;
+  }
+
+  return true;
+}
+
 //-------------------------------------------------------------------
 
 bool Interprocess::GetDirectory(Directory *directory) {
@@ -359,6 +425,20 @@ bool Interprocess::SendMessage(const Message &message) {
   // ロック解放
   ReleaseMutex(mutex_message_);
 
+  return true;
+}
+
+bool Interprocess::WaitUntilErrorEventOccured() {
+  // 初期化されていなければ失敗
+  if (!IsErrorEventInitialized()) {
+    OutputDebugString(TEXT("****Interprocess: WaitUntilErrorEventOccured FAILED\n"));
+    return false;
+  }
+
+  OutputDebugString(TEXT("****Interprocess: WaitUntilErrorEventOccured\n"));
+
+  // シグナル状態になるまで待機
+  WaitForSingleObject(error_event_, INFINITE);
   return true;
 }
 }   // namespace scff_interprocess

@@ -26,6 +26,16 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using SCFF.Interprocess;
 
+/// SCFF DirectShow Filterでエラーが発生したとき
+public class DSFErrorOccuredEventArgs : EventArgs {
+  /// コンストラクタ
+  public DSFErrorOccuredEventArgs(UInt32 processID) {
+    this.ProcessID = processID;
+  }
+  /// プロパティ: エラーが発生したDSFがロードされているプロセスID
+  public uint ProcessID { get; private set; }
+}
+
 public class DSFMonitor {
   //===================================================================
   // コンストラクタ
@@ -61,8 +71,8 @@ public class DSFMonitor {
       });
       task.ContinueWith((t) => {
         var handler = this.OnErrorOccured;
-        if (handler != null && Utilities.IsProcessAlive(processID)) {
-          handler(this, EventArgs.Empty);
+        if (handler != null) {
+          handler(this, new DSFErrorOccuredEventArgs(processID));
         }
         lock (this.SharedLock) {
           Debug.WriteLine("Removing Task: " + processID, "DSFMonitor");
@@ -106,7 +116,7 @@ public class DSFMonitor {
   private Object SharedLock { get; set; }
 
   /// イベント
-  public event EventHandler OnErrorOccured;
+  public event EventHandler<DSFErrorOccuredEventArgs> OnErrorOccured;
 
   /// プロセス間通信用オブジェクト
   private Interprocess Interprocess { get; set; }

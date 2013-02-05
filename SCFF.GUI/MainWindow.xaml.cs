@@ -54,7 +54,7 @@ public partial class MainWindow
 
   /// デストラクタ
   ~MainWindow() {
-    App.DSFMonitor.OnErrorOccured -= this.DSFMonitor_OnErrorOccured;
+    App.DSFMonitor.OnErrorOccured -= DSFMonitor_OnErrorOccured;
     App.Profile.OnChanged -= this.OnProfileChanged;
   }
 
@@ -330,8 +330,11 @@ public partial class MainWindow
   /// DSFMonitor.OnChanged
   /// @param sender 使用しない
   /// @param e 使用しない
-  private void DSFMonitor_OnErrorOccured(object sender, System.EventArgs e) {
-    MessageBox.Show("SCFF DirectShow Filter has encountered a problem.", "SCFF.GUI",
+  void DSFMonitor_OnErrorOccured(object sender, DSFErrorOccuredEventArgs e) {
+    if (!Utilities.IsProcessAlive(e.ProcessID)) return;
+    var message = string.Format("SCFF DirectShow Filter({0}) has encountered a problem.",
+                                e.ProcessID);
+    MessageBox.Show(message, "SCFF.GUI",
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
   }

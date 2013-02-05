@@ -45,6 +45,7 @@
     <Compile Include="Ext\DWMAPI.cs" />
     <Compile Include="Ext\GDI32.cs" />
     <Compile Include="Ext\User32.cs" />
+    <Compile Include="EventArgs.cs" />
     <Compile Include="GUI\HitTest.cs" />
     <Compile Include="GUI\IBindingOptions.cs" />
     <Compile Include="GUI\IBindingProfile.cs" />

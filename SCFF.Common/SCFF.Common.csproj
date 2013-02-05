@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DSFMonitor.cs" />
     <Compile Include="Ext\DWMAPI.cs" />
     <Compile Include="Ext\GDI32.cs" />
     <Compile Include="Ext\User32.cs" />

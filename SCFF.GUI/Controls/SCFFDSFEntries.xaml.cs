@@ -49,6 +49,7 @@ public partial class SCFFDSFEntries : UserControl, IBindingRuntimeOptions {
   /// @param e 使用しない
   private void Refresh_Click(object sender, System.Windows.RoutedEventArgs e) {
     App.RuntimeOptions.RefreshDirectory(App.Interprocess);
+    App.DSFMonitor.CleanupAll();
 
     //-----------------------------------------------------------------
     // Notify self

@@ -49,10 +49,12 @@ public partial class MainWindow
     this.NotifyProfileChanged();
 
     App.Profile.OnChanged += this.OnProfileChanged;
+    App.DSFMonitor.OnErrorOccured += DSFMonitor_OnErrorOccured;
   }
 
   /// デストラクタ
   ~MainWindow() {
+    App.DSFMonitor.OnErrorOccured -= this.DSFMonitor_OnErrorOccured;
     App.Profile.OnChanged -= this.OnProfileChanged;
   }
 
@@ -237,6 +239,8 @@ public partial class MainWindow
     var processID = App.RuntimeOptions.CurrentProcessID;
     if (!Utilities.IsProcessAlive(processID)) {
       if (!quiet) this.ShowSendFailedDialog("Couldn't find process: " + processID);
+      // モニターを解除
+      App.DSFMonitor.Cleanup(processID);
       return;
     }
 
@@ -254,18 +258,8 @@ public partial class MainWindow
       if (!quiet) this.ShowSendFailedDialog("Couldn't access shared memory.");
       return;
     }
-    /// @todo(me) エラーチェック
-    ///           どうやってTaskを終了したらいいんだろう……
-    ///           このままだとThreadがえんえん作られ続けるのだが・・・
-    //
-    /*
-    var errorCheckTask = Task.Factory.StartNew(() => {
-      Debug.WriteLine("ErrorCheck: Start");
-      App.Interprocess.InitErrorEvent(App.RuntimeOptions.CurrentProcessID);
-      App.Interprocess.WaitUntilErrorEventOccured();
-      MessageBox.Show("[SCFF DirectShow Filter] Error occured");
-    });
-    */
+    /// エラーチェック
+    App.DSFMonitor.Start(App.RuntimeOptions.CurrentProcessID);
 
     //-----------------------------------------------------------------
     // Notify self
@@ -331,6 +325,15 @@ public partial class MainWindow
 
     this.OnRuntimeOptionsChanged();
     this.Apply.OnRuntimeOptionsChanged();
+  }
+
+  /// DSFMonitor.OnChanged
+  /// @param sender 使用しない
+  /// @param e 使用しない
+  private void DSFMonitor_OnErrorOccured(object sender, System.EventArgs e) {
+    MessageBox.Show("SCFF DirectShow Filter has encountered a problem.", "SCFF.GUI",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
   }
 
   //-------------------------------------------------------------------

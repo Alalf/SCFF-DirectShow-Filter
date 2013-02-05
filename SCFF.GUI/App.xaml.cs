@@ -33,8 +33,10 @@ public partial class App : Application {
   // シングルトン
   //===================================================================
 
-  /// Singleton: 共有メモリアクセス用オブジェクト
+  /// Singleton: プロセス間通信用オブジェクト
   public static Interprocess Interprocess { get; private set; }
+  /// Singleton: DirectShow Filter監視用オブジェクト
+  public static DSFMonitor DSFMonitor { get; private set; }
 
   /// Singleton: アプリケーション設定
   public static Options Options { get; private set; }
@@ -61,6 +63,7 @@ public partial class App : Application {
   /// staticコンストラクタ
   static App() {
     App.Interprocess = new Interprocess();
+    App.DSFMonitor = new DSFMonitor(App.Interprocess);
 
     App.Options = new Options();
     App.RuntimeOptions = new RuntimeOptions();

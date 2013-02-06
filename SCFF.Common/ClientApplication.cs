@@ -218,16 +218,6 @@ public class ClientApplication {
     OptionsINIFile.Load(this.Options);
 
     // RuntimeOptions
-    var sharedMemoryResult = this.Interprocess.InitDirectory();
-    if (!sharedMemoryResult) {
-      // Event: ErrorOccured
-      {
-        var errorMessage = "Cannot access shared memory.";
-        var args = new ErrorOccuredEventArgs(errorMessage, false);
-        var handler = this.OnErrorOccured;
-        if (handler != null) handler(this, args);
-      }
-    }
     this.RuntimeOptions.RefreshDirectory(this.Interprocess);
 
     // 起動時にAeroがOnだったかを記録
@@ -367,7 +357,11 @@ public class ClientApplication {
       var handler = this.OnSavingProfile;
       if (handler != null) handler(this, args);
 
-      if (args.Cancel) return false;
+      if (args.Cancel) {
+        return false;
+      } else {
+        path = args.Path;
+      }
     }
 
     // データの書き込み

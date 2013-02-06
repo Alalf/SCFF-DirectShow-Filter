@@ -115,7 +115,7 @@ public class DSFMonitor {
   /// 共有ロック
   private Object SharedLock { get; set; }
 
-  /// イベント
+  /// DSFでエラーが発生した後
   public event EventHandler<DSFErrorOccuredEventArgs> OnErrorOccured;
 
   /// プロセス間通信用オブジェクト

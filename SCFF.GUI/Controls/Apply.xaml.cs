@@ -79,7 +79,7 @@ public partial class Apply : UserControl, IBindingOptions, IBindingRuntimeOption
   /// @copydoc Common::GUI::IBindingRuntimeOptions::OnRuntimeOptionsChanged
   public void OnRuntimeOptionsChanged() {
     this.CanChangeRuntimeOptions = false;
-    if (App.ProfileDocument.HasModifiedFromLastApply) {
+    if (App.Impl.HasModifiedFromLastApply) {
       this.ApplyProfile.Tag = "Emphasize";
     } else {
       this.ApplyProfile.Tag = null;

@@ -115,8 +115,7 @@ public partial class Profile {
   /// イベントハンドラの実行
   public void RaiseChanged() {
     var handler = this.OnChanged;
-    if (handler == null) return;
-    handler(this, EventArgs.Empty);
+    if (handler != null) handler(this, EventArgs.Empty);
   }
 
   //-------------------------------------------------------------------

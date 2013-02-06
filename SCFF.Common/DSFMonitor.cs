@@ -46,6 +46,8 @@ public class DSFMonitor {
     this.SharedLock = new Object();
     this.Interprocess = interprocess;
     this.MonitoredDSFs = new HashSet<UInt32>();
+
+    this.Interprocess.InitShutdownEvent();
   }
 
   /// デストラクタ
@@ -67,12 +69,12 @@ public class DSFMonitor {
       Debug.WriteLine("Creating Task: " + processID, "DSFMonitor");
       var task = Task.Factory.StartNew(() => {
         this.Interprocess.InitErrorEvent(processID);
-        this.Interprocess.WaitUntilErrorEventOccured();
-      });
-      task.ContinueWith((t) => {
-        var handler = this.OnErrorOccured;
-        if (handler != null) {
-          handler(this, new DSFErrorOccuredEventArgs(processID));
+        var dsfErrorOccured = this.Interprocess.WaitUntilErrorEventOccured();
+        if (dsfErrorOccured) {
+          // Event: DSFErrorOccured
+          var args = new DSFErrorOccuredEventArgs(processID);
+          var handler = this.OnErrorOccured;
+          if (handler != null) handler(this, args);
         }
         lock (this.SharedLock) {
           Debug.WriteLine("Removing Task: " + processID, "DSFMonitor");

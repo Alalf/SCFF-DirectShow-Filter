@@ -38,7 +38,8 @@ Interprocess::Interprocess()
       message_(nullptr),
       view_of_message_(nullptr),
       mutex_message_(nullptr),
-      error_event_(nullptr) {
+      error_event_(nullptr),
+      shutdown_event_(nullptr) {
   // nop
   OutputDebugString(TEXT("****Interprocess: NEW\n"));
 }
@@ -47,6 +48,7 @@ Interprocess::~Interprocess() {
   OutputDebugString(TEXT("****Interprocess: DELETE\n"));
   // 解放忘れがないように
   ReleaseErrorEvent();
+  ReleaseShutdownEvent();
   ReleaseMessage();
   ReleaseDirectory();
 }
@@ -277,6 +279,37 @@ void Interprocess::ReleaseErrorEvent() {
   }
 }
 
+//---------------------------------------------------------------------
+
+bool Interprocess::InitShutdownEvent() {
+  // プログラム全体で一回だけCreate/CloseすればよいのでCloseはしない
+  if (IsShutdownEventInitialized()) return true;
+            
+  // イベント(ShutdownEvent)の作成
+  HANDLE tmp_shutdown_event = CreateEvent(nullptr, TRUE, FALSE, nullptr);
+  if (tmp_shutdown_event == nullptr) {
+    // イベント作成失敗
+    return false;
+  }
+
+  // メンバ変数に設定
+  shutdown_event_ = tmp_shutdown_event;
+
+  OutputDebugString(TEXT("****Interprocess: InitShutdownEvent Done\n"));
+  return true;
+}
+
+bool Interprocess::IsShutdownEventInitialized() {
+  return shutdown_event_ != nullptr;
+}
+
+void Interprocess::ReleaseShutdownEvent() {
+  if (shutdown_event_ != nullptr) {
+    CloseHandle(shutdown_event_);
+    shutdown_event_ = nullptr;
+  }
+}
+
 //-------------------------------------------------------------------
 // for SCFF DirectShow Filter
 //-------------------------------------------------------------------
@@ -377,7 +410,7 @@ bool Interprocess::RaiseErrorEvent() {
   // シグナルを送る
   BOOL error_set_event = SetEvent(error_event_);
   if (!error_set_event) {
-    OutputDebugString(TEXT("****Interprocess: SetEvent FAILED\n"));
+    OutputDebugString(TEXT("****Interprocess: RaiseErrorEvent FAILED\n"));
     return false;
   }
 
@@ -438,7 +471,33 @@ bool Interprocess::WaitUntilErrorEventOccured() {
   OutputDebugString(TEXT("****Interprocess: WaitUntilErrorEventOccured\n"));
 
   // シグナル状態になるまで待機
-  WaitForSingleObject(error_event_, INFINITE);
+  const HANDLE events[] = {error_event_, shutdown_event_};
+  const int signaled_event_index = WaitForMultipleObjects(2, events, FALSE, INFINITE);
+  if (signaled_event_index != 0) {
+    // エラー以外のイベントが起きた場合は失敗
+    OutputDebugString(TEXT("****Interprocess: WaitUntilErrorEventOccured FAILED\n"));
+    return false;
+  }
+
+  return true;
+}
+
+bool Interprocess::RaiseShutdownEvent() {
+  // 初期化されていなければ失敗
+  if (!IsShutdownEventInitialized()) {
+    OutputDebugString(TEXT("****Interprocess: RaiseShutdownEvent FAILED\n"));
+    return false;
+  }
+
+  OutputDebugString(TEXT("****Interprocess: RaiseShutdownEvent\n"));
+
+  // シグナルを送る
+  BOOL error_set_event = SetEvent(shutdown_event_);
+  if (!error_set_event) {
+    OutputDebugString(TEXT("****Interprocess: RaiseShutdownEvent FAILED\n"));
+    return false;
+  }
+
   return true;
 }
 }   // namespace scff_interprocess

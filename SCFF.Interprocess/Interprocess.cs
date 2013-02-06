@@ -257,6 +257,7 @@ public class Interprocess {
     this.viewOfMessage = null;
     this.mutexMessage = null;
     this.errorEvent = null;
+    this.shutdownEvent = null;
 
     this.directoryType = typeof(Directory);
     this.messageType = typeof(Message);
@@ -270,9 +271,11 @@ public class Interprocess {
   /// デストラクタ
   ~Interprocess() {
     // 解放忘れがないように
-    this.ReleaseDirectory();
-    this.ReleaseMessage();
     this.ReleaseErrorEvent();
+    this.ReleaseShutdownEvent();
+    this.ReleaseMessage();
+    this.ReleaseDirectory();
+
     Trace.WriteLine("****Interprocess: DELETE");
   }
 
@@ -500,6 +503,39 @@ public class Interprocess {
   }
 
   //===================================================================
+  // ShutdownEvent
+  //===================================================================
+
+  public bool InitShutdownEvent() {
+    // プログラム全体で一回だけCreate/CloseすればよいのでCloseはしない
+    if (IsShutdownEventInitialized()) return true;
+
+    // イベント(ShutdownEvent)の作成
+    var tmpShutdownEvent = new ManualResetEvent(false);
+    if (tmpShutdownEvent == null) {
+      // イベント作成失敗
+      return false;
+    }
+
+    // メンバ変数に設定
+    this.shutdownEvent = tmpShutdownEvent;
+
+    Trace.WriteLine("****Interprocess: InitShutdownEvent Done");
+    return true;
+  }
+
+  public bool IsShutdownEventInitialized() {
+    return this.shutdownEvent != null;
+  }
+
+  public void ReleaseShutdownEvent() {
+    if (this.shutdownEvent != null) {
+      this.shutdownEvent.Dispose();
+      this.shutdownEvent = null;
+    }
+  }
+
+  //===================================================================
   // for SCFF DirectShow Filter
   //===================================================================
 
@@ -623,7 +659,7 @@ public class Interprocess {
     // シグナルを送る
     var errorSetEvent = errorEvent.Set();
     if (!errorSetEvent) {
-      Trace.WriteLine("****Interprocess: SetEvent FAILED");
+      Trace.WriteLine("****Interprocess: RaiseErrorEvent FAILED");
       return false;
     }
 
@@ -692,11 +728,33 @@ public class Interprocess {
     Trace.WriteLine("****Interprocess: WaitUntilErrorEventOccured");
 
     // シグナル状態になるまで待機
-    var errorWaitOne = this.errorEvent.WaitOne(Timeout.Infinite);
-    if (!errorWaitOne) {
+    var events = new WaitHandle[] { this.errorEvent, this.shutdownEvent };
+    var signaledEventIndex = WaitHandle.WaitAny(events, Timeout.Infinite);
+    if (signaledEventIndex != 0) {
+      // エラー以外のイベントが起きた場合は失敗
       Trace.WriteLine("****Interprocess: WaitUntilErrorEventOccured FAILED");
       return false;
     }
+    return true;
+  }
+
+  /// 終了要求
+  public bool RaiseShutdownEvent() {
+    // 初期化されていなければ失敗
+    if (!IsShutdownEventInitialized()) {
+      Trace.WriteLine("****Interprocess: RaiseShutdownEvent FAILED");
+      return false;
+    }
+
+    Trace.WriteLine("****Interprocess: RaiseShutdownEvent");
+
+    // シグナルを送る
+    var errorSetEvent = shutdownEvent.Set();
+    if (!errorSetEvent) {
+      Trace.WriteLine("****Interprocess: RaiseShutdownEvent FAILED");
+      return false;
+    }
+
     return true;
   }
 
@@ -728,7 +786,9 @@ public class Interprocess {
   /// Mutex: Message
   private Mutex mutexMessage;
 
-  ///　イベント: ErrorEvent
+  /// イベント: ErrorEvent
   private EventWaitHandle errorEvent;
+  /// イベント: ShutdownEvent
+  private ManualResetEvent shutdownEvent;
 }
 }   // namespace SCFF.Interprocess

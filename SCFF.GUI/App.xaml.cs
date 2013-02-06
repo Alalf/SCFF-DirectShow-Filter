@@ -22,10 +22,10 @@
 namespace SCFF.GUI {
 
 using System.Windows;
+using Microsoft.Win32;
 using SCFF.Common;
 using SCFF.Common.GUI;
 using SCFF.Common.Profile;
-using SCFF.Interprocess;
 
 /// Applicationクラス
 public partial class App : Application {
@@ -33,48 +33,57 @@ public partial class App : Application {
   // シングルトン
   //===================================================================
 
-  /// Singleton: プロセス間通信用オブジェクト
-  public static Interprocess Interprocess { get; private set; }
-  /// Singleton: DirectShow Filter監視用オブジェクト
-  public static DSFMonitor DSFMonitor { get; private set; }
-
-  /// Singleton: アプリケーション設定
-  public static Options Options { get; private set; }
-  /// Singleton: アプリケーション実行時設定
-  public static RuntimeOptions RuntimeOptions { get; private set; }
-  /// Singleton: 現在編集中のプロファイル
-  public static Profile Profile { get; private set; }
-
-  /// Singleton: プロファイルドキュメント
-  public static ProfileDocument ProfileDocument { get; private set; }
+  /// Singleton: アプリケーションの実装
+  public static ClientApplication Impl { get; private set; }
 
   /// Singleton: スクリーンキャプチャ用タイマー
   public static ScreenCaptureTimer ScreenCaptureTimer { get; private set; }
-
-  //-------------------------------------------------------------------
-  // 非マネージドリソース
-  //-------------------------------------------------------------------
-  
   /// Singleton: NullPen
   public static NullPen NullPen { get; private set; }
 
   //-------------------------------------------------------------------
-  
+
+  /// Singleton: アプリケーション設定
+  public static Options Options {
+    get { return App.Impl.Options; }
+  }
+  /// Singleton: アプリケーション実行時設定
+  public static RuntimeOptions RuntimeOptions {
+    get { return App.Impl.RuntimeOptions; }
+  }
+  /// Singleton: 現在編集中のプロファイル
+  public static Profile Profile {
+    get { return App.Impl.Profile; }
+  }
+
+  //===================================================================
+  // コンストラクタ/デストラクタ
+  //===================================================================
+
   /// staticコンストラクタ
   static App() {
-    App.Interprocess = new Interprocess();
-    App.DSFMonitor = new DSFMonitor(App.Interprocess);
-
-    App.Options = new Options();
-    App.RuntimeOptions = new RuntimeOptions();
-    App.Profile = new Profile();
-
-    App.ProfileDocument = new ProfileDocument(
-        App.Options, App.RuntimeOptions, App.Profile);
+    App.Impl = new ClientApplication();
 
     App.ScreenCaptureTimer = new ScreenCaptureTimer();
-    
     App.NullPen = new NullPen();
+
+    // SCFF.Common.ClientApplicationのイベントハンドラ登録
+    App.Impl.OnErrorOccured += App.OnErrorOccured;
+  }
+
+  ~App() {
+    App.Impl.OnErrorOccured -= App.OnErrorOccured;
+  }
+
+  //===================================================================
+  // SCFF.Common.ClientApplicationイベントハンドラ
+  //===================================================================
+
+  /// @copydoc SCFF::Common::ClientApplication::OnErrorOccured
+  private static void OnErrorOccured(object sender, ErrorOccuredEventArgs e) {
+    MessageBox.Show(e.Message, "SCFF.GUI",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
   }
 
   //===================================================================
@@ -85,44 +94,15 @@ public partial class App : Application {
   /// @param e コマンドライン引数(Args)を参照可能
   protected override void OnStartup(StartupEventArgs e) {
     base.OnStartup(e);
-
-    // SCFF DirectShow Filterがインストールされているか
-    string message;
-    var result = Utilities.CheckSCFFDSFInstalled(out message);
-    if (!result) {
-      MessageBox.Show(message, "SCFF.GUI",
-                      MessageBoxButton.OK,
-                      MessageBoxImage.Error);
-    }
-
-    /// @todo(me) WPFではカラーチェックを簡単にやる方法が見つからなかったので要調査
-
-    // Options
-    OptionsINIFile.Load(App.Options);
-
-    // RuntimeOptions
-    App.RuntimeOptions.RefreshDirectory(App.Interprocess);
-
-    // 起動時にAeroがOnだったかを記録
-    App.RuntimeOptions.SaveStartupAeroState();
-
-    // Profile
     var path = e.Args.Length > 0 ? e.Args[0] : null;
-    App.ProfileDocument.Init(path);
+    App.Impl.Startup(path);
   }
 
   /// Exit: アプリケーション終了時
   /// @param e 終了コード(ApplicationExitCode)の参照・設定が可能
   protected override void OnExit(ExitEventArgs e) {
     base.OnExit(e);
-
-    // Profileの保存は明示的にMainWindow上で行うのでここでは何もしない
-
-    // RuntimeOptions
-    App.RuntimeOptions.RestoreStartupAeroState();
-
-    // Options
-    OptionsINIFile.Save(App.Options);
+    App.Impl.Exit();
   }
 }
 }   // namespace SCFF.GUI

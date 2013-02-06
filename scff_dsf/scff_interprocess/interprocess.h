@@ -256,8 +256,13 @@ class Interprocess {
 
   /// ErrorEvent初期化
   bool InitErrorEvent(uint32_t process_id);
-  /// ErrorEventの初期化
+  /// ErrorEventの初期化が成功したか
   bool IsErrorEventInitialized();
+
+  /// ShutdownEvent初期化
+  bool InitShutdownEvent();
+  /// ShutdownEventの初期化が成功したか
+  bool IsShutdownEventInitialized();
 
   //-------------------------------------------------------------------
   // for SCFF DirectShow Filter
@@ -280,6 +285,8 @@ class Interprocess {
   bool SendMessage(const Message &message);
   /// エラーイベントを待機する
   bool WaitUntilErrorEventOccured();
+  /// シャットダウンイベントをシグナル状態にする
+  bool RaiseShutdownEvent();
 
  private:
   /// Directory解放
@@ -288,6 +295,8 @@ class Interprocess {
   void ReleaseMessage();
   /// ErrorEvent解放
   void ReleaseErrorEvent();
+  /// ShutdownEvent解放
+  void ReleaseShutdownEvent();
 
   /// 共有メモリ: Directory
   HANDLE directory_;
@@ -305,6 +314,9 @@ class Interprocess {
 
   /// イベント: ErrorEvent
   HANDLE error_event_;
+
+  /// イベント: ShutdownEvent
+  HANDLE shutdown_event_;
 };
 }   // namespace scff_interprocess
 

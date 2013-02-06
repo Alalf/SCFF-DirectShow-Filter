@@ -21,6 +21,7 @@
 namespace SCFF.Common.Profile {
 
 using System.Collections.Generic;
+using System.Text;
 
   /// 検証エラータイプ
 public enum ValidationErrorTypes {
@@ -57,6 +58,15 @@ public class ValidationErrors : List<ValidationError> {
   public void AddAreaError(string message) {
     var error = new ValidationError(ValidationErrorTypes.AreaError, message);
     this.Add(error);
+  }
+  /// エラーを文字列化
+  public string ToErrorMessage(string header) {
+    var errorMessage = new StringBuilder();
+    if (header != null && header != string.Empty) errorMessage.AppendLine(header);
+    foreach (var error in this) {
+      errorMessage.AppendLine("  - " + error.Message);
+    }
+    return errorMessage.ToString();
   }
 }
 

@@ -52,7 +52,7 @@
     <Compile Include="GUI\MoveAndSize.cs" />
     <Compile Include="GUI\ScreenCaptureRequest.cs" />
     <Compile Include="GUI\SnapGuide.cs" />
-    <Compile Include="ProfileDocument.cs" />
+    <Compile Include="ClientApplication.cs" />
     <Compile Include="Profile\ClippingInputCorrector.cs" />
     <Compile Include="Profile\ILayoutElementView.cs" />
     <Compile Include="OptionsINIFile.cs" />

@@ -49,7 +49,7 @@ public partial class MainWindow
     this.NotifyProfileChanged();
 
     // SCFF.Common.ClientApplicationのイベントハンドラ登録
-    // ErrorOccuredのみStartupでも使うのでそちらで登録
+    App.Impl.OnErrorOccured += this.OnErrorOccured;
     App.Impl.OnProfileChanged += this.OnProfileChanged;
 
     App.Impl.OnClosingProfile += this.OnClosingProfile;
@@ -64,6 +64,7 @@ public partial class MainWindow
   /// デストラクタ
   ~MainWindow() {
     // SCFF.Common.ClientApplicationのイベントハンドラ登録解除
+    App.Impl.OnErrorOccured -= this.OnErrorOccured;
     App.Impl.OnProfileChanged -= this.OnProfileChanged;
 
     App.Impl.OnClosingProfile -= this.OnClosingProfile;
@@ -78,6 +79,14 @@ public partial class MainWindow
   //===================================================================
   // SCFF.Common.ClientApplicationイベントハンドラ
   //===================================================================
+
+  /// @copydoc SCFF::Common::ClientApplication::OnErrorOccured
+  private void OnErrorOccured(object sender, ErrorOccuredEventArgs e) {
+    if (e.Quiet) return;
+    MessageBox.Show(e.Message, "SCFF.GUI",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+  }
 
   /// @copydoc SCFF::Common::ClientApplication::OnProfileChanged
   void OnProfileChanged(object sender, System.EventArgs e) {
@@ -125,7 +134,7 @@ public partial class MainWindow
     dialog.Title = "SCFF.GUI";
     dialog.Filter = "SCFF Profile|*" + e.Extension;
     dialog.InitialDirectory = e.InitialDirectory;
-    var result = dialog.ShowDialog(this);
+    var result = dialog.ShowDialog();
     if (result.HasValue && (bool)result) {
       e.Path = dialog.FileName;
     } else {
@@ -158,7 +167,7 @@ public partial class MainWindow
     dialog.Filter = "SCFF Profile|*" + e.Extension;
     dialog.InitialDirectory = e.InitialDirectory;
     dialog.FileName = e.FileName;
-    var result = dialog.ShowDialog(this);
+    var result = dialog.ShowDialog();
     if (result.HasValue && (bool)result) {
       e.Path = dialog.FileName;
     } else {

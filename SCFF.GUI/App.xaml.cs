@@ -68,20 +68,32 @@ public partial class App : Application {
     App.NullPen = new NullPen();
 
     // SCFF.Common.ClientApplicationのイベントハンドラ登録
-    App.Impl.OnErrorOccured += App.OnErrorOccured;
+    App.Impl.OnStartupErrorOccured += App.OnStartupErrorOccured;
+    App.Impl.OnDSFErrorOccured += App.OnDSFErrorOccured;
   }
 
   ~App() {
-    App.Impl.OnErrorOccured -= App.OnErrorOccured;
+    App.Impl.OnStartupErrorOccured -= App.OnStartupErrorOccured;
+    App.Impl.OnDSFErrorOccured -= App.OnDSFErrorOccured;
   }
 
   //===================================================================
   // SCFF.Common.ClientApplicationイベントハンドラ
   //===================================================================
 
-  /// @copydoc SCFF::Common::ClientApplication::OnErrorOccured
-  private static void OnErrorOccured(object sender, ErrorOccuredEventArgs e) {
+  /// @copydoc SCFF::Common::ClientApplication::OnStartupErrorOccured
+  private static void OnStartupErrorOccured(object sender, ErrorOccuredEventArgs e) {
     if (e.Quiet) return;
+    MessageBox.Show(e.Message, "SCFF.GUI",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+  }
+
+  /// @copydoc SCFF::Common::ClientApplication::OnDSFErrorOccured
+  private static void OnDSFErrorOccured(object sender, ErrorOccuredEventArgs e) {
+    if (e.Quiet) return;
+    /// @todo(me) 最前面に表示する方法を調べる
+    ///           MessageBoxOptions.DefaultDesktopOnlyは明らかに手抜きなのでやめる
     MessageBox.Show(e.Message, "SCFF.GUI",
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);

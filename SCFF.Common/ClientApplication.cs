@@ -95,16 +95,6 @@ public class SavingProfileEventArgs : EventArgs {
   }
   /// プロパティ: [in] 拡張子
   public string Extension { get { return ProfileINIFile.ProfileExtension; }  }
-  /// プロパティ: [in] エラーメッセージ
-  public string ErrorMessage {
-    get {
-      var errorMessage = "Couldn't save the profile";
-      if (this.Path != null && this.Path != string.Empty) {
-        errorMessage = string.Format("Couldn't save the profile to {0}.", this.Path);
-      }
-      return errorMessage;
-    }
-  }
   /// プロパティ: [out] 保存をキャンセル
   public bool Cancel { get; set; }
   /// プロパティ: [in] Saveアクション
@@ -147,6 +137,10 @@ public class ClientApplication {
   // イベント
   //===================================================================
   
+  /// スタートアップエラー発生後
+  public event EventHandler<ErrorOccuredEventArgs> OnStartupErrorOccured;
+  /// DSFエラー発生後
+  public event EventHandler<ErrorOccuredEventArgs> OnDSFErrorOccured;
   /// エラー発生後
   public event EventHandler<ErrorOccuredEventArgs> OnErrorOccured;
   /// プロファイル内容変更後
@@ -172,12 +166,12 @@ public class ClientApplication {
   private void DSFMonitor_OnErrorOccured(object sender, DSFErrorOccuredEventArgs e) {
     if (!Utilities.IsProcessAlive(e.ProcessID)) return;
 
-    // Event: ErrorOccured
+    // Event: DSFErrorOccured
     {
       var message = string.Format("SCFF DirectShow Filter({0}) has encountered a problem.",
                                   e.ProcessID);
       var args = new ErrorOccuredEventArgs(message, false);
-      var handler = this.OnErrorOccured;
+      var handler = this.OnDSFErrorOccured;
       if (handler != null) handler(this, args);
     }
   }
@@ -204,10 +198,10 @@ public class ClientApplication {
     string message;
     var result = Utilities.CheckSCFFDSFInstalled(out message);
     if (!result) {
-      // Event: ErrorOccured
+      // Event: StartupErrorOccured
       {
         var args = new ErrorOccuredEventArgs(message, false);
-        var handler = this.OnErrorOccured;
+        var handler = this.OnStartupErrorOccured;
         if (handler != null) handler(this, args);
       }
     }

@@ -98,11 +98,9 @@ public class OptionsFile : TinyKeyValueFile {
   //===================================================================
 
   /// ファイル入力
-  ///
-  /// アプリケーションの設定からUIに関連するものを読み込む
-  /// 存在しない場合は勝手にデフォルト値が読み込まれる・・・はず
-  /// @param[out] options ファイルから入力したデータの設定先
+  /// @param[in] path ファイルパス
   /// @return 正常終了
+  /// @warning 継承クラスでのreturn falseは禁止
   public override bool ReadFile(string path) {
     // ファイル->ディクショナリ
     var baseResult = base.ReadFile(path);

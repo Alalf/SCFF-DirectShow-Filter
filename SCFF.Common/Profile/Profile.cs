@@ -39,15 +39,6 @@ public partial class Profile {
   // コンストラクタ
   //===================================================================
 
-  /// カーソルの初期化
-  private void BuildLayoutElements() {
-    const int length = Interprocess.MaxComplexLayoutElements;
-    this.layoutElements = new LayoutElement[length];
-    for (int i = 0; i < length; ++i) {
-      this.layoutElements[i] = new LayoutElement(this, i);
-    }
-  }
-
   /// コンストラクタ
   /// @warning コンストラクタでは実際の値の読み込みなどは行わない
   public Profile() {
@@ -58,6 +49,15 @@ public partial class Profile {
     
     // カーソルの初期化
     this.BuildLayoutElements();
+  }
+
+  /// カーソルの初期化
+  private void BuildLayoutElements() {
+    const int length = Interprocess.MaxComplexLayoutElements;
+    this.layoutElements = new LayoutElement[length];
+    for (int i = 0; i < length; ++i) {
+      this.layoutElements[i] = new LayoutElement(this, i);
+    }
   }
 
   //===================================================================
@@ -149,8 +149,8 @@ public partial class Profile {
     }
   }
 
-  /// レイアウト要素を編集モードで返す
-  internal ILayoutElement GetLayoutElement(int index) {
+  /// レイアウト要素を参照・編集モードで返す
+  internal LayoutElement GetLayoutElement(int index) {
     return this.layoutElements[index];
   }
 

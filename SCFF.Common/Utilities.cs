@@ -50,8 +50,7 @@ public static class Utilities {
   // ファイル入出力用の機能
   //===================================================================
 
-  /// Optionの読み込み・保存先/Profileのデフォルト出力先を取得する
-  /// @todo(me) 実装。ただし、書き込み可能かどうかの判断が可能かはわからない
+  /// アプリケーションアセンブリのあるディレクトリ
   public static string ApplicationDirectory {
     get {
       // 末尾が\\で終わること
@@ -91,6 +90,8 @@ public static class Utilities {
     builder.Append(fileName);
     return builder.ToString();
   }
+
+  //-------------------------------------------------------------------
 
   /// 最大文字数(目安)を指定して短縮パスを得る
   public static string GetShortPath(string path, int length) {

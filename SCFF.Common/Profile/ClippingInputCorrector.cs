@@ -217,11 +217,15 @@ public static class ClippingInputCorrector {
     switch (target) {
       case Names.X:
       case Names.Y: {
-        return ClippingInputCorrector.TryChangePosition(original, target, value, window, 1, out changed);
+        return ClippingInputCorrector.TryChangePosition(
+            original, target, value, window,
+            Constants.MinimumClippingSize, out changed);
       }
       case Names.Width:
       case Names.Height: {
-        return ClippingInputCorrector.TryChangeSize(original, target, value, window, 1, out changed);
+        return ClippingInputCorrector.TryChangeSize(
+            original, target, value, window,
+            Constants.MinimumClippingSize, out changed);
       }
       default: Debug.Fail("switch"); throw new System.ArgumentException();
     }

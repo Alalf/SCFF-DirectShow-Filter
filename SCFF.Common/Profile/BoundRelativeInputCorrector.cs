@@ -193,5 +193,47 @@ public static class BoundRelativeInputCorrector {
       default: Debug.Fail("switch"); throw new System.ArgumentException();
     }
   }
+
+  //=================================================================
+  // 一括訂正
+  //=================================================================
+
+  /// レイアウト要素のBoundRelative領域を訂正する
+  /// @param layoutElement レイアウト要素
+  /// @param[out] changed 変更後、制約を満たす形に訂正されたBoundRelative領域
+  /// @return 試行結果（訂正箇所）
+  public static RelativeLTRB Correct(ILayoutElementView layoutElement) {
+    // 準備
+    var left = layoutElement.BoundRelativeLeft;
+    var top = layoutElement.BoundRelativeTop;
+    var right = layoutElement.BoundRelativeRight;
+    var bottom = layoutElement.BoundRelativeBottom;
+
+    // 上限下限
+    if (left < 0.0)
+      left = 0.0;
+    if (1.0 < left + Constants.MinimumBoundRelativeSize)
+      left = 1.0 - Constants.MinimumBoundRelativeSize;
+    if (top < 0.0)
+      top = 0.0;
+    if (1.0 < top + Constants.MinimumBoundRelativeSize)
+      top = 1.0 - Constants.MinimumBoundRelativeSize;
+    if (right < Constants.MinimumBoundRelativeSize)
+      right = Constants.MinimumBoundRelativeSize;
+    if (1.0 < right)
+      right = 1.0;
+    if (bottom < Constants.MinimumBoundRelativeSize)
+      bottom = Constants.MinimumBoundRelativeSize;
+    if (1.0 < bottom)
+      bottom = 1.0;
+
+    // Left/Topを基準にRight/Bottomを訂正
+    if (right < left + Constants.MinimumBoundRelativeSize)
+      right = left + Constants.MinimumBoundRelativeSize;
+    if (bottom < top + Constants.MinimumBoundRelativeSize)
+      bottom = top + Constants.MinimumBoundRelativeSize;
+
+    return new RelativeLTRB(left, top, right, bottom);
+  }
 }
 }   // namespace SCFF.Common.Profile

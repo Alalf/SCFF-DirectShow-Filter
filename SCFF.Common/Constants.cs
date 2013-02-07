@@ -133,6 +133,9 @@ public static class Constants {
   // LayoutElement
   //-------------------------------------------------------------------
 
+  /// クリッピング領域の最小幅＆高さ
+  public const int MinimumClippingSize = 1;
+
   /// レイアウト要素の最小幅＆高さ
   public const double MinimumBoundRelativeSize = 0.04;
 

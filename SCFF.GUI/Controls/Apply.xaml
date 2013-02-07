@@ -18,7 +18,7 @@
     </Grid.RowDefinitions>
     <Button   VerticalAlignment="Center" Height="20" Margin="5,0"
               x:Name="Splash" FontSize="10" Content="Splash"
-              Command="{x:Static local:Commands.SendNullProfile}"/>
+              Command="{x:Static local:Commands.SendNullProfile}" IsCancel="True"/>
     <CheckBox Grid.Column="2"
               VerticalAlignment="Center" HorizontalAlignment="Right" Height="16" Margin="5,0"
               x:Name="AutoApply" Content="Auto"
@@ -26,6 +26,6 @@
     <Button   Grid.Column="3"
               VerticalAlignment="Center" Height="20" Margin="5,0"
               x:Name="ApplyProfile" FontSize="10" Content="Apply"
-              Command="{x:Static local:Commands.SendProfile}"/>
+              Command="{x:Static local:Commands.SendProfile}" IsDefault="True"/>
   </Grid>
 </UserControl>

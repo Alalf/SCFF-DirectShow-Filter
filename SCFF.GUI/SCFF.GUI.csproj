@@ -82,8 +82,8 @@
     <Compile Include="Controls\LayoutToolbar.xaml.cs">
       <DependentUpon>LayoutToolbar.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\SCFFDSFEntries.xaml.cs">
-      <DependentUpon>SCFFDSFEntries.xaml</DependentUpon>
+    <Compile Include="Controls\DSFEntries.xaml.cs">
+      <DependentUpon>DSFEntries.xaml</DependentUpon>
     </Compile>
     <Compile Include="ScreenCaptureTimer.cs" />
     <Compile Include="Extensions.cs" />
@@ -127,7 +127,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\SCFFDSFEntries.xaml">
+    <Page Include="Controls\DSFEntries.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

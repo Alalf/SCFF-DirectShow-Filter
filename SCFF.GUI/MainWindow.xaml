@@ -126,7 +126,7 @@
       <StackPanel DockPanel.Dock="Left"
                   Width="250">
         <!-- プロセス -->
-        <localControls:SCFFDSFEntries x:Name="SCFFEntries"/>
+        <localControls:DSFEntries x:Name="SCFFEntries"/>
         <!-- 取り込みウィンドウ -->
         <GroupBox Header="Target Window">
           <StackPanel>

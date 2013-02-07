@@ -15,8 +15,8 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file SCFF.GUI/Controls/SCFFDSFEntries.xaml.cs
-/// @copydoc SCFF::GUI::Controls::SCFFDSFEntries
+/// @file SCFF.GUI/Controls/DSFEntries.xaml.cs
+/// @copydoc SCFF::GUI::Controls::DSFEntries
 
 namespace SCFF.GUI.Controls {
 
@@ -25,14 +25,14 @@ using System.Windows.Controls;
 using SCFF.Common;
 using SCFF.Common.GUI;
 
-/// SCFFDSFエントリを仮想メモリから読み込み・表示・選択するためのUserControl
-public partial class SCFFDSFEntries : UserControl, IBindingRuntimeOptions {
+/// SCFF DirectShow Filterエントリを仮想メモリから読み込み・表示・選択するためのUserControl
+public partial class DSFEntries : UserControl, IBindingRuntimeOptions {
   //===================================================================
   // コンストラクタ/Dispose/デストラクタ
   //===================================================================
   
   /// コンストラクタ
-  public SCFFDSFEntries() {
+  public DSFEntries() {
     InitializeComponent();
   }
 

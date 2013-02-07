@@ -148,7 +148,7 @@ public partial class MainMenu : UserControl, IBindingOptions {
       var isEmpty = (App.Options.GetRecentProfile(i) == string.Empty);
       var shortPath = isEmpty
           ? ""
-          : Utilities.GetShortPath(App.Options.GetRecentProfile(i), 60);        
+          : Utilities.GetShortPath(App.Options.GetRecentProfile(i), 60);
       var header = string.Format("{0} {1}(_{0})", i+1, shortPath);
 
       this.GetMenuItem(i).IsEnabled = !isEmpty;

@@ -115,7 +115,7 @@ public class ClientApplication {
   public void Startup(string path) {
     // SCFF DirectShow Filterがインストールされているか
     string message;
-    var result = Utilities.CheckSCFFDSFInstalled(out message);
+    var result = EnvironmentChecker.CheckSCFFDSFInstalled(out message);
     if (!result) {
       // Event: StartupErrorOccured
       {
@@ -128,7 +128,9 @@ public class ClientApplication {
     /// @todo(me) WPFではカラーチェックを簡単にやる方法が見つからなかったので要調査
 
     // Options
-    OptionsINIFile.Load(this.Options);
+    var optionsFile = new OptionsFile(this.Options);
+    var optionsFilePath = Utilities.ApplicationDirectory + Constants.OptionsFileName;
+    optionsFile.ReadFile(optionsFilePath);
 
     // RuntimeOptions
     this.RuntimeOptions.RefreshDirectory(this.Interprocess);
@@ -150,7 +152,9 @@ public class ClientApplication {
     this.RuntimeOptions.RestoreStartupAeroState();
 
     // Options
-    OptionsINIFile.Save(this.Options);
+    var optionsFile = new OptionsFile(this.Options);
+    var optionsFilePath = Utilities.ApplicationDirectory + Constants.OptionsFileName;
+    optionsFile.WriteFile(optionsFilePath);
   }
 
   /// Profileを閉じる
@@ -199,11 +203,11 @@ public class ClientApplication {
     
     // 拡張子のチェック
     if (path != null && path != string.Empty &&
-        Path.GetExtension(path) != ProfileINIFile.ProfileExtension) {
+        Path.GetExtension(path) != Constants.ProfileExtension) {
       // Event: ErrorOccured
       {
         var message = string.Format("{0} must be SCFF profile(*.{1})",
-                                    path, ProfileINIFile.ProfileExtension);
+                                    path, Constants.ProfileExtension);
         var args = new ErrorOccuredEventArgs(message, false);
         var handler = this.OnErrorOccured;
         if (handler != null) handler(this, args);
@@ -215,7 +219,7 @@ public class ClientApplication {
     {
       var initialDirectory = this.HasSaved
           ? Path.GetDirectoryName(this.RuntimeOptions.ProfilePath)
-          : Utilities.GetDefaultFilePath;
+          : Utilities.ApplicationDirectory;
       var args = new OpeningProfileEventArgs(path, initialDirectory);
       var handler = this.OnOpeningProfile;
       if (handler != null) handler(this, args);
@@ -264,7 +268,7 @@ public class ClientApplication {
           : "Untitled";
       var initialDirectory = this.HasSaved
           ? Path.GetDirectoryName(this.RuntimeOptions.ProfilePath)
-          : Utilities.GetDefaultFilePath;
+          : Utilities.ApplicationDirectory;
 
       var args = new SavingProfileEventArgs(action, path, fileName, initialDirectory);
       var handler = this.OnSavingProfile;
@@ -384,7 +388,7 @@ public class ClientApplication {
     // 指定されたパスが開ければそのまま開く
     if (path != null && path != string.Empty &&
         System.IO.File.Exists(path) &&
-        Path.GetExtension(path) == ProfileINIFile.ProfileExtension) {
+        Path.GetExtension(path) == Constants.ProfileExtension) {
       this.OpenProfileInternal(path);
       return;
     }
@@ -394,7 +398,7 @@ public class ClientApplication {
       var lastProfilePath = this.Options.GetRecentProfile(0);
       if (lastProfilePath != null && lastProfilePath != string.Empty &&
           System.IO.File.Exists(lastProfilePath) &&
-          Path.GetExtension(lastProfilePath) == ProfileINIFile.ProfileExtension) {
+          Path.GetExtension(lastProfilePath) == Constants.ProfileExtension) {
         this.OpenProfileInternal(lastProfilePath);
         return;
       }
@@ -421,7 +425,8 @@ public class ClientApplication {
   /// Profileの保存
   private bool SaveProfileInternal(string path) {
     // Profile
-    var result = ProfileINIFile.Save(this.Profile, path);
+    var profileFile = new ProfileFile(this.Profile);
+    var result = profileFile.WriteFile(path);
     if (!result) return false;
 
     // Options
@@ -438,7 +443,8 @@ public class ClientApplication {
   /// Profileを読み込む
   private bool OpenProfileInternal(string path) {
     // Profile
-    var result = ProfileINIFile.Load(this.Profile, path);
+    var profileFile = new ProfileFile(this.Profile);
+    var result = profileFile.ReadFile(path);
     if (!result) return false;
 
     // バックアップパラメータの復元

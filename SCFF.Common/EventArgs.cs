@@ -21,7 +21,6 @@
 namespace SCFF.Common {
 
 using System;
-using SCFF.Common.Profile;
 
 //=====================================================================
 // 列挙型
@@ -33,12 +32,11 @@ public enum SaveActions {
   SaveAs,   ///< 別名で保存
 }
 
-
 /// Close時の選択(保存/破棄/キャンセル)を表す列挙形
 public enum CloseActions {
-  Save,
-  Abandon,
-  Cancel
+  Save,     ///< 保存
+  Abandon,  ///< 破棄
+  Cancel    ///< キャンセル
 }
 
 //=====================================================================
@@ -91,8 +89,6 @@ public class OpeningProfileEventArgs : EventArgs {
     this.Path = path;
     this.InitialDirectory = initialDirectory;
   }
-  /// プロパティ: [in] 拡張子
-  public string Extension { get { return ProfileINIFile.ProfileExtension; }  }
   /// プロパティ: [out] 読み込みをキャンセル
   public bool Cancel { get; set; }
   /// プロパティ: [in/out] プロファイルのパス
@@ -113,8 +109,6 @@ public class SavingProfileEventArgs : EventArgs {
     this.FileName = fileName;
     this.InitialDirectory = initialDirectory;
   }
-  /// プロパティ: [in] 拡張子
-  public string Extension { get { return ProfileINIFile.ProfileExtension; }  }
   /// プロパティ: [out] 保存をキャンセル
   public bool Cancel { get; set; }
   /// プロパティ: [in] Saveアクション

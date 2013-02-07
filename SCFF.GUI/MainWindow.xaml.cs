@@ -127,7 +127,7 @@ public partial class MainWindow
     // ダイアログでパスを指定
     var dialog = new OpenFileDialog();
     dialog.Title = "SCFF.GUI";
-    dialog.Filter = "SCFF Profile|*" + e.Extension;
+    dialog.Filter = "SCFF Profile|*" + Constants.ProfileExtension;
     dialog.InitialDirectory = e.InitialDirectory;
     var result = dialog.ShowDialog();
     if (result.HasValue && (bool)result) {
@@ -159,7 +159,7 @@ public partial class MainWindow
     // ダイアログでパスを指定
     var dialog = new SaveFileDialog();
     dialog.Title = "SCFF.GUI";
-    dialog.Filter = "SCFF Profile|*" + e.Extension;
+    dialog.Filter = "SCFF Profile|*" + Constants.ProfileExtension;
     dialog.InitialDirectory = e.InitialDirectory;
     dialog.FileName = e.FileName;
     var result = dialog.ShowDialog();

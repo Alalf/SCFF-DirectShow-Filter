@@ -38,6 +38,24 @@ public static class Constants {
   public const string SCFFSourceRegistryKey = "CLSID\\{" + Constants.SCFFSourceGUID + "}";
 
   //-------------------------------------------------------------------
+  // OptionsFile
+  //-------------------------------------------------------------------
+
+  /// INIファイル名
+  public const string OptionsFileName = "SCFF.Common.Options.ini";
+  /// INIファイルの先頭に付加するヘッダー
+  public const string OptionsHeader = "; " + Constants.SCFFVersion;
+
+  //-------------------------------------------------------------------
+  // ProfileFile
+  //-------------------------------------------------------------------
+
+  /// ProfileFileの拡張子
+  public const string ProfileExtension = ".scffprofile";
+  /// ProfileFileの先頭に付加するヘッダー
+  public const string ProfileHeader = "; " + Constants.SCFFVersion;
+
+  //-------------------------------------------------------------------
   // MainWindow
   //-------------------------------------------------------------------
 

@@ -15,8 +15,8 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file SCFF.Common/Profile/ProfileINIFile.cs
-/// @copydoc SCFF::Common::Profile::ProfileINIFile
+/// @file SCFF.Common/Profile/ProfileFile.cs
+/// @copydoc SCFF::Common::Profile::ProfileFile
 
 namespace SCFF.Common.Profile {
 
@@ -26,19 +26,16 @@ using System.Diagnostics;
 using System.IO;
 using SCFF.Interprocess;
 
-/// プロファイルのINIファイル入出力機能
-public static class ProfileINIFile {
+/// ProfileのFile入出力機能
+public class ProfileFile : TinyKeyValueFile {
   //===================================================================
-  // 定数
+  // コンストラクタ
   //===================================================================
 
-  /// INIファイルの拡張子
-  public const string ProfileExtension = ".scffprofile";
-
-  //-------------------------------------------------------------------
-
-  /// INIファイルの先頭に付加するヘッダー
-  private const string ProfileHeader = "; " + Constants.SCFFVersion;
+  /// コンストラクタ
+  public ProfileFile(Profile profile) : base() {
+    this.Profile = profile;
+  }
 
   //===================================================================
   // ファイル出力
@@ -48,13 +45,16 @@ public static class ProfileINIFile {
   /// @param profile 保存するProfile
   /// @param path 保存先
   /// @return 保存が成功したか
-  public static bool Save(Profile profile, string path) {
+  public override bool WriteFile(string path) {
+    // nop
+    if (!base.WriteFile(path)) return false;   
+
     try {
       using (var writer = new StreamWriter(path)) {
-        writer.WriteLine(ProfileINIFile.ProfileHeader);
-        writer.WriteLine("LayoutElementCount={0}", profile.LayoutElementCount);
-        writer.WriteLine("CurrentIndex={0}", profile.CurrentIndex);
-        foreach (var layoutElement in profile) {
+        writer.WriteLine(Constants.ProfileHeader);
+        writer.WriteLine("LayoutElementCount={0}", this.Profile.LayoutElementCount);
+        writer.WriteLine("CurrentIndex={0}", this.Profile.CurrentIndex);
+        foreach (var layoutElement in this.Profile) {
           var index = layoutElement.Index;
           writer.WriteLine("[LayoutElement{0}]", index);
 
@@ -109,20 +109,9 @@ public static class ProfileINIFile {
   //===================================================================
 
   /// ファイル入力
-  public static bool Load(Profile profile, string path) {
+  public override bool ReadFile(string path) {
     // ファイル->ディクショナリ
-    Dictionary<string,string> labelToRawData;
-    var fileResult = Utilities.LoadDictionaryFromINIFile(path, out labelToRawData);
-    if (!fileResult) return false;
-
-    // ディクショナリ->Profile
-    return ProfileINIFile.LoadFromDictionary(labelToRawData, profile);
-  }
-
-  /// 辞書から読み込む
-  private static bool LoadFromDictionary(Dictionary<string, string> labelToRawData, Profile profile) {
-    // Profileのクリア
-    profile.RestoreDefault();
+    if (!base.ReadFile(path)) return false;
 
     // 使いまわすので注意
     int intValue;
@@ -131,35 +120,35 @@ public static class ProfileINIFile {
     bool boolValue;
 
     // Dictionaryを調べながら値を設定する
-    var originalLayoutElementCount = profile.LayoutElementCount;
-    if (labelToRawData.TryGetInt("LayoutElementCount", out intValue)) {
+    var originalLayoutElementCount = this.Profile.LayoutElementCount;
+    if (this.TryGetInt("LayoutElementCount", out intValue)) {
       // 範囲チェック
       if (intValue < 1 ||
           Interprocess.MaxComplexLayoutElements < intValue) {
         return false;
       }
-      profile.LayoutElementCount = intValue;
+      this.Profile.LayoutElementCount = intValue;
     }
 
-    if (labelToRawData.TryGetInt("CurrentIndex", out intValue)) {
+    if (this.TryGetInt("CurrentIndex", out intValue)) {
       //　範囲チェック
-      if (intValue < 0 || profile.LayoutElementCount <= intValue) {
+      if (intValue < 0 || this.Profile.LayoutElementCount <= intValue) {
         return false;
       }
-      profile.CurrentIndex = intValue;
+      this.Profile.CurrentIndex = intValue;
     }
     
-    for (int i = 0; i < profile.LayoutElementCount; ++i) {
-      var layoutElement = profile.GetLayoutElement(i);
+    for (int i = 0; i < this.Profile.LayoutElementCount; ++i) {
+      var layoutElement = this.Profile.GetLayoutElement(i);
       layoutElement.RestoreDefault();
 
       // TargetWindow
       WindowTypes windowTypes;
-      if (labelToRawData.TryGetWindowTypes("WindowType" + i, out windowTypes)) {
+      if (this.TryGetWindowTypes("WindowType" + i, out windowTypes)) {
         switch (windowTypes) {
           case WindowTypes.Normal: {
             UIntPtr uintptrValue;
-            if (labelToRawData.TryGetUIntPtr("Window" + i, out uintptrValue)) {
+            if (this.TryGetUIntPtr("Window" + i, out uintptrValue)) {
               layoutElement.SetWindow(uintptrValue);
             }
             break;
@@ -176,99 +165,173 @@ public static class ProfileINIFile {
       }
 
       // Area
-      if (labelToRawData.TryGetBool("Fit" + i, out boolValue)) {
+      if (this.TryGetBool("Fit" + i, out boolValue)) {
         layoutElement.SetFit = boolValue;
       }
-      if (labelToRawData.TryGetInt("ClippingXWithoutFit" + i, out intValue)) {
+      if (this.TryGetInt("ClippingXWithoutFit" + i, out intValue)) {
         layoutElement.SetClippingXWithoutFit = intValue;
       }
-      if (labelToRawData.TryGetInt("ClippingYWithoutFit" + i, out intValue)) {
+      if (this.TryGetInt("ClippingYWithoutFit" + i, out intValue)) {
         layoutElement.SetClippingYWithoutFit = intValue;
       }
-      if (labelToRawData.TryGetInt("ClippingWidthWithoutFit" + i, out intValue)) {
+      if (this.TryGetInt("ClippingWidthWithoutFit" + i, out intValue)) {
         layoutElement.SetClippingWidthWithoutFit = intValue;
       }
-      if (labelToRawData.TryGetInt("ClippingHeightWithoutFit" + i, out intValue)) {
+      if (this.TryGetInt("ClippingHeightWithoutFit" + i, out intValue)) {
         layoutElement.SetClippingHeightWithoutFit = intValue;
       }
       // Options
-      if (labelToRawData.TryGetBool("ShowCursor" + i, out boolValue)) {
+      if (this.TryGetBool("ShowCursor" + i, out boolValue)) {
         layoutElement.SetShowCursor = boolValue;
       }
-      if (labelToRawData.TryGetBool("ShowLayeredWindow" + i, out boolValue)) {
+      if (this.TryGetBool("ShowLayeredWindow" + i, out boolValue)) {
         layoutElement.SetShowLayeredWindow = boolValue;
       }
-      if (labelToRawData.TryGetBool("Stretch" + i, out boolValue)) {
+      if (this.TryGetBool("Stretch" + i, out boolValue)) {
         layoutElement.SetStretch = boolValue;
       }
-      if (labelToRawData.TryGetBool("KeepAspectRatio" + i, out boolValue)) {
+      if (this.TryGetBool("KeepAspectRatio" + i, out boolValue)) {
         layoutElement.SetKeepAspectRatio = boolValue;
       }
       RotateDirections rotateDirections;
-      if (labelToRawData.TryGetRotateDirections("RotateDirection" + i, out rotateDirections)) {
+      if (this.TryGetRotateDirections("RotateDirection" + i, out rotateDirections)) {
         layoutElement.SetRotateDirection = rotateDirections;
       }
       // ResizeMethod
       SWScaleFlags swscaleFlags;
-      if (labelToRawData.TryGetSWScaleFlags("SWScaleFlags" + i, out swscaleFlags)) {
+      if (this.TryGetSWScaleFlags("SWScaleFlags" + i, out swscaleFlags)) {
         layoutElement.SetSWScaleFlags = swscaleFlags;
       }
-      if (labelToRawData.TryGetBool("SWScaleAccurateRnd" + i, out boolValue)) {
+      if (this.TryGetBool("SWScaleAccurateRnd" + i, out boolValue)) {
         layoutElement.SetSWScaleAccurateRnd = boolValue;
       }
-      if (labelToRawData.TryGetBool("SWScaleIsFilterEnabled" + i, out boolValue)) {
+      if (this.TryGetBool("SWScaleIsFilterEnabled" + i, out boolValue)) {
         layoutElement.SetSWScaleIsFilterEnabled = boolValue;
       }
-      if (labelToRawData.TryGetFloat("SWScaleLumaGBlur" + i, out floatValue)) {
+      if (this.TryGetFloat("SWScaleLumaGBlur" + i, out floatValue)) {
         layoutElement.SetSWScaleLumaGBlur = floatValue;
       }
-      if (labelToRawData.TryGetFloat("SWScaleChromaGBlur" + i, out floatValue)) {
+      if (this.TryGetFloat("SWScaleChromaGBlur" + i, out floatValue)) {
         layoutElement.SetSWScaleChromaGBlur = floatValue;
       }
-      if (labelToRawData.TryGetFloat("SWScaleLumaSharpen" + i, out floatValue)) {
+      if (this.TryGetFloat("SWScaleLumaSharpen" + i, out floatValue)) {
         layoutElement.SetSWScaleLumaSharpen = floatValue;
       }
-      if (labelToRawData.TryGetFloat("SWScaleChromaSharpen" + i, out floatValue)) {
+      if (this.TryGetFloat("SWScaleChromaSharpen" + i, out floatValue)) {
         layoutElement.SetSWScaleChromaSharpen = floatValue;
       }
-      if (labelToRawData.TryGetFloat("SWScaleChromaHShift" + i, out floatValue)) {
+      if (this.TryGetFloat("SWScaleChromaHShift" + i, out floatValue)) {
         layoutElement.SetSWScaleChromaHShift = floatValue;
       }
-      if (labelToRawData.TryGetFloat("SWScaleChromaVShift" + i, out floatValue)) {
+      if (this.TryGetFloat("SWScaleChromaVShift" + i, out floatValue)) {
         layoutElement.SetSWScaleChromaVShift = floatValue;
       }
       // LayoutParameter
-      if (labelToRawData.TryGetDouble("BoundRelativeLeft" + i, out doubleValue)) {
+      if (this.TryGetDouble("BoundRelativeLeft" + i, out doubleValue)) {
         layoutElement.SetBoundRelativeLeft = doubleValue;
       }
-      if (labelToRawData.TryGetDouble("BoundRelativeTop" + i, out doubleValue)) {
+      if (this.TryGetDouble("BoundRelativeTop" + i, out doubleValue)) {
         layoutElement.SetBoundRelativeTop = doubleValue;
       }
-      if (labelToRawData.TryGetDouble("BoundRelativeRight" + i, out doubleValue)) {
+      if (this.TryGetDouble("BoundRelativeRight" + i, out doubleValue)) {
         layoutElement.SetBoundRelativeRight = doubleValue;
       }
-      if (labelToRawData.TryGetDouble("BoundRelativeBottom" + i, out doubleValue)) {
+      if (this.TryGetDouble("BoundRelativeBottom" + i, out doubleValue)) {
         layoutElement.SetBoundRelativeBottom = doubleValue;
       }
       // Backup
-      if (labelToRawData.TryGetBool("HasBackedUp" + i, out boolValue)) {
+      if (this.TryGetBool("HasBackedUp" + i, out boolValue)) {
         layoutElement.SetHasBackedUp = boolValue;
       }
-      if (labelToRawData.TryGetInt("BackupScreenClippingX" + i, out intValue)) {
+      if (this.TryGetInt("BackupScreenClippingX" + i, out intValue)) {
         layoutElement.SetBackupScreenClippingX = intValue;
       }
-      if (labelToRawData.TryGetInt("BackupScreenClippingY" + i, out intValue)) {
+      if (this.TryGetInt("BackupScreenClippingY" + i, out intValue)) {
         layoutElement.SetBackupScreenClippingY = intValue;
       }
-      if (labelToRawData.TryGetInt("BackupClippingWidth" + i, out intValue)) {
+      if (this.TryGetInt("BackupClippingWidth" + i, out intValue)) {
         layoutElement.SetBackupClippingWidth = intValue;
       }
-      if (labelToRawData.TryGetInt("BackupClippingHeight" + i, out intValue)) {
+      if (this.TryGetInt("BackupClippingHeight" + i, out intValue)) {
         layoutElement.SetBackupClippingHeight = intValue;
       }
     }
 
     return true;
   }
+
+  //===================================================================
+  // private メソッド
+  //===================================================================
+
+  /// valueをRotateDirectionsで取得
+  private bool TryGetRotateDirections(string key, out RotateDirections value) {
+    int internalValue;
+    if (this.TryGetInt(key, out internalValue)) {
+      value = (RotateDirections)internalValue;
+    } else {
+      value = RotateDirections.NoRotate;
+      return false;
+    }
+    /// @warning 範囲チェックはEnum.IsDefinedを使ってはいけない
+    switch (value) {
+      case RotateDirections.NoRotate:
+      case RotateDirections.Degrees90:
+      case RotateDirections.Degrees180:
+      case RotateDirections.Degrees270: return true;
+      default: return false;
+    }
+  }
+
+  /// valueをSWScaleFlagsで取得
+  private bool TryGetSWScaleFlags(string key, out SWScaleFlags value) {
+    int internalValue;
+    if (this.TryGetInt(key, out internalValue)) {
+      value = (SWScaleFlags)internalValue;
+    } else {
+      value = SWScaleFlags.FastBilinear;
+      return false;
+    }
+    /// @warning 範囲チェックはEnum.IsDefinedを使ってはいけない
+    switch (value) {
+      case SWScaleFlags.FastBilinear:
+      case SWScaleFlags.Bilinear:
+      case SWScaleFlags.Bicubic:
+      case SWScaleFlags.X:
+      case SWScaleFlags.Point:
+      case SWScaleFlags.Area:
+      case SWScaleFlags.Bicublin:
+      case SWScaleFlags.Gauss:
+      case SWScaleFlags.Sinc:
+      case SWScaleFlags.Lanczos:
+      case SWScaleFlags.Spline: return true;
+      default: return false;
+    }
+  }
+
+  /// valueをWindowTypesで取得
+  private bool TryGetWindowTypes(string key, out WindowTypes value) {
+    int internalValue;
+    if (this.TryGetInt(key, out internalValue)) {
+      value = (WindowTypes)internalValue;
+    } else {
+      value = WindowTypes.Normal;
+      return false;
+    }
+    /// @warning 範囲チェックはEnum.IsDefinedを使ってはいけない
+    switch (value) {
+      case WindowTypes.Normal:
+      case WindowTypes.DesktopListView:
+      case WindowTypes.Desktop: return true;
+      default: return false;
+    }
+  }
+
+  //===================================================================
+  // プロパティ
+  //===================================================================
+  
+  /// Profileへの参照
+  private Profile Profile { get; set; }
 }
 }   // namespace SCFF.Common.Profile

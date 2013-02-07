@@ -26,6 +26,13 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using SCFF.Interprocess;
 
+/// Profile用Windowの種類
+public enum WindowTypes {
+  Normal,           ///< 標準のWindow
+  DesktopListView,  ///< OS別デスクトップWindow
+  Desktop,          ///< ルートWindow
+}
+
 /// レイアウト設定などをまとめたプロファイル
 public partial class Profile {
   //===================================================================

@@ -23,6 +23,13 @@ namespace SCFF.Common {
 using System.Collections.Generic;
 using System.Diagnostics;
 
+/// Options用WindowState。System.Windows.WindowStateと相互に変換する。
+public enum WindowState {
+  Normal,     ///< 標準状態
+  Minimized,  ///< 最小化
+  Maximized   ///< 最大化
+}
+
 /// プロファイル以外のアプリケーション設定
 ///
 /// @warning 接頭辞Tmpがついたプロパティの使用はApp起動時・終了時以外禁止

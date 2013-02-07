@@ -15,29 +15,12 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file SCFF.Common/Types.cs
-/// SCFF.Commonモジュールで利用する型
+/// @file SCFF.Common/KeyValueFile.cs
+/// @copydoc SCFF::Common::KeyValueFile
 
-/// SCFF共有クラスライブラリ
 namespace SCFF.Common {
+public class KeyValueFile {
 
-using System;
 
-//=====================================================================
-// 列挙型
-//=====================================================================
-
-/// Options用WindowState。System.Windows.WindowStateと相互に変換する。
-public enum WindowState {
-  Normal,     ///< 標準状態
-  Minimized,  ///< 最小化
-  Maximized   ///< 最大化
-}
-
-/// Profile用Windowの種類
-public enum WindowTypes {
-  Normal,           ///< 標準のWindow
-  DesktopListView,  ///< OS別デスクトップWindow
-  Desktop,          ///< ルートWindow
 }
 }   // namespace SCFF.Common

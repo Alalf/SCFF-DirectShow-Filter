@@ -16,12 +16,12 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file SCFF.Common/EventArgs.cs
-/// SCFF.Commonで利用するEventArgs
+/// SCFF.Commonで利用するEventArgsと関連する列挙型
 
 namespace SCFF.Common {
 
 using System;
-  using SCFF.Common.Profile;
+using SCFF.Common.Profile;
 
 //=====================================================================
 // 列挙型

@@ -68,11 +68,11 @@ public class RuntimeOptions {
   public string ProfileName { get; set; }
 
   /// 最後に保存した時のタイムスタンプ
-  /// @warning DateTime.UTCNow.Ticksを格納するので負の数にはなりえない
+  /// @warning DateTime.Now.Ticksを格納するので負の数にはなりえない
   public Int64 LastSavedTimestamp { get; set; }
 
   /// 最後にApplyしたときのタイムスタンプ
-  /// @warning DateTime.UTCNow.Ticksを格納するので負の数にはなりえない
+  /// @warning DateTime.Now.Ticksを格納するので負の数にはなりえない
   public Int64 LastAppliedTimestamp { get; set; }
 
   //-------------------------------------------------------------------

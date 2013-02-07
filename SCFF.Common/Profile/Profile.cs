@@ -275,7 +275,7 @@ public partial class Profile {
 
   /// タイムスタンプを現在時刻で更新する
   public void UpdateTimestamp() {
-    this.message.Timestamp = DateTime.UtcNow.Ticks;
+    this.message.Timestamp = DateTime.Now.Ticks;
   }
 
   //===================================================================

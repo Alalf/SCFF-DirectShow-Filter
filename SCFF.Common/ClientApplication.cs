@@ -488,7 +488,7 @@ public class ClientApplication {
     }
     /// @todo(me) もう少し一貫した対応策があるかもしれない
     // 現在時刻で上書き
-    message.Timestamp = DateTime.UtcNow.Ticks;
+    message.Timestamp = DateTime.Now.Ticks;
     var initResult = this.Interprocess.InitMessage(this.RuntimeOptions.CurrentProcessID);
     if (!initResult) return false;
     var sendResult = this.Interprocess.SendMessage(message);

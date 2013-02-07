@@ -138,7 +138,7 @@ public partial class LayoutEdit
     var formattedText = new FormattedText(header,
         System.Globalization.CultureInfo.CurrentUICulture,
         FlowDirection.LeftToRight,
-        new Typeface("Meiryo"),
+        new Typeface("Segoe UI, Tahoma"),
         CaptionFontSize,
         textBrush);
 

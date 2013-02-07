@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file SCFF.Common/DSFMonitr.cs
+/// @file SCFF.Common/DSFMonitor.cs
 /// @copydoc SCFF::Common::DSFMonitor
 
 namespace SCFF.Common {

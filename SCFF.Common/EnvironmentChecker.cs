@@ -24,6 +24,7 @@ using System.IO;
 using System.Text;
 using Microsoft.Win32;
 
+/// 環境チェックを行うメソッドを集めたstaticクラス
 public static class EnvironmentChecker {
   //===================================================================
   // DirectShow Plugin関連

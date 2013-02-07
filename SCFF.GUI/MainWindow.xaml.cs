@@ -181,6 +181,7 @@ public partial class MainWindow
     //-----------------------------------------------------------------
   }
 
+  /// @copydoc SCFF::Common::ClientApplication::OnSentProfile
   private void OnSentProfile(object sender, System.EventArgs e) {
     //-----------------------------------------------------------------
     // Notify self
@@ -691,7 +692,7 @@ public partial class MainWindow
 
   //-------------------------------------------------------------------
 
-  /// @copybrief SetAero
+  /// @copybrief SCFF::Common::ClientApplication::SetAero
   /// @param sender 使用しない
   /// @param e 使用しない
   private void OnSetAero(object sender, ExecutedRoutedEventArgs e) {

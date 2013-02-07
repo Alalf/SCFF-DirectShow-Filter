@@ -87,7 +87,7 @@ public class DSFMonitor {
   public void CleanupAll() {
     lock (this.SharedLock) {
       foreach (var processID in this.MonitoredDSFs) {
-        if (Utilities.IsProcessAlive(processID)) return;
+        if (Utilities.IsProcessAlive(processID)) continue;
         Debug.WriteLine("Cleanup: " + processID, "DSFMonitor");
         this.Interprocess.InitErrorEvent(processID);
         // WaitOneを解除

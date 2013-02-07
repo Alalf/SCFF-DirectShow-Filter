@@ -73,6 +73,7 @@ public class RuntimeOptions {
 
   /// 最後にApplyしたときのタイムスタンプ
   /// @warning DateTime.Now.Ticksを格納するので負の数にはなりえない
+  /// @todo(me) これはProcessIDごとになるのでは？
   public Int64 LastAppliedTimestamp { get; set; }
 
   //-------------------------------------------------------------------

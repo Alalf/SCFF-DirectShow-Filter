@@ -5,7 +5,7 @@
              xmlns:local="clr-namespace:SCFF.GUI"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="300"
-             FontSize="9">
+             FontSize="10">
   <Grid>
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="1*"/>
@@ -17,7 +17,7 @@
       <RowDefinition Height="30"/>
     </Grid.RowDefinitions>
     <Button   VerticalAlignment="Center" Height="20" Margin="5,0"
-              x:Name="Splash" FontSize="10" Content="Splash"
+              x:Name="Splash" FontSize="10.5" Content="Splash"
               Command="{x:Static local:Commands.SendNullProfile}" IsCancel="True"/>
     <CheckBox Grid.Column="2"
               VerticalAlignment="Center" HorizontalAlignment="Right" Height="16" Margin="5,0"
@@ -25,7 +25,7 @@
               Click="AutoApply_Click"/>
     <Button   Grid.Column="3"
               VerticalAlignment="Center" Height="20" Margin="5,0"
-              x:Name="ApplyProfile" FontSize="10" Content="Apply"
+              x:Name="ApplyProfile" FontSize="10.5" Content="Apply"
               Command="{x:Static local:Commands.SendProfile}" IsDefault="True"/>
   </Grid>
 </UserControl>

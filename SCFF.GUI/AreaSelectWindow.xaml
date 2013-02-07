@@ -9,7 +9,8 @@
         SnapsToDevicePixels="True"
         Icon="Images/app.ico"
         ResizeMode="CanResizeWithGrip"
-        FontSize="9"
+        FontFamily="Segoe UI, Tahoma"
+        FontSize="10"
         Title="AreaSelectWindow" Width="320" Height="240">
   <Window.CommandBindings>
     <!-- ApplicationCommands -->

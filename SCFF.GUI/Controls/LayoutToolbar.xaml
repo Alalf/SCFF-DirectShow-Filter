@@ -5,7 +5,7 @@
              xmlns:local="clr-namespace:SCFF.GUI"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" d:DesignWidth="411" d:DesignHeight="31"
-             FontSize="9">
+             FontSize="10">
   <ToolBarTray HorizontalAlignment="Center"
                Background="{x:Null}"
                IsLocked="True" >

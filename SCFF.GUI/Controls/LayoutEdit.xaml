@@ -5,13 +5,14 @@
              xmlns:local="clr-namespace:SCFF.GUI"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" d:DesignWidth="640" d:DesignHeight="400"
-             FontSize="9">
+             FontSize="10">
   <Image x:Name="LayoutEditImage"
          MouseDown="LayoutEditImage_MouseDown"
          MouseMove="LayoutEditImage_MouseMove"
          MouseUp="LayoutEditImage_MouseUp">
     <Image.ContextMenu>
-      <ContextMenu x:Name="LayoutEditMenu" FontSize="9">
+      <!-- なぜかContextMenuだけFont指定が必要 -->
+      <ContextMenu x:Name="LayoutEditMenu" FontSize="10" FontFamily="Segoe UI, Tahoma">
         <MenuItem Header="Add" Command="{x:Static local:Commands.AddLayoutElement}"
                   CommandTarget="{Binding Path=PlacementTarget,
                       RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"/>

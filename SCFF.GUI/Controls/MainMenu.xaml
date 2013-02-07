@@ -5,8 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:shell="http://schemas.microsoft.com/winfx/2006/xaml/presentation/shell"
              mc:Ignorable="d" d:DesignWidth="530" d:DesignHeight="37"
-             FontSize="9">
-  <Menu FontSize="9"> <!-- なぜかMenuだけFontSize指定が必要 -->
+             FontSize="10">
+  <Menu FontSize="10" FontFamily="Segoe UI, Tahoma"> <!-- なぜかMenuだけFont指定が必要 -->
     <MenuItem Header="File(_F)">
       <MenuItem Header="New profile(_N)"
                 Command="New"/>

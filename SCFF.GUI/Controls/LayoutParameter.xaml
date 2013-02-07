@@ -5,7 +5,7 @@
              xmlns:local="clr-namespace:SCFF.GUI"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" d:DesignWidth="369" d:DesignHeight="104"
-             FontSize="9">
+             FontSize="10">
   <GroupBox x:Name="GroupBox" Header="Layout N: (Window Classname)">
     <Grid>
       <Grid.ColumnDefinitions>

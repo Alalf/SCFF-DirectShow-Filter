@@ -229,7 +229,7 @@ public class ClientApplication {
 
   public void Exit() {
     // DSFエラー監視を停止
-    this.Interprocess.RaiseShutdownEvent();
+    this.Interprocess.SetShutdownEvent();
 
     // Profileの保存は明示的に行うのでここでは何もしない
 

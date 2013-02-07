@@ -287,8 +287,8 @@ public class Interprocess {
   /// @todo(me) 全体的に例外処理を考慮していないコード。要注意。
   /// @return 初期化が成功したか
   public bool InitDirectory() {
-    // 念のため解放
-    this.ReleaseDirectory();
+    // プログラム全体で一回だけCreate/CloseすればよいのでCloseはしない
+    if (IsDirectoryInitialized()) return true;
 
     // 仮想メモリ(Directory)の作成
     /// @todo(me) あまりにも邪悪な例外処理の使い方。なんとかしたい。
@@ -351,20 +351,38 @@ public class Interprocess {
 
   /// Directoryを読み込む
   private Directory ReadDirectory() {
-    byte[] buffer = new byte[this.sizeOfDirectory];
+    // 仮想メモリから読み込み
+    var buffer = new byte[this.sizeOfDirectory];
+    this.viewOfDirectory.Seek(0, SeekOrigin.Begin);
     this.viewOfDirectory.Read(buffer, 0, this.sizeOfDirectory);
-    GCHandle gch = GCHandle.Alloc(buffer, GCHandleType.Pinned);
-    return (Directory)Marshal.PtrToStructure(gch.AddrOfPinnedObject(), this.directoryType);
+    // 読み込んだbyte[]を構造体に変換
+    var gch = GCHandle.Alloc(buffer, GCHandleType.Pinned);
+    try { 
+      var ptr = gch.AddrOfPinnedObject();
+      return (Directory)Marshal.PtrToStructure(gch.AddrOfPinnedObject(), this.directoryType);
+    } finally {
+      gch.Free();
+    }
   }
 
   /// Directoryを書き込む
   private void WriteDirectory(Directory directory) {
-    byte[] buffer = new byte[this.sizeOfDirectory];
-    IntPtr ptr = Marshal.AllocHGlobal(this.sizeOfDirectory);
-    Marshal.StructureToPtr(directory, ptr, false);
-    Marshal.Copy(ptr, buffer, 0, this.sizeOfDirectory);
-    Marshal.FreeHGlobal(ptr);
-    this.viewOfDirectory.Write(buffer, 0, this.sizeOfDirectory);
+    // 書き込み用のIntPtrを準備
+    var ptr = Marshal.AllocHGlobal(this.sizeOfDirectory);
+    try { 
+      // DirectoryをIntPtrに変換
+      Marshal.StructureToPtr(directory, ptr, false);
+
+      // byte[]に書き込み
+      var buffer = new byte[this.sizeOfDirectory];
+      Marshal.Copy(ptr, buffer, 0, this.sizeOfDirectory);
+
+      // byte[]を共有メモリに書き込み
+      this.viewOfDirectory.Seek(0, SeekOrigin.Begin);
+      this.viewOfDirectory.Write(buffer, 0, this.sizeOfDirectory);
+    } finally {
+      Marshal.FreeHGlobal(ptr);
+    }
   }
 
   //===================================================================
@@ -443,20 +461,38 @@ public class Interprocess {
 
   /// Messageを読み込む
   private Message ReadMessage() {
-    byte[] buffer = new byte[this.sizeOfMessage];
+    // 仮想メモリから読み込み
+    var buffer = new byte[this.sizeOfMessage];
+    this.viewOfMessage.Seek(0, SeekOrigin.Begin);
     this.viewOfMessage.Read(buffer, 0, this.sizeOfMessage);
-    GCHandle gch = GCHandle.Alloc(buffer, GCHandleType.Pinned);
-    return (Message)Marshal.PtrToStructure(gch.AddrOfPinnedObject(), this.messageType);
+    // 読み込んだbyte[]を構造体に変換
+    var gch = GCHandle.Alloc(buffer, GCHandleType.Pinned);
+    try {
+      var ptr = gch.AddrOfPinnedObject();
+      return (Message)Marshal.PtrToStructure(ptr, this.messageType);
+    } finally {
+      gch.Free();
+    } 
   }
 
   /// Messageを書き込む
   private void WriteMessage(Message message) {
-    byte[] buffer = new byte[this.sizeOfMessage];
-    IntPtr ptr = Marshal.AllocHGlobal(this.sizeOfMessage);
-    Marshal.StructureToPtr(message, ptr, false);
-    Marshal.Copy(ptr, buffer, 0, this.sizeOfMessage);
-    Marshal.FreeHGlobal(ptr);
-    this.viewOfMessage.Write(buffer, 0, this.sizeOfMessage);
+    // 書き込み用のIntPtrを準備
+    var ptr = Marshal.AllocHGlobal(this.sizeOfMessage);
+    try {
+      // MessageをIntPtrに変換
+      Marshal.StructureToPtr(message, ptr, false);
+
+      // byte[]に書き込み
+      var buffer = new byte[this.sizeOfMessage];
+      Marshal.Copy(ptr, buffer, 0, this.sizeOfMessage);
+
+      // byte[]を共有メモリに書き込み
+      this.viewOfMessage.Seek(0, SeekOrigin.Begin);
+      this.viewOfMessage.Write(buffer, 0, this.sizeOfMessage);
+    } finally {
+      Marshal.FreeHGlobal(ptr);
+    }
   }
 
   //===================================================================
@@ -647,19 +683,19 @@ public class Interprocess {
   }
 
   /// エラーイベントをシグナル状態にする
-  public bool RaiseErrorEvent() {
+  public bool SetErrorEvent() {
     // 初期化されていなければ失敗
     if (!IsErrorEventInitialized()) {
-      Trace.WriteLine("****Interprocess: RaiseErrorEvent FAILED");
+      Trace.WriteLine("****Interprocess: SetErrorEvent FAILED");
       return false;
     }
 
-    Trace.WriteLine("****Interprocess: RaiseErrorEvent");
+    Trace.WriteLine("****Interprocess: SetErrorEvent");
 
     // シグナルを送る
     var errorSetEvent = errorEvent.Set();
     if (!errorSetEvent) {
-      Trace.WriteLine("****Interprocess: RaiseErrorEvent FAILED");
+      Trace.WriteLine("****Interprocess: SetErrorEvent FAILED");
       return false;
     }
 
@@ -717,6 +753,17 @@ public class Interprocess {
     return true;
   }
 
+  /// エラーイベントがシグナル状態か
+  public bool CheckErrorEvent() {
+    // 初期化されていなければ失敗
+    if (!this.IsErrorEventInitialized()) {
+      Trace.WriteLine("****Interprocess: CheckErrorEvent FAILED");
+      return false;
+    }
+
+    return this.errorEvent.WaitOne(0);
+  }
+
   /// エラーイベントを待機する
   public bool WaitUntilErrorEventOccured() {
     // 初期化されていなければ失敗
@@ -739,19 +786,19 @@ public class Interprocess {
   }
 
   /// 終了要求
-  public bool RaiseShutdownEvent() {
+  public bool SetShutdownEvent() {
     // 初期化されていなければ失敗
     if (!IsShutdownEventInitialized()) {
-      Trace.WriteLine("****Interprocess: RaiseShutdownEvent FAILED");
+      Trace.WriteLine("****Interprocess: SetShutdownEvent FAILED");
       return false;
     }
 
-    Trace.WriteLine("****Interprocess: RaiseShutdownEvent");
+    Trace.WriteLine("****Interprocess: SetShutdownEvent");
 
     // シグナルを送る
     var errorSetEvent = shutdownEvent.Set();
     if (!errorSetEvent) {
-      Trace.WriteLine("****Interprocess: RaiseShutdownEvent FAILED");
+      Trace.WriteLine("****Interprocess: SetShutdownEvent FAILED");
       return false;
     }
 

@@ -56,8 +56,8 @@ Interprocess::~Interprocess() {
 //---------------------------------------------------------------------
 
 bool Interprocess::InitDirectory() {
-  // 念のため解放
-  ReleaseDirectory();
+  // プログラム全体で一回だけCreate/CloseすればよいのでCloseはしない
+  if (IsDirectoryInitialized()) return true;
 
   // 仮想メモリ(Directory)の作成
   HANDLE tmp_directory =
@@ -398,19 +398,29 @@ bool Interprocess::ReceiveMessage(Message *message) {
   return true;
 }
 
-bool Interprocess::RaiseErrorEvent() {
+bool Interprocess::CheckErrorEvent() {
   // 初期化されていなければ失敗
   if (!IsErrorEventInitialized()) {
-    OutputDebugString(TEXT("****Interprocess: RaiseErrorEvent FAILED\n"));
+    OutputDebugString(TEXT("****Interprocess: CheckErrorEvent FAILED\n"));
     return false;
   }
 
-  OutputDebugString(TEXT("****Interprocess: RaiseErrorEvent\n"));
+  return WaitForSingleObject(error_event_, 0) == WAIT_OBJECT_0;
+}
+
+bool Interprocess::SetErrorEvent() {
+  // 初期化されていなければ失敗
+  if (!IsErrorEventInitialized()) {
+    OutputDebugString(TEXT("****Interprocess: SetErrorEvent FAILED\n"));
+    return false;
+  }
+
+  OutputDebugString(TEXT("****Interprocess: SetErrorEvent\n"));
 
   // シグナルを送る
   BOOL error_set_event = SetEvent(error_event_);
   if (!error_set_event) {
-    OutputDebugString(TEXT("****Interprocess: RaiseErrorEvent FAILED\n"));
+    OutputDebugString(TEXT("****Interprocess: SetErrorEvent FAILED\n"));
     return false;
   }
 
@@ -482,19 +492,19 @@ bool Interprocess::WaitUntilErrorEventOccured() {
   return true;
 }
 
-bool Interprocess::RaiseShutdownEvent() {
+bool Interprocess::SetShutdownEvent() {
   // 初期化されていなければ失敗
   if (!IsShutdownEventInitialized()) {
-    OutputDebugString(TEXT("****Interprocess: RaiseShutdownEvent FAILED\n"));
+    OutputDebugString(TEXT("****Interprocess: SetShutdownEvent FAILED\n"));
     return false;
   }
 
-  OutputDebugString(TEXT("****Interprocess: RaiseShutdownEvent\n"));
+  OutputDebugString(TEXT("****Interprocess: SetShutdownEvent\n"));
 
   // シグナルを送る
   BOOL error_set_event = SetEvent(shutdown_event_);
   if (!error_set_event) {
-    OutputDebugString(TEXT("****Interprocess: RaiseShutdownEvent FAILED\n"));
+    OutputDebugString(TEXT("****Interprocess: SetShutdownEvent FAILED\n"));
     return false;
   }
 

@@ -85,9 +85,9 @@ void SCFFMonitor::CheckLayoutError(scff_imaging::ErrorCodes error_code) {
     }
     default: {
       if (!last_layout_error_state_) {
-        // 非エラー→エラーに切り替わった時のみシグナルを送る
+        // 非エラー→エラーに切り替わったときにシグナル状態にする
         MyDbgLog((LOG_ERROR, kDbgImportant, TEXT("SCFFMonitor: Raise Error Event")));
-        interprocess_.RaiseErrorEvent();
+        interprocess_.SetErrorEvent();
       }
       last_layout_error_state_ = true;
       break;

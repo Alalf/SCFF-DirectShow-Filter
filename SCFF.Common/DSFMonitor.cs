@@ -67,8 +67,13 @@ public class DSFMonitor {
         return;
       }
       Debug.WriteLine("Creating Task: " + processID, "DSFMonitor");
+
       var task = Task.Factory.StartNew(() => {
+        // 監視開始
         this.Interprocess.InitErrorEvent(processID);
+        // 監視前にチェックしてシグナル状態を解除
+        this.Interprocess.CheckErrorEvent();
+
         var dsfErrorOccured = this.Interprocess.WaitUntilErrorEventOccured();
         if (dsfErrorOccured) {
           // Event: DSFErrorOccured
@@ -94,7 +99,7 @@ public class DSFMonitor {
         Debug.WriteLine("Cleanup: " + processID, "DSFMonitor");
         this.Interprocess.InitErrorEvent(processID);
         // WaitOneを解除
-        this.Interprocess.RaiseErrorEvent();
+        this.Interprocess.SetErrorEvent();
       }
     }
   }
@@ -106,7 +111,7 @@ public class DSFMonitor {
       Debug.WriteLine("Cleanup: " + processID, "DSFMonitor");
       this.Interprocess.InitErrorEvent(processID);
       // WaitOneを解除
-      this.Interprocess.RaiseErrorEvent();
+      this.Interprocess.SetErrorEvent();
     }
   }
 

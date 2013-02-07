@@ -275,7 +275,7 @@ class Interprocess {
   /// @pre 事前にInitMessageが実行されている必要がある
   bool ReceiveMessage(Message *message);
   /// エラーイベントをシグナル状態にする
-  bool RaiseErrorEvent();
+  bool SetErrorEvent();
   //-------------------------------------------------------------------
 
   /// ディレクトリを取得する
@@ -283,10 +283,12 @@ class Interprocess {
   /// メッセージを作成する
   /// @pre 事前にInitMessageが実行されている必要がある
   bool SendMessage(const Message &message);
+  /// エラーイベントがシグナル状態か
+  bool CheckErrorEvent();
   /// エラーイベントを待機する
   bool WaitUntilErrorEventOccured();
   /// シャットダウンイベントをシグナル状態にする
-  bool RaiseShutdownEvent();
+  bool SetShutdownEvent();
 
  private:
   /// Directory解放

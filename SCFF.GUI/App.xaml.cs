@@ -81,6 +81,7 @@ public partial class App : Application {
 
   /// @copydoc SCFF::Common::ClientApplication::OnErrorOccured
   private static void OnErrorOccured(object sender, ErrorOccuredEventArgs e) {
+    if (e.Quiet) return;
     MessageBox.Show(e.Message, "SCFF.GUI",
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);

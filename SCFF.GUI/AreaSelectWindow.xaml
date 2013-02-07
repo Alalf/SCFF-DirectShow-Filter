@@ -11,7 +11,7 @@
         ResizeMode="CanResizeWithGrip"
         FontFamily="Segoe UI, Tahoma"
         FontSize="10"
-        Title="AreaSelectWindow" Width="320" Height="240">
+        Title="AreaSelectWindow" Width="320" Height="240" MinWidth="1" MinHeight="1">
   <Window.CommandBindings>
     <!-- ApplicationCommands -->
     <CommandBinding Command="Save" Executed="OnSave"/>

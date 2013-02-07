@@ -21,19 +21,14 @@
 namespace SCFF.GUI {
 
 using System.Diagnostics;
-using System.IO;
-using System.Text;
-//using System.Threading;
-//using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using Microsoft.Win32;
 using Microsoft.Windows.Shell;
 using SCFF.Common;
 using SCFF.Common.GUI;
-using SCFF.Common.Profile;
 
-/// MainWindowのコードビハインド
+  /// MainWindowのコードビハインド
 public partial class MainWindow
     : Window, IBindingProfile, IBindingOptions, IBindingRuntimeOptions {
   //===================================================================
@@ -43,10 +38,6 @@ public partial class MainWindow
   /// コンストラクタ
   public MainWindow() {
     this.InitializeComponent();
-
-    this.NotifyOptionsChanged();
-    this.NotifyRuntimeOptionsChanged();
-    this.NotifyProfileChanged();
 
     // SCFF.Common.ClientApplicationのイベントハンドラ登録
     App.Impl.OnErrorOccured += this.OnErrorOccured;
@@ -59,6 +50,10 @@ public partial class MainWindow
     App.Impl.OnSavingProfile += this.OnSavingProfile;
     App.Impl.OnSavedProfile += this.OnSavedProfile;
     App.Impl.OnSentProfile += this.OnSentProfile;
+
+    this.NotifyOptionsChanged();
+    this.NotifyRuntimeOptionsChanged();
+    this.NotifyProfileChanged();
   }
 
   /// デストラクタ
@@ -677,7 +672,7 @@ public partial class MainWindow
 
   /// @copybrief Commands::SendProfile
   private void OnSendProfile(object sender, ExecutedRoutedEventArgs e) {
-    if (App.RuntimeOptions.IsEntryListEmpty) return;
+    Debug.Assert(!App.RuntimeOptions.IsEntryListEmpty);
     App.Impl.SendProfile(false, false);
   }
   /// @copybrief Commands::SendProfile
@@ -686,7 +681,7 @@ public partial class MainWindow
   }
   /// @copybrief Commands::SendNullProfile
   private void OnSendNullProfile(object sender, ExecutedRoutedEventArgs e) {
-    if (App.RuntimeOptions.IsEntryListEmpty) return;
+    Debug.Assert(!App.RuntimeOptions.IsEntryListEmpty);
     App.Impl.SendProfile(false, true);
   }
   /// @copybrief Commands::SendNullProfile

@@ -26,92 +26,10 @@ using System.IO;
 using SCFF.Common.Profile;
 using SCFF.Interprocess;
 
-public class ErrorOccuredEventArgs : EventArgs {
-  /// コンストラクタ
-  public ErrorOccuredEventArgs(string message, bool quiet) {
-    this.Message = message;
-    this.Quiet = quiet;
-  }
-  /// プロパティ: [in] メッセージ
-  public string Message { get; private set; }
-  /// プロパティ: [in] メッセージ表示用フラグ
-  public bool Quiet { get; private set; }
-}
-
-/// Close時の選択(保存/破棄/キャンセル)を表す列挙形
-public enum CloseActions {
-  Save,
-  Abandon,
-  Cancel
-}
-
-public class ClosingProfileEventArgs : EventArgs {
-  /// コンストラクタ
-  public ClosingProfileEventArgs(CloseActions action, string profileName) {
-    this.Action = action;
-    this.ProfileName = profileName;
-  }
-  /// プロパティ: [in/out] Closeアクション
-  public CloseActions Action { get; set; }
-  /// プロパティ: [in] プロファイル名
-  public string ProfileName { get; private set; }
-}
-
-public class OpeningProfileEventArgs : EventArgs {
-  /// コンストラクタ
-  public OpeningProfileEventArgs(string path, string initialDirectory) {
-    // 初期値＝キャンセルしない
-    this.Cancel = false;
-
-    this.Path = path;
-    this.InitialDirectory = initialDirectory;
-  }
-  /// プロパティ: [in] 拡張子
-  public string Extension { get { return ProfileINIFile.ProfileExtension; }  }
-  /// プロパティ: [out] 読み込みをキャンセル
-  public bool Cancel { get; set; }
-  /// プロパティ: [in/out] プロファイルのパス
-  public string Path { get; set; }
-  /// プロパティ: [in] パスを設定するために使える初期ディレクトリ
-  public string InitialDirectory { get; private set; }
-}
-
-/// Profileの保存・別名で保存のどちらかを示す列挙型
-public enum SaveActions {
-  Save,     ///< 保存
-  SaveAs,   ///< 別名で保存
-}
-
-public class SavingProfileEventArgs : EventArgs {
-  /// コンストラクタ
-  public SavingProfileEventArgs(SaveActions action, string path, string fileName, string initialDirectory) {
-    // 初期値＝キャンセルしない
-    this.Cancel = false;
-
-    this.Action = action;
-    this.Path = path;
-    this.FileName = fileName;
-    this.InitialDirectory = initialDirectory;
-  }
-  /// プロパティ: [in] 拡張子
-  public string Extension { get { return ProfileINIFile.ProfileExtension; }  }
-  /// プロパティ: [out] 保存をキャンセル
-  public bool Cancel { get; set; }
-  /// プロパティ: [in] Saveアクション
-  public SaveActions Action { get; private set; }
-  /// プロパティ: [in/out] プロファイルのパス
-  public string Path { get; set; }
-  /// プロパティ: [in] ファイル名
-  public string FileName { get; private set; }
-  /// プロパティ: パスを設定するために使える初期ディレクトリ
-  public string InitialDirectory { get; set; }
-}
-
-/// Options,RuntimeOptions.ProfileをまとめるFacadeクラス
-/// @warning Facadeクラスなのでメンバは参照のみに限ること
+/// SCFF DirectShow Filterの設定用クライアントアプリケーション
 public class ClientApplication {
   //===================================================================
-  // コンストラクタ
+  // コンストラクタ/デストラクタ
   //===================================================================
 
   /// コンストラクタ
@@ -141,6 +59,7 @@ public class ClientApplication {
   public event EventHandler<ErrorOccuredEventArgs> OnStartupErrorOccured;
   /// DSFエラー発生後
   public event EventHandler<ErrorOccuredEventArgs> OnDSFErrorOccured;
+
   /// エラー発生後
   public event EventHandler<ErrorOccuredEventArgs> OnErrorOccured;
   /// プロファイル内容変更後
@@ -223,7 +142,7 @@ public class ClientApplication {
 
   public void Exit() {
     // DSFエラー監視を停止
-    this.Interprocess.SetShutdownEvent();
+    this.DSFMonitor.Exit();
 
     // Profileの保存は明示的に行うのでここでは何もしない
 

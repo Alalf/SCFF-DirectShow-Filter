@@ -16,7 +16,7 @@
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
 /// @file SCFF.Common/DSFMonitr.cs
-/// SCFF DirectShow Filterのエラー状態・生存チェックを行う
+/// @copydoc SCFF::Common::DSFMonitor
 
 namespace SCFF.Common {
 
@@ -26,16 +26,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using SCFF.Interprocess;
 
-/// SCFF DirectShow Filterでエラーが発生したとき
-public class DSFErrorOccuredEventArgs : EventArgs {
-  /// コンストラクタ
-  public DSFErrorOccuredEventArgs(UInt32 processID) {
-    this.ProcessID = processID;
-  }
-  /// プロパティ: エラーが発生したDSFがロードされているプロセスID
-  public uint ProcessID { get; private set; }
-}
-
+/// SCFF DirectShow Filterのエラー状態・生存チェックを行う
 public class DSFMonitor {
   //===================================================================
   // コンストラクタ
@@ -52,7 +43,8 @@ public class DSFMonitor {
 
   /// デストラクタ
   ~DSFMonitor() {
-    this.CleanupAll();
+    // 念のため
+    this.Interprocess.SetShutdownEvent();
   }
 
   //===================================================================
@@ -115,15 +107,24 @@ public class DSFMonitor {
     }
   }
 
+  public void Exit() {
+    Debug.WriteLine("Exit", "DSFMonitor");
+    this.Interprocess.SetShutdownEvent();
+  }
+
+  //===================================================================
+  // イベント
+  //===================================================================
+
+  /// DSFでエラーが発生した後
+  public event EventHandler<DSFErrorOccuredEventArgs> OnErrorOccured;
+
   //===================================================================
   // プロパティ
   //===================================================================
 
   /// 共有ロック
   private Object SharedLock { get; set; }
-
-  /// DSFでエラーが発生した後
-  public event EventHandler<DSFErrorOccuredEventArgs> OnErrorOccured;
 
   /// プロセス間通信用オブジェクト
   private Interprocess Interprocess { get; set; }

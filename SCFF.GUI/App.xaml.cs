@@ -22,7 +22,6 @@
 namespace SCFF.GUI {
 
 using System.Windows;
-using Microsoft.Win32;
 using SCFF.Common;
 using SCFF.Common.GUI;
 using SCFF.Common.Profile;

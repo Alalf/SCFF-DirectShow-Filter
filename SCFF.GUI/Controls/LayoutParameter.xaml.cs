@@ -354,7 +354,7 @@ public partial class LayoutParameter
     // dummyの場合もあり
     var sampleWidth = App.RuntimeOptions.CurrentSampleWidth;
     var sampleHeight = App.RuntimeOptions.CurrentSampleHeight;
-    var isDummy = App.RuntimeOptions.SelectedEntryIndex == -1;
+    var isDummy = !App.RuntimeOptions.IsCurrentProcessIDValid;
 
     this.BoundX.Text =
         StringConverter.GetBoundXString(App.Profile.CurrentView, isDummy, sampleWidth);

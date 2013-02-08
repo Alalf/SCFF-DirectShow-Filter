@@ -673,21 +673,21 @@ public partial class MainWindow
 
   /// @copybrief Commands::SendProfile
   private void OnSendProfile(object sender, ExecutedRoutedEventArgs e) {
-    Debug.Assert(!App.RuntimeOptions.IsEntryListEmpty);
+    Debug.Assert(App.RuntimeOptions.IsCurrentProcessIDValid);
     App.Impl.SendProfile(false, false);
   }
   /// @copybrief Commands::SendProfile
   private void CanSendProfile(object sender, CanExecuteRoutedEventArgs e) {
-    e.CanExecute = !App.RuntimeOptions.IsEntryListEmpty;
+    e.CanExecute = App.RuntimeOptions.IsCurrentProcessIDValid;
   }
   /// @copybrief Commands::SendNullProfile
   private void OnSendNullProfile(object sender, ExecutedRoutedEventArgs e) {
-    Debug.Assert(!App.RuntimeOptions.IsEntryListEmpty);
+    Debug.Assert(App.RuntimeOptions.IsCurrentProcessIDValid);
     App.Impl.SendProfile(false, true);
   }
   /// @copybrief Commands::SendNullProfile
   private void CanSendNullProfile(object sender, CanExecuteRoutedEventArgs e) {
-    e.CanExecute = !App.RuntimeOptions.IsEntryListEmpty;
+    e.CanExecute = App.RuntimeOptions.IsCurrentProcessIDValid;
   }
 
   //-------------------------------------------------------------------

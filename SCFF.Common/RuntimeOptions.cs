@@ -22,7 +22,6 @@ namespace SCFF.Common {
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using SCFF.Common.Ext;
 using SCFF.Interprocess;
 
@@ -51,8 +50,9 @@ public class RuntimeOptions {
     this.LastSavedTimestamp = RuntimeOptions.InvalidTimestamp;
     this.LastAppliedTimestamp = RuntimeOptions.InvalidTimestamp;
 
-    this.SelectedEntryIndex = RuntimeOptions.InvalidSelection;
-    this.EntryList = new List<Entry>();
+    this.CurrentProcessID = 0;
+    this.Entries = new Dictionary<UInt32,InternalEntry>();
+    this.EntryLabels = new List<Tuple<UInt32,string>>();
 
     this.WasAeroOnWhenStartup = false;
   }
@@ -77,12 +77,31 @@ public class RuntimeOptions {
   public Int64 LastAppliedTimestamp { get; set; }
 
   //-------------------------------------------------------------------
+ 
+  /// 現在のプロセスID
+  public UInt32 CurrentProcessID { get; set; }
 
-  /// 現在選択中のエントリ(選択なしは-1)
-  public int SelectedEntryIndex { get; set; }
+  /// Entryは構造体のため、Dictionaryから取り出すごとにコピーが発生する
+  /// これを避けるため、参照型のまま取り扱えるEntryクラスを用意した
+  private class InternalEntry {
+    public InternalEntry(int sampleWidth, int sampleHeight,
+                         ImagePixelFormats samplePixelFormat) {
+      this.SampleWidth = sampleWidth;
+      this.SampleHeight = sampleHeight;
+      this.SamplePixelFormat = samplePixelFormat;
+    }
 
-  /// エントリのリスト
-  private List<Entry> EntryList { get; set; }
+    public int SampleWidth { get; private set; }
+    public int SampleHeight { get; private set; }
+    public ImagePixelFormats SamplePixelFormat { get; private set; }
+    // FPS
+  }
+
+  /// エントリディクショナリ
+  private Dictionary<UInt32,InternalEntry> Entries { get; set; }
+
+  /// エントリの表示用ディクショナリ
+  public List<Tuple<UInt32,string>> EntryLabels { get; private set; }
 
   //-------------------------------------------------------------------
 
@@ -100,10 +119,108 @@ public class RuntimeOptions {
 
   /// Aeroの状態を変更可能か
   public bool CanSetAero {
+    get { return this.CanUseAero && this.WasAeroOnWhenStartup; }
+  }
+
+  //-------------------------------------------------------------------
+
+  /// 現在編集中のプロセスIDが有効か
+  public bool IsCurrentProcessIDValid {
+    get { return this.Entries.ContainsKey(this.CurrentProcessID); }
+  }
+
+  /// 現在選択中のピクセルフォーマット
+  public ImagePixelFormats CurrentSamplePixelFormat {
     get {
-      return this.CanUseAero && this.WasAeroOnWhenStartup;
+      if (!this.IsCurrentProcessIDValid)
+        return ImagePixelFormats.IYUV;
+
+      var entry = this.Entries[this.CurrentProcessID];
+      return entry.SamplePixelFormat;
     }
   }
+  /// 現在選択中のプロセスが要求するサンプル幅
+  public int CurrentSampleWidth {
+    get {
+      if (!this.IsCurrentProcessIDValid)
+        return Constants.DummySampleWidth;
+
+      var entry = this.Entries[this.CurrentProcessID];
+      return entry.SampleWidth;
+    }
+  }
+  /// 現在選択中のプロセスが要求するサンプル高さ
+  public int CurrentSampleHeight {
+    get {
+      if (!this.IsCurrentProcessIDValid)
+        return Constants.DummySampleHeight;
+      
+      var entry = this.Entries[this.CurrentProcessID];
+      return entry.SampleHeight;
+    }
+  }
+
+  //===================================================================
+  // アクセサ
+  //===================================================================
+
+  //-------------------------------------------------------------------
+  // Directory/Entry
+  //-------------------------------------------------------------------
+
+  /// Entryをラベルに変換する
+  private string GetEntryLabel(Entry entry) {
+    var pixelFormatString =
+        Constants.ImagePixelFormatLabels[(ImagePixelFormats)entry.SamplePixelFormat];
+
+    return string.Format("[{0}] {1} ({2} {3}x{4} {5:F0}fps)",
+        entry.ProcessID,
+        entry.ProcessName,
+        pixelFormatString,
+        entry.SampleWidth, entry.SampleHeight,
+        entry.FPS);
+  }
+
+  /// 共有メモリアクセスオブジェクトからDirectoryを読み込む
+  /// @param interprocess プロセス間通信用オブジェクト
+  public void RefreshDirectory(Interprocess interprocess) {
+    // 共有メモリにアクセス
+    var initResult = interprocess.InitDirectory();
+    if (!initResult) return;
+    Directory directory;
+    var getResult = interprocess.GetDirectory(out directory);
+    if (!getResult) return;
+
+    // Entries/EntryLabelsを更新
+    this.Entries.Clear();
+    this.EntryLabels.Clear();
+    foreach (var entry in directory.Entries) {
+      if (entry.ProcessID == 0) continue;
+
+      // InternalEntryの生成と追加
+      var internalEntry = new InternalEntry(
+          entry.SampleWidth, entry.SampleHeight,
+          (ImagePixelFormats)entry.SamplePixelFormat);
+      this.Entries.Add(entry.ProcessID, internalEntry);
+
+      // ラベルの生成と追加
+      var tuple = new Tuple<UInt32,string>(entry.ProcessID, this.GetEntryLabel(entry));
+      this.EntryLabels.Add(tuple);
+    }
+
+    // 現在選択中のプロセスIDがなくなっていた場合
+    if (!this.IsCurrentProcessIDValid && this.Entries.Count > 0) {
+      // 適当に最初の一個を選ぶ
+      foreach (var key in this.Entries.Keys) {
+        this.CurrentProcessID = key;
+        break;
+      }
+    }
+  }
+
+  //-------------------------------------------------------------------
+  // Aero
+  //-------------------------------------------------------------------
 
   /// 起動時のAeroの状態を保存
   public void SaveStartupAeroState() {
@@ -149,99 +266,5 @@ public class RuntimeOptions {
     }
   }
 
-  //-------------------------------------------------------------------
-
-  /// EntryListを文字列化したリスト
-  public List<string> EntryStringList {
-    get {
-      var list = new List<string>();
-      foreach (var entry in this.EntryList) {
-        var pixelFormatString =
-            Constants.ImagePixelFormatLabels[(ImagePixelFormats)entry.SamplePixelFormat];
-
-        var entryString = string.Format("[{0}] {1} ({2} {3}x{4} {5:F0}fps)",
-            entry.ProcessID,
-            entry.ProcessName,
-            pixelFormatString,
-            entry.SampleWidth, entry.SampleHeight,
-            entry.FPS);
-
-        list.Add(entryString);
-      }
-      return list;
-    }
-  }
-
-  /// Directoryが空か
-  public bool IsEntryListEmpty {
-    get { return this.EntryList.Count == 0; }
-  }
-
-  /// 現在選択中のプロセスID
-  public UInt32 CurrentProcessID {
-    get {
-      if (this.IsEntryListEmpty) return 0;
-      return this.EntryList[this.SelectedEntryIndex].ProcessID;
-    }
-  }
-  /// 現在選択中のピクセルフォーマット
-  public ImagePixelFormats CurrentSamplePixelFormat {
-    get {
-      if (this.IsEntryListEmpty) return ImagePixelFormats.IYUV;
-      return (ImagePixelFormats)this.EntryList[this.SelectedEntryIndex].SamplePixelFormat;
-    }
-  }
-  /// 現在選択中のプロセスが要求するサンプル幅
-  public int CurrentSampleWidth {
-    get {
-      if (this.IsEntryListEmpty) return Constants.DummySampleWidth;
-      return this.EntryList[this.SelectedEntryIndex].SampleWidth;
-    }
-  }
-  /// 現在選択中のプロセスが要求するサンプル高さ
-  public int CurrentSampleHeight {
-    get {
-      if (this.IsEntryListEmpty) return Constants.DummySampleHeight;
-      return this.EntryList[this.SelectedEntryIndex].SampleHeight;
-    }
-  }
-
-  //===================================================================
-  // アクセサ
-  //===================================================================
-
-  /// 共有メモリアクセスオブジェクトからDirectoryを読み込む
-  /// @param interprocess プロセス間通信用オブジェクト
-  public void RefreshDirectory(Interprocess interprocess) {
-    // 共有メモリにアクセス
-    var initResult = interprocess.InitDirectory();
-    if (!initResult) return;
-    Directory directory;
-    var getResult = interprocess.GetDirectory(out directory);
-    if (!getResult) return;
-
-    // EntryListを更新
-    this.EntryList.Clear();
-    foreach (var entry in directory.Entries) {
-      if (entry.ProcessID == 0) continue;
-      this.EntryList.Add(entry);
-    }
-
-    // EntrySelectedIndexを更新
-    if (this.IsEntryListEmpty) {
-      this.SelectedEntryIndex = RuntimeOptions.InvalidSelection;
-      return;
-    }
-
-    // SelectedEntryIndexが更新後も有効ならそのまま保持する
-    /// @todo(me) プロセスIDが同じものを選択し続けるほうが正しい動作
-    if (0 <= this.SelectedEntryIndex &&
-        this.SelectedEntryIndex < this.EntryList.Count) {
-      // リストの長さの中に納まっている場合は変更しない
-      // nop
-    } else {
-      this.SelectedEntryIndex = 0;
-    }
-  }
 }
 }   // namespace SCFF.Common

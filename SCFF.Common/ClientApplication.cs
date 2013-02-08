@@ -96,7 +96,7 @@ public class ClientApplication {
   }
 
   private void Profile_OnChanged(object sender, EventArgs e) {
-    if (this.Options.AutoApply && !this.RuntimeOptions.IsEntryListEmpty) {
+    if (this.Options.AutoApply && this.RuntimeOptions.IsCurrentProcessIDValid) {
       this.SendProfile(true, false);
     }
     

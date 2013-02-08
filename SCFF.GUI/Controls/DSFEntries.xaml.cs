@@ -20,6 +20,8 @@
 
 namespace SCFF.GUI.Controls {
 
+using System;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Windows.Controls;
 using SCFF.Common;
@@ -34,6 +36,11 @@ public partial class DSFEntries : UserControl, IBindingRuntimeOptions {
   /// コンストラクタ
   public DSFEntries() {
     InitializeComponent();
+
+    this.ProcessesSource = new ObservableCollection<Tuple<uint,string>>();
+    this.Processes.ItemsSource = this.ProcessesSource;
+    this.Processes.DisplayMemberPath = "Item2";
+    this.Processes.SelectedValuePath = "Item1";
   }
 
   //===================================================================
@@ -69,7 +76,7 @@ public partial class DSFEntries : UserControl, IBindingRuntimeOptions {
   /// Processes: SelectionChanged
   private void Processes_SelectionChanged(object sender, SelectionChangedEventArgs e) {
     if (!this.CanChangeRuntimeOptions) return;
-    App.RuntimeOptions.SelectedEntryIndex = this.Processes.SelectedIndex;
+    App.RuntimeOptions.CurrentProcessID = (UInt32)this.Processes.SelectedValue;
 
     //-----------------------------------------------------------------
     // Notify self
@@ -89,25 +96,27 @@ public partial class DSFEntries : UserControl, IBindingRuntimeOptions {
     this.CanChangeRuntimeOptions = false;
 
     // コンボボックスの更新
-    this.Processes.Items.Clear();
-    foreach (var entryString in App.RuntimeOptions.EntryStringList) {
-      var item = new ComboBoxItem();
-      item.Content = entryString;
-      this.Processes.Items.Add(item.Content);
+    this.ProcessesSource.Clear();
+    foreach (var tuple in App.RuntimeOptions.EntryLabels) {
+      this.ProcessesSource.Add(tuple);
     }
 
     // SelectedIndexの調整
-    if (this.Processes.Items.Count == 0) {
+    if (this.ProcessesSource.Count == 0) {
       this.Processes.IsEnabled = false;
-      this.Processes.SelectedIndex = -1;
     } else {
       this.Processes.IsEnabled = true;
-      Debug.Assert(0 <= App.RuntimeOptions.SelectedEntryIndex &&
-                   App.RuntimeOptions.SelectedEntryIndex < this.Processes.Items.Count);
-      this.Processes.SelectedIndex = App.RuntimeOptions.SelectedEntryIndex;
+      this.Processes.SelectedValue = App.RuntimeOptions.CurrentProcessID;
     }
 
     this.CanChangeRuntimeOptions = true;
   }
+
+  //===================================================================
+  // プロパティ
+  //===================================================================
+
+  /// Processes.ItemsSource用のObservableCollection
+  private ObservableCollection<Tuple<UInt32,string>> ProcessesSource { get; set; }
 }
 }   // namespace SCFF.GUI.Controls

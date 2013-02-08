@@ -126,7 +126,7 @@ public partial class LayoutEdit
   private FormattedText CreateHeader(ILayoutElementView layoutElement,
       Rect boundRect, Brush textBrush) {
     var isCurrent = layoutElement.Index == App.Profile.CurrentIndex;
-    var isDummy = App.RuntimeOptions.SelectedEntryIndex == -1;
+    var isDummy = !App.RuntimeOptions.IsCurrentProcessIDValid;
 
     // Caption
     var header = StringConverter.GetHeaderStringForLayoutEdit(layoutElement,

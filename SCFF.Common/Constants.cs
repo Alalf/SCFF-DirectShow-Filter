@@ -87,7 +87,7 @@ public static class Constants {
   public const double MinHeight = 280.0;
 
   /// Normal: ウィンドウの最大高さ
-  public const double NormalMaxHeight = 545.0;
+  public const double NormalMaxHeight = 550.0;
   /// Compact: ウィンドウの最大高さ
   public const double CompactMaxHeight = 280.0;
   /// NormalLayout/CompactLayout: ウィンドウの最大高さ
@@ -96,12 +96,12 @@ public static class Constants {
   /// Normal: ウィンドウの初期幅
   public const double NormalDefaultWidth = Constants.NoLayoutMinWidth;
   /// Normal: ウィンドウの初期高さ
-  public const double NormalDefaultHeight = 545.0;
+  public const double NormalDefaultHeight = 550.0;
 
   /// NormalLayout: ウィンドウの初期幅
   public const double NormalLayoutDefaultWidth = 730.0;
   /// NormalLayout: ウィンドウの初期高さ
-  public const double NormalLayoutDefaultHeight = 545.0;
+  public const double NormalLayoutDefaultHeight = 550.0;
 
   /// Compact: ウィンドウの初期幅
   public const double CompactDefaultWidth = Constants.NoLayoutMinWidth;
@@ -111,7 +111,7 @@ public static class Constants {
   /// CompactLayout: ウィンドウの初期幅
   public const double CompactLayoutDefaultWidth = 730.0;
   /// CompactLayout: ウィンドウの初期高さ
-  public const double CompactLayoutDefaultHeight = 545.0;
+  public const double CompactLayoutDefaultHeight = 550.0;
   
   //-------------------------------------------------------------------
   // Preview

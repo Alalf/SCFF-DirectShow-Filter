@@ -265,6 +265,5 @@ public class RuntimeOptions {
       this.SetAeroOff();
     }
   }
-
 }
 }   // namespace SCFF.Common

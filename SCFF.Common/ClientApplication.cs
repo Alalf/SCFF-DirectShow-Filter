@@ -320,7 +320,7 @@ public class ClientApplication {
         if (handler != null) handler(this, args);
       }
       // モニターを解除
-      this.DSFMonitor.Cleanup(processID);
+      this.DSFMonitor.RemoveZombie(processID);
       return false;
     }
 
@@ -367,7 +367,7 @@ public class ClientApplication {
 
   public void RefreshDirectory() {
     this.RuntimeOptions.RefreshDirectory(this.Interprocess);
-    this.DSFMonitor.CleanupAll();
+    this.DSFMonitor.RemoveZombies();
   }
 
   public void SetAero() {

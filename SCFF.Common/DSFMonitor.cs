@@ -34,17 +34,10 @@ public class DSFMonitor {
 
   /// コンストラクタ
   public DSFMonitor(Interprocess interprocess) {
-    this.SharedLock = new Object();
     this.Interprocess = interprocess;
-    this.MonitoredDSFs = new HashSet<UInt32>();
+    this.MonitoredDSFs = new Dictionary<UInt32,Task>();
 
     this.Interprocess.InitShutdownEvent();
-  }
-
-  /// デストラクタ
-  ~DSFMonitor() {
-    // 念のため
-    this.Interprocess.SetShutdownEvent();
   }
 
   //===================================================================
@@ -53,63 +46,84 @@ public class DSFMonitor {
  
   /// 監視スタート
   public void Start(UInt32 processID) {
-    lock (this.SharedLock) {
-      if (this.MonitoredDSFs.Contains(processID)) {
-        // 既に監視中なので何もしない
-        return;
+    // すでに監視中でTaskがまだ生きている場合は何もしない
+    if (this.MonitoredDSFs.ContainsKey(processID) &&
+        !this.MonitoredDSFs[processID].IsCompleted) return;
+
+    // Task生成
+    var task = new Task(() => {
+      // 監視開始
+      Debug.WriteLine("Start Task: " + processID, "DSFMonitor");
+
+      // 開始前に一回Eventをクリアしておく
+      this.Interprocess.CheckErrorEvent(processID);
+
+      // エラーが起きるまで待機
+      /// @todo(me) ここまでに他のスレッドでInitErrorEventが呼ばれるとおかしなことになる
+      var dsfErrorOccured = this.Interprocess.WaitUntilErrorEventOccured(processID);
+      if (dsfErrorOccured) {
+        // Event: DSFErrorOccured
+        var args = new DSFErrorOccuredEventArgs(processID);
+        var handler = this.OnErrorOccured;
+        if (handler != null) handler(this, args);
       }
-      Debug.WriteLine("Creating Task: " + processID, "DSFMonitor");
 
-      var task = Task.Factory.StartNew(() => {
-        // 監視開始
-        this.Interprocess.InitErrorEvent(processID);
-        // 監視前にチェックしてシグナル状態を解除
-        this.Interprocess.CheckErrorEvent();
+      // 監視終了
+      Debug.WriteLine("End Task: " + processID, "DSFMonitor");
+    });
 
-        var dsfErrorOccured = this.Interprocess.WaitUntilErrorEventOccured();
-        if (dsfErrorOccured) {
-          // Event: DSFErrorOccured
-          var args = new DSFErrorOccuredEventArgs(processID);
-          var handler = this.OnErrorOccured;
-          if (handler != null) handler(this, args);
-        }
-        lock (this.SharedLock) {
-          Debug.WriteLine("Removing Task: " + processID, "DSFMonitor");
-          this.MonitoredDSFs.Remove(processID);
-        }
-      });
-      // 監視中リストに追加
-      this.MonitoredDSFs.Add(processID);
+    // 監視中リストに追加
+    // ValueはIsCompletedであることが保障されているので上書き可能
+    this.MonitoredDSFs[processID] = task;
+
+    // Taskの実行
+    task.Start();
+  }
+
+  /// 死んだプロセスの監視Taskを削除
+  public void RemoveZombies() {
+    var removeList = new List<UInt32>();
+    foreach (var kv in this.MonitoredDSFs) {
+      // プロセスがまだ実行中なら消去の必要はない
+      if (Utilities.IsProcessAlive(kv.Key)) continue;
+
+      // WaitOneを強制解除してTaskの終了を待つ
+      Debug.WriteLine("Removing Zombie: " + kv.Key, "DSFMonitor");
+      this.Interprocess.SetErrorEvent(kv.Key);
+      kv.Value.Wait();
+      removeList.Add(kv.Key);
+    }
+
+    // MonitoredDSFsの更新
+    foreach (var processID in removeList) {
+      Debug.WriteLine("Removing Task: " + processID, "DSFMonitor");
+      this.MonitoredDSFs.Remove(processID);
     }
   }
 
-  /// 監視リストをチェックして必要の無くなったtaskを終了させておく
-  public void CleanupAll() {
-    lock (this.SharedLock) {
-      foreach (var processID in this.MonitoredDSFs) {
-        if (Utilities.IsProcessAlive(processID)) continue;
-        Debug.WriteLine("Cleanup: " + processID, "DSFMonitor");
-        this.Interprocess.InitErrorEvent(processID);
-        // WaitOneを解除
-        this.Interprocess.SetErrorEvent();
-      }
-    }
+  /// 死んだプロセスを明示的に削除
+  public void RemoveZombie(UInt32 processID) {
+    Debug.Assert(!Utilities.IsProcessAlive(processID));
+
+    // WaitOneを強制解除してTaskの終了を待つ
+    Debug.WriteLine("Removing Zombie: " + processID, "DSFMonitor");
+    this.Interprocess.SetErrorEvent(processID);
+    this.MonitoredDSFs[processID].Wait();
+
+    // MonitoredDSFsの更新
+    Debug.WriteLine("Removing Task: " + processID, "DSFMonitor");
+    this.MonitoredDSFs.Remove(processID);
   }
 
-  /// 一つだけTaskを終了させる
-  public void Cleanup(UInt32 processID) {
-    lock (this.SharedLock) {
-      Debug.Assert(!Utilities.IsProcessAlive(processID));
-      Debug.WriteLine("Cleanup: " + processID, "DSFMonitor");
-      this.Interprocess.InitErrorEvent(processID);
-      // WaitOneを解除
-      this.Interprocess.SetErrorEvent();
-    }
-  }
-
+  /// 全てのTaskの終了を待機
   public void Exit() {
     Debug.WriteLine("Exit", "DSFMonitor");
     this.Interprocess.SetShutdownEvent();
+    foreach (var kv in this.MonitoredDSFs) {
+      kv.Value.Wait();
+    }
+    // MonitoredDSFsの更新
+    this.MonitoredDSFs.Clear();
   }
 
   //===================================================================
@@ -123,13 +137,10 @@ public class DSFMonitor {
   // プロパティ
   //===================================================================
 
-  /// 共有ロック
-  private Object SharedLock { get; set; }
-
   /// プロセス間通信用オブジェクト
   private Interprocess Interprocess { get; set; }
 
   /// 監視中のDirectShow Filter
-  private HashSet<UInt32> MonitoredDSFs { get; set; }
+  private Dictionary<UInt32,Task> MonitoredDSFs { get; set; }
 }
 }

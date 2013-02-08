@@ -154,7 +154,7 @@ public static class Constants {
 
   /// ImagePixelFormats->ImagePixelFormatsの名前
   public static readonly Dictionary<ImagePixelFormats,string> ImagePixelFormatLabels
-    = new Dictionary<ImagePixelFormats,string> {
+      = new Dictionary<ImagePixelFormats,string> {
     {ImagePixelFormats.InvalidPixelFormat, "InvalidPixelFormat"},
     {ImagePixelFormats.I420, "I420"},
     {ImagePixelFormats.IYUV, "IYUV"},
@@ -169,51 +169,20 @@ public static class Constants {
   // ResizeMethod
   //-------------------------------------------------------------------
 
-  /// Index->ResizeMethodの名前
-  public static readonly string[] ResizeMethodLabels = new string[] {
-    "FastBilinear (fast bilinear)",
-    "Bilinear (bilinear)",
-    "Bicubic (bicubic)",
-    "X (experimental)",
-    "Point (nearest neighbor)",
-    "Area (averaging area)",
-    "Bicublin (luma bicubic, chroma bilinear)",
-    "Gauss (gaussian)",
-    "Sinc (sinc)",
-    "Lanczos (lanczos)",
-    "Spline (natural bicubic spline)"
-  };
-
-  /// Index->SWScaleFlags
-  public static readonly SWScaleFlags[] ResizeMethodArray =
-      new SWScaleFlags[] {
-    SWScaleFlags.FastBilinear,
-    SWScaleFlags.Bilinear,
-    SWScaleFlags.Bicubic,
-    SWScaleFlags.X,
-    SWScaleFlags.Point,
-    SWScaleFlags.Area,
-    SWScaleFlags.Bicublin,
-    SWScaleFlags.Gauss,
-    SWScaleFlags.Sinc,
-    SWScaleFlags.Lanczos,
-    SWScaleFlags.Spline,
-  };
-
-  /// SWScaleFlags->Index
-  public static readonly Dictionary<SWScaleFlags,int> ResizeMethodIndexes =
-      new Dictionary<SWScaleFlags,int> {
-    {SWScaleFlags.FastBilinear, 0},
-    {SWScaleFlags.Bilinear, 1},
-    {SWScaleFlags.Bicubic, 2},
-    {SWScaleFlags.X, 3},
-    {SWScaleFlags.Point, 4},
-    {SWScaleFlags.Area, 5},
-    {SWScaleFlags.Bicublin, 6},
-    {SWScaleFlags.Gauss, 7},
-    {SWScaleFlags.Sinc, 8},
-    {SWScaleFlags.Lanczos, 9},
-    {SWScaleFlags.Spline, 10}
+  /// SWScaleFlags->SWScaleFlagsの名前
+  public static readonly Dictionary<SWScaleFlags,string> SWScaleFlagLabels
+      = new Dictionary<SWScaleFlags,string> {
+    {SWScaleFlags.FastBilinear, "FastBilinear (fast bilinear)"},
+    {SWScaleFlags.Bilinear,     "Bilinear (bilinear)"},
+    {SWScaleFlags.Bicubic,      "Bicubic (bicubic)"},
+    {SWScaleFlags.X,            "X (experimental)"},
+    {SWScaleFlags.Point,        "Point (nearest neighbor)"},
+    {SWScaleFlags.Area,         "Area (averaging area)"},
+    {SWScaleFlags.Bicublin,     "Bicublin (luma bicubic, chroma bilinear)"},
+    {SWScaleFlags.Gauss,        "Gauss (gaussian)"},
+    {SWScaleFlags.Sinc,         "Sinc (sinc)"},
+    {SWScaleFlags.Lanczos,      "Lanczos (lanczos)"},
+    {SWScaleFlags.Spline,       "Spline (natural bicubic spline)"}
   };
 }
 }   // namespace SCFF.Common

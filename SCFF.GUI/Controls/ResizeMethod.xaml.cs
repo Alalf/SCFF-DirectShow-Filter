@@ -41,12 +41,9 @@ public partial class ResizeMethod : UserControl, IBindingProfile {
     InitializeComponent();
 
     // SWScaleFlags
-    this.SWScaleFlags.Items.Clear();
-    foreach (var method in Constants.ResizeMethodLabels) {
-      var item = new ComboBoxItem();
-      item.Content = method;
-      this.SWScaleFlags.Items.Add(item);
-    }
+    this.SWScaleFlags.ItemsSource = Constants.SWScaleFlagLabels;
+    this.SWScaleFlags.SelectedValuePath = "Key";
+    this.SWScaleFlags.DisplayMemberPath = "Value";
 
     // HACK!: PlacementTargetが上手く動かないのでここで設定する
     this.SetPlacementTarget(SWScale.LumaGBlur);
@@ -329,7 +326,7 @@ public partial class ResizeMethod : UserControl, IBindingProfile {
   /// SWScaleFlags: SelectionChanged
   private void SWScaleFlags_SelectionChanged(object sender, SelectionChangedEventArgs e) {
     if (!this.CanChangeProfile) return;
-    var flags = Constants.ResizeMethodArray[this.SWScaleFlags.SelectedIndex];
+    var flags = (Interprocess.SWScaleFlags)this.SWScaleFlags.SelectedValue;
 
     App.Profile.Current.Open();
     App.Profile.Current.SetSWScaleFlags = flags;
@@ -405,9 +402,7 @@ public partial class ResizeMethod : UserControl, IBindingProfile {
     this.CanChangeProfile = false;
     this.SWScaleAccurateRnd.IsChecked = App.Profile.CurrentView.SWScaleAccurateRnd;
     this.SWScaleIsFilterEnabled.IsChecked = App.Profile.CurrentView.SWScaleIsFilterEnabled;
-
-    var index = Constants.ResizeMethodIndexes[App.Profile.CurrentView.SWScaleFlags];
-    this.SWScaleFlags.SelectedIndex = index;
+    this.SWScaleFlags.SelectedValue = App.Profile.CurrentView.SWScaleFlags;
     this.SWScaleLumaGBlur.Text = StringConverter.GetSWScaleLumaGBlurString(App.Profile.CurrentView);
     this.SWScaleLumaSharpen.Text = StringConverter.GetSWScaleLumaSharpenString(App.Profile.CurrentView);
     this.SWScaleChromaHShift.Text = StringConverter.GetSWScaleChromaHShiftString(App.Profile.CurrentView);

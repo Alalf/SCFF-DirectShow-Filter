@@ -254,11 +254,6 @@ class Interprocess {
   /// Messageの初期化が成功したか
   bool IsMessageInitialized();
 
-  /// ErrorEvent初期化
-  bool InitErrorEvent(uint32_t process_id);
-  /// ErrorEventの初期化が成功したか
-  bool IsErrorEventInitialized();
-
   /// ShutdownEvent初期化
   bool InitShutdownEvent();
   /// ShutdownEventの初期化が成功したか
@@ -275,7 +270,7 @@ class Interprocess {
   /// @pre 事前にInitMessageが実行されている必要がある
   bool ReceiveMessage(Message *message);
   /// エラーイベントをシグナル状態にする
-  bool SetErrorEvent();
+  bool SetErrorEvent(uint32_t process_id);
   //-------------------------------------------------------------------
 
   /// ディレクトリを取得する
@@ -284,9 +279,9 @@ class Interprocess {
   /// @pre 事前にInitMessageが実行されている必要がある
   bool SendMessage(const Message &message);
   /// エラーイベントがシグナル状態か
-  bool CheckErrorEvent();
+  bool CheckErrorEvent(uint32_t process_id);
   /// エラーイベントを待機する
-  bool WaitUntilErrorEventOccured();
+  bool WaitUntilErrorEventOccured(uint32_t process_id);
   /// シャットダウンイベントをシグナル状態にする
   bool SetShutdownEvent();
 
@@ -295,10 +290,13 @@ class Interprocess {
   void ReleaseDirectory();
   /// Message解放
   void ReleaseMessage();
-  /// ErrorEvent解放
-  void ReleaseErrorEvent();
   /// ShutdownEvent解放
   void ReleaseShutdownEvent();
+
+  // Event初期化
+  HANDLE CreateErrorEvent(uint32_t process_id); 
+  // Event解放
+  void ReleaseErrorEvent(HANDLE error_event);
 
   /// 共有メモリ: Directory
   HANDLE directory_;
@@ -313,9 +311,6 @@ class Interprocess {
   LPVOID view_of_message_;
   /// Mutex: Message
   HANDLE mutex_message_;
-
-  /// イベント: ErrorEvent
-  HANDLE error_event_;
 
   /// イベント: ShutdownEvent
   HANDLE shutdown_event_;

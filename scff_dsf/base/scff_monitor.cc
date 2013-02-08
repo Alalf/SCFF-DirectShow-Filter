@@ -30,7 +30,8 @@
 //=====================================================================
 
 SCFFMonitor::SCFFMonitor()
-    : last_polling_clock_(-1),          // ありえない値
+    : process_id_(GetCurrentProcessId()),
+      last_polling_clock_(-1),          // ありえない値
       last_message_timestamp_(-1LL),    // ありえない値
       last_layout_error_state_(false) { ///< @attention Splash状態がスタートだがエラーなし扱い
   MyDbgLog((LOG_MEMORY, kDbgNewDelete, TEXT("NEW SCFFMonitor")));
@@ -38,25 +39,20 @@ SCFFMonitor::SCFFMonitor()
 
 SCFFMonitor::~SCFFMonitor() {
   MyDbgLog((LOG_MEMORY, kDbgNewDelete, TEXT("DELETE SCFFMonitor")));
-  // プロセスIDの取得
-  const DWORD process_id = GetCurrentProcessId();
-  interprocess_.RemoveEntry(process_id);
+  interprocess_.RemoveEntry(process_id_);
 }
 
 bool SCFFMonitor::Init(scff_imaging::ImagePixelFormats pixel_format,
                        int width, int height, double fps) {
-  // プロセスIDの取得
-  const DWORD process_id = GetCurrentProcessId();
-
   // interprocessオブジェクトの初期化
   const bool success_directory = interprocess_.InitDirectory();
-  const bool success_message = interprocess_.InitMessage(process_id);
-  const bool success_error_event = interprocess_.InitErrorEvent(process_id);
-  ASSERT(success_directory && success_message && success_error_event);
+  const bool success_message = interprocess_.InitMessage(process_id_);
+  const bool success_shutdown_event = interprocess_.InitShutdownEvent();
+  ASSERT(success_directory && success_message && success_shutdown_event);
 
   // エントリの追加
   scff_interprocess::Entry entry;
-  entry.process_id = process_id;
+  entry.process_id = process_id_;
   GetModuleBaseNameA(
       GetCurrentProcess(),
       nullptr,
@@ -87,7 +83,7 @@ void SCFFMonitor::CheckLayoutError(scff_imaging::ErrorCodes error_code) {
       if (!last_layout_error_state_) {
         // 非エラー→エラーに切り替わったときにシグナル状態にする
         MyDbgLog((LOG_ERROR, kDbgImportant, TEXT("SCFFMonitor: Raise Error Event")));
-        interprocess_.SetErrorEvent();
+        interprocess_.SetErrorEvent(process_id_);
       }
       last_layout_error_state_ = true;
       break;

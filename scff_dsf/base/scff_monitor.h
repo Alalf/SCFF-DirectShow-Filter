@@ -47,6 +47,9 @@ class SCFFMonitor {
   void ReleaseRequest(scff_imaging::Request *request);
 
  private:
+  /// プロセスID
+  const DWORD process_id_;
+
   /// プロセス間通信のためのインスタンス
   scff_interprocess::Interprocess interprocess_;
 

@@ -38,7 +38,6 @@ Interprocess::Interprocess()
       message_(nullptr),
       view_of_message_(nullptr),
       mutex_message_(nullptr),
-      error_event_(nullptr),
       shutdown_event_(nullptr) {
   // nop
   OutputDebugString(TEXT("****Interprocess: NEW\n"));
@@ -47,7 +46,6 @@ Interprocess::Interprocess()
 Interprocess::~Interprocess() {
   OutputDebugString(TEXT("****Interprocess: DELETE\n"));
   // 解放忘れがないように
-  ReleaseErrorEvent();
   ReleaseShutdownEvent();
   ReleaseMessage();
   ReleaseDirectory();
@@ -237,10 +235,7 @@ void Interprocess::ReleaseMessage() {
 
 //---------------------------------------------------------------------
 
-bool Interprocess::InitErrorEvent(uint32_t process_id) {
-  // 念のため解放
-  ReleaseErrorEvent();
-
+HANDLE Interprocess::CreateErrorEvent(uint32_t process_id) {
   // イベントの名前
   TCHAR error_event_name[256];
   ZeroMemory(error_event_name, sizeof(error_event_name));
@@ -249,34 +244,21 @@ bool Interprocess::InitErrorEvent(uint32_t process_id) {
               kErrorEventNamePrefix, process_id);
             
   // イベント(ErrorEvent<process_id>)の作成
-  HANDLE tmp_error_event = CreateEvent(nullptr, FALSE, FALSE, error_event_name);
-  if (tmp_error_event == nullptr) {
-    // イベント作成失敗
-    return false;
-  }
-  DWORD error_create_event = GetLastError();
+  HANDLE error_event = CreateEvent(nullptr, FALSE, FALSE, error_event_name);
 
+  // イベント作成失敗
+  // if (error_event == nullptr) return nullptr;
+  
   // 最初にEventを作成した場合は…なにもしなくていい
-  if (error_create_event != ERROR_ALREADY_EXISTS) {
-    // nop
-  }
+  // DWORD error_create_event = GetLastError();
+  // if (error_create_event != ERROR_ALREADY_EXISTS) ;
 
-  // メンバ変数に設定
-  error_event_ = tmp_error_event;
-
-  OutputDebugString(TEXT("****Interprocess: InitErrorEvent Done\n"));
-  return true;
+  OutputDebugString(TEXT("****Interprocess: CreateErrorEvent Done\n"));
+  return error_event;
 }
 
-bool Interprocess::IsErrorEventInitialized() {
-  return error_event_ != nullptr;
-}
-
-void Interprocess::ReleaseErrorEvent() {
-  if (error_event_ != nullptr) {
-    CloseHandle(error_event_);
-    error_event_ = nullptr;
-  }
+void Interprocess::ReleaseErrorEvent(HANDLE error_event) {
+  if (error_event != nullptr) CloseHandle(error_event);
 }
 
 //---------------------------------------------------------------------
@@ -287,10 +269,9 @@ bool Interprocess::InitShutdownEvent() {
             
   // イベント(ShutdownEvent)の作成
   HANDLE tmp_shutdown_event = CreateEvent(nullptr, TRUE, FALSE, nullptr);
-  if (tmp_shutdown_event == nullptr) {
-    // イベント作成失敗
-    return false;
-  }
+
+  // イベント作成失敗
+  if (tmp_shutdown_event == nullptr) return false;
 
   // メンバ変数に設定
   shutdown_event_ = tmp_shutdown_event;
@@ -398,19 +379,11 @@ bool Interprocess::ReceiveMessage(Message *message) {
   return true;
 }
 
-bool Interprocess::CheckErrorEvent() {
-  // 初期化されていなければ失敗
-  if (!IsErrorEventInitialized()) {
-    OutputDebugString(TEXT("****Interprocess: CheckErrorEvent FAILED\n"));
-    return false;
-  }
+bool Interprocess::SetErrorEvent(uint32_t process_id) {
+  HANDLE error_event = CreateErrorEvent(process_id);
 
-  return WaitForSingleObject(error_event_, 0) == WAIT_OBJECT_0;
-}
-
-bool Interprocess::SetErrorEvent() {
-  // 初期化されていなければ失敗
-  if (!IsErrorEventInitialized()) {
+  // イベント作成失敗
+  if (error_event == nullptr) {
     OutputDebugString(TEXT("****Interprocess: SetErrorEvent FAILED\n"));
     return false;
   }
@@ -418,7 +391,9 @@ bool Interprocess::SetErrorEvent() {
   OutputDebugString(TEXT("****Interprocess: SetErrorEvent\n"));
 
   // シグナルを送る
-  BOOL error_set_event = SetEvent(error_event_);
+  BOOL error_set_event = SetEvent(error_event);
+  ReleaseErrorEvent(error_event);
+
   if (!error_set_event) {
     OutputDebugString(TEXT("****Interprocess: SetErrorEvent FAILED\n"));
     return false;
@@ -471,9 +446,27 @@ bool Interprocess::SendMessage(const Message &message) {
   return true;
 }
 
-bool Interprocess::WaitUntilErrorEventOccured() {
-  // 初期化されていなければ失敗
-  if (!IsErrorEventInitialized()) {
+bool Interprocess::CheckErrorEvent(uint32_t process_id) {
+  HANDLE error_event = CreateErrorEvent(process_id);
+  // イベント作成失敗
+  if (error_event == nullptr) {
+    OutputDebugString(TEXT("****Interprocess: CheckErrorEvent FAILED\n"));
+    return false;
+  }
+
+  OutputDebugString(TEXT("****Interprocess: CheckErrorEvent\n"));
+  
+  // 状態をチェックする（同時に非シグナル状態になる）
+  bool result = WaitForSingleObject(error_event, 0) == WAIT_OBJECT_0;
+  ReleaseErrorEvent(error_event);
+
+  return result;
+}
+
+bool Interprocess::WaitUntilErrorEventOccured(uint32_t process_id) {
+  HANDLE error_event = CreateErrorEvent(process_id);
+  // イベント作成失敗
+  if (error_event == nullptr) {
     OutputDebugString(TEXT("****Interprocess: WaitUntilErrorEventOccured FAILED\n"));
     return false;
   }
@@ -481,13 +474,12 @@ bool Interprocess::WaitUntilErrorEventOccured() {
   OutputDebugString(TEXT("****Interprocess: WaitUntilErrorEventOccured\n"));
 
   // シグナル状態になるまで待機
-  const HANDLE events[] = {error_event_, shutdown_event_};
+  const HANDLE events[] = {error_event, shutdown_event_};
   const int signaled_event_index = WaitForMultipleObjects(2, events, FALSE, INFINITE);
-  if (signaled_event_index != 0) {
-    // エラー以外のイベントが起きた場合は失敗
-    OutputDebugString(TEXT("****Interprocess: WaitUntilErrorEventOccured FAILED\n"));
-    return false;
-  }
+  ReleaseErrorEvent(error_event);
+
+  // エラー以外のイベントが起きた場合=Shutdownなら失敗(エラー表示なし)で戻る
+  if (signaled_event_index != 0) return false;
 
   return true;
 }

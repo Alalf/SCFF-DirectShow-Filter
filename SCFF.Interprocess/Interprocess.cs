@@ -495,6 +495,31 @@ public class Interprocess {
   }
 
   //===================================================================
+  // ErrorEvent
+  //===================================================================
+
+  private EventWaitHandle CreateErrorEvent(UInt32 processID) {
+    // イベントの名前
+    string errorEventName = ErrorEventNamePrefix + processID;
+    
+    // イベント(ErrorEvent<ProcessID>)の作成
+    bool createdNew;
+    var errorEvent = new EventWaitHandle(false,
+        EventResetMode.AutoReset, errorEventName, out createdNew);
+       
+    // イベント作成失敗
+    // if (errorEvent == null) return null;
+
+    // 最初にEventを作成した場合は…なにもしなくていい
+    // if (createdNew) ;
+
+    Trace.WriteLine("****Interprocess: CreateErrorEvent Done");
+    return errorEvent;
+  }
+
+  // ReleaseErrorEventはCsharpではusingがあるので必要ない
+
+  //===================================================================
   // ShutdownEvent
   //===================================================================
 
@@ -640,22 +665,19 @@ public class Interprocess {
 
   /// エラーイベントをシグナル状態にする
   public bool SetErrorEvent(UInt32 processID) {
-    // イベント(ErrorEvent<process_id>)の作成
-    string errorEventName = ErrorEventNamePrefix + processID;
-    bool createdNew;
-    using (var errorEvent = new EventWaitHandle(false,
-        EventResetMode.AutoReset, errorEventName, out createdNew)) {
+    using (var errorEvent = CreateErrorEvent(processID)) {
       // イベント作成失敗
-      if (errorEvent == null) return false;
-      // 最初にEventを作成した場合は…なにもしなくていい
-      // if (createdNew) ;
+      if (errorEvent == null) {
+        Trace.WriteLine("****Interprocess: SetErrorEvent FAILED");
+        return false;
+      }
 
-      Trace.WriteLine("****Interprocess: SetErrorEvent: " + processID);
+      Trace.WriteLine("****Interprocess: SetErrorEvent");
 
       // シグナルを送る
       var errorSetEvent = errorEvent.Set();
       if (!errorSetEvent) {
-        Trace.WriteLine("****Interprocess: SetErrorEvent FAILED: " + processID);
+        Trace.WriteLine("****Interprocess: SetErrorEvent FAILED");
         return false;
       }
 
@@ -716,51 +738,38 @@ public class Interprocess {
 
   /// エラーイベントがシグナル状態か
   public bool CheckErrorEvent(UInt32 processID) {
-    // イベント(ErrorEvent<process_id>)の作成
-    string errorEventName = ErrorEventNamePrefix + processID;
-    bool createdNew;
-    using (var errorEvent = new EventWaitHandle(false,
-        EventResetMode.AutoReset, errorEventName, out createdNew)) {
+    using (var errorEvent = this.CreateErrorEvent(processID)) {
       // イベント作成失敗
       if (errorEvent == null) {
-        Trace.WriteLine("****Interprocess: CheckErrorEvent FAILED: " + processID);
+        Trace.WriteLine("****Interprocess: CheckErrorEvent FAILED");
         return false;
       }
-      // 最初にEventを作成した場合は…なにもしなくていい
-      // if (createdNew) ;
 
-      Trace.WriteLine("****Interprocess: CheckErrorEvent: " + processID);
+      Trace.WriteLine("****Interprocess: CheckErrorEvent");
 
-      // 状態をチェックする
+      // 状態をチェックする（同時に非シグナル状態になる）
       return errorEvent.WaitOne(0);
     }
   }
 
   /// エラーイベントを待機する
   public bool WaitUntilErrorEventOccured(UInt32 processID) {
-    // イベント(ErrorEvent<process_id>)の作成
-    string errorEventName = ErrorEventNamePrefix + processID;
-    bool createdNew;
-    using (var errorEvent = new EventWaitHandle(false,
-        EventResetMode.AutoReset, errorEventName, out createdNew)) {
+    using (var errorEvent = this.CreateErrorEvent(processID)) {
       // イベント作成失敗
       if (errorEvent == null) {
         Trace.WriteLine("****Interprocess: WaitUntilErrorEventOccured FAILED: " + processID);
         return false;
       }
-      // 最初にEventを作成した場合は…なにもしなくていい
-      // if (createdNew) ;
 
       Trace.WriteLine("****Interprocess: WaitUntilErrorEventOccured: " + processID);
 
       // シグナル状態になるまで待機
       var events = new WaitHandle[] { errorEvent, this.shutdownEvent };
       var signaledEventIndex = WaitHandle.WaitAny(events, Timeout.Infinite);
-      if (signaledEventIndex != 0) {
-        // エラー以外のイベントが起きた場合は失敗
-        Trace.WriteLine("****Interprocess: WaitUntilErrorEventOccured FAILED: " + processID);
-        return false;
-      }
+
+      // エラー以外のイベントが起きた場合=Shutdownなら失敗(エラー表示なし)で戻る
+      if (signaledEventIndex != 0) return false;
+
       return true;
     }
   }

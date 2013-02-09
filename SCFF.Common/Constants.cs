@@ -120,7 +120,7 @@ public static class Constants {
   /// プロセスエントリが見つからないときのサンプルの幅
   public const int DummySampleWidth = 640;
   /// プロセスエントリが見つからないときのサンプルの高さ
-  public const int DummySampleHeight = 400;
+  public const int DummySampleHeight = 360;
 
   //-------------------------------------------------------------------
   // Options

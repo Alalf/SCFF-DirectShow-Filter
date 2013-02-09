@@ -64,6 +64,7 @@ public partial class Profile {
   // LayoutElementsの一括更新
   //===================================================================
 
+  /// 全てのレイアウト要素のBackupParametersを更新する
   public void UpdateBackupParameters() {
     for (int i = 0; i < this.LayoutElementCount; ++i) {
       var layoutElement = this.layoutElements[i];
@@ -72,6 +73,7 @@ public partial class Profile {
       layoutElement.UpdateBackupParameters();
     }
   }
+  /// 全てのレイアウト要素のBackupParametersを復元する
   public void RestoreBackupParameters() {
     for (int i = 0; i < this.LayoutElementCount; ++i) {
       var layoutElement = this.layoutElements[i];

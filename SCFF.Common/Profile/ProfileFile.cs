@@ -42,7 +42,6 @@ public class ProfileFile : TinyKeyValueFile {
   //===================================================================
 
   /// ファイル出力
-  /// @param profile 保存するProfile
   /// @param path 保存先
   /// @return 保存が成功したか
   public override bool WriteFile(string path) {
@@ -307,6 +306,9 @@ public class ProfileFile : TinyKeyValueFile {
   //===================================================================
 
   /// valueをRotateDirectionsで取得
+  /// @param key Key
+  /// @param value RotateDirections型に変換されたValue
+  /// @return 取得成功
   private bool TryGetRotateDirections(string key, out RotateDirections value) {
     int internalValue;
     if (this.TryGetInt(key, out internalValue)) {
@@ -326,6 +328,9 @@ public class ProfileFile : TinyKeyValueFile {
   }
 
   /// valueをSWScaleFlagsで取得
+  /// @param key Key
+  /// @param value SWScaleFlags型に変換されたValue
+  /// @return 取得成功
   private bool TryGetSWScaleFlags(string key, out SWScaleFlags value) {
     int internalValue;
     if (this.TryGetInt(key, out internalValue)) {
@@ -352,6 +357,9 @@ public class ProfileFile : TinyKeyValueFile {
   }
 
   /// valueをWindowTypesで取得
+  /// @param key Key
+  /// @param value WindowTypes型に変換されたValue
+  /// @return 取得成功
   private bool TryGetWindowTypes(string key, out WindowTypes value) {
     int internalValue;
     if (this.TryGetInt(key, out internalValue)) {

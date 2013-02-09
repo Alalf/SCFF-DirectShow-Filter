@@ -200,8 +200,7 @@ public static class BoundRelativeInputCorrector {
 
   /// レイアウト要素のBoundRelative領域を訂正する
   /// @param layoutElement レイアウト要素
-  /// @param[out] changed 変更後、制約を満たす形に訂正されたBoundRelative領域
-  /// @return 試行結果（訂正箇所）
+  /// @return 制約を満たす形に訂正されたBoundRelative領域
   public static RelativeLTRB Correct(ILayoutElementView layoutElement) {
     // 準備
     var left = layoutElement.BoundRelativeLeft;

@@ -80,7 +80,9 @@ public partial class App : Application {
   // SCFF.Common.ClientApplicationイベントハンドラ
   //===================================================================
 
-  /// @copydoc SCFF::Common::ClientApplication::OnStartupErrorOccured
+  /// @copybrief SCFF::Common::ClientApplication::OnStartupErrorOccured
+  /// @param[in] sender 使用しない
+  /// @param[in] e エラー表示用のデータが格納されたオブジェクト
   private static void OnStartupErrorOccured(object sender, ErrorOccuredEventArgs e) {
     if (e.Quiet) return;
     MessageBox.Show(e.Message, "SCFF.GUI",
@@ -88,7 +90,9 @@ public partial class App : Application {
                     MessageBoxImage.Error);
   }
 
-  /// @copydoc SCFF::Common::ClientApplication::OnDSFErrorOccured
+  /// @copybrief SCFF::Common::ClientApplication::OnDSFErrorOccured
+  /// @param[in] sender 使用しない
+  /// @param[in] e エラー表示用のデータが格納されたオブジェクト
   private static void OnDSFErrorOccured(object sender, ErrorOccuredEventArgs e) {
     if (e.Quiet) return;
     /// @todo(me) 最前面に表示する方法を調べる

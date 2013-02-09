@@ -75,7 +75,9 @@ public partial class MainWindow
   // SCFF.Common.ClientApplicationイベントハンドラ
   //===================================================================
 
-  /// @copydoc SCFF::Common::ClientApplication::OnErrorOccured
+  /// @copybrief SCFF::Common::ClientApplication::OnErrorOccured
+  /// @param[in] sender 使用しない
+  /// @param[in] e エラー表示用のデータが格納されたオブジェクト
   private void OnErrorOccured(object sender, ErrorOccuredEventArgs e) {
     if (e.Quiet) return;
     MessageBox.Show(e.Message, "SCFF.GUI",
@@ -83,7 +85,9 @@ public partial class MainWindow
                     MessageBoxImage.Error);
   }
 
-  /// @copydoc SCFF::Common::ClientApplication::OnProfileChanged
+  /// @copybrief SCFF::Common::ClientApplication::OnProfileChanged
+  /// @param[in] sender 使用しない
+  /// @param[in] e 使用しない
   void OnProfileChanged(object sender, System.EventArgs e) {
     //-----------------------------------------------------------------
     // Notify self
@@ -93,7 +97,9 @@ public partial class MainWindow
     //-----------------------------------------------------------------
   }
 
-  /// @copydoc SCFF::Common::ClientApplication::OnClosingProfile
+  /// @copybrief SCFF::Common::ClientApplication::OnClosingProfile
+  /// @param[in] sender 使用しない
+  /// @param[in,out] e e.Actionに動作を指定する
   void OnClosingProfile(object sender, ClosingProfileEventArgs e) {
     var message = string.Format("Do you want to save changes to {0}?", e.ProfileName);
     var result =  MessageBox.Show(message,
@@ -108,7 +114,9 @@ public partial class MainWindow
     }
   }
 
-  /// @copydoc SCFF::Common::ClientApplication::OnNewProfile
+  /// @copybrief SCFF::Common::ClientApplication::OnNewProfile
+  /// @param[in] sender 使用しない
+  /// @param[in] e 使用しない
   private void OnNewProfile(object sender, System.EventArgs e) {
     //-----------------------------------------------------------------
     // Notify self
@@ -119,7 +127,9 @@ public partial class MainWindow
     //-----------------------------------------------------------------
   }
 
-  /// @copydoc SCFF::Common::ClientApplication::OnOpeningProfile
+  /// @copybrief SCFF::Common::ClientApplication::OnOpeningProfile
+  /// @param[in] sender 使用しない
+  /// @param[in,out] e e.Cancelでキャンセル可能
   private void OnOpeningProfile(object sender, OpeningProfileEventArgs e) {
     // パスが指定されている = ダイアログを開いてパスを指定する必要はない
     if (e.Path != null && e.Path != string.Empty) return;
@@ -138,7 +148,9 @@ public partial class MainWindow
     }
   }
 
-  /// @copydoc SCFF::Common::ClientApplication::OnOpeningProfile
+  /// @copybrief SCFF::Common::ClientApplication::OnOpeningProfile
+  /// @param[in] sender 使用しない
+  /// @param[in] e 使用しない
   private void OnOpenedProfile(object sender, System.EventArgs e) {
     //-----------------------------------------------------------------
     // Notify self
@@ -150,7 +162,9 @@ public partial class MainWindow
     //-----------------------------------------------------------------
   }
 
-  /// @copydoc SCFF::Common::ClientApplication::OnSavingProfile
+  /// @copybrief SCFF::Common::ClientApplication::OnSavingProfile
+  /// @param[in] sender 使用しない
+  /// @param[in] e e.Cancelでキャンセル可能
   private void OnSavingProfile(object sender, SavingProfileEventArgs e) {
     // [保存]で既に一回以上ファイルに保存されている場合はパスの指定は必要ない
     if (e.Action == SaveActions.Save &&
@@ -171,7 +185,9 @@ public partial class MainWindow
     }
   }
 
-  /// @copydoc SCFF::Common::ClientApplication::OnSavedProfile
+  /// @copybrief SCFF::Common::ClientApplication::OnSavedProfile
+  /// @param[in] sender 使用しない
+  /// @param[in] e 使用しない
   private void OnSavedProfile(object sender, System.EventArgs e) {
     //-----------------------------------------------------------------
     // Notify self
@@ -181,7 +197,9 @@ public partial class MainWindow
     //-----------------------------------------------------------------
   }
 
-  /// @copydoc SCFF::Common::ClientApplication::OnSentProfile
+  /// @copybrief SCFF::Common::ClientApplication::OnSentProfile
+  /// @param[in] sender 使用しない
+  /// @param[in] e 使用しない
   private void OnSentProfile(object sender, System.EventArgs e) {
     //-----------------------------------------------------------------
     // Notify self

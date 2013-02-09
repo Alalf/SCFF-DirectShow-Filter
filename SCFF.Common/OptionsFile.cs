@@ -205,6 +205,9 @@ public class OptionsFile : TinyKeyValueFile {
   //===================================================================
 
   /// valueをOptions.WindowStateで取得
+  /// @param key Key
+  /// @param value WindowState型に変換されたValue
+  /// @return 取得成功
   private bool TryGetWindowState(string key, out WindowState value) {
     int internalValue;
     if (this.TryGetInt(key, out internalValue)) {

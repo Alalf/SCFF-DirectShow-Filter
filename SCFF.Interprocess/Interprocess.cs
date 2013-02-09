@@ -498,6 +498,7 @@ public class Interprocess {
   // ErrorEvent
   //===================================================================
 
+  /// ErrorEvent生成
   private EventWaitHandle CreateErrorEvent(UInt32 processID) {
     // イベントの名前
     string errorEventName = ErrorEventNamePrefix + processID;
@@ -523,6 +524,7 @@ public class Interprocess {
   // ShutdownEvent
   //===================================================================
 
+  /// ShutdownEvent初期化
   public bool InitShutdownEvent() {
     // プログラム全体で一回だけCreate/CloseすればよいのでCloseはしない
     if (IsShutdownEventInitialized()) return true;
@@ -541,10 +543,12 @@ public class Interprocess {
     return true;
   }
 
+  /// ShutdownEventの初期化が成功したか
   public bool IsShutdownEventInitialized() {
     return this.shutdownEvent != null;
   }
 
+  /// ShutdownEvent解放
   public void ReleaseShutdownEvent() {
     if (this.shutdownEvent != null) {
       this.shutdownEvent.Dispose();
@@ -688,6 +692,7 @@ public class Interprocess {
   //===================================================================
   // for SCFF GUI Client
   //===================================================================
+
   /// ディレクトリを取得する
   public bool GetDirectory(out Directory directory) {
     // 初期化されていなければ失敗
@@ -774,7 +779,7 @@ public class Interprocess {
     }
   }
 
-  /// 終了要求
+  /// シャットダウンイベントをシグナル状態にする
   public bool SetShutdownEvent() {
     // 初期化されていなければ失敗
     if (!IsShutdownEventInitialized()) {

@@ -81,20 +81,27 @@ public class RuntimeOptions {
   /// 現在のプロセスID
   public UInt32 CurrentProcessID { get; set; }
 
-  /// Entryは構造体のため、Dictionaryから取り出すごとにコピーが発生する
-  /// これを避けるため、参照型のまま取り扱えるEntryクラスを用意した
+  /// @copybrief SCFF::Interprocess::Entry
+  /// @attention Entryは構造体のため、Dictionaryから取り出すごとにコピーが発生する
+  ///            これを避けるため、参照型のまま取り扱えるEntryクラスを用意した
   private class InternalEntry {
+    /// コンストラクタ
+    /// @param[in] sampleWidth サンプルの出力幅
+    /// @param[in] sampleHeight サンプルの出力高さ
+    /// @param[in] samplePixelFormat サンプルの出力ピクセルフォーマット
     public InternalEntry(int sampleWidth, int sampleHeight,
                          ImagePixelFormats samplePixelFormat) {
       this.SampleWidth = sampleWidth;
       this.SampleHeight = sampleHeight;
       this.SamplePixelFormat = samplePixelFormat;
     }
-
+    /// サンプルの出力幅
     public int SampleWidth { get; private set; }
+    /// サンプルの出力高さ
     public int SampleHeight { get; private set; }
+    /// サンプルの出力ピクセルフォーマット
     public ImagePixelFormats SamplePixelFormat { get; private set; }
-    // FPS
+    // FPSは現在必要ない
   }
 
   /// エントリディクショナリ

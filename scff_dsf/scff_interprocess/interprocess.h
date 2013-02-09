@@ -293,9 +293,9 @@ class Interprocess {
   /// ShutdownEvent解放
   void ReleaseShutdownEvent();
 
-  // Event初期化
+  // ErrorEvent生成
   HANDLE CreateErrorEvent(uint32_t process_id); 
-  // Event解放
+  // ErrorEvent解放
   void ReleaseErrorEvent(HANDLE error_event);
 
   /// 共有メモリ: Directory

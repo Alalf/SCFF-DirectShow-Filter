@@ -45,6 +45,7 @@ public class DSFMonitor {
   //===================================================================
  
   /// 監視スタート
+  /// @param[in] processID 監視対象のプロセスID
   public void Start(UInt32 processID) {
     // すでに監視中でTaskがまだ生きている場合は何もしない
     if (this.MonitoredDSFs.ContainsKey(processID) &&

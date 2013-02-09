@@ -82,6 +82,7 @@ public class ClientApplication {
 
   //-------------------------------------------------------------------
 
+  /// @copybrief DSFMonitor::OnErrorOccured
   private void DSFMonitor_OnErrorOccured(object sender, DSFErrorOccuredEventArgs e) {
     if (!Utilities.IsProcessAlive(e.ProcessID)) return;
 
@@ -95,6 +96,7 @@ public class ClientApplication {
     }
   }
 
+  /// @copybrief Profile::Profile::OnChanged
   private void Profile_OnChanged(object sender, EventArgs e) {
     if (this.Options.AutoApply && this.RuntimeOptions.IsCurrentProcessIDValid) {
       this.SendProfile(true, false);
@@ -111,7 +113,11 @@ public class ClientApplication {
   // 外部インタフェース
   //===================================================================
 
-  /// Argsからの読み込み/LastProfile/新規作成から選んでProfileを読み込む
+  /// アプリケーションの起動処理
+  /// - Argsで指定されたPathのProfileを読み込む or
+  /// - LastProfileからProfileを読み込む or 
+  /// - Profileを新規作成
+  /// @param[in] path Argsで指定されたPath
   public void Startup(string path) {
     // SCFF DirectShow Filterがインストールされているか
     string message;
@@ -142,6 +148,10 @@ public class ClientApplication {
     this.InitProfileInternal(path);
   }
 
+  /// アプリケーションの終了処理
+  /// - DSFエラー監視を強制停止
+  /// - Aero状態を復旧
+  /// - Optionsをファイルに書き出す。
   public void Exit() {
     // DSFエラー監視を停止
     this.DSFMonitor.Exit();
@@ -365,11 +375,13 @@ public class ClientApplication {
     return true;
   }
 
+  /// Directoryを更新し、DSFMonitorからゾンビTaskを消去する
   public void RefreshDirectory() {
     this.RuntimeOptions.RefreshDirectory(this.Interprocess);
     this.DSFMonitor.RemoveZombies();
   }
 
+  /// AeroをOff(Options.ForceAeroOnがOnならOn)に設定する
   public void SetAero() {
     if (!this.RuntimeOptions.CanSetAero) return;
     if (this.Options.ForceAeroOn) {
@@ -473,7 +485,6 @@ public class ClientApplication {
 
   /// Profileを共有メモリに書き込み
   /// @pre Validate済み
-  /// @param interprocess プロセス間通信用オブジェクト
   /// @param forceNullLayout Splash画像を表示させる
   /// @return 共有メモリに書き込み成功
   private bool SendProfileInternal(bool forceNullLayout) {

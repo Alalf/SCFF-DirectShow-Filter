@@ -504,18 +504,20 @@ public class LayoutElement : ILayoutElementView, ILayoutElement {
 
   /// @copydoc ILayoutElementView::GetBoundRect
   public SampleRect GetBoundRect(int sampleWidth, int sampleHeight) {
-    var realX = this.BoundRelativeLeft * sampleWidth;
-    var realY = this.BoundRelativeTop * sampleHeight;
-    var realWidth = this.BoundRelativeWidth * sampleWidth;
-    var realHeight = this.BoundRelativeHeight * sampleHeight;
+    var realLeft = this.BoundRelativeLeft * sampleWidth;
+    var realTop = this.BoundRelativeTop * sampleHeight;
+    var realRight = this.BoundRelativeRight * sampleWidth;
+    var realBottom = this.BoundRelativeBottom * sampleHeight;
 
     /// @attention 切捨て・切り上げ計算をここでしている
     // floor
-    var x = (int)(realX + Imaging.Utilities.Epsilon);
-    var y = (int)(realY + Imaging.Utilities.Epsilon);
-    // ceil
-    var width = (int)Math.Ceiling(realWidth - Imaging.Utilities.Epsilon);
-    var height = (int)Math.Ceiling(realHeight - Imaging.Utilities.Epsilon);
+    var x = (int)(realLeft + Imaging.Utilities.Epsilon);
+    var y = (int)(realTop + Imaging.Utilities.Epsilon);
+    var right = (int)(realRight + Imaging.Utilities.Epsilon);
+    var bottom = (int)(realBottom + Imaging.Utilities.Epsilon);
+
+    var width = right - x;
+    var height = bottom - y;
 
     return new SampleRect(x, y, width, height);
   }

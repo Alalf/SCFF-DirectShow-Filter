@@ -95,6 +95,13 @@ public partial class MainMenu : UserControl, IBindingOptions {
         this.RestoreMissingWindowWhenOpeningProfile.IsChecked;
   }
 
+  /// EnableGPUPreviewRendering: Click
+  /// @param sender 使用しない
+  /// @param e 使用しない
+  private void EnableGPUPreviewRendering_Click(object sender, RoutedEventArgs e) {
+    App.Options.EnableGPUPreviewRendering = this.EnableGPUPreviewRendering.IsChecked;
+  }
+
   /// RecentProfile1: Click
   /// @param sender 使用しない
   /// @param e 使用しない
@@ -166,6 +173,7 @@ public partial class MainMenu : UserControl, IBindingOptions {
     this.RestoreLastProfile.IsChecked = App.Options.RestoreLastProfile;
     this.RestoreMissingWindowWhenOpeningProfile.IsChecked =
         App.Options.RestoreMissingWindowWhenOpeningProfile;
+    this.EnableGPUPreviewRendering.IsChecked = App.Options.EnableGPUPreviewRendering;
     this.CanChangeOptions = true;
   }
 }

@@ -65,6 +65,11 @@
                 IsCheckable="True"
                 x:Name="RestoreMissingWindowWhenOpeningProfile"
                 Click="RestoreMissingWindowWhenOpeningProfile_Click"/>
+      <Separator/>
+      <MenuItem Header="Enable GPU preview rendering (restart required) (_G)"
+                IsCheckable="True"
+                x:Name="EnableGPUPreviewRendering"
+                Click="EnableGPUPreviewRendering_Click"/>
     </MenuItem>
   </Menu>
 </UserControl>

@@ -84,6 +84,7 @@ public class OptionsFile : TinyKeyValueFile {
         writer.WriteLine("RestoreLastProfile={0}", this.Options.RestoreLastProfile);
         writer.WriteLine("RestoreMissingWindowWhenOpeningProfile={0}",
                          this.Options.RestoreMissingWindowWhenOpeningProfile);
+        writer.WriteLine("EnableGPUPreviewRendering={0}", this.Options.EnableGPUPreviewRendering);
         return true;
       }
     } catch (Exception) {
@@ -195,6 +196,9 @@ public class OptionsFile : TinyKeyValueFile {
     }
     if (this.TryGetBool("RestoreMissingWindowWhenOpeningProfile", out boolValue)) {
       this.Options.RestoreMissingWindowWhenOpeningProfile = boolValue;
+    }
+    if (this.TryGetBool("EnableGPUPreviewRendering", out boolValue)) {
+      this.Options.EnableGPUPreviewRendering = boolValue;
     }
 
     return true;

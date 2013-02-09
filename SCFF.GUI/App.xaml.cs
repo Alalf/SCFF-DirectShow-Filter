@@ -22,6 +22,8 @@
 namespace SCFF.GUI {
 
 using System.Windows;
+using System.Windows.Interop;
+using System.Windows.Media;
 using SCFF.Common;
 using SCFF.Common.GUI;
 using SCFF.Common.Profile;
@@ -112,6 +114,13 @@ public partial class App : Application {
     base.OnStartup(e);
     var path = e.Args.Length > 0 ? e.Args[0] : null;
     App.Impl.Startup(path);
+
+    // ProcessRenderModeの設定
+    if (App.Options.EnableGPUPreviewRendering) {
+      // Default
+    } else {
+      RenderOptions.ProcessRenderMode = RenderMode.SoftwareOnly;
+    }
   }
 
   /// Exit: アプリケーション終了時

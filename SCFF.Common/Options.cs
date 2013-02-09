@@ -72,6 +72,7 @@ public class Options {
     this.ForceAeroOn = false;
     this.RestoreLastProfile = true;
     this.RestoreMissingWindowWhenOpeningProfile = true;
+    this.EnableGPUPreviewRendering = true;
   }
 
   //===================================================================
@@ -139,6 +140,8 @@ public class Options {
   public bool RestoreLastProfile { get; set; }
   /// プロファイル読み込み時にWindowが存在していないとき、デスクトップ取り込みに切り替える
   public bool RestoreMissingWindowWhenOpeningProfile { get; set; }
+  /// GUIクライアントのプレビュー機能でGPUレンダリングを有効にする
+  public bool EnableGPUPreviewRendering { get; set; }
 
   //===================================================================
   // アクセサ

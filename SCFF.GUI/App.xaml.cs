@@ -121,11 +121,10 @@ public partial class App : Application {
     // 引数取得
     var path = e.Args.Length > 0 ? e.Args[0] : null;
 
-    // Mutexのチェック
+    // Mutexのチェック(Closeはファイナライザに任せる)
     bool createdNew;
     var mutex = new Mutex(false, App.mutexName, out createdNew);
     if (!createdNew) {
-      mutex.Close();
       this.Shutdown();
       return;
     }
@@ -162,7 +161,6 @@ public partial class App : Application {
     base.OnExit(e);
     App.Impl.Exit();
     this.DestructStaticProperties();
-    this.Mutex.Close();
   }
 }
 }   // namespace SCFF.GUI

@@ -21,11 +21,15 @@
 /// SCFF DSFのGUIクライアント
 namespace SCFF.GUI {
 
+using System;
 using System.Diagnostics;
+using System.IO.Pipes;
+using System.Text;
 using System.Threading;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
+using System.Windows.Threading;
 using SCFF.Common;
 using SCFF.Common.GUI;
 using SCFF.Common.Profile;
@@ -33,13 +37,13 @@ using SCFF.Common.Profile;
 /// Applicationクラス
 public partial class App : Application {
   //===================================================================
-  // 多重起動防止
+  // 定数
   //===================================================================
 
   /// Mutex名
   private const string mutexName = "SCFF.GUI-{3C55C868-E1E9-4E76-B46C-6D07458C5993}";
-  /// Singleton: Mutex
-  private Mutex Mutex { get; set; }
+  /// NamedPipe名
+  private const string namedPipeName = mutexName + "-pipe";
 
   //===================================================================
   // staticプロパティ
@@ -75,15 +79,22 @@ public partial class App : Application {
     App.Impl                        = new ClientApplication();
     App.ScreenCaptureTimer          = new ScreenCaptureTimer();
     App.NullPen                     = new NullPen();
-    App.Impl.OnStartupErrorOccured  += App.OnStartupErrorOccured;
-    App.Impl.OnDSFErrorOccured      += App.OnDSFErrorOccured;
+    App.Impl.OnStartupErrorOccured  += this.OnStartupErrorOccured;
+    App.Impl.OnDSFErrorOccured      += this.OnDSFErrorOccured;
   }
   /// Staticプロパティの解放
   private void DestructStaticProperties() {
     // 他のプロパティはファイナライザに任せる
-    App.Impl.OnStartupErrorOccured  -= App.OnStartupErrorOccured;
-    App.Impl.OnDSFErrorOccured      -= App.OnDSFErrorOccured;
+    App.Impl.OnStartupErrorOccured  -= this.OnStartupErrorOccured;
+    App.Impl.OnDSFErrorOccured      -= this.OnDSFErrorOccured;
   }
+
+  //===================================================================
+  // プロパティ
+  //===================================================================
+
+  /// Mutex
+  private Mutex Mutex { get; set; }
 
   //===================================================================
   // SCFF.Common.ClientApplicationイベントハンドラ
@@ -92,7 +103,7 @@ public partial class App : Application {
   /// @copybrief SCFF::Common::ClientApplication::OnStartupErrorOccured
   /// @param[in] sender 使用しない
   /// @param[in] e エラー表示用のデータが格納されたオブジェクト
-  private static void OnStartupErrorOccured(object sender, ErrorOccuredEventArgs e) {
+  private void OnStartupErrorOccured(object sender, ErrorOccuredEventArgs e) {
     if (e.Quiet) return;
     MessageBox.Show(e.Message, "SCFF.GUI",
                     MessageBoxButton.OK,
@@ -102,13 +113,13 @@ public partial class App : Application {
   /// @copybrief SCFF::Common::ClientApplication::OnDSFErrorOccured
   /// @param[in] sender 使用しない
   /// @param[in] e エラー表示用のデータが格納されたオブジェクト
-  private static void OnDSFErrorOccured(object sender, ErrorOccuredEventArgs e) {
+  private void OnDSFErrorOccured(object sender, ErrorOccuredEventArgs e) {
     if (e.Quiet) return;
-    /// @todo(me) 最前面に表示する方法を調べる
-    ///           MessageBoxOptions.DefaultDesktopOnlyは明らかに手抜きなのでやめる
-    MessageBox.Show(e.Message, "SCFF.GUI",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
+    Dispatcher.Invoke((Action)(() => {
+      MessageBox.Show(e.Message, "SCFF.GUI",
+                      MessageBoxButton.OK,
+                      MessageBoxImage.Error);
+    }));
   }
 
   //===================================================================
@@ -125,7 +136,8 @@ public partial class App : Application {
     bool createdNew;
     var mutex = new Mutex(false, App.mutexName, out createdNew);
     if (!createdNew) {
-      this.Shutdown();
+      this.StartPipeClient(path);
+      this.Shutdown(-1);
       return;
     }
     this.Mutex = mutex;
@@ -145,6 +157,9 @@ public partial class App : Application {
     // Window生成
     this.MainWindow = new MainWindow();
     this.MainWindow.Show();
+
+    // NamedPipe作成
+    this.StartPipeServer();
   }
 
   /// Exit: アプリケーション終了時
@@ -153,7 +168,6 @@ public partial class App : Application {
     // Mutexがない = 複数起動
     if (this.Mutex == null) {
       Debug.WriteLine(Constants.SCFFVersion + " is already running.", "App");
-      e.ApplicationExitCode = -1;
       return;
     }
 
@@ -161,6 +175,80 @@ public partial class App : Application {
     base.OnExit(e);
     App.Impl.Exit();
     this.DestructStaticProperties();
+  }
+
+  //===================================================================
+  // 多重起動防止
+  //===================================================================
+
+  /// NamedPipeServerStreamを生成する
+  private void StartPipeServer() {
+    Debug.WriteLine("[OPEN]", "NamedPipe");
+    var pipe = new NamedPipeServerStream(App.namedPipeName,
+        PipeDirection.In, -1, PipeTransmissionMode.Message,
+        PipeOptions.Asynchronous);
+
+    try {
+      pipe.BeginWaitForConnection((result) => {
+        try {
+          pipe.EndWaitForConnection(result);
+          // 新しいPipeを生成
+          this.StartPipeServer();
+
+          // Read
+          var data = new byte[520]; // 260文字(MAX_PATH)x2byte
+          pipe.BeginRead(data, 0, data.Length, (readResult) => {
+            string path = "";
+            try {
+              var actualLength = pipe.EndRead(readResult);
+              path = Encoding.Unicode.GetString(data, 0, actualLength);
+            } catch {
+              // 出来なければできないでOK
+              Debug.WriteLine("Read named pipe failed", "App.StartPipeServer");
+              return;
+            } finally {
+              pipe.Close();
+            }
+
+            Debug.WriteLine("Open profile requested: " + path);
+            Dispatcher.Invoke((Action)(() => {
+              App.Impl.OpenProfile(path);
+            }), null);
+        
+            Debug.WriteLine("[CLOSE]", "NamedPipe");
+          }, null);
+        } catch {
+          // 出来なければできないでOK
+          Debug.WriteLine("Connect named pipe failed", "App.StartPipeServer");
+          pipe.Close();
+        }
+      }, null);
+    } catch {
+      // 出来なければできないでOK
+      Debug.WriteLine("Start named pipe failed", "App.StartPipeServer");
+      pipe.Close();
+    }
+  }
+
+  /// NamedPipeClientStreamを生成する
+  private void StartPipeClient(string path) {
+    if (path == null || path == string.Empty || path.Length > 260) {
+      Debug.WriteLine("Argument is invalid", "App.StartPipeClient");
+      return;
+    }
+
+    try {
+      using (var pipe = new NamedPipeClientStream(".", App.namedPipeName, PipeDirection.Out)) {
+        if (pipe == null) return;
+        pipe.Connect();
+        if (!pipe.IsConnected) return;
+        var data = Encoding.Unicode.GetBytes(path);
+        pipe.Write(data, 0, data.Length);
+      }
+    } catch {
+      // 出来なければできないでOK
+      Debug.WriteLine("Send profile path failed", "App.StartPipeClient");
+    }
   }
 }
 }   // namespace SCFF.GUI

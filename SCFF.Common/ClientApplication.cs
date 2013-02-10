@@ -552,9 +552,9 @@ public class ClientApplication {
 
   //-------------------------------------------------------------------
 
-  /// Singleton: プロセス間通信用オブジェクト
+  /// プロセス間通信用オブジェクト
   public Interprocess Interprocess { get; private set; }
-  /// Singleton: DirectShow Filter監視用オブジェクト
+  /// DirectShow Filter監視用オブジェクト
   public DSFMonitor DSFMonitor { get; private set; }
 
   /// Optionsへの参照

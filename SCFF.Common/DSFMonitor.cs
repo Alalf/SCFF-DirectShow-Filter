@@ -60,7 +60,6 @@ public class DSFMonitor {
       this.Interprocess.CheckErrorEvent(processID);
 
       // エラーが起きるまで待機
-      /// @todo(me) ここまでに他のスレッドでInitErrorEventが呼ばれるとおかしなことになる
       var dsfErrorOccured = this.Interprocess.WaitUntilErrorEventOccured(processID);
       if (dsfErrorOccured) {
         // Event: DSFErrorOccured

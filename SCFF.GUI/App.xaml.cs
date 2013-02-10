@@ -21,6 +21,8 @@
 /// SCFF DSFのGUIクライアント
 namespace SCFF.GUI {
 
+using System.Diagnostics;
+using System.Threading;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
@@ -31,51 +33,56 @@ using SCFF.Common.Profile;
 /// Applicationクラス
 public partial class App : Application {
   //===================================================================
-  // シングルトン
+  // 多重起動防止
   //===================================================================
 
-  /// Singleton: アプリケーションの実装
+  /// Mutex名
+  private const string mutexName = "SCFF.GUI-{3C55C868-E1E9-4E76-B46C-6D07458C5993}";
+  /// Singleton: Mutex
+  private Mutex Mutex { get; set; }
+
+  //===================================================================
+  // staticプロパティ
+  //===================================================================
+
+  /// アプリケーションの実装
   public static ClientApplication Impl { get; private set; }
 
-  /// Singleton: スクリーンキャプチャ用タイマー
+  /// スクリーンキャプチャ用タイマー
   public static ScreenCaptureTimer ScreenCaptureTimer { get; private set; }
-  /// Singleton: NullPen
+  /// NullPen
   public static NullPen NullPen { get; private set; }
 
   //-------------------------------------------------------------------
 
-  /// Singleton: アプリケーション設定
+  /// アプリケーション設定
   public static Options Options {
     get { return App.Impl.Options; }
   }
-  /// Singleton: アプリケーション実行時設定
+  /// アプリケーション実行時設定
   public static RuntimeOptions RuntimeOptions {
     get { return App.Impl.RuntimeOptions; }
   }
-  /// Singleton: 現在編集中のプロファイル
+  /// 現在編集中のプロファイル
   public static Profile Profile {
     get { return App.Impl.Profile; }
   }
 
-  //===================================================================
-  // コンストラクタ/デストラクタ
-  //===================================================================
+  //-------------------------------------------------------------------
 
-  /// staticコンストラクタ
-  static App() {
-    App.Impl = new ClientApplication();
-
-    App.ScreenCaptureTimer = new ScreenCaptureTimer();
-    App.NullPen = new NullPen();
-
-    // SCFF.Common.ClientApplicationのイベントハンドラ登録
-    App.Impl.OnStartupErrorOccured += App.OnStartupErrorOccured;
-    App.Impl.OnDSFErrorOccured += App.OnDSFErrorOccured;
+  /// Staticプロパティの生成
+  private void ConstructStaticProperties() {
+    App.Impl                        = new ClientApplication();
+    App.ScreenCaptureTimer          = new ScreenCaptureTimer();
+    App.NullPen                     = new NullPen();
+    App.Impl.OnStartupErrorOccured  += App.OnStartupErrorOccured;
+    App.Impl.OnDSFErrorOccured      += App.OnDSFErrorOccured;
   }
-
-  ~App() {
-    App.Impl.OnStartupErrorOccured -= App.OnStartupErrorOccured;
-    App.Impl.OnDSFErrorOccured -= App.OnDSFErrorOccured;
+  /// Staticプロパティの解放
+  private void DestructStaticProperties() {
+    // 他のプロパティはファイナライザに任せる
+    App.Impl.OnStartupErrorOccured  -= App.OnStartupErrorOccured;
+    App.Impl.OnDSFErrorOccured      -= App.OnDSFErrorOccured;
   }
 
   //===================================================================
@@ -111,8 +118,22 @@ public partial class App : Application {
   /// Startup: アプリケーション開始時
   /// @param e コマンドライン引数(Args)を参照可能
   protected override void OnStartup(StartupEventArgs e) {
-    base.OnStartup(e);
+    // 引数取得
     var path = e.Args.Length > 0 ? e.Args[0] : null;
+
+    // Mutexのチェック
+    bool createdNew;
+    var mutex = new Mutex(false, App.mutexName, out createdNew);
+    if (!createdNew) {
+      mutex.Close();
+      this.Shutdown();
+      return;
+    }
+    this.Mutex = mutex;
+
+    // 正常起動
+    base.OnStartup(e);
+    this.ConstructStaticProperties();
     App.Impl.Startup(path);
 
     // ProcessRenderModeの設定
@@ -121,13 +142,27 @@ public partial class App : Application {
     } else {
       RenderOptions.ProcessRenderMode = RenderMode.SoftwareOnly;
     }
+    
+    // Window生成
+    var mainWindow = new MainWindow();
+    mainWindow.Show();
   }
 
   /// Exit: アプリケーション終了時
   /// @param e 終了コード(ApplicationExitCode)の参照・設定が可能
   protected override void OnExit(ExitEventArgs e) {
+    // Mutexがない = 複数起動
+    if (this.Mutex == null) {
+      Debug.WriteLine(Constants.SCFFVersion + " is already running.", "App");
+      e.ApplicationExitCode = -1;
+      return;
+    }
+
+    // 正常終了
     base.OnExit(e);
     App.Impl.Exit();
+    this.DestructStaticProperties();
+    this.Mutex.Close();
   }
 }
 }   // namespace SCFF.GUI

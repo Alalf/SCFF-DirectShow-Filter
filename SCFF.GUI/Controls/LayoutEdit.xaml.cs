@@ -343,7 +343,10 @@ public partial class LayoutEdit
     //-----------------------------------------------------------------
     // Notify self
     // Notify other controls
-    Commands.LayoutParameterChanged.Execute(null, this);
+    if (this.moveAndSize.ShouldUpdateControl) {
+      Commands.LayoutParameterChanged.Execute(null, this);
+      this.moveAndSize.ShouldUpdateControl = false;
+    }
     //-----------------------------------------------------------------
 
     this.BuildDrawingGroup();
@@ -357,6 +360,12 @@ public partial class LayoutEdit
     this.moveAndSize.End();
     this.LayoutEditImage.ReleaseMouseCapture();
     App.Profile.Current.Close();
+
+    //-----------------------------------------------------------------
+    // Notify self
+    // Notify other controls
+    Commands.LayoutParameterChanged.Execute(null, this);
+    //-----------------------------------------------------------------
   }
 
   //-------------------------------------------------------------------

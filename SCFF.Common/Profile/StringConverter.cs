@@ -161,48 +161,29 @@ public static class StringConverter {
   // Bound X/Y/Width/Height
   //=================================================================
 
-  /// GetBoundRectの引数用
-  private const int dummySampleSize = 100;
-
   /// BoundX表示用
   /// @param layoutElement データ取得元のレイアウト要素
   /// @param isDummy ダミープレビューサイズかどうか
   /// @param sampleWidth サンプルの幅
+  /// @param sampleHeight サンプルの高さ
+  /// @param[out] x BoundXの文字列
+  /// @param[out] y BoundYの文字列
+  /// @param[out] width BoundWidthの文字列
+  /// @param[out] height BoundHeightの文字列
   /// @return BoundX表示用文字列
-  public static string GetBoundXString(ILayoutElementView layoutElement, bool isDummy, int sampleWidth) {
-    var boundRect = layoutElement.GetBoundRect(sampleWidth, StringConverter.dummySampleSize);
-    return isDummy ? string.Format("({0})", boundRect.X)
-                   : boundRect.X.ToString();
-  }
-  /// BoundY表示用
-  /// @param layoutElement データ取得元のレイアウト要素
-  /// @param isDummy ダミープレビューサイズかどうか
-  /// @param sampleHeight サンプルの高さ
-  /// @return BoundY表示用文字列
-  public static string GetBoundYString(ILayoutElementView layoutElement, bool isDummy, int sampleHeight) {
-    var boundRect = layoutElement.GetBoundRect(StringConverter.dummySampleSize, sampleHeight);
-    return isDummy ? string.Format("({0})", boundRect.Y)
-                   : boundRect.Y.ToString();
-  }
-  /// BoundWidth表示用
-  /// @param layoutElement データ取得元のレイアウト要素
-  /// @param isDummy ダミープレビューサイズかどうか
-  /// @param sampleWidth サンプルの幅
-  /// @return BoundWidth表示用文字列
-  public static string GetBoundWidthString(ILayoutElementView layoutElement, bool isDummy, int sampleWidth) {
-    var boundRect = layoutElement.GetBoundRect(sampleWidth, StringConverter.dummySampleSize);
-    return isDummy ? string.Format("({0})", boundRect.Width)
-                   : boundRect.Width.ToString();
-  }
-  /// BoundHeight表示用
-  /// @param layoutElement データ取得元のレイアウト要素
-  /// @param isDummy ダミープレビューサイズかどうか
-  /// @param sampleHeight サンプルの高さ
-  /// @return BoundHeight表示用文字列
-  public static string GetBoundHeightString(ILayoutElementView layoutElement, bool isDummy, int sampleHeight) {
-    var boundRect = layoutElement.GetBoundRect(StringConverter.dummySampleSize, sampleHeight);
-    return isDummy ? string.Format("({0})", boundRect.Height)
-                   : boundRect.Height.ToString();
+  public static void GetBoundRectString(ILayoutElementView layoutElement,
+      bool isDummy, int sampleWidth, int sampleHeight,
+      out string x, out string y, out string width, out string height) {
+    var boundRect = layoutElement.GetBoundRect(sampleWidth, sampleHeight);
+
+    x = isDummy ? string.Format("({0})", boundRect.X)
+                : boundRect.X.ToString();
+    y = isDummy ? string.Format("({0})", boundRect.Y)
+                : boundRect.Y.ToString();
+    width = isDummy ? string.Format("({0})", boundRect.Width)
+                    : boundRect.Width.ToString();
+    height = isDummy ? string.Format("({0})", boundRect.Height)
+                     : boundRect.Height.ToString();
   }
 
   //=================================================================

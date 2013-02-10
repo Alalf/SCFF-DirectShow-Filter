@@ -20,12 +20,20 @@
 
 namespace SCFF.Common.GUI {
 
+using System;
 using System.Diagnostics;
 using SCFF.Common.Profile;
 
 /// 現在のマウス座標とオフセットを指定してCurrentレイアウト要素を移動・拡大縮小
 /// @warning このクラスの中でProfileへの書き込みは行わない
 public class MoveAndSize {
+  //===================================================================
+  // 定数
+  //===================================================================
+
+  /// 100ミリ秒間隔でコントロールに更新を伝える
+  private const int frameLength = 100;
+
   //===================================================================
   // 動作
   //===================================================================
@@ -42,6 +50,9 @@ public class MoveAndSize {
                                          this.Target.BoundRelativeRight,
                                          this.Target.BoundRelativeBottom);
     this.SnapGuide = snapGuide;
+
+    this.ShouldUpdateControl = false;
+    this.LastUpdateControl = Environment.TickCount;
   }
 
   /// 現在のマウス座標を更新
@@ -52,6 +63,13 @@ public class MoveAndSize {
   /// 処理
   public RelativeLTRB Do(bool keepAspectRatio) {
     Debug.Assert(this.IsRunning);
+
+    var now = Environment.TickCount;
+    if (this.LastUpdateControl + MoveAndSize.frameLength < now) {
+      // 現在時刻が次回更新時刻を過ぎた場合は更新が必要
+      this.ShouldUpdateControl = true;
+      this.LastUpdateControl = now;
+    }
 
     // 現在のマウスポイントに合わせて処理を実行
     if (this.HitMode == HitModes.Move) {
@@ -73,6 +91,8 @@ public class MoveAndSize {
     this.MouseOffset = null;
     this.OriginalLTRB = null;
     this.SnapGuide = null;
+    this.ShouldUpdateControl = false;
+    this.LastUpdateControl = 0;
   }
 
   //===================================================================
@@ -325,6 +345,9 @@ public class MoveAndSize {
   /// 動作中か
   public bool IsRunning { get { return (this.HitMode != HitModes.Neutral); } }
 
+  /// コントロールを更新するべきか
+  public bool ShouldUpdateControl { get; set; }
+
   //-------------------------------------------------------------------
 
   /// 動作開始時のアスペクト比
@@ -356,5 +379,8 @@ public class MoveAndSize {
 
   /// スナップガイド
   private SnapGuide SnapGuide { get; set; }
+
+  /// タイムスタンプ(ミリ秒単位)
+  private int LastUpdateControl { get; set; }
 }
 }   // namespace SCFF.Common.GUI

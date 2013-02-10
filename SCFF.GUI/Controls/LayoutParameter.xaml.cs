@@ -356,14 +356,16 @@ public partial class LayoutParameter
     var sampleHeight = App.RuntimeOptions.CurrentSampleHeight;
     var isDummy = !App.RuntimeOptions.IsCurrentProcessIDValid;
 
-    this.BoundX.Text =
-        StringConverter.GetBoundXString(App.Profile.CurrentView, isDummy, sampleWidth);
-    this.BoundY.Text =
-        StringConverter.GetBoundYString(App.Profile.CurrentView, isDummy, sampleHeight);
-    this.BoundWidth.Text =
-        StringConverter.GetBoundWidthString(App.Profile.CurrentView, isDummy, sampleWidth);
-    this.BoundHeight.Text =
-        StringConverter.GetBoundHeightString(App.Profile.CurrentView, isDummy, sampleHeight);
+    // 文字列化
+    string x, y, width, height;
+    StringConverter.GetBoundRectString(App.Profile.CurrentView,
+        isDummy, sampleWidth, sampleHeight,
+        out x, out y, out width, out height);
+
+    this.BoundX.Text = x;
+    this.BoundY.Text = y;
+    this.BoundWidth.Text = width;
+    this.BoundHeight.Text = height;
   }
 
   //-------------------------------------------------------------------

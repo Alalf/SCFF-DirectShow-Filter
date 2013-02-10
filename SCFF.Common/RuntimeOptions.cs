@@ -20,10 +20,11 @@
 
 namespace SCFF.Common {
 
-using System;
-using System.Collections.Generic;
-using SCFF.Common.Ext;
-using SCFF.Interprocess;
+  using System;
+  using System.Collections.Generic;
+  using System.Diagnostics;
+  using SCFF.Common.Ext;
+  using SCFF.Interprocess;
 
 /// アプリケーションの実行時設定
 ///
@@ -133,7 +134,7 @@ public class RuntimeOptions {
 
   /// 現在編集中のプロセスIDが有効か
   public bool IsCurrentProcessIDValid {
-    get { return this.Entries.ContainsKey(this.CurrentProcessID); }
+    get { return this.CurrentProcessID != 0; }
   }
 
   /// 現在選択中のピクセルフォーマット
@@ -142,8 +143,8 @@ public class RuntimeOptions {
       if (!this.IsCurrentProcessIDValid)
         return ImagePixelFormats.IYUV;
 
-      var entry = this.Entries[this.CurrentProcessID];
-      return entry.SamplePixelFormat;
+      Debug.Assert(this.Entries.ContainsKey(this.CurrentProcessID));
+      return this.Entries[this.CurrentProcessID].SamplePixelFormat;
     }
   }
   /// 現在選択中のプロセスが要求するサンプル幅
@@ -152,8 +153,8 @@ public class RuntimeOptions {
       if (!this.IsCurrentProcessIDValid)
         return Constants.DummySampleWidth;
 
-      var entry = this.Entries[this.CurrentProcessID];
-      return entry.SampleWidth;
+      Debug.Assert(this.Entries.ContainsKey(this.CurrentProcessID));
+      return this.Entries[this.CurrentProcessID].SampleWidth;
     }
   }
   /// 現在選択中のプロセスが要求するサンプル高さ
@@ -161,9 +162,9 @@ public class RuntimeOptions {
     get {
       if (!this.IsCurrentProcessIDValid)
         return Constants.DummySampleHeight;
-      
-      var entry = this.Entries[this.CurrentProcessID];
-      return entry.SampleHeight;
+     
+      Debug.Assert(this.Entries.ContainsKey(this.CurrentProcessID));
+      return this.Entries[this.CurrentProcessID].SampleHeight;
     }
   }
 
@@ -216,11 +217,15 @@ public class RuntimeOptions {
     }
 
     // 現在選択中のプロセスIDがなくなっていた場合
-    if (!this.IsCurrentProcessIDValid && this.Entries.Count > 0) {
-      // 適当に最初の一個を選ぶ
-      foreach (var key in this.Entries.Keys) {
-        this.CurrentProcessID = key;
-        break;
+    if (!this.Entries.ContainsKey(this.CurrentProcessID)) {
+      if (this.Entries.Count == 0) {
+        this.CurrentProcessID = 0;
+      } else {
+        // 適当に最初の一個を選ぶ
+        foreach (var key in this.Entries.Keys) {
+          this.CurrentProcessID = key;
+          break;
+        }
       }
     }
   }

@@ -143,8 +143,8 @@ public partial class App : Application {
     }
     
     // Window生成
-    var mainWindow = new MainWindow();
-    mainWindow.Show();
+    this.MainWindow = new MainWindow();
+    this.MainWindow.Show();
   }
 
   /// Exit: アプリケーション終了時

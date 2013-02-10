@@ -65,7 +65,7 @@ public class Options {
     this.ResizeMethodIsExpanded = true;
     this.LayoutIsExpanded = true;
     this.AutoApply = false;
-    this.LayoutPreview = false;
+    this.LayoutPreview = true;
     this.LayoutBorder = true;
     this.LayoutSnap = true;
     this.CompactView = false;

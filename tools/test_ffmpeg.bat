@@ -15,4 +15,6 @@ DEL "%OUTPUT%"
 
 REM "%FFMPEG_EXE%" -rtbufsize 10MB -r 30 -s 640x360 -f dshow -i video="%VIDEO%":audio="%AUDIO%" -threads 4 -vf fps="fps=30" -r 30 -s 640x360 -pix_fmt yuv420p -maxrate 850k -bufsize 850k -crf 30 -vcodec libx264 -preset slow -profile:v main -async 100 -acodec libvo_aacenc -ar 48000 -ab 96k -ac 2 -vol 256 -f flv "%OUTPUT%"
 
+REM "%FFMPEG_EXE%" -f dshow -i video="%VIDEO%":audio="%AUDIO%" -s 640x360 -r 30 -g 90 -acodec libvorbis -ab 128k -vcodec libvpx -vb 700k -f webm "%OUTPUT%"
+
 POPD

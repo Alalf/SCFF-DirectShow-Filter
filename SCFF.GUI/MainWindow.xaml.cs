@@ -253,6 +253,21 @@ public partial class MainWindow
     App.Impl.OpenProfile(path);
   }
 
+  /// StateChanged
+  /// @param e 使用しない
+  protected override void OnStateChanged(System.EventArgs e) {
+    if (!this.CanChangeOptions) return;
+
+    base.OnStateChanged(e);
+    App.Options.WindowState = (SCFF.Common.WindowState)this.WindowState;
+
+    //-----------------------------------------------------------------
+    // Notify self
+    // Notify other controls
+    Commands.ProfileVisualChanged.Execute(null, this);
+    //-----------------------------------------------------------------
+  }
+
   //-------------------------------------------------------------------
   // *Changed/Checked/Unchecked以外
   //-------------------------------------------------------------------
@@ -421,7 +436,7 @@ public partial class MainWindow
     // Temporary
     this.Left         = App.Options.TmpLeft;
     this.Top          = App.Options.TmpTop;
-    this.WindowState  = (System.Windows.WindowState)App.Options.TmpWindowState;
+    this.WindowState  = (System.Windows.WindowState)App.Options.WindowState;
 
     // MainWindow.Controls
     this.AreaExpander.IsExpanded          = App.Options.AreaIsExpanded;
@@ -445,7 +460,6 @@ public partial class MainWindow
     App.Options.TmpLeft = isNormal ? this.Left : this.RestoreBounds.Left;
     App.Options.TmpTop = isNormal ? this.Top : this.RestoreBounds.Top;
     this.UpdateTmpSize();
-    App.Options.TmpWindowState = (SCFF.Common.WindowState)this.WindowState;
   }
 
   //===================================================================

@@ -59,7 +59,7 @@ public class Options {
     this.TmpCompactLayoutWidth = Constants.CompactLayoutDefaultWidth;
     this.TmpCompactLayoutHeight = Constants.CompactLayoutDefaultHeight;
 
-    this.TmpWindowState = WindowState.Normal;
+    this.WindowState = WindowState.Normal;
     this.AreaIsExpanded = true;
     this.OptionsIsExpanded = true;
     this.ResizeMethodIsExpanded = true;
@@ -112,7 +112,7 @@ public class Options {
   public double TmpCompactLayoutHeight { get; set; }
   
   /// ウィンドウ状態
-  public WindowState TmpWindowState { get; set; }
+  public WindowState WindowState { get; set; }
 
   /// AreaExpanderが開いている
   public bool AreaIsExpanded { get; set; }
@@ -146,6 +146,11 @@ public class Options {
   //===================================================================
   // アクセサ
   //===================================================================
+
+  /// LayoutEditが表示されているか
+  public bool IsLayoutVisible {
+    get { return this.LayoutIsExpanded && this.WindowState != WindowState.Minimized; }
+  }
 
   /// プロファイルパスリストのindex番目を取得する
   public string GetRecentProfile(int index) {

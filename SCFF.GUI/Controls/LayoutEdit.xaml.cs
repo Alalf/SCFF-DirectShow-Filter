@@ -212,7 +212,7 @@ public partial class LayoutEdit
   ///
   /// @todo(me) 負荷軽減のためFPS制限してもいいかも(30FPSでだいたい半分だがカクカク)
   private void BuildDrawingGroup() {
-    Debug.Assert(App.Options.LayoutIsExpanded, "Must be shown", "LayoutEdit");
+    Debug.Assert(App.Options.IsLayoutVisible, "Must be shown", "LayoutEdit");
 
     using (var dc = this.DrawingGroup.Open()) {
       // 背景描画でサイズを決める
@@ -253,7 +253,7 @@ public partial class LayoutEdit
   /// @param e 使用しない
   void ScreenCaptureTimer_Tick(object sender, EventArgs e) {
     // プレビューが必要なければ更新しない
-    if (!App.Options.LayoutIsExpanded) return;
+    if (!App.Options.IsLayoutVisible) return;
     if (!App.Options.LayoutPreview) return;
     
     // マウス操作中は更新しない
@@ -406,14 +406,14 @@ public partial class LayoutEdit
   public void OnOptionsChanged() {
     this.CanChangeOptions = false;
 
-    if (App.Options.LayoutIsExpanded && App.Options.LayoutPreview) {
+    if (App.Options.IsLayoutVisible && App.Options.LayoutPreview) {
       App.ScreenCaptureTimer.Start();       // タイマー再開
       App.ScreenCaptureTimer.UpdateRequest(App.Profile);
       this.BuildDrawingGroup();
-    } else if (App.Options.LayoutIsExpanded && !App.Options.LayoutPreview) {
+    } else if (App.Options.IsLayoutVisible && !App.Options.LayoutPreview) {
       App.ScreenCaptureTimer.Suspend();     // タイマー停止
       this.BuildDrawingGroup();
-    } else { // App.Options.!LayoutIsExpanded
+    } else if (!App.Options.IsLayoutVisible) {
       App.ScreenCaptureTimer.Suspend();     // タイマー停止
       this.ClearDrawingGroup();             // DrawingGroupもクリア
     }
@@ -432,9 +432,7 @@ public partial class LayoutEdit
     this.CanChangeRuntimeOptions = false;
 
     // 再描画
-    if (App.Options.LayoutIsExpanded) {
-      this.BuildDrawingGroup();
-    }
+    if (App.Options.IsLayoutVisible) this.BuildDrawingGroup();
 
     this.CanChangeRuntimeOptions = true;
   }
@@ -454,7 +452,7 @@ public partial class LayoutEdit
   public void OnProfileChanged() {
     this.CanChangeProfile = false;
 
-    if (App.Options.LayoutIsExpanded) {
+    if (App.Options.IsLayoutVisible) {
       if (App.Options.LayoutPreview) {
         App.ScreenCaptureTimer.UpdateRequest(App.Profile);
       }

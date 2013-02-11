@@ -68,7 +68,7 @@ public class OptionsFile : TinyKeyValueFile {
         writer.WriteLine("TmpCompactLayoutWidth={0}", this.options.TmpCompactLayoutWidth);
         writer.WriteLine("TmpCompactLayoutHeight={0}", this.options.TmpCompactLayoutHeight);
 
-        writer.WriteLine("TmpWindowState={0}", (int)this.options.TmpWindowState);
+        writer.WriteLine("WindowState={0}", (int)this.options.WindowState);
         writer.WriteLine("AreaIsExpanded={0}", this.options.AreaIsExpanded);
         writer.WriteLine("OptionsIsExpanded={0}", this.options.OptionsIsExpanded);
         writer.WriteLine("ResizeMethodIsExpanded={0}",
@@ -157,8 +157,8 @@ public class OptionsFile : TinyKeyValueFile {
     }
 
     WindowState windowState;
-    if (this.TryGetWindowState("TmpWindowState", out windowState)) {
-      this.options.TmpWindowState = windowState;
+    if (this.TryGetWindowState("WindowState", out windowState)) {
+      this.options.WindowState = windowState;
     }
     if (this.TryGetBool("AreaIsExpanded", out boolValue)) {
       this.options.AreaIsExpanded = boolValue;

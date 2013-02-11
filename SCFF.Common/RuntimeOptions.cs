@@ -20,11 +20,11 @@
 
 namespace SCFF.Common {
 
-  using System;
-  using System.Collections.Generic;
-  using System.Diagnostics;
-  using SCFF.Common.Ext;
-  using SCFF.Interprocess;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using SCFF.Common.Ext;
+using SCFF.Interprocess;
 
 /// アプリケーションの実行時設定
 ///
@@ -52,10 +52,7 @@ public class RuntimeOptions {
     this.LastAppliedTimestamp = RuntimeOptions.InvalidTimestamp;
 
     this.CurrentProcessID = 0;
-    this.Entries = new Dictionary<UInt32,InternalEntry>();
     this.EntryLabels = new List<Tuple<UInt32,string>>();
-
-    this.WasAeroOnWhenStartup = false;
   }
 
   //===================================================================
@@ -77,60 +74,8 @@ public class RuntimeOptions {
   /// @todo(me) これはProcessIDごとになるのでは？
   public Int64 LastAppliedTimestamp { get; set; }
 
-  //-------------------------------------------------------------------
- 
   /// 現在のプロセスID
   public UInt32 CurrentProcessID { get; set; }
-
-  /// @copybrief SCFF::Interprocess::Entry
-  /// @attention Entryは構造体のため、Dictionaryから取り出すごとにコピーが発生する
-  ///            これを避けるため、参照型のまま取り扱えるEntryクラスを用意した
-  private class InternalEntry {
-    /// コンストラクタ
-    /// @param[in] sampleWidth サンプルの出力幅
-    /// @param[in] sampleHeight サンプルの出力高さ
-    /// @param[in] samplePixelFormat サンプルの出力ピクセルフォーマット
-    public InternalEntry(int sampleWidth, int sampleHeight,
-                         ImagePixelFormats samplePixelFormat) {
-      this.SampleWidth = sampleWidth;
-      this.SampleHeight = sampleHeight;
-      this.SamplePixelFormat = samplePixelFormat;
-    }
-    /// サンプルの出力幅
-    public int SampleWidth { get; private set; }
-    /// サンプルの出力高さ
-    public int SampleHeight { get; private set; }
-    /// サンプルの出力ピクセルフォーマット
-    public ImagePixelFormats SamplePixelFormat { get; private set; }
-    // FPSは現在必要ない
-  }
-
-  /// エントリディクショナリ
-  private Dictionary<UInt32,InternalEntry> Entries { get; set; }
-
-  /// エントリの表示用ディクショナリ
-  public List<Tuple<UInt32,string>> EntryLabels { get; private set; }
-
-  //-------------------------------------------------------------------
-
-  /// 起動時にAeroがOnだったか
-  private bool WasAeroOnWhenStartup { get; set; }
-
-  /// DWMAPI.DLLが利用可能かどうか
-  private bool CanUseAero {
-    get {
-      // Vista以降なら利用可能
-      return (Environment.OSVersion.Platform == PlatformID.Win32NT &&
-              Environment.OSVersion.Version.Major >= 6);
-    }
-  }
-
-  /// Aeroの状態を変更可能か
-  public bool CanSetAero {
-    get { return this.CanUseAero && this.WasAeroOnWhenStartup; }
-  }
-
-  //-------------------------------------------------------------------
 
   /// 現在編集中のプロセスIDが有効か
   public bool IsCurrentProcessIDValid {
@@ -143,8 +88,8 @@ public class RuntimeOptions {
       if (!this.IsCurrentProcessIDValid)
         return ImagePixelFormats.IYUV;
 
-      Debug.Assert(this.Entries.ContainsKey(this.CurrentProcessID));
-      return this.Entries[this.CurrentProcessID].SamplePixelFormat;
+      Debug.Assert(this.entries.ContainsKey(this.CurrentProcessID));
+      return this.entries[this.CurrentProcessID].SamplePixelFormat;
     }
   }
   /// 現在選択中のプロセスが要求するサンプル幅
@@ -153,8 +98,8 @@ public class RuntimeOptions {
       if (!this.IsCurrentProcessIDValid)
         return Constants.DummySampleWidth;
 
-      Debug.Assert(this.Entries.ContainsKey(this.CurrentProcessID));
-      return this.Entries[this.CurrentProcessID].SampleWidth;
+      Debug.Assert(this.entries.ContainsKey(this.CurrentProcessID));
+      return this.entries[this.CurrentProcessID].SampleWidth;
     }
   }
   /// 現在選択中のプロセスが要求するサンプル高さ
@@ -163,9 +108,30 @@ public class RuntimeOptions {
       if (!this.IsCurrentProcessIDValid)
         return Constants.DummySampleHeight;
      
-      Debug.Assert(this.Entries.ContainsKey(this.CurrentProcessID));
-      return this.Entries[this.CurrentProcessID].SampleHeight;
+      Debug.Assert(this.entries.ContainsKey(this.CurrentProcessID));
+      return this.entries[this.CurrentProcessID].SampleHeight;
     }
+  }
+
+  /// エントリの表示用ディクショナリ
+  public List<Tuple<UInt32,string>> EntryLabels { get; private set; }
+
+  //-------------------------------------------------------------------
+  // private
+  //-------------------------------------------------------------------
+ 
+  /// DWMAPI.DLLが利用可能かどうか
+  private bool CanUseAero {
+    get {
+      // Vista以降なら利用可能
+      return (Environment.OSVersion.Platform == PlatformID.Win32NT &&
+              Environment.OSVersion.Version.Major >= 6);
+    }
+  }
+
+  /// Aeroの状態を変更可能か
+  public bool CanSetAero {
+    get { return this.CanUseAero && this.wasAeroOnWhenStartup; }
   }
 
   //===================================================================
@@ -200,7 +166,7 @@ public class RuntimeOptions {
     if (!getResult) return;
 
     // Entries/EntryLabelsを更新
-    this.Entries.Clear();
+    this.entries.Clear();
     this.EntryLabels.Clear();
     foreach (var entry in directory.Entries) {
       if (entry.ProcessID == 0) continue;
@@ -209,7 +175,7 @@ public class RuntimeOptions {
       var internalEntry = new InternalEntry(
           entry.SampleWidth, entry.SampleHeight,
           (ImagePixelFormats)entry.SamplePixelFormat);
-      this.Entries.Add(entry.ProcessID, internalEntry);
+      this.entries.Add(entry.ProcessID, internalEntry);
 
       // ラベルの生成と追加
       var tuple = new Tuple<UInt32,string>(entry.ProcessID, this.GetEntryLabel(entry));
@@ -217,12 +183,12 @@ public class RuntimeOptions {
     }
 
     // 現在選択中のプロセスIDがなくなっていた場合
-    if (!this.Entries.ContainsKey(this.CurrentProcessID)) {
-      if (this.Entries.Count == 0) {
+    if (!this.entries.ContainsKey(this.CurrentProcessID)) {
+      if (this.entries.Count == 0) {
         this.CurrentProcessID = 0;
       } else {
         // 適当に最初の一個を選ぶ
-        foreach (var key in this.Entries.Keys) {
+        foreach (var key in this.entries.Keys) {
           this.CurrentProcessID = key;
           break;
         }
@@ -237,13 +203,13 @@ public class RuntimeOptions {
   /// 起動時のAeroの状態を保存
   public void SaveStartupAeroState() {
     if (!this.CanUseAero) {
-      this.WasAeroOnWhenStartup = false;
+      this.wasAeroOnWhenStartup = false;
       return;
     }
 
     bool isAeroOn;
     DWMAPI.DwmIsCompositionEnabled(out isAeroOn);
-    this.WasAeroOnWhenStartup = isAeroOn;
+    this.wasAeroOnWhenStartup = isAeroOn;
   }
 
   /// Dwmapi.dllを利用してAeroをOnに
@@ -271,11 +237,47 @@ public class RuntimeOptions {
   /// AeroをOffにしていたらOnに戻す
   public void RestoreStartupAeroState() {
     if (!this.CanUseAero) return;
-    if (this.WasAeroOnWhenStartup) {
+    if (this.wasAeroOnWhenStartup) {
       this.SetAeroOn();
     } else {
       this.SetAeroOff();
     }
   }
+
+  //===================================================================
+  // フィールド
+  //===================================================================
+
+  /// @copybrief SCFF::Interprocess::Entry
+  /// @attention Entryは構造体のため、Dictionaryから取り出すごとにコピーが発生する
+  ///            これを避けるため、参照型のまま取り扱えるEntryクラスを用意した
+  private class InternalEntry {
+    /// コンストラクタ
+    /// @param[in] sampleWidth サンプルの出力幅
+    /// @param[in] sampleHeight サンプルの出力高さ
+    /// @param[in] samplePixelFormat サンプルの出力ピクセルフォーマット
+    public InternalEntry(int sampleWidth, int sampleHeight,
+                         ImagePixelFormats samplePixelFormat) {
+      this.SampleWidth = sampleWidth;
+      this.SampleHeight = sampleHeight;
+      this.SamplePixelFormat = samplePixelFormat;
+    }
+    /// サンプルの出力幅
+    public int SampleWidth { get; private set; }
+    /// サンプルの出力高さ
+    public int SampleHeight { get; private set; }
+    /// サンプルの出力ピクセルフォーマット
+    public ImagePixelFormats SamplePixelFormat { get; private set; }
+    // FPSは現在必要ない
+  }
+
+  /// エントリディクショナリ
+  private readonly Dictionary<UInt32,InternalEntry> entries =
+      new Dictionary<UInt32,InternalEntry>();
+
+  //-------------------------------------------------------------------
+
+  /// 起動時にAeroがOnだったか
+  private bool wasAeroOnWhenStartup;
 }
 }   // namespace SCFF.Common

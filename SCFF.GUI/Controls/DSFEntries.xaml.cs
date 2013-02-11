@@ -37,8 +37,7 @@ public partial class DSFEntries : UserControl, IBindingRuntimeOptions {
   public DSFEntries() {
     InitializeComponent();
 
-    this.ProcessesSource = new ObservableCollection<Tuple<uint,string>>();
-    this.Processes.ItemsSource = this.ProcessesSource;
+    this.Processes.ItemsSource = this.processesSource;
     this.Processes.DisplayMemberPath = "Item2";
     this.Processes.SelectedValuePath = "Item1";
   }
@@ -96,13 +95,13 @@ public partial class DSFEntries : UserControl, IBindingRuntimeOptions {
     this.CanChangeRuntimeOptions = false;
 
     // コンボボックスの更新
-    this.ProcessesSource.Clear();
+    this.processesSource.Clear();
     foreach (var tuple in App.RuntimeOptions.EntryLabels) {
-      this.ProcessesSource.Add(tuple);
+      this.processesSource.Add(tuple);
     }
 
     // SelectedIndexの調整
-    if (this.ProcessesSource.Count == 0) {
+    if (this.processesSource.Count == 0) {
       this.Processes.IsEnabled = false;
     } else {
       this.Processes.IsEnabled = true;
@@ -113,10 +112,11 @@ public partial class DSFEntries : UserControl, IBindingRuntimeOptions {
   }
 
   //===================================================================
-  // プロパティ
+  // フィールド
   //===================================================================
 
   /// Processes.ItemsSource用のObservableCollection
-  private ObservableCollection<Tuple<UInt32,string>> ProcessesSource { get; set; }
+  private readonly ObservableCollection<Tuple<UInt32,string>> processesSource =
+      new ObservableCollection<Tuple<uint,string>>();
 }
 }   // namespace SCFF.GUI.Controls

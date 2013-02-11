@@ -21,7 +21,6 @@
 /// SCFF DSFのGUIクライアント
 namespace SCFF.GUI {
 
-using System;
 using System.Diagnostics;
 using System.IO.Pipes;
 using System.Text;
@@ -29,7 +28,6 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
-using System.Windows.Threading;
 using SCFF.Common;
 using SCFF.Common.GUI;
 using SCFF.Common.Profile;
@@ -46,33 +44,8 @@ public partial class App : Application {
   private const string namedPipeName = mutexName + "-pipe";
 
   //===================================================================
-  // staticプロパティ
+  // イベントハンドラ
   //===================================================================
-
-  /// アプリケーションの実装
-  public static ClientApplication Impl { get; private set; }
-
-  /// スクリーンキャプチャ用タイマー
-  public static ScreenCaptureTimer ScreenCaptureTimer { get; private set; }
-  /// NullPen
-  public static NullPen NullPen { get; private set; }
-
-  //-------------------------------------------------------------------
-
-  /// アプリケーション設定
-  public static Options Options {
-    get { return App.Impl.Options; }
-  }
-  /// アプリケーション実行時設定
-  public static RuntimeOptions RuntimeOptions {
-    get { return App.Impl.RuntimeOptions; }
-  }
-  /// 現在編集中のプロファイル
-  public static Profile Profile {
-    get { return App.Impl.Profile; }
-  }
-
-  //-------------------------------------------------------------------
 
   /// Staticプロパティの生成
   private void ConstructStaticProperties() {
@@ -89,40 +62,7 @@ public partial class App : Application {
     App.Impl.OnDSFErrorOccured      -= this.OnDSFErrorOccured;
   }
 
-  //===================================================================
-  // プロパティ
-  //===================================================================
-
-  /// Mutex
-  private Mutex Mutex { get; set; }
-
-  //===================================================================
-  // SCFF.Common.ClientApplicationイベントハンドラ
-  //===================================================================
-
-  /// @copybrief SCFF::Common::ClientApplication::OnStartupErrorOccured
-  /// @param[in] sender 使用しない
-  /// @param[in] e エラー表示用のデータが格納されたオブジェクト
-  private void OnStartupErrorOccured(object sender, ErrorOccuredEventArgs e) {
-    if (e.Quiet) return;
-    MessageBox.Show(e.Message, "SCFF.GUI",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
-  }
-
-  /// @copybrief SCFF::Common::ClientApplication::OnDSFErrorOccured
-  /// @param[in] sender 使用しない
-  /// @param[in] e エラー表示用のデータが格納されたオブジェクト
-  private void OnDSFErrorOccured(object sender, ErrorOccuredEventArgs e) {
-    if (e.Quiet) return;
-    MessageBox.Show(e.Message, "SCFF.GUI",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
-  }
-
-  //===================================================================
-  // イベントハンドラ
-  //===================================================================
+  //-------------------------------------------------------------------
 
   /// Startup: アプリケーション開始時
   /// @param e コマンドライン引数(Args)を参照可能
@@ -138,7 +78,7 @@ public partial class App : Application {
       this.Shutdown(-1);
       return;
     }
-    this.Mutex = mutex;
+    this.mutex = mutex;
 
     // 正常起動
     base.OnStartup(e);
@@ -165,7 +105,7 @@ public partial class App : Application {
   /// @param e 終了コード(ApplicationExitCode)の参照・設定が可能
   protected override void OnExit(ExitEventArgs e) {
     // Mutexがない = 複数起動
-    if (this.Mutex == null) {
+    if (this.mutex == null) {
       Debug.WriteLine(Constants.SCFFVersion + " is already running.", "App");
       return;
     }
@@ -174,6 +114,31 @@ public partial class App : Application {
     base.OnExit(e);
     App.Impl.Exit();
     this.DestructStaticProperties();
+  }
+
+
+  //===================================================================
+  // SCFF.Common.ClientApplicationイベントハンドラ
+  //===================================================================
+
+  /// @copybrief SCFF::Common::ClientApplication::OnStartupErrorOccured
+  /// @param[in] sender 使用しない
+  /// @param[in] e エラー表示用のデータが格納されたオブジェクト
+  private void OnStartupErrorOccured(object sender, ErrorOccuredEventArgs e) {
+    if (e.Quiet) return;
+    MessageBox.Show(e.Message, "SCFF.GUI",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+  }
+
+  /// @copybrief SCFF::Common::ClientApplication::OnDSFErrorOccured
+  /// @param[in] sender 使用しない
+  /// @param[in] e エラー表示用のデータが格納されたオブジェクト
+  private void OnDSFErrorOccured(object sender, ErrorOccuredEventArgs e) {
+    if (e.Quiet) return;
+    MessageBox.Show(e.Message, "SCFF.GUI",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
   }
 
   //===================================================================
@@ -250,5 +215,39 @@ public partial class App : Application {
       Debug.WriteLine("Send profile path failed", "App.StartPipeClient");
     }
   }
+
+  //===================================================================
+  // staticプロパティ
+  //===================================================================
+
+  /// アプリケーションの実装
+  public static ClientApplication Impl { get; private set; }
+
+  /// スクリーンキャプチャ用タイマー
+  public static ScreenCaptureTimer ScreenCaptureTimer { get; private set; }
+  /// NullPen
+  public static NullPen NullPen { get; private set; }
+
+  //-------------------------------------------------------------------
+
+  /// アプリケーション設定
+  public static Options Options {
+    get { return App.Impl.Options; }
+  }
+  /// アプリケーション実行時設定
+  public static RuntimeOptions RuntimeOptions {
+    get { return App.Impl.RuntimeOptions; }
+  }
+  /// 現在編集中のプロファイル
+  public static Profile Profile {
+    get { return App.Impl.Profile; }
+  }
+
+  //===================================================================
+  // フィールド
+  //===================================================================
+
+  /// Mutex
+  private Mutex mutex;
 }
 }   // namespace SCFF.GUI

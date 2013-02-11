@@ -50,13 +50,6 @@ public class LayoutElement : ILayoutElementView, ILayoutElement {
   }
 
   //=================================================================
-  // プロパティ
-  //=================================================================
-
-  /// 対象プロファイル
-  private Profile profile { get; set; }
-
-  //=================================================================
   // ILayoutElementView: プロパティ
   //=================================================================
 
@@ -607,6 +600,13 @@ public class LayoutElement : ILayoutElementView, ILayoutElement {
   public int SetBackupClippingHeight {
     set { this.profile.additionalLayoutParameters[this.Index].BackupClippingHeight = value; }
   }
+
+  //=================================================================
+  // フィールド
+  //=================================================================
+
+  /// 対象プロファイル
+  private readonly Profile profile;
 }
 }   // (outerclass) SCFF.Common.Profile.Profile
 }   // namespace SCFF.Common.Profile

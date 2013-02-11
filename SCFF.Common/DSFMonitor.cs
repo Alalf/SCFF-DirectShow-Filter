@@ -35,10 +35,8 @@ public class DSFMonitor {
 
   /// コンストラクタ
   public DSFMonitor(Interprocess interprocess) {
-    this.Interprocess = interprocess;
-    this.MonitoredDSFs = new Dictionary<UInt32,Task>();
-
-    this.Interprocess.InitShutdownEvent();
+    this.interprocess = interprocess;
+    this.interprocess.InitShutdownEvent();
   }
 
   //===================================================================
@@ -49,8 +47,8 @@ public class DSFMonitor {
   /// @param[in] processID 監視対象のプロセスID
   public void Start(UInt32 processID) {
     // すでに監視中でTaskがまだ生きている場合は何もしない
-    if (this.MonitoredDSFs.ContainsKey(processID) &&
-        !this.MonitoredDSFs[processID].IsCompleted) return;
+    if (this.monitoredDSFs.ContainsKey(processID) &&
+        !this.monitoredDSFs[processID].IsCompleted) return;
 
     var context = SynchronizationContext.Current;
 
@@ -60,10 +58,10 @@ public class DSFMonitor {
       Debug.WriteLine("Start Task: " + processID, "DSFMonitor");
 
       // 開始前に一回Eventをクリアしておく
-      this.Interprocess.CheckErrorEvent(processID);
+      this.interprocess.CheckErrorEvent(processID);
 
       // エラーが起きるまで待機
-      var dsfErrorOccured = this.Interprocess.WaitUntilErrorEventOccured(processID);
+      var dsfErrorOccured = this.interprocess.WaitUntilErrorEventOccured(processID);
       if (dsfErrorOccured) {
         context.Post((s) => {
           // Event: DSFErrorOccured
@@ -79,7 +77,7 @@ public class DSFMonitor {
 
     // 監視中リストに追加
     // ValueはIsCompletedであることが保障されているので上書き可能
-    this.MonitoredDSFs[processID] = task;
+    this.monitoredDSFs[processID] = task;
 
     // Taskの実行
     task.Start();
@@ -88,13 +86,13 @@ public class DSFMonitor {
   /// 死んだプロセスの監視Taskを削除
   public void RemoveZombies() {
     var removeList = new List<UInt32>();
-    foreach (var kv in this.MonitoredDSFs) {
+    foreach (var kv in this.monitoredDSFs) {
       // プロセスがまだ実行中なら消去の必要はない
       if (Utilities.IsProcessAlive(kv.Key)) continue;
 
       // WaitOneを強制解除してTaskの終了を待つ
       Debug.WriteLine("Removing Zombie: " + kv.Key, "DSFMonitor");
-      this.Interprocess.SetErrorEvent(kv.Key);
+      this.interprocess.SetErrorEvent(kv.Key);
       kv.Value.Wait();
       removeList.Add(kv.Key);
     }
@@ -102,7 +100,7 @@ public class DSFMonitor {
     // MonitoredDSFsの更新
     foreach (var processID in removeList) {
       Debug.WriteLine("Removing Task: " + processID, "DSFMonitor");
-      this.MonitoredDSFs.Remove(processID);
+      this.monitoredDSFs.Remove(processID);
     }
   }
 
@@ -112,23 +110,23 @@ public class DSFMonitor {
 
     // WaitOneを強制解除してTaskの終了を待つ
     Debug.WriteLine("Removing Zombie: " + processID, "DSFMonitor");
-    this.Interprocess.SetErrorEvent(processID);
-    this.MonitoredDSFs[processID].Wait();
+    this.interprocess.SetErrorEvent(processID);
+    this.monitoredDSFs[processID].Wait();
 
     // MonitoredDSFsの更新
     Debug.WriteLine("Removing Task: " + processID, "DSFMonitor");
-    this.MonitoredDSFs.Remove(processID);
+    this.monitoredDSFs.Remove(processID);
   }
 
   /// 全てのTaskの終了を待機
   public void Exit() {
     Debug.WriteLine("Exit", "DSFMonitor");
-    this.Interprocess.SetShutdownEvent();
-    foreach (var kv in this.MonitoredDSFs) {
+    this.interprocess.SetShutdownEvent();
+    foreach (var kv in this.monitoredDSFs) {
       kv.Value.Wait();
     }
     // MonitoredDSFsの更新
-    this.MonitoredDSFs.Clear();
+    this.monitoredDSFs.Clear();
   }
 
   //===================================================================
@@ -139,13 +137,14 @@ public class DSFMonitor {
   public event EventHandler<DSFErrorOccuredEventArgs> OnErrorOccured;
 
   //===================================================================
-  // プロパティ
+  // フィールド
   //===================================================================
 
   /// プロセス間通信用オブジェクト
-  private Interprocess Interprocess { get; set; }
+  private readonly Interprocess interprocess;
 
   /// 監視中のDirectShow Filter
-  private Dictionary<UInt32,Task> MonitoredDSFs { get; set; }
+  private readonly Dictionary<UInt32,Task> monitoredDSFs =
+      new Dictionary<UInt32,Task>();
 }
 }

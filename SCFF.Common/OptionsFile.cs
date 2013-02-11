@@ -21,7 +21,6 @@
 namespace SCFF.Common {
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 
@@ -33,7 +32,7 @@ public class OptionsFile : TinyKeyValueFile {
 
   /// コンストラクタ
   public OptionsFile(Options options) : base() {
-    this.Options = options;
+    this.options = options;
   }
 
   //===================================================================
@@ -53,38 +52,38 @@ public class OptionsFile : TinyKeyValueFile {
         writer.WriteLine(Constants.OptionsHeader);
         for (int i = 0; i < 5; ++i) {
           writer.WriteLine("RecentProfile{0}={1}", i,
-                           this.Options.GetRecentProfile(i));
+                           this.options.GetRecentProfile(i));
         }
-        writer.WriteLine("FFmpegPath={0}", this.Options.FFmpegPath);
-        writer.WriteLine("FFmpegArguments={0}", this.Options.FFmpegArguments);
-        writer.WriteLine("TmpLeft={0}", this.Options.TmpLeft);
-        writer.WriteLine("TmpTop={0}", this.Options.TmpTop);
+        writer.WriteLine("FFmpegPath={0}", this.options.FFmpegPath);
+        writer.WriteLine("FFmpegArguments={0}", this.options.FFmpegArguments);
+        writer.WriteLine("TmpLeft={0}", this.options.TmpLeft);
+        writer.WriteLine("TmpTop={0}", this.options.TmpTop);
 
-        writer.WriteLine("TmpNormalWidth={0}", this.Options.TmpNormalWidth);
-        writer.WriteLine("TmpNormalHeight={0}", this.Options.TmpNormalHeight);
-        writer.WriteLine("TmpNormalLayoutWidth={0}", this.Options.TmpNormalLayoutWidth);
-        writer.WriteLine("TmpNormalLayoutHeight={0}", this.Options.TmpNormalLayoutHeight);
-        writer.WriteLine("TmpCompactWidth={0}", this.Options.TmpCompactWidth);
-        writer.WriteLine("TmpCompactHeight={0}", this.Options.TmpCompactHeight);
-        writer.WriteLine("TmpCompactLayoutWidth={0}", this.Options.TmpCompactLayoutWidth);
-        writer.WriteLine("TmpCompactLayoutHeight={0}", this.Options.TmpCompactLayoutHeight);
+        writer.WriteLine("TmpNormalWidth={0}", this.options.TmpNormalWidth);
+        writer.WriteLine("TmpNormalHeight={0}", this.options.TmpNormalHeight);
+        writer.WriteLine("TmpNormalLayoutWidth={0}", this.options.TmpNormalLayoutWidth);
+        writer.WriteLine("TmpNormalLayoutHeight={0}", this.options.TmpNormalLayoutHeight);
+        writer.WriteLine("TmpCompactWidth={0}", this.options.TmpCompactWidth);
+        writer.WriteLine("TmpCompactHeight={0}", this.options.TmpCompactHeight);
+        writer.WriteLine("TmpCompactLayoutWidth={0}", this.options.TmpCompactLayoutWidth);
+        writer.WriteLine("TmpCompactLayoutHeight={0}", this.options.TmpCompactLayoutHeight);
 
-        writer.WriteLine("TmpWindowState={0}", (int)this.Options.TmpWindowState);
-        writer.WriteLine("AreaIsExpanded={0}", this.Options.AreaIsExpanded);
-        writer.WriteLine("OptionsIsExpanded={0}", this.Options.OptionsIsExpanded);
+        writer.WriteLine("TmpWindowState={0}", (int)this.options.TmpWindowState);
+        writer.WriteLine("AreaIsExpanded={0}", this.options.AreaIsExpanded);
+        writer.WriteLine("OptionsIsExpanded={0}", this.options.OptionsIsExpanded);
         writer.WriteLine("ResizeMethodIsExpanded={0}",
-                         this.Options.ResizeMethodIsExpanded);
-        writer.WriteLine("LayoutIsExpanded={0}", this.Options.LayoutIsExpanded);
-        writer.WriteLine("AutoApply={0}", this.Options.AutoApply);
-        writer.WriteLine("LayoutPreview={0}", this.Options.LayoutPreview);
-        writer.WriteLine("LayoutBorder={0}", this.Options.LayoutBorder);
-        writer.WriteLine("LayoutSnap={0}", this.Options.LayoutSnap);
-        writer.WriteLine("CompactView={0}", this.Options.CompactView);
-        writer.WriteLine("ForceAeroOn={0}", this.Options.ForceAeroOn);
-        writer.WriteLine("RestoreLastProfile={0}", this.Options.RestoreLastProfile);
+                         this.options.ResizeMethodIsExpanded);
+        writer.WriteLine("LayoutIsExpanded={0}", this.options.LayoutIsExpanded);
+        writer.WriteLine("AutoApply={0}", this.options.AutoApply);
+        writer.WriteLine("LayoutPreview={0}", this.options.LayoutPreview);
+        writer.WriteLine("LayoutBorder={0}", this.options.LayoutBorder);
+        writer.WriteLine("LayoutSnap={0}", this.options.LayoutSnap);
+        writer.WriteLine("CompactView={0}", this.options.CompactView);
+        writer.WriteLine("ForceAeroOn={0}", this.options.ForceAeroOn);
+        writer.WriteLine("RestoreLastProfile={0}", this.options.RestoreLastProfile);
         writer.WriteLine("RestoreMissingWindowWhenOpeningProfile={0}",
-                         this.Options.RestoreMissingWindowWhenOpeningProfile);
-        writer.WriteLine("EnableGPUPreviewRendering={0}", this.Options.EnableGPUPreviewRendering);
+                         this.options.RestoreMissingWindowWhenOpeningProfile);
+        writer.WriteLine("EnableGPUPreviewRendering={0}", this.options.EnableGPUPreviewRendering);
         return true;
       }
     } catch (Exception) {
@@ -116,89 +115,89 @@ public class OptionsFile : TinyKeyValueFile {
     string prefix = "RecentProfile";
     for (int i = 0; i < 5; ++i) {
       if (this.TryGetString(prefix + i, out stringValue)) {
-        this.Options.SetRecentProfile(i, stringValue);
+        this.options.SetRecentProfile(i, stringValue);
       }
     }
     if (this.TryGetString("FFmpegPath", out stringValue)) {
-      this.Options.FFmpegPath = stringValue;
+      this.options.FFmpegPath = stringValue;
     }
     if (this.TryGetString("FFmpegArguments", out stringValue)) {
-      this.Options.FFmpegArguments = stringValue;
+      this.options.FFmpegArguments = stringValue;
     }
     if (this.TryGetDouble("TmpLeft", out doubleValue)) {
-      this.Options.TmpLeft = doubleValue;
+      this.options.TmpLeft = doubleValue;
     }
     if (this.TryGetDouble("TmpTop", out doubleValue)) {
-      this.Options.TmpTop = doubleValue;
+      this.options.TmpTop = doubleValue;
     }
 
     if (this.TryGetDouble("TmpNormalWidth", out doubleValue)) {
-      this.Options.TmpNormalWidth = doubleValue;
+      this.options.TmpNormalWidth = doubleValue;
     }
     if (this.TryGetDouble("TmpNormalHeight", out doubleValue)) {
-      this.Options.TmpNormalHeight = doubleValue;
+      this.options.TmpNormalHeight = doubleValue;
     }
     if (this.TryGetDouble("TmpNormalLayoutWidth", out doubleValue)) {
-      this.Options.TmpNormalLayoutWidth = doubleValue;
+      this.options.TmpNormalLayoutWidth = doubleValue;
     }
     if (this.TryGetDouble("TmpNormalLayoutHeight", out doubleValue)) {
-      this.Options.TmpNormalLayoutHeight = doubleValue;
+      this.options.TmpNormalLayoutHeight = doubleValue;
     }
     if (this.TryGetDouble("TmpCompactWidth", out doubleValue)) {
-      this.Options.TmpCompactWidth = doubleValue;
+      this.options.TmpCompactWidth = doubleValue;
     }
     if (this.TryGetDouble("TmpCompactHeight", out doubleValue)) {
-      this.Options.TmpCompactHeight = doubleValue;
+      this.options.TmpCompactHeight = doubleValue;
     }
     if (this.TryGetDouble("TmpCompactLayoutWidth", out doubleValue)) {
-      this.Options.TmpCompactLayoutWidth = doubleValue;
+      this.options.TmpCompactLayoutWidth = doubleValue;
     }
     if (this.TryGetDouble("TmpCompactLayoutHeight", out doubleValue)) {
-      this.Options.TmpCompactLayoutHeight = doubleValue;
+      this.options.TmpCompactLayoutHeight = doubleValue;
     }
 
     WindowState windowState;
     if (this.TryGetWindowState("TmpWindowState", out windowState)) {
-      this.Options.TmpWindowState = windowState;
+      this.options.TmpWindowState = windowState;
     }
     if (this.TryGetBool("AreaIsExpanded", out boolValue)) {
-      this.Options.AreaIsExpanded = boolValue;
+      this.options.AreaIsExpanded = boolValue;
     }
     if (this.TryGetBool("OptionsIsExpanded", out boolValue)) {
-      this.Options.OptionsIsExpanded = boolValue;
+      this.options.OptionsIsExpanded = boolValue;
     }
     if (this.TryGetBool("ResizeMethodIsExpanded", out boolValue)) {
-      this.Options.ResizeMethodIsExpanded = boolValue;
+      this.options.ResizeMethodIsExpanded = boolValue;
     }
     if (this.TryGetBool("LayoutIsExpanded", out boolValue)) {
-      this.Options.LayoutIsExpanded = boolValue;
+      this.options.LayoutIsExpanded = boolValue;
     }
     if (this.TryGetBool("AutoApply", out boolValue)) {
-      this.Options.AutoApply = boolValue;
+      this.options.AutoApply = boolValue;
     }
     if (this.TryGetBool("LayoutPreview", out boolValue)) {
-      this.Options.LayoutPreview = boolValue;
+      this.options.LayoutPreview = boolValue;
     }
     if (this.TryGetBool("LayoutBorder", out boolValue)) {
-      this.Options.LayoutBorder = boolValue;
+      this.options.LayoutBorder = boolValue;
     }
     if (this.TryGetBool("LayoutSnap", out boolValue)) {
-      this.Options.LayoutSnap = boolValue;
+      this.options.LayoutSnap = boolValue;
     }
     if (this.TryGetBool("CompactView", out boolValue)) {
-      this.Options.CompactView = boolValue;
+      this.options.CompactView = boolValue;
     }
     if (this.TryGetBool("ForceAeroOn", out boolValue)) {
-      this.Options.ForceAeroOn = boolValue;
+      this.options.ForceAeroOn = boolValue;
     }
     if (this.TryGetBool("RestoreLastProfile", out boolValue)) {
-      this.Options.RestoreLastProfile = boolValue;
+      this.options.RestoreLastProfile = boolValue;
     }
     if (this.TryGetBool("RestoreMissingWindowWhenOpeningProfile", out boolValue)) {
-      this.Options.RestoreMissingWindowWhenOpeningProfile = boolValue;
+      this.options.RestoreMissingWindowWhenOpeningProfile = boolValue;
     }
     if (this.TryGetBool("EnableGPUPreviewRendering", out boolValue)) {
-      this.Options.EnableGPUPreviewRendering = boolValue;
+      this.options.EnableGPUPreviewRendering = boolValue;
     }
 
     return true;
@@ -230,10 +229,10 @@ public class OptionsFile : TinyKeyValueFile {
   }
 
   //===================================================================
-  // プロパティ
+  // フィールド
   //===================================================================
   
   /// Optionsへの参照
-  private Options Options { get; set; }
+  private readonly Options options;
 }
 }   // namespace SCFF.Common

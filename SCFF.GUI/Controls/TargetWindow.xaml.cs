@@ -232,10 +232,10 @@ public partial class TargetWindow : UserControl, IBindingProfile {
   //-------------------------------------------------------------------
 
   /// DragHereボタンが押されたか
-  private bool dragHereMode = false;
+  private bool dragHereMode;
   /// 現在のマウスカーソル上のWindowハンドル
-  private UIntPtr currentTargetWindow = UIntPtr.Zero;
+  private UIntPtr currentTargetWindow;
   /// 現在のマウスカーソル上のWindowハンドルのDC
-  private IntPtr currentTargetDC = IntPtr.Zero;
+  private IntPtr currentTargetDC;
 }
 }   // namespace SCFF.GUI.Controls

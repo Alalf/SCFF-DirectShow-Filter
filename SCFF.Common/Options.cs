@@ -42,9 +42,9 @@ public class Options {
 
   /// コンストラクタ
   public Options() {
-    this.reverseRecentProfiles = new string[Constants.RecentProfilesLength] {
-      string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, 
-    };
+    for (int i = 0; i < Constants.RecentProfilesLength; ++i) {
+      this.reverseRecentProfiles[i] = string.Empty;
+    }
     this.FFmpegPath = string.Empty;
     this.FFmpegArguments = string.Empty;
     this.TmpLeft = Constants.DefaultLeft;
@@ -193,6 +193,7 @@ public class Options {
 
   /// 最近使用したプロファイルのパスのリスト
   /// @warning 先頭から古く、末尾が一番新しい
-  private string[] reverseRecentProfiles;
+  private readonly string[] reverseRecentProfiles =
+      new string[Constants.RecentProfilesLength];
 }
 }

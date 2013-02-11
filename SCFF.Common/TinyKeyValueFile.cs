@@ -30,21 +30,12 @@ using SCFF.Interprocess;
 /// @warning データを一回Dictionaryに読み込むので大きなファイルには非対応
 public abstract class TinyKeyValueFile {
   //===================================================================
-  // コンストラクタ/デストラクタ
-  //===================================================================
-  
-  /// コンストラクタ
-  public TinyKeyValueFile() {
-    this.TinyDictionary = new Dictionary<string,string>();
-  }
-
-  //===================================================================
   // メソッド
   //===================================================================
 
   /// ファイルから読み込み
   public virtual bool ReadFile(string path) {
-    this.TinyDictionary.Clear();
+    this.tinyDictionary.Clear();
 
     // テキストファイルの読み込み
     var lines = new List<string>();
@@ -53,7 +44,7 @@ public abstract class TinyKeyValueFile {
         while (!reader.EndOfStream) {
           string key, value;
           if (this.TrySplit(reader.ReadLine(), out key, out value)) {
-            this.TinyDictionary.Add(key, value); 
+            this.tinyDictionary.Add(key, value); 
           }
         }
       }
@@ -103,43 +94,43 @@ public abstract class TinyKeyValueFile {
 
   /// valueをstringでそのまま取得
   protected bool TryGetString(string key, out string value) {
-    return this.TinyDictionary.TryGetValue(key, out value);
+    return this.tinyDictionary.TryGetValue(key, out value);
   }
 
   /// valueをintで取得
   protected bool TryGetInt(string key, out int value) {
     value = 0;
-    if (!this.TinyDictionary.ContainsKey(key)) return false;
-    return int.TryParse(this.TinyDictionary[key], out value);
+    if (!this.tinyDictionary.ContainsKey(key)) return false;
+    return int.TryParse(this.tinyDictionary[key], out value);
   }
 
   /// valueをdoubleで取得
   protected bool TryGetDouble(string key, out double value) {
     value = 0.0;
-    if (!this.TinyDictionary.ContainsKey(key)) return false;
-    return double.TryParse(this.TinyDictionary[key], out value);
+    if (!this.tinyDictionary.ContainsKey(key)) return false;
+    return double.TryParse(this.tinyDictionary[key], out value);
   }
 
   /// valueをfloatで取得
   protected bool TryGetFloat(string key, out float value) {
     value = 0.0F;
-    if (!this.TinyDictionary.ContainsKey(key)) return false;
-    return float.TryParse(this.TinyDictionary[key], out value);
+    if (!this.tinyDictionary.ContainsKey(key)) return false;
+    return float.TryParse(this.tinyDictionary[key], out value);
   }
 
   /// valueをboolで取得
   protected bool TryGetBool(string key, out bool value) {
     value = false;
-    if (!this.TinyDictionary.ContainsKey(key)) return false;
-    return bool.TryParse(this.TinyDictionary[key], out value);
+    if (!this.tinyDictionary.ContainsKey(key)) return false;
+    return bool.TryParse(this.tinyDictionary[key], out value);
   }
 
   /// valueをUIntPtrで取得
   protected bool TryGetUIntPtr(string key, out UIntPtr value) {
     value = UIntPtr.Zero;
-    if (!this.TinyDictionary.ContainsKey(key)) return false;
+    if (!this.tinyDictionary.ContainsKey(key)) return false;
     UInt64 internalValue;
-    if (UInt64.TryParse(this.TinyDictionary[key], out internalValue)) {
+    if (UInt64.TryParse(this.tinyDictionary[key], out internalValue)) {
       value = (UIntPtr)internalValue;
       return true;
     }
@@ -151,6 +142,7 @@ public abstract class TinyKeyValueFile {
   //===================================================================
 
   /// データを格納するためのDictionary
-  private Dictionary<string,string> TinyDictionary { get; set; }
+  private readonly Dictionary<string,string> tinyDictionary =
+      new Dictionary<string,string>();
 }
 }   // namespace SCFF.Common

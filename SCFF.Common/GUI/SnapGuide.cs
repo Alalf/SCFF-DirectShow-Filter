@@ -109,8 +109,8 @@ public class SnapGuide {
   //===================================================================
 
   /// 横方向のスナップガイドリスト
-  private LinkedList<double> verticalSnapGuides = new LinkedList<double>();
+  private readonly LinkedList<double> verticalSnapGuides = new LinkedList<double>();
   /// 縦方向のスナップガイドリスト
-  private LinkedList<double> horizontalSnapGuides = new LinkedList<double>();
+  private readonly LinkedList<double> horizontalSnapGuides = new LinkedList<double>();
 }
 }   // namespace SCFF.Common.GUI

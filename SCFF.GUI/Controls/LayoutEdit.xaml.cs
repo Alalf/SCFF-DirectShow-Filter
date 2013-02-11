@@ -39,9 +39,6 @@ public partial class LayoutEdit
   // 定数
   //===================================================================  
 
-  /// 再描画間隔: 5000ミリ秒
-  private const double redrawTimerPeriod = 5000;
-
   /// カーソルをまとめたディクショナリ
   private static readonly Dictionary<HitModes,Cursor> HitModesToCursors =
       new Dictionary<HitModes,Cursor> {
@@ -355,7 +352,7 @@ public partial class LayoutEdit
     }
 
     // Move or Size
-    this.moveAndSize.UpdateMousePoint(relativeMousePoint);
+    this.moveAndSize.MousePoint = relativeMousePoint;
     var nextLTRB = this.moveAndSize.Do(Keyboard.Modifiers == ModifierKeys.Shift);
       
     App.Profile.Current.SetBoundRelativeLeft = nextLTRB.Left;
@@ -471,10 +468,7 @@ public partial class LayoutEdit
   // フィールド
   //===================================================================
 
-  /// 再描画用DispatcherTimer
-  private DispatcherTimer redrawTimer = new DispatcherTimer();
-
   /// MoveAndSize
-  private MoveAndSize moveAndSize = new MoveAndSize();
+  private readonly MoveAndSize moveAndSize = new MoveAndSize();
 }
 }   // namespace SCFF.GUI.Controls

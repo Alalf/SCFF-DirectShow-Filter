@@ -37,7 +37,7 @@ public class ScreenCaptureTimer : IDisposable {
   // 定数
   //===================================================================
 
-  private const int DefaultTimerPeriod = 3000;  ///< 更新間隔3秒
+  private const int DefaultTimerPeriod = 5000;  ///< 更新間隔5秒
 
   private const int MaxBitmapWidth = 640;   ///< BitmapSourceの最大幅
   private const int MaxBitmapHeight = 480;  ///< BitmapSourceの最大高さ
@@ -48,26 +48,22 @@ public class ScreenCaptureTimer : IDisposable {
 
   /// コンストラクタ
   public ScreenCaptureTimer() {
-    this.SharedLock   = new object();
-    this.IsRunning    = false;
-    this.Cache        = new Dictionary<ScreenCaptureRequest,BitmapSource>();
-    this.TimerPeriod  = ScreenCaptureTimer.DefaultTimerPeriod;
-
+    // Timerの生成
+    var period = ScreenCaptureTimer.DefaultTimerPeriod;
     var context = SynchronizationContext.Current; // UIThread
-    this.CaptureTimer = new Timer(this.TimerCallback, context, 0, (int)this.TimerPeriod);
+    this.captureTimer = new Timer(this.TimerCallback, context, 0, period);
 
-    Debug.WriteLine("ScreenCaptureTimer.CaptureTimer", "*** MEMORY[NEW] ***");
+    Debug.WriteLine("ScreenCaptureTimer.captureTimer", "*** MEMORY[NEW] ***");
   }
 
   /// Dispose
   public void Dispose() {
-    lock (this.SharedLock) {
-      this.IsRunning = false;
-      if (this.CaptureTimer != null) {
-        this.CaptureTimer.Change(Timeout.Infinite, Timeout.Infinite);
-        this.CaptureTimer.Dispose();
-        this.CaptureTimer = null;
-        Debug.WriteLine("ScreenCaptureTimer.CaptureTimer", "*** MEMORY[DISPOSE] ***");
+    lock (this.sharedLock) {
+      this.isRunning = false;
+      if (this.captureTimer != null) {
+        this.captureTimer.Change(Timeout.Infinite, Timeout.Infinite);
+        this.captureTimer.Dispose();
+        Debug.WriteLine("ScreenCaptureTimer.captureTimer", "*** MEMORY[DISPOSE] ***");
       }
     }
     GC.SuppressFinalize(this);
@@ -175,15 +171,15 @@ public class ScreenCaptureTimer : IDisposable {
   /// タイマーコールバック
   /// @param state 使わない
   private void TimerCallback(object state) {
-    lock (this.SharedLock) {
-      if (!this.IsRunning) return;
+    lock (this.sharedLock) {
+      if (!this.isRunning) return;
       
-      var requests = new List<ScreenCaptureRequest>(this.Cache.Keys);
+      var requests = new List<ScreenCaptureRequest>(this.cache.Keys);
       foreach (var request in requests) {
         // var bitmapSource = this.Capture(request);
         var bitmapSource = this.CaptureByGetDIBits(request);
         Debug.WriteIf(bitmapSource != null, "o");
-        this.Cache[request] = bitmapSource;
+        this.cache[request] = bitmapSource;
       }
       /// @todo(me) 潔癖症過ぎないか？
       // GC.Collect();
@@ -208,27 +204,34 @@ public class ScreenCaptureTimer : IDisposable {
 
   /// 開始
   public void Start() {
-    lock (this.SharedLock) {
-      var changed = !this.IsRunning;
+    lock (this.sharedLock) {
+      var changed = !this.isRunning;
       Debug.WriteLineIf(changed, "Start", "ScreenCaptureTimer");
-      this.IsRunning = true;
+      this.isRunning = true;
     }
   }
 
   /// 中断
   public void Suspend() {
-    lock (this.SharedLock) {
-      var changed = this.IsRunning;
+    lock (this.sharedLock) {
+      var changed = this.isRunning;
       Debug.WriteLineIf(changed, "Suspend", "ScreenCaptureTimer");
-      this.IsRunning = false;
+      this.isRunning = false;
       // メモリ解放
-      if (changed && this.Cache.Count > 0) {
-        this.Cache.Clear();
+      if (changed && this.cache.Count > 0) {
+        this.cache.Clear();
         GC.Collect();
         //GC.WaitForPendingFinalizers();
         //GC.Collect();
-        Debug.WriteLine("Collect ScreenCaptureTimer.Cache", "*** MEMORY[GC] ***");
+        Debug.WriteLine("Collect ScreenCaptureTimer.cache", "*** MEMORY[GC] ***");
       }
+    }
+  }
+
+  /// タイマーの更新頻度を変更する
+  public void SetTimerPeriod(int period) {
+    lock (this.sharedLock) {
+      this.captureTimer.Change(0, period);
     }
   }
 
@@ -245,23 +248,23 @@ public class ScreenCaptureTimer : IDisposable {
       profileRequests.Add(new ScreenCaptureRequest(layoutElement));
     }
 
-    lock (this.SharedLock) {
-      Debug.Assert(this.IsRunning, "Must be running", "ScreenCaptureTimer");
+    lock (this.sharedLock) {
+      Debug.Assert(this.isRunning, "Must be running", "ScreenCaptureTimer");
 
       // 三つの場合で処理がわかれる
-      // 1. profileにもCacheにも含まれている = nop
-      // 2. Cacheにはあるがprofileにはない = メモリ解放
-      // 3. profileにはあるがCacheにはない = Cacheに追加して即時更新
-      var onlyCacheRequests = new HashSet<ScreenCaptureRequest>(this.Cache.Keys);
-      onlyCacheRequests.ExceptWith(profileRequests);
+      // 1. profileにもcacheにも含まれている = nop
+      // 2. cacheにはあるがprofileにはない = メモリ解放
+      // 3. profileにはあるがcacheにはない = cacheに追加して即時更新
+      var onlycacheRequests = new HashSet<ScreenCaptureRequest>(this.cache.Keys);
+      onlycacheRequests.ExceptWith(profileRequests);
       var onlyProfileRequests = profileRequests; // もう使わないのでCloneしない
-      onlyProfileRequests.ExceptWith(this.Cache.Keys);
+      onlyProfileRequests.ExceptWith(this.cache.Keys);
 
       // 2.
       var needGC = false;
-      foreach (var request in onlyCacheRequests) {
-        this.Cache[request] = null;
-        var result = this.Cache.Remove(request);
+      foreach (var request in onlycacheRequests) {
+        this.cache[request] = null;
+        var result = this.cache.Remove(request);
         Debug.WriteLineIf(!result, "!");
         needGC = true;
       }
@@ -277,7 +280,7 @@ public class ScreenCaptureTimer : IDisposable {
         // var bitmapSource = this.Capture(request);
         var bitmapSource = this.CaptureByGetDIBits(request);
         Debug.WriteIf(bitmapSource != null, "x");
-        this.Cache[request] = bitmapSource;
+        this.cache[request] = bitmapSource;
       }
     }
   }
@@ -290,10 +293,10 @@ public class ScreenCaptureTimer : IDisposable {
     var request = new ScreenCaptureRequest(layoutElement);
 
     /// ディクショナリはスレッドセーフではない
-    lock (this.SharedLock) {
+    lock (this.sharedLock) {
       BitmapSource result;
-      var success = this.Cache.TryGetValue(request, out result);
-      Debug.WriteLineIf(!success, "No request in Cache", "ScreenCaptureTimer");
+      var success = this.cache.TryGetValue(request, out result);
+      Debug.WriteLineIf(!success, "No request in cache", "ScreenCaptureTimer");
       return result;
     }
   }
@@ -306,7 +309,7 @@ public class ScreenCaptureTimer : IDisposable {
   public event EventHandler Tick;
 
   //===================================================================
-  // プロパティ
+  // フィールド
   //===================================================================
 
   //-------------------------------------------------------------------
@@ -314,20 +317,18 @@ public class ScreenCaptureTimer : IDisposable {
   //-------------------------------------------------------------------
 
   /// 共有ロック
-  public object SharedLock { get; set; }
+  private readonly object sharedLock = new object();
 
   /// 共有(自R/他W): プレビュー表示中かどうか
-  private bool IsRunning { get; set; }
+  private bool isRunning;
   
   /// 共有(自R/他W): リクエストと結果をまとめたディクショナリ
-  private Dictionary<ScreenCaptureRequest,BitmapSource> Cache { get; set; }
+  private readonly Dictionary<ScreenCaptureRequest,BitmapSource> cache =
+      new Dictionary<ScreenCaptureRequest,BitmapSource>();
   
-  /// 共有(自R/他W): タイマーの間隔
-  private double TimerPeriod { get; set; }
-
   //-------------------------------------------------------------------
 
   /// タイマー
-  private Timer CaptureTimer { get; set; }
+  private readonly Timer captureTimer;
 }
 }   // namespace SCFF.GUI.Controls

@@ -42,19 +42,12 @@ public partial class Profile {
   /// コンストラクタ
   /// @warning コンストラクタでは実際の値の読み込みなどは行わない
   public Profile() {
-    // 配列の初期化
     const int length = Interprocess.MaxComplexLayoutElements;
+
+    // LayoutParametersの初期化
     this.message.LayoutParameters = new LayoutParameter[length];
-    this.additionalLayoutParameters = new AdditionalLayoutParameter[length];
     
     // カーソルの初期化
-    this.BuildLayoutElements();
-  }
-
-  /// カーソルの初期化
-  private void BuildLayoutElements() {
-    const int length = Interprocess.MaxComplexLayoutElements;
-    this.layoutElements = new LayoutElement[length];
     for (int i = 0; i < length; ++i) {
       this.layoutElements[i] = new LayoutElement(this, i);
     }
@@ -285,7 +278,8 @@ public partial class Profile {
   //===================================================================
 
   /// カーソルのキャッシュ
-  private LayoutElement[] layoutElements;
+  private readonly LayoutElement[] layoutElements =
+      new LayoutElement[Interprocess.MaxComplexLayoutElements];
 
   /// レイアウトパラメータを格納したメッセージ
   ///
@@ -295,6 +289,7 @@ public partial class Profile {
 
   /// 追加レイアウトパラメータをまとめた配列
   /// @attention messageLayoutParametersにあわせて非初期化済みにした
-  private AdditionalLayoutParameter[] additionalLayoutParameters;
+  private readonly AdditionalLayoutParameter[] additionalLayoutParameters =
+      new AdditionalLayoutParameter[Interprocess.MaxComplexLayoutElements];
 }
 }   // namespace SCFF.Common.Profile

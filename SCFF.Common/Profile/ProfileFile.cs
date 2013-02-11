@@ -34,7 +34,7 @@ public class ProfileFile : TinyKeyValueFile {
 
   /// コンストラクタ
   public ProfileFile(Profile profile) : base() {
-    this.Profile = profile;
+    this.profile = profile;
   }
 
   //===================================================================
@@ -51,9 +51,9 @@ public class ProfileFile : TinyKeyValueFile {
     try {
       using (var writer = new StreamWriter(path)) {
         writer.WriteLine(Constants.ProfileHeader);
-        writer.WriteLine("LayoutElementCount={0}", this.Profile.LayoutElementCount);
-        writer.WriteLine("CurrentIndex={0}", this.Profile.CurrentIndex);
-        foreach (var layoutElement in this.Profile) {
+        writer.WriteLine("LayoutElementCount={0}", this.profile.LayoutElementCount);
+        writer.WriteLine("CurrentIndex={0}", this.profile.CurrentIndex);
+        foreach (var layoutElement in this.profile) {
           var index = layoutElement.Index;
           writer.WriteLine("[LayoutElement{0}]", index);
 
@@ -122,27 +122,27 @@ public class ProfileFile : TinyKeyValueFile {
     bool boolValue;
 
     // Dictionaryを調べながら値を設定する
-    var originalLayoutElementCount = this.Profile.LayoutElementCount;
+    var originalLayoutElementCount = this.profile.LayoutElementCount;
     if (this.TryGetInt("LayoutElementCount", out intValue)) {
       // 範囲チェック
       if (intValue < 1)
         intValue = 1;
       if (Interprocess.MaxComplexLayoutElements < intValue)
         intValue = Interprocess.MaxComplexLayoutElements;
-      this.Profile.LayoutElementCount = intValue;
+      this.profile.LayoutElementCount = intValue;
     }
 
     if (this.TryGetInt("CurrentIndex", out intValue)) {
       //　範囲チェック
       if (intValue < 0)
         intValue = 0;
-      if (this.Profile.LayoutElementCount - 1 < intValue)
-        intValue = this.Profile.LayoutElementCount - 1;
-      this.Profile.CurrentIndex = intValue;
+      if (this.profile.LayoutElementCount - 1 < intValue)
+        intValue = this.profile.LayoutElementCount - 1;
+      this.profile.CurrentIndex = intValue;
     }
     
-    for (int i = 0; i < this.Profile.LayoutElementCount; ++i) {
-      var layoutElement = this.Profile.GetLayoutElement(i);
+    for (int i = 0; i < this.profile.LayoutElementCount; ++i) {
+      var layoutElement = this.profile.GetLayoutElement(i);
       layoutElement.RestoreDefault();
 
       // TargetWindow
@@ -378,10 +378,10 @@ public class ProfileFile : TinyKeyValueFile {
   }
 
   //===================================================================
-  // プロパティ
+  // フィールド
   //===================================================================
   
   /// Profileへの参照
-  private Profile Profile { get; set; }
+  private readonly Profile profile;
 }
 }   // namespace SCFF.Common.Profile

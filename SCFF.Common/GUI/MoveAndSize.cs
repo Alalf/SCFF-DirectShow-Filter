@@ -41,23 +41,18 @@ public class MoveAndSize {
   /// 開始
   public void Start(ILayoutElementView target, HitModes hitMode,
                     RelativePoint mousePoint, SnapGuide snapGuide) {
-    this.Target = target;
-    this.HitMode = hitMode;
-    this.MousePoint = mousePoint;
-    this.MouseOffset = new RelativeMouseOffset(this.Target, this.MousePoint);
-    this.OriginalLTRB = new RelativeLTRB(this.Target.BoundRelativeLeft,
-                                         this.Target.BoundRelativeTop,
-                                         this.Target.BoundRelativeRight,
-                                         this.Target.BoundRelativeBottom);
-    this.SnapGuide = snapGuide;
+    this.target       = target;
+    this.hitMode      = hitMode;
+    this.mouseOffset  = new RelativeMouseOffset(target, mousePoint);
+    this.originalLTRB = new RelativeLTRB(target.BoundRelativeLeft,
+                                         target.BoundRelativeTop,
+                                         target.BoundRelativeRight,
+                                         target.BoundRelativeBottom);
+    this.snapGuide            = snapGuide;
+    this.lastUpdateControl    = Environment.TickCount;
 
-    this.ShouldUpdateControl = false;
-    this.LastUpdateControl = Environment.TickCount;
-  }
-
-  /// 現在のマウス座標を更新
-  public void UpdateMousePoint(RelativePoint mousePoint) {
-    this.MousePoint = mousePoint;
+    this.MousePoint           = mousePoint;
+    this.ShouldUpdateControl  = false;
   }
 
   /// 処理
@@ -65,18 +60,18 @@ public class MoveAndSize {
     Debug.Assert(this.IsRunning);
 
     var now = Environment.TickCount;
-    if (this.LastUpdateControl + MoveAndSize.frameLength < now) {
+    if (this.lastUpdateControl + MoveAndSize.frameLength < now) {
       // 現在時刻が次回更新時刻を過ぎた場合は更新が必要
       this.ShouldUpdateControl = true;
-      this.LastUpdateControl = now;
+      this.lastUpdateControl = now;
     }
 
     // 現在のマウスポイントに合わせて処理を実行
-    if (this.HitMode == HitModes.Move) {
+    if (this.hitMode == HitModes.Move) {
       return this.Move();
     } else if (keepAspectRatio &&
-               (this.HitMode == HitModes.SizeNE || this.HitMode == HitModes.SizeNW ||
-                this.HitMode == HitModes.SizeSE || this.HitMode == HitModes.SizeSW)) {
+               (this.hitMode == HitModes.SizeNE || this.hitMode == HitModes.SizeNW ||
+                this.hitMode == HitModes.SizeSE || this.hitMode == HitModes.SizeSW)) {
       return this.SizeWithKeepAspectRatio();
     } else {
       return this.Size();
@@ -85,14 +80,15 @@ public class MoveAndSize {
 
   /// 終了
   public void End() {
-    this.Target = null;
-    this.HitMode = HitModes.Neutral;
-    this.MousePoint = null;
-    this.MouseOffset = null;
-    this.OriginalLTRB = null;
-    this.SnapGuide = null;
-    this.ShouldUpdateControl = false;
-    this.LastUpdateControl = 0;
+    this.target               = null;
+    this.hitMode              = HitModes.Neutral;
+    this.mouseOffset          = null;
+    this.originalLTRB         = null;
+    this.snapGuide            = null;
+    this.lastUpdateControl    = 0;
+
+    this.MousePoint           = null;
+    this.ShouldUpdateControl  = false;
   }
 
   //===================================================================
@@ -102,37 +98,37 @@ public class MoveAndSize {
   /// レイアウト要素を移動する
   /// @return 移動後のLTRB
   public RelativeLTRB Move() {
-    var width = this.Target.BoundRelativeWidth;
-    var height = this.Target.BoundRelativeHeight;
+    var width = this.target.BoundRelativeWidth;
+    var height = this.target.BoundRelativeHeight;
 
     // 初期値
-    var nextLeft = this.MousePoint.X - this.MouseOffset.Left;
-    var nextTop = this.MousePoint.Y - this.MouseOffset.Top;
+    var nextLeft = this.MousePoint.X - this.mouseOffset.Left;
+    var nextTop = this.MousePoint.Y - this.mouseOffset.Top;
     var nextRight = nextLeft + width;
     var nextBottom = nextTop + height;
 
     // スナップガイドによる補正(優先度: 左上右下)
     if (this.UseSnapGuide) {
       // Left
-      var isLeftSnapped = this.SnapGuide.TryHorizontalSnap(ref nextLeft);
+      var isLeftSnapped = this.snapGuide.TryHorizontalSnap(ref nextLeft);
       if (isLeftSnapped) {
         nextRight = nextLeft + width;
       }
       // Top
-      var isTopSnapped = this.SnapGuide.TryVerticalSnap(ref nextTop);
+      var isTopSnapped = this.snapGuide.TryVerticalSnap(ref nextTop);
       if (isTopSnapped) {
         nextBottom = nextTop + height;
       }
       // Right (LeftにSnapされていたら無視する
       if (!isLeftSnapped) {
-        var isRightSnapped = this.SnapGuide.TryHorizontalSnap(ref nextRight);
+        var isRightSnapped = this.snapGuide.TryHorizontalSnap(ref nextRight);
         if (isRightSnapped) {
           nextLeft = nextRight - width;
         }
       }
       // Bottom (TopにSnapされていたら無視する
       if (!isTopSnapped) {
-        var isBottomSnapped = this.SnapGuide.TryVerticalSnap(ref nextBottom);
+        var isBottomSnapped = this.snapGuide.TryVerticalSnap(ref nextBottom);
         if (isBottomSnapped) {
           nextTop = nextBottom - height;
         }
@@ -174,23 +170,23 @@ public class MoveAndSize {
   /// レイアウト要素を比率を維持したまま拡大縮小する
   /// @return 拡大縮小後のLTRB
   public RelativeLTRB SizeWithKeepAspectRatio() {
-    Debug.Assert(this.HitMode == HitModes.SizeNW || this.HitMode == HitModes.SizeNE ||
-                 this.HitMode == HitModes.SizeSW || this.HitMode == HitModes.SizeSE);
+    Debug.Assert(this.hitMode == HitModes.SizeNW || this.hitMode == HitModes.SizeNE ||
+                 this.hitMode == HitModes.SizeSW || this.hitMode == HitModes.SizeSE);
 
     // 初期値
-    var nextLeft = this.Target.BoundRelativeLeft;
-    var nextTop = this.Target.BoundRelativeTop;
-    var nextRight = this.Target.BoundRelativeRight;
-    var nextBottom = this.Target.BoundRelativeBottom;
+    var nextLeft = this.target.BoundRelativeLeft;
+    var nextTop = this.target.BoundRelativeTop;
+    var nextRight = this.target.BoundRelativeRight;
+    var nextBottom = this.target.BoundRelativeBottom;
 
     // Top/Bottom
     /// @attention 浮動小数点数の比較
-    switch (this.HitMode) {
+    switch (this.hitMode) {
       case HitModes.SizeNW:
       case HitModes.SizeNE: {
         // Top
-        var tryNextTop = this.MousePoint.Y - this.MouseOffset.Top;
-        if (this.UseSnapGuide) this.SnapGuide.TryVerticalSnap(ref tryNextTop);
+        var tryNextTop = this.MousePoint.Y - this.mouseOffset.Top;
+        if (this.UseSnapGuide) this.snapGuide.TryVerticalSnap(ref tryNextTop);
         if (tryNextTop < 0.0) tryNextTop = 0.0;
         var topUpperBound = nextBottom - Constants.MinimumBoundRelativeSize;
         if (topUpperBound < tryNextTop) tryNextTop = topUpperBound;
@@ -200,8 +196,8 @@ public class MoveAndSize {
       case HitModes.SizeSW:
       case HitModes.SizeSE: {
         // Bottom
-        var tryNextBottom = this.MousePoint.Y - this.MouseOffset.Bottom;
-        if (this.UseSnapGuide) this.SnapGuide.TryVerticalSnap(ref tryNextBottom);
+        var tryNextBottom = this.MousePoint.Y - this.mouseOffset.Bottom;
+        if (this.UseSnapGuide) this.snapGuide.TryVerticalSnap(ref tryNextBottom);
         if (1.0 < tryNextBottom) tryNextBottom = 1.0;
         var bottomLowerBound = nextTop + Constants.MinimumBoundRelativeSize;
         if (tryNextBottom < bottomLowerBound) tryNextBottom = bottomLowerBound;
@@ -212,13 +208,13 @@ public class MoveAndSize {
 
     // Left/Right
     /// @attention 浮動小数点数の比較
-    switch (this.HitMode) {
+    switch (this.hitMode) {
       case HitModes.SizeNW:
       case HitModes.SizeSW: {
         // Left
         var tryNextLeft = nextRight - ((nextBottom - nextTop) * this.OriginalAspectRatio);
-        if (this.UseSnapGuide && this.SnapGuide.TryHorizontalSnap(ref tryNextLeft)) {
-          if (this.HitMode == HitModes.SizeNW) {
+        if (this.UseSnapGuide && this.snapGuide.TryHorizontalSnap(ref tryNextLeft)) {
+          if (this.hitMode == HitModes.SizeNW) {
             nextTop = nextBottom - ((nextRight - tryNextLeft) / this.OriginalAspectRatio);
           } else {
             nextBottom = nextTop + ((nextRight - tryNextLeft) / this.OriginalAspectRatio);
@@ -226,7 +222,7 @@ public class MoveAndSize {
         }
         if (tryNextLeft < 0.0) {
           tryNextLeft = 0.0;
-          if (this.HitMode == HitModes.SizeNW) {
+          if (this.hitMode == HitModes.SizeNW) {
             nextTop = nextBottom - ((nextRight - tryNextLeft) / this.OriginalAspectRatio);
           } else {
             nextBottom = nextTop + ((nextRight - tryNextLeft) / this.OriginalAspectRatio);
@@ -241,8 +237,8 @@ public class MoveAndSize {
       case HitModes.SizeSE: {
         // Right
         var tryNextRight = ((nextBottom - nextTop) * this.OriginalAspectRatio) + nextLeft;
-        if (this.UseSnapGuide && this.SnapGuide.TryHorizontalSnap(ref tryNextRight)) {
-          if (this.HitMode == HitModes.SizeNE) {
+        if (this.UseSnapGuide && this.snapGuide.TryHorizontalSnap(ref tryNextRight)) {
+          if (this.hitMode == HitModes.SizeNE) {
             nextTop = nextBottom - ((tryNextRight - nextLeft) / this.OriginalAspectRatio);
           } else {
             nextBottom = nextTop + ((tryNextRight - nextLeft) / this.OriginalAspectRatio);
@@ -250,7 +246,7 @@ public class MoveAndSize {
         }
         if (1.0 < tryNextRight) {
           tryNextRight = 1.0;
-          if (this.HitMode == HitModes.SizeNE) {
+          if (this.hitMode == HitModes.SizeNE) {
             nextTop = nextBottom - ((tryNextRight - nextLeft) / this.OriginalAspectRatio);
           } else {
             nextBottom = nextTop + ((tryNextRight - nextLeft) / this.OriginalAspectRatio);
@@ -269,23 +265,23 @@ public class MoveAndSize {
   /// レイアウト要素を拡大縮小する
   /// @return 拡大縮小後のLTRB
   public RelativeLTRB Size() {
-    Debug.Assert(this.HitMode != HitModes.Move);
+    Debug.Assert(this.hitMode != HitModes.Move);
 
     // 初期値
-    var nextLeft = this.Target.BoundRelativeLeft;
-    var nextTop = this.Target.BoundRelativeTop;
-    var nextRight = this.Target.BoundRelativeRight;
-    var nextBottom = this.Target.BoundRelativeBottom;
+    var nextLeft = this.target.BoundRelativeLeft;
+    var nextTop = this.target.BoundRelativeTop;
+    var nextRight = this.target.BoundRelativeRight;
+    var nextBottom = this.target.BoundRelativeBottom;
 
     // Top/Bottom
     /// @attention 浮動小数点数の比較
-    switch (this.HitMode) {
+    switch (this.hitMode) {
       case HitModes.SizeN:
       case HitModes.SizeNW:
       case HitModes.SizeNE: {
         // Top
-        var tryNextTop = this.MousePoint.Y - this.MouseOffset.Top;
-        if (this.UseSnapGuide) this.SnapGuide.TryVerticalSnap(ref tryNextTop);
+        var tryNextTop = this.MousePoint.Y - this.mouseOffset.Top;
+        if (this.UseSnapGuide) this.snapGuide.TryVerticalSnap(ref tryNextTop);
         if (tryNextTop < 0.0) tryNextTop = 0.0;
         var topUpperBound = nextBottom - Constants.MinimumBoundRelativeSize;
         if (topUpperBound < tryNextTop) tryNextTop = topUpperBound;
@@ -296,8 +292,8 @@ public class MoveAndSize {
       case HitModes.SizeSW:
       case HitModes.SizeSE: {
         // Bottom
-        var tryNextBottom = this.MousePoint.Y - this.MouseOffset.Bottom;
-        if (this.UseSnapGuide) this.SnapGuide.TryVerticalSnap(ref tryNextBottom);
+        var tryNextBottom = this.MousePoint.Y - this.mouseOffset.Bottom;
+        if (this.UseSnapGuide) this.snapGuide.TryVerticalSnap(ref tryNextBottom);
         if (1.0 < tryNextBottom) tryNextBottom = 1.0;
         var bottomLowerBound = nextTop + Constants.MinimumBoundRelativeSize;
         if (tryNextBottom < bottomLowerBound) tryNextBottom = bottomLowerBound;
@@ -308,13 +304,13 @@ public class MoveAndSize {
 
     // Left/Right
     /// @attention 浮動小数点数の比較
-    switch (this.HitMode) {
+    switch (this.hitMode) {
       case HitModes.SizeNW:
       case HitModes.SizeW:
       case HitModes.SizeSW: {
         // Left
-        var tryNextLeft = this.MousePoint.X - this.MouseOffset.Left;
-        if (this.UseSnapGuide) this.SnapGuide.TryHorizontalSnap(ref tryNextLeft);
+        var tryNextLeft = this.MousePoint.X - this.mouseOffset.Left;
+        if (this.UseSnapGuide) this.snapGuide.TryHorizontalSnap(ref tryNextLeft);
         if (tryNextLeft < 0.0) tryNextLeft = 0.0;
         var leftUpperBound = nextRight - Constants.MinimumBoundRelativeSize;
         if (leftUpperBound < tryNextLeft) tryNextLeft = leftUpperBound;
@@ -325,8 +321,8 @@ public class MoveAndSize {
       case HitModes.SizeE:
       case HitModes.SizeSE: {
         // Right
-        var tryNextRight = this.MousePoint.X - this.MouseOffset.Right;
-        if (this.UseSnapGuide) this.SnapGuide.TryHorizontalSnap(ref tryNextRight);
+        var tryNextRight = this.MousePoint.X - this.mouseOffset.Right;
+        if (this.UseSnapGuide) this.snapGuide.TryHorizontalSnap(ref tryNextRight);
         if (1.0 < tryNextRight) tryNextRight = 1.0;
         var rightLowerBound = nextLeft + Constants.MinimumBoundRelativeSize;
         if (tryNextRight < rightLowerBound) tryNextRight = rightLowerBound;
@@ -343,44 +339,48 @@ public class MoveAndSize {
   //===================================================================
 
   /// 動作中か
-  public bool IsRunning { get { return (this.HitMode != HitModes.Neutral); } }
+  public bool IsRunning { get { return (this.hitMode != HitModes.Neutral); } }
+
+  /// 動作中のマウス座標
+  public RelativePoint MousePoint { get; set; }
 
   /// コントロールを更新するべきか
   public bool ShouldUpdateControl { get; set; }
 
   //-------------------------------------------------------------------
+  // private
+  //-------------------------------------------------------------------
 
   /// 動作開始時のアスペクト比
   private double OriginalAspectRatio {
     get {
-      return (this.OriginalLTRB.Right - this.OriginalLTRB.Left) /
-             (this.OriginalLTRB.Bottom - this.OriginalLTRB.Top);
+      return (this.originalLTRB.Right - this.originalLTRB.Left) /
+             (this.originalLTRB.Bottom - this.originalLTRB.Top);
     }
   }
   /// スナップガイドを使用するか
-  private bool UseSnapGuide { get { return this.SnapGuide != null; } }
+  private bool UseSnapGuide { get { return this.snapGuide != null; } }
 
-  //-------------------------------------------------------------------
+  //===================================================================
+  // フィールド
+  //===================================================================
 
   /// 移動・拡大縮小対象のレイアウト要素
-  private ILayoutElementView Target { get; set; }
+  private ILayoutElementView target;
 
   /// 動作開始時のヒットテストの結果
-  private HitModes HitMode { get; set; }
+  private HitModes hitMode;
 
   /// 動作開始時のマウス座標とLeft/Right/Top/BottomのOffset
-  private RelativeMouseOffset MouseOffset { get; set; }
+  private RelativeMouseOffset mouseOffset;
 
   /// 動作開始時のLTRB
-  public RelativeLTRB OriginalLTRB { get; set; }
-
-  /// 動作中のマウス座標
-  private RelativePoint MousePoint { get; set; }
+  private RelativeLTRB originalLTRB;
 
   /// スナップガイド
-  private SnapGuide SnapGuide { get; set; }
+  private SnapGuide snapGuide;
 
   /// タイムスタンプ(ミリ秒単位)
-  private int LastUpdateControl { get; set; }
+  private int lastUpdateControl;
 }
 }   // namespace SCFF.Common.GUI

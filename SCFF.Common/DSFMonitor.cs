@@ -106,6 +106,7 @@ public class DSFMonitor {
 
   /// 死んだプロセスを明示的に削除
   public void RemoveZombie(UInt32 processID) {
+    if (!this.monitoredDSFs.ContainsKey(processID)) return;
     Debug.Assert(!Utilities.IsProcessAlive(processID));
 
     // WaitOneを強制解除してTaskの終了を待つ

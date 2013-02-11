@@ -69,14 +69,12 @@ public partial class LayoutEdit
     RenderOptions.SetBitmapScalingMode(this.DrawingGroup, BitmapScalingMode.LowQuality);
 
     // 再描画タイマーの準備
-    this.redrawTimer.Interval = TimeSpan.FromMilliseconds(LayoutEdit.redrawTimerPeriod);
-    this.redrawTimer.Tick += this.redrawTimer_Tick;
-    this.redrawTimer.Start();
+    App.ScreenCaptureTimer.Tick += ScreenCaptureTimer_Tick;
   }
 
   /// デストラクタ
   ~LayoutEdit() {
-    this.redrawTimer.Tick -= this.redrawTimer_Tick;
+    App.ScreenCaptureTimer.Tick -= ScreenCaptureTimer_Tick;
   }
 
   //===================================================================
@@ -253,6 +251,31 @@ public partial class LayoutEdit
   // イベントハンドラ
   //===================================================================
 
+  /// 再描画タイマーコールバック
+  /// @param sender 使用しない
+  /// @param e 使用しない
+  void ScreenCaptureTimer_Tick(object sender, EventArgs e) {
+    // プレビューが必要なければ更新しない
+    if (!App.Options.LayoutIsExpanded) return;
+    if (!App.Options.LayoutPreview) return;
+    
+    // マウス操作中は更新しない
+    if (this.moveAndSize.IsRunning) return;
+
+    // プレビュー内容更新のためにリクエスト送信
+    App.ScreenCaptureTimer.UpdateRequest(App.Profile);
+
+    // 再描画
+    /// @attention 浮動小数点数の比較
+    Debug.WriteLineIf(this.LayoutEditImage.ActualWidth > App.RuntimeOptions.CurrentSampleWidth ||
+                      this.LayoutEditImage.ActualHeight > App.RuntimeOptions.CurrentSampleHeight,
+                      string.Format("Redraw ({0:F2}, {1:F2})",
+                                    this.LayoutEditImage.ActualWidth,
+                                    this.LayoutEditImage.ActualHeight),
+                      "LayoutEdit");
+    this.BuildDrawingGroup();
+  }
+
   //-------------------------------------------------------------------
   // *Changed/Checked/Unchecked以外
   //-------------------------------------------------------------------
@@ -374,36 +397,7 @@ public partial class LayoutEdit
 
   //-------------------------------------------------------------------
   // *Changed/Collapsed/Expanded
-  //-------------------------------------------------------------------
-
-  //===================================================================
-  // DispatcherTimerによる再描画
-  //===================================================================
-
-  /// 再描画タイマーコールバック
-  /// @param sender 使用しない
-  /// @param e 使用しない
-  void redrawTimer_Tick(object sender, EventArgs e) {
-    // プレビューが必要なければ更新しない
-    if (!App.Options.LayoutIsExpanded) return;
-    if (!App.Options.LayoutPreview) return;
-    
-    // マウス操作中は更新しない
-    if (this.moveAndSize.IsRunning) return;
-
-    // プレビュー内容更新のためにリクエスト送信
-    App.ScreenCaptureTimer.UpdateRequest(App.Profile);
-
-    // 再描画
-    /// @attention 浮動小数点数の比較
-    Debug.WriteLineIf(this.LayoutEditImage.ActualWidth > App.RuntimeOptions.CurrentSampleWidth ||
-                      this.LayoutEditImage.ActualHeight > App.RuntimeOptions.CurrentSampleHeight,
-                      string.Format("Redraw ({0:F2}, {1:F2})",
-                                    this.LayoutEditImage.ActualWidth,
-                                    this.LayoutEditImage.ActualHeight),
-                      "LayoutEdit");
-    this.BuildDrawingGroup();
-  }
+  //-------------------------------------------------------------------  
 
   //===================================================================
   // IUpdateByOptionsの実装

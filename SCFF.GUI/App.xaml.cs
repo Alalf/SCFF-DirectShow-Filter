@@ -115,11 +115,9 @@ public partial class App : Application {
   /// @param[in] e エラー表示用のデータが格納されたオブジェクト
   private void OnDSFErrorOccured(object sender, ErrorOccuredEventArgs e) {
     if (e.Quiet) return;
-    Dispatcher.Invoke((Action)(() => {
-      MessageBox.Show(e.Message, "SCFF.GUI",
-                      MessageBoxButton.OK,
-                      MessageBoxImage.Error);
-    }));
+    MessageBox.Show(e.Message, "SCFF.GUI",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
   }
 
   //===================================================================
@@ -159,7 +157,8 @@ public partial class App : Application {
     this.MainWindow.Show();
 
     // NamedPipe作成
-    this.StartPipeServer();
+    var context = SynchronizationContext.Current;
+    this.StartPipeServer(context);
   }
 
   /// Exit: アプリケーション終了時
@@ -182,7 +181,7 @@ public partial class App : Application {
   //===================================================================
 
   /// NamedPipeServerStreamを生成する
-  private void StartPipeServer() {
+  private void StartPipeServer(SynchronizationContext context) {
     Debug.WriteLine("[OPEN]", "NamedPipe");
     var pipe = new NamedPipeServerStream(App.namedPipeName,
         PipeDirection.In, -1, PipeTransmissionMode.Message,
@@ -193,7 +192,7 @@ public partial class App : Application {
         try {
           pipe.EndWaitForConnection(result);
           // 新しいPipeを生成
-          this.StartPipeServer();
+          this.StartPipeServer(context);
 
           // Read
           var data = new byte[520]; // 260文字(MAX_PATH)x2byte
@@ -210,10 +209,11 @@ public partial class App : Application {
               pipe.Close();
             }
 
+            // ProfileをUIスレッドで開く
             Debug.WriteLine("Open profile requested: " + path);
-            Dispatcher.Invoke((Action)(() => {
+            context.Post((state) => {
               App.Impl.OpenProfile(path);
-            }), null);
+            }, null);
         
             Debug.WriteLine("[CLOSE]", "NamedPipe");
           }, null);

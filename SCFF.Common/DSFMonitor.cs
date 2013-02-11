@@ -23,6 +23,7 @@ namespace SCFF.Common {
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 using SCFF.Interprocess;
 
@@ -51,6 +52,8 @@ public class DSFMonitor {
     if (this.MonitoredDSFs.ContainsKey(processID) &&
         !this.MonitoredDSFs[processID].IsCompleted) return;
 
+    var context = SynchronizationContext.Current;
+
     // Task生成
     var task = new Task(() => {
       // 監視開始
@@ -62,10 +65,12 @@ public class DSFMonitor {
       // エラーが起きるまで待機
       var dsfErrorOccured = this.Interprocess.WaitUntilErrorEventOccured(processID);
       if (dsfErrorOccured) {
-        // Event: DSFErrorOccured
-        var args = new DSFErrorOccuredEventArgs(processID);
-        var handler = this.OnErrorOccured;
-        if (handler != null) handler(this, args);
+        context.Post((s) => {
+          // Event: DSFErrorOccured
+          var args = new DSFErrorOccuredEventArgs(processID);
+          var handler = this.OnErrorOccured;
+          if (handler != null) handler(this, args);
+        }, null);
       }
 
       // 監視終了

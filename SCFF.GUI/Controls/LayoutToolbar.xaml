@@ -21,7 +21,7 @@
       <CheckBox Margin="3,0,0,0" 
                 x:Name="LayoutPreview" Content="Preview"
                 Click="LayoutPreview_Click"/>
-      <Slider   Margin="3,0,0,0" Width="60"
+      <Slider   Margin="3,0,0,0" Width="50"
                 VerticalAlignment="Center"
                 x:Name="LayoutPreviewInterval"
                 IsEnabled="{Binding ElementName=LayoutPreview, Path=IsChecked}"

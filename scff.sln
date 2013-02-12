@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCFF.Common", "SCFF.Common\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCFF.Interprocess", "SCFF.Interprocess\SCFF.Interprocess.csproj", "{B0EB2E38-D3D9-4A69-8C40-D41B9D5E43DB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCFF.Common.Tests", "SCFF.Common.Tests\SCFF.Common.Tests.csproj", "{1207FFE6-32DA-49C1-9CD9-099A65593DF0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug_MBCS|Win32 = Debug_MBCS|Win32
@@ -145,6 +147,18 @@ Global
 		{B0EB2E38-D3D9-4A69-8C40-D41B9D5E43DB}.Release|Win32.Build.0 = Release|x86
 		{B0EB2E38-D3D9-4A69-8C40-D41B9D5E43DB}.Release|x64.ActiveCfg = Release|x86
 		{B0EB2E38-D3D9-4A69-8C40-D41B9D5E43DB}.Release|x64.Build.0 = Release|x86
+		{1207FFE6-32DA-49C1-9CD9-099A65593DF0}.Debug_MBCS|Win32.ActiveCfg = Debug|x86
+		{1207FFE6-32DA-49C1-9CD9-099A65593DF0}.Debug_MBCS|Win32.Build.0 = Debug|x86
+		{1207FFE6-32DA-49C1-9CD9-099A65593DF0}.Debug_MBCS|x64.ActiveCfg = Debug|x86
+		{1207FFE6-32DA-49C1-9CD9-099A65593DF0}.Debug|Win32.ActiveCfg = Debug|x86
+		{1207FFE6-32DA-49C1-9CD9-099A65593DF0}.Debug|Win32.Build.0 = Debug|x86
+		{1207FFE6-32DA-49C1-9CD9-099A65593DF0}.Debug|x64.ActiveCfg = Debug|x86
+		{1207FFE6-32DA-49C1-9CD9-099A65593DF0}.Release_MBCS|Win32.ActiveCfg = Release|x86
+		{1207FFE6-32DA-49C1-9CD9-099A65593DF0}.Release_MBCS|Win32.Build.0 = Release|x86
+		{1207FFE6-32DA-49C1-9CD9-099A65593DF0}.Release_MBCS|x64.ActiveCfg = Release|x86
+		{1207FFE6-32DA-49C1-9CD9-099A65593DF0}.Release|Win32.ActiveCfg = Release|x86
+		{1207FFE6-32DA-49C1-9CD9-099A65593DF0}.Release|Win32.Build.0 = Release|x86
+		{1207FFE6-32DA-49C1-9CD9-099A65593DF0}.Release|x64.ActiveCfg = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

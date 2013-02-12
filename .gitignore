@@ -20,3 +20,4 @@
 *.pfx
 */publish
 *.snk
+/TestResults

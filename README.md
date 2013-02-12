@@ -155,14 +155,16 @@
 
 ### ffmpeg
 - サンプル設定がtools/test_ffmpeg.batにあります。
+- "real-time buffer XXX% full! frame dropped!"が表示された場合、音ずれが発生しています。
+    - "-rtbufsize=100MB"オプションを追加するなど、設定を見直してみてください。
 
 ### xSplit
 - xSplitと併用する場合、ffmpegの一部ライブラリが干渉することがあります。
     - SplitMediaLabs\XSplit\avutil-51.dllをSCFF付属のavutil-*.dllと置き換えるとよい、という報告がありました。
 
 ### x264を利用したflvエンコーダ共通
-- 長時間エンコードした時に音ずれが発生する場合、音声同期オプションを試してみてください
-    - 例 ffmpeg: "-async 100"オプションの追加で改善される場合があります
+- 長時間エンコードした時に音ずれが発生する場合、音声同期オプションを試してみてください。
+    - 例 ffmpeg: "-async 100"オプションの追加で改善される場合があります。
 
 ### Windows Media Encoder(WME)
 - YUV420P(I420)に加えて各種ピクセルフォーマット出力が利用可能です。

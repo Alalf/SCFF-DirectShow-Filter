@@ -19,12 +19,4 @@ REM [SIMPLE]
 REM "%FFMPEG_EXE%" -rtbufsize 10MB -r 30 -s 640x360 -f dshow -i video="%VIDEO%":audio="%AUDIO%" -threads 4 -vf fps="fps=30" -r 30 -s 640x360 -pix_fmt yuv420p -maxrate 700k -bufsize 1400k -crf 30 -vcodec libx264 -preset slow -profile:v main -async 100 -acodec libvo_aacenc -ar 48000 -ab 96k -ac 2 -vol 256 -f flv "%OUTPUT%"
 REM "%OUTPUT%"
 
-REM [WEBM]
-REM SET OUTPUT=http://localhost:8080/publish/first?password=secret
-REM "%FFMPEG_EXE%" -rtbufsize 10MB -r 30 -s 640x360 -f dshow -i video="%VIDEO%":audio="%AUDIO%" -threads 4 -vf fps="fps=30" -vb 700k -r 30 -s 640x360 -pix_fmt yuv420p -maxrate 700k -bufsize 1400k -crf 23 -qmin 10 -qmax 51 -vcodec libvpx -preset medium -async 100 -acodec libvorbis -ar 48000 -ab 96k -ac 2 -vol 256 -f webm "%OUTPUT%"
-
-REM [MATROSKA]
-REM SET OUTPUT=http://localhost:8080/publish/first?password=secret
-REM "%FFMPEG_EXE%" -rtbufsize 100MB -r 30 -s 640x360 -f dshow -i video="%VIDEO%":audio="%AUDIO%" -threads 4 -vf fps="fps=30" -vb 700k -r 30 -s 640x360 -pix_fmt yuv420p -maxrate 700k -bufsize 1400k -crf 23 -qmin 10 -qmax 51 -vcodec libvpx -preset medium -async 100 -acodec libvorbis -ar 48000 -ab 96k -ac 2 -vol 256 -f matroska "%OUTPUT%"
-
 POPD

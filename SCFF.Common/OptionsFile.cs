@@ -76,6 +76,7 @@ public class OptionsFile : TinyKeyValueFile {
         writer.WriteLine("LayoutIsExpanded={0}", this.options.LayoutIsExpanded);
         writer.WriteLine("AutoApply={0}", this.options.AutoApply);
         writer.WriteLine("LayoutPreview={0}", this.options.LayoutPreview);
+        writer.WriteLine("LayoutPreviewInterval={0}", this.options.LayoutPreviewInterval);
         writer.WriteLine("LayoutBorder={0}", this.options.LayoutBorder);
         writer.WriteLine("LayoutSnap={0}", this.options.LayoutSnap);
         writer.WriteLine("CompactView={0}", this.options.CompactView);
@@ -108,6 +109,7 @@ public class OptionsFile : TinyKeyValueFile {
 
     // 使いまわすので注意
     string stringValue;
+    int intValue;
     double doubleValue;
     bool boolValue;
 
@@ -177,6 +179,15 @@ public class OptionsFile : TinyKeyValueFile {
     }
     if (this.TryGetBool("LayoutPreview", out boolValue)) {
       this.options.LayoutPreview = boolValue;
+    }
+    if (this.TryGetInt("LayoutPreviewInterval", out intValue)) {
+      // 範囲チェック
+      if (intValue < Constants.MinimumLayoutPreviewInterval) {
+        intValue = Constants.MinimumLayoutPreviewInterval;
+      } else if (Constants.MaximumLayoutPreviewInterval < intValue) {
+        intValue = Constants.MaximumLayoutPreviewInterval;
+      }
+      this.options.LayoutPreviewInterval = intValue;
     }
     if (this.TryGetBool("LayoutBorder", out boolValue)) {
       this.options.LayoutBorder = boolValue;

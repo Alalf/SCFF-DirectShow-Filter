@@ -22,6 +22,8 @@ namespace SCFF.GUI.Controls {
 
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using SCFF.Common;
 using SCFF.Common.GUI;
 
 /// レイアウト編集用ツールバーを管理するUserControl
@@ -33,6 +35,14 @@ public partial class LayoutToolbar : UserControl, IBindingOptions {
   /// コンストラクタ
   public LayoutToolbar() {
     InitializeComponent();
+
+    // 定数から範囲などを設定
+    this.LayoutPreviewInterval.Minimum = Constants.MinimumLayoutPreviewInterval;
+    this.LayoutPreviewInterval.Maximum = Constants.MaximumLayoutPreviewInterval;
+    this.LayoutPreviewInterval.TickFrequency = Constants.LayoutPreviewIntervalTick;
+    this.LayoutPreviewInterval.SmallChange = Constants.LayoutPreviewIntervalTick;
+    this.LayoutPreviewInterval.LargeChange = Constants.LayoutPreviewIntervalTick;
+    this.LayoutPreviewInterval.IsSnapToTickEnabled = true;
   }
 
   //===================================================================
@@ -42,6 +52,18 @@ public partial class LayoutToolbar : UserControl, IBindingOptions {
   //-------------------------------------------------------------------
   // *Changed/Checked/Unchecked以外
   //-------------------------------------------------------------------
+  
+  /// LayoutPreviewInterval: Thumb.DragStarted
+  private void LayoutPreviewInterval_DragStarted(object sender, DragStartedEventArgs e) {
+    this.isLayoutPreviewIntervalDragStarted = true;
+  }
+
+  /// LayoutPreviewInterval: Thumb.DragCompleted
+  private void LayoutPreviewInterval_DragCompleted(object sender, DragCompletedEventArgs e) {
+    App.Options.LayoutPreviewInterval = (int)(this.LayoutPreviewInterval.Value);
+    App.ScreenCaptureTimer.TimerPeriod = App.Options.LayoutPreviewInterval;
+    this.isLayoutPreviewIntervalDragStarted = false;
+  }
 
   /// LayoutPreview: Click
   /// @param sender 使用しない
@@ -93,6 +115,14 @@ public partial class LayoutToolbar : UserControl, IBindingOptions {
   // *Changed/Collapsed/Expanded
   //-------------------------------------------------------------------
 
+  /// LayoutPreviewInterval: ValueChanged
+  private void LayoutPreviewInterval_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) {
+    if (!this.CanChangeOptions) return;
+    if (this.isLayoutPreviewIntervalDragStarted) return;
+    App.Options.LayoutPreviewInterval = (int)(this.LayoutPreviewInterval.Value);
+    App.ScreenCaptureTimer.TimerPeriod = App.Options.LayoutPreviewInterval;
+  }
+
   //===================================================================
   // IBindingOptionsの実装
   //===================================================================
@@ -103,9 +133,18 @@ public partial class LayoutToolbar : UserControl, IBindingOptions {
   public void OnOptionsChanged() {
     this.CanChangeOptions = false;
     this.LayoutPreview.IsChecked = App.Options.LayoutPreview;
+    this.LayoutPreviewInterval.Value = App.Options.LayoutPreviewInterval;
+    App.ScreenCaptureTimer.TimerPeriod = App.Options.LayoutPreviewInterval;
     this.LayoutBorder.IsChecked = App.Options.LayoutBorder;
     this.LayoutSnap.IsChecked = App.Options.LayoutSnap;
     this.CanChangeOptions = true;
   }
+
+  //===================================================================
+  // フィールド
+  //===================================================================
+
+  /// LayoutPreviewIntervalのドラッグ中
+  private bool isLayoutPreviewIntervalDragStarted;
 }
 }   // namespace SCFF.GUI.Controls

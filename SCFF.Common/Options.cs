@@ -66,6 +66,7 @@ public class Options {
     this.LayoutIsExpanded = true;
     this.AutoApply = false;
     this.LayoutPreview = true;
+    this.LayoutPreviewInterval = Constants.DefaultLayoutPreviewInterval;
     this.LayoutBorder = true;
     this.LayoutSnap = true;
     this.CompactView = false;
@@ -127,6 +128,8 @@ public class Options {
   public bool AutoApply { get; set; }
   /// LayoutEditでプレビュー表示を行う
   public bool LayoutPreview { get; set; }
+  /// LayoutEditでプレビュー表示を行う際のプレビュー更新間隔(ミリ秒単位)
+  public int LayoutPreviewInterval { get; set; }
   /// LayoutEditで枠線とキャプション描画を行う
   public bool LayoutBorder { get; set; }
   /// LayoutEditで移動・拡大縮小時にスナップ機能を使う

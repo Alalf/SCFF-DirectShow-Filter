@@ -4,12 +4,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:local="clr-namespace:SCFF.GUI"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d" d:DesignWidth="411" d:DesignHeight="31"
+             mc:Ignorable="d" d:DesignWidth="526" d:DesignHeight="31"
              FontSize="10">
   <ToolBarTray HorizontalAlignment="Center"
                Background="{x:Null}"
                IsLocked="True" >
-    <ToolBar Height="25"
+    <ToolBar Height="30"
              Header="Layout">
       <Button Margin="3,0,0,0"
               x:Name="Add" Content="Add"
@@ -21,6 +21,17 @@
       <CheckBox Margin="3,0,0,0" 
                 x:Name="LayoutPreview" Content="Preview"
                 Click="LayoutPreview_Click"/>
+      <Slider   Margin="3,0,0,0" Width="60"
+                VerticalAlignment="Center"
+                x:Name="LayoutPreviewInterval"
+                IsEnabled="{Binding ElementName=LayoutPreview, Path=IsChecked}"
+                ValueChanged="LayoutPreviewInterval_ValueChanged"
+                Thumb.DragStarted="LayoutPreviewInterval_DragStarted"
+                Thumb.DragCompleted="LayoutPreviewInterval_DragCompleted"/>
+      <Label    Margin="3,0,0,0" Width="55"
+                Content="{Binding ElementName=LayoutPreviewInterval, Path=Value}"
+                ContentStringFormat="{}{0} [mSec]"
+                VerticalAlignment="Center"/>
       <CheckBox Margin="3,0,0,0"
                 x:Name="LayoutBorder" Content="Border" 
                 Click="LayoutBorder_Click"/>

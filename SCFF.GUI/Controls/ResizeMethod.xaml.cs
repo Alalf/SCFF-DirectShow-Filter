@@ -297,28 +297,6 @@ public partial class ResizeMethod : UserControl, IBindingProfile {
   // Checked/Unchecked
   //-------------------------------------------------------------------
 
-  /// SWScaleIsFilterEnabled: Checked
-  /// @param sender 使用しない
-  /// @param e 使用しない
-  private void SWScaleIsFilterEnabled_Checked(object sender, RoutedEventArgs e) {
-    this.SWScaleLumaGBlur.IsEnabled = true;
-    this.SWScaleLumaSharpen.IsEnabled = true;
-    this.SWScaleChromaGBlur.IsEnabled = true;
-    this.SWScaleChromaSharpen.IsEnabled = true;
-    /// @todo(me) HShiftおよびVShiftの使い方がわかるまで設定できないように
-  }
-
-  /// SWScaleIsFilterEnabled: Unchecked
-  /// @param sender 使用しない
-  /// @param e 使用しない
-  private void SWScaleIsFilterEnabled_Unchecked(object sender, RoutedEventArgs e) {
-    this.SWScaleLumaGBlur.IsEnabled = false;
-    this.SWScaleLumaSharpen.IsEnabled = false;
-    this.SWScaleChromaGBlur.IsEnabled = false;
-    this.SWScaleChromaSharpen.IsEnabled = false;
-    /// @todo(me) HShiftおよびVShiftの使い方がわかるまで設定できないように
-  }
-
   //-------------------------------------------------------------------
   // *Changed/Collapsed/Expanded
   //-------------------------------------------------------------------

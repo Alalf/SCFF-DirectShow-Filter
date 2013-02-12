@@ -32,8 +32,6 @@
     <CheckBox Grid.Row="2" Grid.ColumnSpan="4"
               Height="16" VerticalAlignment="Center"
               x:Name="SWScaleIsFilterEnabled" Content="Enable filter"
-              Checked="SWScaleIsFilterEnabled_Checked"
-              Unchecked="SWScaleIsFilterEnabled_Unchecked"
               Click="SWScaleIsFilterEnabled_Click"/>
     <!-- L GBlur -->
     <Label    Grid.Row="3"
@@ -41,7 +39,7 @@
               Content="L GBlur"/>
     <TextBox  Grid.Column="1" Grid.Row="3"
               VerticalAlignment="Center" Height="20" Margin="5,0"
-              IsEnabled="False"
+              IsEnabled="{Binding ElementName=SWScaleIsFilterEnabled, Path=IsChecked}"
               x:Name="SWScaleLumaGBlur" Text="9999" HorizontalContentAlignment="Right"
               TextChanged="SWScaleLumaGBlur_TextChanged" KeyDown="SWScaleLumaGBlur_KeyDown" LostFocus="SWScaleLumaGBlur_LostFocus">
       <TextBox.ToolTip>
@@ -54,7 +52,7 @@
               Content="L Sharpen"/>
     <TextBox  Grid.Row="4" Grid.Column="1"
               VerticalAlignment="Center" Height="20" Margin="5,0" 
-              IsEnabled="False"
+              IsEnabled="{Binding ElementName=SWScaleIsFilterEnabled, Path=IsChecked}"
               x:Name="SWScaleLumaSharpen" Text="9999" HorizontalContentAlignment="Right"
               TextChanged="SWScaleLumaSharpen_TextChanged" KeyDown="SWScaleLumaSharpen_KeyDown" LostFocus="SWScaleLumaSharpen_LostFocus">
       <TextBox.ToolTip>
@@ -65,6 +63,7 @@
     <Label    Grid.Row="5"
               VerticalAlignment="Center" HorizontalAlignment="Right" Height="12"
               Content="C HShift"/>
+    <!-- @todo(me) HShift/VShiftの使い道がわかるまではIsEnabled="False" -->
     <TextBox  Grid.Row="5" Grid.Column="1"
               VerticalAlignment="Top" Height="20" Margin="5,3,5,0"
               IsEnabled="False"
@@ -80,7 +79,7 @@
               Content="C GBlur"/>
     <TextBox  Grid.Row="3" Grid.Column="3"
               VerticalAlignment="Center" Height="20" Margin="5,0"
-              IsEnabled="False"
+              IsEnabled="{Binding ElementName=SWScaleIsFilterEnabled, Path=IsChecked}"
               x:Name="SWScaleChromaGBlur" Text="9999" HorizontalContentAlignment="Right"
               TextChanged="SWScaleChromaGBlur_TextChanged" KeyDown="SWScaleChromaGBlur_KeyDown" LostFocus="SWScaleChromaGBlur_LostFocus">
       <TextBox.ToolTip>
@@ -93,7 +92,7 @@
               Content="C Sharpen"/>
     <TextBox  Grid.Row="4" Grid.Column="3" 
               VerticalAlignment="Center" Height="20" Margin="5,0"
-              IsEnabled="False"
+              IsEnabled="{Binding ElementName=SWScaleIsFilterEnabled, Path=IsChecked}"
               x:Name="SWScaleChromaSharpen" Text="9999" HorizontalContentAlignment="Right"
               TextChanged="SWScaleChromaSharpen_TextChanged" KeyDown="SWScaleChromaSharpen_KeyDown" LostFocus="SWScaleChromaSharpen_LostFocus">
       <TextBox.ToolTip>
@@ -104,6 +103,7 @@
     <Label    Grid.Row="5" Grid.Column="2"
               VerticalAlignment="Center" HorizontalAlignment="Right" Height="12"
               Content="C VShift"/>
+    <!-- @todo(me) HShift/VShiftの使い道がわかるまではIsEnabled="False" -->
     <TextBox  Grid.Row="5" Grid.Column="3"
               VerticalAlignment="Center" Height="20" Margin="5,0"
               IsEnabled="False"

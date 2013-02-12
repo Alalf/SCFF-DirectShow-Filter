@@ -28,6 +28,7 @@ using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using SCFF.Common;
 using SCFF.Common.GUI;
 using SCFF.Common.Profile;
   
@@ -36,8 +37,6 @@ public class ScreenCaptureTimer : IDisposable {
   //===================================================================
   // 定数
   //===================================================================
-
-  private const int DefaultTimerPeriod = 5000;  ///< 更新間隔5秒
 
   private const int MaxBitmapWidth = 640;   ///< BitmapSourceの最大幅
   private const int MaxBitmapHeight = 480;  ///< BitmapSourceの最大高さ
@@ -49,7 +48,7 @@ public class ScreenCaptureTimer : IDisposable {
   /// コンストラクタ
   public ScreenCaptureTimer() {
     // Timerの生成
-    var period = ScreenCaptureTimer.DefaultTimerPeriod;
+    const int period = Constants.DefaultLayoutPreviewInterval;
     var context = SynchronizationContext.Current; // UIThread
     this.captureTimer = new Timer(this.TimerCallback, context, 0, period);
 
@@ -228,13 +227,6 @@ public class ScreenCaptureTimer : IDisposable {
     }
   }
 
-  /// タイマーの更新頻度を変更する
-  public void SetTimerPeriod(int period) {
-    lock (this.sharedLock) {
-      this.captureTimer.Change(0, period);
-    }
-  }
-
   //-------------------------------------------------------------------
   // リクエストの設定とキャプチャされたビットマップの取得
   //-------------------------------------------------------------------
@@ -307,6 +299,19 @@ public class ScreenCaptureTimer : IDisposable {
 
   /// キャプチャ終了後
   public event EventHandler Tick;
+
+  //===================================================================
+  // プロパティ
+  //===================================================================
+
+  /// タイマーの更新頻度を設定
+  public int TimerPeriod {
+    set {
+      lock (this.sharedLock) {
+        this.captureTimer.Change(value, value);
+      }
+    }
+  }
 
   //===================================================================
   // フィールド

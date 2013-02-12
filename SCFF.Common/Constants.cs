@@ -129,6 +129,15 @@ public static class Constants {
   /// 「最近使ったプロファイル」に表示される数
   public const int RecentProfilesLength = 5;
 
+  /// LayoutEditのプレビュー更新頻度(mSec): 変更単位
+  public const int LayoutPreviewIntervalTick = 500;
+  /// LayoutEditのプレビュー更新頻度(mSec): 最小値
+  public const int MinimumLayoutPreviewInterval = 500;
+  /// LayoutEditのプレビュー更新頻度(mSec): デフォルト
+  public const int DefaultLayoutPreviewInterval = 3000;
+  /// LayoutEditのプレビュー更新頻度(mSec): 最大値
+  public const int MaximumLayoutPreviewInterval = 5000;
+
   //-------------------------------------------------------------------
   // LayoutElement
   //-------------------------------------------------------------------

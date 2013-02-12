@@ -228,9 +228,7 @@ public partial class MainWindow
   protected override void OnDeactivated(System.EventArgs e) {
     base.OnDeactivated(e);
 
-    /// @todo(me) スクリーンキャプチャをの更新頻度を下げる
-    ///           App.RuntimeOptionsに該当するデータを保存しておく感じかな？
-    // Debug.WriteLine("Deactivated", "MainWindow");
+    App.ScreenCaptureTimer.TimerPeriod = Constants.MaximumLayoutPreviewInterval;
   }
 
   /// Activated
@@ -238,9 +236,7 @@ public partial class MainWindow
   protected override void OnActivated(System.EventArgs e) {
     base.OnActivated(e);
 
-    /// @todo(me) スクリーンキャプチャを更新頻度を元に戻す
-    ///           App.RuntimeOptionsに該当するデータを保存しておく感じかな？
-    // Debug.WriteLine("Activated", "MainWindow");
+    App.ScreenCaptureTimer.TimerPeriod = App.Options.LayoutPreviewInterval;
   }
 
   /// Drop

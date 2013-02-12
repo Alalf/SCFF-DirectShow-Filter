@@ -7,7 +7,8 @@
     - Web: http://alalf.github.com/SCFF-DirectShow-Filter/
     - GitHub: https://github.com/Alalf/SCFF-DirectShow-Filter
     - Nightly-Build: (調査中)
-    - Nightly-Build(old): https://github.com/Alalf/SCFF-DirectShow-Filter/downloads
+    - Nightly-Build(暫定): http://ux.getuploader.com/scff_directshow_filter/
+    - Nightly-Build(停止): https://github.com/Alalf/SCFF-DirectShow-Filter/downloads
 
 
 現在バージョン0.1.5/0.1.6を利用されている方へ
@@ -158,6 +159,10 @@
 ### xSplit
 - xSplitと併用する場合、ffmpegの一部ライブラリが干渉することがあります。
     - SplitMediaLabs\XSplit\avutil-51.dllをSCFF付属のavutil-*.dllと置き換えるとよい、という報告がありました。
+
+### x264を利用したflvエンコーダ共通
+- 長時間エンコードした時に音ずれが発生する場合、音声同期オプションを試してみてください
+    - 例 ffmpeg: "-async 100"オプションの追加で改善される場合があります
 
 ### Windows Media Encoder(WME)
 - YUV420P(I420)に加えて各種ピクセルフォーマット出力が利用可能です。

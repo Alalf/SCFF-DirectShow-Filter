@@ -31,11 +31,11 @@ public partial class Profile {
 /// プロファイル内を参照・操作するためのカーソルクラス
 /// 
 /// - C#のインナークラスはC++のフレンドクラスと似たようなことができる！
-/// - プログラムから直接は利用してはいけないもの(this.profile.appendicesの内容で上書きされるため)
-///   - this.profile.message.layoutParameters[*].Bound*
-///   - this.profile.message.layoutParameters[*].Clipping*
+/// - プログラムから直接は利用してはいけないもの(this.profile.ToMessage()で上書きされるため)
+///   - this.profile.layoutElementDatabase[*].Bound*
+///   - this.profile.layoutElementDatabase[*].Clipping*
 /// - 以下の内容も最新のデータがあることは保障しない
-///   - this.profile.message.layoutParameters[*].Window
+///   - this.profile.layoutElementDatabase[*].Window
 /// - ProfileはProcessに関連した情報を知ることはできない
 ///   - よってsampleWidth/sampleHeightの存在は仮定しないこと
 public class LayoutElement : ILayoutElementView, ILayoutElement {

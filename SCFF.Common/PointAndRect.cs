@@ -81,9 +81,29 @@ public class IntRect {
   }
 
   /// 含有判定
+  /// @param other 判定対象のRect
+  /// @return 含有しているか
   public bool Contains(IntRect other) {
-    return this.X <= other.X && other.Right <= this.Right &&
-           this.Y <= other.Y && other.Bottom <= this.Bottom;
+    if (this.Width < 0 || this.Height < 0 ||
+        other.Width < 0 || other.Height < 0) return false;
+
+    // 開始点
+    if (other.X < this.X || other.Y < this.Y) return false;
+    // Right
+    if (other.Right <= other.X) {
+      // other.Widthが負の数
+      if (this.X <= this.Right || this.Right < other.Right) return false;
+    } else {
+      if (this.X <= this.Right && this.Right < other.Right) return false;
+    }
+    // Bottom
+    if (other.Bottom <= other.Y) {
+      // other.Heightが負の数
+      if (this.Y <= this.Bottom || this.Bottom < other.Bottom) return false;
+    } else {
+      if (this.Y <= this.Bottom && this.Bottom < other.Bottom) return false;
+    }
+    return true;
   }
 }
 

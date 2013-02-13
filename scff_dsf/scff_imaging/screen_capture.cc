@@ -72,7 +72,7 @@ ErrorCodes ScreenCapture::ValidateParameter(int index) {
   const int clipping_height = parameters_[index].clipping_height;
 
   // 不正なWindow
-  if (window == nullptr || !IsWindow(window)) {
+  if (window == nullptr || !IsWindow(window) || IsIconic(window)) {
     return ErrorCodes::kScreenCaptureInvalidWindowError;
   }
 

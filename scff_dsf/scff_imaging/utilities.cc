@@ -245,23 +245,31 @@ const double kEpsilon = 0.0001;
 bool Contains(int bound_x, int bound_y,
               int bound_width, int bound_height,
               int x, int y, int width, int height) {
-  ASSERT(bound_width >= 0 && bound_height >= 0 &&
-         width >= 0 && height >= 0);
-
-  // 境界の幅、高さのどちらかが0なら必ずfalse
-  if (bound_width == 0 || bound_height == 0) {
-    return false;
-  }
-
   const int right = x + width;
   const int bottom = y + height;
   const int bound_right = bound_x + bound_width;
   const int bound_bottom = bound_y + bound_height;
 
-  return bound_x <= x && x <= bound_right &&
-         bound_y <= y && y <= bound_bottom &&
-         right <= bound_right &&
-         bottom <= bound_bottom;
+  if (bound_width < 0 || bound_height < 0 ||
+      width < 0 || height < 0) return false;
+
+  // 開始点
+  if (x < bound_x || y < bound_y) return false;
+  // Right
+  if (right <= x) {
+    // widthが負の数
+    if (bound_x <= bound_right || bound_right < right) return false;
+  } else {
+    if (bound_x <= bound_right && bound_right < right) return false;
+  }
+  // Bottom
+  if (bottom <= y) {
+    // heightが負の数
+    if (bound_y <= bound_bottom || bound_bottom < bottom) return false;
+  } else {
+    if (bound_y <= bound_bottom && bound_bottom < bottom) return false;
+  }
+  return true;
 }
 
 /// 境界に合わせる

@@ -55,6 +55,7 @@
     <Compile Include="GUI\ScreenCaptureRequest.cs" />
     <Compile Include="GUI\SnapGuide.cs" />
     <Compile Include="ClientApplication.cs" />
+    <Compile Include="InternalTypes.cs" />
     <Compile Include="Profile\Utilities.cs" />
     <Compile Include="TinyKeyValueFile.cs" />
     <Compile Include="PointAndRect.cs" />
@@ -69,7 +70,7 @@
     <Compile Include="Profile\StringConverter.cs" />
     <Compile Include="Profile\BoundRelativeInputCorrector.cs" />
     <Compile Include="Profile\SWScaleInputCorrector.cs" />
-    <Compile Include="Profile\AdditionalLayoutParameter.cs" />
+    <Compile Include="Profile\LayoutElementData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GUI\Types.cs" />
     <Compile Include="RuntimeOptions.cs" />

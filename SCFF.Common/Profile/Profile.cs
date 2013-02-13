@@ -42,12 +42,8 @@ public partial class Profile {
   /// コンストラクタ
   /// @warning コンストラクタでは実際の値の読み込みなどは行わない
   public Profile() {
-    const int length = Interprocess.MaxComplexLayoutElements;
-
-    // LayoutParametersの初期化
-    this.message.LayoutParameters = new LayoutParameter[length];
-    
     // カーソルの初期化
+    const int length = Interprocess.MaxComplexLayoutElements;
     for (int i = 0; i < length; ++i) {
       this.layoutElements[i] = new LayoutElement(this, i);
     }
@@ -86,20 +82,32 @@ public partial class Profile {
   /// @param sampleHeight サンプルの高さ
   /// @return 共有メモリにそのまま設定可能なMessage
   public Message ToMessage(int sampleWidth, int sampleHeight) {
-    // this.messageで最新の情報になっていない部分を編集する
-    this.message.LayoutType = (int)this.LayoutType;
+    // インスタンス生成
+    Message result;
+    result.LayoutParameters = new LayoutParameter[Interprocess.MaxComplexLayoutElements];
+
+    // 更新
+    result.LayoutType = (int)this.LayoutType;
+    result.LayoutElementCount = this.LayoutElementCount;
+    result.Timestamp = this.Timestamp;
     for (int i = 0; i < this.LayoutElementCount; ++i) {
+      // Bound*とClipping*以外のデータをコピー
+      result.LayoutParameters[i] = this.layoutElementDatabase[i].ToLayoutParameter();
+
+      // Bound*
       var boundRect = this.layoutElements[i].GetBoundRect(sampleWidth, sampleHeight);
-      this.message.LayoutParameters[i].BoundX = boundRect.X;
-      this.message.LayoutParameters[i].BoundY = boundRect.Y;
-      this.message.LayoutParameters[i].BoundWidth = boundRect.Width;
-      this.message.LayoutParameters[i].BoundHeight = boundRect.Height;
-      this.message.LayoutParameters[i].ClippingX = this.layoutElements[i].ClippingXWithFit;
-      this.message.LayoutParameters[i].ClippingY = this.layoutElements[i].ClippingYWithFit;
-      this.message.LayoutParameters[i].ClippingWidth = this.layoutElements[i].ClippingWidthWithFit;
-      this.message.LayoutParameters[i].ClippingHeight = this.layoutElements[i].ClippingHeightWithFit;
+      result.LayoutParameters[i].BoundX = boundRect.X;
+      result.LayoutParameters[i].BoundY = boundRect.Y;
+      result.LayoutParameters[i].BoundWidth = boundRect.Width;
+      result.LayoutParameters[i].BoundHeight = boundRect.Height;
+
+      // Clipping*
+      result.LayoutParameters[i].ClippingX = this.layoutElements[i].ClippingXWithFit;
+      result.LayoutParameters[i].ClippingY = this.layoutElements[i].ClippingYWithFit;
+      result.LayoutParameters[i].ClippingWidth = this.layoutElements[i].ClippingWidthWithFit;
+      result.LayoutParameters[i].ClippingHeight = this.layoutElements[i].ClippingHeightWithFit;
     }
-    return this.message;
+    return result;
   }
 
   //===================================================================
@@ -139,7 +147,7 @@ public partial class Profile {
 
   /// foreach用Enumerator(参照モード)を返す
   public IEnumerator<ILayoutElementView> GetEnumerator() {
-    for (int i = 0; i < this.message.LayoutElementCount; ++i) {
+    for (int i = 0; i < this.LayoutElementCount; ++i) {
       yield return this.layoutElements[i];
     }
   }
@@ -158,8 +166,7 @@ public partial class Profile {
   private void ClearArrays() {
     /// 配列をクリア
     const int length = Interprocess.MaxComplexLayoutElements;
-    Array.Clear(this.message.LayoutParameters, 0, length);
-    Array.Clear(this.additionalLayoutParameters, 0, length);
+    Array.Clear(this.layoutElementDatabase, 0, length);
   }
 
   /// デフォルトに戻す
@@ -182,7 +189,7 @@ public partial class Profile {
 
   /// レイアウト要素を追加可能か
   public bool CanAdd {
-    get { return this.message.LayoutElementCount < Interprocess.MaxComplexLayoutElements; }
+    get { return this.LayoutElementCount < Interprocess.MaxComplexLayoutElements; }
   }
 
   /// レイアウト要素を追加
@@ -205,7 +212,7 @@ public partial class Profile {
 
   /// レイアウト要素を削除可能か
   public bool CanRemoveCurrent {
-    get { return this.message.LayoutElementCount > 1; }
+    get { return this.LayoutElementCount > 1; }
   }
 
   /// 現在選択中のレイアウト要素を削除
@@ -214,21 +221,18 @@ public partial class Profile {
     // ややこしいので良く考えて書くこと！
     // とりあえず一番簡単なのは全部コピーして全部に書き戻すことだろう
     // また、全体的にスレッドセーフではないとおもうので何とかしたいところ
-    var layoutParameterList = new List<LayoutParameter>();
-    var additionalLayoutPararameterList = new List<AdditionalLayoutParameter>();
+    var newDatabase = new List<LayoutElementData>();
 
     var removedIndex = this.CurrentIndex;
     for (int i = 0; i < this.LayoutElementCount; ++i) {
       if (i != removedIndex) {
-        layoutParameterList.Add(this.message.LayoutParameters[i]);
-        additionalLayoutPararameterList.Add(this.additionalLayoutParameters[i]);
+        newDatabase.Add(this.layoutElementDatabase[i]);
       }
     }
 
     // 後は配列を消去した上で書き戻す
     this.ClearArrays();
-    layoutParameterList.CopyTo(this.message.LayoutParameters);
-    additionalLayoutPararameterList.CopyTo(this.additionalLayoutParameters);
+    newDatabase.CopyTo(this.layoutElementDatabase);
 
     // Profileメンバの更新
     --this.LayoutElementCount;
@@ -250,14 +254,9 @@ public partial class Profile {
   //===================================================================
 
   /// タイムスタンプ
-  public Int64 Timestamp {
-    get { return this.message.Timestamp; }
-  } 
+  public Int64 Timestamp { get; private set; }
   /// レイアウト要素数
-  public int LayoutElementCount {
-    get { return this.message.LayoutElementCount; }
-    set { this.message.LayoutElementCount = value; }
-  }
+  public int LayoutElementCount { get; set; }
 
   /// レイアウトの種類
   public LayoutTypes LayoutType {
@@ -270,7 +269,7 @@ public partial class Profile {
 
   /// タイムスタンプを現在時刻で更新する
   public void UpdateTimestamp() {
-    this.message.Timestamp = DateTime.Now.Ticks;
+    this.Timestamp = DateTime.Now.Ticks;
   }
 
   //===================================================================
@@ -281,15 +280,8 @@ public partial class Profile {
   private readonly LayoutElement[] layoutElements =
       new LayoutElement[Interprocess.MaxComplexLayoutElements];
 
-  /// レイアウトパラメータを格納したメッセージ
-  ///
-  /// 大半の情報はこのmessage内部にあるが、messageの中身は実行時のみ有効な値が含まれている
-  /// (UIntPtr windowなど)。このために、messageとは別にいくらかの情報を追加して保存しなければならない。
-  private Message message = new Message();
-
-  /// 追加レイアウトパラメータをまとめた配列
-  /// @attention messageLayoutParametersにあわせて非初期化済みにした
-  private readonly AdditionalLayoutParameter[] additionalLayoutParameters =
-      new AdditionalLayoutParameter[Interprocess.MaxComplexLayoutElements];
+  /// レイアウトパラメータをまとめた配列
+  private readonly LayoutElementData[] layoutElementDatabase =
+      new LayoutElementData[Interprocess.MaxComplexLayoutElements];
 }
 }   // namespace SCFF.Common.Profile

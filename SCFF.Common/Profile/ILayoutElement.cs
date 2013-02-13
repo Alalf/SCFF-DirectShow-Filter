@@ -54,67 +54,67 @@ public interface ILayoutElement {
   //=================================================================
 
   /// @copydoc SCFF::Common::Profile::AdditionalLayoutParameter::Fit
-  bool SetFit { set; }
+  bool Fit { set; }
 
   /// @copydoc SCFF::Common::Profile::AdditionalLayoutParameter::ClippingXWithoutFit
-  int SetClippingXWithoutFit { set; }
+  int ClippingXWithoutFit { set; }
   /// @copydoc SCFF::Common::Profile::AdditionalLayoutParameter::ClippingYWithoutFit
-  int SetClippingYWithoutFit { set; }
+  int ClippingYWithoutFit { set; }
   /// @copydoc SCFF::Common::Profile::AdditionalLayoutParameter::ClippingWidthWithoutFit
-  int SetClippingWidthWithoutFit { set; }
+  int ClippingWidthWithoutFit { set; }
   /// @copydoc SCFF::Common::Profile::AdditionalLayoutParameter::ClippingHeightWithoutFit
-  int SetClippingHeightWithoutFit { set; }
+  int ClippingHeightWithoutFit { set; }
 
   //=================================================================
   // Options
   //=================================================================
 
   /// @copydoc SCFF::Interprocess::LayoutParameter::ShowCursor
-  bool SetShowCursor { set; }
+  bool ShowCursor { set; }
   /// @copydoc SCFF::Interprocess::LayoutParameter::ShowLayeredWindow
-  bool SetShowLayeredWindow { set; }
+  bool ShowLayeredWindow { set; }
   /// @copydoc SCFF::Interprocess::LayoutParameter::Stretch
-  bool SetStretch { set; }
+  bool Stretch { set; }
   /// @copydoc SCFF::Interprocess::LayoutParameter::KeepAspectRatio
-  bool SetKeepAspectRatio { set; }
+  bool KeepAspectRatio { set; }
   /// @copydoc SCFF::Interprocess::LayoutParameter::RotateDirection
-  RotateDirections SetRotateDirection { set; }
+  RotateDirections RotateDirection { set; }
 
   //=================================================================
   // ResizeMethod
   //=================================================================
 
   /// @copydoc SCFF::Interprocess::SWScaleConfig::Flags
-  SWScaleFlags SetSWScaleFlags { set; }
+  SWScaleFlags SWScaleFlags { set; }
   /// @copydoc SCFF::Interprocess::SWScaleConfig::AccurateRnd
-  bool SetSWScaleAccurateRnd { set; }
+  bool SWScaleAccurateRnd { set; }
   /// @copydoc SCFF::Interprocess::SWScaleConfig::IsFilterEnabled
-  bool SetSWScaleIsFilterEnabled { set; }
+  bool SWScaleIsFilterEnabled { set; }
   /// @copydoc SCFF::Interprocess::SWScaleConfig::LumaGblur
-  float SetSWScaleLumaGBlur { set; }
+  float SWScaleLumaGBlur { set; }
   /// @copydoc SCFF::Interprocess::SWScaleConfig::ChromaGblur
-  float SetSWScaleChromaGBlur { set; }
+  float SWScaleChromaGBlur { set; }
   /// @copydoc SCFF::Interprocess::SWScaleConfig::LumaSharpen
-  float SetSWScaleLumaSharpen { set; }
+  float SWScaleLumaSharpen { set; }
   /// @copydoc SCFF::Interprocess::SWScaleConfig::ChromaSharpen
-  float SetSWScaleChromaSharpen { set; }
+  float SWScaleChromaSharpen { set; }
   /// @copydoc SCFF::Interprocess::SWScaleConfig::ChromaHShift
-  float SetSWScaleChromaHShift { set; }
+  float SWScaleChromaHShift { set; }
   /// @copydoc SCFF::Interprocess::SWScaleConfig::ChromaVShift
-  float SetSWScaleChromaVShift { set; }
+  float SWScaleChromaVShift { set; }
 
   //=================================================================
   // LayoutParameter
   //=================================================================
 
   /// @copydoc SCFF::Common::Profile::AdditionalLayoutParameter::BoundRelativeLeft
-  double SetBoundRelativeLeft { set; }
+  double BoundRelativeLeft { set; }
   /// @copydoc SCFF::Common::Profile::AdditionalLayoutParameter::BoundRelativeTop
-  double SetBoundRelativeTop { set; }
+  double BoundRelativeTop { set; }
   /// @copydoc SCFF::Common::Profile::AdditionalLayoutParameter::BoundRelativeRight
-  double SetBoundRelativeRight { set; }
+  double BoundRelativeRight { set; }
   /// @copydoc SCFF::Common::Profile::AdditionalLayoutParameter::BoundRelativeBottom
-  double SetBoundRelativeBottom { set; }
+  double BoundRelativeBottom { set; }
 
   /// LayoutParameterをサンプル座標系で調整する
   /// @param sampleWidth サンプルの幅
@@ -141,14 +141,14 @@ public interface ILayoutElement {
   void ClearBackupParameters();
 
   /// @copydoc SCFF::Common::Profile::AdditionalLayoutParameter::HasBackedUp
-  bool SetHasBackedUp { set; }
+  bool HasBackedUp { set; }
   /// @copydoc SCFF::Common::Profile::AdditionalLayoutParameter::BackupScreenClippingX
-  int SetBackupScreenClippingX { set; }
+  int BackupScreenClippingX { set; }
   /// @copydoc SCFF::Common::Profile::AdditionalLayoutParameter::BackupScreenClippingY
-  int SetBackupScreenClippingY { set; }
+  int BackupScreenClippingY { set; }
   /// @copydoc SCFF::Common::Profile::AdditionalLayoutParameter::BackupClippingWidth
-  int SetBackupClippingWidth { set; }
+  int BackupClippingWidth { set; }
   /// @copydoc SCFF::Common::Profile::AdditionalLayoutParameter::BackupClippingHeight
-  int SetBackupClippingHeight { set; }
+  int BackupClippingHeight { set; }
 }
 }   // namespace SCFF.Common.Profile

@@ -104,12 +104,12 @@ public partial class ResizeMethod : UserControl, IBindingProfile {
   /// enumと値を指定してProfileを変更
   private void SetSWScaleValue(SWScale name, float value) {
     switch (name) {
-      case SWScale.LumaGBlur: App.Profile.Current.SetSWScaleLumaGBlur = value; break;
-      case SWScale.LumaSharpen: App.Profile.Current.SetSWScaleLumaSharpen = value; break;
-      case SWScale.ChromaHShift: App.Profile.Current.SetSWScaleChromaHShift = value; break;
-      case SWScale.ChromaGBlur: App.Profile.Current.SetSWScaleChromaGBlur = value; break;
-      case SWScale.ChromaSharpen: App.Profile.Current.SetSWScaleChromaSharpen = value; break;
-      case SWScale.ChromaVShift: App.Profile.Current.SetSWScaleChromaVShift = value; break;
+      case SWScale.LumaGBlur: App.Profile.Current.SWScaleLumaGBlur = value; break;
+      case SWScale.LumaSharpen: App.Profile.Current.SWScaleLumaSharpen = value; break;
+      case SWScale.ChromaHShift: App.Profile.Current.SWScaleChromaHShift = value; break;
+      case SWScale.ChromaGBlur: App.Profile.Current.SWScaleChromaGBlur = value; break;
+      case SWScale.ChromaSharpen: App.Profile.Current.SWScaleChromaSharpen = value; break;
+      case SWScale.ChromaVShift: App.Profile.Current.SWScaleChromaVShift = value; break;
       default: Debug.Fail("switch"); throw new System.ArgumentException();
     }
   }
@@ -212,7 +212,7 @@ public partial class ResizeMethod : UserControl, IBindingProfile {
     if (!this.SWScaleAccurateRnd.IsChecked.HasValue) return;
     
     App.Profile.Current.Open();
-    App.Profile.Current.SetSWScaleAccurateRnd =
+    App.Profile.Current.SWScaleAccurateRnd =
         (bool)this.SWScaleAccurateRnd.IsChecked;
     App.Profile.Current.Close();
   }
@@ -224,7 +224,7 @@ public partial class ResizeMethod : UserControl, IBindingProfile {
     if (!this.SWScaleIsFilterEnabled.IsChecked.HasValue) return;
 
     App.Profile.Current.Open();
-    App.Profile.Current.SetSWScaleIsFilterEnabled =
+    App.Profile.Current.SWScaleIsFilterEnabled =
         (bool)this.SWScaleIsFilterEnabled.IsChecked;
     App.Profile.Current.Close();
   }
@@ -307,7 +307,7 @@ public partial class ResizeMethod : UserControl, IBindingProfile {
     var flags = (Interprocess.SWScaleFlags)this.SWScaleFlags.SelectedValue;
 
     App.Profile.Current.Open();
-    App.Profile.Current.SetSWScaleFlags = flags;
+    App.Profile.Current.SWScaleFlags = flags;
     App.Profile.Current.Close();
   }
 

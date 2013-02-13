@@ -93,10 +93,10 @@ public partial class Area : UserControl, IBindingProfile {
   /// enumと値を指定してProfileを変更
   private void SetClippingValue(Clipping name, int value) {
     switch (name) {
-      case Clipping.X: App.Profile.Current.SetClippingXWithoutFit = value; break;
-      case Clipping.Y: App.Profile.Current.SetClippingYWithoutFit = value; break;
-      case Clipping.Width: App.Profile.Current.SetClippingWidthWithoutFit = value; break;
-      case Clipping.Height: App.Profile.Current.SetClippingHeightWithoutFit = value; break;
+      case Clipping.X: App.Profile.Current.ClippingXWithoutFit = value; break;
+      case Clipping.Y: App.Profile.Current.ClippingYWithoutFit = value; break;
+      case Clipping.Width: App.Profile.Current.ClippingWidthWithoutFit = value; break;
+      case Clipping.Height: App.Profile.Current.ClippingHeightWithoutFit = value; break;
       default: Debug.Fail("switch"); throw new System.ArgumentException();
     }
   }
@@ -206,10 +206,10 @@ public partial class Area : UserControl, IBindingProfile {
 
     // Update Profile
     App.Profile.Current.Open();
-    App.Profile.Current.SetClippingXWithoutFit = changed.X;
-    App.Profile.Current.SetClippingWidthWithoutFit = changed.Width;
-    App.Profile.Current.SetClippingYWithoutFit = changed.Y;
-    App.Profile.Current.SetClippingHeightWithoutFit = changed.Height;
+    App.Profile.Current.ClippingXWithoutFit = changed.X;
+    App.Profile.Current.ClippingWidthWithoutFit = changed.Width;
+    App.Profile.Current.ClippingYWithoutFit = changed.Y;
+    App.Profile.Current.ClippingHeightWithoutFit = changed.Height;
     App.Profile.Current.Close();
 
     //---------------------------------------------------------------
@@ -242,7 +242,7 @@ public partial class Area : UserControl, IBindingProfile {
     if (!this.Fit.IsChecked.HasValue) return;
 
     App.Profile.Current.Open();
-    App.Profile.Current.SetFit = (bool)this.Fit.IsChecked;
+    App.Profile.Current.Fit = (bool)this.Fit.IsChecked;
     App.Profile.Current.Close();
 
     //-----------------------------------------------------------------

@@ -377,10 +377,10 @@ public partial class LayoutEdit
     this.moveAndSize.MousePoint = relativeMousePoint;
     var nextLTRB = this.moveAndSize.Do(Keyboard.Modifiers == ModifierKeys.Shift);
       
-    App.Profile.Current.SetBoundRelativeLeft = nextLTRB.Left;
-    App.Profile.Current.SetBoundRelativeTop = nextLTRB.Top;
-    App.Profile.Current.SetBoundRelativeRight = nextLTRB.Right;
-    App.Profile.Current.SetBoundRelativeBottom = nextLTRB.Bottom;
+    App.Profile.Current.BoundRelativeLeft = nextLTRB.Left;
+    App.Profile.Current.BoundRelativeTop = nextLTRB.Top;
+    App.Profile.Current.BoundRelativeRight = nextLTRB.Right;
+    App.Profile.Current.BoundRelativeBottom = nextLTRB.Bottom;
 
     // 描画自体はCompositionTarget.Renderingで行う
   }

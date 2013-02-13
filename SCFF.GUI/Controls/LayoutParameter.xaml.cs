@@ -94,10 +94,10 @@ public partial class LayoutParameter
   /// enumと値を指定してProfileを変更
   private void SetBoundRelativeValue(BoundRelative name, double value) {
     switch (name) {
-      case BoundRelative.Left: App.Profile.Current.SetBoundRelativeLeft = value; break;
-      case BoundRelative.Top: App.Profile.Current.SetBoundRelativeTop = value; break;
-      case BoundRelative.Right: App.Profile.Current.SetBoundRelativeRight = value; break;
-      case BoundRelative.Bottom: App.Profile.Current.SetBoundRelativeBottom = value; break;
+      case BoundRelative.Left: App.Profile.Current.BoundRelativeLeft = value; break;
+      case BoundRelative.Top: App.Profile.Current.BoundRelativeTop = value; break;
+      case BoundRelative.Right: App.Profile.Current.BoundRelativeRight = value; break;
+      case BoundRelative.Bottom: App.Profile.Current.BoundRelativeBottom = value; break;
       default: Debug.Fail("switch"); throw new System.ArgumentException();
     }
   }
@@ -207,10 +207,10 @@ public partial class LayoutParameter
 
     // Update Profile
     App.Profile.Current.Open();
-    App.Profile.Current.SetBoundRelativeLeft = changed.Left;
-    App.Profile.Current.SetBoundRelativeTop = changed.Top;
-    App.Profile.Current.SetBoundRelativeRight = changed.Right;
-    App.Profile.Current.SetBoundRelativeBottom = changed.Bottom;
+    App.Profile.Current.BoundRelativeLeft = changed.Left;
+    App.Profile.Current.BoundRelativeTop = changed.Top;
+    App.Profile.Current.BoundRelativeRight = changed.Right;
+    App.Profile.Current.BoundRelativeBottom = changed.Bottom;
     App.Profile.Current.Close();
 
     //---------------------------------------------------------------

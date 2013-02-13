@@ -143,7 +143,7 @@ public class RuntimeOptions {
   //-------------------------------------------------------------------
 
   /// Entryをラベルに変換する
-  private string GetEntryLabel(Entry entry) {
+  private string GetEntryLabel(InternalEntry entry) {
     var pixelFormatString =
         Constants.ImagePixelFormatLabels[(ImagePixelFormats)entry.SamplePixelFormat];
 
@@ -172,13 +172,11 @@ public class RuntimeOptions {
       if (entry.ProcessID == 0) continue;
 
       // InternalEntryの生成と追加
-      var internalEntry = new InternalEntry(
-          entry.SampleWidth, entry.SampleHeight,
-          (ImagePixelFormats)entry.SamplePixelFormat);
+      var internalEntry = new InternalEntry(entry);
       this.entries.Add(entry.ProcessID, internalEntry);
 
       // ラベルの生成と追加
-      var tuple = new Tuple<UInt32,string>(entry.ProcessID, this.GetEntryLabel(entry));
+      var tuple = new Tuple<UInt32,string>(entry.ProcessID, this.GetEntryLabel(internalEntry));
       this.EntryLabels.Add(tuple);
     }
 
@@ -247,29 +245,6 @@ public class RuntimeOptions {
   //===================================================================
   // フィールド
   //===================================================================
-
-  /// @copybrief SCFF::Interprocess::Entry
-  /// @attention Entryは構造体のため、Dictionaryから取り出すごとにコピーが発生する
-  ///            これを避けるため、参照型のまま取り扱えるEntryクラスを用意した
-  private class InternalEntry {
-    /// コンストラクタ
-    /// @param[in] sampleWidth サンプルの出力幅
-    /// @param[in] sampleHeight サンプルの出力高さ
-    /// @param[in] samplePixelFormat サンプルの出力ピクセルフォーマット
-    public InternalEntry(int sampleWidth, int sampleHeight,
-                         ImagePixelFormats samplePixelFormat) {
-      this.SampleWidth = sampleWidth;
-      this.SampleHeight = sampleHeight;
-      this.SamplePixelFormat = samplePixelFormat;
-    }
-    /// サンプルの出力幅
-    public int SampleWidth { get; private set; }
-    /// サンプルの出力高さ
-    public int SampleHeight { get; private set; }
-    /// サンプルの出力ピクセルフォーマット
-    public ImagePixelFormats SamplePixelFormat { get; private set; }
-    // FPSは現在必要ない
-  }
 
   /// エントリディクショナリ
   private readonly Dictionary<UInt32,InternalEntry> entries =

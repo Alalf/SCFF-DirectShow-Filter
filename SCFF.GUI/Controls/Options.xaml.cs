@@ -50,7 +50,7 @@ public partial class Options : UserControl, IBindingProfile {
     if (!this.ShowCursor.IsChecked.HasValue) return;
 
     App.Profile.Current.Open();
-    App.Profile.Current.SetShowCursor = (bool)this.ShowCursor.IsChecked;
+    App.Profile.Current.ShowCursor = (bool)this.ShowCursor.IsChecked;
     App.Profile.Current.Close();
     
     //-----------------------------------------------------------------
@@ -67,7 +67,7 @@ public partial class Options : UserControl, IBindingProfile {
     if (!this.ShowLayeredWindow.IsChecked.HasValue) return;
 
     App.Profile.Current.Open();
-    App.Profile.Current.SetShowLayeredWindow = (bool)this.ShowLayeredWindow.IsChecked;
+    App.Profile.Current.ShowLayeredWindow = (bool)this.ShowLayeredWindow.IsChecked;
     App.Profile.Current.Close();
 
     //-----------------------------------------------------------------
@@ -84,7 +84,7 @@ public partial class Options : UserControl, IBindingProfile {
     if (!this.KeepAspectRatio.IsChecked.HasValue) return;
 
     App.Profile.Current.Open();
-    App.Profile.Current.SetKeepAspectRatio = (bool)this.KeepAspectRatio.IsChecked;
+    App.Profile.Current.KeepAspectRatio = (bool)this.KeepAspectRatio.IsChecked;
     App.Profile.Current.Close();
 
     //-----------------------------------------------------------------
@@ -101,7 +101,7 @@ public partial class Options : UserControl, IBindingProfile {
     if (!this.Stretch.IsChecked.HasValue) return;
  
     App.Profile.Current.Open();
-    App.Profile.Current.SetStretch = (bool)this.Stretch.IsChecked;
+    App.Profile.Current.Stretch = (bool)this.Stretch.IsChecked;
     App.Profile.Current.Close();
 
     //-----------------------------------------------------------------

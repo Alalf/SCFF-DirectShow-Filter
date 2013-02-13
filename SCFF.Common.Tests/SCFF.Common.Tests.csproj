@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="Imaging\Utilities.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SandBox.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SCFF.Common\SCFF.Common.csproj">

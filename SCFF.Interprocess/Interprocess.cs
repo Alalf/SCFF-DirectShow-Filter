@@ -114,7 +114,7 @@ public struct Entry {
   /// サンプルの出力height
   public Int32 SampleHeight;
   /// サンプルの出力ピクセルフォーマット
-  /// @attention ImagePixelFormatを操作に使うこと
+  /// @attention ImagePixelFormatsを操作に使うこと
   public Int32 SamplePixelFormat;
   /// 目標fps
   public Double FPS;

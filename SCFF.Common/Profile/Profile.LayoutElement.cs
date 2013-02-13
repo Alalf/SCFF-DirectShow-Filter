@@ -50,6 +50,15 @@ public class LayoutElement : ILayoutElementView, ILayoutElement {
   }
 
   //=================================================================
+  // プロパティ
+  //=================================================================
+
+  private LayoutElementData Data {
+    get { return this.profile.layoutElementDatabase[this.Index]; }
+    set { this.profile.layoutElementDatabase[this.Index] = value; }
+  }
+
+  //=================================================================
   // ILayoutElementView: プロパティ
   //=================================================================
 
@@ -76,32 +85,29 @@ public class LayoutElement : ILayoutElementView, ILayoutElement {
   /// @todo(me) インスタンスを生成する形でゼロクリアしているが非効率的？
   public void RestoreDefault() {
     // newで参照型をゼロクリア
-    var layoutParameter = new LayoutParameter();
-    layoutParameter.SWScaleConfig = new SWScaleConfig();
-    this.profile.message.LayoutParameters[this.Index] = layoutParameter;
-    this.profile.additionalLayoutParameters[this.Index] = new AdditionalLayoutParameter();
+    this.Data = new LayoutElementData();
 
-    this.SetKeepAspectRatio = true;
-    this.SetRotateDirection = RotateDirections.NoRotate;
-    this.SetStretch = true;
-    this.SetSWScaleFlags = SWScaleFlags.Area;
-    this.SetSWScaleIsFilterEnabled = false;
+    this.KeepAspectRatio = true;
+    this.RotateDirection = RotateDirections.NoRotate;
+    this.Stretch = true;
+    this.SWScaleFlags = SWScaleFlags.Area;
+    this.SWScaleIsFilterEnabled = false;
 
     // プライマリモニタを表示
     this.SetWindowToDesktop();
-    this.SetFit = false;
-    this.SetClippingXWithoutFit       = 0;
-    this.SetClippingYWithoutFit       = 0;
-    this.SetClippingWidthWithoutFit   = User32.GetSystemMetrics(User32.SM_CXSCREEN);
-    this.SetClippingHeightWithoutFit  = User32.GetSystemMetrics(User32.SM_CYSCREEN);
+    this.Fit = false;
+    this.ClippingXWithoutFit       = 0;
+    this.ClippingYWithoutFit       = 0;
+    this.ClippingWidthWithoutFit   = User32.GetSystemMetrics(User32.SM_CXSCREEN);
+    this.ClippingHeightWithoutFit  = User32.GetSystemMetrics(User32.SM_CYSCREEN);
     
     // 初期値を少しずつずらす
-    this.SetBoundRelativeLeft =
+    this.BoundRelativeLeft =
         Constants.MinimumBoundRelativeSize * this.Index;
-    this.SetBoundRelativeTop =
+    this.BoundRelativeTop =
         Constants.MinimumBoundRelativeSize * this.Index;
-    this.SetBoundRelativeRight = 1.0;
-    this.SetBoundRelativeBottom = 1.0;
+    this.BoundRelativeRight = 1.0;
+    this.BoundRelativeBottom = 1.0;
   }
 
   //=================================================================
@@ -110,7 +116,7 @@ public class LayoutElement : ILayoutElementView, ILayoutElement {
 
   /// @copydoc ILayoutElementView::Window
   public UIntPtr Window {
-    get { return (UIntPtr)this.profile.message.LayoutParameters[this.Index].Window; }
+    get { return this.Data.Window; }
   }
 
   /// @copydoc ILayoutElementView::IsWindowValid
@@ -120,18 +126,18 @@ public class LayoutElement : ILayoutElementView, ILayoutElement {
 
   /// @copydoc ILayoutElementView::WindowType
   public WindowTypes WindowType {
-    get { return this.profile.additionalLayoutParameters[this.Index].WindowType; }
+    get { return this.Data.WindowType; }
   }
 
   /// @copydoc ILayoutElementView::WindowCaption
   public string WindowCaption {
-    get { return this.profile.additionalLayoutParameters[this.Index].WindowCaption; }
+    get { return this.Data.WindowCaption; }
   }
 
   /// @copydoc ILayoutElement::SetWindow
   public void SetWindow(UIntPtr window) {
-    this.profile.additionalLayoutParameters[this.Index].WindowType = WindowTypes.Normal;
-    this.profile.message.LayoutParameters[this.Index].Window = window.ToUInt64();
+    this.Data.WindowType = WindowTypes.Normal;
+    this.Data.Window = window;
 
     var windowCaption = "n/a";
     if (Common.Utilities.IsWindowValid(window)) {
@@ -139,19 +145,19 @@ public class LayoutElement : ILayoutElementView, ILayoutElement {
       User32.GetClassName(window, className, 256);
       windowCaption = className.ToString();
     }
-    this.profile.additionalLayoutParameters[this.Index].WindowCaption = windowCaption;
+    this.Data.WindowCaption = windowCaption;
   }
   /// @copydoc ILayoutElement::SetWindowToDesktop
   public void SetWindowToDesktop() {
-    this.profile.additionalLayoutParameters[this.Index].WindowType = WindowTypes.Desktop;
-    this.profile.message.LayoutParameters[this.Index].Window = User32.GetDesktopWindow().ToUInt64();
-    this.profile.additionalLayoutParameters[this.Index].WindowCaption = "(Desktop)";
+    this.Data.WindowType = WindowTypes.Desktop;
+    this.Data.Window = User32.GetDesktopWindow();
+    this.Data.WindowCaption = "(Desktop)";
   }
   /// @copydoc ILayoutElement::SetWindowToDesktopListView
   public void SetWindowToDesktopListView() {
-    this.profile.additionalLayoutParameters[this.Index].WindowType = WindowTypes.DesktopListView;
-    this.profile.message.LayoutParameters[this.Index].Window = Utilities.DesktopListViewWindow.ToUInt64();
-    this.profile.additionalLayoutParameters[this.Index].WindowCaption = "(DesktopListView)";
+    this.Data.WindowType = WindowTypes.DesktopListView;
+    this.Data.Window = Utilities.DesktopListViewWindow;
+    this.Data.WindowCaption = "(DesktopListView)";
   }
 
   //=================================================================
@@ -160,23 +166,28 @@ public class LayoutElement : ILayoutElementView, ILayoutElement {
 
   /// @copydoc ILayoutElementView::Fit
   public bool Fit {
-    get { return this.profile.additionalLayoutParameters[this.Index].Fit; }
+    get { return this.Data.Fit; }
+    set { this.Data.Fit = value; }
   }
   /// @copydoc ILayoutElementView::ClippingXWithoutFit
   public int ClippingXWithoutFit {
-    get { return this.profile.additionalLayoutParameters[this.Index].ClippingXWithoutFit; }
+    get { return this.Data.ClippingXWithoutFit; }
+    set { this.Data.ClippingXWithoutFit = value; }
   }
   /// @copydoc ILayoutElementView::ClippingYWithoutFit
   public int ClippingYWithoutFit {
-    get { return this.profile.additionalLayoutParameters[this.Index].ClippingYWithoutFit; }
+    get { return this.Data.ClippingYWithoutFit; }
+    set { this.Data.ClippingYWithoutFit = value; }
   }
   /// @copydoc ILayoutElementView::ClippingWidthWithoutFit
   public int ClippingWidthWithoutFit {
-    get { return this.profile.additionalLayoutParameters[this.Index].ClippingWidthWithoutFit; }
+    get { return this.Data.ClippingWidthWithoutFit; }
+    set { this.Data.ClippingWidthWithoutFit = value; }
   }
   /// @copydoc ILayoutElementView::ClippingHeightWithoutFit
   public int ClippingHeightWithoutFit {
-    get { return this.profile.additionalLayoutParameters[this.Index].ClippingHeightWithoutFit; }
+    get { return this.Data.ClippingHeightWithoutFit; }
+    set { this.Data.ClippingHeightWithoutFit = value; }
   }
 
   /// @copydoc ILayoutElementView::ClippingXWithFit
@@ -227,71 +238,34 @@ public class LayoutElement : ILayoutElementView, ILayoutElement {
     }
   }
 
-  /// @copydoc ILayoutElement::SetFit
-  public bool SetFit {
-    set { this.profile.additionalLayoutParameters[this.Index].Fit = value; }
-  }
-  /// @copydoc ILayoutElement::SetClippingXWithoutFit
-  public int SetClippingXWithoutFit {
-    set { this.profile.additionalLayoutParameters[this.Index].ClippingXWithoutFit = value; }
-  }
-  /// @copydoc ILayoutElement::SetClippingYWithoutFit
-  public int SetClippingYWithoutFit {
-    set { this.profile.additionalLayoutParameters[this.Index].ClippingYWithoutFit = value; }
-  }
-  /// @copydoc ILayoutElement::SetClippingWidthWithoutFit
-  public int SetClippingWidthWithoutFit {
-    set { this.profile.additionalLayoutParameters[this.Index].ClippingWidthWithoutFit = value; }
-  }
-  /// @copydoc ILayoutElement::SetClippingHeightWithoutFit
-  public int SetClippingHeightWithoutFit {
-    set { this.profile.additionalLayoutParameters[this.Index].ClippingHeightWithoutFit = value; }
-  }
-
   //=================================================================
   // Options
   //=================================================================
 
   /// @copydoc ILayoutElementView::ShowCursor
   public bool ShowCursor {
-    get { return Convert.ToBoolean(this.profile.message.LayoutParameters[this.Index].ShowCursor); }
+    get { return this.Data.ShowCursor; }
+    set { this.Data.ShowCursor = value; }
   }
   /// @copydoc ILayoutElementView::ShowLayeredWindow
   public bool ShowLayeredWindow {
-    get { return Convert.ToBoolean(this.profile.message.LayoutParameters[this.Index].ShowLayeredWindow); }
+    get { return this.Data.ShowLayeredWindow; }
+    set { this.Data.ShowLayeredWindow = value; }
   }
   /// @copydoc ILayoutElementView::Stretch
   public bool Stretch {
-    get { return Convert.ToBoolean(this.profile.message.LayoutParameters[this.Index].Stretch); }
+    get { return this.Data.Stretch; }
+    set { this.Data.Stretch = value; }
   }
   /// @copydoc ILayoutElementView::KeepAspectRatio
   public bool KeepAspectRatio {
-    get { return Convert.ToBoolean(this.profile.message.LayoutParameters[this.Index].KeepAspectRatio); }
+    get { return this.Data.KeepAspectRatio; }
+    set { this.Data.KeepAspectRatio = value; }
   }
   /// @copydoc ILayoutElementView::RotateDirection
   public RotateDirections RotateDirection {
-    get { return (RotateDirections)this.profile.message.LayoutParameters[this.Index].RotateDirection; }
-  }
-
-  /// @copydoc ILayoutElement::SetShowCursor
-  public bool SetShowCursor {
-    set { this.profile.message.LayoutParameters[this.Index].ShowCursor = Convert.ToByte(value); }
-  }
-  /// @copydoc ILayoutElement::SetShowLayeredWindow
-  public bool SetShowLayeredWindow {
-    set { this.profile.message.LayoutParameters[this.Index].ShowLayeredWindow = Convert.ToByte(value); }
-  }
-  /// @copydoc ILayoutElement::SetStretch
-  public bool SetStretch {
-    set { this.profile.message.LayoutParameters[this.Index].Stretch = Convert.ToByte(value); }
-  }
-  /// @copydoc ILayoutElement::SetKeepAspectRatio
-  public bool SetKeepAspectRatio {
-    set { this.profile.message.LayoutParameters[this.Index].KeepAspectRatio = Convert.ToByte(value); }
-  }
-  /// @copydoc ILayoutElement::SetRotateDirection
-  public RotateDirections SetRotateDirection {
-    set { this.profile.message.LayoutParameters[this.Index].RotateDirection = Convert.ToInt32(value); }
+    get { return this.Data.RotateDirection; }
+    set { this.Data.RotateDirection = value; }
   }
 
   //=================================================================
@@ -300,76 +274,48 @@ public class LayoutElement : ILayoutElementView, ILayoutElement {
 
   /// @copydoc ILayoutElementView::SWScaleFlags
   public SWScaleFlags SWScaleFlags {
-    get { return (SWScaleFlags)this.profile.message.LayoutParameters[this.Index].SWScaleConfig.Flags; }
+    get { return this.Data.SWScaleConfig.Flags; }
+    set { this.Data.SWScaleConfig.Flags = value; }
   }
   /// @copydoc ILayoutElementView::SWScaleAccurateRnd
   public bool SWScaleAccurateRnd {
-    get { return Convert.ToBoolean(this.profile.message.LayoutParameters[this.Index].SWScaleConfig.AccurateRnd); }
+    get { return this.Data.SWScaleConfig.AccurateRnd; }
+    set { this.Data.SWScaleConfig.AccurateRnd = value; }
   }
   /// @copydoc ILayoutElementView::SWScaleIsFilterEnabled
   public bool SWScaleIsFilterEnabled {
-    get { return Convert.ToBoolean(this.profile.message.LayoutParameters[this.Index].SWScaleConfig.IsFilterEnabled); }
+    get { return this.Data.SWScaleConfig.IsFilterEnabled; }
+    set { this.Data.SWScaleConfig.IsFilterEnabled = value; }
   }
   /// @copydoc ILayoutElementView::SWScaleLumaGBlur
   public float SWScaleLumaGBlur {
-    get { return this.profile.message.LayoutParameters[this.Index].SWScaleConfig.LumaGblur; }
+    get { return this.Data.SWScaleConfig.LumaGblur; }
+    set { this.Data.SWScaleConfig.LumaGblur = value; }
   }
   /// @copydoc ILayoutElementView::SWScaleChromaGBlur
   public float SWScaleChromaGBlur {
-    get { return this.profile.message.LayoutParameters[this.Index].SWScaleConfig.ChromaGblur; }
+    get { return this.Data.SWScaleConfig.ChromaGblur; }
+    set { this.Data.SWScaleConfig.ChromaGblur = value; }
   }
   /// @copydoc ILayoutElementView::SWScaleLumaSharpen
   public float SWScaleLumaSharpen {
-    get { return this.profile.message.LayoutParameters[this.Index].SWScaleConfig.LumaSharpen; }
+    get { return this.Data.SWScaleConfig.LumaSharpen; }
+    set { this.Data.SWScaleConfig.LumaSharpen = value; }
   }
   /// @copydoc ILayoutElementView::SWScaleChromaSharpen
   public float SWScaleChromaSharpen {
-    get { return this.profile.message.LayoutParameters[this.Index].SWScaleConfig.ChromaSharpen; }
+    get { return this.Data.SWScaleConfig.ChromaSharpen; }
+    set { this.Data.SWScaleConfig.ChromaSharpen = value; }
   }
   /// @copydoc ILayoutElementView::SWScaleChromaHShift
   public float SWScaleChromaHShift {
-    get { return this.profile.message.LayoutParameters[this.Index].SWScaleConfig.ChromaHShift; }
+    get { return this.Data.SWScaleConfig.ChromaHShift; }
+    set { this.Data.SWScaleConfig.ChromaHShift = value; }
   }
   /// @copydoc ILayoutElementView::SWScaleChromaVShift
   public float SWScaleChromaVShift {
-    get { return this.profile.message.LayoutParameters[this.Index].SWScaleConfig.ChromaVShift; }
-  }
-
-  /// @copydoc ILayoutElement::SetSWScaleFlags
-  public SWScaleFlags SetSWScaleFlags {
-    set { this.profile.message.LayoutParameters[this.Index].SWScaleConfig.Flags = Convert.ToInt32(value); }
-  }
-  /// @copydoc ILayoutElement::SetSWScaleAccurateRnd
-  public bool SetSWScaleAccurateRnd {
-    set { this.profile.message.LayoutParameters[this.Index].SWScaleConfig.AccurateRnd = Convert.ToByte(value); }
-  }
-  /// @copydoc ILayoutElement::SetSWScaleIsFilterEnabled
-  public bool SetSWScaleIsFilterEnabled {
-    set { this.profile.message.LayoutParameters[this.Index].SWScaleConfig.IsFilterEnabled = Convert.ToByte(value); }
-  }
-  /// @copydoc ILayoutElement::SetSWScaleLumaGBlur
-  public float SetSWScaleLumaGBlur {
-    set { this.profile.message.LayoutParameters[this.Index].SWScaleConfig.LumaGblur = value; }
-  }
-  /// @copydoc ILayoutElement::SetSWScaleChromaGBlur
-  public float SetSWScaleChromaGBlur {
-    set { this.profile.message.LayoutParameters[this.Index].SWScaleConfig.ChromaGblur = value; }
-  }
-  /// @copydoc ILayoutElement::SetSWScaleLumaSharpen
-  public float SetSWScaleLumaSharpen {
-    set { this.profile.message.LayoutParameters[this.Index].SWScaleConfig.LumaSharpen = value; }
-  }
-  /// @copydoc ILayoutElement::SetSWScaleChromaSharpen
-  public float SetSWScaleChromaSharpen {
-    set { this.profile.message.LayoutParameters[this.Index].SWScaleConfig.ChromaSharpen = value; }
-  }
-  /// @copydoc ILayoutElement::SetSWScaleChromaHShift
-  public float SetSWScaleChromaHShift {
-    set { this.profile.message.LayoutParameters[this.Index].SWScaleConfig.ChromaHShift = value; }
-  }
-  /// @copydoc ILayoutElement::SetSWScaleChromaVShift
-  public float SetSWScaleChromaVShift {
-    set { this.profile.message.LayoutParameters[this.Index].SWScaleConfig.ChromaVShift = value; }
+    get { return this.Data.SWScaleConfig.ChromaVShift; }
+    set { this.Data.SWScaleConfig.ChromaVShift = value; }
   }
 
   //=================================================================
@@ -378,19 +324,23 @@ public class LayoutElement : ILayoutElementView, ILayoutElement {
 
   /// @copydoc ILayoutElementView::BoundRelativeLeft
   public double BoundRelativeLeft {
-    get { return this.profile.additionalLayoutParameters[this.Index].BoundRelativeLeft; }
+    get { return this.Data.BoundRelativeLeft; }
+    set { this.Data.BoundRelativeLeft = value; }
   }
   /// @copydoc ILayoutElementView::BoundRelativeTop
   public double BoundRelativeTop {
-    get { return this.profile.additionalLayoutParameters[this.Index].BoundRelativeTop; }
+    get { return this.Data.BoundRelativeTop; }
+    set { this.Data.BoundRelativeTop = value; }
   }
   /// @copydoc ILayoutElementView::BoundRelativeRight
   public double BoundRelativeRight {
-    get { return this.profile.additionalLayoutParameters[this.Index].BoundRelativeRight; }
+    get { return this.Data.BoundRelativeRight; }
+    set { this.Data.BoundRelativeRight = value; }
   }
   /// @copydoc ILayoutElementView::BoundRelativeBottom
   public double BoundRelativeBottom {
-    get { return this.profile.additionalLayoutParameters[this.Index].BoundRelativeBottom; }
+    get { return this.Data.BoundRelativeBottom; }
+    set { this.Data.BoundRelativeBottom = value; }
   }
   /// @copydoc ILayoutElementView::BoundRelativeWidth
   public double BoundRelativeWidth {
@@ -401,22 +351,6 @@ public class LayoutElement : ILayoutElementView, ILayoutElement {
     get { return this.BoundRelativeBottom - this.BoundRelativeTop; }
   }
 
-  /// @copydoc ILayoutElement::SetBoundRelativeLeft
-  public double SetBoundRelativeLeft {
-    set { this.profile.additionalLayoutParameters[this.Index].BoundRelativeLeft = value; }
-  }
-  /// @copydoc ILayoutElement::SetBoundRelativeTop
-  public double SetBoundRelativeTop {
-    set { this.profile.additionalLayoutParameters[this.Index].BoundRelativeTop = value; }
-  }
-  /// @copydoc ILayoutElement::SetBoundRelativeRight
-  public double SetBoundRelativeRight {
-    set { this.profile.additionalLayoutParameters[this.Index].BoundRelativeRight = value; }
-  }
-  /// @copydoc ILayoutElement::SetBoundRelativeBottom
-  public double SetBoundRelativeBottom {
-    set { this.profile.additionalLayoutParameters[this.Index].BoundRelativeBottom = value; }
-  }
   /// @copydoc ILayoutElement::FitBoundRelativeRect
   public void FitBoundRelativeRect(int sampleWidth, int sampleHeight) {
     Debug.Assert(this.IsWindowValid, "Invalid Window", "LayoutElement.FitBoundRelativeRect");
@@ -435,10 +369,10 @@ public class LayoutElement : ILayoutElementView, ILayoutElement {
     var relativeYPerPixel = 1.0 / sampleHeight;
 
     // Profileに反映
-    this.SetBoundRelativeLeft   = actualBoundRect.X * relativeXPerPixel;
-    this.SetBoundRelativeTop    = actualBoundRect.Y * relativeYPerPixel;
-    this.SetBoundRelativeRight  = actualBoundRect.Right * relativeXPerPixel;
-    this.SetBoundRelativeBottom = actualBoundRect.Bottom * relativeYPerPixel;
+    this.BoundRelativeLeft   = actualBoundRect.X * relativeXPerPixel;
+    this.BoundRelativeTop    = actualBoundRect.Y * relativeYPerPixel;
+    this.BoundRelativeRight  = actualBoundRect.Right * relativeXPerPixel;
+    this.BoundRelativeBottom = actualBoundRect.Bottom * relativeYPerPixel;
   }
 
   //=================================================================
@@ -469,26 +403,26 @@ public class LayoutElement : ILayoutElementView, ILayoutElement {
     nextScreenRect.Intersect(boundScreenRect);
 
     // プロパティを変更
-    this.SetFit = false;
+    this.Fit = false;
     switch (this.WindowType) {
       case WindowTypes.Normal:
       case WindowTypes.DesktopListView: {
         // Screen->Client座標系変換
-        this.SetClippingXWithoutFit = nextScreenRect.X - boundScreenRect.X;
-        this.SetClippingYWithoutFit = nextScreenRect.Y - boundScreenRect.Y;
+        this.ClippingXWithoutFit = nextScreenRect.X - boundScreenRect.X;
+        this.ClippingYWithoutFit = nextScreenRect.Y - boundScreenRect.Y;
         break;
       }
       case WindowTypes.Desktop: {
         // 変換の必要なし
-        this.SetClippingXWithoutFit = nextScreenRect.X;
-        this.SetClippingYWithoutFit = nextScreenRect.Y;
+        this.ClippingXWithoutFit = nextScreenRect.X;
+        this.ClippingYWithoutFit = nextScreenRect.Y;
         break;
       }
       default: Debug.Fail("switch"); throw new System.ArgumentException();
     }
     // Width/Heightは共通
-    this.SetClippingWidthWithoutFit = nextScreenRect.Width;
-    this.SetClippingHeightWithoutFit = nextScreenRect.Height;
+    this.ClippingWidthWithoutFit = nextScreenRect.Width;
+    this.ClippingHeightWithoutFit = nextScreenRect.Height;
   }
 
   //=================================================================
@@ -534,71 +468,56 @@ public class LayoutElement : ILayoutElementView, ILayoutElement {
 
   /// @copydoc ILayoutElementView::HasBackedUp
   public bool HasBackedUp {
-    get { return this.profile.additionalLayoutParameters[this.Index].HasBackedUp; }
+    get { return this.Data.HasBackedUp; }
+    set { this.Data.HasBackedUp = value; }
   }
   /// @copydoc ILayoutElementView::BackupScreenClippingX
   public int BackupScreenClippingX {
-    get { return this.profile.additionalLayoutParameters[this.Index].BackupScreenClippingX; }
+    get { return this.Data.BackupScreenClippingX; }
+    set { this.Data.BackupScreenClippingX = value; }
   }
   /// @copydoc ILayoutElementView::BackupScreenClippingY
   public int BackupScreenClippingY {
-    get { return this.profile.additionalLayoutParameters[this.Index].BackupScreenClippingY; }
+    get { return this.Data.BackupScreenClippingY; }
+    set { this.Data.BackupScreenClippingY = value; }
   }
   /// @copydoc ILayoutElementView::BackupClippingWidth
   public int BackupClippingWidth {
-    get { return this.profile.additionalLayoutParameters[this.Index].BackupClippingWidth; }
+    get { return this.Data.BackupClippingWidth; }
+    set { this.Data.BackupClippingWidth = value; }
   }
   /// @copydoc ILayoutElementView::BackupClippingHeight
   public int BackupClippingHeight {
-    get { return this.profile.additionalLayoutParameters[this.Index].BackupClippingHeight; }
+    get { return this.Data.BackupClippingHeight; }
+    set { this.Data.BackupClippingHeight = value; }
   }
   /// @copydoc ILayoutElement::UpdateBackupParameters
   public void UpdateBackupParameters() {
     var screenRect = this.ScreenClippingRectWithFit;
-    this.SetBackupScreenClippingX = screenRect.X;
-    this.SetBackupScreenClippingY = screenRect.Y;
-    this.SetBackupClippingWidth = screenRect.Width;
-    this.SetBackupClippingHeight = screenRect.Height;
-    this.SetHasBackedUp = true;
+    this.BackupScreenClippingX = screenRect.X;
+    this.BackupScreenClippingY = screenRect.Y;
+    this.BackupClippingWidth = screenRect.Width;
+    this.BackupClippingHeight = screenRect.Height;
+    this.HasBackedUp = true;
   }
   /// @copydoc ILayoutElement::UpdateBackupParameters
   public void RestoreBackupParameters() {
     if (!this.HasBackedUp) return;
     Debug.Assert(!this.IsWindowValid);
     this.SetWindowToDesktop();
-    this.SetFit = false;
-    this.SetClippingXWithoutFit = this.BackupScreenClippingX;
-    this.SetClippingYWithoutFit = this.BackupScreenClippingY;
-    this.SetClippingWidthWithoutFit = this.BackupClippingWidth;
-    this.SetClippingHeightWithoutFit = this.BackupClippingHeight;
+    this.Fit = false;
+    this.ClippingXWithoutFit = this.BackupScreenClippingX;
+    this.ClippingYWithoutFit = this.BackupScreenClippingY;
+    this.ClippingWidthWithoutFit = this.BackupClippingWidth;
+    this.ClippingHeightWithoutFit = this.BackupClippingHeight;
   }
   /// @copydoc ILayoutElement::ClearBackupParameters
   public void ClearBackupParameters() {
-    this.SetBackupScreenClippingX = 0;
-    this.SetBackupScreenClippingY = 0;
-    this.SetBackupClippingWidth = 1;
-    this.SetBackupClippingHeight = 1;
-    this.SetHasBackedUp = false;
-  }
-  /// @copydoc ILayoutElement::SetHasBackedUp
-  public bool SetHasBackedUp {
-    set { this.profile.additionalLayoutParameters[this.Index].HasBackedUp = value; }
-  }
-  /// @copydoc ILayoutElement::SetBackupScreenClippingX
-  public int SetBackupScreenClippingX {
-    set { this.profile.additionalLayoutParameters[this.Index].BackupScreenClippingX = value; }
-  }
-  /// @copydoc ILayoutElement::SetBackupScreenClippingY
-  public int SetBackupScreenClippingY {
-    set { this.profile.additionalLayoutParameters[this.Index].BackupScreenClippingY = value; }
-  }
-  /// @copydoc ILayoutElement::SetBackupClippingWidth
-  public int SetBackupClippingWidth {
-    set { this.profile.additionalLayoutParameters[this.Index].BackupClippingWidth = value; }
-  }
-  /// @copydoc ILayoutElement::SetBackupClippingHeight
-  public int SetBackupClippingHeight {
-    set { this.profile.additionalLayoutParameters[this.Index].BackupClippingHeight = value; }
+    this.BackupScreenClippingX = 0;
+    this.BackupScreenClippingY = 0;
+    this.BackupClippingWidth = 1;
+    this.BackupClippingHeight = 1;
+    this.HasBackedUp = false;
   }
 
   //=================================================================

@@ -67,7 +67,7 @@ public partial class TargetWindow : UserControl, IBindingProfile {
       }
       default: Debug.Fail("switch"); throw new System.ArgumentException();
     }
-    App.Profile.Current.SetFit = true;
+    App.Profile.Current.Fit = true;
     App.Profile.Current.ClearBackupParameters();
     App.Profile.Current.Close();
 

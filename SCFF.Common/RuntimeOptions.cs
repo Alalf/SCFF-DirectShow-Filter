@@ -124,8 +124,8 @@ public class RuntimeOptions {
   private bool CanUseAero {
     get {
       // Vista以降なら利用可能
-      return (Environment.OSVersion.Platform == PlatformID.Win32NT &&
-              Environment.OSVersion.Version.Major >= 6);
+      return Environment.OSVersion.Platform == PlatformID.Win32NT &&
+             Environment.OSVersion.Version.Major >= 6;
     }
   }
 

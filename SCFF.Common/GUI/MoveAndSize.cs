@@ -339,7 +339,7 @@ public class MoveAndSize {
   //===================================================================
 
   /// 動作中か
-  public bool IsRunning { get { return (this.hitMode != HitModes.Neutral); } }
+  public bool IsRunning { get { return this.hitMode != HitModes.Neutral; } }
 
   /// 動作中のマウス座標
   public RelativePoint MousePoint { get; set; }

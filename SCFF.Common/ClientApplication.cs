@@ -523,17 +523,17 @@ public class ClientApplication {
 
   /// 現在編集中のProfileがファイルに保存されているかかどうか
   public bool HasSaved {
-    get { return (this.RuntimeOptions.ProfilePath != string.Empty); }
+    get { return this.RuntimeOptions.ProfilePath != string.Empty; }
   }
 
   /// プロファイルが変更されたか
   public bool HasModified {
-    get { return (this.RuntimeOptions.LastSavedTimestamp != this.Profile.Timestamp); }
+    get { return this.RuntimeOptions.LastSavedTimestamp != this.Profile.Timestamp; }
   }
 
   /// プロファイルが前回のApply移行に変更されたか
   public bool HasModifiedFromLastApply {
-    get { return (this.RuntimeOptions.LastAppliedTimestamp != this.Profile.Timestamp); }
+    get { return this.RuntimeOptions.LastAppliedTimestamp != this.Profile.Timestamp; }
   }
 
   /// 現在の状態を文字列にして返す

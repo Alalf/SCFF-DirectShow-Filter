@@ -47,7 +47,7 @@ public struct ValidationError {
 public class ValidationErrors : List<ValidationError> {
   /// エラーが検出されなかった
   public bool IsNoError {
-    get { return (this.Count == 0); }
+    get { return this.Count == 0; }
   }
   /// TargetWindowに関するエラーを追加
   public void AddTargetWindowError(string message) {

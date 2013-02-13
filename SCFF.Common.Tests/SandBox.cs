@@ -33,6 +33,16 @@ class FullAccess : IReader, IWriter {
   public int Value { get; set; }
 }
 
+// 継承によるインタフェースの実装
+
+class Parent {
+  public int Value { get; set; }
+}
+
+class Child : Parent, IReader, IWriter {
+
+}
+
 /// C#の機能調査用
 [TestClass]
 public class SandBoxTest {
@@ -47,6 +57,10 @@ public class SandBoxTest {
     var readable = obj as IReader;
     var test2 = readable.Value;
     Assert.AreEqual(test2, 2);
+    var child = new Child();
+    child.Value = 3;
+    var test3 = child.Value;
+    Assert.AreEqual(test3, 3);
   }
 }
 }   // namespace SCFF.Common.Tests

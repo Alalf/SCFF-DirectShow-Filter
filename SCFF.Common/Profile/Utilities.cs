@@ -39,7 +39,7 @@ public static class Utilities {
   public static ClientRect GetWindowRect(WindowTypes windowType, UIntPtr window) {
     switch (windowType) {
       case WindowTypes.Normal: {
-        Debug.Assert(window != UIntPtr.Zero && User32.IsWindow(window),
+        Debug.Assert(Common.Utilities.IsWindowValid(window),
                      "Invalid Window", "GetWindowRect");
         User32.RECT windowRect;
         User32.GetClientRect(window, out windowRect);
@@ -65,7 +65,7 @@ public static class Utilities {
   public static ScreenPoint ClientToScreen(WindowTypes windowType, UIntPtr window, int clientX, int clientY) {
     switch (windowType) {
       case WindowTypes.Normal: {
-        Debug.Assert(window != UIntPtr.Zero && User32.IsWindow(window),
+        Debug.Assert(Common.Utilities.IsWindowValid(window),
                      "Invalid Window", "ClientToScreen");
         User32.POINT windowPoint = new User32.POINT { X = clientX, Y = clientY };
         User32.ClientToScreen(window, ref windowPoint);

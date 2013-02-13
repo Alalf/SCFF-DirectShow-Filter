@@ -26,9 +26,19 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using SCFF.Common.Ext;
 
 /// SCFF.Commonモジュール共通で利用する機能
 public static class Utilities {
+  //===================================================================
+  // Windowの有効確認
+  //===================================================================
+
+  /// Windowが有効か
+  public static bool IsWindowValid(UIntPtr window) {
+    return window != null && User32.IsWindow(window) && !User32.IsIconic(window);
+  }
+
   //===================================================================
   // プロセスの生存確認
   //===================================================================

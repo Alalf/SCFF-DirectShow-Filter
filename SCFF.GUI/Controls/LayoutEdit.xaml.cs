@@ -64,6 +64,7 @@ public partial class LayoutEdit
 
     // できるだけ軽く
     RenderOptions.SetBitmapScalingMode(this.DrawingGroup, BitmapScalingMode.LowQuality);
+    CompositionTarget.Rendering += CompositionTarget_Rendering;
 
     // 再描画タイマーの準備
     App.ScreenCaptureTimer.Tick += ScreenCaptureTimer_Tick;
@@ -71,6 +72,7 @@ public partial class LayoutEdit
 
   /// デストラクタ
   ~LayoutEdit() {
+    CompositionTarget.Rendering -= CompositionTarget_Rendering;
     App.ScreenCaptureTimer.Tick -= ScreenCaptureTimer_Tick;
   }
 
@@ -334,6 +336,26 @@ public partial class LayoutEdit
     App.Profile.Current.Open();
   }
 
+  /// CompositionTarget.Rendering
+  /// @param sender 使用しない
+  /// @param e 使用しない
+  private void CompositionTarget_Rendering(object sender, EventArgs e) {
+    // ドラッグ中で無ければ何もしない
+    if (!this.moveAndSize.IsRunning) return;
+
+    //-----------------------------------------------------------------
+    // Notify self
+    // Notify other controls
+    if (this.moveAndSize.ShouldUpdateControl) {
+      Commands.LayoutParameterChanged.Execute(null, this);
+      this.moveAndSize.ShouldUpdateControl = false;
+    }
+    //-----------------------------------------------------------------
+
+    this.BuildDrawingGroup();
+  }
+
+
   /// LayoutEditImage: MouseMove
   /// @param sender 使用しない
   /// @param e Client座標系でのマウス座標(GetPosition(...))の取得が可能
@@ -360,16 +382,7 @@ public partial class LayoutEdit
     App.Profile.Current.SetBoundRelativeRight = nextLTRB.Right;
     App.Profile.Current.SetBoundRelativeBottom = nextLTRB.Bottom;
 
-    //-----------------------------------------------------------------
-    // Notify self
-    // Notify other controls
-    if (this.moveAndSize.ShouldUpdateControl) {
-      Commands.LayoutParameterChanged.Execute(null, this);
-      this.moveAndSize.ShouldUpdateControl = false;
-    }
-    //-----------------------------------------------------------------
-
-    this.BuildDrawingGroup();
+    // 描画自体はCompositionTarget.Renderingで行う
   }
 
   /// LayoutEditImage: MouseUp

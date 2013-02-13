@@ -83,10 +83,10 @@ public sealed class ScreenCaptureRequest {
   /// @return スクリーンキャプチャした結果のHBitmap
   public BitmapHandle Execute() {
     // Windowチェック
-    var window = this.Window;
-    if (window == UIntPtr.Zero || !User32.IsWindow(window)) return null;
+    if (!Common.Utilities.IsWindowValid(this.Window)) return null;
 
     // BitBlt
+    var window = this.Window;
     var windowDC = User32.GetDC(window);
     var capturedDC = GDI32.CreateCompatibleDC(windowDC);
     var capturedBitmap = GDI32.CreateCompatibleBitmap(windowDC,
@@ -140,14 +140,15 @@ public sealed class ScreenCaptureRequest {
   /// @return スクリーンキャプチャした結果のbyte[]
   public byte[] ExecuteByGetDIBits() {
     // Windowチェック
-    var window = this.Window;
-    if (window == UIntPtr.Zero || !User32.IsWindow(window)) return null;
+    if (!Common.Utilities.IsWindowValid(this.Window)) return null;
+
 
     // 結果を格納するためのbyte配列
     var result = new byte[this.Size];
     var bitmapInfo = this.BitmapInfo;
 
     // BitBlt
+    var window = this.Window;
     var windowDC = User32.GetDC(window);
     var capturedDC = GDI32.CreateCompatibleDC(windowDC);
     var capturedBitmap = GDI32.CreateCompatibleBitmap(windowDC,

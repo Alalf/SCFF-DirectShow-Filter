@@ -80,6 +80,11 @@ public class User32 {
   [return: MarshalAs(UnmanagedType.Bool)]
   public static extern bool IsWindow(UIntPtr hWnd);
 
+  /// Windowハンドルが最小化状態かの判定
+  [DllImport("user32.dll")]
+  [return: MarshalAs(UnmanagedType.Bool)]
+  public static extern bool IsIconic(UIntPtr hWnd);  
+
   /// 親を持たないルートWindow(≒デスクトップ)ハンドルの取得
   [DllImport("user32.dll", SetLastError = false)]
   public static extern UIntPtr GetDesktopWindow();

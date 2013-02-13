@@ -445,7 +445,7 @@ void GetWindowRectangle(HWND window, int *x, int *y,
     *y = GetSystemMetrics(SM_YVIRTUALSCREEN);
     *width = GetSystemMetrics(SM_CXVIRTUALSCREEN);
     *height = GetSystemMetrics(SM_CYVIRTUALSCREEN);
-  } else if (IsWindow(window)) {
+  } else if (IsWindow(window) && !IsIconic(window)) {
     RECT window_rect;
     GetClientRect(window, &window_rect);
     *x = window_rect.left;

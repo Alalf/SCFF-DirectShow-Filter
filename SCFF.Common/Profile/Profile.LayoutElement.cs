@@ -115,7 +115,7 @@ public class LayoutElement : ILayoutElementView, ILayoutElement {
 
   /// @copydoc ILayoutElementView::IsWindowValid
   public bool IsWindowValid {
-    get { return (this.Window != UIntPtr.Zero && User32.IsWindow(this.Window)); }
+    get { return Common.Utilities.IsWindowValid(this.Window); }
   }
 
   /// @copydoc ILayoutElementView::WindowType
@@ -134,7 +134,7 @@ public class LayoutElement : ILayoutElementView, ILayoutElement {
     this.profile.message.LayoutParameters[this.Index].Window = window.ToUInt64();
 
     var windowCaption = "n/a";
-    if (window != UIntPtr.Zero && User32.IsWindow(window)) {
+    if (Common.Utilities.IsWindowValid(window)) {
       StringBuilder className = new StringBuilder(256);
       User32.GetClassName(window, className, 256);
       windowCaption = className.ToString();

@@ -173,7 +173,7 @@ public class RuntimeOptions {
 
       // InternalEntryの生成と追加
       var internalEntry = new InternalEntry(entry);
-      this.entries.Add(entry.ProcessID, internalEntry);
+      this.entries[entry.ProcessID] = internalEntry;
 
       // ラベルの生成と追加
       var tuple = new Tuple<UInt32,string>(entry.ProcessID, this.GetEntryLabel(internalEntry));

@@ -44,7 +44,7 @@ public abstract class TinyKeyValueFile {
         while (!reader.EndOfStream) {
           string key, value;
           if (this.TrySplit(reader.ReadLine(), out key, out value)) {
-            this.tinyDictionary.Add(key, value); 
+            this.tinyDictionary[key] =  value; 
           }
         }
       }

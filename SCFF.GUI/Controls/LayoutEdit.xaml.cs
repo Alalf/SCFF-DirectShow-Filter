@@ -64,7 +64,6 @@ public partial class LayoutEdit
 
     // できるだけ軽く
     RenderOptions.SetBitmapScalingMode(this.DrawingGroup, BitmapScalingMode.LowQuality);
-    CompositionTarget.Rendering += CompositionTarget_Rendering;
 
     // 再描画タイマーの準備
     App.ScreenCaptureTimer.Tick += ScreenCaptureTimer_Tick;
@@ -72,7 +71,6 @@ public partial class LayoutEdit
 
   /// デストラクタ
   ~LayoutEdit() {
-    CompositionTarget.Rendering -= CompositionTarget_Rendering;
     App.ScreenCaptureTimer.Tick -= ScreenCaptureTimer_Tick;
   }
 
@@ -334,6 +332,9 @@ public partial class LayoutEdit
 
     // Profileを更新
     App.Profile.Current.Open();
+
+    // CompositionTarget.Renderingの実行はコストが高いのでここだけで使う
+    CompositionTarget.Rendering += CompositionTarget_Rendering;
   }
 
   /// CompositionTarget.Rendering
@@ -399,6 +400,9 @@ public partial class LayoutEdit
     // Notify other controls
     Commands.LayoutParameterChanged.Execute(null, this);
     //-----------------------------------------------------------------
+
+    // CompositionTarget.Renderingの実行はコストが高いのでここだけで使う
+    CompositionTarget.Rendering -= CompositionTarget_Rendering;
   }
 
   //-------------------------------------------------------------------

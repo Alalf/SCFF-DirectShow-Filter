@@ -35,6 +35,26 @@ public class MoveAndSize {
   private const int frameLength = 100;
 
   //===================================================================
+  // コンストラクタ
+  //===================================================================
+
+  public MoveAndSize() {
+    this.Clear();
+  }
+
+  private void Clear() {
+    this.target               = null;
+    this.hitMode              = HitModes.Neutral;
+    this.mouseOffset          = null;
+    this.originalLTRB         = null;
+    this.snapGuide            = null;
+    this.lastUpdateControl    = 0;
+
+    this.MousePoint           = null;
+    this.ShouldUpdateControl  = false;
+  }
+
+  //===================================================================
   // 動作
   //===================================================================
 
@@ -80,15 +100,7 @@ public class MoveAndSize {
 
   /// 終了
   public void End() {
-    this.target               = null;
-    this.hitMode              = HitModes.Neutral;
-    this.mouseOffset          = null;
-    this.originalLTRB         = null;
-    this.snapGuide            = null;
-    this.lastUpdateControl    = 0;
-
-    this.MousePoint           = null;
-    this.ShouldUpdateControl  = false;
+    this.Clear();
   }
 
   //===================================================================

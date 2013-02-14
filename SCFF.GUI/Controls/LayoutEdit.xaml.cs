@@ -291,9 +291,12 @@ public partial class LayoutEdit
   /// @param sender 使用しない
   /// @param e Client座標系でのマウス座標(GetPosition(...))の取得が可能
   private void LayoutEditImage_MouseDown(object sender, MouseButtonEventArgs e) {
+    // マウス操作中にアプリケーションからフォーカスが外れた場合に対応
+    if (this.moveAndSize.IsRunning) return;
+
     // 左/右クリック以外はすぐに戻る
     if (e.ChangedButton != MouseButton.Left && e.ChangedButton != MouseButton.Right) return;
-    
+
     // 前処理
     var image = (IInputElement)sender;
     var relativeMousePoint = this.GetRelativeMousePoint(image, e);
@@ -391,6 +394,7 @@ public partial class LayoutEdit
   /// @param e Client座標系でのマウス座標(GetPosition(...))の取得が可能
   private void LayoutEditImage_MouseUp(object sender, MouseButtonEventArgs e) {
     if (!this.moveAndSize.IsRunning) return;
+
     this.moveAndSize.End();
     this.LayoutEditImage.ReleaseMouseCapture();
     App.Profile.Current.Close();

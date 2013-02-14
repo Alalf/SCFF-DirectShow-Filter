@@ -130,6 +130,8 @@ public partial class TargetWindow : UserControl, IBindingProfile {
   /// @param sender 使用しない
   /// @param e 使用しない
   private void DragHere_PreviewMouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e) {
+    if (this.dragHereMode) return;
+
     this.DragHere.Tag = "Emphasize";
 
     this.dragHereMode = true;
@@ -141,10 +143,7 @@ public partial class TargetWindow : UserControl, IBindingProfile {
   /// @param sender 使用しない
   /// @param e Client座標系でのマウス座標(GetPosition(...))の取得が可能
   private void DragHere_PreviewMouseMove(object sender, System.Windows.Input.MouseEventArgs e) {
-   if (!this.dragHereMode) {
-      // nop
-      return;
-    }
+   if (!this.dragHereMode) return;
 
     var screenPoint = this.DragHere.PointToScreen(e.GetPosition(this.DragHere));
     UIntPtr nextTargetWindow = User32.WindowFromPoint((int)screenPoint.X, (int)screenPoint.Y);
@@ -178,6 +177,8 @@ public partial class TargetWindow : UserControl, IBindingProfile {
   /// @param sender 使用しない
   /// @param e Client座標系でのマウス座標(GetPosition(...))の取得が可能
   private void DragHere_PreviewMouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e) {
+    if (!this.dragHereMode) return;
+
     this.DragHere.Tag = null;
 
     // 後処理

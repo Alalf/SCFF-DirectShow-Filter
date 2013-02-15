@@ -43,7 +43,7 @@ public class Options {
   /// コンストラクタ
   public Options() {
     for (int i = 0; i < Constants.RecentProfilesLength; ++i) {
-      this.reverseRecentProfiles[i] = string.Empty;
+      this.reverseRecentProfiles.Add(string.Empty);
     }
     this.FFmpegPath = string.Empty;
     this.FFmpegArguments = string.Empty;
@@ -165,26 +165,13 @@ public class Options {
 
   /// プロファイルパスリストにパスを追加する
   public void AddRecentProfile(string profile) {
-    // Queueに再構成してから配列に書き戻す
-    var queue = new Queue<string>();
-    var alreadyExists = false;
-    foreach (var recentProfile in this.reverseRecentProfiles) {
-      if (recentProfile.Equals(profile)) {
-        // 追加したいものが配列の中に見つかった場合はEnqueueしない
-        alreadyExists = true;
-        continue;
-      }
-      queue.Enqueue(recentProfile);
-    }
-    if (!alreadyExists) {
-      // 新規なら古いのを一個消す
-      queue.Dequeue();
-    }
-    queue.Enqueue(profile);
-    Debug.Assert(queue.Count == Constants.RecentProfilesLength); 
-
-    // 配列に書き戻して終了
-    queue.CopyTo(this.reverseRecentProfiles, 0);
+    // 削除
+    var alreadyExists = this.reverseRecentProfiles.Remove(profile);
+    // 先頭に追加
+    this.reverseRecentProfiles.Add(profile);
+    // 削除されていなければ末尾を削除
+    if (!alreadyExists) this.reverseRecentProfiles.RemoveAt(0);
+    Debug.Assert(this.reverseRecentProfiles.Count == Constants.RecentProfilesLength);
   }
   
   /// プロファイルパスリストに直接indexを指定してパスを設定する
@@ -201,7 +188,6 @@ public class Options {
 
   /// 最近使用したプロファイルのパスのリスト
   /// @warning 先頭から古く、末尾が一番新しい
-  private readonly string[] reverseRecentProfiles =
-      new string[Constants.RecentProfilesLength];
+  private readonly List<string> reverseRecentProfiles = new List<string>();
 }
 }

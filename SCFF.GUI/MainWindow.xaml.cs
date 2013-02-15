@@ -243,7 +243,7 @@ public partial class MainWindow
   /// @param e ドラッグアンドドロップされた内容が入っている
   protected override void OnDrop(DragEventArgs e) {
     base.OnDrop(e);
-    string[] files = e.Data.GetData(DataFormats.FileDrop) as string[];
+    var files = e.Data.GetData(DataFormats.FileDrop) as string[];
     if (files == null || files.Length == 0) return;
     var path = files[0];
     App.Impl.OpenProfile(path);

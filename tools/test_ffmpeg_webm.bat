@@ -4,7 +4,8 @@ PUSHD "%ROOT_DIR%"
 
 SET OUTPUT_DIR=tools\tmp
 SET OUTPUT=http://localhost:8080/publish/first?password=secret
-SET OUTPUT_FILE=%OUTPUT_DIR%\test_ffmpeg_webm.mkv
+SET OUTPUT_FILE=%OUTPUT_DIR%\test_ffmpeg_webm.webm
+REM SET OUTPUT_FILE=%OUTPUT_DIR%\test_ffmpeg_webm.mkv
 SET VIDEO=SCFF DirectShow Filter
 SET AUDIO=Mixer (Creative SB X-Fi)
 SET FFMPEG_EXE=ext\ffmpeg\x64\bin\ffmpeg.exe

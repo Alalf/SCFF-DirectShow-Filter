@@ -156,7 +156,7 @@
 ### ffmpeg
 - サンプル設定がtools/test_ffmpeg.batにあります。
 - "real-time buffer XXX% full! frame dropped!"が表示された場合、音ずれが発生しています。
-    - "-rtbufsize=100MB"オプションを追加するなど、設定を見直してみてください。
+    - "-rtbufsize=100MB"オプションを追加する、CPU優先度を上げる(start /high ffmpeg.exe)など設定を見直してみてください。
 
 ### xSplit
 - xSplitと併用する場合、ffmpegの一部ライブラリが干渉することがあります。

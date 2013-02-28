@@ -54,6 +54,10 @@
 2. install_Win32/x64.batを実行してください
     - ***重要！***
       インストール後にscff_dsf_Win32/x64.axを移動させた場合は再度install_Win32/x64.batを実行してください。
+3. (install_Win32/x64.batでインストールできない場合) 以下の手順で手動インストールしてください:
+    - 32bit: install_Win32_System32.batをエクスプローラ上で右クリック＞管理者として実行
+    - 64bit: install_x64_SysWOW64.batをエクスプローラ上で右クリック＞管理者として実行
+    - もしくは管理者として実行したコマンドプロンプトからbatファイルを実行してください
 
 
 使用方法
@@ -85,8 +89,12 @@
 
 1. エンコーダおよびGUIクライアント(SCFF.GUI.exe/scff_app.exe)が実行されていないことを確認して下さい。
 2. uninstall_Win32.bat/uninstall_x64.batを実行してください。
-3. フォルダ・ファイルを削除してください。
-4. (scff_app.exeのみ)アプリケーション設定ファイルが以下の場所にあるので削除してください。
+3. (install_Win32_System32/x64_SysWOW64.batでインストールした場合) 以下の手順で手動アンインストールしてください:
+    - 32bit: uninstall_Win32_System32.batをエクスプローラ上で右クリック＞管理者として実行
+    - 64bit: uninstall_x64_SysWOW64.batをエクスプローラ上で右クリック＞管理者として実行
+    - もしくは管理者として実行したコマンドプロンプトからbatファイルを実行してください
+4. フォルダ・ファイルを削除してください。
+5. (scff_app.exeのみ)アプリケーション設定ファイルが以下の場所にあるので削除してください。
     - Users/NAME/AppData/scff_app
 
 
@@ -156,7 +164,7 @@
 ### ffmpeg
 - サンプル設定がtools/test_ffmpeg.batにあります。
 - "real-time buffer XXX% full! frame dropped!"が表示された場合、音ずれが発生しています。
-    - "-rtbufsize=100MB"オプションを追加するなど、設定を見直してみてください。
+    - "-rtbufsize=100MB"オプションを追加する、CPU優先度を上げる(start /high ffmpeg.exe)など設定を見直してみてください。
 
 ### xSplit
 - xSplitと併用する場合、ffmpegの一部ライブラリが干渉することがあります。

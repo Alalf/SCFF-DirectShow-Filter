@@ -54,6 +54,11 @@
 2. install_Win32/x64.batを実行してください
     - ***重要！***
       インストール後にscff_dsf_Win32/x64.axを移動させた場合は再度install_Win32/x64.batを実行してください。
+3. install_Win32/x64.batでインストールできない場合、以下の手順で手動インストールしてください:
+    - コマンドプロンプトを管理者として実行
+    - scff_XXX.axのあるフォルダまで移動
+    - 32bit: "%systemroot%\system32\regsvr32.exe" "scff_dsf_Win32.ax"
+    - 64bit: "%systemroot%\syswow64\regsvr32.exe" "scff_dsf_x64.ax"
 
 
 使用方法
@@ -85,8 +90,11 @@
 
 1. エンコーダおよびGUIクライアント(SCFF.GUI.exe/scff_app.exe)が実行されていないことを確認して下さい。
 2. uninstall_Win32.bat/uninstall_x64.batを実行してください。
-3. フォルダ・ファイルを削除してください。
-4. (scff_app.exeのみ)アプリケーション設定ファイルが以下の場所にあるので削除してください。
+3. システムのregsvr32.exeを使用してインストールした場合、以下の手順でアンインストールしてください:
+    - 32bit: "%systemroot%\system32\regsvr32.exe" /u "scff_dsf_Win32.ax"
+    - 64bit: "%systemroot%\syswow64\regsvr32.exe" /u "scff_dsf_x64.ax"
+4. フォルダ・ファイルを削除してください。
+5. (scff_app.exeのみ)アプリケーション設定ファイルが以下の場所にあるので削除してください。
     - Users/NAME/AppData/scff_app
 
 

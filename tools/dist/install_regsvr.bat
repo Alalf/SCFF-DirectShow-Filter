@@ -1,5 +1,5 @@
 @echo off
-set ROOT_DIR=%~dp0..\
+set ROOT_DIR=%~dp0
 pushd "%ROOT_DIR%"
 
 if exist "scff_dsf_Win32.ax" (

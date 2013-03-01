@@ -1,1 +1,0 @@
-regsvrex64 scff_dsf_x64.ax

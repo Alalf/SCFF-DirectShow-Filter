@@ -1,1 +1,0 @@
-regsvrex32 scff_dsf_Win32.ax

@@ -94,10 +94,10 @@ def dist():
         ROOT_DIR + '\\tools\\bin\\regsvrex32.exe',
         ROOT_DIR + '\\tools\\dist\\Microsoft .NET Framework 4 Client Profile.url',
         ROOT_DIR + '\\tools\\dist\\Visual C++ Redistributable for Visual Studio 2012 Update 1.url',
-        ROOT_DIR + '\\tools\\dist\\install_Win32.bat',
-        ROOT_DIR + '\\tools\\dist\\uninstall_Win32.bat',
-        ROOT_DIR + '\\tools\\dist\\install_Win32_System32.bat',
-        ROOT_DIR + '\\tools\\dist\\uninstall_Win32_System32.bat',
+        ROOT_DIR + '\\tools\\dist\\install.bat',
+        ROOT_DIR + '\\tools\\dist\\uninstall.bat',
+        ROOT_DIR + '\\tools\\dist\\install_regsvr.bat',
+        ROOT_DIR + '\\tools\\dist\\uninstall_regsvr.bat',
         ]
     dist.FILES_64BIT = [
         ROOT_DIR + '\\README.md',
@@ -112,10 +112,10 @@ def dist():
         ROOT_DIR + '\\tools\\bin\\regsvrex64.exe',
         ROOT_DIR + '\\tools\\dist\\Microsoft .NET Framework 4 Client Profile.url',
         ROOT_DIR + '\\tools\\dist\\Visual C++ Redistributable for Visual Studio 2012 Update 1.url',
-        ROOT_DIR + '\\tools\\dist\\install_x64.bat',
-        ROOT_DIR + '\\tools\\dist\\uninstall_x64.bat',
-        ROOT_DIR + '\\tools\\dist\\install_x64_SysWOW64.bat',
-        ROOT_DIR + '\\tools\\dist\\uninstall_x64_SysWOW64.bat',
+        ROOT_DIR + '\\tools\\dist\\install.bat',
+        ROOT_DIR + '\\tools\\dist\\uninstall.bat',
+        ROOT_DIR + '\\tools\\dist\\install_regsvr.bat',
+        ROOT_DIR + '\\tools\\dist\\uninstall_regsvr.bat',
         ]
     dist.ARCHIVE_COMMAND = BIN_DIR + '\\7zr.exe'
     dist.ARCHIVE_OPTIONS = 'a'

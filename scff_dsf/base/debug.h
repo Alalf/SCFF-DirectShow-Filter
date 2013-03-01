@@ -30,21 +30,21 @@
 // デバッグ用定数
 //=====================================================================
 
-/// DbgOut用: 重要な操作
+/// DbgOut用: アプリケーションの進捗の概要が分かるメッセージ
 extern const int kTraceInfo;
-/// DbgOut用: あまり実行されない操作
+/// DbgOut用: アプリケーションをデバッグするのに役立つ詳細なイベント情報
 extern const int kTraceDebug;
-/// DbgOut用: トレース表示 
+/// DbgOut用: kTraceDebugより詳細なイベント情報
 extern const int kTrace;
 
 /// DbgOut用: 現在のTraceレベル。この数値より上は表示しない。
 extern const int kTraceCurrentLevel;
 
-/// DbgOut用: 致命的なエラー
+/// DbgOut用: アプリケーションを異常終了させるような非常に深刻なイベント
 extern const int kErrorFatal;
-/// DbgOut用: エラー
+/// DbgOut用: アプリケーションの稼働が継続できる程度のエラー
 extern const int kError;
-/// DbgOut用: エラー
+/// DbgOut用: 潜在的に害を及ぼすような状況
 extern const int kErrorWarn;
 
 /// DbgOut用: 現在のErrorレベル。この数値より上は表示しない。

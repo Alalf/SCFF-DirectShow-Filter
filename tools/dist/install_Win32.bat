@@ -1,1 +1,1 @@
-regsvrex32 /s scff_dsf_Win32.ax
+regsvrex32 scff_dsf_Win32.ax

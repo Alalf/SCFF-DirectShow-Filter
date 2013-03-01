@@ -20,6 +20,7 @@
 
 namespace SCFF.GUI {
 
+using System;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
@@ -28,7 +29,7 @@ using Microsoft.Windows.Shell;
 using SCFF.Common;
 using SCFF.Common.GUI;
 
-  /// MainWindowのコードビハインド
+/// MainWindowのコードビハインド
 public partial class MainWindow
     : Window, IBindingProfile, IBindingOptions, IBindingRuntimeOptions {
   //===================================================================
@@ -228,7 +229,9 @@ public partial class MainWindow
   protected override void OnDeactivated(System.EventArgs e) {
     base.OnDeactivated(e);
 
-    App.ScreenCaptureTimer.TimerPeriod = Constants.MaximumLayoutPreviewInterval;
+    App.ScreenCaptureTimer.TimerPeriod = Math.Max(
+        Constants.DefaultLayoutPreviewInterval,
+        App.Options.LayoutPreviewInterval);
   }
 
   /// Activated

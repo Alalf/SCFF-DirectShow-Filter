@@ -100,12 +100,45 @@ do {                                                                            
 } while (0)
 //---------------------------------------------------------------------
 
-AVFilterFormats *ff_merge_formats(AVFilterFormats *a, AVFilterFormats *b)
+AVFilterFormats *ff_merge_formats(AVFilterFormats *a, AVFilterFormats *b,
+                                  enum AVMediaType type)
 {
     AVFilterFormats *ret = NULL;
+    int i, j;
+    int alpha1=0, alpha2=0;
+    int chroma1=0, chroma2=0;
 
     if (a == b)
         return a;
+
+    /* Do not lose chroma or alpha in merging.
+       It happens if both lists have formats with chroma (resp. alpha), but
+       the only formats in common do not have it (e.g. YUV+gray vs.
+       RGB+gray): in that case, the merging would select the gray format,
+       possibly causing a lossy conversion elsewhere in the graph.
+       To avoid that, pretend that there are no common formats to force the
+       insertion of a conversion filter. */
+    if (type == AVMEDIA_TYPE_VIDEO)
+        for (i = 0; i < a->format_count; i++)
+            for (j = 0; j < b->format_count; j++) {
+                //-----------------------------------------------------
+                // 2012/06/30 modified by Alalf
+                const AVPixFmtDescriptor *adesc = av_pix_fmt_desc_get(
+                    static_cast<AVPixelFormat>(a->formats[i]));
+                const AVPixFmtDescriptor *bdesc = av_pix_fmt_desc_get(
+                    static_cast<AVPixelFormat>(b->formats[j]));
+                //-----------------------------------------------------
+                alpha2 |= adesc->flags & bdesc->flags & PIX_FMT_ALPHA;
+                chroma2|= adesc->nb_components > 1 && bdesc->nb_components > 1;
+                if (a->formats[i] == b->formats[j]) {
+                    alpha1 |= adesc->flags & PIX_FMT_ALPHA;
+                    chroma1|= adesc->nb_components > 1;
+                }
+            }
+
+    // If chroma or alpha can be lost through merging then do not merge
+    if (alpha2 > alpha1 || chroma2 > chroma1)
+        return NULL;
 
     //---------------------------------------------------------------------
     // 2012/06/30 modified by Alalf

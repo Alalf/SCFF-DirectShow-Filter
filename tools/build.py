@@ -86,7 +86,9 @@ def dist():
         ROOT_DIR + '\\LICENSE',
         ROOT_DIR + '\\bin\\Release\\scff_app.exe',
         ROOT_DIR + '\\bin\\Release\\SCFF.GUI.exe',
-        ROOT_DIR + '\\bin\\Release\\*.dll',
+        ROOT_DIR + '\\bin\\Release\\Microsoft.Windows.Shell.dll',
+        ROOT_DIR + '\\bin\\Release\\SCFF.Common.dll',
+        ROOT_DIR + '\\bin\\Release\\SCFF.Interprocess.dll',
         ROOT_DIR + '\\bin\\Release_Win32\\*.dll',
         ROOT_DIR + '\\bin\\Release_Win32\\*.ax',
         ROOT_DIR + '\\tools\\bin\\regsvrex32.exe',
@@ -102,7 +104,9 @@ def dist():
         ROOT_DIR + '\\LICENSE',
         ROOT_DIR + '\\bin\\Release\\scff_app.exe',
         ROOT_DIR + '\\bin\\Release\\SCFF.GUI.exe',
-        ROOT_DIR + '\\bin\\Release\\*.dll',
+        ROOT_DIR + '\\bin\\Release\\Microsoft.Windows.Shell.dll',
+        ROOT_DIR + '\\bin\\Release\\SCFF.Common.dll',
+        ROOT_DIR + '\\bin\\Release\\SCFF.Interprocess.dll',
         ROOT_DIR + '\\bin\\Release_x64\\*.dll',
         ROOT_DIR + '\\bin\\Release_x64\\*.ax',
         ROOT_DIR + '\\tools\\bin\\regsvrex64.exe',
@@ -113,7 +117,6 @@ def dist():
         ROOT_DIR + '\\tools\\dist\\install_x64_SysWOW64.bat',
         ROOT_DIR + '\\tools\\dist\\uninstall_x64_SysWOW64.bat',
         ]
-
     dist.ARCHIVE_COMMAND = BIN_DIR + '\\7zr.exe'
     dist.ARCHIVE_OPTIONS = 'a'
 

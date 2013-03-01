@@ -18,6 +18,8 @@
 
 LIBRARY                  scff_dsf_x64.ax
 EXPORTS
+  DllMain                PRIVATE
+  DllEntryPoint=DllMain  PRIVATE
   DllGetClassObject      PRIVATE
   DllCanUnloadNow        PRIVATE
   DllRegisterServer      PRIVATE

@@ -35,9 +35,9 @@ ScreenCapture::ScreenCapture(
     const LayoutParameter (&parameters)[kMaxProcessorSize])
     : Processor<void, AVPictureWithFillImage>(count),
       vertical_invert_(vertical_invert) {
-  MyDbgLog((LOG_MEMORY, kDbgNewDelete,
-            TEXT("ScreenCapture: NEW(%d)"),
-            count));
+  DbgLog((LOG_TRACE, kTrace,
+          TEXT("ScreenCapture: NEW(%d)"),
+          count));
   // 配列の初期化
   for (int i = 0; i < kMaxProcessorSize; i++) {
     parameters_[i] = parameters[i];
@@ -50,7 +50,7 @@ ScreenCapture::ScreenCapture(
 }
 
 ScreenCapture::~ScreenCapture() {
-  MyDbgLog((LOG_MEMORY, kDbgNewDelete,
+  DbgLog((LOG_TRACE, kTrace,
           TEXT("ScreenCapture: DELETE")));
   // 管理しているインスタンスをすべて破棄
   // 破棄はプロセッサ→イメージの順
@@ -152,7 +152,7 @@ ErrorCodes ScreenCapture::InitByIndex(int index) {
 }
 
 ErrorCodes ScreenCapture::Init() {
-  MyDbgLog((LOG_TRACE, kDbgImportant,
+  DbgLog((LOG_TRACE, kTraceInfo,
           TEXT("ScreenCapture: Init")));
 
   for (int i = 0; i < size(); i++) {

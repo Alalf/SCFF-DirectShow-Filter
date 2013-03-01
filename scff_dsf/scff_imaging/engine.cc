@@ -84,7 +84,7 @@ Engine::Engine(ImagePixelFormats output_pixel_format,
       layout_(nullptr),
       layout_error_code_(ErrorCodes::kProcessorUninitializedError),
       last_update_image_(ImageIndexes::kFront) {
-  MyDbgLog((LOG_MEMORY, kDbgNewDelete,
+  DbgLog((LOG_TRACE, kTrace,
           TEXT("Engine: NEW(%d, %d, %d, %.1f)"),
           output_pixel_format, output_width, output_height, output_fps));
   // 明示的に初期化していない
@@ -94,7 +94,7 @@ Engine::Engine(ImagePixelFormats output_pixel_format,
 }
 
 Engine::~Engine() {
-  MyDbgLog((LOG_MEMORY, kDbgNewDelete,
+  DbgLog((LOG_TRACE, kTrace,
           TEXT("Engine: DELETE")));
 
   /// @attention enum->DWORD
@@ -108,7 +108,7 @@ Engine::~Engine() {
 //---------------------------------------------------------------------
 
 ErrorCodes Engine::Init() {
-  MyDbgLog((LOG_TRACE, kDbgImportant,
+  DbgLog((LOG_TRACE, kTraceInfo,
           TEXT("Engine: Init")));
 
   //-------------------------------------------------------------------
@@ -183,7 +183,7 @@ ErrorCodes Engine::Accept(Request *request) {
     return GetCurrentError();
   }
 
-  MyDbgLog((LOG_TRACE, kDbgImportant,
+  DbgLog((LOG_TRACE, kTraceInfo,
           TEXT("Engine: Accept")));
 
   // リクエストが送られてきているのならば、
@@ -290,7 +290,7 @@ void Engine::SetLayoutParameters(
 //===================================================================
 
 void Engine::DoResetLayout() {
-  MyDbgLog((LOG_MEMORY, kDbgNewDelete,
+  DbgLog((LOG_TRACE, kTraceInfo,
           TEXT("Engine: Reset Layout")));
 
   // 解放+0クリア
@@ -357,8 +357,7 @@ void Engine::DoLoop() {
       if (delta > 0) {
         ::Sleep(static_cast<DWORD>(delta * MILLISECONDS / CLOCKS_PER_SEC));
       } else {
-        MyDbgLog((LOG_TRACE, kDbgRare,
-                TEXT("Engine: Drop Frame")));
+        DbgLog((LOG_ERROR, kErrorWarn, TEXT("Engine: Drop Frame")));
       }
       last_update = ::clock();
     }
@@ -469,7 +468,7 @@ ErrorCodes Engine::LayoutErrorOccured(ErrorCodes error_code) {
   if (error_code != ErrorCodes::kNoError) {
     // 後からkNoErrorにしようとしてもできない
     // ASSERT(false);
-    MyDbgLog((LOG_TRACE, kDbgImportant,
+    DbgLog((LOG_ERROR, kError,
             TEXT("Engine: Layout Error Occured(%d)"),
             error_code));
     layout_error_code_ = error_code;

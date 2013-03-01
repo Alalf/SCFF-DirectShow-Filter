@@ -38,7 +38,7 @@ ComplexLayout::ComplexLayout(
     : Layout(),
       element_count_(element_count),
       screen_capture_(nullptr) {
-  MyDbgLog((LOG_MEMORY, kDbgNewDelete,
+  DbgLog((LOG_TRACE, kTrace,
           TEXT("ComplexLayout: NEW(%d)"),
           element_count));
   // 配列の初期化
@@ -56,7 +56,7 @@ ComplexLayout::ComplexLayout(
 }
 
 ComplexLayout::~ComplexLayout() {
-  MyDbgLog((LOG_MEMORY, kDbgNewDelete,
+  DbgLog((LOG_TRACE, kTrace,
           TEXT("ComplexLayout: DELETE")));
   // 管理しているインスタンスをすべて破棄
   // 破棄はプロセッサ→イメージの順
@@ -152,7 +152,7 @@ ErrorCodes ComplexLayout::InitByIndex(int index) {
 //-------------------------------------------------------------------
 
 ErrorCodes ComplexLayout::Init() {
-  MyDbgLog((LOG_TRACE, kDbgImportant,
+  DbgLog((LOG_TRACE, kTraceInfo,
           TEXT("ComplexLayout: Init")));
 
   // DrawUtilsが使えるフォーマットでなければComplexLayoutは使えない

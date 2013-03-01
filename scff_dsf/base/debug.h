@@ -30,44 +30,25 @@
 // デバッグ用定数
 //=====================================================================
 
-/// DbgOut用: トレース表示
-extern const int kDbgTrace;
-/// DbgOut用: あまり実行されない操作
-extern const int kDbgRare;
 /// DbgOut用: 重要な操作
-extern const int kDbgImportant;
-/// DbgOut用: New/Delete/Load/Unloadなどの深刻バグが発生しやすい部分
-extern const int kDbgNewDelete;
-/// DbgOut用: 最大デバッグレベル
-extern const int kDbgMax;
+extern const int kTraceInfo;
+/// DbgOut用: あまり実行されない操作
+extern const int kTraceDebug;
+/// DbgOut用: トレース表示 
+extern const int kTrace;
 
-/// DbgOut用: 現在のデバッグレベル。これ"以下"は表示しない。
-extern const int kDbgCurrentLevel;
+/// DbgOut用: 現在のTraceレベル。この数値より上は表示しない。
+extern const int kTraceCurrentLevel;
 
-//=====================================================================
-// デバッグ関数
-//=====================================================================
+/// DbgOut用: 致命的なエラー
+extern const int kErrorFatal;
+/// DbgOut用: エラー
+extern const int kError;
+/// DbgOut用: エラー
+extern const int kErrorWarn;
 
-#ifdef _DEBUG
+/// DbgOut用: 現在のErrorレベル。この数値より上は表示しない。
+extern const int kErrorCurrentLevel;
 
-/// DbgLogの代わり。改行をはさみ、少しフォーマットを変える
-/// @todo(me) DbgOutの使い方が分かり次第置き換え
-int MyDebugLog(DWORD types, DWORD level, LPCTSTR format, ...);
-
-/// MessageBoxの代わり。フォーマット対応。
-/// @todo(me) DbgOutの使い方が分かり次第置き換え
-void MyDebugMessageBox(LPCTSTR format, ...);
-
-#define MyDbgLog(_x_) MyDebugLog _x_
-#define MyDbgMsgBox MyDebugMessageBox
-#define MyDbgOutString DbgOutString
-
-#else  // _DEBUG
-
-#define MyDbgLog DbgLog
-#define MyDbgMsgBox 0
-#define MyDbgOutString DbgOutString
-
-#endif  // _DEBUG
 
 #endif  // SCFF_DSF_BASE_DEBUG_H_

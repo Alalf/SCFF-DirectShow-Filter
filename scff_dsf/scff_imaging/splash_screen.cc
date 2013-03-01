@@ -36,8 +36,8 @@ SplashScreen::SplashScreen()
     : Layout(),
       scale_(nullptr),
       padding_(nullptr) {
-  MyDbgLog((LOG_MEMORY, kDbgNewDelete,
-            TEXT("SplashScreen: NEW")));
+  DbgLog((LOG_TRACE, kTrace,
+          TEXT("SplashScreen: NEW")));
   // 明示的に初期化していない
   // resource_ddb_
   // resource_image_
@@ -46,7 +46,7 @@ SplashScreen::SplashScreen()
 }
 
 SplashScreen::~SplashScreen() {
-  MyDbgLog((LOG_MEMORY, kDbgNewDelete,
+  DbgLog((LOG_TRACE, kTrace,
           TEXT("SplashScreen: DELETE")));
   // 管理しているインスタンスをすべて破棄
   // 破棄はプロセッサ→イメージの順
@@ -61,7 +61,7 @@ SplashScreen::~SplashScreen() {
 //-------------------------------------------------------------------
 
 ErrorCodes SplashScreen::Init() {
-  MyDbgLog((LOG_TRACE, kDbgImportant,
+  DbgLog((LOG_TRACE, kTraceInfo,
           TEXT("SplashScreen: Init")));
 
   // あらかじめイメージのサイズを計算しておく

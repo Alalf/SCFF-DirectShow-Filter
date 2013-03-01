@@ -34,11 +34,11 @@ SCFFMonitor::SCFFMonitor()
       last_polling_clock_(-1),          // ありえない値
       last_message_timestamp_(-1LL),    // ありえない値
       last_layout_error_state_(false) { ///< @attention Splash状態がスタートだがエラーなし扱い
-  MyDbgLog((LOG_MEMORY, kDbgNewDelete, TEXT("NEW SCFFMonitor")));
+  DbgLog((LOG_TRACE, kTrace, TEXT("NEW SCFFMonitor")));
 }
 
 SCFFMonitor::~SCFFMonitor() {
-  MyDbgLog((LOG_MEMORY, kDbgNewDelete, TEXT("DELETE SCFFMonitor")));
+  DbgLog((LOG_TRACE, kTrace, TEXT("DELETE SCFFMonitor")));
   interprocess_.RemoveEntry(process_id_);
 }
 
@@ -82,7 +82,7 @@ void SCFFMonitor::CheckLayoutError(scff_imaging::ErrorCodes error_code) {
     default: {
       if (!last_layout_error_state_) {
         // 非エラー→エラーに切り替わったときにシグナル状態にする
-        MyDbgLog((LOG_ERROR, kDbgImportant, TEXT("SCFFMonitor: Raise Error Event")));
+        DbgLog((LOG_ERROR, kError, TEXT("SCFFMonitor: Raise Error Event")));
         interprocess_.SetErrorEvent(process_id_);
       }
       last_layout_error_state_ = true;
@@ -271,9 +271,9 @@ scff_imaging::Request* SCFFMonitor::CreateRequest() {
   //-----------------------------------------------------------------
   if (layout_type == scff_interprocess::LayoutTypes::kNullLayout) {
     /// @todo(me) %lldではなく%"PRId64"が適切だがコンパイルエラーになる
-    MyDbgLog((LOG_TRACE, kDbgImportant,
-              TEXT("SCFFMonitor: ResetLayoutRequest arrived(%lld)."),
-              message.timestamp));
+    DbgLog((LOG_TRACE, kTraceInfo,
+            TEXT("SCFFMonitor: ResetLayoutRequest arrived(%lld)."),
+            message.timestamp));
     return new scff_imaging::ResetLayoutRequest();
   }
 
@@ -284,10 +284,10 @@ scff_imaging::Request* SCFFMonitor::CreateRequest() {
          layout_type == scff_interprocess::LayoutTypes::kComplexLayout);
 
   /// @todo(me) %lldではなく%"PRId64"が適切だがコンパイルエラーになる
-  MyDbgLog((LOG_TRACE, kDbgImportant,
-            TEXT("SCFFMonitor: SetLayoutRequest arrived(%d, %lld)."),
-            message.layout_type,
-            message.timestamp));
+  DbgLog((LOG_TRACE, kTraceInfo,
+          TEXT("SCFFMonitor: SetLayoutRequest arrived(%d, %lld)."),
+          message.layout_type,
+          message.timestamp));
 
   // パラメータをメッセージから抽出
   scff_imaging::LayoutParameter parameters[scff_imaging::kMaxProcessorSize];

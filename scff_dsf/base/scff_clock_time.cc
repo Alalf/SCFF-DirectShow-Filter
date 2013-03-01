@@ -88,8 +88,8 @@ void SCFFClockTime::Reset(double fps, CSource* parent) {
   frame_counter_ = 0LL;
   last_end_ = 0LL;
 
-  MyDbgLog((LOG_TRACE, kDbgImportant,
-            TEXT("SCFFClockTime: RESET!!!!!!!!!!!!")));
+  DbgLog((LOG_TRACE, kTraceInfo,
+          TEXT("SCFFClockTime: RESET!!!!!!!!!!!!")));
 }
 
 REFERENCE_TIME SCFFClockTime::GetNow(REFERENCE_TIME filter_zero) {
@@ -148,9 +148,9 @@ void SCFFClockTime::GetTimestamp(REFERENCE_TIME filter_zero,
         ++skip_count;
     } while (tmp_end < now_in_stream);
     // 現在時刻がフレームの終了時よりも前になるまでスキップ
-    MyDbgLog((LOG_TRACE, kDbgImportant,
-              TEXT("SCFFClockTime: Inital Skip Occured(%d)"),
-              skip_count));
+    DbgLog((LOG_ERROR, kErrorWarn,
+            TEXT("SCFFClockTime: Initial Skip Occured(%d)"),
+            skip_count));
   }
 
   // 想定フレームを計算＋フレームカウンタ更新
@@ -176,9 +176,9 @@ void SCFFClockTime::GetTimestamp(REFERENCE_TIME filter_zero,
         ++skip_count;
     } while (tmp_end < now_in_stream);
     // 現在時刻がフレームの終了時よりも前になるまでスキップ
-    MyDbgLog((LOG_TRACE, kDbgImportant,
-              TEXT("SCFFClockTime: Frame Skip Occured(%d)"),
-              skip_count));
+    DbgLog((LOG_ERROR, kErrorWarn,
+            TEXT("SCFFClockTime: Frame Skip Occured(%d)"),
+            skip_count));
   }
 
   /// @attention タイムスタンプは必ずしも１フレームに収める必要はない

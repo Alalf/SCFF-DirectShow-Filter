@@ -30,14 +30,14 @@
 
 SCFFSource::SCFFSource(IUnknown *unknown, HRESULT *result)
   : CSource(kFilterName, unknown, CLSID_SCFFSource) {
-  MyDbgLog((LOG_MEMORY, kDbgNewDelete, TEXT("SCFFSource: NEW")));
+  DbgLog((LOG_TRACE, kTrace, TEXT("SCFFSource: NEW")));
   // newするだけでAddPinされる
   new SCFFOutputPin(result, this);
   ASSERT(GetPinCount() == 1);
 }
 
 SCFFSource::~SCFFSource() {
-  MyDbgLog((LOG_MEMORY, kDbgNewDelete, TEXT("SCFFSource: DELETE")));
+  DbgLog((LOG_TRACE, kTrace, TEXT("SCFFSource: DELETE")));
 }
 
 CUnknown* WINAPI SCFFSource::CreateInstance(IUnknown *unknown,
@@ -56,9 +56,9 @@ CUnknown* WINAPI SCFFSource::CreateInstance(IUnknown *unknown,
 void WINAPI SCFFSource::Init(BOOL loading, const CLSID *clsid) {
   if (loading) {
     // DLLがロードされた場合の処理
-    MyDbgLog((LOG_MEMORY, kDbgNewDelete, TEXT("scff_dsf_*.ax: LOAD")));
+    DbgLog((LOG_TRACE, kTraceInfo, TEXT("scff_dsf_*.ax: LOAD")));
   } else {
     // DLLがアンロードされた場合の処理
-    MyDbgLog((LOG_MEMORY, kDbgNewDelete, TEXT("scff_dsf_*.ax: UNLOAD")));
+    DbgLog((LOG_TRACE, kTraceInfo, TEXT("scff_dsf_*.ax: UNLOAD")));
   }
 }

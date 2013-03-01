@@ -140,7 +140,7 @@ class Processor {
     if (error_code != ErrorCodes::kNoError) {
       // 後からkNoErrorにしようとしてもできない
       // ASSERT(false);
-      MyDbgLog((LOG_TRACE, kDbgImportant,
+      DbgLog((LOG_ERROR, kError,
               TEXT("Processor: Error Occured(%d)"),
               error_code));
       error_code_ = error_code;

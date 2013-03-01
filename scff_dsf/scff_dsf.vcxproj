@@ -186,7 +186,6 @@
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
       <AdditionalDependencies>strmbasd.lib;Msvcrtd.lib;Winmm.lib;PSAPI.lib;swscale.lib;avcodec.lib;avutil.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
-      <EntryPointSymbol>DllMain</EntryPointSymbol>
     </Link>
     <PreLinkEvent />
     <PreLinkEvent />
@@ -210,7 +209,6 @@
       <ModuleDefinitionFile>base\$(ProjectName)_$(PlatformName).def</ModuleDefinitionFile>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
       <AdditionalDependencies>strmbasd.lib;Msvcrtd.lib;Winmm.lib;PSAPI.lib;swscale.lib;avcodec.lib;avutil.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <EntryPointSymbol>DllMain</EntryPointSymbol>
     </Link>
     <PostBuildEvent />
     <PreLinkEvent />
@@ -238,7 +236,6 @@
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
       <AdditionalDependencies>strmbase.lib;Msvcrt.lib;Winmm.lib;PSAPI.lib;swscale.lib;avcodec.lib;avutil.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
-      <EntryPointSymbol>DllMain</EntryPointSymbol>
     </Link>
     <PreLinkEvent />
     <PreLinkEvent />
@@ -266,7 +263,6 @@
       <ModuleDefinitionFile>base\$(ProjectName)_$(PlatformName).def</ModuleDefinitionFile>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
       <AdditionalDependencies>strmbase.lib;Msvcrt.lib;Winmm.lib;PSAPI.lib;swscale.lib;avcodec.lib;avutil.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <EntryPointSymbol>DllMain</EntryPointSymbol>
     </Link>
     <PreLinkEvent />
     <PreLinkEvent />

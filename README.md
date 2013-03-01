@@ -91,6 +91,9 @@
 3. (install_regsvr.batでインストールした場合) 以下の手順で手動アンインストールしてください:
     - uninstall_regsvr.batをエクスプローラ上で右クリック＞管理者として実行
     - もしくは管理者として実行したコマンドプロンプトからbatファイルを実行してください
+    - ***重要！***
+      現在uninstall_regsvr.batは正常に動いていません
+      レジストリからscff_dsfのエントリを消去するにはuninstall.batを利用してください
 4. フォルダ・ファイルを削除してください。
 5. (scff_app.exeのみ)アプリケーション設定ファイルが以下の場所にあるので削除してください。
     - Users/NAME/AppData/scff_app

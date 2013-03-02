@@ -30,12 +30,23 @@ extern "C" {
 #include "scff_imaging/imaging_types.h"
 #include "scff_imaging/avpicture_image.h"
 
+// DLLインスタンスハンドル(DirectShow BaseClassesで定義済み)
+extern HINSTANCE g_hInst;
+
 namespace scff_imaging {
 
 //=====================================================================
 // scff_imaging::utilities
 //=====================================================================
 namespace utilities {
+
+//-------------------------------------------------------------------
+// リソースの取得用DLLインスタンスハンドルの取得
+//-------------------------------------------------------------------
+
+HINSTANCE dll_instance() {
+  return g_hInst;
+}
 
 //-------------------------------------------------------------------
 // イメージの操作

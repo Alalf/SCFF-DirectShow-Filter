@@ -26,9 +26,6 @@
 #include "scff_imaging/imaging_types.h"
 #include "scff_imaging/utilities.h"
 
-// DLLインスタンスハンドル(DirectShow BaseClassesで定義済み)
-extern HINSTANCE g_hInst;
-
 namespace scff_imaging {
 
 //=====================================================================
@@ -66,7 +63,7 @@ ErrorCodes WindowsDDBImage::CreateFromResource(int width, int height,
   // LoadImageをつかってDDBを読み込む
   /// @attention Bitmapイメージの形式はチェックしていない
   HBITMAP windows_ddb = static_cast<HBITMAP>(
-      LoadImage(g_hInst,
+      LoadImage(utilities::dll_instance(),
                 MAKEINTRESOURCE(resource_id),
                 IMAGE_BITMAP,
                 0, 0, 0));

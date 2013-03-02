@@ -30,29 +30,12 @@ extern "C" {
 #include "scff_imaging/imaging_types.h"
 #include "scff_imaging/avpicture_image.h"
 
-namespace {
-/// リソースの取得用DLLインスタンスハンドル
-HINSTANCE g_dll_instance;
-}   // namespace
-
 namespace scff_imaging {
 
 //=====================================================================
 // scff_imaging::utilities
 //=====================================================================
 namespace utilities {
-
-//-------------------------------------------------------------------
-// リソースの取得用DLLインスタンスハンドルの取得
-//-------------------------------------------------------------------
-
-HINSTANCE dll_instance() {
-  return ::g_dll_instance;
-}
-
-void set_dll_instance(HINSTANCE dll_instance) {
-  ::g_dll_instance = dll_instance;
-}
 
 //-------------------------------------------------------------------
 // イメージの操作

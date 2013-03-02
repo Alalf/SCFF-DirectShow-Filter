@@ -55,6 +55,9 @@ CUnknown* WINAPI SCFFSource::CreateInstance(IUnknown *unknown,
 
 void WINAPI SCFFSource::Init(BOOL loading, const CLSID *clsid) {
   if (loading) {
+    // デバッグ情報表示用
+    DbgSetModuleLevel(LOG_TRACE, kTraceCurrentLevel);  
+    DbgSetModuleLevel(LOG_ERROR, kErrorCurrentLevel);
     // DLLがロードされた場合の処理
     DbgLog((LOG_TRACE, kTraceInfo, TEXT("scff_dsf_*.ax: LOAD")));
   } else {

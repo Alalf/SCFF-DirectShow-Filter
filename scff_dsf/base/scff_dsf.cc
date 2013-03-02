@@ -212,7 +212,5 @@ extern "C" BOOL WINAPI DllEntryPoint(HINSTANCE, ULONG, LPVOID);
 
 /// DLLMain。DLLEntryPointを呼び出して処理をStrmbase.libに任せる。
 BOOL APIENTRY DllMain(HANDLE hModule, DWORD dwReason, LPVOID lpReserved) {
-  DbgSetModuleLevel(LOG_TRACE, kTraceCurrentLevel);  
-  DbgSetModuleLevel(LOG_ERROR, kErrorCurrentLevel);
   return DllEntryPoint((HINSTANCE)(hModule), dwReason, lpReserved);
 }

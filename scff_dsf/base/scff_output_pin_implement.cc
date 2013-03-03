@@ -78,7 +78,7 @@ STDMETHODIMP SCFFOutputPin::GetPreferredFormat(int position,
 /// @retval E_OUTOFMEMORY
 /// @retval S_OK
 STDMETHODIMP SCFFOutputPin::GetFormat(AM_MEDIA_TYPE **media_type) {
-  DbgLog((LOG_TRACE, kTraceDebug,
+  DbgLog((kLogTrace, kTraceDebug,
           TEXT("[pin]<IAMStreamConfig> -> format")));
   return GetPreferredFormat(0, media_type);
 }
@@ -93,7 +93,7 @@ STDMETHODIMP SCFFOutputPin::GetNumberOfCapabilities(
   *count = kSupportedFormatsCount;
   *size = sizeof(VIDEO_STREAM_CONFIG_CAPS);
 
-  DbgLog((LOG_TRACE, kTraceDebug,
+  DbgLog((kLogTrace, kTraceDebug,
           TEXT("[pin]<IAMStreamConfig> -> num of caps(%d)"),
           *count));
   return S_OK;
@@ -150,7 +150,7 @@ STDMETHODIMP SCFFOutputPin::GetStreamCaps(
   config_caps->ShrinkTapsX          = 0;
   config_caps->ShrinkTapsY          = 0;
 
-  DbgLog((LOG_TRACE, kTraceDebug,
+  DbgLog((kLogTrace, kTraceDebug,
           TEXT("[pin]<IAMStreamConfig> -> stream caps(%d)"),
           position));
   return S_OK;
@@ -170,7 +170,7 @@ STDMETHODIMP SCFFOutputPin::SetFormat(
   HRESULT result = SetMediaType(&media_type_instance);
   if (FAILED(result)) return result;
 
-  DbgLog((LOG_TRACE, kTraceDebug,
+  DbgLog((kLogTrace, kTraceDebug,
           TEXT("[pin]<IAMStreamConfig> <- format")));
   return S_OK;
 }
@@ -183,7 +183,7 @@ STDMETHODIMP SCFFOutputPin::SetFormat(
 STDMETHODIMP SCFFOutputPin::Set(REFGUID property_set_guid, DWORD property_id,
                               LPVOID instance_data, DWORD instance_data_size,
                               LPVOID property_data, DWORD property_data_size) {
-  DbgLog((LOG_TRACE, kTraceDebug,
+  DbgLog((kLogTrace, kTraceDebug,
           TEXT("SCFFOutputPin: Set")));
   return E_NOTIMPL;
 }
@@ -222,7 +222,7 @@ STDMETHODIMP SCFFOutputPin::Get(REFGUID property_set_guid, DWORD property_id,
   GUID *guid = reinterpret_cast<GUID*>(property_data);
   *guid = PIN_CATEGORY_CAPTURE;
 
-  DbgLog((LOG_TRACE, kTraceDebug,
+  DbgLog((kLogTrace, kTraceDebug,
           TEXT("SCFFOutputPin: Get")));
 
   return S_OK;
@@ -256,7 +256,7 @@ STDMETHODIMP SCFFOutputPin::QuerySupported(REFGUID property_set_guid,
 STDMETHODIMP SCFFOutputPin::GetLatency(REFERENCE_TIME *latency) {
   CheckPointer(latency, E_POINTER);
 
-  DbgLog((LOG_TRACE, kTraceDebug,
+  DbgLog((kLogTrace, kTraceDebug,
           TEXT("SCFFOutputPin: GetLatency")));
 
   /// @todo(me) 値が不正確。固定値ではないはず。
@@ -277,7 +277,7 @@ STDMETHODIMP SCFFOutputPin::GetLatency(REFERENCE_TIME *latency) {
 /// @retval E_POINTER
 /// @retval S_OK
 STDMETHODIMP SCFFOutputPin::GetPushSourceFlags(ULONG *flags) {
-  DbgLog((LOG_TRACE, kTraceDebug,
+  DbgLog((kLogTrace, kTraceDebug,
           TEXT("SCFFOutputPin: GetPushSourceFlags")));
 
   CheckPointer(flags, E_POINTER);
@@ -287,7 +287,7 @@ STDMETHODIMP SCFFOutputPin::GetPushSourceFlags(ULONG *flags) {
 
 /// @retval E_NOTIMPL
 STDMETHODIMP SCFFOutputPin::SetPushSourceFlags(ULONG flags) {
-  DbgLog((LOG_TRACE, kTraceDebug,
+  DbgLog((kLogTrace, kTraceDebug,
           TEXT("SCFFOutputPin: SetPushSourceFlags")));
 
   return E_NOTIMPL;
@@ -295,7 +295,7 @@ STDMETHODIMP SCFFOutputPin::SetPushSourceFlags(ULONG flags) {
 
 /// @retval S_OK
 STDMETHODIMP SCFFOutputPin::GetMaxStreamOffset(REFERENCE_TIME *max_offset) {
-  DbgLog((LOG_TRACE, kTraceDebug,
+  DbgLog((kLogTrace, kTraceDebug,
           TEXT("SCFFOutputPin: GetMaxStreamOffset")));
 
   CheckPointer(max_offset, E_POINTER);
@@ -307,7 +307,7 @@ STDMETHODIMP SCFFOutputPin::GetMaxStreamOffset(REFERENCE_TIME *max_offset) {
 /// @retval S_OK
 STDMETHODIMP SCFFOutputPin::SetMaxStreamOffset(REFERENCE_TIME max_offset) {
   // max_offsetは設定できない
-  DbgLog((LOG_TRACE, kTraceDebug,
+  DbgLog((kLogTrace, kTraceDebug,
           TEXT("SCFFOutputPin: SetMaxStreamOffset")));
 
   return S_OK;
@@ -318,7 +318,7 @@ STDMETHODIMP SCFFOutputPin::SetMaxStreamOffset(REFERENCE_TIME max_offset) {
 STDMETHODIMP SCFFOutputPin::GetStreamOffset(REFERENCE_TIME *offset) {
   CheckPointer(offset, E_POINTER);
 
-  DbgLog((LOG_TRACE, kTraceDebug,
+  DbgLog((kLogTrace, kTraceDebug,
           TEXT("SCFFOutputPin: GetStreamOffset")));
 
   *offset = offset_;
@@ -328,7 +328,7 @@ STDMETHODIMP SCFFOutputPin::GetStreamOffset(REFERENCE_TIME *offset) {
 /// @retval S_OK
 STDMETHODIMP SCFFOutputPin::SetStreamOffset(REFERENCE_TIME offset) {
   /// @todo(me) %lldではなく%"PRId64"が適切だがコンパイルエラーになる
-  DbgLog((LOG_TRACE, kTraceDebug,
+  DbgLog((kLogTrace, kTraceDebug,
           TEXT("SCFFOutputPin: SetStreamOffset(%lld)"), offset));
   offset_ = offset;
   return S_OK;

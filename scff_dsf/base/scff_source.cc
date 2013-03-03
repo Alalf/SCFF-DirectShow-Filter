@@ -30,14 +30,14 @@
 
 SCFFSource::SCFFSource(IUnknown *unknown, HRESULT *result)
   : CSource(kFilterName, unknown, CLSID_SCFFSource) {
-  DbgLog((LOG_TRACE, kTrace, TEXT("SCFFSource: NEW")));
+  DbgLog((kLogMemory, kTrace, TEXT("SCFFSource: NEW")));
   // newするだけでAddPinされる
   new SCFFOutputPin(result, this);
   ASSERT(GetPinCount() == 1);
 }
 
 SCFFSource::~SCFFSource() {
-  DbgLog((LOG_TRACE, kTrace, TEXT("SCFFSource: DELETE")));
+  DbgLog((kLogMemory, kTrace, TEXT("SCFFSource: DELETE")));
 }
 
 CUnknown* WINAPI SCFFSource::CreateInstance(IUnknown *unknown,
@@ -56,12 +56,13 @@ CUnknown* WINAPI SCFFSource::CreateInstance(IUnknown *unknown,
 void WINAPI SCFFSource::Init(BOOL loading, const CLSID *clsid) {
   if (loading) {
     // デバッグ情報表示用
-    DbgSetModuleLevel(LOG_TRACE, kTraceCurrentLevel);  
-    DbgSetModuleLevel(LOG_ERROR, kErrorCurrentLevel);
+    DbgSetModuleLevel(kLogLocking | kLogMemory | kLogTiming | kLogTrace,
+                      kTraceCurrentLevel);
+    DbgSetModuleLevel(kLogError, kErrorCurrentLevel);
     // DLLがロードされた場合の処理
-    DbgLog((LOG_TRACE, kTraceInfo, TEXT("scff_dsf_*.ax: LOAD")));
+    DbgLog((kLogTrace, kTraceInfo, TEXT("scff_dsf_*.ax: LOAD")));
   } else {
     // DLLがアンロードされた場合の処理
-    DbgLog((LOG_TRACE, kTraceInfo, TEXT("scff_dsf_*.ax: UNLOAD")));
+    DbgLog((kLogTrace, kTraceInfo, TEXT("scff_dsf_*.ax: UNLOAD")));
   }
 }

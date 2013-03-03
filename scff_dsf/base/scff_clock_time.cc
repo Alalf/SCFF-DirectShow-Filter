@@ -88,7 +88,7 @@ void SCFFClockTime::Reset(double fps, CSource* parent) {
   frame_counter_ = 0LL;
   last_end_ = 0LL;
 
-  DbgLog((LOG_TRACE, kTraceInfo,
+  DbgLog((kLogTrace, kTraceInfo,
           TEXT("SCFFClockTime: RESET!!!!!!!!!!!!")));
 }
 
@@ -148,7 +148,7 @@ void SCFFClockTime::GetTimestamp(REFERENCE_TIME filter_zero,
         ++skip_count;
     } while (tmp_end < now_in_stream);
     // 現在時刻がフレームの終了時よりも前になるまでスキップ
-    DbgLog((LOG_ERROR, kErrorWarn,
+    DbgLog((kLogError, kErrorWarn,
             TEXT("SCFFClockTime: Initial Skip Occured(%d)"),
             skip_count));
   }
@@ -176,7 +176,7 @@ void SCFFClockTime::GetTimestamp(REFERENCE_TIME filter_zero,
         ++skip_count;
     } while (tmp_end < now_in_stream);
     // 現在時刻がフレームの終了時よりも前になるまでスキップ
-    DbgLog((LOG_ERROR, kErrorWarn,
+    DbgLog((kLogError, kErrorWarn,
             TEXT("SCFFClockTime: Frame Skip Occured(%d)"),
             skip_count));
   }

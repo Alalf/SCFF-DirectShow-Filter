@@ -30,15 +30,8 @@
 // デバッグ用定数
 //=====================================================================
 
-/// DbgOut用: アプリケーションの進捗の概要が分かるメッセージ
-extern const int kTraceInfo;
-/// DbgOut用: アプリケーションをデバッグするのに役立つ詳細なイベント情報
-extern const int kTraceDebug;
-/// DbgOut用: kTraceDebugより詳細なイベント情報
-extern const int kTrace;
-
-/// DbgOut用: 現在のTraceレベル。この数値より上は表示しない。
-extern const int kTraceCurrentLevel;
+/// DbgOut用: SCFF用LOG_ERROR: エラー通知
+extern const int kLogError;
 
 /// DbgOut用: アプリケーションを異常終了させるような非常に深刻なイベント
 extern const int kErrorFatal;
@@ -50,5 +43,25 @@ extern const int kErrorWarn;
 /// DbgOut用: 現在のErrorレベル。この数値より上は表示しない。
 extern const int kErrorCurrentLevel;
 
+//---------------------------------------------------------------------
+
+/// DbgOut用: SCFF用LOG_LOCKING: クリティカル セクションのロックとアンロック
+extern const int kLogLocking;
+/// DbgOut用: SCFF用LOG_MEMORY: メモリ割り当てと、オブジェクトの作成および破棄
+extern const int kLogMemory;
+/// DbgOut用: SCFF用LOG_TIMING: タイミングとパフォーマンスの測定
+extern const int kLogTiming;
+/// DbgOut用: SCFF用LOG_TRACE: 一般的な呼び出しトレース
+extern const int kLogTrace;
+
+/// DbgOut用: アプリケーションの進捗の概要が分かるメッセージ
+extern const int kTraceInfo;
+/// DbgOut用: アプリケーションをデバッグするのに役立つ詳細なイベント情報
+extern const int kTraceDebug;
+/// DbgOut用: kTraceDebugより詳細なイベント情報
+extern const int kTrace;
+
+/// DbgOut用: 現在のTraceレベル。この数値より上は表示しない。
+extern const int kTraceCurrentLevel;
 
 #endif  // SCFF_DSF_BASE_DEBUG_H_

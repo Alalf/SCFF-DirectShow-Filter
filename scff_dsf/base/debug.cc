@@ -26,14 +26,23 @@
 // デバッグ用定数
 //=====================================================================
 
-const int kTraceInfo    = 1;
-const int kTraceDebug   = 2;
-const int kTrace        = 3;
-
-const int kTraceCurrentLevel = kTraceInfo;
+const int kLogError     = LOG_CUSTOM1;
 
 const int kErrorFatal   = 1;
 const int kError        = 2;
 const int kErrorWarn    = 3;
 
 const int kErrorCurrentLevel = kErrorWarn;
+
+//---------------------------------------------------------------------
+
+const int kLogLocking   = LOG_CUSTOM2;
+const int kLogMemory    = LOG_CUSTOM3;
+const int kLogTiming    = LOG_CUSTOM4;
+const int kLogTrace     = LOG_CUSTOM5;
+
+const int kTraceInfo    = 1;
+const int kTraceDebug   = 2;
+const int kTrace        = 3;
+
+const int kTraceCurrentLevel = kTraceInfo;

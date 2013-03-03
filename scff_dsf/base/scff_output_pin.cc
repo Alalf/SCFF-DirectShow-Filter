@@ -39,13 +39,13 @@ SCFFOutputPin::SCFFOutputPin(HRESULT *result, CSource *source)
     fps_(kDefaultFPS),
     pixel_format_(scff_imaging::ImagePixelFormats::kI420),
     offset_(0LL) {
-  DbgLog((LOG_TRACE, kTrace,
+  DbgLog((kLogMemory, kTrace,
           TEXT("SCFFOutputPin: NEW(%d, %d, %.1ffps)"),
           width_, height_, fps_));
 }
 
 SCFFOutputPin::~SCFFOutputPin() {
-  DbgLog((LOG_TRACE, kTrace,
+  DbgLog((kLogMemory, kTrace,
           TEXT("SCFFOutputPin: DELETE(%d, %d, %.1ffps)"),
           width_, height_, fps_));
 }
@@ -168,7 +168,7 @@ HRESULT SCFFOutputPin::GetMediaType(int position, CMediaType *media_type) {
   media_type->SetSampleSize(video_info->bmiHeader.biSizeImage);
   media_type->SetTemporalCompression(FALSE);
 
-  DbgLog((LOG_TRACE, kTraceDebug,
+  DbgLog((kLogTrace, kTraceDebug,
           TEXT("[pin] -> mediatype(%dbpp, %d, %d, %.1ffps)"),
           video_info->bmiHeader.biBitCount,
           video_info->bmiHeader.biWidth,
@@ -248,7 +248,7 @@ HRESULT SCFFOutputPin::CheckMediaType(const CMediaType *media_type) {
   //   return E_INVALIDARG;
   // }
 
-  DbgLog((LOG_TRACE, kTraceDebug,
+  DbgLog((kLogTrace, kTraceDebug,
           TEXT("[pin] <- check: mediatype(%dbpp, %d, %d, %.1ffps)"),
           video_info->bmiHeader.biBitCount,
           video_info->bmiHeader.biWidth,
@@ -275,7 +275,7 @@ HRESULT SCFFOutputPin::SetMediaType(const CMediaType *media_type) {
     reinterpret_cast<VIDEOINFO*>(media_type->Format());
   CheckPointer(video_info, E_UNEXPECTED);
 
-  DbgLog((LOG_TRACE, kTraceDebug,
+  DbgLog((kLogTrace, kTraceDebug,
           TEXT("[pin] <- mediatype(%dbpp, %d, %d, %.1ffps)"),
           video_info->bmiHeader.biBitCount,
           video_info->bmiHeader.biWidth,
@@ -409,7 +409,7 @@ HRESULT SCFFOutputPin::DecideBufferSize(IMemAllocator *allocator,
   }
 
   ASSERT(actual_allocator.cBuffers == CalcBufferCount());
-  DbgLog((LOG_TRACE, kTraceDebug,
+  DbgLog((kLogTrace, kTraceDebug,
           TEXT("[pin] -> (%ld buffers we need)"),
           actual_allocator.cBuffers));
 
@@ -422,7 +422,7 @@ HRESULT SCFFOutputPin::DecideBufferSize(IMemAllocator *allocator,
 
 /// @retval S_OK
 HRESULT SCFFOutputPin::OnThreadCreate(void) {
-  DbgLog((LOG_TRACE, kTraceInfo,
+  DbgLog((kLogTrace, kTraceInfo,
           TEXT("SCFFOutputPin: OnThreadCreate")));
   // スレッド終了させるにはE_を返す
   return S_OK;
@@ -430,7 +430,7 @@ HRESULT SCFFOutputPin::OnThreadCreate(void) {
 
 /// @retval S_OK
 HRESULT SCFFOutputPin::OnThreadDestroy(void) {
-  DbgLog((LOG_TRACE, kTraceInfo,
+  DbgLog((kLogTrace, kTraceInfo,
           TEXT("SCFFOutputPin: OnThreadDestroy")));
   // スレッド終了させるにはE_を返す
   return S_OK;
@@ -438,7 +438,7 @@ HRESULT SCFFOutputPin::OnThreadDestroy(void) {
 
 /// @retval S_OK
 HRESULT SCFFOutputPin::OnThreadStartPlay(void) {
-  DbgLog((LOG_TRACE, kTraceInfo,
+  DbgLog((kLogTrace, kTraceInfo,
           TEXT("SCFFOutputPin: OnThreadStartPlay")));
   CAutoLock lock(&filling_buffer_);
   // タイムマネージャをリセット
@@ -456,7 +456,7 @@ HRESULT SCFFOutputPin::OnThreadStartPlay(void) {
 HRESULT SCFFOutputPin::DoBufferProcessingLoop(void) {
   Command command;
 
-  DbgLog((LOG_TRACE, kTraceInfo,
+  DbgLog((kLogTrace, kTraceInfo,
           TEXT("SCFFOutputPin: DoBufferProcessingLoop(%d, %d, %.1ffps) starts"),
           width_, height_, fps_));
 
@@ -535,7 +535,7 @@ HRESULT SCFFOutputPin::DoBufferProcessingLoop(void) {
         HRESULT result_deliver = Deliver(sample);
         sample->Release();
         if (result_deliver != S_OK) {
-          DbgLog((LOG_ERROR, kError,
+          DbgLog((kLogError, kError,
                   TEXT("SCFFOutputPin: Deliver() returned %08x; stopping"),
                   result_deliver));
           return S_OK;
@@ -548,7 +548,7 @@ HRESULT SCFFOutputPin::DoBufferProcessingLoop(void) {
       } else {
         // FillBufferでエラー発生
         sample->Release();
-        DbgLog((LOG_ERROR, kError,
+        DbgLog((kLogError, kError,
                 TEXT("SCFFOutputPin: Error %08lX from FillBuffer!!!"),
                 result_fill_buffer));
         DeliverEndOfStream();
@@ -567,12 +567,12 @@ HRESULT SCFFOutputPin::DoBufferProcessingLoop(void) {
       Reply(S_OK);
     } else if (command != CMD_STOP) {
       Reply((DWORD) E_UNEXPECTED);
-      DbgLog((LOG_ERROR, kErrorFatal,
+      DbgLog((kLogError, kErrorFatal,
               TEXT("SCFFOutputPin: Unexpected command!!!")));
     }
   } while (command != CMD_STOP);
 
-  DbgLog((LOG_TRACE, kTraceInfo,
+  DbgLog((kLogTrace, kTraceInfo,
           TEXT("SCFFOutputPin: DoBufferProcessingLoop ends")));
 
   return S_FALSE;

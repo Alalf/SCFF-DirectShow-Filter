@@ -39,7 +39,7 @@ NativeLayout::NativeLayout(
       screen_capture_(nullptr),
       scale_(nullptr),
       padding_(nullptr) {
-  DbgLog((LOG_TRACE, kTrace,
+  DbgLog((kLogMemory, kTrace,
           TEXT("NativeLayout: NEW(%dx%d)"),
           parameter_.clipping_width,
           parameter_.clipping_height));
@@ -49,7 +49,7 @@ NativeLayout::NativeLayout(
 }
 
 NativeLayout::~NativeLayout() {
-  DbgLog((LOG_TRACE, kTrace,
+  DbgLog((kLogMemory, kTrace,
           TEXT("NativeLayout: DELETE")));
   // 管理しているインスタンスをすべて破棄
   // 破棄はプロセッサ→イメージの順
@@ -67,7 +67,7 @@ NativeLayout::~NativeLayout() {
 //-------------------------------------------------------------------
 
 ErrorCodes NativeLayout::Init() {
-  DbgLog((LOG_TRACE, kTraceInfo,
+  DbgLog((kLogTrace, kTraceInfo,
           TEXT("NativeLayout: Init(%dx%d)"),
           parameter_.clipping_width,
           parameter_.clipping_height));

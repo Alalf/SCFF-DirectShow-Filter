@@ -153,7 +153,8 @@ ErrorCodes ComplexLayout::InitByIndex(int index) {
 
 ErrorCodes ComplexLayout::Init() {
   DbgLog((LOG_TRACE, kTraceInfo,
-          TEXT("ComplexLayout: Init")));
+          TEXT("ComplexLayout: Init(%d)"),
+          element_count_));
 
   // DrawUtilsが使えるフォーマットでなければComplexLayoutは使えない
   if (!utilities::CanUseDrawUtils(GetOutputImage()->pixel_format())) {

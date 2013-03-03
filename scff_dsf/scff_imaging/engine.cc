@@ -109,7 +109,8 @@ Engine::~Engine() {
 
 ErrorCodes Engine::Init() {
   DbgLog((LOG_TRACE, kTraceInfo,
-          TEXT("Engine: Init")));
+          TEXT("Engine: Init(%d, %d, %d, %.1f)"),
+          output_pixel_format_, output_width_, output_height_, output_fps_));
 
   //-------------------------------------------------------------------
   // 初期化の順番はイメージ→プロセッサの順

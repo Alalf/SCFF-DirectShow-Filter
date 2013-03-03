@@ -457,7 +457,8 @@ HRESULT SCFFOutputPin::DoBufferProcessingLoop(void) {
   Command command;
 
   DbgLog((LOG_TRACE, kTraceInfo,
-          TEXT("SCFFOutputPin: DoBufferProcessingLoop starts")));
+          TEXT("SCFFOutputPin: DoBufferProcessingLoop(%d, %d, %.1ffps) starts"),
+          width_, height_, fps_));
 
   OnThreadStartPlay();
 

@@ -153,7 +153,8 @@ ErrorCodes ScreenCapture::InitByIndex(int index) {
 
 ErrorCodes ScreenCapture::Init() {
   DbgLog((LOG_TRACE, kTraceInfo,
-          TEXT("ScreenCapture: Init")));
+          TEXT("ScreenCapture: Init(%d)"),
+          size()));
 
   for (int i = 0; i < size(); i++) {
     const ErrorCodes error = InitByIndex(i);

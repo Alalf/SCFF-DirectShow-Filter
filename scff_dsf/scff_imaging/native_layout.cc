@@ -68,7 +68,9 @@ NativeLayout::~NativeLayout() {
 
 ErrorCodes NativeLayout::Init() {
   DbgLog((LOG_TRACE, kTraceInfo,
-          TEXT("NativeLayout: Init")));
+          TEXT("NativeLayout: Init(%dx%d)"),
+          parameter_.clipping_width,
+          parameter_.clipping_height));
 
   // あらかじめイメージのサイズを計算しておく
   const int captured_width = parameter_.clipping_width;

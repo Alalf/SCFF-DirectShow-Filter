@@ -60,11 +60,11 @@ bool Interprocess::InitDirectory() {
   // 仮想メモリ(Directory)の作成
   HANDLE tmp_directory =
       CreateFileMappingA(INVALID_HANDLE_VALUE,
-                          nullptr,
-                          PAGE_READWRITE,
-                          0,
-                          sizeof(Directory),
-                          kDirectoryName);
+                         nullptr,
+                         PAGE_READWRITE,
+                         0,
+                         sizeof(Directory),
+                         kDirectoryName);
   if (tmp_directory == nullptr) {
     // 仮想メモリ作成失敗
     return false;
@@ -151,11 +151,11 @@ bool Interprocess::InitMessage(uint32_t process_id) {
   // 仮想メモリ(Message<process_id>)の作成
   HANDLE tmp_message =
       CreateFileMappingA(INVALID_HANDLE_VALUE,
-                          nullptr,
-                          PAGE_READWRITE,
-                          0,
-                          sizeof(Message),
-                          message_name);
+                         nullptr,
+                         PAGE_READWRITE,
+                         0,
+                         sizeof(Message),
+                         message_name);
   if (tmp_message == nullptr) {
     // 仮想メモリ作成失敗
     return false;

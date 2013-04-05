@@ -23,7 +23,6 @@ namespace SCFF.GUI.Controls {
 using System;
 using System.Diagnostics;
 using System.Windows.Controls;
-using SCFF.Common;
 using SCFF.Common.Ext;
 using SCFF.Common.GUI;
 using SCFF.Common.Profile;

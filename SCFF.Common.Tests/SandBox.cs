@@ -20,7 +20,6 @@
 
 namespace SCFF.Common.Tests {
 
-using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 interface IReader {

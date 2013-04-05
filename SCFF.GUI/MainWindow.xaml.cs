@@ -52,6 +52,8 @@ public partial class MainWindow
     App.Impl.OnSavedProfile += this.OnSavedProfile;
     App.Impl.OnSentProfile += this.OnSentProfile;
 
+    App.ScreenCaptureTimer.Tick += LayoutEdit.OnScreenCaptured;
+
     this.NotifyOptionsChanged();
     this.NotifyRuntimeOptionsChanged();
     this.NotifyProfileChanged();
@@ -70,6 +72,8 @@ public partial class MainWindow
     App.Impl.OnSavingProfile -= this.OnSavingProfile;
     App.Impl.OnSavedProfile -= this.OnSavedProfile;
     App.Impl.OnSentProfile -= this.OnSentProfile;
+
+    App.ScreenCaptureTimer.Tick -= LayoutEdit.OnScreenCaptured;
   }
 
   //===================================================================

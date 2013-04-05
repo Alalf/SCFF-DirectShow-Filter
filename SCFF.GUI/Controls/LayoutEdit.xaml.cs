@@ -27,7 +27,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Threading;
 using SCFF.Common;
 using SCFF.Common.GUI;
 using SCFF.Common.Profile;
@@ -64,14 +63,6 @@ public partial class LayoutEdit
 
     // できるだけ軽く
     RenderOptions.SetBitmapScalingMode(this.DrawingGroup, BitmapScalingMode.LowQuality);
-
-    // 再描画タイマーの準備
-    App.ScreenCaptureTimer.Tick += ScreenCaptureTimer_Tick;
-  }
-
-  /// デストラクタ
-  ~LayoutEdit() {
-    App.ScreenCaptureTimer.Tick -= ScreenCaptureTimer_Tick;
   }
 
   //===================================================================
@@ -251,7 +242,7 @@ public partial class LayoutEdit
   /// 再描画タイマーコールバック
   /// @param sender 使用しない
   /// @param e 使用しない
-  void ScreenCaptureTimer_Tick(object sender, EventArgs e) {
+  public void OnScreenCaptured(object sender, EventArgs e) {
     // プレビューが必要なければ更新しない
     if (!App.Options.IsLayoutVisible) return;
     if (!App.Options.LayoutPreview) return;

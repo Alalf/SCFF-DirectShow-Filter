@@ -22,9 +22,7 @@ namespace SCFF.GUI.Controls {
 
 using System;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Windows.Controls;
-using SCFF.Common;
 using SCFF.Common.GUI;
 
 /// SCFF DirectShow Filterエントリを仮想メモリから読み込み・表示・選択するためのUserControl

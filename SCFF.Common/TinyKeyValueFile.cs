@@ -24,7 +24,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using SCFF.Interprocess;
 
 /// INIFileよりも更に低機能＆高速なファイル読み書き用オブジェクト
 /// @warning データを一回Dictionaryに読み込むので大きなファイルには非対応

@@ -20,7 +20,6 @@
 
 namespace SCFF.GUI.Controls {
 
-using System;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;

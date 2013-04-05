@@ -20,8 +20,6 @@
 
 namespace SCFF.Common.Profile {
 
-using SCFF.Interprocess;
-
 /// レイアウト要素に必要なデータ(SCFF.Interprocess.LayoutParameterに＋α)
 class LayoutElementData : InternalLayoutParameter {
   /// Windowタイプ: 標準状態 or 最小化 or 最大化

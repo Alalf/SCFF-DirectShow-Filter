@@ -21,7 +21,6 @@
 namespace SCFF.Common.Profile {
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using SCFF.Interprocess;

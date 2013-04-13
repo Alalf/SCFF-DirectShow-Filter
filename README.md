@@ -132,14 +132,17 @@
     - ext/ffmpeg/x64に64bit版を、ext/ffmpeg/Win32に32bit版を展開する
     - SharedもDevも同じディレクトリに展開すること（数個のファイルが上書きされるが問題ない）
     - ext/ffmpeg/x64/README.txt, ext/ffmpeg/Win32/README.txtが存在するように確認すること
-2. scff.slnソリューションを開き、全てのビルドが通ることを確認
-   - Microsoft Visual Studio Express 2012で確認済み
-   - 必要ならばいくつかのプロジェクト設定を書き換えること
-3. tools/copy_ffmpeg_dll.batを実行してbinディレクトリにffmpeg付属のdllをコピー
-4. tools/install_debug.batかtools/install_release.batを実行
-5. 各種エンコーダを起動しフィルタが認識されているかチェック
-6. bin/Debugかbin/Releaseにあるヘルパーアプリケーションを起動し取り込み設定を行う
-7. （scff_dsfのデバッグバージョンを利用する場合:）
+2. Microsoft Ribbon for WPF October 2010をインストールする
+    - [Microsoft Ribbon for WPF.msi]
+      (http://www.microsoft.com/en-us/download/details.aspx?id=11877)
+3. scff.slnソリューションを開き、全てのビルドが通ることを確認
+    - Microsoft Visual Studio Express 2012で確認済み
+    - 必要ならばいくつかのプロジェクト設定を書き換えること
+4. tools/copy_ffmpeg_dll.batを実行してbinディレクトリにffmpeg付属のdllをコピー
+5. tools/install_debug.batかtools/install_release.batを実行
+6. 各種エンコーダを起動しフィルタが認識されているかチェック
+7. bin/Debugかbin/Releaseにあるヘルパーアプリケーションを起動し取り込み設定を行う
+8. （scff_dsfのデバッグバージョンを利用する場合:）
     - プロジェクト設定からローカルWindowsデバッガーを選ぶ
     - コマンドにWME/KTE/FMEなどを選択すればデバッグ文字列などを見ることが出来る。
 

@@ -344,23 +344,67 @@ void Engine::DoSetComplexLayout() {
 }
 
 void Engine::DoLoop() {
+  // システムクロックを取得
+  IReferenceClock *system_clock = nullptr;
+  HRESULT result_system_clock = CoCreateInstance(
+    CLSID_SystemClock,
+    NULL, // nullptr
+    CLSCTX_INPROC_SERVER,
+    IID_IReferenceClock,
+    reinterpret_cast<void**>(&system_clock));
+  ASSERT(result_system_clock == S_OK);
+  ASSERT(system_clock != nullptr);
+
+  // 初期化
   DWORD request;
-  const clock_t output_interval =
-      static_cast<clock_t>((1 / output_fps_) * CLOCKS_PER_SEC);
-  clock_t last_update = ::clock();
+  const REFERENCE_TIME output_frame_interval =
+      static_cast<REFERENCE_TIME>(UNITS / output_fps_);
+  REFERENCE_TIME zero = 0LL;
+  system_clock->GetTime(&zero);
+  REFERENCE_TIME now = zero;
+  int64_t frame_counter = 0LL;  
 
   do {
     while (!CheckRequest(&request)) {
       Update();
-      const clock_t end_update = ::clock();
-      const clock_t update_interval = end_update - last_update;
-      const clock_t delta = output_interval - update_interval;
-      if (delta > 0) {
-        ::Sleep(static_cast<DWORD>(delta * MILLISECONDS / CLOCKS_PER_SEC));
-      } else {
-        DbgLog((kLogError, kErrorWarn, TEXT("Engine: Drop Frame")));
+      system_clock->GetTime(&now);
+      now -= zero;
+      
+      // 想定フレームを計算＋フレームカウンタ更新
+      REFERENCE_TIME tmp_start = frame_counter * output_frame_interval;
+      REFERENCE_TIME tmp_end = tmp_start + output_frame_interval;
+      ++frame_counter;
+
+      // すでに現在時刻が次の想定フレームの中にある場合
+      //    = フレームスキップが絶対発生する
+      if (tmp_end + output_frame_interval < now) {
+        int skip_count = 0;
+        do {
+          // 想定フレームを再計算＋フレームカウンタ更新
+          tmp_start = frame_counter * output_frame_interval;
+          tmp_end = tmp_start + output_frame_interval;
+          ++frame_counter;
+          ++skip_count;
+        } while (tmp_end < now);
+        // 現在時刻がフレームの終了時よりも前になるまでスキップ
+        DbgLog((kLogError, kErrorWarn,
+                TEXT("Engine: Frame Skip Occured(%d)"),
+                skip_count));
       }
-      last_update = ::clock();
+
+      // Sleep時間を計算
+      const REFERENCE_TIME sleep_interval = tmp_end - now;
+      const DWORD sleep_interval_msec =
+          static_cast<DWORD>((sleep_interval * MILLISECONDS) / UNITS);
+
+      if (tmp_end < now) {
+        // Sleepするべき時間がすでに過ぎてしまった
+        DbgLog((kLogError, kErrorWarn, TEXT("Engine: Drop Frame")));
+      } else {
+        // Sleepしないとフレームを生成しすぎる
+        //    = フレーム終了まで待つ
+        ::Sleep(sleep_interval_msec);
+      }
     }
 
     /// @attention enum->DWORD
@@ -368,6 +412,12 @@ void Engine::DoLoop() {
       Reply(NOERROR);
     }
   } while (request != static_cast<DWORD>(RequestTypes::kStop));
+
+  // システムクロック解放
+  if (system_clock != nullptr) {
+    system_clock->Release();
+    system_clock = nullptr;
+  }
 }
 
 DWORD Engine::ThreadProc() {

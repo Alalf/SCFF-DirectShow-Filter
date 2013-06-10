@@ -101,7 +101,7 @@ REFERENCE_TIME SCFFClockTime::GetNow(REFERENCE_TIME filter_zero) {
   const double system_delta_sec =
       static_cast<double>(system_now - system_cursor_) / UNITS;
   /// @attention 浮動小数点数の比較
-  if (system_delta_sec > 60.0) {
+  if (system_cursor_ == -1LL || system_delta_sec > 60.0) {
     // 1分ごとにzero_を計算しなおす
     system_cursor_ = system_now;
     graph_clock_->GetTime(&graph_cursor_);
@@ -141,11 +141,11 @@ void SCFFClockTime::GetTimestamp(REFERENCE_TIME filter_zero,
 
     int skip_count = 0;
     do {
-        // 想定フレームを再計算＋フレームカウンタ更新
-        tmp_start = frame_counter_ * target_frame_interval_;
-        tmp_end = tmp_start + target_frame_interval_;
-        ++frame_counter_;
-        ++skip_count;
+      // 想定フレームを再計算＋フレームカウンタ更新
+      tmp_start = frame_counter_ * target_frame_interval_;
+      tmp_end = tmp_start + target_frame_interval_;
+      ++frame_counter_;
+      ++skip_count;
     } while (tmp_end < now_in_stream);
     // 現在時刻がフレームの終了時よりも前になるまでスキップ
     DbgLog((kLogError, kErrorWarn,
@@ -169,11 +169,11 @@ void SCFFClockTime::GetTimestamp(REFERENCE_TIME filter_zero,
   if (tmp_end + target_frame_interval_ < now_in_stream) {
     int skip_count = 0;
     do {
-        // 想定フレームを再計算＋フレームカウンタ更新
-        tmp_start = frame_counter_ * target_frame_interval_;
-        tmp_end = tmp_start + target_frame_interval_;
-        ++frame_counter_;
-        ++skip_count;
+      // 想定フレームを再計算＋フレームカウンタ更新
+      tmp_start = frame_counter_ * target_frame_interval_;
+      tmp_end = tmp_start + target_frame_interval_;
+      ++frame_counter_;
+      ++skip_count;
     } while (tmp_end < now_in_stream);
     // 現在時刻がフレームの終了時よりも前になるまでスキップ
     DbgLog((kLogError, kErrorWarn,

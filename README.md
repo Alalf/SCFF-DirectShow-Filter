@@ -6,9 +6,9 @@
 - リンク:
     - Web: http://alalf.github.com/SCFF-DirectShow-Filter/
     - GitHub: https://github.com/Alalf/SCFF-DirectShow-Filter
-    - Nightly-Build: (調査中)
-    - Nightly-Build(暫定): http://ux.getuploader.com/scff_directshow_filter/
-    - Nightly-Build(停止): https://github.com/Alalf/SCFF-DirectShow-Filter/downloads
+    - Nightly-Build: https://sites.google.com/site/scffdirectshowfilter/
+    - Old-Build-1: http://ux.getuploader.com/scff_directshow_filter/
+    - Old-Build-2(停止): https://github.com/Alalf/SCFF-DirectShow-Filter/downloads
 
 
 現在バージョン0.1.5/0.1.6を利用されている方へ

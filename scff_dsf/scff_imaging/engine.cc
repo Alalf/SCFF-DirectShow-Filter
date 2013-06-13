@@ -20,8 +20,6 @@
 
 #include "scff_imaging/engine.h"
 
-#include <ctime>
-
 #include "scff_imaging/debug.h"
 #include "scff_imaging/avpicture_image.h"
 #include "scff_imaging/splash_screen.h"

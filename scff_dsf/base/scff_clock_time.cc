@@ -133,32 +133,6 @@ void SCFFClockTime::GetTimestamp(REFERENCE_TIME filter_zero,
   // 現在のストリームタイムを取得
   const REFERENCE_TIME now_in_stream = GetNow(filter_zero);
 
-#if defined(FOR_FFMPEG)
-  // 最初の1回だけは正確な値を計算する
-  if (frame_counter_ == 0LL) {
-    REFERENCE_TIME tmp_start;
-    REFERENCE_TIME tmp_end;
-
-    int skip_count = 0;
-    do {
-      // 想定フレームを再計算＋フレームカウンタ更新
-      tmp_start = frame_counter_ * target_frame_interval_;
-      tmp_end = tmp_start + target_frame_interval_;
-      ++frame_counter_;
-      ++skip_count;
-    } while (tmp_end < now_in_stream);
-    // 現在時刻がフレームの終了時よりも前になるまでスキップ
-    DbgLog((kLogError, kErrorWarn,
-            TEXT("SCFFClockTime: Initial Skip Occured(%d)"),
-            skip_count));
-  }
-
-  // 想定フレームを計算＋フレームカウンタ更新
-  *start = frame_counter_ * target_frame_interval_;
-  *end = *start + target_frame_interval_;
-  last_end_ = *end;
-  ++frame_counter_;
-#else
   // 想定フレームを計算＋フレームカウンタ更新
   REFERENCE_TIME tmp_start = frame_counter_ * target_frame_interval_;
   REFERENCE_TIME tmp_end = tmp_start + target_frame_interval_;
@@ -181,12 +155,9 @@ void SCFFClockTime::GetTimestamp(REFERENCE_TIME filter_zero,
             skip_count));
   }
 
-  /// @attention タイムスタンプは必ずしも１フレームに収める必要はない
   *start = tmp_start;
-  //*start = last_end_+1;
   *end = tmp_end;
   last_end_ = tmp_end;
-#endif
 }
 
 void SCFFClockTime::Sleep(REFERENCE_TIME filter_zero) {

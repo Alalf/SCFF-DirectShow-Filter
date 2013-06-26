@@ -103,11 +103,7 @@ HRESULT SCFFOutputPin::GetMediaType(int position, CMediaType *media_type) {
   if (position == 0) {
     // ピクセルフォーマット指定付き
     // positionからピクセルフォーマットを計算
-#if defined(FOR_KOTOENCODER)
-    current_pixel_format = scff_imaging::kI420;
-#else
     current_pixel_format = pixel_format_;
-#endif
     current_width = width_;
     current_height = height_;
   } else {
@@ -120,12 +116,9 @@ HRESULT SCFFOutputPin::GetMediaType(int position, CMediaType *media_type) {
         fixed_position / kPreferredSizesCount;
 
     // positionからピクセルフォーマットを計算
-#if defined(FOR_KOTOENCODER)
-    current_pixel_format = scff_imaging::kI420;
-#else
     current_pixel_format =
         scff_imaging::utilities::IndexToPixelFormat(position_in_pixel_formats);
-#endif
+
     // サイズ設定の優先度は以下のとおり:
     //  0.  SetMediaTypeでピン接続先から指定されたサイズ
     //  1-. 優先サイズの配列順

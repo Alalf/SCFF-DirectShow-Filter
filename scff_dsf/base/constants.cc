@@ -48,14 +48,9 @@ const int kPreferredSizesCount =
   sizeof(kPreferredSizes) / sizeof(kPreferredSizes[0]);
 
 const int kSupportedPixelFormatsCount =
-#if defined(FOR_KOTOENCODER)
-  // KoToEncoderは基本的に1ピクセルフォーマットしか対応していない
-  1;
-#else
   /// @attention enum->int
   static_cast<int>(
       scff_imaging::ImagePixelFormats::kSupportedPixelFormatsCount);
-#endif
 
 /// @warning 最初の1個はSetFormat用
 const int kSupportedFormatsCount =

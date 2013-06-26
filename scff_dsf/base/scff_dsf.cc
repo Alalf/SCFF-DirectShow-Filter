@@ -50,16 +50,12 @@ static const GUID kMediaSubtypeRGB0 = MEDIASUBTYPE_RGB32;
 
 /// メディアタイプ: Video
 static const AMOVIESETUP_MEDIATYPE kMediaTypes[] = {
-#if defined(FOR_KOTOENCODER)
-  {&MEDIATYPE_Video, &kMediaSubtypeI420},
-#else
   {&MEDIATYPE_Video, &kMediaSubtypeI420},
   {&MEDIATYPE_Video, &kMediaSubtypeIYUV},
   {&MEDIATYPE_Video, &kMediaSubtypeYV12},
   {&MEDIATYPE_Video, &kMediaSubtypeUYVY},
   {&MEDIATYPE_Video, &kMediaSubtypeYUY2},
   {&MEDIATYPE_Video, &kMediaSubtypeRGB0},
-#endif
 };
 
 /// ピン: 出力ピンは必ず１個存在する

@@ -51,9 +51,9 @@
 1. 以下のランタイムをインストールしてください  
     - 共通: [Microsoft .NET Framework 4 Client Profile]
       (http://www.microsoft.com/downloads/ja-jp/details.aspx?FamilyID=e5ad0459-cbcc-4b4f-97b6-fb17111cf544)
-    - 32bit OS: [Visual Studio 2012 Update 1 の Visual C++ 再頒布可能パッケージ (VSU1\vcredist_x86.exe)]
+    - 32bit OS: [Visual Studio 2012 Update 3 の Visual C++ 再頒布可能パッケージ (VSU3\vcredist_x86.exe)]
       (http://www.microsoft.com/ja-jp/download/details.aspx?id=30679)
-    - 64bit OS: [Visual Studio 2012 Update 1 の Visual C++ 再頒布可能パッケージ (VSU1\vcredist_x64.exe)]
+    - 64bit OS: [Visual Studio 2012 Update 3 の Visual C++ 再頒布可能パッケージ (VSU3\vcredist_x64.exe)]
       (http://www.microsoft.com/ja-jp/download/details.aspx?id=30679)
 2. install.batを実行してください
     - ***重要！***
@@ -136,7 +136,7 @@
     - [Microsoft Ribbon for WPF.msi]
       (http://www.microsoft.com/en-us/download/details.aspx?id=11877)
 3. scff.slnソリューションを開き、全てのビルドが通ることを確認
-    - Microsoft Visual Studio Express 2012で確認済み
+    - Microsoft Visual Studio Express 2012 Update 3で確認済み
     - 必要ならばいくつかのプロジェクト設定を書き換えること
 4. tools/copy_ffmpeg_dll.batを実行してbinディレクトリにffmpeg付属のdllをコピー
 5. tools/install_debug.batかtools/install_release.batを実行

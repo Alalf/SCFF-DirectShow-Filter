@@ -1,4 +1,4 @@
-# build.py - SCFF-DirectShow-Filter Build Script
+﻿# build.py - SCFF-DirectShow-Filter Build Script
 #======================================================================
 
 # option
@@ -93,7 +93,7 @@ def dist():
         ROOT_DIR + '\\bin\\Release_Win32\\*.ax',
         ROOT_DIR + '\\tools\\bin\\regsvrex32.exe',
         ROOT_DIR + '\\tools\\dist\\Microsoft .NET Framework 4 Client Profile.url',
-        ROOT_DIR + '\\tools\\dist\\Visual C++ Redistributable for Visual Studio 2012 Update 1.url',
+        ROOT_DIR + '\\tools\\dist\\Visual C++ Redistributable for Visual Studio 2012 Update 3.url',
         ROOT_DIR + '\\tools\\dist\\install.bat',
         ROOT_DIR + '\\tools\\dist\\uninstall.bat',
         ROOT_DIR + '\\tools\\dist\\install_regsvr.bat',
@@ -111,7 +111,7 @@ def dist():
         ROOT_DIR + '\\bin\\Release_x64\\*.ax',
         ROOT_DIR + '\\tools\\bin\\regsvrex64.exe',
         ROOT_DIR + '\\tools\\dist\\Microsoft .NET Framework 4 Client Profile.url',
-        ROOT_DIR + '\\tools\\dist\\Visual C++ Redistributable for Visual Studio 2012 Update 1.url',
+        ROOT_DIR + '\\tools\\dist\\Visual C++ Redistributable for Visual Studio 2012 Update 3.url',
         ROOT_DIR + '\\tools\\dist\\install.bat',
         ROOT_DIR + '\\tools\\dist\\uninstall.bat',
         ROOT_DIR + '\\tools\\dist\\install_regsvr.bat',

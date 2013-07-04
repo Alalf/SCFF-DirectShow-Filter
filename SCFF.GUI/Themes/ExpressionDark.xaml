@@ -160,14 +160,22 @@
       <Border x:Name="FocusVisualElement" IsHitTestVisible="false" BorderBrush="{StaticResource HoverShineBrush}" BorderThickness="1" CornerRadius="3,3,3,3" Margin="1,1,1,1" Opacity="0" />
     </Grid>
     <ControlTemplate.Triggers>
-      <!-- 2013/01/16 Modified by Alalf -->
-      <Trigger Property="Tag" Value="Emphasize">
+      <!-- 2013/07/04 Modified by Alalf -->
+      <MultiTrigger>
+        <MultiTrigger.Conditions>
+          <Condition Property="IsDefault" Value="True" />
+          <Condition Property="Tag" Value="Emphasize" />
+        </MultiTrigger.Conditions>
         <Setter Property="BorderBrush" Value="{StaticResource EmphasizeBrush}"/>
-      </Trigger>
-
-      <Trigger Property="IsDefault" Value="True">
+      </MultiTrigger>
+      <MultiTrigger>
+        <MultiTrigger.Conditions>
+          <Condition Property="IsDefault" Value="True" />
+          <Condition Property="Tag" Value="{x:Null}" />
+        </MultiTrigger.Conditions>
         <Setter Property="BorderBrush" TargetName="ShineBorder" Value="{DynamicResource DefaultedBorderBrush}" />
-      </Trigger>
+      </MultiTrigger>
+
       <Trigger Property="IsKeyboardFocused" Value="true">
         <Trigger.ExitActions>
           <BeginStoryboard Storyboard="{StaticResource FocussedOff}" x:Name="FocussedOff_BeginStoryboard" />

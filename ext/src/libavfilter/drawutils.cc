@@ -189,10 +189,8 @@ int ff_draw_init(FFDrawContext *draw, enum AVPixelFormat format, unsigned flags)
     draw->format    = format;
     draw->nb_planes = nb_planes;
     memcpy(draw->pixelstep, pixelstep, sizeof(draw->pixelstep));
-    if (nb_planes >= 3 && !(desc->flags & AV_PIX_FMT_FLAG_RGB)) {
-        draw->hsub[1] = draw->hsub[2] = draw->hsub_max = desc->log2_chroma_w;
-        draw->vsub[1] = draw->vsub[2] = draw->vsub_max = desc->log2_chroma_h;
-    }
+    draw->hsub[1] = draw->hsub[2] = draw->hsub_max = desc->log2_chroma_w;
+    draw->vsub[1] = draw->vsub[2] = draw->vsub_max = desc->log2_chroma_h;
     for (i = 0; i < ((desc->nb_components - 1) | 1); i++)
         draw->comp_mask[desc->comp[i].plane] |=
             1 << (desc->comp[i].offset_plus1 - 1);
@@ -206,10 +204,15 @@ void ff_draw_color(FFDrawContext *draw, FFDrawColor *color, const uint8_t rgba[4
 
     if (rgba != color->rgba)
         memcpy(color->rgba, rgba, sizeof(color->rgba));
-    if ((draw->desc->flags & AV_PIX_FMT_FLAG_RGB) && draw->nb_planes == 1 &&
+    if ((draw->desc->flags & AV_PIX_FMT_FLAG_RGB) &&
         ff_fill_rgba_map(rgba_map, draw->format) >= 0) {
-        for (i = 0; i < 4; i++)
-            color->comp[0].u8[rgba_map[i]] = rgba[i];
+        if (draw->nb_planes == 1) {
+            for (i = 0; i < 4; i++)
+                color->comp[0].u8[rgba_map[i]] = rgba[i];
+        } else {
+            for (i = 0; i < 4; i++)
+                color->comp[rgba_map[i]].u8[0] = rgba[i];
+        }
     } else if (draw->nb_planes == 3 || draw->nb_planes == 4) {
         /* assume YUV */
         color->comp[0].u8[0] = RGB_TO_Y_CCIR(rgba[0], rgba[1], rgba[2]);

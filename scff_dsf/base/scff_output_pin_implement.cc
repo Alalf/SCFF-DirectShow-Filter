@@ -163,7 +163,9 @@ STDMETHODIMP SCFFOutputPin::GetStreamCaps(
 /// @retval S_OK
 STDMETHODIMP SCFFOutputPin::SetFormat(
                               AM_MEDIA_TYPE *media_type) {
+  // @todo(me) SetFormatはnullptrを渡された場合にはS_OKを返さないとFlash Playerで使えないらしい
   CheckPointer(media_type, E_POINTER);
+
   // コピーコンストラクタを利用してコピー
   CMediaType media_type_instance = *media_type;
 

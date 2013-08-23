@@ -133,7 +133,7 @@ def upload():
     from scripts import upload
     upload.TMP_DIR = TMP_DIR + '\\upload'
     upload.ARCHIVES = TMP_DIR + '\\dist\\*.7z'
-    upload.UPLOAD_COMMAND = 'curl.exe'
+    upload.UPLOAD_COMMAND = 'C:\\Program Files (x86)\\Git\\bin\\curl.exe'
     upload.UPLOAD_OPTIONS = ''
 
     upload.AUTH = ('Alalf', raw_input('GitHub Password: '))

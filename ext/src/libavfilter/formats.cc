@@ -266,6 +266,7 @@ AVFilterChannelLayouts *ff_merge_channel_layouts(AVFilterChannelLayouts *a,
     MERGE_REF(ret, a, channel_layouts, AVFilterChannelLayouts, fail);
     MERGE_REF(ret, b, channel_layouts, AVFilterChannelLayouts, fail);
     return ret;
+
 fail:
     if (ret) {
         av_freep(&ret->refs);

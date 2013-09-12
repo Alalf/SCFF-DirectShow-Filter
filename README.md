@@ -4,54 +4,31 @@
 - SCFF directShow FilterはWindows用スクリーンキャプチャプログラム(DirectShowフィルタ)です。
 - ffmpegやWindows Media Encoderの映像入力として使われることを想定しています。
 - リンク:
-    - Web: http://alalf.github.com/SCFF-DirectShow-Filter/
     - GitHub: https://github.com/Alalf/SCFF-DirectShow-Filter
     - Nightly-Build: https://sites.google.com/site/scffdirectshowfilter/
-    - Old-Build-1: ux.getuploader.com/scff_directshow_filter/
-    - Old-Build-2(停止): github.com/Alalf/SCFF-DirectShow-Filter/downloads
 
 
-現在バージョン0.1.5/0.1.6を利用されている方へ
+v0.3.0-alpha.3インストール前の注意事項
 -----------------------------------------------------------------------
 
-- バージョン0.1.7-(2012/12下旬版)からフィルタのファイル名が変わりました。
-- フォルダ・ファイルを全て削除した上で再インストールをお願いします。
-    - できれば旧バージョンのuninstall_*.batを実行したあとで削除してください。
-- 開発環境をVisual Studio 2012に移行しました。
-    - ***重要！***
-      Visual C++ 再頒布可能パッケージを下記のアドレスからアップデートしてください。
-      ショートカットファイルもアーカイブに添付してあります。
-    - Windows XPでの動作が不安定になる可能性があります。
+- v0.3.0-alpha.3(2013/09/12版)から.asf/.dllファイルの置き場所が変わりました。
+    - 旧版のuninstall_*.batを実行/全てのファイルを削除したあと、最新版をインストールしてください。
 
 
 必要動作環境
 -----------------------------------------------------------------------
 
-- Windows XP SP3(注)/Windows 7
-    - (注)Windows XP SP3では不安定になる可能性があります
+- Windows XP SP3/Windows 7
 - 画面の色数: 32bit True Color
-- (調査中)
-
-
-最適動作環境
------------------------------------------------------------------------
-
-- Windows 7
-- CPU: Intel Sandy Bridge/Ivy Bridge
-    - Lucid Virtu (MVP) I-Mode
-    - GPUに全く負荷を与えずにスクリーンキャプチャができます
 
 
 インストール方法
 -----------------------------------------------------------------------
 
-0. まず利用したいエンコーダが32bit版か64bit版かを確認してください
-    - Flash Media Encoderなどは64bit版がありませんので64bitOSであっても32bit版SCFFしか使えません
-    - Windows Media Encoderにも32bit版と64bit版がありますので注意してください
 1. 以下のランタイムをインストールしてください  
     - 共通: [Microsoft .NET Framework 4 Client Profile]
       (http://www.microsoft.com/downloads/ja-jp/details.aspx?FamilyID=e5ad0459-cbcc-4b4f-97b6-fb17111cf544)
-    - 32bit OS: [Visual Studio 2012 Update 3 の Visual C++ 再頒布可能パッケージ (VSU3\vcredist_x86.exe)]
+    - 32bit/64bit OS: [Visual Studio 2012 Update 3 の Visual C++ 再頒布可能パッケージ (VSU3\vcredist_x86.exe)]
       (http://www.microsoft.com/ja-jp/download/details.aspx?id=30679)
     - 64bit OS: [Visual Studio 2012 Update 3 の Visual C++ 再頒布可能パッケージ (VSU3\vcredist_x64.exe)]
       (http://www.microsoft.com/ja-jp/download/details.aspx?id=30679)
@@ -72,8 +49,8 @@
    SCFF DirectShow Filterは取り込みサイズとフレームレートは
    出力サイズに自動的に合わせられます。
    各種エンコーダで、まずは出力サイズ、フレームレートを設定してください。
-3. プレビュー画面を確認し、ロゴが中央に表示されることを確認してください。
-4. SCFF.GUI.exe(scff_app.exe)を実行してください。
+3. エンコードを開始し、ロゴが中央に表示されているかプレビューなどで確認してください。
+4. SCFF.GUI.exeを実行してください。
 5. 左上のプロセスメニューから目的のプロセスを選択し、
    取り込み設定後、Applyボタンを押してください。
    (Applyボタン横のAutoチェックボックスを押すと、
@@ -84,21 +61,19 @@
 バージョンアップ方法
 -----------------------------------------------------------------------
 
-1. エンコーダおよびGUIクライアント(SCFF.GUI.exe/scff_app.exe)が実行されていないことを確認して下さい。
+1. エンコーダおよびGUIクライアント(SCFF.GUI.exe)が実行されていないことを確認して下さい。
 2. 確認後、ファイルを上書きしてください。
 
 
 アンインストール方法
 -----------------------------------------------------------------------
 
-1. エンコーダおよびGUIクライアント(SCFF.GUI.exe/scff_app.exe)が実行されていないことを確認して下さい。
+1. エンコーダおよびGUIクライアント(SCFF.GUI.exe)が実行されていないことを確認して下さい。
 2. uninstall.batを実行してください。
 3. (install_regsvr.batでインストールした場合) 以下の手順で手動アンインストールしてください:
     - uninstall_regsvr.batをエクスプローラ上で右クリック＞管理者として実行
     - もしくは管理者として実行したコマンドプロンプトからbatファイルを実行してください
 4. フォルダ・ファイルを削除してください。
-5. (scff_app.exeのみ)アプリケーション設定ファイルが以下の場所にあるので削除してください。
-    - Users/NAME/AppData/scff_app
 
 
 注意
@@ -167,6 +142,13 @@
 各種エンコーダー対応情報
 -----------------------------------------------------------------------
 
+### エンコーダ共通
+- YUV420P(I420)に加えて各種ピクセルフォーマット出力が利用可能です。
+    - YUV420P: IYUV/YV12
+    - RGB32
+    - [暫定対応] YUV422: UYVY/YUY2
+        - レイアウト機能、Keep Aspect Ratioなどの設定が使えません
+
 ### ffmpeg
 - サンプル設定がtools/test_ffmpeg.batにあります。
 - "real-time buffer XXX% full! frame dropped!"が表示された場合、音ずれが発生しています。
@@ -181,11 +163,6 @@
     - 例 ffmpeg: "-async 100"オプションの追加で改善される場合があります。
 
 ### Windows Media Encoder(WME)
-- YUV420P(I420)に加えて各種ピクセルフォーマット出力が利用可能です。
-    - YUV420P: IYUV/YV12
-    - RGB32
-    - [暫定対応] YUV422: UYVY/YUY2
-        - レイアウト機能、Keep Aspect Ratioなどの設定が使えません
 - WMEのノンインターレース化処理の利用は非推奨です。
     - アマレコやpecatvのデインタレース機能を利用することをおすすめします。
 

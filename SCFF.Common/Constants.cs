@@ -30,7 +30,7 @@ public static class Constants {
   //===================================================================
 
   /// アプリケーション名＋バージョン表記
-  public const string SCFFVersion = "SCFF DirectShow Filter Ver.0.2.0";
+  public const string SCFFVersion = "SCFF DirectShow Filter v0.3.0-alpha.3";
 
   /// SCFF DirectShow Filter GUID
   public const string SCFFSourceGUID = "D64DB8AA-9055-418F-AFE9-A080A4FAE47A";

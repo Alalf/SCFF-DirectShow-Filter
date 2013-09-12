@@ -4,7 +4,7 @@
 # option
 #OPTIONS = ['download_ffmpeg', 'msbuild', 'dist', 'upload']
 OPTIONS = ['download_ffmpeg', 'msbuild', 'dist']
-#OPTIONS = ['download_ffmpeg']
+#OPTIONS = ['msbuild', 'dist']
 
 #----------------------------------------------------------------------
 
@@ -76,39 +76,19 @@ def dist():
     from scripts import dist
     dist.TMP_DIR = TMP_DIR + '\\dist'
 
-    dist.BASENAME_32BIT_DIR = 'SCFF-DirectShow-Filter-Win32'
-    dist.BASENAME_64BIT_DIR = 'SCFF-DirectShow-Filter-x64'
-    dist.DIST_32BIT_DIR = dist.TMP_DIR + '\\' + dist.BASENAME_32BIT_DIR
-    dist.DIST_64BIT_DIR = dist.TMP_DIR + '\\' + dist.BASENAME_64BIT_DIR
+    dist.BASENAME_DIR = 'SCFF-DirectShow-Filter'
+    dist.DIST_DIR = dist.TMP_DIR + '\\' + dist.BASENAME_DIR
+    dist.DLLS_32BIT_DIR = dist.DIST_DIR + '\\Win32'
+    dist.DLLS_64BIT_DIR = dist.DIST_DIR + '\\x64'
 
-    dist.FILES_32BIT = [
+    dist.FILES = [
         ROOT_DIR + '\\README.md',
         ROOT_DIR + '\\LICENSE',
-        ROOT_DIR + '\\bin\\Release\\scff_app.exe',
         ROOT_DIR + '\\bin\\Release\\SCFF.GUI.exe',
         ROOT_DIR + '\\bin\\Release\\Microsoft.Windows.Shell.dll',
         ROOT_DIR + '\\bin\\Release\\SCFF.Common.dll',
         ROOT_DIR + '\\bin\\Release\\SCFF.Interprocess.dll',
-        ROOT_DIR + '\\bin\\Release_Win32\\*.dll',
-        ROOT_DIR + '\\bin\\Release_Win32\\*.ax',
         ROOT_DIR + '\\tools\\bin\\regsvrex32.exe',
-        ROOT_DIR + '\\tools\\dist\\Microsoft .NET Framework 4 Client Profile.url',
-        ROOT_DIR + '\\tools\\dist\\Visual C++ Redistributable for Visual Studio 2012 Update 3.url',
-        ROOT_DIR + '\\tools\\dist\\install.bat',
-        ROOT_DIR + '\\tools\\dist\\uninstall.bat',
-        ROOT_DIR + '\\tools\\dist\\install_regsvr.bat',
-        ROOT_DIR + '\\tools\\dist\\uninstall_regsvr.bat',
-        ]
-    dist.FILES_64BIT = [
-        ROOT_DIR + '\\README.md',
-        ROOT_DIR + '\\LICENSE',
-        ROOT_DIR + '\\bin\\Release\\scff_app.exe',
-        ROOT_DIR + '\\bin\\Release\\SCFF.GUI.exe',
-        ROOT_DIR + '\\bin\\Release\\Microsoft.Windows.Shell.dll',
-        ROOT_DIR + '\\bin\\Release\\SCFF.Common.dll',
-        ROOT_DIR + '\\bin\\Release\\SCFF.Interprocess.dll',
-        ROOT_DIR + '\\bin\\Release_x64\\*.dll',
-        ROOT_DIR + '\\bin\\Release_x64\\*.ax',
         ROOT_DIR + '\\tools\\bin\\regsvrex64.exe',
         ROOT_DIR + '\\tools\\dist\\Microsoft .NET Framework 4 Client Profile.url',
         ROOT_DIR + '\\tools\\dist\\Visual C++ Redistributable for Visual Studio 2012 Update 3.url',
@@ -116,6 +96,14 @@ def dist():
         ROOT_DIR + '\\tools\\dist\\uninstall.bat',
         ROOT_DIR + '\\tools\\dist\\install_regsvr.bat',
         ROOT_DIR + '\\tools\\dist\\uninstall_regsvr.bat',
+        ]
+    dist.DLLS_32BIT = [
+        ROOT_DIR + '\\bin\\Release_Win32\\*.dll',
+        ROOT_DIR + '\\bin\\Release_Win32\\*.ax',
+        ]
+    dist.DLLS_64BIT = [
+        ROOT_DIR + '\\bin\\Release_x64\\*.dll',
+        ROOT_DIR + '\\bin\\Release_x64\\*.ax',
         ]
     dist.ARCHIVE_COMMAND = BIN_DIR + '\\7zr.exe'
     dist.ARCHIVE_OPTIONS = 'a'

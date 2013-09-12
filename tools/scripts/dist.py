@@ -1,15 +1,15 @@
-# dist.py
+﻿# dist.py
 #======================================================================
 
 # config
 
 # TMP_DIR
-# BASENAME_32BIT_DIR
-# BASENAME_64BIT_DIR
-# DIST_32BIT_DIR
-# DIST_64BIT_DIR
-# FILES_32BIT
-# FILES_64BIT
+# DIST_DIR
+# DLLS_32BIT_DIR
+# DLLS_64BIT_DIR
+# FILES
+# DLLS_32BIT
+# DLLS_64BIT
 # ARCHIVE_COMMAND = BIN_DIR + '\\7zr.exe'
 # ARCHIVE_OPTIONS = 'a'
 
@@ -35,15 +35,20 @@ def make_dist():
 
     print >>stderr, 'make_dist:'
     
-    makedirs(DIST_32BIT_DIR)
-    for path in FILES_32BIT:
+    makedirs(DIST_DIR)
+    for path in FILES:
         for f in glob(path):
-            copy(f, DIST_32BIT_DIR)
+            copy(f, DIST_DIR)
+    
+    makedirs(DLLS_32BIT_DIR)    
+    for path in DLLS_32BIT:
+        for f in glob(path):
+            copy(f, DLLS_32BIT_DIR)
 
-    makedirs(DIST_64BIT_DIR)
-    for path in FILES_64BIT:
+    makedirs(DLLS_64BIT_DIR)
+    for path in DLLS_64BIT:
         for f in glob(path):
-            copy(f, DIST_64BIT_DIR)
+            copy(f, DLLS_64BIT_DIR)
 
 #----------------------------------------------------------------------
 
@@ -57,10 +62,6 @@ def make_archive():
     today = datetime.today()
     timestamp = today.strftime('%Y%m%d-%H%M%S')
 
-    archive_32bit = TMP_DIR + '\\%s-%s' % (BASENAME_32BIT_DIR, timestamp)
-    archive_64bit = TMP_DIR + '\\%s-%s' % (BASENAME_64BIT_DIR, timestamp)
-    
-    command_32bit = '"%s" %s "%s" "%s"' % (ARCHIVE_COMMAND, ARCHIVE_OPTIONS, archive_32bit + '.7z', DIST_32BIT_DIR)
-    command_64bit = '"%s" %s "%s" "%s"' % (ARCHIVE_COMMAND, ARCHIVE_OPTIONS, archive_64bit + '.7z', DIST_64BIT_DIR)
-    call(command_32bit)
-    call(command_64bit)
+    archive = TMP_DIR + '\\%s-%s' % (BASENAME_DIR, timestamp)
+    command = '"%s" %s "%s" "%s"' % (ARCHIVE_COMMAND, ARCHIVE_OPTIONS, archive + '.7z', DIST_DIR)
+    call(command)

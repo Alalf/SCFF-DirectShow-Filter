@@ -22,6 +22,7 @@
 namespace SCFF.GUI {
 
 using System.Diagnostics;
+using System.IO;
 using System.IO.Pipes;
 using System.Text;
 using System.Threading;
@@ -207,7 +208,10 @@ public partial class App : Application {
         if (pipe == null) return;
         pipe.Connect();
         if (!pipe.IsConnected) return;
-        var data = Encoding.Unicode.GetBytes(path);
+        // クライアントとサーバでカレントディレクトリが異なる可能性がある
+        // よって、Pathはフルパスに予め展開しておく必要あり
+        var fullPath = Path.GetFullPath(path);
+        var data = Encoding.Unicode.GetBytes(fullPath);
         pipe.Write(data, 0, data.Length);
       }
     } catch {

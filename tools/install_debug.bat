@@ -12,9 +12,9 @@ if "%1"=="-sys" (
   )
 ) else (
   rem Normal
-  "tools\bin\regsvrex32.exe" /s "bin\Debug_Win32\scff_dsf_Win32.ax"
+  "tools\bin\regsvrex32.exe" "bin\Debug_Win32\scff_dsf_Win32.ax"
   if "%PROCESSOR_ARCHITECTURE%"=="AMD64" (
-    "tools\bin\regsvrex64.exe" /s "bin\Debug_x64\scff_dsf_x64.ax"
+    "tools\bin\regsvrex64.exe" "bin\Debug_x64\scff_dsf_x64.ax"
   )
 )
 

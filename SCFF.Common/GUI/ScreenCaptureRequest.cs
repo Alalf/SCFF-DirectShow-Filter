@@ -138,10 +138,13 @@ public sealed class ScreenCaptureRequest {
 
   /// スクリーンキャプチャした結果をbyte[]に格納する
   /// @return スクリーンキャプチャした結果のbyte[]
-  public byte[] ExecuteByGetDIBits() {
+  public byte[] ExecuteByGetDIBits(out int dpiX, out int dpiY) {
     // Windowチェック
-    if (!Common.Utilities.IsWindowValid(this.Window)) return null;
-
+    if (!Common.Utilities.IsWindowValid(this.Window)) {
+      dpiX = 96;
+      dpiY = 96;
+      return null;
+    }
 
     // 結果を格納するためのbyte配列
     var result = new byte[this.Size];
@@ -150,6 +153,8 @@ public sealed class ScreenCaptureRequest {
     // BitBlt
     var window = this.Window;
     var windowDC = User32.GetDC(window);
+    dpiX = GDI32.GetDeviceCaps(windowDC, GDI32.LOGPIXELSX);
+    dpiY = GDI32.GetDeviceCaps(windowDC, GDI32.LOGPIXELSY);
     var capturedDC = GDI32.CreateCompatibleDC(windowDC);
     var capturedBitmap = GDI32.CreateCompatibleBitmap(windowDC,
         this.ClippingWidth, this.ClippingHeight);

@@ -146,11 +146,12 @@ public class ScreenCaptureTimer : IDisposable {
     }
     
     // GetDIBitsでbyte[]にデータを格納
-    var result = request.ExecuteByGetDIBits();
+    int dpiX, dpiY;
+    var result = request.ExecuteByGetDIBits(out dpiX, out dpiY);
     if (result == null) return null;
 
     var bitmap = BitmapSource.Create(request.ClippingWidth, request.ClippingHeight,
-                                 96.0, 96.0, PixelFormats.Bgr32, null, result, request.Stride);
+                                 dpiX, dpiY, PixelFormats.Bgr32, null, result, request.Stride);
 
     result = null;
     /// @todo(me) あまり大きな画像をメモリにおいておきたくない。

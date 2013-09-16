@@ -32,19 +32,24 @@ public class GDI32 {
   //===================================================================
 
   /// ラスタオペレーションコード: 単純なコピー
-  public const int SRCCOPY    = 0x00CC0020;
+  public const int SRCCOPY          = 0x00CC0020;
   /// ラスタオペレーションコード: レイヤードウィンドウ含めコピー
-  public const int CAPTUREBLT = 0x40000000;
+  public const int CAPTUREBLT       = 0x40000000;
 
   /// Pen Style: 描画されない
-  public const int PS_NULL        = 0x00000005;
+  public const int PS_NULL          = 0x00000005;
   /// 描画モード: XOR
-  public const int R2_XORPEN      = 7;
+  public const int R2_XORPEN        = 7;
 
   /// ビットマップ圧縮モード: 圧縮なしRGB
-  public const uint BI_RGB        = 0;
+  public const uint BI_RGB          = 0;
   /// カラーテーブル: RGB
   public const uint DIB_RGB_COLORS  = 0;
+
+  /// 能力のインデックス: 画面の水平方向での、論理インチ当たりのピクセル数
+  public const int LOGPIXELSX       = 88;
+  /// 能力のインデックス: 画面の垂直方向での、論理インチ当たりのピクセル数
+  public const int LOGPIXELSY       = 90;
 
   //===================================================================
   // 構造体
@@ -77,6 +82,9 @@ public class GDI32 {
   //===================================================================
   // API
   //===================================================================
+
+  [DllImport("gdi32.dll")]
+  public static extern int GetDeviceCaps(IntPtr hDC, int nIndex);
 
   /// BitBlt(XP,NoAero Vista/7ではハードウェア支援付き)
   [DllImport("gdi32.dll")]

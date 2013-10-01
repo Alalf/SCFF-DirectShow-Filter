@@ -68,14 +68,13 @@ public partial class App : Application {
   /// Startup: アプリケーション開始時
   /// @param e コマンドライン引数(Args)を参照可能
   protected override void OnStartup(StartupEventArgs e) {
-    // 引数取得
-    var path = e.Args.Length > 0 ? e.Args[0] : null;
+    var args = new CommandLineArgs(e.Args);
 
     // Mutexのチェック(Closeはファイナライザに任せる)
     bool createdNew;
     var mutex = new Mutex(false, App.mutexName, out createdNew);
     if (!createdNew) {
-      this.StartPipeClient(path);
+      this.StartPipeClient(args);
       this.Shutdown(-1);
       return;
     }
@@ -84,7 +83,9 @@ public partial class App : Application {
     // 正常起動
     base.OnStartup(e);
     this.ConstructStaticProperties();
-    App.Impl.Startup(path);
+
+    // TODO(me): CommandLineArgsの解析
+    App.Impl.Startup(args.ProfilePath);
 
     // ProcessRenderModeの設定
     if (App.Options.EnableGPUPreviewRendering) {
@@ -161,12 +162,12 @@ public partial class App : Application {
           this.StartPipeServer(context);
 
           // Read
-          var data = new byte[520]; // 260文字(MAX_PATH)x2byte
+          var data = new byte[1024]; // 260文字(MAX_PATH)x3byte、改行とオプション分
           pipe.BeginRead(data, 0, data.Length, (readResult) => {
-            string path = "";
+            var args = new CommandLineArgs();
             try {
               var actualLength = pipe.EndRead(readResult);
-              path = Encoding.Unicode.GetString(data, 0, actualLength);
+              args = new CommandLineArgs(data, actualLength);
             } catch {
               // 出来なければできないでOK
               Debug.WriteLine("Read named pipe failed", "App.StartPipeServer");
@@ -175,10 +176,10 @@ public partial class App : Application {
               pipe.Close();
             }
 
-            // ProfileをUIスレッドで開く
-            Debug.WriteLine("Open profile requested: " + path);
+            // TODO(me): CommandLineArgsの解析
+            Debug.WriteLine("Open profile requested: " + args.ProfilePath);
             context.Post((state) => {
-              App.Impl.OpenProfile(path);
+              App.Impl.OpenProfile(args.ProfilePath);
             }, null);
         
             Debug.WriteLine("[CLOSE]", "NamedPipe");
@@ -197,8 +198,8 @@ public partial class App : Application {
   }
 
   /// NamedPipeClientStreamを生成する
-  private void StartPipeClient(string path) {
-    if (path == null || path == string.Empty || path.Length > 260) {
+  private void StartPipeClient(CommandLineArgs args) {
+    if (args.IsEmpty) {
       Debug.WriteLine("Argument is invalid", "App.StartPipeClient");
       return;
     }
@@ -210,8 +211,7 @@ public partial class App : Application {
         if (!pipe.IsConnected) return;
         // クライアントとサーバでカレントディレクトリが異なる可能性がある
         // よって、Pathはフルパスに予め展開しておく必要あり
-        var fullPath = Path.GetFullPath(path);
-        var data = Encoding.Unicode.GetBytes(fullPath);
+        var data = args.ToUnicodeData();
         pipe.Write(data, 0, data.Length);
       }
     } catch {

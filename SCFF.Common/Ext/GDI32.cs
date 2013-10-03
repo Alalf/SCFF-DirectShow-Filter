@@ -103,7 +103,7 @@ public class GDI32 {
 
   /// 互換DCを作成
   [DllImport("gdi32.dll")]
-	public static extern IntPtr CreateCompatibleDC(IntPtr hdc);
+  public static extern IntPtr CreateCompatibleDC(IntPtr hdc);
 
   /// DCを削除
   [DllImport("gdi32.dll")]

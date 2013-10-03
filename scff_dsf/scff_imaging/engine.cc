@@ -360,14 +360,14 @@ void Engine::DoLoop() {
   REFERENCE_TIME zero = 0LL;
   system_clock->GetTime(&zero);
   REFERENCE_TIME now = zero;
-  int64_t frame_counter = 0LL;  
+  int64_t frame_counter = 0LL;
 
   do {
     while (!CheckRequest(&request)) {
       Update();
       system_clock->GetTime(&now);
       now -= zero;
-      
+
       // 想定フレームを計算＋フレームカウンタ更新
       REFERENCE_TIME tmp_start = frame_counter * output_frame_interval;
       REFERENCE_TIME tmp_end = tmp_start + output_frame_interval;

@@ -604,21 +604,21 @@ public partial class MainWindow
   //-------------------------------------------------------------------
   
   /// CloseWindow
-	private void OnCloseWindow(object sender, ExecutedRoutedEventArgs e) {
-		SystemCommands.CloseWindow(this);
-	}
+  private void OnCloseWindow(object sender, ExecutedRoutedEventArgs e) {
+    SystemCommands.CloseWindow(this);
+  }
   /// MaximizeWindow
-	private void OnMaximizeWindow(object sender, ExecutedRoutedEventArgs e) {
-		SystemCommands.MaximizeWindow(this);
-	}
+  private void OnMaximizeWindow(object sender, ExecutedRoutedEventArgs e) {
+    SystemCommands.MaximizeWindow(this);
+  }
   /// MinimizeWindow
-	private void OnMinimizeWindow(object sender, ExecutedRoutedEventArgs e) {
-		SystemCommands.MinimizeWindow(this);
-	}
+  private void OnMinimizeWindow(object sender, ExecutedRoutedEventArgs e) {
+    SystemCommands.MinimizeWindow(this);
+  }
   /// RestoreWindow
-	private void OnRestoreWindow(object sender, ExecutedRoutedEventArgs e) {
-		SystemCommands.RestoreWindow(this);
-	}
+  private void OnRestoreWindow(object sender, ExecutedRoutedEventArgs e) {
+    SystemCommands.RestoreWindow(this);
+  }
 
   //-------------------------------------------------------------------
   // SCFF.GUI.Commands

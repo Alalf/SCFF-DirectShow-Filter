@@ -294,7 +294,7 @@ class Interprocess {
   void ReleaseShutdownEvent();
 
   // ErrorEvent生成
-  HANDLE CreateErrorEvent(uint32_t process_id); 
+  HANDLE CreateErrorEvent(uint32_t process_id);
   // ErrorEvent解放
   void ReleaseErrorEvent(HANDLE error_event);
 

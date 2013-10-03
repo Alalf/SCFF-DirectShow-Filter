@@ -242,13 +242,13 @@ HANDLE Interprocess::CreateErrorEvent(uint32_t process_id) {
   _stprintf_s(error_event_name,
               256, TEXT("%s%d"),
               kErrorEventNamePrefix, process_id);
-            
+
   // イベント(ErrorEvent<process_id>)の作成
   HANDLE error_event = CreateEvent(nullptr, FALSE, FALSE, error_event_name);
 
   // イベント作成失敗
   // if (error_event == nullptr) return nullptr;
-  
+
   // 最初にEventを作成した場合は…なにもしなくていい
   // DWORD error_create_event = GetLastError();
   // if (error_create_event != ERROR_ALREADY_EXISTS) ;
@@ -266,7 +266,7 @@ void Interprocess::ReleaseErrorEvent(HANDLE error_event) {
 bool Interprocess::InitShutdownEvent() {
   // プログラム全体で一回だけCreate/CloseすればよいのでCloseはしない
   if (IsShutdownEventInitialized()) return true;
-            
+
   // イベント(ShutdownEvent)の作成
   HANDLE tmp_shutdown_event = CreateEvent(nullptr, TRUE, FALSE, nullptr);
 
@@ -455,7 +455,7 @@ bool Interprocess::CheckErrorEvent(uint32_t process_id) {
   }
 
   OutputDebugString(TEXT("****Interprocess: CheckErrorEvent\n"));
-  
+
   // 状態をチェックする（同時に非シグナル状態になる）
   bool result = WaitForSingleObject(error_event, 0) == WAIT_OBJECT_0;
   ReleaseErrorEvent(error_event);
@@ -467,7 +467,8 @@ bool Interprocess::WaitUntilErrorEventOccured(uint32_t process_id) {
   HANDLE error_event = CreateErrorEvent(process_id);
   // イベント作成失敗
   if (error_event == nullptr) {
-    OutputDebugString(TEXT("****Interprocess: WaitUntilErrorEventOccured FAILED\n"));
+    OutputDebugString(
+        TEXT("****Interprocess: WaitUntilErrorEventOccured FAILED\n"));
     return false;
   }
 
@@ -475,7 +476,8 @@ bool Interprocess::WaitUntilErrorEventOccured(uint32_t process_id) {
 
   // シグナル状態になるまで待機
   const HANDLE events[] = {error_event, shutdown_event_};
-  const int signaled_event_index = WaitForMultipleObjects(2, events, FALSE, INFINITE);
+  const int signaled_event_index =
+      WaitForMultipleObjects(2, events, FALSE, INFINITE);
   ReleaseErrorEvent(error_event);
 
   // エラー以外のイベントが起きた場合=Shutdownなら失敗(エラー表示なし)で戻る

@@ -33,7 +33,7 @@ SCFFMonitor::SCFFMonitor()
     : process_id_(GetCurrentProcessId()),
       last_polling_clock_(-1),          // ありえない値
       last_message_timestamp_(-1LL),    // ありえない値
-      last_layout_error_state_(false) { ///< @attention Splash状態がスタートだがエラーなし扱い
+      last_layout_error_state_(false) { // 初期Splash状態はエラーではない
   DbgLog((kLogMemory, kTrace, TEXT("NEW SCFFMonitor")));
 }
 

@@ -55,9 +55,9 @@ v0.3.0-alpha.3インストール前の注意事項
    取り込み設定後、Applyボタンを押してください。
    (Applyボタン横のAutoチェックボックスを押すと、
     一部設定が変更後自動でApplyされます)
-6. SCFF.GUI.exe起動中にコマンドプロンプトからSCFF.GUI.exeを操作できます
-   > SCFF.GUI.exe <PROFILE_PATH> [/p <PID> [/s|/a]]
-   - /p <PID>: プロファイルの書き込み先のプロセスを選択
+6. SCFF.GUI.exe起動中にコマンドプロンプトからSCFF.GUI.exeを操作可能です。
+   - SCFF.GUI.exe (PROFILE_PATH) [/p (PID) [/s|/a]]
+   - /p (PID): プロファイルの書き込み先のプロセスを選択
    - /s: スプラッシュ画面を表示（Splashボタンを同じ動作）
    - /a: プロファイルを適用(Applyボタンと同じ動作)
 7. 後はいろいろ触って覚えてください。

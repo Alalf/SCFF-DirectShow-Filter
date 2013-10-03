@@ -66,19 +66,24 @@ public class ClientApplication {
   public event EventHandler OnProfileChanged;
 
   /// プロファイルを閉じる前
-  public event EventHandler<ClosingProfileEventArgs> OnClosingProfile;
+  public event EventHandler<ProfileClosingEventArgs> OnProfileClosing;
   /// プロファイルを新規作成した後
-  public event EventHandler OnNewProfile;
+  public event EventHandler OnProfileNew;
   /// プロファイルを開く前
-  public event EventHandler<OpeningProfileEventArgs> OnOpeningProfile;
+  public event EventHandler<ProfileOpeningEventArgs> OnProfileOpening;
   /// プロファイルを開いた後
-  public event EventHandler OnOpenedProfile;
+  public event EventHandler OnProfileOpened;
   /// プロファイルを保存する前
-  public event EventHandler<SavingProfileEventArgs> OnSavingProfile;
+  public event EventHandler<ProfileSavingEventArgs> OnProfileSaving;
   /// プロファイルを保存した後
-  public event EventHandler OnSavedProfile;
+  public event EventHandler OnProfileSaved;
   /// プロファイルを仮想メモリに書き込んだ後
-  public event EventHandler OnSentProfile;
+  public event EventHandler OnProfileSent;
+
+  /// ディレクトリを更新した後
+  public event EventHandler OnDirectoryRefreshed;
+  /// プロファイルの書き込み先を選択した後
+  public event EventHandler OnSelectedEntryChanged;
 
   //-------------------------------------------------------------------
 
@@ -172,13 +177,13 @@ public class ClientApplication {
     // 編集がされていなければそのまま[閉じる]ことが可能
     if (!this.HasModified) return true;
 
-    // Event: ClosingProfile
+    // Event: ProfileClosing
     var action = CloseActions.Save;
     {
       var profileName = this.HasSaved ? this.RuntimeOptions.ProfileName
                                       : "Untitled";
-      var args = new ClosingProfileEventArgs(action, profileName);
-      var handler = this.OnClosingProfile;
+      var args = new ProfileClosingEventArgs(action, profileName);
+      var handler = this.OnProfileClosing;
       if (handler != null) handler(this, args);
       action = args.Action;
     }
@@ -200,7 +205,7 @@ public class ClientApplication {
 
     // Event: NewProfile
     {
-      var handler = this.OnNewProfile;
+      var handler = this.OnProfileNew;
       if (handler != null) handler(this, EventArgs.Empty);
     }
 
@@ -230,8 +235,8 @@ public class ClientApplication {
       var initialDirectory = this.HasSaved
           ? Path.GetDirectoryName(this.RuntimeOptions.ProfilePath)
           : Utilities.ApplicationDirectory;
-      var args = new OpeningProfileEventArgs(path, initialDirectory);
-      var handler = this.OnOpeningProfile;
+      var args = new ProfileOpeningEventArgs(path, initialDirectory);
+      var handler = this.OnProfileOpening;
       if (handler != null) handler(this, args);
 
       if (args.Cancel) {
@@ -258,9 +263,9 @@ public class ClientApplication {
       return false;
     }
 
-    // Event: OpenedProfile
+    // Event: ProfileOpened
     {
-      var handler = this.OnOpenedProfile;
+      var handler = this.OnProfileOpened;
       if (handler != null) handler(this, EventArgs.Empty);
     }
     
@@ -270,7 +275,7 @@ public class ClientApplication {
 
   /// Profileの保存
   public bool SaveProfile(SaveActions action) {
-    // Event: SavingProfile
+    // Event: ProfileSaving
     var path = this.RuntimeOptions.ProfilePath;
     {
       var fileName = this.HasSaved
@@ -280,8 +285,8 @@ public class ClientApplication {
           ? Path.GetDirectoryName(this.RuntimeOptions.ProfilePath)
           : Utilities.ApplicationDirectory;
 
-      var args = new SavingProfileEventArgs(action, path, fileName, initialDirectory);
-      var handler = this.OnSavingProfile;
+      var args = new ProfileSavingEventArgs(action, path, fileName, initialDirectory);
+      var handler = this.OnProfileSaving;
       if (handler != null) handler(this, args);
 
       if (args.Cancel) {
@@ -309,7 +314,7 @@ public class ClientApplication {
 
     // Event: SavedProfile
     {
-      var handler = this.OnSavedProfile;
+      var handler = this.OnProfileSaved;
       if (handler != null) handler(this, EventArgs.Empty);
     }
 
@@ -366,9 +371,9 @@ public class ClientApplication {
     // DSFエラー監視開始
     this.DSFMonitor.Start(this.RuntimeOptions.CurrentProcessID);
 
-    // Event: SentProfile
+    // Event: ProfileSent
     {
-      var handler = this.OnSentProfile;
+      var handler = this.OnProfileSent;
       if (handler != null) handler(this, EventArgs.Empty);
     }
 

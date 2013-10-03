@@ -67,9 +67,9 @@ public class ErrorOccuredEventArgs : EventArgs {
 }
 
 /// Profileを[閉じる]時用EventArgs
-public class ClosingProfileEventArgs : EventArgs {
+public class ProfileClosingEventArgs : EventArgs {
   /// コンストラクタ
-  public ClosingProfileEventArgs(CloseActions action, string profileName) {
+  public ProfileClosingEventArgs(CloseActions action, string profileName) {
     this.Action = action;
     this.ProfileName = profileName;
   }
@@ -80,9 +80,9 @@ public class ClosingProfileEventArgs : EventArgs {
 }
 
 /// Profileを[開く]時用EventArgs
-public class OpeningProfileEventArgs : EventArgs {
+public class ProfileOpeningEventArgs : EventArgs {
   /// コンストラクタ
-  public OpeningProfileEventArgs(string path, string initialDirectory) {
+  public ProfileOpeningEventArgs(string path, string initialDirectory) {
     // 初期値＝キャンセルしない
     this.Cancel = false;
 
@@ -98,9 +98,9 @@ public class OpeningProfileEventArgs : EventArgs {
 }
 
 /// Profileを[保存]時用EventArgs
-public class SavingProfileEventArgs : EventArgs {
+public class ProfileSavingEventArgs : EventArgs {
   /// コンストラクタ
-  public SavingProfileEventArgs(SaveActions action, string path, string fileName, string initialDirectory) {
+  public ProfileSavingEventArgs(SaveActions action, string path, string fileName, string initialDirectory) {
     // 初期値＝キャンセルしない
     this.Cancel = false;
 

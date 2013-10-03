@@ -44,13 +44,13 @@ public partial class MainWindow
     App.Impl.OnErrorOccured += this.OnErrorOccured;
     App.Impl.OnProfileChanged += this.OnProfileChanged;
 
-    App.Impl.OnClosingProfile += this.OnClosingProfile;
-    App.Impl.OnNewProfile += this.OnNewProfile;
-    App.Impl.OnOpeningProfile += this.OnOpeningProfile;
-    App.Impl.OnOpenedProfile += this.OnOpenedProfile;
-    App.Impl.OnSavingProfile += this.OnSavingProfile;
-    App.Impl.OnSavedProfile += this.OnSavedProfile;
-    App.Impl.OnSentProfile += this.OnSentProfile;
+    App.Impl.OnProfileClosing += this.OnProfileClosing;
+    App.Impl.OnProfileNew += this.OnProfileNew;
+    App.Impl.OnProfileOpening += this.OnProfileOpening;
+    App.Impl.OnProfileOpened += this.OnProfileOpened;
+    App.Impl.OnProfileSaving += this.OnProfileSaving;
+    App.Impl.OnProfileSaved += this.OnProfileSaved;
+    App.Impl.OnProfileSent += this.OnProfileSent;
 
     App.ScreenCaptureTimer.Tick += LayoutEdit.OnScreenCaptured;
 
@@ -65,13 +65,13 @@ public partial class MainWindow
     App.Impl.OnErrorOccured -= this.OnErrorOccured;
     App.Impl.OnProfileChanged -= this.OnProfileChanged;
 
-    App.Impl.OnClosingProfile -= this.OnClosingProfile;
-    App.Impl.OnNewProfile -= this.OnNewProfile;
-    App.Impl.OnOpeningProfile -= this.OnOpeningProfile;
-    App.Impl.OnOpenedProfile -= this.OnOpenedProfile;
-    App.Impl.OnSavingProfile -= this.OnSavingProfile;
-    App.Impl.OnSavedProfile -= this.OnSavedProfile;
-    App.Impl.OnSentProfile -= this.OnSentProfile;
+    App.Impl.OnProfileClosing -= this.OnProfileClosing;
+    App.Impl.OnProfileNew -= this.OnProfileNew;
+    App.Impl.OnProfileOpening -= this.OnProfileOpening;
+    App.Impl.OnProfileOpened -= this.OnProfileOpened;
+    App.Impl.OnProfileSaving -= this.OnProfileSaving;
+    App.Impl.OnProfileSaved -= this.OnProfileSaved;
+    App.Impl.OnProfileSent -= this.OnProfileSent;
 
     App.ScreenCaptureTimer.Tick -= LayoutEdit.OnScreenCaptured;
   }
@@ -102,10 +102,10 @@ public partial class MainWindow
     //-----------------------------------------------------------------
   }
 
-  /// @copybrief SCFF::Common::ClientApplication::OnClosingProfile
+  /// @copybrief SCFF::Common::ClientApplication::OnProfileClosing
   /// @param[in] sender 使用しない
   /// @param[in,out] e e.Actionに動作を指定する
-  void OnClosingProfile(object sender, ClosingProfileEventArgs e) {
+  void OnProfileClosing(object sender, ProfileClosingEventArgs e) {
     var message = string.Format("Do you want to save changes to {0}?", e.ProfileName);
     var result =  MessageBox.Show(message,
                                   "SCFF.GUI",
@@ -119,10 +119,10 @@ public partial class MainWindow
     }
   }
 
-  /// @copybrief SCFF::Common::ClientApplication::OnNewProfile
+  /// @copybrief SCFF::Common::ClientApplication::OnProfileNew
   /// @param[in] sender 使用しない
   /// @param[in] e 使用しない
-  private void OnNewProfile(object sender, System.EventArgs e) {
+  private void OnProfileNew(object sender, System.EventArgs e) {
     //-----------------------------------------------------------------
     // Notify self
     this.OnRuntimeOptionsChanged();
@@ -132,10 +132,10 @@ public partial class MainWindow
     //-----------------------------------------------------------------
   }
 
-  /// @copybrief SCFF::Common::ClientApplication::OnOpeningProfile
+  /// @copybrief SCFF::Common::ClientApplication::OnProfileOpening
   /// @param[in] sender 使用しない
   /// @param[in,out] e e.Cancelでキャンセル可能
-  private void OnOpeningProfile(object sender, OpeningProfileEventArgs e) {
+  private void OnProfileOpening(object sender, ProfileOpeningEventArgs e) {
     // パスが指定されている = ダイアログを開いてパスを指定する必要はない
     if (e.Path != null && e.Path != string.Empty) return;
 
@@ -153,10 +153,10 @@ public partial class MainWindow
     }
   }
 
-  /// @copybrief SCFF::Common::ClientApplication::OnOpeningProfile
+  /// @copybrief SCFF::Common::ClientApplication::OnProfileOpening
   /// @param[in] sender 使用しない
   /// @param[in] e 使用しない
-  private void OnOpenedProfile(object sender, System.EventArgs e) {
+  private void OnProfileOpened(object sender, System.EventArgs e) {
     //-----------------------------------------------------------------
     // Notify self
     this.OnRuntimeOptionsChanged();
@@ -167,10 +167,10 @@ public partial class MainWindow
     //-----------------------------------------------------------------
   }
 
-  /// @copybrief SCFF::Common::ClientApplication::OnSavingProfile
+  /// @copybrief SCFF::Common::ClientApplication::OnProfileSaving
   /// @param[in] sender 使用しない
   /// @param[in] e e.Cancelでキャンセル可能
-  private void OnSavingProfile(object sender, SavingProfileEventArgs e) {
+  private void OnProfileSaving(object sender, ProfileSavingEventArgs e) {
     // [保存]で既に一回以上ファイルに保存されている場合はパスの指定は必要ない
     if (e.Action == SaveActions.Save &&
         e.Path != null && e.Path != string.Empty) return;
@@ -190,10 +190,10 @@ public partial class MainWindow
     }
   }
 
-  /// @copybrief SCFF::Common::ClientApplication::OnSavedProfile
+  /// @copybrief SCFF::Common::ClientApplication::OnProfileSaved
   /// @param[in] sender 使用しない
   /// @param[in] e 使用しない
-  private void OnSavedProfile(object sender, System.EventArgs e) {
+  private void OnProfileSaved(object sender, System.EventArgs e) {
     //-----------------------------------------------------------------
     // Notify self
     this.OnRuntimeOptionsChanged();
@@ -202,10 +202,10 @@ public partial class MainWindow
     //-----------------------------------------------------------------
   }
 
-  /// @copybrief SCFF::Common::ClientApplication::OnSentProfile
+  /// @copybrief SCFF::Common::ClientApplication::OnProfileSent
   /// @param[in] sender 使用しない
   /// @param[in] e 使用しない
-  private void OnSentProfile(object sender, System.EventArgs e) {
+  private void OnProfileSent(object sender, System.EventArgs e) {
     //-----------------------------------------------------------------
     // Notify self
     // Notify other controls

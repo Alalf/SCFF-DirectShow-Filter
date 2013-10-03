@@ -27,8 +27,8 @@ using System.Text;
 /// コマンドライン引数を処理するためのクラス
 /// - path: 指定した場所のProfileを開く
 /// - /p pid: プロセスリフトリフレッシュ後、プロセスIDを選択する(なければそのまま)
-/// - /s: 現在選択中のプロセスでスプラッシュボタンを可能なら押す(/aよりも優先)
-/// - /a: 現在選択中のプロセスでApplyを可能なら押す
+/// - /s: /pで指定されたプロセスが存在した場合、スプラッシュボタンを可能なら押す(/aよりも優先)
+/// - /a: /pで指定されたプロセスが存在した場合、Applyを可能なら押す
 public class CommandLineArgs {
   //===================================================================
   // コンストラクタ/デストラクタ
@@ -63,7 +63,7 @@ public class CommandLineArgs {
         isPIDParsing = false;
       } else if (isPIDParsing) {
         this.ProcessIDOption = true;
-        this.ProcessID = int.Parse(arg);
+        this.ProcessID = uint.Parse(arg);
         isPIDParsing = false;
       } else {
         this.ProfilePathOption = true;
@@ -127,7 +127,7 @@ public class CommandLineArgs {
   /// /p pid: プロセスIDを選択
   public bool ProcessIDOption { get; private set; }
   /// プロセスID
-  public int ProcessID { get; private set; }
+  public uint ProcessID { get; private set; }
 
   /// /s: スプラッシュ表示
   public bool SplashOption { get; private set; }

@@ -52,7 +52,7 @@ public class RuntimeOptions {
     this.LastAppliedTimestamp = RuntimeOptions.InvalidTimestamp;
 
     this.CurrentProcessID = 0;
-    this.EntryLabels = new List<Tuple<UInt32,string>>();
+    this.EntryLabels = new Dictionary<UInt32,string>();
   }
 
   //===================================================================
@@ -114,7 +114,7 @@ public class RuntimeOptions {
   }
 
   /// エントリの表示用ディクショナリ
-  public List<Tuple<UInt32,string>> EntryLabels { get; private set; }
+  public Dictionary<UInt32,string> EntryLabels { get; private set; }
 
   //-------------------------------------------------------------------
   // private
@@ -176,8 +176,7 @@ public class RuntimeOptions {
       this.entries[entry.ProcessID] = internalEntry;
 
       // ラベルの生成と追加
-      var tuple = new Tuple<UInt32,string>(entry.ProcessID, this.GetEntryLabel(internalEntry));
-      this.EntryLabels.Add(tuple);
+      this.EntryLabels.Add(entry.ProcessID, this.GetEntryLabel(internalEntry));
     }
 
     // 現在選択中のプロセスIDがなくなっていた場合

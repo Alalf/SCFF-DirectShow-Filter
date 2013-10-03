@@ -21,6 +21,7 @@
 namespace SCFF.GUI.Controls {
 
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Controls;
 using SCFF.Common.GUI;
@@ -36,8 +37,8 @@ public partial class DSFEntries : UserControl, IBindingRuntimeOptions {
     InitializeComponent();
 
     this.Processes.ItemsSource = this.processesSource;
-    this.Processes.DisplayMemberPath = "Item2";
-    this.Processes.SelectedValuePath = "Item1";
+    this.Processes.DisplayMemberPath = "Value";
+    this.Processes.SelectedValuePath = "Key";
   }
 
   //===================================================================
@@ -56,9 +57,8 @@ public partial class DSFEntries : UserControl, IBindingRuntimeOptions {
 
     //-----------------------------------------------------------------
     // Notify self
-    this.OnRuntimeOptionsChanged();
     // Notify other controls
-    Commands.SampleSizeChanged.Execute(null, this);
+    // どちらもApp.Implのイベントハンドラで処理しているため必要ない
     //-----------------------------------------------------------------
   }
 
@@ -73,12 +73,13 @@ public partial class DSFEntries : UserControl, IBindingRuntimeOptions {
   /// Processes: SelectionChanged
   private void Processes_SelectionChanged(object sender, SelectionChangedEventArgs e) {
     if (!this.CanChangeRuntimeOptions) return;
-    App.RuntimeOptions.CurrentProcessID = (UInt32)this.Processes.SelectedValue;
+    var processID = (UInt32)this.Processes.SelectedValue;
+    App.Impl.SelectEntry(processID);
 
     //-----------------------------------------------------------------
     // Notify self
     // Notify other controls
-    Commands.SampleSizeChanged.Execute(null, this);
+    // どちらもApp.Implのイベントハンドラで処理しているため必要ない
     //-----------------------------------------------------------------
   }
 
@@ -94,8 +95,8 @@ public partial class DSFEntries : UserControl, IBindingRuntimeOptions {
 
     // コンボボックスの更新
     this.processesSource.Clear();
-    foreach (var tuple in App.RuntimeOptions.EntryLabels) {
-      this.processesSource.Add(tuple);
+    foreach (var kv in App.RuntimeOptions.EntryLabels) {
+      this.processesSource.Add(kv);
     }
 
     // SelectedIndexの調整
@@ -114,7 +115,7 @@ public partial class DSFEntries : UserControl, IBindingRuntimeOptions {
   //===================================================================
 
   /// Processes.ItemsSource用のObservableCollection
-  private readonly ObservableCollection<Tuple<UInt32,string>> processesSource =
-      new ObservableCollection<Tuple<uint,string>>();
+  private readonly ObservableCollection<KeyValuePair<UInt32,string>> processesSource =
+      new ObservableCollection<KeyValuePair<UInt32,string>>();
 }
 }   // namespace SCFF.GUI.Controls

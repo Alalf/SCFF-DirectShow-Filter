@@ -84,8 +84,17 @@ public partial class App : Application {
     base.OnStartup(e);
     this.ConstructStaticProperties();
 
-    // TODO(me): CommandLineArgsの解析
     App.Impl.Startup(args.ProfilePath);
+    if (args.ProcessIDOption) {
+      var success = App.Impl.SelectEntry(args.ProcessID);
+      if (success) {
+        if (args.SplashOption) {
+          App.Impl.SendProfile(true, true);
+        } else if (args.ApplyOption) {
+          App.Impl.SendProfile(true, false);
+        }
+      }
+    }
 
     // ProcessRenderModeの設定
     if (App.Options.EnableGPUPreviewRendering) {
@@ -176,10 +185,21 @@ public partial class App : Application {
               pipe.Close();
             }
 
-            // TODO(me): CommandLineArgsの解析
-            Debug.WriteLine("Open profile requested: " + args.ProfilePath);
+            Debug.WriteLine("CLI feature requested:");
             context.Post((state) => {
-              App.Impl.OpenProfile(args.ProfilePath);
+              if (args.ProfilePathOption) {
+                App.Impl.OpenProfile(args.ProfilePath);
+              }
+              if (args.ProcessIDOption) {
+                var success = App.Impl.SelectEntry(args.ProcessID);
+                if (success) {
+                  if (args.SplashOption) {
+                    App.Impl.SendProfile(true, true);
+                  } else if (args.ApplyOption) {
+                    App.Impl.SendProfile(true, false);
+                  }
+                }
+              }
             }, null);
         
             Debug.WriteLine("[CLOSE]", "NamedPipe");

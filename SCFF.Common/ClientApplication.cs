@@ -83,7 +83,7 @@ public class ClientApplication {
   /// ディレクトリを更新した後
   public event EventHandler OnDirectoryRefreshed;
   /// プロファイルの書き込み先を選択した後
-  public event EventHandler OnSelectedEntryChanged;
+  public event EventHandler OnCurrentEntryChanged;
 
   //-------------------------------------------------------------------
 
@@ -384,6 +384,30 @@ public class ClientApplication {
   public void RefreshDirectory() {
     this.RuntimeOptions.RefreshDirectory(this.Interprocess);
     this.DSFMonitor.RemoveZombies();
+
+    // Event: DirectoryRefreshed
+    {
+      var handler = this.OnDirectoryRefreshed;
+      if (handler != null) handler(this, EventArgs.Empty);
+    }
+  }
+
+  /// プロファイルの書き込み先のプロセスIDを変更する
+  /// 指定されたプロセスIDがDirectoryになければ変更しない
+  public bool SelectEntry(uint processID) {
+    if (!this.RuntimeOptions.EntryLabels.ContainsKey(processID)) {
+      Debug.WriteLine("Cannot select entry: " + processID);
+      return false;
+    }
+    this.RuntimeOptions.CurrentProcessID = processID;
+
+    /// Event: SelectedEntryChanged
+    {
+      var handler = this.OnCurrentEntryChanged;;
+      if (handler != null) handler(this, EventArgs.Empty);
+    }
+
+    return true;
   }
 
   /// AeroをOff(Options.ForceAeroOnがOnならOn)に設定する

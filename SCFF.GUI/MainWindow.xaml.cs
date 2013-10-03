@@ -52,6 +52,9 @@ public partial class MainWindow
     App.Impl.OnProfileSaved += this.OnProfileSaved;
     App.Impl.OnProfileSent += this.OnProfileSent;
 
+    App.Impl.OnDirectoryRefreshed += this.OnDirectoryRefreshed;
+    App.Impl.OnCurrentEntryChanged += this.OnCurrentEntryChanged;
+
     App.ScreenCaptureTimer.Tick += LayoutEdit.OnScreenCaptured;
 
     this.NotifyOptionsChanged();
@@ -72,6 +75,9 @@ public partial class MainWindow
     App.Impl.OnProfileSaving -= this.OnProfileSaving;
     App.Impl.OnProfileSaved -= this.OnProfileSaved;
     App.Impl.OnProfileSent -= this.OnProfileSent;
+
+    App.Impl.OnDirectoryRefreshed -= this.OnDirectoryRefreshed;
+    App.Impl.OnCurrentEntryChanged -= this.OnCurrentEntryChanged;
 
     App.ScreenCaptureTimer.Tick -= LayoutEdit.OnScreenCaptured;
   }
@@ -210,6 +216,30 @@ public partial class MainWindow
     // Notify self
     // Notify other controls
     this.Apply.OnRuntimeOptionsChanged();
+    //-----------------------------------------------------------------
+  }
+
+  /// @copybrief SCFF::Common::ClientApplication::OnDirectoryRefreshed
+  /// @param[in] sender 使用しない
+  /// @param[in] e 使用しない
+  private void OnDirectoryRefreshed(object sender, System.EventArgs e) {
+    //-----------------------------------------------------------------
+    // Notify self
+    Commands.SampleSizeChanged.Execute(null, this);
+    // Notify other controls
+    this.SCFFEntries.OnRuntimeOptionsChanged();
+    //-----------------------------------------------------------------
+  }
+
+  /// @copybrief SCFF::Common::ClientApplication::OnCurrentEntryChanged
+  /// @param[in] sender 使用しない
+  /// @param[in] e 使用しない
+  private void OnCurrentEntryChanged(object sender, System.EventArgs e) {
+    //-----------------------------------------------------------------
+    // Notify self
+    Commands.SampleSizeChanged.Execute(null, this);
+    // Notify other controls
+    this.SCFFEntries.OnRuntimeOptionsChanged();
     //-----------------------------------------------------------------
   }
 

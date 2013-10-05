@@ -27,6 +27,7 @@ using System.Text;
 /// コマンドライン引数を処理するためのクラス
 /// - path: 指定した場所のProfileを開く
 /// - /p pid: プロセスリフトリフレッシュ後、プロセスIDを選択する(なければそのまま)
+/// - /pa: プロセスリストにある全てのプロセスIDに対してS/Aを行う。選択中のプロセスIDは保持される
 /// - /s: /pで指定されたプロセスが存在した場合、スプラッシュボタンを可能なら押す(/aよりも優先)
 /// - /a: /pで指定されたプロセスが存在した場合、Applyを可能なら押す
 public class CommandLineArgs {
@@ -55,6 +56,9 @@ public class CommandLineArgs {
     foreach (var arg in args) {
       if (arg == "/p") {
         isPIDParsing = true;
+      } else if (arg == "/pa") {
+        this.ProcessAllOption = true;
+        isPIDParsing = false;
       } else if (arg == "/s") {
         this.SplashOption = true;
         isPIDParsing = false;
@@ -93,6 +97,9 @@ public class CommandLineArgs {
       args.Add("/p");
       args.Add(this.ProcessID.ToString());
     }
+    if (this.ProcessAllOption) {
+      args.Add("/pa");
+    }
     if (this.SplashOption) {
       args.Add("/s");
     }
@@ -112,6 +119,7 @@ public class CommandLineArgs {
     get {
       return  !this.ProfilePathOption &&
               !this.ProcessIDOption &&
+              !this.ProcessAllOption &&
               !this.SplashOption &&
               !this.ApplyOption;
     }
@@ -128,6 +136,9 @@ public class CommandLineArgs {
   public bool ProcessIDOption { get; private set; }
   /// プロセスID
   public uint ProcessID { get; private set; }
+
+  /// /pa: 全てのプロセスIDを対象にする
+  public bool ProcessAllOption { get; private set; }
 
   /// /s: スプラッシュ表示
   public bool SplashOption { get; private set; }

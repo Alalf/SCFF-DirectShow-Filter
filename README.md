@@ -56,8 +56,9 @@ v0.3.0-alpha.3インストール前の注意事項
    (Applyボタン横のAutoチェックボックスを押すと、
     一部設定が変更後自動でApplyされます)
 6. SCFF.GUI.exe起動中にコマンドプロンプトからSCFF.GUI.exeを操作可能です。
-   - SCFF.GUI.exe (PROFILE_PATH) [/p (PID) [/s|/a]]
+   - SCFF.GUI.exe (PROFILE_PATH) [[/p (PID)|/pa] [/s|/a]]
    - /p (PID): プロファイルの書き込み先のプロセスを選択
+   - /pa: /sおよび/aオプションを全てのプロセスを対象にする。プロセスの選択は保持される
    - /s: スプラッシュ画面を表示（Splashボタンを同じ動作）
    - /a: プロファイルを適用(Applyボタンと同じ動作)
 7. 後はいろいろ触って覚えてください。

@@ -63,6 +63,40 @@ public partial class App : Application {
     App.Impl.OnDSFErrorOccured      -= this.OnDSFErrorOccured;
   }
 
+  /// CommandLineArgsの解析
+  private void ParseAndRun(CommandLineArgs args, bool refresh) {
+    if (args.ProcessAllOption) {
+      if (refresh) {
+        App.Impl.RefreshDirectory();
+      }
+      var oldCurrent = App.Impl.RuntimeOptions.CurrentProcessID;
+      foreach (var kv in App.Impl.RuntimeOptions.EntryLabels) {
+        var pid = kv.Key;
+        var success = App.Impl.SelectEntry(pid);
+        if (success) {
+          if (args.SplashOption) {
+            App.Impl.SendProfile(true, true);
+          } else if (args.ApplyOption) {
+            App.Impl.SendProfile(true, false);
+          }
+        }
+      }
+      App.Impl.SelectEntry(oldCurrent);
+    } else if (args.ProcessIDOption) {
+      if (refresh) {
+        App.Impl.RefreshDirectory();
+      }
+      var success = App.Impl.SelectEntry(args.ProcessID);
+      if (success) {
+        if (args.SplashOption) {
+          App.Impl.SendProfile(true, true);
+        } else if (args.ApplyOption) {
+          App.Impl.SendProfile(true, false);
+        }
+      }
+    }
+  }
+
   //-------------------------------------------------------------------
 
   /// Startup: アプリケーション開始時
@@ -84,17 +118,9 @@ public partial class App : Application {
     base.OnStartup(e);
     this.ConstructStaticProperties();
 
+    // CommandLineArgsの解析と内容の実行
     App.Impl.Startup(args.ProfilePath);
-    if (args.ProcessIDOption) {
-      var success = App.Impl.SelectEntry(args.ProcessID);
-      if (success) {
-        if (args.SplashOption) {
-          App.Impl.SendProfile(true, true);
-        } else if (args.ApplyOption) {
-          App.Impl.SendProfile(true, false);
-        }
-      }
-    }
+    this.ParseAndRun(args, false);
 
     // ProcessRenderModeの設定
     if (App.Options.EnableGPUPreviewRendering) {
@@ -190,16 +216,7 @@ public partial class App : Application {
               if (args.ProfilePathOption) {
                 App.Impl.OpenProfile(args.ProfilePath);
               }
-              if (args.ProcessIDOption) {
-                var success = App.Impl.SelectEntry(args.ProcessID);
-                if (success) {
-                  if (args.SplashOption) {
-                    App.Impl.SendProfile(true, true);
-                  } else if (args.ApplyOption) {
-                    App.Impl.SendProfile(true, false);
-                  }
-                }
-              }
+              this.ParseAndRun(args, true);
             }, null);
         
             Debug.WriteLine("[CLOSE]", "NamedPipe");

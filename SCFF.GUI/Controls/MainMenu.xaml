@@ -57,6 +57,10 @@
                 IsCheckable="True"
                 x:Name="ForceAeroOn" 
                 Click="ForceAeroOn_Click"/>
+      <MenuItem Header="Save profile on exit(_E)"
+                IsCheckable="True"
+                x:Name="SaveProfileOnExit"
+                Click="SaveProfileOnExit_Click" />
       <MenuItem Header="Restore last profile(_R)"
                 IsCheckable="True"
                 x:Name="RestoreLastProfile"

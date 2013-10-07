@@ -80,6 +80,13 @@ public partial class MainMenu : UserControl, IBindingOptions {
     //-----------------------------------------------------------------
   }
 
+  /// SaveProfileOnExit: Click
+  /// @param sender 使用しない
+  /// @param e 使用しない
+  private void SaveProfileOnExit_Click(object sender, RoutedEventArgs e) {
+    App.Options.SaveProfileOnExit = this.SaveProfileOnExit.IsChecked;
+  }
+
   /// RestoreLastProfile: Click
   /// @param sender 使用しない
   /// @param e 使用しない
@@ -170,6 +177,7 @@ public partial class MainMenu : UserControl, IBindingOptions {
     this.UpdateRecentProfiles();
     this.CompactView.IsChecked = App.Options.CompactView;
     this.ForceAeroOn.IsChecked = App.Options.ForceAeroOn;
+    this.SaveProfileOnExit.IsChecked = App.Options.SaveProfileOnExit;
     this.RestoreLastProfile.IsChecked = App.Options.RestoreLastProfile;
     this.RestoreMissingWindowWhenOpeningProfile.IsChecked =
         App.Options.RestoreMissingWindowWhenOpeningProfile;

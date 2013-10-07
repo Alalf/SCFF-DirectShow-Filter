@@ -71,6 +71,7 @@ public class Options {
     this.LayoutSnap = true;
     this.CompactView = false;
     this.ForceAeroOn = false;
+    this.SaveProfileOnExit = false;
     this.RestoreLastProfile = true;
     this.RestoreMissingWindowWhenOpeningProfile = true;
     this.EnableGPUPreviewRendering = true;
@@ -139,6 +140,8 @@ public class Options {
   public bool CompactView { get; set; }
   /// 強制的にAeroをOnにする
   public bool ForceAeroOn { get; set; }
+  /// 終了時にプロファイルを保存する
+  public bool SaveProfileOnExit { get; set; }
   /// 最後に使用したプロファイルを起動時に読み込む
   public bool RestoreLastProfile { get; set; }
   /// プロファイル読み込み時にWindowが存在していないとき、デスクトップ取り込みに切り替える

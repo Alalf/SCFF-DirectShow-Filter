@@ -81,6 +81,7 @@ public class OptionsFile : TinyKeyValueFile {
         writer.WriteLine("LayoutSnap={0}", this.options.LayoutSnap);
         writer.WriteLine("CompactView={0}", this.options.CompactView);
         writer.WriteLine("ForceAeroOn={0}", this.options.ForceAeroOn);
+        writer.WriteLine("SaveProfileOnExit={0}", this.options.SaveProfileOnExit);
         writer.WriteLine("RestoreLastProfile={0}", this.options.RestoreLastProfile);
         writer.WriteLine("RestoreMissingWindowWhenOpeningProfile={0}",
                          this.options.RestoreMissingWindowWhenOpeningProfile);
@@ -200,6 +201,9 @@ public class OptionsFile : TinyKeyValueFile {
     }
     if (this.TryGetBool("ForceAeroOn", out boolValue)) {
       this.options.ForceAeroOn = boolValue;
+    }
+    if (this.TryGetBool("SaveProfileOnExit", out boolValue)) {
+      this.options.SaveProfileOnExit = boolValue;
     }
     if (this.TryGetBool("RestoreLastProfile", out boolValue)) {
       this.options.RestoreLastProfile = boolValue;

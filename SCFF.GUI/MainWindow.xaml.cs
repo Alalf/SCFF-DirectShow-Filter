@@ -250,9 +250,13 @@ public partial class MainWindow
   /// アプリケーション終了時に発生するClosingイベントハンドラ
   protected override void OnClosing(System.ComponentModel.CancelEventArgs e) {
     base.OnClosing(e);
-    if (!App.Impl.CloseProfile()) {
-      e.Cancel = true;
-      return;
+    if (!App.Options.SaveProfileOnExit) {
+      if (!App.Impl.CloseProfile()) {
+        e.Cancel = true;
+        return;
+      }
+    } else {
+      App.Impl.SaveProfile(SaveActions.Save);
     }
 
     this.SaveTemporaryOptions();

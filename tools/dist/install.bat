@@ -1,5 +1,4 @@
 @echo off
-set ERROR_VC2012_RUNTIME=0
 set VC2012_REGKEY=HKLM\SOFTWARE\Microsoft\DevDiv\VC\Servicing\11.0\RuntimeMinimum
 set VC2012_WOW6432_REGKEY=HKLM\SOFTWARE\WOW6432Node\Microsoft\DevDiv\VC\Servicing\11.0\RuntimeMinimum
 

@@ -256,7 +256,9 @@ public partial class MainWindow
         return;
       }
     } else {
-      App.Impl.SaveProfile(SaveActions.Save);
+      if (App.Impl.HasModified) {
+        App.Impl.SaveProfile(SaveActions.Save);
+      }
     }
 
     this.SaveTemporaryOptions();

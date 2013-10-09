@@ -21,5 +21,9 @@
 */publish
 *.snk
 /TestResults
-/ext/XSplit/lib
 /ext/XSplit/*.dll
+/ext/XSplit/*.def
+
+/ext/XSplit/*.exp
+
+/ext/XSplit/*.lib

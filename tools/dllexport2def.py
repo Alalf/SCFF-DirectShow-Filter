@@ -1,4 +1,4 @@
-# dllexport2def.py
+# dllexports2def.py
 # from http://takumakei.blogspot.jp/2009/04/dlldef.html
 #======================================================================
 
@@ -11,7 +11,7 @@ def dllexports2def(path):
 
     from os.path import basename, splitext
     dll_basename = basename(path)
-    dll_name, ext = splitext(dll_basename)
+    dll_name = dll_basename.split('.')[0]
     max_name_length = 0
     exports = []
     with open(path) as f:
@@ -42,7 +42,7 @@ def dllexports2def(path):
 # main()
 if __name__=='__main__':
     from sys import stderr, argv
-    print >>stderr, '=== dllexport2def.py ===\n'
+    print >>stderr, '=== dllexports2def.py ===\n'
 
     if len(argv) != 2:
         print >>stderr, 'Usage: python %s filename' % argv[0]

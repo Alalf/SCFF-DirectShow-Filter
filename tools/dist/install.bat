@@ -6,10 +6,10 @@ rem ===================================================================
 :_CHECK_RUNTIME
 rem ===================================================================
 reg query "%VC2012_REGKEY%" /v "Install" >NUL 2>&1
-if "%ErrorLevel%"=="1" goto _NO_VC2012_RUNTIME
+if ERRORLEVEL 1 goto _NO_VC2012_RUNTIME
 if "%PROCESSOR_ARCHITECTURE%"=="x86" goto _MAIN_X86
 reg query "%VC2012_WOW6432_REGKEY%" /v "Install" >NUL 2>&1
-if "%ErrorLevel%"=="1" goto _NO_VC2012_32BIT_RUNTIME
+if ERRORLEVEL 1 goto _NO_VC2012_32BIT_RUNTIME
 goto _MAIN_AMD64
 
 rem ===================================================================

@@ -140,7 +140,7 @@
     <LinkIncremental>true</LinkIncremental>
     <TargetName>$(ProjectName)_$(PlatformName)</TargetName>
     <IntDir>$(SolutionDir)\obj\$(ProjectName)\$(Configuration)_$(PlatformName)\</IntDir>
-    <OutDir>$(SolutionDir)\bin\$(Configuration)_$(PlatformName)\</OutDir>
+    <OutDir>$(SolutionDir)\bin\$(Configuration)_$(PlatformName)_xsplit\</OutDir>
     <ExtensionsToDeleteOnClean>*.ax;$(ExtensionsToDeleteOnClean)</ExtensionsToDeleteOnClean>
     <TargetExt>.ax</TargetExt>
   </PropertyGroup>
@@ -156,7 +156,7 @@
     <LinkIncremental>false</LinkIncremental>
     <TargetName>$(ProjectName)_$(PlatformName)</TargetName>
     <IntDir>$(SolutionDir)\obj\$(ProjectName)\$(Configuration)_$(PlatformName)\</IntDir>
-    <OutDir>$(SolutionDir)\bin\$(Configuration)_$(PlatformName)\</OutDir>
+    <OutDir>$(SolutionDir)\bin\$(Configuration)_$(PlatformName)_xsplit\</OutDir>
     <ExtensionsToDeleteOnClean>*.ax;$(ExtensionsToDeleteOnClean)</ExtensionsToDeleteOnClean>
     <TargetExt>.ax</TargetExt>
   </PropertyGroup>
@@ -181,10 +181,10 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)\obj\BaseClasses\$(Configuration)_$(PlatformName)\;$(SolutionDir)ext\ffmpeg\$(PlatformName)\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)\obj\BaseClasses\$(Configuration)_$(PlatformName)\;$(SolutionDir)ext\XSplit</AdditionalLibraryDirectories>
       <ModuleDefinitionFile>base\$(ProjectName)_$(PlatformName).def</ModuleDefinitionFile>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
-      <AdditionalDependencies>strmbasd.lib;Msvcrtd.lib;Winmm.lib;PSAPI.lib;swscale.lib;avcodec.lib;avutil.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>strmbasd.lib;Msvcrtd.lib;Winmm.lib;PSAPI.lib;swscale-2.lib;avcodec-54.lib;avutil-52.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
     <PreLinkEvent />
@@ -231,10 +231,10 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(SolutionDir)\obj\BaseClasses\$(Configuration)_$(PlatformName)\;$(SolutionDir)ext\ffmpeg\$(PlatformName)\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)\obj\BaseClasses\$(Configuration)_$(PlatformName)\;$(SolutionDir)ext\XSplit</AdditionalLibraryDirectories>
       <ModuleDefinitionFile>base\$(ProjectName)_$(PlatformName).def</ModuleDefinitionFile>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
-      <AdditionalDependencies>strmbase.lib;Msvcrt.lib;Winmm.lib;PSAPI.lib;swscale.lib;avcodec.lib;avutil.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>strmbase.lib;Msvcrt.lib;Winmm.lib;PSAPI.lib;swscale-2.lib;avcodec-54.lib;avutil-52.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
     <PreLinkEvent />

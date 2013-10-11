@@ -303,17 +303,10 @@ public partial class LayoutEdit
 
     // 現在選択中のIndexではない場合はそれに変更する
     if (hitElement != App.Profile.Current) {
-      /// @todo(me): O(n)が常に発生しているのでデバッグ表示を簡素化したい
-      Debug.WriteLine(string.Format("Changing CurrentIndex({0:D})...",
-                                    App.Profile.GetCurrentIndex()),
+      Debug.WriteLine("MouseDown: Changing Current ...",
                       "LayoutEdit");
 
       App.Profile.Current = hitElement;
-
-      /// @todo(me): O(n)が常に発生しているのでデバッグ表示を簡素化したい
-      Debug.WriteLine(string.Format("CurrentIndex was changed({0:D})",
-                                    App.Profile.GetCurrentIndex()),
-                      "LayoutEdit");
 
       //---------------------------------------------------------------
       // Notify self

@@ -31,10 +31,9 @@ public class SnapGuide {
 
   /// コンストラクタ
   public SnapGuide(Profile profile) {
-    var current = profile.Current;
     foreach (var layoutElement in profile.LayoutElements) {
       // currentにSnapさせる必要はない
-      if (layoutElement == current) continue;
+      if (layoutElement == profile.Current) continue;
 
       // Top/Leftは先に、Right/Bottomは後に
       verticalSnapGuides.AddFirst(layoutElement.BoundRelativeTop);

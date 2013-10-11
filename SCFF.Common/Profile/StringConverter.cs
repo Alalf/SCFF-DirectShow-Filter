@@ -43,6 +43,7 @@ public static class StringConverter {
 
   /// LayoutEdit用ヘッダー文字列
   /// @param layoutElement データ取得元のレイアウト要素
+  /// @param index レイアウト要素のインデックス
   /// @param isCurrent 現在選択中のLayoutElementか
   /// @param isDummy ダミープレビューサイズかどうか
   /// @param sampleWidth サンプルの幅

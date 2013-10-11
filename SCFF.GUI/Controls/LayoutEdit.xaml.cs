@@ -159,6 +159,7 @@ public partial class LayoutEdit
   /// 枠線とキャプションの描画
   /// @param dc 描画先
   /// @param layoutElement 描画対象
+  /// @param index 描画対象のインデックス
   private void DrawBorder(DrawingContext dc, ILayoutElementView layoutElement, int index) {
     // フレームサイズ
     var boundRect = layoutElement.GetBoundRect(

@@ -74,6 +74,7 @@ public class ValidationErrors : List<ValidationError> {
 public static class Validator {
   /// レイアウト要素単位での検証
   /// @param layoutElement 対象のレイアウト要素
+  /// @param index レイアウト要素のインデックス
   /// @return 検証エラーリスト
   private static ValidationErrors ValidateLayoutElement(ILayoutElementView layoutElement, int index) {
     var result = new ValidationErrors();

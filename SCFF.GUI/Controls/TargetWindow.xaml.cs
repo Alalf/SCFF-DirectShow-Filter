@@ -56,8 +56,8 @@ public partial class TargetWindow : UserControl, IBindingProfile {
         App.Profile.Current.SetWindow(nextTargetWindow);
         break;
       }
-      case WindowTypes.DesktopListView: {
-        App.Profile.Current.SetWindowToDesktopListView();
+      case WindowTypes.DXGI: {
+        App.Profile.Current.SetWindowToDXGI();
         break;
       }
       case WindowTypes.Desktop: {
@@ -86,12 +86,12 @@ public partial class TargetWindow : UserControl, IBindingProfile {
     this.ModifyProfile(WindowTypes.Desktop, UIntPtr.Zero);
   }
 
-  /// ListView: Click
+  /// DXGI: Click
   /// @param sender 使用しない
   /// @param e 使用しない
-  private void ListView_Click(object sender, System.Windows.RoutedEventArgs e) {
+  private void DXGI_Click(object sender, System.Windows.RoutedEventArgs e) {
     // Profileを更新
-    this.ModifyProfile(WindowTypes.DesktopListView, UIntPtr.Zero);
+    this.ModifyProfile(WindowTypes.DXGI, UIntPtr.Zero);
   }
 
   //-------------------------------------------------------------------

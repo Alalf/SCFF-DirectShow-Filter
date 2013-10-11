@@ -45,7 +45,7 @@ public static class Utilities {
         User32.GetClientRect(window, out windowRect);
         return new ClientRect(0, 0, windowRect.Right, windowRect.Bottom);
       }
-      case WindowTypes.DesktopListView: {
+      case WindowTypes.DXGI: {
         return new ClientRect(0, 0,
             User32.GetSystemMetrics(User32.SM_CXVIRTUALSCREEN),
             User32.GetSystemMetrics(User32.SM_CYVIRTUALSCREEN));
@@ -71,7 +71,7 @@ public static class Utilities {
         User32.ClientToScreen(window, ref windowPoint);
         return new ScreenPoint(windowPoint.X, windowPoint.Y);
       }
-      case WindowTypes.DesktopListView: {
+      case WindowTypes.DXGI: {
         //　VirtualScreen座標なので補正を戻す
         return new ScreenPoint(clientX + User32.GetSystemMetrics(User32.SM_XVIRTUALSCREEN),
                                clientY + User32.GetSystemMetrics(User32.SM_YVIRTUALSCREEN));
@@ -95,10 +95,10 @@ public static class Utilities {
 
 
   //===================================================================
-  // 特定のOSに依存しないDesktopListViewWindowの取得
+  // Windows 8/8.1 DXGI Desktop Duplication
   //===================================================================
 
-  /// 特定のOSに依存しないDesktopListViewWindowの取得
+  /// 特定のOSに依存しないDXGI用Windowの取得
   ///
   /// デスクトップのHWNDの階層関係は以下のとおり:
   /// - GetDesktopWindow()
@@ -112,7 +112,7 @@ public static class Utilities {
   ///   - EdgeUiInputWndClass (Win 8)
   ///
   /// パッと見る限り明らかに重いのはAero On時。EnumWindows必須。
-  public static UIntPtr DesktopListViewWindow {
+  public static UIntPtr DXGIWindow {
     get {
       UIntPtr progman = User32.FindWindowEx(UIntPtr.Zero,
           UIntPtr.Zero, "Progman", null);

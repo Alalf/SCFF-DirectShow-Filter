@@ -86,11 +86,11 @@ public partial class LayoutEdit
                               : BrushesAndPens.NormalBrush;
         break;
       }
-      case WindowTypes.DesktopListView: {
-        framePen  = isCurrent ? BrushesAndPens.CurrentDesktopListViewPen
-                              : BrushesAndPens.DesktopListViewPen;
-        textBrush = isCurrent ? BrushesAndPens.CurrentDesktopListViewBrush
-                              : BrushesAndPens.DesktopListViewBrush;
+      case WindowTypes.DXGI: {
+        framePen  = isCurrent ? BrushesAndPens.CurrentDXGIPen
+                              : BrushesAndPens.DXGIPen;
+        textBrush = isCurrent ? BrushesAndPens.CurrentDXGIBrush
+                              : BrushesAndPens.DXGIBrush;
         break;
       }
       case WindowTypes.Desktop: {

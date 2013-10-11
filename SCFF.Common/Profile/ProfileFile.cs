@@ -161,8 +161,8 @@ public class ProfileFile : TinyKeyValueFile {
             }
             break;
           }
-          case WindowTypes.DesktopListView: {
-            layoutElement.SetWindowToDesktopListView();
+          case WindowTypes.DXGI: {
+            layoutElement.SetWindowToDXGI();
             break;
           }
           case WindowTypes.Desktop: {
@@ -384,7 +384,7 @@ public class ProfileFile : TinyKeyValueFile {
     /// @warning 範囲チェックはEnum.IsDefinedを使ってはいけない
     switch (value) {
       case WindowTypes.Normal:
-      case WindowTypes.DesktopListView:
+      case WindowTypes.DXGI:
       case WindowTypes.Desktop: return true;
       default: return false;
     }

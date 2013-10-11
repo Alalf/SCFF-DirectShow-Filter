@@ -139,11 +139,11 @@ public class LayoutElement {
     this.rawData.Window = User32.GetDesktopWindow();
     this.additionalData.WindowCaption = "(Desktop)";
   }
-  /// @copydoc ILayoutElement::SetWindowToDesktopListView
-  public void SetWindowToDesktopListView() {
-    this.additionalData.WindowType = WindowTypes.DesktopListView;
-    this.rawData.Window = Utilities.DesktopListViewWindow;
-    this.additionalData.WindowCaption = "(DesktopListView)";
+  /// @copydoc ILayoutElement::SetWindowToDXGI
+  public void SetWindowToDXGI() {
+    this.additionalData.WindowType = WindowTypes.DXGI;
+    this.rawData.Window = Utilities.DXGIWindow;
+    this.additionalData.WindowCaption = "(DXGI)";
   }
 
   //=================================================================
@@ -392,7 +392,7 @@ public class LayoutElement {
     this.Fit = false;
     switch (this.WindowType) {
       case WindowTypes.Normal:
-      case WindowTypes.DesktopListView: {
+      case WindowTypes.DXGI: {
         // Screen->Client座標系変換
         this.ClippingXWithoutFit = nextScreenRect.X - boundScreenRect.X;
         this.ClippingYWithoutFit = nextScreenRect.Y - boundScreenRect.Y;

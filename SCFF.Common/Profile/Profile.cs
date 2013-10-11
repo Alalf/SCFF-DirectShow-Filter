@@ -29,7 +29,7 @@ using SCFF.Interprocess;
 /// Profile用Windowの種類
 public enum WindowTypes {
   Normal,           ///< 標準のWindow
-  DesktopListView,  ///< OS別デスクトップWindow
+  DXGI,             ///< DXGI Desktop Duplication
   Desktop,          ///< ルートWindow
 }
 

@@ -262,9 +262,9 @@ public partial class Area : UserControl, IBindingProfile {
       case WindowTypes.Normal: {
         // 更に現在のTypeによって色を分ける
         switch (currentWindowType) {
-          case WindowTypes.DesktopListView: {
-            border = BrushesAndPens.CurrentDesktopListViewBrush;
-            background = BrushesAndPens.TransparentDesktopListViewBrush;
+          case WindowTypes.DXGI: {
+            border = BrushesAndPens.CurrentDXGIBrush;
+            background = BrushesAndPens.TransparentDXGIBrush;
             break;
           }
           case WindowTypes.Desktop: {
@@ -281,9 +281,9 @@ public partial class Area : UserControl, IBindingProfile {
         }
         break;
       }
-      case WindowTypes.DesktopListView: {
-        border = BrushesAndPens.CurrentDesktopListViewBrush;
-        background = BrushesAndPens.TransparentDesktopListViewBrush;
+      case WindowTypes.DXGI: {
+        border = BrushesAndPens.CurrentDXGIBrush;
+        background = BrushesAndPens.TransparentDXGIBrush;
         break;
       }
       case WindowTypes.Desktop: {
@@ -335,8 +335,8 @@ public partial class Area : UserControl, IBindingProfile {
     App.Profile.Open();
     if (changeWindowType) {
       switch (nextWindowType) {
-        case WindowTypes.DesktopListView: {
-          App.Profile.Current.SetWindowToDesktopListView();
+        case WindowTypes.DXGI: {
+          App.Profile.Current.SetWindowToDXGI();
           break;
         }
         case WindowTypes.Desktop: {
@@ -368,9 +368,9 @@ public partial class Area : UserControl, IBindingProfile {
     this.CommonAreaSelect();
   }
 
-  /// ListView: Click
-  private void ListView_Click(object sender, RoutedEventArgs e) {
-    this.CommonAreaSelect(true, WindowTypes.DesktopListView);
+  /// DXGI: Click
+  private void DXGI_Click(object sender, RoutedEventArgs e) {
+    this.CommonAreaSelect(true, WindowTypes.DXGI);
   }
 
   /// Desktop: Click
@@ -503,17 +503,17 @@ public partial class Area : UserControl, IBindingProfile {
 
     switch (App.Profile.Current.WindowType) {
       case WindowTypes.Normal: {
-        this.ListView.IsEnabled = true;
+        this.DXGI.IsEnabled = true;
         this.Desktop.IsEnabled = true;
         break;
       }
       case WindowTypes.Desktop: {
-        this.ListView.IsEnabled = true;
+        this.DXGI.IsEnabled = true;
         this.Desktop.IsEnabled = false;
         break;
       }
-      case WindowTypes.DesktopListView: {
-        this.ListView.IsEnabled = false;
+      case WindowTypes.DXGI: {
+        this.DXGI.IsEnabled = false;
         this.Desktop.IsEnabled = true;
         break;
       }

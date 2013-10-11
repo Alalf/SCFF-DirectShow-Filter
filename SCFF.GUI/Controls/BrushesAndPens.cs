@@ -32,12 +32,12 @@ public static class BrushesAndPens {
   /// WindowTypes.Normalのブラシ
   public static readonly Brush NormalBrush;
 
-  /// WindowTypes.DesktopListViewでCurrent時のブラシ
-  public static readonly Brush CurrentDesktopListViewBrush;
-  /// WindowTypes.DesktopListViewの半透明ブラシ
-  public static readonly Brush TransparentDesktopListViewBrush;
-  /// WindowTypes.DesktopListViewのブラシ
-  public static readonly Brush DesktopListViewBrush;
+  /// WindowTypes.DXGIでCurrent時のブラシ
+  public static readonly Brush CurrentDXGIBrush;
+  /// WindowTypes.DXGIの半透明ブラシ
+  public static readonly Brush TransparentDXGIBrush;
+  /// WindowTypes.DXGIのブラシ
+  public static readonly Brush DXGIBrush;
 
   /// WindowTypes.DesktopでCurrent時のブラシ
   public static readonly Brush CurrentDesktopBrush;
@@ -57,10 +57,10 @@ public static class BrushesAndPens {
   public static readonly Pen CurrentNormalPen;
   /// WindowTypes.Normalのペン
   public static readonly Pen NormalPen;
-  /// WindowTypes.DesktopListViewでCurrent時のペン
-  public static readonly Pen CurrentDesktopListViewPen;
-  /// WindowTypes.DesktopListViewのペン
-  public static readonly Pen DesktopListViewPen;
+  /// WindowTypes.DXGIでCurrent時のペン
+  public static readonly Pen CurrentDXGIPen;
+  /// WindowTypes.DXGIのペン
+  public static readonly Pen DXGIPen;
   /// WindowTypes.DesktopでCurrent時のペン
   public static readonly Pen CurrentDesktopPen;
   /// WindowTypes.Desktopのペン
@@ -78,14 +78,14 @@ public static class BrushesAndPens {
         new SolidColorBrush(Color.FromRgb(0x7F, 0x44, 0x00));
     BrushesAndPens.NormalBrush.Freeze();
 
-    BrushesAndPens.CurrentDesktopListViewBrush = Brushes.DarkCyan;
-    BrushesAndPens.CurrentDesktopListViewBrush.Freeze();
-    BrushesAndPens.TransparentDesktopListViewBrush =
+    BrushesAndPens.CurrentDXGIBrush = Brushes.DarkCyan;
+    BrushesAndPens.CurrentDXGIBrush.Freeze();
+    BrushesAndPens.TransparentDXGIBrush =
         new SolidColorBrush(Color.FromArgb(0x99, 0x00, 0x8B, 0x8B));
-    BrushesAndPens.TransparentDesktopListViewBrush.Freeze();
-    BrushesAndPens.DesktopListViewBrush =
+    BrushesAndPens.TransparentDXGIBrush.Freeze();
+    BrushesAndPens.DXGIBrush =
         new SolidColorBrush(Color.FromRgb(0x00, 0x3F, 0x3F));
-    BrushesAndPens.DesktopListViewBrush.Freeze();
+    BrushesAndPens.DXGIBrush.Freeze();
 
     BrushesAndPens.CurrentDesktopBrush = Brushes.DarkGreen;
     BrushesAndPens.CurrentDesktopBrush.Freeze();
@@ -106,12 +106,12 @@ public static class BrushesAndPens {
     BrushesAndPens.NormalPen =
         new Pen(BrushesAndPens.NormalBrush, BrushesAndPens.dummyPenThickness);
     BrushesAndPens.NormalPen.Freeze();
-    BrushesAndPens.CurrentDesktopListViewPen =
-        new Pen(BrushesAndPens.CurrentDesktopListViewBrush, BrushesAndPens.dummyPenThickness);
-    BrushesAndPens.CurrentDesktopListViewPen.Freeze();
-    BrushesAndPens.DesktopListViewPen =
-        new Pen(BrushesAndPens.DesktopListViewBrush, BrushesAndPens.dummyPenThickness);
-    BrushesAndPens.DesktopListViewPen.Freeze();
+    BrushesAndPens.CurrentDXGIPen =
+        new Pen(BrushesAndPens.CurrentDXGIBrush, BrushesAndPens.dummyPenThickness);
+    BrushesAndPens.CurrentDXGIPen.Freeze();
+    BrushesAndPens.DXGIPen =
+        new Pen(BrushesAndPens.DXGIBrush, BrushesAndPens.dummyPenThickness);
+    BrushesAndPens.DXGIPen.Freeze();
     BrushesAndPens.CurrentDesktopPen =
         new Pen(BrushesAndPens.CurrentDesktopBrush, BrushesAndPens.dummyPenThickness);
     BrushesAndPens.CurrentDesktopPen.Freeze();

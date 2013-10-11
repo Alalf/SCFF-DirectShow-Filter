@@ -87,13 +87,13 @@ public static class BrushesAndPens {
         new SolidColorBrush(Color.FromRgb(0x00, 0x3F, 0x3F));
     BrushesAndPens.DXGIBrush.Freeze();
 
-    BrushesAndPens.CurrentDesktopBrush = Brushes.DarkGreen;
+    BrushesAndPens.CurrentDesktopBrush = Brushes.Green;
     BrushesAndPens.CurrentDesktopBrush.Freeze();
     BrushesAndPens.TransparentDesktopBrush =
-        new SolidColorBrush(Color.FromArgb(0x99, 0x00, 0x64, 0x00));
+        new SolidColorBrush(Color.FromArgb(0x99, 0x00, 0x80, 0x00));
     BrushesAndPens.TransparentDesktopBrush.Freeze();
     BrushesAndPens.DesktopBrush =
-        new SolidColorBrush(Color.FromRgb(0x00, 0x33, 0x00));
+        new SolidColorBrush(Color.FromRgb(0x00, 0x40, 0x00));
     BrushesAndPens.DesktopBrush.Freeze();
 
     BrushesAndPens.DropShadowBrush = Brushes.Black;

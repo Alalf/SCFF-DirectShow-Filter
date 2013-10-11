@@ -31,11 +31,12 @@ public static class StringConverter {
 
   /// LayoutParameter用ヘッダー文字列
   /// @param layoutElement データ取得元のレイアウト要素
+  /// @param index レイアウト要素のインデックス
   /// @param maxLength 文字列の長さの上限
   /// @return LayoutParameter用ヘッダー文字列
-  public static string GetHeaderStringForLayoutParameter(ILayoutElementView layoutElement, int maxLength) {
+  public static string GetHeaderStringForLayoutParameter(ILayoutElementView layoutElement, int index, int maxLength) {
     var header = string.Format("Layout {0:D}: {1}",
-                                layoutElement.Index + 1,
+                                index + 1,
                                 layoutElement.WindowCaption);
     return header.Substring(0, Math.Min(header.Length, maxLength));
   }
@@ -47,18 +48,18 @@ public static class StringConverter {
   /// @param sampleWidth サンプルの幅
   /// @param sampleHeight サンプルの高さ
   /// @return LayoutEdit用ヘッダー文字列
-  public static string GetHeaderStringForLayoutEdit(ILayoutElementView layoutElement, bool isCurrent, bool isDummy, int sampleWidth, int sampleHeight) {
+  public static string GetHeaderStringForLayoutEdit(ILayoutElementView layoutElement, int index, bool isCurrent, bool isDummy, int sampleWidth, int sampleHeight) {
     if (isCurrent && isDummy) {
-      return string.Format(" [{0}] {1}", layoutElement.Index + 1, layoutElement.WindowCaption);
+      return string.Format(" [{0}] {1}", index + 1, layoutElement.WindowCaption);
     } else if (isCurrent) {
       var boundRect = layoutElement.GetBoundRect(sampleWidth, sampleHeight);
       return string.Format(" [{0}] ({1}x{2}) {3}",
-          layoutElement.Index + 1,
+          index + 1,
           boundRect.Width,
           boundRect.Height,
           layoutElement.WindowCaption);
     } else {
-      return string.Format(" [{0}]", layoutElement.Index + 1);
+      return string.Format(" [{0}]", index + 1);
     }
   }
 

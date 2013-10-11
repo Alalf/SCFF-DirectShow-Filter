@@ -167,9 +167,9 @@ public partial class LayoutParameter
     }
 
     // 成功: そのまま書き換え(Textは変更しない)
-    App.Profile.Current.Open();
+    App.Profile.Open();
     this.SetBoundRelativeValue(target, value);
-    App.Profile.Current.Close();
+    App.Profile.Close();
 
     //---------------------------------------------------------------
     // Notify self
@@ -206,12 +206,12 @@ public partial class LayoutParameter
     if (result == BoundRelativeInputCorrector.TryResult.NothingChanged) return;
 
     // Update Profile
-    App.Profile.Current.Open();
+    App.Profile.Open();
     App.Profile.Current.BoundRelativeLeft = changed.Left;
     App.Profile.Current.BoundRelativeTop = changed.Top;
     App.Profile.Current.BoundRelativeRight = changed.Right;
     App.Profile.Current.BoundRelativeBottom = changed.Bottom;
-    App.Profile.Current.Close();
+    App.Profile.Close();
 
     //---------------------------------------------------------------
     // Notify self
@@ -381,7 +381,8 @@ public partial class LayoutParameter
 
     this.GroupBox.Header =
         StringConverter.GetHeaderStringForLayoutParameter(
-            App.Profile.CurrentView, LayoutParameter.maxHeaderLength);
+            App.Profile.CurrentView, LayoutParameter.maxHeaderLength,
+            App.Profile.GetCurrentIndex());
 
     this.OverwriteBoundRectText();
 

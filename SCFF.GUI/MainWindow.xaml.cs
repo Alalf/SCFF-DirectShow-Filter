@@ -726,11 +726,11 @@ public partial class MainWindow
     }
 
     // Profileの設定を変える
-    App.Profile.Current.Open();
+    App.Profile.Open();
     App.Profile.Current.FitBoundRelativeRect(
         App.RuntimeOptions.CurrentSampleWidth,
         App.RuntimeOptions.CurrentSampleHeight);
-    App.Profile.Current.Close();
+    App.Profile.Close();
 
     //-----------------------------------------------------------------
     // Notify self

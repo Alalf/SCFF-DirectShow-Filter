@@ -48,7 +48,7 @@ public partial class TargetWindow : UserControl, IBindingProfile {
 
   /// プロファイルを更新
   private void ModifyProfile(WindowTypes nextWindowType, UIntPtr nextTargetWindow) {
-    App.Profile.Current.Open();
+    App.Profile.Open();
 
     // Window
     switch (nextWindowType) {
@@ -68,7 +68,7 @@ public partial class TargetWindow : UserControl, IBindingProfile {
     }
     App.Profile.Current.Fit = true;
     App.Profile.Current.ClearBackupParameters();
-    App.Profile.Current.Close();
+    App.Profile.Close();
 
     //-----------------------------------------------------------------
     // Notify self

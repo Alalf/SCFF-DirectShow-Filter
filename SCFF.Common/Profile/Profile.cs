@@ -36,81 +36,6 @@ public enum WindowTypes {
 /// レイアウト設定などをまとめたプロファイル
 public partial class Profile {
   //===================================================================
-  // コンストラクタ
-  //===================================================================
-
-  /// コンストラクタ
-  /// @warning コンストラクタでは実際の値の読み込みなどは行わない
-  public Profile() {
-    // カーソルの初期化
-    const int length = Interprocess.MaxComplexLayoutElements;
-    for (int i = 0; i < length; ++i) {
-      this.layoutElements[i] = new LayoutElement(this, i);
-    }
-  }
-
-  //===================================================================
-  // LayoutElementsの一括更新
-  //===================================================================
-
-  /// 全てのレイアウト要素のBackupParametersを更新する
-  public void UpdateBackupParameters() {
-    for (int i = 0; i < this.LayoutElementCount; ++i) {
-      var layoutElement = this.layoutElements[i];
-      if (layoutElement.WindowType != WindowTypes.Normal) continue;
-      Debug.Assert(layoutElement.IsWindowValid);
-      layoutElement.UpdateBackupParameters();
-    }
-  }
-  /// 全てのレイアウト要素のBackupParametersを復元する
-  public void RestoreBackupParameters() {
-    for (int i = 0; i < this.LayoutElementCount; ++i) {
-      var layoutElement = this.layoutElements[i];
-      if (layoutElement.WindowType == WindowTypes.Normal &&
-          !layoutElement.IsWindowValid) {
-        layoutElement.RestoreBackupParameters();
-      }
-    }
-  }
-
-  //===================================================================
-  // 変換
-  //===================================================================
-
-  /// サンプルの幅と高さを指定してmessageを生成する
-  /// @param sampleWidth サンプルの幅
-  /// @param sampleHeight サンプルの高さ
-  /// @return 共有メモリにそのまま設定可能なMessage
-  public Message ToMessage(int sampleWidth, int sampleHeight) {
-    // インスタンス生成
-    Message result;
-    result.LayoutParameters = new LayoutParameter[Interprocess.MaxComplexLayoutElements];
-
-    // 更新
-    result.LayoutType = (int)this.LayoutType;
-    result.LayoutElementCount = this.LayoutElementCount;
-    result.Timestamp = this.Timestamp;
-    for (int i = 0; i < this.LayoutElementCount; ++i) {
-      // Bound*とClipping*以外のデータをコピー
-      result.LayoutParameters[i] = this.layoutElementDatabase[i].ToLayoutParameter();
-
-      // Bound*
-      var boundRect = this.layoutElements[i].GetBoundRect(sampleWidth, sampleHeight);
-      result.LayoutParameters[i].BoundX = boundRect.X;
-      result.LayoutParameters[i].BoundY = boundRect.Y;
-      result.LayoutParameters[i].BoundWidth = boundRect.Width;
-      result.LayoutParameters[i].BoundHeight = boundRect.Height;
-
-      // Clipping*
-      result.LayoutParameters[i].ClippingX = this.layoutElements[i].ClippingXWithFit;
-      result.LayoutParameters[i].ClippingY = this.layoutElements[i].ClippingYWithFit;
-      result.LayoutParameters[i].ClippingWidth = this.layoutElements[i].ClippingWidthWithFit;
-      result.LayoutParameters[i].ClippingHeight = this.layoutElements[i].ClippingHeightWithFit;
-    }
-    return result;
-  }
-
-  //===================================================================
   // 外部インタフェース
   //===================================================================
 
@@ -133,54 +58,66 @@ public partial class Profile {
   //-------------------------------------------------------------------
 
   /// 現在選択中のレイアウト要素
-  public int CurrentIndex { get; set; }
+  public LayoutElement CurrentElement { get; set; }
+  
 
   /// 現在選択中のレイアウト要素を参照モードで返す
   public ILayoutElementView CurrentView {
-    get { return this.layoutElements[this.CurrentIndex]; }
+    get { return this.CurrentElement; }
   }
 
   /// 現在選択中のレイアウト要素を編集モードで返す
   public ILayoutElement Current {
-    get { return this.layoutElements[this.CurrentIndex]; }
+    get { return this.CurrentElement; }
+  }
+
+  /// レイアウト要素編集開始
+  public void Open() {
+    // nop
+  }
+
+  /// レイアウト要素編集終了
+  public void Close() {
+    this.UpdateTimestamp();
+    this.RaiseChanged();
   }
 
   /// foreach用Enumerator(参照モード)を返す
   public IEnumerator<ILayoutElementView> GetEnumerator() {
-    for (int i = 0; i < this.LayoutElementCount; ++i) {
-      yield return this.layoutElements[i];
+    foreach (var layoutElement in this.layoutElements) {
+      yield return layoutElement;
     }
   }
 
-  /// レイアウト要素を参照・編集モードで返す
-  internal LayoutElement GetLayoutElement(int index) {
-    return this.layoutElements[index];
+  //-------------------------------------------------------------------
+  // カーソル(インデックス)
+  //-------------------------------------------------------------------
+
+  /// 現在選択中のレイアウト要素のインデックスを返す
+  public int GetCurrentIndex() {
+    return this.layoutElements.IndexOf(this.CurrentElement);
+  }
+
+  /// 指定されたインデックスのレイアウト要素を選択する
+  public void SetCurrentByIndex(int next) {
+    /// @todo(me): 範囲チェック
+    this.CurrentElement = this.layoutElements[next];
   }
 
   //-------------------------------------------------------------------
   // デフォルトに戻す
   //-------------------------------------------------------------------
 
-  /// メンバ配列を空にする
-  /// @pre メンバ配列自体は生成済み(not null)
-  private void ClearArrays() {
-    /// 配列をクリア
-    const int length = Interprocess.MaxComplexLayoutElements;
-    Array.Clear(this.layoutElementDatabase, 0, length);
-  }
-
   /// デフォルトに戻す
   /// @post タイムスタンプ更新するがRaiseChangedは発生させない
   public void RestoreDefault() {
-    this.ClearArrays();
-    
-    // Profileのプロパティの初期化
-    this.LayoutElementCount = 1;
-    this.UpdateTimestamp();
+    this.layoutElements.Clear();
+    var newCurrent = new LayoutElement(0);
+    this.layoutElements.Add(newCurrent);
+    this.CurrentElement = newCurrent;
 
-    // currentの生成
-    this.CurrentIndex = 0;
-    this.Current.RestoreDefault();
+    // Profileのプロパティの初期化
+    this.UpdateTimestamp();
   }
 
   //-------------------------------------------------------------------
@@ -195,14 +132,10 @@ public partial class Profile {
   /// レイアウト要素を追加
   /// @post タイムスタンプ更新
   public void Add() {
-    var nextIndex = this.LayoutElementCount;
-    ++this.LayoutElementCount;
+    this.CurrentElement = new LayoutElement(this.LayoutElementCount);
+    this.layoutElements.Add(this.CurrentElement);
+
     this.UpdateTimestamp();
-
-    // currentを新たに生成したものに切り替える
-    this.CurrentIndex = nextIndex;
-    this.Current.RestoreDefault();
-
     this.RaiseChanged();
   }
 
@@ -218,35 +151,73 @@ public partial class Profile {
   /// 現在選択中のレイアウト要素を削除
   /// @post タイムスタンプ更新
   public void RemoveCurrent() {
-    // ややこしいので良く考えて書くこと！
-    // とりあえず一番簡単なのは全部コピーして全部に書き戻すことだろう
-    // また、全体的にスレッドセーフではないとおもうので何とかしたいところ
-    var newDatabase = new List<LayoutElementData>();
-
-    var removedIndex = this.CurrentIndex;
-    for (int i = 0; i < this.LayoutElementCount; ++i) {
-      if (i != removedIndex) {
-        newDatabase.Add(this.layoutElementDatabase[i]);
-      }
-    }
-
-    // 後は配列を消去した上で書き戻す
-    this.ClearArrays();
-    newDatabase.CopyTo(this.layoutElementDatabase);
-
-    // Profileメンバの更新
-    --this.LayoutElementCount;
-    this.UpdateTimestamp();
+    var removedIndex = this.GetCurrentIndex();
+    this.layoutElements.Remove(this.CurrentElement);
 
     // currentIndexを新しい場所に移して終了
     if (removedIndex < this.LayoutElementCount) {
-      // なにもしない
+      this.CurrentElement = this.layoutElements[removedIndex];
     } else {
-      this.CurrentIndex = removedIndex - 1;
+      this.CurrentElement = this.layoutElements[removedIndex - 1];
     }
 
     // 変更イベントの発生
+    this.UpdateTimestamp();
     this.RaiseChanged();
+  }
+
+  //-------------------------------------------------------------------
+  // LayoutElementsの一括更新
+  //-------------------------------------------------------------------
+
+  /// 全てのレイアウト要素のBackupParametersを更新する
+  public void UpdateBackupParameters() {
+    foreach (var layoutElement in this.layoutElements) {
+      if (layoutElement.WindowType != WindowTypes.Normal) continue;
+      Debug.Assert(layoutElement.IsWindowValid);
+      layoutElement.UpdateBackupParameters();
+    }
+  }
+  /// 全てのレイアウト要素のBackupParametersを復元する
+  public void RestoreBackupParameters() {
+    foreach (var layoutElement in this.layoutElements) {
+      if (layoutElement.WindowType == WindowTypes.Normal &&
+          !layoutElement.IsWindowValid) {
+        layoutElement.RestoreBackupParameters();
+      }
+    }
+  }
+
+  /// LayoutElementsを一気に更新する
+  internal void SetLayoutElements(List<LayoutElement> layoutElements, LayoutElement current) {
+    this.layoutElements = layoutElements;
+    this.CurrentElement = current;
+  }
+
+  //-------------------------------------------------------------------
+  // 変換
+  //-------------------------------------------------------------------
+
+  /// サンプルの幅と高さを指定してmessageを生成する
+  /// @param sampleWidth サンプルの幅
+  /// @param sampleHeight サンプルの高さ
+  /// @return 共有メモリにそのまま設定可能なMessage
+  public Message ToMessage(int sampleWidth, int sampleHeight) {
+    // インスタンス生成
+    Message result;
+    result.LayoutParameters = new LayoutParameter[Interprocess.MaxComplexLayoutElements];
+
+    // 更新
+    result.LayoutType = (int)this.LayoutType;
+    result.LayoutElementCount = this.LayoutElementCount;
+    result.Timestamp = this.Timestamp;
+    int index = 0;
+    foreach (var layoutElement in this.layoutElements) {
+      // Bound*とClipping*以外のデータをコピー
+      result.LayoutParameters[index] = layoutElement.ToLayoutParameter(sampleWidth, sampleHeight);
+      ++index;
+    }
+    return result;
   }
 
   //===================================================================
@@ -256,8 +227,9 @@ public partial class Profile {
   /// タイムスタンプ
   public Int64 Timestamp { get; private set; }
   /// レイアウト要素数
-  public int LayoutElementCount { get; set; }
-
+  public int LayoutElementCount { 
+    get { return this.layoutElements.Count; }
+  }
   /// レイアウトの種類
   public LayoutTypes LayoutType {
     get { return this.LayoutElementCount == 1 ? LayoutTypes.NativeLayout : LayoutTypes.ComplexLayout; }
@@ -276,12 +248,7 @@ public partial class Profile {
   // フィールド
   //===================================================================
 
-  /// カーソルのキャッシュ
-  private readonly LayoutElement[] layoutElements =
-      new LayoutElement[Interprocess.MaxComplexLayoutElements];
-
-  /// レイアウトパラメータをまとめた配列
-  private readonly LayoutElementData[] layoutElementDatabase =
-      new LayoutElementData[Interprocess.MaxComplexLayoutElements];
+  /// レイアウトパラメータをまとめたリスト
+  private List<LayoutElement> layoutElements = new List<LayoutElement>();
 }
 }   // namespace SCFF.Common.Profile

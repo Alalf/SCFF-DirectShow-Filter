@@ -15,13 +15,13 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file SCFF.Common/Profile/LayoutElementData.cs
-/// @copydoc SCFF::Common::Profile::LayoutElementData
+/// @file SCFF.Common/Profile/AdditionalLayoutParameter.cs
+/// @copydoc SCFF::Common::Profile::AdditionalLayoutParameter
 
 namespace SCFF.Common.Profile {
 
 /// レイアウト要素に必要なデータ(SCFF.Interprocess.LayoutParameterに＋α)
-class LayoutElementData : InternalLayoutParameter {
+class AdditionalLayoutParameter {
   /// Windowタイプ: 標準状態 or 最小化 or 最大化
   public WindowTypes WindowType { get; set; }
   /// Window内容を示す文字列(≒Class名)

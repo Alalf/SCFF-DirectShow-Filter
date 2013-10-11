@@ -123,7 +123,7 @@ public static class HitTest {
 
   /// ヒットテスト
   public static bool TryHitTest(Profile profile, RelativePoint mousePoint,
-      out int hitIndex, out HitModes hitMode) {
+      out ILayoutElementView hitElement, out HitModes hitMode) {
     // 計算途中の結果をまとめるスタック
     var moveStack = new Stack<ILayoutElementView>();
     var sizeStack = new Stack<ILayoutElementView>();
@@ -148,7 +148,7 @@ public static class HitTest {
     foreach (var layoutElement in sizeStack) {
       // 見つかり次第終了
       hitMode = HitTest.GetHitMode(layoutElement, mousePoint);
-      hitIndex = layoutElement.Index;
+      hitElement = layoutElement;
       return true;
     }
 
@@ -156,11 +156,11 @@ public static class HitTest {
     foreach (var layoutElement in moveStack) {
       // 見つかり次第終了
       hitMode = HitModes.Move;
-      hitIndex = layoutElement.Index;
+      hitElement = layoutElement;
       return true;
     }
 
-    hitIndex = -1;
+    hitElement = null;
     hitMode = HitModes.Neutral;
     return false;
   }

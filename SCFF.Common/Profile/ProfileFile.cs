@@ -21,6 +21,7 @@
 namespace SCFF.Common.Profile {
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using SCFF.Interprocess;
@@ -51,9 +52,9 @@ public class ProfileFile : TinyKeyValueFile {
       using (var writer = new StreamWriter(path)) {
         writer.WriteLine(Constants.ProfileHeader);
         writer.WriteLine("LayoutElementCount={0}", this.profile.LayoutElementCount);
-        writer.WriteLine("CurrentIndex={0}", this.profile.CurrentIndex);
+        writer.WriteLine("CurrentIndex={0}", this.profile.GetCurrentIndex());
+        int index = 0;
         foreach (var layoutElement in this.profile) {
-          var index = layoutElement.Index;
           writer.WriteLine("[LayoutElement{0}]", index);
 
           // TargetWindow
@@ -92,6 +93,8 @@ public class ProfileFile : TinyKeyValueFile {
           writer.WriteLine("BackupScreenClippingY{0}={1}", index, layoutElement.BackupScreenClippingY);
           writer.WriteLine("BackupClippingWidth{0}={1}", index, layoutElement.BackupClippingWidth);
           writer.WriteLine("BackupClippingHeight{0}={1}", index, layoutElement.BackupClippingHeight);
+
+          ++index;
         }
         return true;
       }
@@ -121,36 +124,39 @@ public class ProfileFile : TinyKeyValueFile {
     bool boolValue;
 
     // Dictionaryを調べながら値を設定する
-    var originalLayoutElementCount = this.profile.LayoutElementCount;
+    var layoutElements = new List<LayoutElement>();
+    int layoutElementCount = 0;
+    int currentIndex = 0;
+    LayoutElement current = null;
+
     if (this.TryGetInt("LayoutElementCount", out intValue)) {
       // 範囲チェック
       if (intValue < 1)
         intValue = 1;
       if (Interprocess.MaxComplexLayoutElements < intValue)
         intValue = Interprocess.MaxComplexLayoutElements;
-      this.profile.LayoutElementCount = intValue;
+      layoutElementCount = intValue;
     }
 
     if (this.TryGetInt("CurrentIndex", out intValue)) {
       //　範囲チェック
       if (intValue < 0)
         intValue = 0;
-      if (this.profile.LayoutElementCount - 1 < intValue)
-        intValue = this.profile.LayoutElementCount - 1;
-      this.profile.CurrentIndex = intValue;
+      if (layoutElementCount - 1 < intValue)
+        intValue = layoutElementCount - 1;
+      currentIndex = intValue;
     }
     
-    for (int i = 0; i < this.profile.LayoutElementCount; ++i) {
-      var layoutElement = this.profile.GetLayoutElement(i);
-      layoutElement.RestoreDefault();
+    for (int index = 0; index < layoutElementCount; ++index) {
+      var layoutElement = new LayoutElement(index);
 
       // TargetWindow
       WindowTypes windowTypes;
-      if (this.TryGetWindowTypes("WindowType" + i, out windowTypes)) {
+      if (this.TryGetWindowTypes("WindowType" + index, out windowTypes)) {
         switch (windowTypes) {
           case WindowTypes.Normal: {
             UIntPtr uintptrValue;
-            if (this.TryGetUIntPtr("Window" + i, out uintptrValue)) {
+            if (this.TryGetUIntPtr("Window" + index, out uintptrValue)) {
               layoutElement.SetWindow(uintptrValue);
             }
             break;
@@ -167,22 +173,22 @@ public class ProfileFile : TinyKeyValueFile {
       }
 
       // Area
-      if (this.TryGetBool("Fit" + i, out boolValue)) {
+      if (this.TryGetBool("Fit" + index, out boolValue)) {
         layoutElement.Fit = boolValue;
       }
-      if (this.TryGetInt("ClippingXWithoutFit" + i, out intValue)) {
+      if (this.TryGetInt("ClippingXWithoutFit" + index, out intValue)) {
         layoutElement.ClippingXWithoutFit = intValue;
       }
-      if (this.TryGetInt("ClippingYWithoutFit" + i, out intValue)) {
+      if (this.TryGetInt("ClippingYWithoutFit" + index, out intValue)) {
         layoutElement.ClippingYWithoutFit = intValue;
       }
-      if (this.TryGetInt("ClippingWidthWithoutFit" + i, out intValue)) {
+      if (this.TryGetInt("ClippingWidthWithoutFit" + index, out intValue)) {
         // 範囲チェック
         if (intValue < Constants.MinimumClippingSize)
           intValue = Constants.MinimumClippingSize;
         layoutElement.ClippingWidthWithoutFit = intValue;
       }
-      if (this.TryGetInt("ClippingHeightWithoutFit" + i, out intValue)) {
+      if (this.TryGetInt("ClippingHeightWithoutFit" + index, out intValue)) {
         // 範囲チェック
         if (intValue < Constants.MinimumClippingSize)
           intValue = Constants.MinimumClippingSize;
@@ -190,64 +196,64 @@ public class ProfileFile : TinyKeyValueFile {
       }
 
       // Options
-      if (this.TryGetBool("ShowCursor" + i, out boolValue)) {
+      if (this.TryGetBool("ShowCursor" + index, out boolValue)) {
         layoutElement.ShowCursor = boolValue;
       }
-      if (this.TryGetBool("ShowLayeredWindow" + i, out boolValue)) {
+      if (this.TryGetBool("ShowLayeredWindow" + index, out boolValue)) {
         layoutElement.ShowLayeredWindow = boolValue;
       }
-      if (this.TryGetBool("Stretch" + i, out boolValue)) {
+      if (this.TryGetBool("Stretch" + index, out boolValue)) {
         layoutElement.Stretch = boolValue;
       }
-      if (this.TryGetBool("KeepAspectRatio" + i, out boolValue)) {
+      if (this.TryGetBool("KeepAspectRatio" + index, out boolValue)) {
         layoutElement.KeepAspectRatio = boolValue;
       }
       RotateDirections rotateDirections;
-      if (this.TryGetRotateDirections("RotateDirection" + i, out rotateDirections)) {
+      if (this.TryGetRotateDirections("RotateDirection" + index, out rotateDirections)) {
         layoutElement.RotateDirection = rotateDirections;
       }
       // ResizeMethod
       SWScaleFlags swscaleFlags;
-      if (this.TryGetSWScaleFlags("SWScaleFlags" + i, out swscaleFlags)) {
+      if (this.TryGetSWScaleFlags("SWScaleFlags" + index, out swscaleFlags)) {
         layoutElement.SWScaleFlags = swscaleFlags;
       }
-      if (this.TryGetBool("SWScaleAccurateRnd" + i, out boolValue)) {
+      if (this.TryGetBool("SWScaleAccurateRnd" + index, out boolValue)) {
         layoutElement.SWScaleAccurateRnd = boolValue;
       }
-      if (this.TryGetBool("SWScaleIsFilterEnabled" + i, out boolValue)) {
+      if (this.TryGetBool("SWScaleIsFilterEnabled" + index, out boolValue)) {
         layoutElement.SWScaleIsFilterEnabled = boolValue;
       }
-      if (this.TryGetFloat("SWScaleLumaGBlur" + i, out floatValue)) {
+      if (this.TryGetFloat("SWScaleLumaGBlur" + index, out floatValue)) {
         SWScaleInputCorrector.TryChange(SWScaleInputCorrector.Names.LumaGBlur,
                                         floatValue,
                                         out floatValue);
         layoutElement.SWScaleLumaGBlur = floatValue;
       }
-      if (this.TryGetFloat("SWScaleChromaGBlur" + i, out floatValue)) {
+      if (this.TryGetFloat("SWScaleChromaGBlur" + index, out floatValue)) {
         SWScaleInputCorrector.TryChange(SWScaleInputCorrector.Names.ChromaGBlur,
                                         floatValue,
                                         out floatValue);
         layoutElement.SWScaleChromaGBlur = floatValue;
       }
-      if (this.TryGetFloat("SWScaleLumaSharpen" + i, out floatValue)) {
+      if (this.TryGetFloat("SWScaleLumaSharpen" + index, out floatValue)) {
         SWScaleInputCorrector.TryChange(SWScaleInputCorrector.Names.LumaSharpen,
                                         floatValue,
                                         out floatValue);
         layoutElement.SWScaleLumaSharpen = floatValue;
       }
-      if (this.TryGetFloat("SWScaleChromaSharpen" + i, out floatValue)) {
+      if (this.TryGetFloat("SWScaleChromaSharpen" + index, out floatValue)) {
         SWScaleInputCorrector.TryChange(SWScaleInputCorrector.Names.ChromaSharpen,
                                         floatValue,
                                         out floatValue);
         layoutElement.SWScaleChromaSharpen = floatValue;
       }
-      if (this.TryGetFloat("SWScaleChromaHShift" + i, out floatValue)) {
+      if (this.TryGetFloat("SWScaleChromaHShift" + index, out floatValue)) {
         SWScaleInputCorrector.TryChange(SWScaleInputCorrector.Names.ChromaHShift,
                                         floatValue,
                                         out floatValue);
         layoutElement.SWScaleChromaHShift = floatValue;
       }
-      if (this.TryGetFloat("SWScaleChromaVShift" + i, out floatValue)) {
+      if (this.TryGetFloat("SWScaleChromaVShift" + index, out floatValue)) {
         SWScaleInputCorrector.TryChange(SWScaleInputCorrector.Names.ChromaVShift,
                                         floatValue,
                                         out floatValue);
@@ -255,16 +261,16 @@ public class ProfileFile : TinyKeyValueFile {
       }
 
       // LayoutParameter
-      if (this.TryGetDouble("BoundRelativeLeft" + i, out doubleValue)) {
+      if (this.TryGetDouble("BoundRelativeLeft" + index, out doubleValue)) {
         layoutElement.BoundRelativeLeft = doubleValue;
       }
-      if (this.TryGetDouble("BoundRelativeTop" + i, out doubleValue)) {
+      if (this.TryGetDouble("BoundRelativeTop" + index, out doubleValue)) {
         layoutElement.BoundRelativeTop = doubleValue;
       }
-      if (this.TryGetDouble("BoundRelativeRight" + i, out doubleValue)) {
+      if (this.TryGetDouble("BoundRelativeRight" + index, out doubleValue)) {
         layoutElement.BoundRelativeRight = doubleValue;
       }
-      if (this.TryGetDouble("BoundRelativeBottom" + i, out doubleValue)) {
+      if (this.TryGetDouble("BoundRelativeBottom" + index, out doubleValue)) {
         layoutElement.BoundRelativeBottom = doubleValue;
       }
       var boundRelativeRect = BoundRelativeInputCorrector.Correct(layoutElement);
@@ -274,28 +280,35 @@ public class ProfileFile : TinyKeyValueFile {
       layoutElement.BoundRelativeBottom = boundRelativeRect.Bottom;
 
       // Backup
-      if (this.TryGetBool("HasBackedUp" + i, out boolValue)) {
+      if (this.TryGetBool("HasBackedUp" + index, out boolValue)) {
         layoutElement.HasBackedUp = boolValue;
       }
-      if (this.TryGetInt("BackupScreenClippingX" + i, out intValue)) {
+      if (this.TryGetInt("BackupScreenClippingX" + index, out intValue)) {
         layoutElement.BackupScreenClippingX = intValue;
       }
-      if (this.TryGetInt("BackupScreenClippingY" + i, out intValue)) {
+      if (this.TryGetInt("BackupScreenClippingY" + index, out intValue)) {
         layoutElement.BackupScreenClippingY = intValue;
       }
-      if (this.TryGetInt("BackupClippingWidth" + i, out intValue)) {
+      if (this.TryGetInt("BackupClippingWidth" + index, out intValue)) {
         // 範囲チェック
         if (intValue < Constants.MinimumClippingSize)
           intValue = Constants.MinimumClippingSize;
         layoutElement.BackupClippingWidth = intValue;
       }
-      if (this.TryGetInt("BackupClippingHeight" + i, out intValue)) {
+      if (this.TryGetInt("BackupClippingHeight" + index, out intValue)) {
         // 範囲チェック
         if (intValue < Constants.MinimumClippingSize)
           intValue = Constants.MinimumClippingSize;
         layoutElement.BackupClippingHeight = intValue;
       }
+
+      layoutElements.Add(layoutElement);
+      if (index == currentIndex) {
+        current = layoutElement;
+      }
     }
+
+    this.profile.SetLayoutElements(layoutElements, current);
 
     return true;
   }

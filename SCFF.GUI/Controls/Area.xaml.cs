@@ -165,9 +165,9 @@ public partial class Area : UserControl, IBindingProfile {
     }
 
     // 成功: そのまま書き換え(Textは変更しない)
-    App.Profile.Current.Open();
+    App.Profile.Open();
     this.SetClippingValue(target, value);
-    App.Profile.Current.Close();
+    App.Profile.Close();
 
     //---------------------------------------------------------------
     // Notify self
@@ -204,12 +204,12 @@ public partial class Area : UserControl, IBindingProfile {
     if (result == ClippingInputCorrector.TryResult.NothingChanged) return;
 
     // Update Profile
-    App.Profile.Current.Open();
+    App.Profile.Open();
     App.Profile.Current.ClippingXWithoutFit = changed.X;
     App.Profile.Current.ClippingWidthWithoutFit = changed.Width;
     App.Profile.Current.ClippingYWithoutFit = changed.Y;
     App.Profile.Current.ClippingHeightWithoutFit = changed.Height;
-    App.Profile.Current.Close();
+    App.Profile.Close();
 
     //---------------------------------------------------------------
     // Notify self
@@ -240,9 +240,9 @@ public partial class Area : UserControl, IBindingProfile {
   private void Fit_Click(object sender, RoutedEventArgs e) {
     if (!this.Fit.IsChecked.HasValue) return;
 
-    App.Profile.Current.Open();
+    App.Profile.Open();
     App.Profile.Current.Fit = (bool)this.Fit.IsChecked;
-    App.Profile.Current.Close();
+    App.Profile.Close();
 
     //-----------------------------------------------------------------
     // Notify self
@@ -332,7 +332,7 @@ public partial class Area : UserControl, IBindingProfile {
         (int)dialog.Left, (int)dialog.Top, (int)dialog.Width, (int)dialog.Height);
 
     // Profile更新
-    App.Profile.Current.Open();
+    App.Profile.Open();
     if (changeWindowType) {
       switch (nextWindowType) {
         case WindowTypes.DesktopListView: {
@@ -348,7 +348,7 @@ public partial class Area : UserControl, IBindingProfile {
     }
     App.Profile.Current.SetClippingRectByScreenRect(nextScreenRect);
     App.Profile.Current.ClearBackupParameters();
-    App.Profile.Current.Close();
+    App.Profile.Close();
 
     //-----------------------------------------------------------------
     // Notify self

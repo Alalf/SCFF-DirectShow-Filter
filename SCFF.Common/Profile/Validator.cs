@@ -75,19 +75,19 @@ public static class Validator {
   /// レイアウト要素単位での検証
   /// @param layoutElement 対象のレイアウト要素
   /// @return 検証エラーリスト
-  private static ValidationErrors ValidateLayoutElement(ILayoutElementView layoutElement) {
+  private static ValidationErrors ValidateLayoutElement(ILayoutElementView layoutElement, int index) {
     var result = new ValidationErrors();
     
     // TargetWindow
     if (!layoutElement.IsWindowValid) {
-      var message = string.Format("Layout{0}: Specified window is invalid", layoutElement.Index + 1);
+      var message = string.Format("Layout{0}: Specified window is invalid", index + 1);
       result.AddTargetWindowError(message);
       return result;
     }
 
     // Area
     if (!layoutElement.IsClippingParametersValid) {
-      var message = string.Format("Layout{0}: Clipping parameters are invalid", layoutElement.Index + 1);
+      var message = string.Format("Layout{0}: Clipping parameters are invalid", index + 1);
       result.AddAreaError(message);
       return result;
     }
@@ -100,8 +100,10 @@ public static class Validator {
   /// @return 検証エラーリスト
   public static ValidationErrors ValidateProfile(Profile profile) {
     var result = new ValidationErrors();
+    int index = 0;
     foreach (var layoutElement in profile) {
-      result.AddRange(Validator.ValidateLayoutElement(layoutElement));
+      result.AddRange(Validator.ValidateLayoutElement(layoutElement, index));
+      ++index;
     }
     return result;
   }

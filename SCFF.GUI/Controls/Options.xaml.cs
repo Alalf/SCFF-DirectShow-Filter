@@ -49,9 +49,9 @@ public partial class Options : UserControl, IBindingProfile {
   private void ShowCursor_Click(object sender, RoutedEventArgs e) {
     if (!this.ShowCursor.IsChecked.HasValue) return;
 
-    App.Profile.Current.Open();
+    App.Profile.Open();
     App.Profile.Current.ShowCursor = (bool)this.ShowCursor.IsChecked;
-    App.Profile.Current.Close();
+    App.Profile.Close();
     
     //-----------------------------------------------------------------
     // Notify self
@@ -66,9 +66,9 @@ public partial class Options : UserControl, IBindingProfile {
   private void ShowLayeredWindow_Click(object sender, RoutedEventArgs e) {
     if (!this.ShowLayeredWindow.IsChecked.HasValue) return;
 
-    App.Profile.Current.Open();
+    App.Profile.Open();
     App.Profile.Current.ShowLayeredWindow = (bool)this.ShowLayeredWindow.IsChecked;
-    App.Profile.Current.Close();
+    App.Profile.Close();
 
     //-----------------------------------------------------------------
     // Notify self
@@ -83,9 +83,9 @@ public partial class Options : UserControl, IBindingProfile {
   private void KeepAspectRatio_Click(object sender, RoutedEventArgs e) {
     if (!this.KeepAspectRatio.IsChecked.HasValue) return;
 
-    App.Profile.Current.Open();
+    App.Profile.Open();
     App.Profile.Current.KeepAspectRatio = (bool)this.KeepAspectRatio.IsChecked;
-    App.Profile.Current.Close();
+    App.Profile.Close();
 
     //-----------------------------------------------------------------
     // Notify self
@@ -100,9 +100,9 @@ public partial class Options : UserControl, IBindingProfile {
   private void Stretch_Click(object sender, RoutedEventArgs e) {
     if (!this.Stretch.IsChecked.HasValue) return;
  
-    App.Profile.Current.Open();
+    App.Profile.Open();
     App.Profile.Current.Stretch = (bool)this.Stretch.IsChecked;
-    App.Profile.Current.Close();
+    App.Profile.Close();
 
     //-----------------------------------------------------------------
     // Notify self

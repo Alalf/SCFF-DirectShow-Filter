@@ -157,9 +157,9 @@ public partial class ResizeMethod : UserControl, IBindingProfile {
     }
 
     // 成功: そのまま書き換え(Textは変更しない)
-    App.Profile.Current.Open();
+    App.Profile.Open();
     this.SetSWScaleValue(target, value);
-    App.Profile.Current.Close();
+    App.Profile.Close();
 
     //---------------------------------------------------------------
     // Notify self
@@ -185,9 +185,9 @@ public partial class ResizeMethod : UserControl, IBindingProfile {
     if (result) return;
 
     // Update Profile
-    App.Profile.Current.Open();
+    App.Profile.Open();
     this.SetSWScaleValue(target, changed);
-    App.Profile.Current.Close();
+    App.Profile.Close();
 
     //---------------------------------------------------------------
     // Notify self
@@ -211,10 +211,10 @@ public partial class ResizeMethod : UserControl, IBindingProfile {
   private void SWScaleAccurateRnd_Click(object sender, RoutedEventArgs e) {
     if (!this.SWScaleAccurateRnd.IsChecked.HasValue) return;
     
-    App.Profile.Current.Open();
+    App.Profile.Open();
     App.Profile.Current.SWScaleAccurateRnd =
         (bool)this.SWScaleAccurateRnd.IsChecked;
-    App.Profile.Current.Close();
+    App.Profile.Close();
   }
 
   /// SWScaleIsFilterEnabled: Click
@@ -223,10 +223,10 @@ public partial class ResizeMethod : UserControl, IBindingProfile {
   private void SWScaleIsFilterEnabled_Click(object sender, RoutedEventArgs e) {
     if (!this.SWScaleIsFilterEnabled.IsChecked.HasValue) return;
 
-    App.Profile.Current.Open();
+    App.Profile.Open();
     App.Profile.Current.SWScaleIsFilterEnabled =
         (bool)this.SWScaleIsFilterEnabled.IsChecked;
-    App.Profile.Current.Close();
+    App.Profile.Close();
   }
 
   //-------------------------------------------------------------------
@@ -306,9 +306,9 @@ public partial class ResizeMethod : UserControl, IBindingProfile {
     if (!this.CanChangeProfile) return;
     var flags = (Interprocess.SWScaleFlags)this.SWScaleFlags.SelectedValue;
 
-    App.Profile.Current.Open();
+    App.Profile.Open();
     App.Profile.Current.SWScaleFlags = flags;
-    App.Profile.Current.Close();
+    App.Profile.Close();
   }
 
   /// SWScaleLumaGBlur: TextChanged

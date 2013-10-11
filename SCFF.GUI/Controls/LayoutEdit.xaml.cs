@@ -75,7 +75,7 @@ public partial class LayoutEdit
   /// DrawBorder用のスタイル(Brush,Pen)を生成
   private void CreateBorderStyle(ILayoutElementView layoutElement,
       out Pen framePen, out Brush textBrush) {
-    var isCurrent = layoutElement.Index == App.Profile.CurrentIndex;
+    var isCurrent = layoutElement == App.Profile.CurrentView;
 
     // framePen/textBrush
     switch (layoutElement.WindowType) {
@@ -106,17 +106,18 @@ public partial class LayoutEdit
 
   /// レイアウト要素のヘッダーの生成
   /// @param layoutElement 対象のレイアウト要素
+  /// @param index レイアウト要素のインデックス
   /// @param boundRect ヘッダー表示領域
   /// @param textBrush テキスト描画用ブラシ
   /// @return DrawingContext.DrawTextで描画可能なDrawingVisualオブジェクト
   private FormattedText CreateHeader(ILayoutElementView layoutElement,
-      Rect boundRect, Brush textBrush) {
-    var isCurrent = layoutElement.Index == App.Profile.CurrentIndex;
+      int index, Rect boundRect, Brush textBrush) {
+    var isCurrent = layoutElement == App.Profile.CurrentView;
     var isDummy = !App.RuntimeOptions.IsCurrentProcessIDValid;
 
     // Caption
     var header = StringConverter.GetHeaderStringForLayoutEdit(layoutElement,
-            isCurrent, isDummy,
+            index, isCurrent, isDummy,
             App.RuntimeOptions.CurrentSampleWidth,
             App.RuntimeOptions.CurrentSampleHeight);
 
@@ -158,7 +159,7 @@ public partial class LayoutEdit
   /// 枠線とキャプションの描画
   /// @param dc 描画先
   /// @param layoutElement 描画対象
-  private void DrawBorder(DrawingContext dc, ILayoutElementView layoutElement) {
+  private void DrawBorder(DrawingContext dc, ILayoutElementView layoutElement, int index) {
     // フレームサイズ
     var boundRect = layoutElement.GetBoundRect(
         App.RuntimeOptions.CurrentSampleWidth,
@@ -181,12 +182,12 @@ public partial class LayoutEdit
                                    boundRect.Y + shadowOffset,
                                    boundRect.Width - shadowOffset,
                                    boundRect.Height - shadowOffset);
-    var shadow = this.CreateHeader(layoutElement, shadowBoundRect, BrushesAndPens.DropShadowBrush);
+    var shadow = this.CreateHeader(layoutElement, index, shadowBoundRect, BrushesAndPens.DropShadowBrush);
     dc.DrawText(shadow, shadowPoint);
 
     // ヘッダーの描画
     var headerPoint = new Point(boundRect.X, boundRect.Y);
-    var header = this.CreateHeader(layoutElement, boundRect, textBrush);
+    var header = this.CreateHeader(layoutElement, index, boundRect, textBrush);
     dc.DrawText(header, headerPoint);
   }
 
@@ -218,8 +219,10 @@ public partial class LayoutEdit
 
       // 枠線とキャプションを描画
       if (App.Options.LayoutBorder) {
+        int index = 0;
         foreach (var layoutElement in App.Profile) {
-          this.DrawBorder(dc, layoutElement);
+          this.DrawBorder(dc, layoutElement, index);
+          ++index;
         }
       }
     }
@@ -293,17 +296,18 @@ public partial class LayoutEdit
     var relativeMousePoint = this.GetRelativeMousePoint(image, e);
 
     // HitTest
-    int hitIndex;
+    ILayoutElementView hitElement;
     HitModes hitMode;
-    if (!HitTest.TryHitTest(App.Profile, relativeMousePoint, out hitIndex, out hitMode)) return;
+    if (!HitTest.TryHitTest(App.Profile, relativeMousePoint, out hitElement, out hitMode)) return;
 
     // 現在選択中のIndexではない場合はそれに変更する
-    if (hitIndex != App.Profile.CurrentIndex) {
-      Debug.WriteLine(string.Format("CurrentIndex ({0:D}->{1:D})",
-                                    App.Profile.CurrentIndex + 1, hitIndex + 1),
+    if (hitElement != App.Profile.CurrentView) {
+      Debug.WriteLine(string.Format("CurrentIndex ({0}->{1})",
+                                    App.Profile.CurrentView, hitElement),
                       "LayoutEdit");
 
-      App.Profile.CurrentIndex = hitIndex;
+      /// @todo(me): ダウンキャストが必要になるのは絶対におかしい
+      App.Profile.CurrentElement = hitElement as LayoutElement;
 
       //---------------------------------------------------------------
       // Notify self
@@ -325,7 +329,7 @@ public partial class LayoutEdit
     image.CaptureMouse();
 
     // Profileを更新
-    App.Profile.Current.Open();
+    App.Profile.Open();
 
     // CompositionTarget.Renderingの実行はコストが高いのでここだけで使う
     CompositionTarget.Rendering += CompositionTarget_Rendering;
@@ -361,9 +365,9 @@ public partial class LayoutEdit
 
     // 動作中でなければカーソルを変更するだけ
     if (!this.moveAndSize.IsRunning) {
-      int hitIndex;
+      ILayoutElementView hitElement;
       HitModes hitMode;
-      HitTest.TryHitTest(App.Profile, relativeMousePoint, out hitIndex, out hitMode);
+      HitTest.TryHitTest(App.Profile, relativeMousePoint, out hitElement, out hitMode);
       this.Cursor = LayoutEdit.HitModesToCursors[hitMode];
       return;
     }
@@ -388,7 +392,7 @@ public partial class LayoutEdit
 
     this.moveAndSize.End();
     this.LayoutEditImage.ReleaseMouseCapture();
-    App.Profile.Current.Close();
+    App.Profile.Close();
 
     //-----------------------------------------------------------------
     // Notify self

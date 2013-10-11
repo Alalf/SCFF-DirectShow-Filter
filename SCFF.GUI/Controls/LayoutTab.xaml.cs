@@ -57,7 +57,7 @@ public partial class LayoutTab : UserControl, IBindingProfile {
   private void LayoutElementTab_SelectionChanged(object sender, SelectionChangedEventArgs e) {
     if (!this.CanChangeProfile) return;
     var next = this.LayoutElementTab.SelectedIndex;
-    App.Profile.CurrentIndex = next;
+    App.Profile.SetCurrentByIndex(next);
 
     //-----------------------------------------------------------------
     // Notify self
@@ -83,7 +83,7 @@ public partial class LayoutTab : UserControl, IBindingProfile {
 
     var tabIndex = this.LayoutElementTab.SelectedIndex;
     var tabCount = this.LayoutElementTab.Items.Count;
-    var profileIndex = App.Profile.CurrentIndex;
+    var profileIndex = App.Profile.GetCurrentIndex();
     var profileCount = App.Profile.LayoutElementCount;
     
     // まず数を合わせる
@@ -110,13 +110,13 @@ public partial class LayoutTab : UserControl, IBindingProfile {
     }
 
     // 次に選択しているところを同期させる
-    this.LayoutElementTab.SelectedIndex = App.Profile.CurrentIndex;
+    this.LayoutElementTab.SelectedIndex = App.Profile.GetCurrentIndex();
 
     // コントロール編集終了
     this.CanChangeProfile = true;
 
     Debug.Assert(App.Profile.LayoutElementCount == this.LayoutElementTab.Items.Count);
-    Debug.Assert(App.Profile.CurrentIndex == this.LayoutElementTab.SelectedIndex);
+    Debug.Assert(App.Profile.GetCurrentIndex() == this.LayoutElementTab.SelectedIndex);
   }
   /// @copydoc Common::GUI::IBindingProfile::OnProfileChanged
   public void OnProfileChanged() {

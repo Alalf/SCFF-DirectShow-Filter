@@ -26,8 +26,6 @@ using System.Text;
 using SCFF.Common.Ext;
 using SCFF.Interprocess;
 
-public partial class Profile {
-
 /// プロファイル内を参照・操作するためのカーソルクラス
 /// 
 /// - C#のインナークラスはC++のフレンドクラスと似たようなことができる！
@@ -40,52 +38,15 @@ public partial class Profile {
 ///   - よってsampleWidth/sampleHeightの存在は仮定しないこと
 public class LayoutElement : ILayoutElementView, ILayoutElement {
   //=================================================================
-  // コンストラクタ/Dispose
+  // コンストラクタ
   //=================================================================
 
   /// コンストラクタ
-  public LayoutElement(Profile profile, int index) {
-    this.profile = profile;
-    this.Index = index;
-  }
-
-  //=================================================================
-  // プロパティ
-  //=================================================================
-
-  private LayoutElementData Data {
-    get { return this.profile.layoutElementDatabase[this.Index]; }
-    set { this.profile.layoutElementDatabase[this.Index] = value; }
-  }
-
-  //=================================================================
-  // ILayoutElementView: プロパティ
-  //=================================================================
-
-  /// @copydoc ILayoutElementView::Index
-  public int Index { get; private set; }
-
-  //=================================================================
-  // ILayoutElement: メソッド
-  //=================================================================
-
-  /// @copydoc ILayoutElement::Open
-  public void Open() {
-    // nop
-    /// @todo(me) OpenしてないとCloseできないようにするとバグが見つけやすい？
-  }
-
-  /// @copydoc ILayoutElement::Close
-  public void Close() {
-    this.profile.UpdateTimestamp();
-    this.profile.RaiseChanged();
-  }
-
-  /// @copydoc ILayoutElement::RestoreDefault
-  /// @todo(me) インスタンスを生成する形でゼロクリアしているが非効率的？
-  public void RestoreDefault() {
+  /// @param index インデックス
+  public LayoutElement(int index) {
     // newで参照型をゼロクリア
-    this.Data = new LayoutElementData();
+    this.rawData = new InternalLayoutParameter();
+    this.additionalData = new AdditionalLayoutParameter();
 
     this.KeepAspectRatio = true;
     this.RotateDirection = RotateDirections.NoRotate;
@@ -103,11 +64,36 @@ public class LayoutElement : ILayoutElementView, ILayoutElement {
     
     // 初期値を少しずつずらす
     this.BoundRelativeLeft =
-        Constants.MinimumBoundRelativeSize * this.Index;
+        Constants.MinimumBoundRelativeSize * index;
     this.BoundRelativeTop =
-        Constants.MinimumBoundRelativeSize * this.Index;
+        Constants.MinimumBoundRelativeSize * index;
     this.BoundRelativeRight = 1.0;
     this.BoundRelativeBottom = 1.0;
+  }
+
+  //=================================================================
+  // 変換
+  //=================================================================
+
+  /// 共有メモリに書き込める形に変換
+  public LayoutParameter ToLayoutParameter(int sampleWidth, int sampleHeight) {
+    // Bound*とClipping*以外のデータをコピー
+    var result = this.rawData.ToLayoutParameter();
+
+    // Bound*
+    var boundRect = this.GetBoundRect(sampleWidth, sampleHeight);
+    result.BoundX = boundRect.X;
+    result.BoundY = boundRect.Y;
+    result.BoundWidth = boundRect.Width;
+    result.BoundHeight = boundRect.Height;
+
+    // Clipping*
+    result.ClippingX = this.ClippingXWithFit;
+    result.ClippingY = this.ClippingYWithFit;
+    result.ClippingWidth = this.ClippingWidthWithFit;
+    result.ClippingHeight = this.ClippingHeightWithFit;
+
+    return result;
   }
 
   //=================================================================
@@ -116,7 +102,7 @@ public class LayoutElement : ILayoutElementView, ILayoutElement {
 
   /// @copydoc ILayoutElementView::Window
   public UIntPtr Window {
-    get { return this.Data.Window; }
+    get { return this.rawData.Window; }
   }
 
   /// @copydoc ILayoutElementView::IsWindowValid
@@ -126,18 +112,18 @@ public class LayoutElement : ILayoutElementView, ILayoutElement {
 
   /// @copydoc ILayoutElementView::WindowType
   public WindowTypes WindowType {
-    get { return this.Data.WindowType; }
+    get { return this.additionalData.WindowType; }
   }
 
   /// @copydoc ILayoutElementView::WindowCaption
   public string WindowCaption {
-    get { return this.Data.WindowCaption; }
+    get { return this.additionalData.WindowCaption; }
   }
 
   /// @copydoc ILayoutElement::SetWindow
   public void SetWindow(UIntPtr window) {
-    this.Data.WindowType = WindowTypes.Normal;
-    this.Data.Window = window;
+    this.additionalData.WindowType = WindowTypes.Normal;
+    this.rawData.Window = window;
 
     var windowCaption = "n/a";
     if (Common.Utilities.IsWindowValid(window)) {
@@ -145,19 +131,19 @@ public class LayoutElement : ILayoutElementView, ILayoutElement {
       User32.GetClassName(window, className, 256);
       windowCaption = className.ToString();
     }
-    this.Data.WindowCaption = windowCaption;
+    this.additionalData.WindowCaption = windowCaption;
   }
   /// @copydoc ILayoutElement::SetWindowToDesktop
   public void SetWindowToDesktop() {
-    this.Data.WindowType = WindowTypes.Desktop;
-    this.Data.Window = User32.GetDesktopWindow();
-    this.Data.WindowCaption = "(Desktop)";
+    this.additionalData.WindowType = WindowTypes.Desktop;
+    this.rawData.Window = User32.GetDesktopWindow();
+    this.additionalData.WindowCaption = "(Desktop)";
   }
   /// @copydoc ILayoutElement::SetWindowToDesktopListView
   public void SetWindowToDesktopListView() {
-    this.Data.WindowType = WindowTypes.DesktopListView;
-    this.Data.Window = Utilities.DesktopListViewWindow;
-    this.Data.WindowCaption = "(DesktopListView)";
+    this.additionalData.WindowType = WindowTypes.DesktopListView;
+    this.rawData.Window = Utilities.DesktopListViewWindow;
+    this.additionalData.WindowCaption = "(DesktopListView)";
   }
 
   //=================================================================
@@ -166,28 +152,28 @@ public class LayoutElement : ILayoutElementView, ILayoutElement {
 
   /// @copydoc ILayoutElementView::Fit
   public bool Fit {
-    get { return this.Data.Fit; }
-    set { this.Data.Fit = value; }
+    get { return this.additionalData.Fit; }
+    set { this.additionalData.Fit = value; }
   }
   /// @copydoc ILayoutElementView::ClippingXWithoutFit
   public int ClippingXWithoutFit {
-    get { return this.Data.ClippingXWithoutFit; }
-    set { this.Data.ClippingXWithoutFit = value; }
+    get { return this.additionalData.ClippingXWithoutFit; }
+    set { this.additionalData.ClippingXWithoutFit = value; }
   }
   /// @copydoc ILayoutElementView::ClippingYWithoutFit
   public int ClippingYWithoutFit {
-    get { return this.Data.ClippingYWithoutFit; }
-    set { this.Data.ClippingYWithoutFit = value; }
+    get { return this.additionalData.ClippingYWithoutFit; }
+    set { this.additionalData.ClippingYWithoutFit = value; }
   }
   /// @copydoc ILayoutElementView::ClippingWidthWithoutFit
   public int ClippingWidthWithoutFit {
-    get { return this.Data.ClippingWidthWithoutFit; }
-    set { this.Data.ClippingWidthWithoutFit = value; }
+    get { return this.additionalData.ClippingWidthWithoutFit; }
+    set { this.additionalData.ClippingWidthWithoutFit = value; }
   }
   /// @copydoc ILayoutElementView::ClippingHeightWithoutFit
   public int ClippingHeightWithoutFit {
-    get { return this.Data.ClippingHeightWithoutFit; }
-    set { this.Data.ClippingHeightWithoutFit = value; }
+    get { return this.additionalData.ClippingHeightWithoutFit; }
+    set { this.additionalData.ClippingHeightWithoutFit = value; }
   }
 
   /// @copydoc ILayoutElementView::ClippingXWithFit
@@ -244,28 +230,28 @@ public class LayoutElement : ILayoutElementView, ILayoutElement {
 
   /// @copydoc ILayoutElementView::ShowCursor
   public bool ShowCursor {
-    get { return this.Data.ShowCursor; }
-    set { this.Data.ShowCursor = value; }
+    get { return this.rawData.ShowCursor; }
+    set { this.rawData.ShowCursor = value; }
   }
   /// @copydoc ILayoutElementView::ShowLayeredWindow
   public bool ShowLayeredWindow {
-    get { return this.Data.ShowLayeredWindow; }
-    set { this.Data.ShowLayeredWindow = value; }
+    get { return this.rawData.ShowLayeredWindow; }
+    set { this.rawData.ShowLayeredWindow = value; }
   }
   /// @copydoc ILayoutElementView::Stretch
   public bool Stretch {
-    get { return this.Data.Stretch; }
-    set { this.Data.Stretch = value; }
+    get { return this.rawData.Stretch; }
+    set { this.rawData.Stretch = value; }
   }
   /// @copydoc ILayoutElementView::KeepAspectRatio
   public bool KeepAspectRatio {
-    get { return this.Data.KeepAspectRatio; }
-    set { this.Data.KeepAspectRatio = value; }
+    get { return this.rawData.KeepAspectRatio; }
+    set { this.rawData.KeepAspectRatio = value; }
   }
   /// @copydoc ILayoutElementView::RotateDirection
   public RotateDirections RotateDirection {
-    get { return this.Data.RotateDirection; }
-    set { this.Data.RotateDirection = value; }
+    get { return this.rawData.RotateDirection; }
+    set { this.rawData.RotateDirection = value; }
   }
 
   //=================================================================
@@ -274,48 +260,48 @@ public class LayoutElement : ILayoutElementView, ILayoutElement {
 
   /// @copydoc ILayoutElementView::SWScaleFlags
   public SWScaleFlags SWScaleFlags {
-    get { return this.Data.SWScaleConfig.Flags; }
-    set { this.Data.SWScaleConfig.Flags = value; }
+    get { return this.rawData.SWScaleConfig.Flags; }
+    set { this.rawData.SWScaleConfig.Flags = value; }
   }
   /// @copydoc ILayoutElementView::SWScaleAccurateRnd
   public bool SWScaleAccurateRnd {
-    get { return this.Data.SWScaleConfig.AccurateRnd; }
-    set { this.Data.SWScaleConfig.AccurateRnd = value; }
+    get { return this.rawData.SWScaleConfig.AccurateRnd; }
+    set { this.rawData.SWScaleConfig.AccurateRnd = value; }
   }
   /// @copydoc ILayoutElementView::SWScaleIsFilterEnabled
   public bool SWScaleIsFilterEnabled {
-    get { return this.Data.SWScaleConfig.IsFilterEnabled; }
-    set { this.Data.SWScaleConfig.IsFilterEnabled = value; }
+    get { return this.rawData.SWScaleConfig.IsFilterEnabled; }
+    set { this.rawData.SWScaleConfig.IsFilterEnabled = value; }
   }
   /// @copydoc ILayoutElementView::SWScaleLumaGBlur
   public float SWScaleLumaGBlur {
-    get { return this.Data.SWScaleConfig.LumaGblur; }
-    set { this.Data.SWScaleConfig.LumaGblur = value; }
+    get { return this.rawData.SWScaleConfig.LumaGblur; }
+    set { this.rawData.SWScaleConfig.LumaGblur = value; }
   }
   /// @copydoc ILayoutElementView::SWScaleChromaGBlur
   public float SWScaleChromaGBlur {
-    get { return this.Data.SWScaleConfig.ChromaGblur; }
-    set { this.Data.SWScaleConfig.ChromaGblur = value; }
+    get { return this.rawData.SWScaleConfig.ChromaGblur; }
+    set { this.rawData.SWScaleConfig.ChromaGblur = value; }
   }
   /// @copydoc ILayoutElementView::SWScaleLumaSharpen
   public float SWScaleLumaSharpen {
-    get { return this.Data.SWScaleConfig.LumaSharpen; }
-    set { this.Data.SWScaleConfig.LumaSharpen = value; }
+    get { return this.rawData.SWScaleConfig.LumaSharpen; }
+    set { this.rawData.SWScaleConfig.LumaSharpen = value; }
   }
   /// @copydoc ILayoutElementView::SWScaleChromaSharpen
   public float SWScaleChromaSharpen {
-    get { return this.Data.SWScaleConfig.ChromaSharpen; }
-    set { this.Data.SWScaleConfig.ChromaSharpen = value; }
+    get { return this.rawData.SWScaleConfig.ChromaSharpen; }
+    set { this.rawData.SWScaleConfig.ChromaSharpen = value; }
   }
   /// @copydoc ILayoutElementView::SWScaleChromaHShift
   public float SWScaleChromaHShift {
-    get { return this.Data.SWScaleConfig.ChromaHShift; }
-    set { this.Data.SWScaleConfig.ChromaHShift = value; }
+    get { return this.rawData.SWScaleConfig.ChromaHShift; }
+    set { this.rawData.SWScaleConfig.ChromaHShift = value; }
   }
   /// @copydoc ILayoutElementView::SWScaleChromaVShift
   public float SWScaleChromaVShift {
-    get { return this.Data.SWScaleConfig.ChromaVShift; }
-    set { this.Data.SWScaleConfig.ChromaVShift = value; }
+    get { return this.rawData.SWScaleConfig.ChromaVShift; }
+    set { this.rawData.SWScaleConfig.ChromaVShift = value; }
   }
 
   //=================================================================
@@ -324,23 +310,23 @@ public class LayoutElement : ILayoutElementView, ILayoutElement {
 
   /// @copydoc ILayoutElementView::BoundRelativeLeft
   public double BoundRelativeLeft {
-    get { return this.Data.BoundRelativeLeft; }
-    set { this.Data.BoundRelativeLeft = value; }
+    get { return this.additionalData.BoundRelativeLeft; }
+    set { this.additionalData.BoundRelativeLeft = value; }
   }
   /// @copydoc ILayoutElementView::BoundRelativeTop
   public double BoundRelativeTop {
-    get { return this.Data.BoundRelativeTop; }
-    set { this.Data.BoundRelativeTop = value; }
+    get { return this.additionalData.BoundRelativeTop; }
+    set { this.additionalData.BoundRelativeTop = value; }
   }
   /// @copydoc ILayoutElementView::BoundRelativeRight
   public double BoundRelativeRight {
-    get { return this.Data.BoundRelativeRight; }
-    set { this.Data.BoundRelativeRight = value; }
+    get { return this.additionalData.BoundRelativeRight; }
+    set { this.additionalData.BoundRelativeRight = value; }
   }
   /// @copydoc ILayoutElementView::BoundRelativeBottom
   public double BoundRelativeBottom {
-    get { return this.Data.BoundRelativeBottom; }
-    set { this.Data.BoundRelativeBottom = value; }
+    get { return this.additionalData.BoundRelativeBottom; }
+    set { this.additionalData.BoundRelativeBottom = value; }
   }
   /// @copydoc ILayoutElementView::BoundRelativeWidth
   public double BoundRelativeWidth {
@@ -468,28 +454,28 @@ public class LayoutElement : ILayoutElementView, ILayoutElement {
 
   /// @copydoc ILayoutElementView::HasBackedUp
   public bool HasBackedUp {
-    get { return this.Data.HasBackedUp; }
-    set { this.Data.HasBackedUp = value; }
+    get { return this.additionalData.HasBackedUp; }
+    set { this.additionalData.HasBackedUp = value; }
   }
   /// @copydoc ILayoutElementView::BackupScreenClippingX
   public int BackupScreenClippingX {
-    get { return this.Data.BackupScreenClippingX; }
-    set { this.Data.BackupScreenClippingX = value; }
+    get { return this.additionalData.BackupScreenClippingX; }
+    set { this.additionalData.BackupScreenClippingX = value; }
   }
   /// @copydoc ILayoutElementView::BackupScreenClippingY
   public int BackupScreenClippingY {
-    get { return this.Data.BackupScreenClippingY; }
-    set { this.Data.BackupScreenClippingY = value; }
+    get { return this.additionalData.BackupScreenClippingY; }
+    set { this.additionalData.BackupScreenClippingY = value; }
   }
   /// @copydoc ILayoutElementView::BackupClippingWidth
   public int BackupClippingWidth {
-    get { return this.Data.BackupClippingWidth; }
-    set { this.Data.BackupClippingWidth = value; }
+    get { return this.additionalData.BackupClippingWidth; }
+    set { this.additionalData.BackupClippingWidth = value; }
   }
   /// @copydoc ILayoutElementView::BackupClippingHeight
   public int BackupClippingHeight {
-    get { return this.Data.BackupClippingHeight; }
-    set { this.Data.BackupClippingHeight = value; }
+    get { return this.additionalData.BackupClippingHeight; }
+    set { this.additionalData.BackupClippingHeight = value; }
   }
   /// @copydoc ILayoutElement::UpdateBackupParameters
   public void UpdateBackupParameters() {
@@ -524,8 +510,12 @@ public class LayoutElement : ILayoutElementView, ILayoutElement {
   // フィールド
   //=================================================================
 
-  /// 対象プロファイル
-  private readonly Profile profile;
+  /// レイアウトパラメータ
+  private InternalLayoutParameter rawData =
+      new InternalLayoutParameter();
+
+  /// レイアウトパラメータ追加分
+  private AdditionalLayoutParameter additionalData =
+      new AdditionalLayoutParameter();
 }
-}   // (outerclass) SCFF.Common.Profile.Profile
 }   // namespace SCFF.Common.Profile

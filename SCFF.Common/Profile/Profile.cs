@@ -46,7 +46,7 @@ public partial class Profile {
 
   /// デフォルトに戻す
   /// @post タイムスタンプ更新するがRaiseChangedは発生させない
-  private void RestoreDefault() {
+  public void RestoreDefault() {
     this.LayoutElements = new List<LayoutElement>();
     this.Current = new LayoutElement(0);
     this.LayoutElements.Add(this.Current);

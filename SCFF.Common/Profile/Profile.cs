@@ -112,11 +112,10 @@ public partial class Profile {
   /// @post タイムスタンプ更新するがRaiseChangedは発生させない
   public void RestoreDefault() {
     this.layoutElements.Clear();
-    var newCurrent = new LayoutElement(0);
-    this.layoutElements.Add(newCurrent);
-    this.CurrentElement = newCurrent;
+    this.CurrentElement = new LayoutElement(0);
+    this.layoutElements.Add(this.CurrentElement);
 
-    // Profileのプロパティの初期化
+    // 変更イベントの発生はなし
     this.UpdateTimestamp();
   }
 
@@ -135,6 +134,7 @@ public partial class Profile {
     this.CurrentElement = new LayoutElement(this.LayoutElementCount);
     this.layoutElements.Add(this.CurrentElement);
 
+    // 変更イベントの発生
     this.UpdateTimestamp();
     this.RaiseChanged();
   }

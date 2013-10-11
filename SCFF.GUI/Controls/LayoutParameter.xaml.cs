@@ -381,8 +381,8 @@ public partial class LayoutParameter
 
     this.GroupBox.Header =
         StringConverter.GetHeaderStringForLayoutParameter(
-            App.Profile.CurrentView, LayoutParameter.maxHeaderLength,
-            App.Profile.GetCurrentIndex());
+            App.Profile.CurrentView, App.Profile.GetCurrentIndex(),
+            LayoutParameter.maxHeaderLength);
 
     this.OverwriteBoundRectText();
 

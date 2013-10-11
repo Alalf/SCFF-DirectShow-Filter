@@ -12,13 +12,23 @@
     <ToolBar Height="30"
              Header="Layout">
       <Button Margin="3,0,0,0"
-              x:Name="Add" Content="Add"
+              x:Name="Add"
+              Content="2" FontFamily="Marlett"
               Command="{x:Static local:Commands.AddLayoutElement}"/>
       <Button Margin="3,0,0,0"
-              x:Name="Remove" Content="Remove"
+              x:Name="Remove"
+              Content="r" FontFamily="Marlett"
               Command="{x:Static local:Commands.RemoveCurrentLayoutElement}"/>
+      <Button Margin="3,0,0,0"
+              x:Name="BringForward"
+              Content="5" FontFamily="Marlett"
+              Command="{x:Static local:Commands.BringCurrentLayoutElementForward}"/>
+      <Button Margin="3,0,0,0"
+              x:Name="SendBackward"
+              Content="6" FontFamily="Marlett"
+              Command="{x:Static local:Commands.SendCurrentLayoutElementBackward}"/>
       <Separator/>
-      <CheckBox Margin="3,0,0,0" 
+      <CheckBox Margin="3,0,0,0"
                 x:Name="LayoutPreview" Content="Preview"
                 Click="LayoutPreview_Click"/>
       <Slider   Margin="3,0,0,0" Width="50"

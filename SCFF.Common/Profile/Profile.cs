@@ -141,7 +141,7 @@ public partial class Profile {
     var removedIndex = this.GetCurrentIndex();
     this.LayoutElements.Remove(this.Current);
 
-    // currentIndexを新しい場所に移して終了
+    // Currentを新しい場所に移して終了
     if (removedIndex < this.LayoutElements.Count) {
       this.Current = this.LayoutElements[removedIndex];
     } else {
@@ -151,6 +151,48 @@ public partial class Profile {
     // 変更イベントの発生
     this.UpdateTimestamp();
     this.RaiseChanged();
+  }
+
+  //-------------------------------------------------------------------
+  // レイアウト要素の重ね順の調整
+  //-------------------------------------------------------------------
+
+  /// 現在編集中のレイアウト要素を一つ前面に
+  public void BringCurrentForward() {
+    var removedIndex = this.LayoutElements.IndexOf(this.Current);
+    this.LayoutElements.Remove(this.Current);
+    this.LayoutElements.Insert(removedIndex + 1, this.Current);
+
+    // 変更イベントの発生
+    this.UpdateTimestamp();
+    this.RaiseChanged();
+  }
+
+  /// 現在編集中のレイアウト要素を一つ前面に移動できるか
+  public bool CanBringCurrentForward {
+    get {
+      return this.LayoutElements.Count != 1 &&
+          this.LayoutElements[this.LayoutElements.Count - 1] != this.Current;
+    }
+  }
+
+  /// 現在編集中のレイアウト要素を一つ背面に
+  public void SendCurrentBackward() {
+    var removedIndex = this.LayoutElements.IndexOf(this.Current);
+    this.LayoutElements.Remove(this.Current);
+    this.LayoutElements.Insert(removedIndex - 1, this.Current);
+
+    // 変更イベントの発生
+    this.UpdateTimestamp();
+    this.RaiseChanged();
+  }
+
+  /// 現在編集中のレイアウト要素を一つ背面に移動できるか
+  public bool CanSendCurrentBackward {
+    get {
+      return this.LayoutElements.Count != 1 &&
+          this.LayoutElements[0] != this.Current;
+    }
   }
 
   //-------------------------------------------------------------------

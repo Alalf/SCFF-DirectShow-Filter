@@ -19,6 +19,12 @@
         <MenuItem Header="Remove Current" Command="{x:Static local:Commands.RemoveCurrentLayoutElement}"
                   CommandTarget="{Binding Path=PlacementTarget,
                       RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"/>
+        <MenuItem Header="Bring Forward" Command="{x:Static local:Commands.BringCurrentLayoutElementForward}"
+                  CommandTarget="{Binding Path=PlacementTarget,
+                      RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"/>
+        <MenuItem Header="Send Backward" Command="{x:Static local:Commands.SendCurrentLayoutElementBackward}"
+                  CommandTarget="{Binding Path=PlacementTarget,
+                      RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"/>
         <Separator />
         <MenuItem Header="Fit" Command="{x:Static local:Commands.FitCurrentBoundRect}"
                   CommandTarget="{Binding Path=PlacementTarget,

@@ -716,6 +716,40 @@ public partial class MainWindow
     e.CanExecute = App.Profile.CanRemoveCurrent;
   }
 
+  /// @copybrief Commands::BringCurrentLayoutElementForward
+  /// @param sender 使用しない
+  /// @param e 使用しない
+  private void OnBringCurrentLayoutElementForward(object sender, ExecutedRoutedEventArgs e) {
+    App.Profile.BringCurrentForward();
+    // tabの選択を変えないといけないので全てに通知
+    this.NotifyProfileChanged();
+  }
+
+  /// @copybrief Commands::BringCurrentLayoutElementForward
+  /// @warning CanExecuteは処理負荷が高い
+  /// @param sender 使用しない
+  /// @param e 実行可能かどうかをCanExecuteに設定可能
+  private void CanBringCurrentLayoutElementForward(object sender, CanExecuteRoutedEventArgs e) {
+    e.CanExecute = App.Profile.CanBringCurrentForward;
+  }
+
+  /// @copybrief Commands::SendCurrentLayoutElementBackward
+  /// @param sender 使用しない
+  /// @param e 使用しない
+  private void OnSendCurrentLayoutElementBackward(object sender, ExecutedRoutedEventArgs e) {
+    App.Profile.SendCurrentBackward();
+    // tabの選択を変えないといけないので全てに通知
+    this.NotifyProfileChanged();
+  }
+
+  /// @copybrief Commands::BringCurrentLayoutElementForward
+  /// @warning CanExecuteは処理負荷が高い
+  /// @param sender 使用しない
+  /// @param e 実行可能かどうかをCanExecuteに設定可能
+  private void CanSendCurrentLayoutElementBackward(object sender, CanExecuteRoutedEventArgs e) {
+    e.CanExecute = App.Profile.CanSendCurrentBackward;
+  }
+
   /// @copybrief Commands::FitCurrentBoundRect
   /// @param sender 使用しない
   /// @param e 使用しない

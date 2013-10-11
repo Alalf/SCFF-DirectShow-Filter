@@ -58,6 +58,11 @@ public static class Commands {
   /// 現在編集中のレイアウト要素の削除
   public static readonly RoutedCommand RemoveCurrentLayoutElement = new RoutedCommand();
 
+  /// 現在編集中のレイアウト要素を一つ前面に
+  public static readonly RoutedCommand BringCurrentLayoutElementForward = new RoutedCommand();
+  /// 現在編集中のレイアウト要素を一つ背面に
+  public static readonly RoutedCommand SendCurrentLayoutElementBackward = new RoutedCommand();
+
   /// 現在編集中のレイアウト要素の境界を取り込み内容に合わせて調整する
   public static readonly RoutedCommand FitCurrentBoundRect = new RoutedCommand();
   

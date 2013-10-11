@@ -84,7 +84,7 @@ public partial class LayoutTab : UserControl, IBindingProfile {
     var tabIndex = this.LayoutElementTab.SelectedIndex;
     var tabCount = this.LayoutElementTab.Items.Count;
     var profileIndex = App.Profile.GetCurrentIndex();
-    var profileCount = App.Profile.LayoutElementCount;
+    var profileCount = App.Profile.LayoutElements.Count;
     
     // まず数を合わせる
     if (tabCount == profileCount) {
@@ -115,7 +115,7 @@ public partial class LayoutTab : UserControl, IBindingProfile {
     // コントロール編集終了
     this.CanChangeProfile = true;
 
-    Debug.Assert(App.Profile.LayoutElementCount == this.LayoutElementTab.Items.Count);
+    Debug.Assert(App.Profile.LayoutElements.Count == this.LayoutElementTab.Items.Count);
     Debug.Assert(App.Profile.GetCurrentIndex() == this.LayoutElementTab.SelectedIndex);
   }
   /// @copydoc Common::GUI::IBindingProfile::OnProfileChanged

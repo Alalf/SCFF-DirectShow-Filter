@@ -73,9 +73,9 @@ public partial class LayoutEdit
   private const int CaptionFontSize = 20;
 
   /// DrawBorder用のスタイル(Brush,Pen)を生成
-  private void CreateBorderStyle(ILayoutElementView layoutElement,
+  private void CreateBorderStyle(LayoutElement layoutElement,
       out Pen framePen, out Brush textBrush) {
-    var isCurrent = layoutElement == App.Profile.CurrentView;
+    var isCurrent = layoutElement == App.Profile.Current;
 
     // framePen/textBrush
     switch (layoutElement.WindowType) {
@@ -110,9 +110,9 @@ public partial class LayoutEdit
   /// @param boundRect ヘッダー表示領域
   /// @param textBrush テキスト描画用ブラシ
   /// @return DrawingContext.DrawTextで描画可能なDrawingVisualオブジェクト
-  private FormattedText CreateHeader(ILayoutElementView layoutElement,
+  private FormattedText CreateHeader(LayoutElement layoutElement,
       int index, Rect boundRect, Brush textBrush) {
-    var isCurrent = layoutElement == App.Profile.CurrentView;
+    var isCurrent = layoutElement == App.Profile.Current;
     var isDummy = !App.RuntimeOptions.IsCurrentProcessIDValid;
 
     // Caption
@@ -139,7 +139,7 @@ public partial class LayoutEdit
   /// プレビュー画像の描画
   /// @param dc 描画先
   /// @param layoutElement 描画対象
-  private void DrawPreview(DrawingContext dc, ILayoutElementView layoutElement) {
+  private void DrawPreview(DrawingContext dc, LayoutElement layoutElement) {
     var bitmap = App.ScreenCaptureTimer.GetBitmapSource(layoutElement);
     if (bitmap == null) {
       // エラーが起きた場合は赤色の四角形を描画
@@ -160,7 +160,7 @@ public partial class LayoutEdit
   /// @param dc 描画先
   /// @param layoutElement 描画対象
   /// @param index 描画対象のインデックス
-  private void DrawBorder(DrawingContext dc, ILayoutElementView layoutElement, int index) {
+  private void DrawBorder(DrawingContext dc, LayoutElement layoutElement, int index) {
     // フレームサイズ
     var boundRect = layoutElement.GetBoundRect(
         App.RuntimeOptions.CurrentSampleWidth,
@@ -213,7 +213,7 @@ public partial class LayoutEdit
 
       // プレビューを下に描画
       if (App.Options.LayoutPreview) {
-        foreach (var layoutElement in App.Profile) {
+        foreach (var layoutElement in App.Profile.LayoutElements) {
           this.DrawPreview(dc, layoutElement);
         }
       }
@@ -221,7 +221,7 @@ public partial class LayoutEdit
       // 枠線とキャプションを描画
       if (App.Options.LayoutBorder) {
         int index = 0;
-        foreach (var layoutElement in App.Profile) {
+        foreach (var layoutElement in App.Profile.LayoutElements) {
           this.DrawBorder(dc, layoutElement, index);
           ++index;
         }
@@ -297,18 +297,23 @@ public partial class LayoutEdit
     var relativeMousePoint = this.GetRelativeMousePoint(image, e);
 
     // HitTest
-    ILayoutElementView hitElement;
+    LayoutElement hitElement;
     HitModes hitMode;
     if (!HitTest.TryHitTest(App.Profile, relativeMousePoint, out hitElement, out hitMode)) return;
 
     // 現在選択中のIndexではない場合はそれに変更する
-    if (hitElement != App.Profile.CurrentView) {
-      Debug.WriteLine(string.Format("CurrentIndex ({0}->{1})",
-                                    App.Profile.CurrentView, hitElement),
+    if (hitElement != App.Profile.Current) {
+      /// @todo(me): O(n)が常に発生しているのでデバッグ表示を簡素化したい
+      Debug.WriteLine(string.Format("Changing CurrentIndex({0:D})...",
+                                    App.Profile.GetCurrentIndex()),
                       "LayoutEdit");
 
-      /// @todo(me): ダウンキャストが必要になるのは絶対におかしい
-      App.Profile.CurrentElement = hitElement as LayoutElement;
+      App.Profile.Current = hitElement;
+
+      /// @todo(me): O(n)が常に発生しているのでデバッグ表示を簡素化したい
+      Debug.WriteLine(string.Format("CurrentIndex was changed({0:D})",
+                                    App.Profile.GetCurrentIndex()),
+                      "LayoutEdit");
 
       //---------------------------------------------------------------
       // Notify self
@@ -324,7 +329,7 @@ public partial class LayoutEdit
 
     // マウスを押した場所を記録してマウスキャプチャー開始
     var snapGuide = App.Options.LayoutSnap ? new SnapGuide(App.Profile) : null;
-    this.moveAndSize.Start(App.Profile.CurrentView, hitMode, relativeMousePoint, snapGuide);
+    this.moveAndSize.Start(App.Profile.Current, hitMode, relativeMousePoint, snapGuide);
 
     // マウスキャプチャー開始
     image.CaptureMouse();
@@ -366,7 +371,7 @@ public partial class LayoutEdit
 
     // 動作中でなければカーソルを変更するだけ
     if (!this.moveAndSize.IsRunning) {
-      ILayoutElementView hitElement;
+      LayoutElement hitElement;
       HitModes hitMode;
       HitTest.TryHitTest(App.Profile, relativeMousePoint, out hitElement, out hitMode);
       this.Cursor = LayoutEdit.HitModesToCursors[hitMode];

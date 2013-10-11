@@ -190,7 +190,7 @@ public static class ClippingInputCorrector {
   //-------------------------------------------------------------------
 
   /// レイアウト要素からClipping領域(Fitオプションなし)を取得
-  private static ClientRect GetOriginal(ILayoutElementView layoutElement) {
+  private static ClientRect GetOriginal(LayoutElement layoutElement) {
     return new ClientRect(layoutElement.ClippingXWithoutFit,
                           layoutElement.ClippingYWithoutFit,
                           layoutElement.ClippingWidthWithoutFit,
@@ -204,7 +204,7 @@ public static class ClippingInputCorrector {
   /// @param[out] changed 変更後、制約を満たす形に訂正されたClipping領域
   /// @return 試行結果（訂正箇所）
   public static TryResult TryChange(
-      ILayoutElementView layoutElement, Names target, int value,
+      LayoutElement layoutElement, Names target, int value,
       out ClientRect changed) {
     Debug.Assert(layoutElement.IsWindowValid);
     Debug.Assert(!layoutElement.Fit);

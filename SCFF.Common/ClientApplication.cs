@@ -452,7 +452,7 @@ public class ClientApplication {
   /// Profileの新規作成
   private void NewProfileInternal() {
     // Profile
-    this.Profile.RestoreDefault();
+    this.Profile = new Profile.Profile();
 
     // RuntimeOptions
     this.RuntimeOptions.ProfilePath = string.Empty;

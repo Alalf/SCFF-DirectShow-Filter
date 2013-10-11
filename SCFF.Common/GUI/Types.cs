@@ -51,7 +51,7 @@ public enum HitModes {
 /// マウス座標(相対座標系)がレイアウト要素の上下左右とどれだけ離れているか
 public class RelativeMouseOffset : RelativeLTRB {
   /// コンストラクタ
-  public RelativeMouseOffset(ILayoutElementView layoutElement,
+  public RelativeMouseOffset(LayoutElement layoutElement,
                              RelativePoint mousePoint)
       : base(mousePoint.X - layoutElement.BoundRelativeLeft,
              mousePoint.Y - layoutElement.BoundRelativeTop,

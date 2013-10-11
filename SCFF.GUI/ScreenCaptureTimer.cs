@@ -236,7 +236,7 @@ public class ScreenCaptureTimer : IDisposable {
   public void UpdateRequest(Profile profile) {
     // ProfileからRequestを生成
     var profileRequests = new HashSet<ScreenCaptureRequest>();
-    foreach (var layoutElement in profile) {
+    foreach (var layoutElement in profile.LayoutElements) {
       if (!layoutElement.IsWindowValid) continue;
       profileRequests.Add(new ScreenCaptureRequest(layoutElement));
     }
@@ -281,7 +281,7 @@ public class ScreenCaptureTimer : IDisposable {
   /// 結果を取得
   /// @param layoutElement 対象のレイアウト要素
   /// @return 生成済みならBitmapSourceを。でなければNullを返す。
-  public BitmapSource GetBitmapSource(ILayoutElementView layoutElement) {
+  public BitmapSource GetBitmapSource(LayoutElement layoutElement) {
     if (!layoutElement.IsWindowValid) return null;
     var request = new ScreenCaptureRequest(layoutElement);
 

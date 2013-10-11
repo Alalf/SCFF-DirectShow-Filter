@@ -36,6 +36,26 @@ public enum WindowTypes {
 /// レイアウト設定などをまとめたプロファイル
 public partial class Profile {
   //===================================================================
+  // コンストラクタ
+  //===================================================================
+  
+  /// コンストラクタ
+  public Profile() {
+    this.RestoreDefault();
+  }
+
+  /// デフォルトに戻す
+  /// @post タイムスタンプ更新するがRaiseChangedは発生させない
+  private void RestoreDefault() {
+    this.LayoutElements = new List<LayoutElement>();
+    this.Current = new LayoutElement(0);
+    this.LayoutElements.Add(this.Current);
+
+    // 変更イベントの発生はなし
+    this.UpdateTimestamp();
+  }
+
+  //===================================================================
   // 外部インタフェース
   //===================================================================
 
@@ -58,18 +78,7 @@ public partial class Profile {
   //-------------------------------------------------------------------
 
   /// 現在選択中のレイアウト要素
-  public LayoutElement CurrentElement { get; set; }
-  
-
-  /// 現在選択中のレイアウト要素を参照モードで返す
-  public ILayoutElementView CurrentView {
-    get { return this.CurrentElement; }
-  }
-
-  /// 現在選択中のレイアウト要素を編集モードで返す
-  public ILayoutElement Current {
-    get { return this.CurrentElement; }
-  }
+  public LayoutElement Current { get; set; }
 
   /// レイアウト要素編集開始
   public void Open() {
@@ -82,41 +91,19 @@ public partial class Profile {
     this.RaiseChanged();
   }
 
-  /// foreach用Enumerator(参照モード)を返す
-  public IEnumerator<ILayoutElementView> GetEnumerator() {
-    foreach (var layoutElement in this.layoutElements) {
-      yield return layoutElement;
-    }
-  }
-
   //-------------------------------------------------------------------
   // カーソル(インデックス)
   //-------------------------------------------------------------------
 
   /// 現在選択中のレイアウト要素のインデックスを返す
   public int GetCurrentIndex() {
-    return this.layoutElements.IndexOf(this.CurrentElement);
+    return this.LayoutElements.IndexOf(this.Current);
   }
 
   /// 指定されたインデックスのレイアウト要素を選択する
   public void SetCurrentByIndex(int next) {
     /// @todo(me): 範囲チェック
-    this.CurrentElement = this.layoutElements[next];
-  }
-
-  //-------------------------------------------------------------------
-  // デフォルトに戻す
-  //-------------------------------------------------------------------
-
-  /// デフォルトに戻す
-  /// @post タイムスタンプ更新するがRaiseChangedは発生させない
-  public void RestoreDefault() {
-    this.layoutElements.Clear();
-    this.CurrentElement = new LayoutElement(0);
-    this.layoutElements.Add(this.CurrentElement);
-
-    // 変更イベントの発生はなし
-    this.UpdateTimestamp();
+    this.Current = this.LayoutElements[next];
   }
 
   //-------------------------------------------------------------------
@@ -125,14 +112,14 @@ public partial class Profile {
 
   /// レイアウト要素を追加可能か
   public bool CanAdd {
-    get { return this.LayoutElementCount < Interprocess.MaxComplexLayoutElements; }
+    get { return this.LayoutElements.Count < Interprocess.MaxComplexLayoutElements; }
   }
 
   /// レイアウト要素を追加
   /// @post タイムスタンプ更新
   public void Add() {
-    this.CurrentElement = new LayoutElement(this.LayoutElementCount);
-    this.layoutElements.Add(this.CurrentElement);
+    this.Current = new LayoutElement(this.LayoutElements.Count);
+    this.LayoutElements.Add(this.Current);
 
     // 変更イベントの発生
     this.UpdateTimestamp();
@@ -145,20 +132,20 @@ public partial class Profile {
 
   /// レイアウト要素を削除可能か
   public bool CanRemoveCurrent {
-    get { return this.LayoutElementCount > 1; }
+    get { return this.LayoutElements.Count > 1; }
   }
 
   /// 現在選択中のレイアウト要素を削除
   /// @post タイムスタンプ更新
   public void RemoveCurrent() {
     var removedIndex = this.GetCurrentIndex();
-    this.layoutElements.Remove(this.CurrentElement);
+    this.LayoutElements.Remove(this.Current);
 
     // currentIndexを新しい場所に移して終了
-    if (removedIndex < this.LayoutElementCount) {
-      this.CurrentElement = this.layoutElements[removedIndex];
+    if (removedIndex < this.LayoutElements.Count) {
+      this.Current = this.LayoutElements[removedIndex];
     } else {
-      this.CurrentElement = this.layoutElements[removedIndex - 1];
+      this.Current = this.LayoutElements[removedIndex - 1];
     }
 
     // 変更イベントの発生
@@ -172,7 +159,7 @@ public partial class Profile {
 
   /// 全てのレイアウト要素のBackupParametersを更新する
   public void UpdateBackupParameters() {
-    foreach (var layoutElement in this.layoutElements) {
+    foreach (var layoutElement in this.LayoutElements) {
       if (layoutElement.WindowType != WindowTypes.Normal) continue;
       Debug.Assert(layoutElement.IsWindowValid);
       layoutElement.UpdateBackupParameters();
@@ -180,18 +167,12 @@ public partial class Profile {
   }
   /// 全てのレイアウト要素のBackupParametersを復元する
   public void RestoreBackupParameters() {
-    foreach (var layoutElement in this.layoutElements) {
+    foreach (var layoutElement in this.LayoutElements) {
       if (layoutElement.WindowType == WindowTypes.Normal &&
           !layoutElement.IsWindowValid) {
         layoutElement.RestoreBackupParameters();
       }
     }
-  }
-
-  /// LayoutElementsを一気に更新する
-  internal void SetLayoutElements(List<LayoutElement> layoutElements, LayoutElement current) {
-    this.layoutElements = layoutElements;
-    this.CurrentElement = current;
   }
 
   //-------------------------------------------------------------------
@@ -209,10 +190,10 @@ public partial class Profile {
 
     // 更新
     result.LayoutType = (int)this.LayoutType;
-    result.LayoutElementCount = this.LayoutElementCount;
+    result.LayoutElementCount = this.LayoutElements.Count;
     result.Timestamp = this.Timestamp;
     int index = 0;
-    foreach (var layoutElement in this.layoutElements) {
+    foreach (var layoutElement in this.LayoutElements) {
       // Bound*とClipping*以外のデータをコピー
       result.LayoutParameters[index] = layoutElement.ToLayoutParameter(sampleWidth, sampleHeight);
       ++index;
@@ -226,13 +207,10 @@ public partial class Profile {
 
   /// タイムスタンプ
   public Int64 Timestamp { get; private set; }
-  /// レイアウト要素数
-  public int LayoutElementCount { 
-    get { return this.layoutElements.Count; }
-  }
+
   /// レイアウトの種類
   public LayoutTypes LayoutType {
-    get { return this.LayoutElementCount == 1 ? LayoutTypes.NativeLayout : LayoutTypes.ComplexLayout; }
+    get { return this.LayoutElements.Count == 1 ? LayoutTypes.NativeLayout : LayoutTypes.ComplexLayout; }
   }
 
   //===================================================================
@@ -249,6 +227,6 @@ public partial class Profile {
   //===================================================================
 
   /// レイアウトパラメータをまとめたリスト
-  private List<LayoutElement> layoutElements = new List<LayoutElement>();
+  public List<LayoutElement> LayoutElements { get; internal set; }
 }
 }   // namespace SCFF.Common.Profile

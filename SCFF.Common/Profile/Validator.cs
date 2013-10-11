@@ -76,7 +76,7 @@ public static class Validator {
   /// @param layoutElement 対象のレイアウト要素
   /// @param index レイアウト要素のインデックス
   /// @return 検証エラーリスト
-  private static ValidationErrors ValidateLayoutElement(ILayoutElementView layoutElement, int index) {
+  private static ValidationErrors ValidateLayoutElement(LayoutElement layoutElement, int index) {
     var result = new ValidationErrors();
     
     // TargetWindow
@@ -102,7 +102,7 @@ public static class Validator {
   public static ValidationErrors ValidateProfile(Profile profile) {
     var result = new ValidationErrors();
     int index = 0;
-    foreach (var layoutElement in profile) {
+    foreach (var layoutElement in profile.LayoutElements) {
       result.AddRange(Validator.ValidateLayoutElement(layoutElement, index));
       ++index;
     }

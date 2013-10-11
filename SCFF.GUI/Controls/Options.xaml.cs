@@ -129,10 +129,10 @@ public partial class Options : UserControl, IBindingProfile {
   public void OnCurrentLayoutElementChanged() {
     this.CanChangeProfile = false;
     // checkboxはclickがあるのでeventハンドラをattach/detachする必要はない
-    this.ShowCursor.IsChecked = App.Profile.CurrentView.ShowCursor;
-    this.ShowLayeredWindow.IsChecked = App.Profile.CurrentView.ShowLayeredWindow;
-    this.KeepAspectRatio.IsChecked = App.Profile.CurrentView.KeepAspectRatio;
-    this.Stretch.IsChecked = App.Profile.CurrentView.Stretch;
+    this.ShowCursor.IsChecked = App.Profile.Current.ShowCursor;
+    this.ShowLayeredWindow.IsChecked = App.Profile.Current.ShowLayeredWindow;
+    this.KeepAspectRatio.IsChecked = App.Profile.Current.KeepAspectRatio;
+    this.Stretch.IsChecked = App.Profile.Current.Stretch;
     // @todo(me) overSampingとthreadCountはまだDSFでも実装されていない
     this.CanChangeProfile = true;
   }

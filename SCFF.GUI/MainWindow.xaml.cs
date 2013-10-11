@@ -720,7 +720,7 @@ public partial class MainWindow
   /// @param sender 使用しない
   /// @param e 使用しない
   private void OnFitCurrentBoundRect(object sender, ExecutedRoutedEventArgs e) {
-    if (!App.Profile.CurrentView.IsWindowValid) {
+    if (!App.Profile.Current.IsWindowValid) {
       Debug.WriteLine("Invalid Window", "[Command] FitCurrentBoundRect");
       return;
     }

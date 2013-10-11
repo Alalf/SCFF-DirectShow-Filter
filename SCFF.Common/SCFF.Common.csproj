@@ -62,7 +62,6 @@
     <Compile Include="TinyKeyValueFile.cs" />
     <Compile Include="PointAndRect.cs" />
     <Compile Include="Profile\ClippingInputCorrector.cs" />
-    <Compile Include="Profile\ILayoutElementView.cs" />
     <Compile Include="OptionsFile.cs" />
     <Compile Include="Profile\Profile.cs" />
     <Compile Include="Constants.cs" />
@@ -77,7 +76,6 @@
     <Compile Include="GUI\Types.cs" />
     <Compile Include="RuntimeOptions.cs" />
     <Compile Include="Utilities.cs" />
-    <Compile Include="Profile\ILayoutElement.cs" />
     <Compile Include="Profile\Validator.cs" />
   </ItemGroup>
   <ItemGroup>

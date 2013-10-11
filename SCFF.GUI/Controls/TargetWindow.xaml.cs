@@ -209,12 +209,12 @@ public partial class TargetWindow : UserControl, IBindingProfile {
   /// @copydoc IBindingProfile::OnCurrentLayoutElementChanged
   public void OnCurrentLayoutElementChanged() {
     this.CanChangeProfile = false;
-    if (!App.Profile.CurrentView.IsWindowValid) {
+    if (!App.Profile.Current.IsWindowValid) {
       TextBoxError.SetError(this.WindowCaption);
     } else {
       TextBoxError.ResetError(this.WindowCaption);
     }
-    this.WindowCaption.Text = StringConverter.GetWindowCaption(App.Profile.CurrentView);
+    this.WindowCaption.Text = StringConverter.GetWindowCaption(App.Profile.Current);
     this.CanChangeProfile = true;
   }
   /// @copydoc IBindingProfile::OnProfileChanged

@@ -82,10 +82,10 @@ public partial class Area : UserControl, IBindingProfile {
   /// enum->文字列
   private string GetClippingValueString(Clipping name) {
     switch (name) {
-      case Clipping.X: return StringConverter.GetClippingXString(App.Profile.CurrentView);
-      case Clipping.Y: return StringConverter.GetClippingYString(App.Profile.CurrentView);
-      case Clipping.Width: return StringConverter.GetClippingWidthString(App.Profile.CurrentView);
-      case Clipping.Height: return StringConverter.GetClippingHeightString(App.Profile.CurrentView);
+      case Clipping.X: return StringConverter.GetClippingXString(App.Profile.Current);
+      case Clipping.Y: return StringConverter.GetClippingYString(App.Profile.Current);
+      case Clipping.Width: return StringConverter.GetClippingWidthString(App.Profile.Current);
+      case Clipping.Height: return StringConverter.GetClippingHeightString(App.Profile.Current);
       default: Debug.Fail("switch"); throw new System.ArgumentException();
     }
   }
@@ -132,7 +132,7 @@ public partial class Area : UserControl, IBindingProfile {
     }
 
     // Window Check
-    if (!App.Profile.CurrentView.IsWindowValid) {
+    if (!App.Profile.Current.IsWindowValid) {
       this.SetError(target, "Target window is invalid");
       this.ResetError(dependent);
       return;
@@ -141,7 +141,7 @@ public partial class Area : UserControl, IBindingProfile {
     // Correct
     ClientRect changed;
     var result = ClippingInputCorrector.TryChange(
-        App.Profile.CurrentView, target, value, out changed);
+        App.Profile.Current, target, value, out changed);
 
     // Error表示
     switch (result) {
@@ -189,7 +189,7 @@ public partial class Area : UserControl, IBindingProfile {
     }
 
     // Window Check
-    if (!App.Profile.CurrentView.IsWindowValid) {
+    if (!App.Profile.Current.IsWindowValid) {
       this.OverwriteText(target);
       this.ResetError(dependent);
       return;
@@ -198,7 +198,7 @@ public partial class Area : UserControl, IBindingProfile {
     // Correct
     ClientRect changed;
     var result = ClippingInputCorrector.TryChange(
-        App.Profile.CurrentView, target, value, out changed);
+        App.Profile.Current, target, value, out changed);
 
     // 訂正の必要がない=TextChangedで設定済み
     if (result == ClippingInputCorrector.TryResult.NothingChanged) return;
@@ -298,7 +298,7 @@ public partial class Area : UserControl, IBindingProfile {
   /// 現在編集中のレイアウト要素のクリッピング領域/Fitオプションを変更する
   private void CommonAreaSelect(bool changeWindowType = false,
                                 WindowTypes nextWindowType = WindowTypes.Normal) {
-    if (!App.Profile.CurrentView.IsWindowValid) {
+    if (!App.Profile.Current.IsWindowValid) {
       Debug.WriteLine("Invalid Window", "Area.CommonAreaSelect");
       return;
     }
@@ -309,7 +309,7 @@ public partial class Area : UserControl, IBindingProfile {
     var dialog = new AreaSelectWindow();
 
     // サイズ
-    var screenRect = App.Profile.CurrentView.ScreenClippingRectWithFit;
+    var screenRect = App.Profile.Current.ScreenClippingRectWithFit;
     dialog.Left   = screenRect.X;
     dialog.Top    = screenRect.Y;
     dialog.Width  = screenRect.Width;
@@ -318,7 +318,7 @@ public partial class Area : UserControl, IBindingProfile {
     // カラーの変更
     Brush border, background;
     this.GetWindowTypesBrushes(
-        App.Profile.CurrentView.WindowType, nextWindowType,
+        App.Profile.Current.WindowType, nextWindowType,
         out border, out background);
     dialog.WindowBorder.BorderBrush = border;
     dialog.WindowGrid.Background = background;
@@ -501,7 +501,7 @@ public partial class Area : UserControl, IBindingProfile {
   public void OnCurrentLayoutElementChanged() {
     this.CanChangeProfile = false;
 
-    switch (App.Profile.CurrentView.WindowType) {
+    switch (App.Profile.Current.WindowType) {
       case WindowTypes.Normal: {
         this.ListView.IsEnabled = true;
         this.Desktop.IsEnabled = true;
@@ -519,13 +519,13 @@ public partial class Area : UserControl, IBindingProfile {
       }
       default: Debug.Fail("switch"); throw new System.ArgumentException();
     }
-    this.Fit.IsChecked = App.Profile.CurrentView.Fit;
+    this.Fit.IsChecked = App.Profile.Current.Fit;
 
     // *Changed/Collapsed/Expanded
-    this.ClippingX.Text = StringConverter.GetClippingXString(App.Profile.CurrentView);
-    this.ClippingY.Text = StringConverter.GetClippingYString(App.Profile.CurrentView);
-    this.ClippingWidth.Text = StringConverter.GetClippingWidthString(App.Profile.CurrentView);
-    this.ClippingHeight.Text = StringConverter.GetClippingHeightString(App.Profile.CurrentView);
+    this.ClippingX.Text = StringConverter.GetClippingXString(App.Profile.Current);
+    this.ClippingY.Text = StringConverter.GetClippingYString(App.Profile.Current);
+    this.ClippingWidth.Text = StringConverter.GetClippingWidthString(App.Profile.Current);
+    this.ClippingHeight.Text = StringConverter.GetClippingHeightString(App.Profile.Current);
     this.ResetError(Clipping.X);
     this.ResetError(Clipping.Y);
     this.ResetError(Clipping.Width);

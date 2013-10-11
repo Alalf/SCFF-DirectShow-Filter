@@ -159,7 +159,7 @@ public static class BoundRelativeInputCorrector {
   //-------------------------------------------------------------------
 
   /// レイアウト要素からClipping領域(Fitオプションなし)を取得
-  private static RelativeLTRB GetOriginal(ILayoutElementView layoutElement) {
+  private static RelativeLTRB GetOriginal(LayoutElement layoutElement) {
     return new RelativeLTRB(layoutElement.BoundRelativeLeft,
                             layoutElement.BoundRelativeTop,
                             layoutElement.BoundRelativeRight,
@@ -173,7 +173,7 @@ public static class BoundRelativeInputCorrector {
   /// @param[out] changed 変更後、制約を満たす形に訂正されたBoundRelative領域
   /// @return 試行結果（訂正箇所）
   public static TryResult TryChange(
-      ILayoutElementView layoutElement, Names target, double value,
+      LayoutElement layoutElement, Names target, double value,
       out RelativeLTRB changed) {
     // 準備
     var original = BoundRelativeInputCorrector.GetOriginal(layoutElement);
@@ -201,7 +201,7 @@ public static class BoundRelativeInputCorrector {
   /// レイアウト要素のBoundRelative領域を訂正する
   /// @param layoutElement レイアウト要素
   /// @return 制約を満たす形に訂正されたBoundRelative領域
-  public static RelativeLTRB Correct(ILayoutElementView layoutElement) {
+  public static RelativeLTRB Correct(LayoutElement layoutElement) {
     // 準備
     var left = layoutElement.BoundRelativeLeft;
     var top = layoutElement.BoundRelativeTop;

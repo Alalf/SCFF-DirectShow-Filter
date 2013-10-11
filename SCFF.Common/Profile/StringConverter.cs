@@ -34,7 +34,7 @@ public static class StringConverter {
   /// @param index レイアウト要素のインデックス
   /// @param maxLength 文字列の長さの上限
   /// @return LayoutParameter用ヘッダー文字列
-  public static string GetHeaderStringForLayoutParameter(ILayoutElementView layoutElement, int index, int maxLength) {
+  public static string GetHeaderStringForLayoutParameter(LayoutElement layoutElement, int index, int maxLength) {
     var header = string.Format("Layout {0:D}: {1}",
                                 index + 1,
                                 layoutElement.WindowCaption);
@@ -49,7 +49,9 @@ public static class StringConverter {
   /// @param sampleWidth サンプルの幅
   /// @param sampleHeight サンプルの高さ
   /// @return LayoutEdit用ヘッダー文字列
-  public static string GetHeaderStringForLayoutEdit(ILayoutElementView layoutElement, int index, bool isCurrent, bool isDummy, int sampleWidth, int sampleHeight) {
+  public static string GetHeaderStringForLayoutEdit(
+      LayoutElement layoutElement, int index,
+      bool isCurrent, bool isDummy, int sampleWidth, int sampleHeight) {
     if (isCurrent && isDummy) {
       return string.Format(" [{0}] {1}", index + 1, layoutElement.WindowCaption);
     } else if (isCurrent) {
@@ -69,7 +71,7 @@ public static class StringConverter {
   //=================================================================
 
   /// 表示用のウィンドウ名を取得
-  public static string GetWindowCaption(ILayoutElementView layoutElement) {
+  public static string GetWindowCaption(LayoutElement layoutElement) {
     if (layoutElement.IsWindowValid) {
       return layoutElement.WindowCaption;
     } else {
@@ -84,7 +86,7 @@ public static class StringConverter {
   /// ClippingX表示用
   /// @param layoutElement データ取得元のレイアウト要素
   /// @return ClippingX表示用文字列
-  public static string GetClippingXString(ILayoutElementView layoutElement) {
+  public static string GetClippingXString(LayoutElement layoutElement) {
     if (layoutElement.Fit && !layoutElement.IsWindowValid) {
       return "n/a";
     } else if (layoutElement.Fit) {
@@ -96,7 +98,7 @@ public static class StringConverter {
   /// ClippingY表示用
   /// @param layoutElement データ取得元のレイアウト要素
   /// @return ClippingY表示用文字列
-  public static string GetClippingYString(ILayoutElementView layoutElement) {
+  public static string GetClippingYString(LayoutElement layoutElement) {
     if (layoutElement.Fit && !layoutElement.IsWindowValid) {
       return "n/a";
     } else if (layoutElement.Fit) {
@@ -108,7 +110,7 @@ public static class StringConverter {
   /// ClippingWidth表示用
   /// @param layoutElement データ取得元のレイアウト要素
   /// @return ClippingWidth表示用文字列
-  public static string GetClippingWidthString(ILayoutElementView layoutElement) {
+  public static string GetClippingWidthString(LayoutElement layoutElement) {
     if (layoutElement.Fit && !layoutElement.IsWindowValid) {
       return "n/a";
     } else if (layoutElement.Fit) {
@@ -120,7 +122,7 @@ public static class StringConverter {
   /// ClippingHeight表示用
   /// @param layoutElement データ取得元のレイアウト要素
   /// @return ClippingHeight表示用文字列
-  public static string GetClippingHeightString(ILayoutElementView layoutElement) {
+  public static string GetClippingHeightString(LayoutElement layoutElement) {
     if (layoutElement.Fit && !layoutElement.IsWindowValid) {
       return "n/a";
     } else if (layoutElement.Fit) {
@@ -137,25 +139,25 @@ public static class StringConverter {
   /// BoundRelativeLeft表示用
   /// @param layoutElement データ取得元のレイアウト要素
   /// @return BoundRelativeLeft表示用文字列
-  public static string GetBoundRelativeLeftString(ILayoutElementView layoutElement) {
+  public static string GetBoundRelativeLeftString(LayoutElement layoutElement) {
     return layoutElement.BoundRelativeLeft.ToString("F3");
   }
   /// BoundRelativeRight表示用
   /// @param layoutElement データ取得元のレイアウト要素
   /// @return BoundRelativeRight表示用文字列
-  public static string GetBoundRelativeRightString(ILayoutElementView layoutElement) {
+  public static string GetBoundRelativeRightString(LayoutElement layoutElement) {
     return layoutElement.BoundRelativeRight.ToString("F3");
   }
   /// BoundRelativeTop表示用
   /// @param layoutElement データ取得元のレイアウト要素
   /// @return BoundRelativeTop表示用文字列
-  public static string GetBoundRelativeTopString(ILayoutElementView layoutElement) {
+  public static string GetBoundRelativeTopString(LayoutElement layoutElement) {
     return layoutElement.BoundRelativeTop.ToString("F3");
   }
   /// BoundRelativeBottom表示用
   /// @param layoutElement データ取得元のレイアウト要素
   /// @return BoundRelativeBottom表示用文字列
-  public static string GetBoundRelativeBottomString(ILayoutElementView layoutElement) {
+  public static string GetBoundRelativeBottomString(LayoutElement layoutElement) {
     return layoutElement.BoundRelativeBottom.ToString("F3");
   }
 
@@ -173,7 +175,7 @@ public static class StringConverter {
   /// @param[out] width BoundWidthの文字列
   /// @param[out] height BoundHeightの文字列
   /// @return BoundX表示用文字列
-  public static void GetBoundRectString(ILayoutElementView layoutElement,
+  public static void GetBoundRectString(LayoutElement layoutElement,
       bool isDummy, int sampleWidth, int sampleHeight,
       out string x, out string y, out string width, out string height) {
     var boundRect = layoutElement.GetBoundRect(sampleWidth, sampleHeight);
@@ -195,37 +197,37 @@ public static class StringConverter {
   /// SWScaleLumaGBlur表示用
   /// @param layoutElement データ取得元のレイアウト要素
   /// @return SWScaleLumaGBlur表示用文字列
-  public static string GetSWScaleLumaGBlurString(ILayoutElementView layoutElement) {
+  public static string GetSWScaleLumaGBlurString(LayoutElement layoutElement) {
     return layoutElement.SWScaleLumaGBlur.ToString("F2");
   }
   /// SWScaleLumaSharpen表示用
   /// @param layoutElement データ取得元のレイアウト要素
   /// @return SWScaleLumaSharpen表示用文字列
-  public static string GetSWScaleLumaSharpenString(ILayoutElementView layoutElement) {
+  public static string GetSWScaleLumaSharpenString(LayoutElement layoutElement) {
     return layoutElement.SWScaleLumaSharpen.ToString("F2"); 
   } 
   /// SWScaleChromaHShift表示用
   /// @param layoutElement データ取得元のレイアウト要素
   /// @return SWScaleChromaHShift表示用文字列
-  public static string GetSWScaleChromaHShiftString(ILayoutElementView layoutElement) {
+  public static string GetSWScaleChromaHShiftString(LayoutElement layoutElement) {
     return layoutElement.SWScaleChromaHShift.ToString("F2");
   }
   /// SWScaleChromaGBlur表示用
   /// @param layoutElement データ取得元のレイアウト要素
   /// @return SWScaleChromaGBlur表示用文字列
-  public static string GetSWScaleChromaGBlurString(ILayoutElementView layoutElement) {
+  public static string GetSWScaleChromaGBlurString(LayoutElement layoutElement) {
     return layoutElement.SWScaleChromaGBlur.ToString("F2");
   }
   /// SWScaleChromaSharpen表示用
   /// @param layoutElement データ取得元のレイアウト要素
   /// @return SWScaleChromaSharpen表示用文字列
-  public static string GetSWScaleChromaSharpenString(ILayoutElementView layoutElement) {
+  public static string GetSWScaleChromaSharpenString(LayoutElement layoutElement) {
     return layoutElement.SWScaleChromaSharpen.ToString("F2");
   }
   /// SWScaleChromaVShift表示用
   /// @param layoutElement データ取得元のレイアウト要素
   /// @return SWScaleChromaVShift表示用文字列
-  public static string GetSWScaleChromaVShiftString(ILayoutElementView layoutElement) {
+  public static string GetSWScaleChromaVShiftString(LayoutElement layoutElement) {
     return layoutElement.SWScaleChromaVShift.ToString("F2");
   }
 }

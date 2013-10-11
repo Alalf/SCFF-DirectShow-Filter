@@ -36,7 +36,7 @@ using SCFF.Interprocess;
 ///   - this.profile.layoutElementDatabase[*].Window
 /// - ProfileはProcessに関連した情報を知ることはできない
 ///   - よってsampleWidth/sampleHeightの存在は仮定しないこと
-public class LayoutElement : ILayoutElementView, ILayoutElement {
+public class LayoutElement {
   //=================================================================
   // コンストラクタ
   //=================================================================

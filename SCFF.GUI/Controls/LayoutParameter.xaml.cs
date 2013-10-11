@@ -84,10 +84,10 @@ public partial class LayoutParameter
   /// enum->文字列
   private string GetBoundRelativeValueString(BoundRelative name) {
     switch (name) {
-      case BoundRelative.Left: return StringConverter.GetBoundRelativeLeftString(App.Profile.CurrentView);
-      case BoundRelative.Top: return StringConverter.GetBoundRelativeTopString(App.Profile.CurrentView);
-      case BoundRelative.Right: return StringConverter.GetBoundRelativeRightString(App.Profile.CurrentView);
-      case BoundRelative.Bottom: return StringConverter.GetBoundRelativeBottomString(App.Profile.CurrentView);
+      case BoundRelative.Left: return StringConverter.GetBoundRelativeLeftString(App.Profile.Current);
+      case BoundRelative.Top: return StringConverter.GetBoundRelativeTopString(App.Profile.Current);
+      case BoundRelative.Right: return StringConverter.GetBoundRelativeRightString(App.Profile.Current);
+      case BoundRelative.Bottom: return StringConverter.GetBoundRelativeBottomString(App.Profile.Current);
       default: Debug.Fail("switch"); throw new System.ArgumentException();
     }
   }
@@ -134,7 +134,7 @@ public partial class LayoutParameter
     }
 
     // Window Check
-    if (!App.Profile.CurrentView.IsWindowValid) {
+    if (!App.Profile.Current.IsWindowValid) {
       this.SetError(target, "Target window is invalid");
       this.ResetError(dependent);
       return;
@@ -143,7 +143,7 @@ public partial class LayoutParameter
     // Correct
     RelativeLTRB changed;
     var result = BoundRelativeInputCorrector.TryChange(
-        App.Profile.CurrentView, target, value, out changed);
+        App.Profile.Current, target, value, out changed);
 
     // Error表示
     switch (result) {
@@ -191,7 +191,7 @@ public partial class LayoutParameter
     }
 
     // Window Check
-    if (!App.Profile.CurrentView.IsWindowValid) {
+    if (!App.Profile.Current.IsWindowValid) {
       this.OverwriteText(target);
       this.ResetError(dependent);
       return;
@@ -200,7 +200,7 @@ public partial class LayoutParameter
     // Correct
     RelativeLTRB changed;
     var result = BoundRelativeInputCorrector.TryChange(
-        App.Profile.CurrentView, target, value, out changed);
+        App.Profile.Current, target, value, out changed);
 
     // 訂正の必要がない=TextChangedで設定済み
     if (result == BoundRelativeInputCorrector.TryResult.NothingChanged) return;
@@ -358,7 +358,7 @@ public partial class LayoutParameter
 
     // 文字列化
     string x, y, width, height;
-    StringConverter.GetBoundRectString(App.Profile.CurrentView,
+    StringConverter.GetBoundRectString(App.Profile.Current,
         isDummy, sampleWidth, sampleHeight,
         out x, out y, out width, out height);
 
@@ -381,7 +381,7 @@ public partial class LayoutParameter
 
     this.GroupBox.Header =
         StringConverter.GetHeaderStringForLayoutParameter(
-            App.Profile.CurrentView, App.Profile.GetCurrentIndex(),
+            App.Profile.Current, App.Profile.GetCurrentIndex(),
             LayoutParameter.maxHeaderLength);
 
     this.OverwriteBoundRectText();
@@ -393,10 +393,10 @@ public partial class LayoutParameter
     this.BoundRelativeBottom.IsEnabled = isComplexLayout;
 
     // *Changed/Collapsed/Expanded
-    this.BoundRelativeLeft.Text = StringConverter.GetBoundRelativeLeftString(App.Profile.CurrentView);
-    this.BoundRelativeTop.Text = StringConverter.GetBoundRelativeTopString(App.Profile.CurrentView);
-    this.BoundRelativeRight.Text = StringConverter.GetBoundRelativeRightString(App.Profile.CurrentView);
-    this.BoundRelativeBottom.Text = StringConverter.GetBoundRelativeBottomString(App.Profile.CurrentView);
+    this.BoundRelativeLeft.Text = StringConverter.GetBoundRelativeLeftString(App.Profile.Current);
+    this.BoundRelativeTop.Text = StringConverter.GetBoundRelativeTopString(App.Profile.Current);
+    this.BoundRelativeRight.Text = StringConverter.GetBoundRelativeRightString(App.Profile.Current);
+    this.BoundRelativeBottom.Text = StringConverter.GetBoundRelativeBottomString(App.Profile.Current);
     this.ResetError(BoundRelative.Left);
     this.ResetError(BoundRelative.Top);
     this.ResetError(BoundRelative.Right);

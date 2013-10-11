@@ -51,10 +51,10 @@ public class ProfileFile : TinyKeyValueFile {
     try {
       using (var writer = new StreamWriter(path)) {
         writer.WriteLine(Constants.ProfileHeader);
-        writer.WriteLine("LayoutElementCount={0}", this.profile.LayoutElementCount);
+        writer.WriteLine("LayoutElementCount={0}", this.profile.LayoutElements.Count);
         writer.WriteLine("CurrentIndex={0}", this.profile.GetCurrentIndex());
         int index = 0;
-        foreach (var layoutElement in this.profile) {
+        foreach (var layoutElement in this.profile.LayoutElements) {
           writer.WriteLine("[LayoutElement{0}]", index);
 
           // TargetWindow
@@ -308,7 +308,8 @@ public class ProfileFile : TinyKeyValueFile {
       }
     }
 
-    this.profile.SetLayoutElements(layoutElements, current);
+    this.profile.Current = current;
+    this.profile.LayoutElements = layoutElements;
 
     return true;
   }

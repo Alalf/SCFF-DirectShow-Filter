@@ -59,7 +59,7 @@ public class MoveAndSize {
   //===================================================================
 
   /// 開始
-  public void Start(ILayoutElementView target, HitModes hitMode,
+  public void Start(LayoutElement target, HitModes hitMode,
                     RelativePoint mousePoint, SnapGuide snapGuide) {
     this.target       = target;
     this.hitMode      = hitMode;
@@ -378,7 +378,7 @@ public class MoveAndSize {
   //===================================================================
 
   /// 移動・拡大縮小対象のレイアウト要素
-  private ILayoutElementView target;
+  private LayoutElement target;
 
   /// 動作開始時のヒットテストの結果
   private HitModes hitMode;

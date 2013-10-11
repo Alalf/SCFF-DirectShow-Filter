@@ -33,7 +33,7 @@ public sealed class ScreenCaptureRequest {
   //===================================================================
 
   /// コンストラクタ
-  public ScreenCaptureRequest(ILayoutElementView layoutElement) {
+  public ScreenCaptureRequest(LayoutElement layoutElement) {
     Debug.Assert(layoutElement.IsWindowValid, "Invalid Window", "ScreenCaptureRequest");
     this.Window = layoutElement.Window;
     this.ClippingX = layoutElement.ClippingXWithFit;

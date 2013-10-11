@@ -92,12 +92,12 @@ public partial class ResizeMethod : UserControl, IBindingProfile {
   /// enum->文字列
   private string GetSWScaleValueString(SWScale name) {
     switch (name) {
-      case SWScale.LumaGBlur: return StringConverter.GetSWScaleLumaGBlurString(App.Profile.CurrentView);
-      case SWScale.LumaSharpen: return StringConverter.GetSWScaleLumaSharpenString(App.Profile.CurrentView);
-      case SWScale.ChromaHShift: return StringConverter.GetSWScaleChromaHShiftString(App.Profile.CurrentView);
-      case SWScale.ChromaGBlur: return StringConverter.GetSWScaleChromaGBlurString(App.Profile.CurrentView);
-      case SWScale.ChromaSharpen: return StringConverter.GetSWScaleChromaSharpenString(App.Profile.CurrentView);
-      case SWScale.ChromaVShift: return StringConverter.GetSWScaleChromaVShiftString(App.Profile.CurrentView);
+      case SWScale.LumaGBlur: return StringConverter.GetSWScaleLumaGBlurString(App.Profile.Current);
+      case SWScale.LumaSharpen: return StringConverter.GetSWScaleLumaSharpenString(App.Profile.Current);
+      case SWScale.ChromaHShift: return StringConverter.GetSWScaleChromaHShiftString(App.Profile.Current);
+      case SWScale.ChromaGBlur: return StringConverter.GetSWScaleChromaGBlurString(App.Profile.Current);
+      case SWScale.ChromaSharpen: return StringConverter.GetSWScaleChromaSharpenString(App.Profile.Current);
+      case SWScale.ChromaVShift: return StringConverter.GetSWScaleChromaVShiftString(App.Profile.Current);
       default: Debug.Fail("switch"); throw new System.ArgumentException();
     }
   }
@@ -378,15 +378,15 @@ public partial class ResizeMethod : UserControl, IBindingProfile {
   /// @copydoc Common::GUI::IBindingProfile::OnCurrentLayoutElementChanged
   public void OnCurrentLayoutElementChanged() {
     this.CanChangeProfile = false;
-    this.SWScaleAccurateRnd.IsChecked = App.Profile.CurrentView.SWScaleAccurateRnd;
-    this.SWScaleIsFilterEnabled.IsChecked = App.Profile.CurrentView.SWScaleIsFilterEnabled;
-    this.SWScaleFlags.SelectedValue = App.Profile.CurrentView.SWScaleFlags;
-    this.SWScaleLumaGBlur.Text = StringConverter.GetSWScaleLumaGBlurString(App.Profile.CurrentView);
-    this.SWScaleLumaSharpen.Text = StringConverter.GetSWScaleLumaSharpenString(App.Profile.CurrentView);
-    this.SWScaleChromaHShift.Text = StringConverter.GetSWScaleChromaHShiftString(App.Profile.CurrentView);
-    this.SWScaleChromaGBlur.Text = StringConverter.GetSWScaleChromaGBlurString(App.Profile.CurrentView);
-    this.SWScaleChromaSharpen.Text = StringConverter.GetSWScaleChromaSharpenString(App.Profile.CurrentView);
-    this.SWScaleChromaVShift.Text = StringConverter.GetSWScaleChromaVShiftString(App.Profile.CurrentView);
+    this.SWScaleAccurateRnd.IsChecked = App.Profile.Current.SWScaleAccurateRnd;
+    this.SWScaleIsFilterEnabled.IsChecked = App.Profile.Current.SWScaleIsFilterEnabled;
+    this.SWScaleFlags.SelectedValue = App.Profile.Current.SWScaleFlags;
+    this.SWScaleLumaGBlur.Text = StringConverter.GetSWScaleLumaGBlurString(App.Profile.Current);
+    this.SWScaleLumaSharpen.Text = StringConverter.GetSWScaleLumaSharpenString(App.Profile.Current);
+    this.SWScaleChromaHShift.Text = StringConverter.GetSWScaleChromaHShiftString(App.Profile.Current);
+    this.SWScaleChromaGBlur.Text = StringConverter.GetSWScaleChromaGBlurString(App.Profile.Current);
+    this.SWScaleChromaSharpen.Text = StringConverter.GetSWScaleChromaSharpenString(App.Profile.Current);
+    this.SWScaleChromaVShift.Text = StringConverter.GetSWScaleChromaVShiftString(App.Profile.Current);
     this.CanChangeProfile = true;
   }
   /// @copydoc Common::GUI::IBindingProfile::OnProfileChanged

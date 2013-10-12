@@ -137,6 +137,8 @@ public sealed class ScreenCaptureRequest {
   }
 
   /// スクリーンキャプチャした結果をbyte[]に格納する
+  /// @param[out] dpiX X軸方向のDPI
+  /// @param[out] dpiY Y軸方向のDPI
   /// @return スクリーンキャプチャした結果のbyte[]
   public byte[] ExecuteByGetDIBits(out int dpiX, out int dpiY) {
     // Windowチェック

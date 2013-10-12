@@ -394,6 +394,8 @@ public class ClientApplication {
 
   /// プロファイルの書き込み先のプロセスIDを変更する
   /// 指定されたプロセスIDがDirectoryになければ変更しない
+  /// @param processID 書き込み先のプロセスID
+  /// @return 書き込み先のプロセスが存在した
   public bool SelectEntry(uint processID) {
     if (!this.RuntimeOptions.EntryLabels.ContainsKey(processID)) {
       Debug.WriteLine("Cannot select entry: " + processID);

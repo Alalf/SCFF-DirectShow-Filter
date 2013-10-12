@@ -308,8 +308,7 @@ public class ProfileFile : TinyKeyValueFile {
       }
     }
 
-    this.profile.Current = current;
-    this.profile.LayoutElements = layoutElements;
+    this.profile.SetLayoutElements(layoutElements, current);
 
     return true;
   }

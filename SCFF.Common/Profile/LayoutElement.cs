@@ -15,8 +15,8 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file SCFF.Common/Profile/Profile.LayoutElement.cs
-/// @copydoc SCFF::Common::Profile::Profile::LayoutElement
+/// @file SCFF.Common/Profile/LayoutElement.cs
+/// @copydoc SCFF::Common::Profile::LayoutElement
 
 namespace SCFF.Common.Profile {
 
@@ -100,27 +100,28 @@ public class LayoutElement {
   // TargetWindow
   //=================================================================
 
-  /// @copydoc ILayoutElementView::Window
+  /// @copydoc SCFF::Common::InternalLayoutParameter::Window
   public UIntPtr Window {
     get { return this.rawData.Window; }
   }
 
-  /// @copydoc ILayoutElementView::IsWindowValid
+  /// 正常なWindowハンドルかどうか
   public bool IsWindowValid {
     get { return Common.Utilities.IsWindowValid(this.Window); }
   }
 
-  /// @copydoc ILayoutElementView::WindowType
+  /// @copydoc AdditionalLayoutParameter::WindowType
   public WindowTypes WindowType {
     get { return this.additionalData.WindowType; }
   }
 
-  /// @copydoc ILayoutElementView::WindowCaption
+  /// @copydoc AdditionalLayoutParameter::WindowCaption
   public string WindowCaption {
     get { return this.additionalData.WindowCaption; }
   }
 
-  /// @copydoc ILayoutElement::SetWindow
+  /// WindowタイプをNormalに＋Windowハンドルを設定する
+  /// @param window 設定するWindowハンドル
   public void SetWindow(UIntPtr window) {
     this.additionalData.WindowType = WindowTypes.Normal;
     this.rawData.Window = window;
@@ -133,13 +134,13 @@ public class LayoutElement {
     }
     this.additionalData.WindowCaption = windowCaption;
   }
-  /// @copydoc ILayoutElement::SetWindowToDesktop
+  /// WindowタイプをDesktopにする
   public void SetWindowToDesktop() {
     this.additionalData.WindowType = WindowTypes.Desktop;
     this.rawData.Window = User32.GetDesktopWindow();
     this.additionalData.WindowCaption = "(Desktop)";
   }
-  /// @copydoc ILayoutElement::SetWindowToDXGI
+  /// WindowタイプをDXGIにする
   public void SetWindowToDXGI() {
     this.additionalData.WindowType = WindowTypes.DXGI;
     this.rawData.Window = Utilities.DXGIWindow;
@@ -150,54 +151,58 @@ public class LayoutElement {
   // Area
   //=================================================================
 
-  /// @copydoc ILayoutElementView::Fit
+  /// @copydoc AdditionalLayoutParameter::Fit
   public bool Fit {
     get { return this.additionalData.Fit; }
     set { this.additionalData.Fit = value; }
   }
-  /// @copydoc ILayoutElementView::ClippingXWithoutFit
+  /// @copydoc AdditionalLayoutParameter::ClippingXWithoutFit
   public int ClippingXWithoutFit {
     get { return this.additionalData.ClippingXWithoutFit; }
     set { this.additionalData.ClippingXWithoutFit = value; }
   }
-  /// @copydoc ILayoutElementView::ClippingYWithoutFit
+  /// @copydoc AdditionalLayoutParameter::ClippingYWithoutFit
   public int ClippingYWithoutFit {
     get { return this.additionalData.ClippingYWithoutFit; }
     set { this.additionalData.ClippingYWithoutFit = value; }
   }
-  /// @copydoc ILayoutElementView::ClippingWidthWithoutFit
+  /// @copydoc AdditionalLayoutParameter::ClippingWidthWithoutFit
   public int ClippingWidthWithoutFit {
     get { return this.additionalData.ClippingWidthWithoutFit; }
     set { this.additionalData.ClippingWidthWithoutFit = value; }
   }
-  /// @copydoc ILayoutElementView::ClippingHeightWithoutFit
+  /// @copydoc AdditionalLayoutParameter::ClippingHeightWithoutFit
   public int ClippingHeightWithoutFit {
     get { return this.additionalData.ClippingHeightWithoutFit; }
     set { this.additionalData.ClippingHeightWithoutFit = value; }
   }
 
-  /// @copydoc ILayoutElementView::ClippingXWithFit
+  /// Fitオプションを考慮したクリッピング領域左上端のX座標
+  /// @pre IsWindowValid == True
   public int ClippingXWithFit {
     get {
       return this.Fit ? Utilities.GetWindowRect(this.WindowType, this.Window).X
                       : this.ClippingXWithoutFit;
     }
   }
-  /// @copydoc ILayoutElementView::ClippingYWithFit
+  /// Fitオプションを考慮したクリッピング領域左上端のY座標
+  /// @pre IsWindowValid == True
   public int ClippingYWithFit {
     get {
       return this.Fit ? Utilities.GetWindowRect(this.WindowType, this.Window).Y
                       : this.ClippingYWithoutFit;
     }
   }
-  /// @copydoc ILayoutElementView::ClippingWidthWithFit
+  /// Fitオプションを考慮したクリッピング領域の幅
+  /// @pre IsWindowValid == True
   public int ClippingWidthWithFit {
     get {
       return this.Fit ? Utilities.GetWindowRect(this.WindowType, this.Window).Width
                       : this.ClippingWidthWithoutFit;
     }
   }
-  /// @copydoc ILayoutElementView::ClippingHeightWithFit
+  /// Fitオプションを考慮したクリッピング領域の高さ
+  /// @pre IsWindowValid == True
   public int ClippingHeightWithFit {
     get {
       return this.Fit ? Utilities.GetWindowRect(this.WindowType, this.Window).Height
@@ -205,7 +210,7 @@ public class LayoutElement {
     }
   }
 
-  /// @copydoc ILayoutElementView::IsClippingParametersValid
+  /// クリッピング領域が正常か
   public bool IsClippingParametersValid {
     get {
       /// @todo(me) まだValidateのチェックが甘い。
@@ -228,27 +233,27 @@ public class LayoutElement {
   // Options
   //=================================================================
 
-  /// @copydoc ILayoutElementView::ShowCursor
+  /// @copydoc SCFF::Common::InternalLayoutParameter::ShowCursor
   public bool ShowCursor {
     get { return this.rawData.ShowCursor; }
     set { this.rawData.ShowCursor = value; }
   }
-  /// @copydoc ILayoutElementView::ShowLayeredWindow
+  /// @copydoc SCFF::Common::InternalLayoutParameter::ShowLayeredWindow
   public bool ShowLayeredWindow {
     get { return this.rawData.ShowLayeredWindow; }
     set { this.rawData.ShowLayeredWindow = value; }
   }
-  /// @copydoc ILayoutElementView::Stretch
+  /// @copydoc SCFF::Common::InternalLayoutParameter::Stretch
   public bool Stretch {
     get { return this.rawData.Stretch; }
     set { this.rawData.Stretch = value; }
   }
-  /// @copydoc ILayoutElementView::KeepAspectRatio
+  /// @copydoc SCFF::Common::InternalLayoutParameter::KeepAspectRatio
   public bool KeepAspectRatio {
     get { return this.rawData.KeepAspectRatio; }
     set { this.rawData.KeepAspectRatio = value; }
   }
-  /// @copydoc ILayoutElementView::RotateDirection
+  /// @copydoc SCFF::Common::InternalLayoutParameter::RotateDirection
   public RotateDirections RotateDirection {
     get { return this.rawData.RotateDirection; }
     set { this.rawData.RotateDirection = value; }
@@ -258,47 +263,47 @@ public class LayoutElement {
   // ResizeMethod
   //=================================================================
 
-  /// @copydoc ILayoutElementView::SWScaleFlags
+  /// @copydoc SCFF::Common::InternalSWScaleConfig::Flags
   public SWScaleFlags SWScaleFlags {
     get { return this.rawData.SWScaleConfig.Flags; }
     set { this.rawData.SWScaleConfig.Flags = value; }
   }
-  /// @copydoc ILayoutElementView::SWScaleAccurateRnd
+  /// @copydoc SCFF::Common::InternalSWScaleConfig::AccurateRnd
   public bool SWScaleAccurateRnd {
     get { return this.rawData.SWScaleConfig.AccurateRnd; }
     set { this.rawData.SWScaleConfig.AccurateRnd = value; }
   }
-  /// @copydoc ILayoutElementView::SWScaleIsFilterEnabled
+  /// @copydoc SCFF::Common::InternalSWScaleConfig::IsFilterEnabled
   public bool SWScaleIsFilterEnabled {
     get { return this.rawData.SWScaleConfig.IsFilterEnabled; }
     set { this.rawData.SWScaleConfig.IsFilterEnabled = value; }
   }
-  /// @copydoc ILayoutElementView::SWScaleLumaGBlur
+  /// @copydoc SCFF::Common::InternalSWScaleConfig::LumaGBlur
   public float SWScaleLumaGBlur {
     get { return this.rawData.SWScaleConfig.LumaGblur; }
     set { this.rawData.SWScaleConfig.LumaGblur = value; }
   }
-  /// @copydoc ILayoutElementView::SWScaleChromaGBlur
+  /// @copydoc SCFF::Common::InternalSWScaleConfig::ChromaGBlur
   public float SWScaleChromaGBlur {
     get { return this.rawData.SWScaleConfig.ChromaGblur; }
     set { this.rawData.SWScaleConfig.ChromaGblur = value; }
   }
-  /// @copydoc ILayoutElementView::SWScaleLumaSharpen
+  /// @copydoc SCFF::Common::InternalSWScaleConfig::LumaSharpen
   public float SWScaleLumaSharpen {
     get { return this.rawData.SWScaleConfig.LumaSharpen; }
     set { this.rawData.SWScaleConfig.LumaSharpen = value; }
   }
-  /// @copydoc ILayoutElementView::SWScaleChromaSharpen
+  /// @copydoc SCFF::Common::InternalSWScaleConfig::ChromaSharpen
   public float SWScaleChromaSharpen {
     get { return this.rawData.SWScaleConfig.ChromaSharpen; }
     set { this.rawData.SWScaleConfig.ChromaSharpen = value; }
   }
-  /// @copydoc ILayoutElementView::SWScaleChromaHShift
+  /// @copydoc SCFF::Common::InternalSWScaleConfig::ChromaHShift
   public float SWScaleChromaHShift {
     get { return this.rawData.SWScaleConfig.ChromaHShift; }
     set { this.rawData.SWScaleConfig.ChromaHShift = value; }
   }
-  /// @copydoc ILayoutElementView::SWScaleChromaVShift
+  /// @copydoc SCFF::Common::InternalSWScaleConfig::ChromaVShift
   public float SWScaleChromaVShift {
     get { return this.rawData.SWScaleConfig.ChromaVShift; }
     set { this.rawData.SWScaleConfig.ChromaVShift = value; }
@@ -308,36 +313,38 @@ public class LayoutElement {
   // LayoutParameter
   //=================================================================
 
-  /// @copydoc ILayoutElementView::BoundRelativeLeft
+  /// @copydoc AdditionalLayoutParameter::BoundRelativeLeft
   public double BoundRelativeLeft {
     get { return this.additionalData.BoundRelativeLeft; }
     set { this.additionalData.BoundRelativeLeft = value; }
   }
-  /// @copydoc ILayoutElementView::BoundRelativeTop
+  /// @copydoc AdditionalLayoutParameter::BoundRelativeTop
   public double BoundRelativeTop {
     get { return this.additionalData.BoundRelativeTop; }
     set { this.additionalData.BoundRelativeTop = value; }
   }
-  /// @copydoc ILayoutElementView::BoundRelativeRight
+  /// @copydoc AdditionalLayoutParameter::BoundRelativeRight
   public double BoundRelativeRight {
     get { return this.additionalData.BoundRelativeRight; }
     set { this.additionalData.BoundRelativeRight = value; }
   }
-  /// @copydoc ILayoutElementView::BoundRelativeBottom
+  /// @copydoc AdditionalLayoutParameter::BoundRelativeBottom
   public double BoundRelativeBottom {
     get { return this.additionalData.BoundRelativeBottom; }
     set { this.additionalData.BoundRelativeBottom = value; }
   }
-  /// @copydoc ILayoutElementView::BoundRelativeWidth
+  /// 相対座標系でのレイアウト要素の幅
   public double BoundRelativeWidth {
     get { return this.BoundRelativeRight - this.BoundRelativeLeft; }
   }
-  /// @copydoc ILayoutElementView::BoundRelativeHeight
+  /// 相対座標系でのレイアウト要素の高さ
   public double BoundRelativeHeight {
     get { return this.BoundRelativeBottom - this.BoundRelativeTop; }
   }
 
-  /// @copydoc ILayoutElement::FitBoundRelativeRect
+  /// LayoutParameterをサンプル座標系で調整する
+  /// @param sampleWidth サンプルの幅
+  /// @param sampleHeight サンプルの高さ
   public void FitBoundRelativeRect(int sampleWidth, int sampleHeight) {
     Debug.Assert(this.IsWindowValid, "Invalid Window", "LayoutElement.FitBoundRelativeRect");
 
@@ -365,7 +372,7 @@ public class LayoutElement {
   // Screen
   //=================================================================
 
-  /// @copydoc ILayoutElementView::ScreenClippingRectWithFit
+  /// Screen座標系で表されたクリッピング領域(Fit考慮)を取得する
   public ScreenRect ScreenClippingRectWithFit {
     get {
       var screenPoint = Utilities.ClientToScreen(
@@ -375,7 +382,8 @@ public class LayoutElement {
     }
   }
 
-  /// @copydoc ILayoutElement::SetClippingRectByScreenRect
+  /// Screen座標系のRectとIntersectを取り、新しいClipping領域に設定する。
+  /// @param nextScreenRect 新しいClipping領域(Intersect前)
   public void SetClippingRectByScreenRect(ScreenRect nextScreenRect) {
     Debug.Assert(this.IsWindowValid, "Invalid Window", "LayoutElement.SetClippingRectByScreenRect");
 
@@ -415,7 +423,10 @@ public class LayoutElement {
   // SampleWidth/Heightの値が必要
   //=================================================================
 
-  /// @copydoc ILayoutElementView::GetBoundRect
+  /// サンプル座標系でのレイアウト要素の領域
+  /// @param sampleWidth サンプルの幅
+  /// @param sampleHeight サンプルの高さ
+  /// @return サンプル座標系でのレイアウト要素の領域
   public SampleRect GetBoundRect(int sampleWidth, int sampleHeight) {
     var realLeft = this.BoundRelativeLeft * sampleWidth;
     var realTop = this.BoundRelativeTop * sampleHeight;
@@ -434,7 +445,10 @@ public class LayoutElement {
 
     return new SampleRect(x, y, width, height);
   }
-  /// @copydoc ILayoutElementView::GetActualBoundRect
+  /// サンプル座標系でのレイアウト要素の画像部分が占める領域
+  /// @param sampleWidth サンプルの幅
+  /// @param sampleHeight サンプルの高さ
+  /// @return サンプル座標系でのレイアウト要素の画像部分が占める領域
   public SampleRect GetActualBoundRect(int sampleWidth, int sampleHeight) {
     Debug.Assert(this.IsWindowValid, "Invalid Window", "LayoutElement.GetActualSampleRect");
     var boundRect = this.GetBoundRect(sampleWidth, sampleHeight);
@@ -452,32 +466,32 @@ public class LayoutElement {
   // Backup
   //=================================================================
 
-  /// @copydoc ILayoutElementView::HasBackedUp
+  /// @copydoc AdditionalLayoutParameter::HasBackedUp
   public bool HasBackedUp {
     get { return this.additionalData.HasBackedUp; }
     set { this.additionalData.HasBackedUp = value; }
   }
-  /// @copydoc ILayoutElementView::BackupScreenClippingX
+  /// @copydoc AdditionalLayoutParameter::BackupScreenClippingX
   public int BackupScreenClippingX {
     get { return this.additionalData.BackupScreenClippingX; }
     set { this.additionalData.BackupScreenClippingX = value; }
   }
-  /// @copydoc ILayoutElementView::BackupScreenClippingY
+  /// @copydoc AdditionalLayoutParameter::BackupScreenClippingY
   public int BackupScreenClippingY {
     get { return this.additionalData.BackupScreenClippingY; }
     set { this.additionalData.BackupScreenClippingY = value; }
   }
-  /// @copydoc ILayoutElementView::BackupClippingWidth
+  /// @copydoc AdditionalLayoutParameter::BackupClippingWidth
   public int BackupClippingWidth {
     get { return this.additionalData.BackupClippingWidth; }
     set { this.additionalData.BackupClippingWidth = value; }
   }
-  /// @copydoc ILayoutElementView::BackupClippingHeight
+  /// @copydoc AdditionalLayoutParameter::BackupClippingHeight
   public int BackupClippingHeight {
     get { return this.additionalData.BackupClippingHeight; }
     set { this.additionalData.BackupClippingHeight = value; }
   }
-  /// @copydoc ILayoutElement::UpdateBackupParameters
+  /// Backup*をすべて更新
   public void UpdateBackupParameters() {
     var screenRect = this.ScreenClippingRectWithFit;
     this.BackupScreenClippingX = screenRect.X;
@@ -486,7 +500,7 @@ public class LayoutElement {
     this.BackupClippingHeight = screenRect.Height;
     this.HasBackedUp = true;
   }
-  /// @copydoc ILayoutElement::UpdateBackupParameters
+  /// BackupからWindow/Clipping*を設定
   public void RestoreBackupParameters() {
     if (!this.HasBackedUp) return;
     Debug.Assert(!this.IsWindowValid);
@@ -497,7 +511,7 @@ public class LayoutElement {
     this.ClippingWidthWithoutFit = this.BackupClippingWidth;
     this.ClippingHeightWithoutFit = this.BackupClippingHeight;
   }
-  /// @copydoc ILayoutElement::ClearBackupParameters
+  /// Backup*をクリア
   public void ClearBackupParameters() {
     this.BackupScreenClippingX = 0;
     this.BackupScreenClippingY = 0;

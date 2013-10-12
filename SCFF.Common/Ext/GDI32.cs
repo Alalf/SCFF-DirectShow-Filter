@@ -83,6 +83,7 @@ public class GDI32 {
   // API
   //===================================================================
 
+  /// 指定されたデバイスに関するデバイス固有の情報を取得
   [DllImport("gdi32.dll")]
   public static extern int GetDeviceCaps(IntPtr hDC, int nIndex);
 

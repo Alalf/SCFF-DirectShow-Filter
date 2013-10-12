@@ -101,6 +101,7 @@ public partial class Profile {
   }
 
   /// 指定されたインデックスのレイアウト要素を選択する
+  /// @param next 選択したいレイアウト要素のインデックス
   public void SetCurrentByIndex(int next) {
     /// @todo(me): 範囲チェック
     this.Current = this.LayoutElements[next];
@@ -216,6 +217,11 @@ public partial class Profile {
       }
     }
   }
+  /// 全てのレイアウト要素を一気に更新する
+  public void SetLayoutElements(List<LayoutElement> layoutElements, LayoutElement current) {
+    this.LayoutElements = layoutElements;
+    this.Current = current;
+  }
 
   //-------------------------------------------------------------------
   // 変換
@@ -269,6 +275,6 @@ public partial class Profile {
   //===================================================================
 
   /// レイアウトパラメータをまとめたリスト
-  public List<LayoutElement> LayoutElements { get; internal set; }
+  public List<LayoutElement> LayoutElements { get; private set; }
 }
 }   // namespace SCFF.Common.Profile

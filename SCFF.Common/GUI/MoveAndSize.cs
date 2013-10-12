@@ -38,10 +38,12 @@ public class MoveAndSize {
   // コンストラクタ
   //===================================================================
 
+  /// コンストラクタ
   public MoveAndSize() {
     this.Clear();
   }
 
+  /// フィールドを初期化
   private void Clear() {
     this.target               = null;
     this.hitMode              = HitModes.Neutral;

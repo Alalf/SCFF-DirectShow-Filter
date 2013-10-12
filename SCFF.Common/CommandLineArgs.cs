@@ -39,9 +39,14 @@ public class CommandLineArgs {
   public CommandLineArgs() {
     // nop
   }
+  /// コンストラクタ
+  /// @param args コマンドライン引数
   public CommandLineArgs(string[] args) {
     this.ParseArgs(args);
   }
+  /// コンストラクタ
+  /// @param data 改行区切り、Unicode化されたコマンドライン引数
+  /// @param actualLength データ長
   public CommandLineArgs(byte[] data, int actualLength) {
     this.ParseUnicodeData(data, actualLength);
   }
@@ -51,6 +56,7 @@ public class CommandLineArgs {
   //===================================================================
 
   /// string[]を解析
+  /// @param args 解析対象のコマンドライン引数
   private void ParseArgs(string[] args) {
     var isPIDParsing = false;
     foreach (var arg in args) {

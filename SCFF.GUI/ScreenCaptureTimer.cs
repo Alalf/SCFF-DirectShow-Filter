@@ -236,7 +236,8 @@ public class ScreenCaptureTimer : IDisposable {
   public void UpdateRequest(Profile profile) {
     // ProfileからRequestを生成
     var profileRequests = new HashSet<ScreenCaptureRequest>();
-    foreach (var layoutElement in profile.LayoutElements) {
+    var copy = profile.CopyLayoutElements();
+    foreach (var layoutElement in copy) {
       if (!layoutElement.IsWindowValid) continue;
       profileRequests.Add(new ScreenCaptureRequest(layoutElement));
     }

@@ -41,6 +41,7 @@ public partial class Profile {
   
   /// コンストラクタ
   public Profile() {
+    this.CopyLock = new object();
     this.RestoreDefault();
   }
 
@@ -60,7 +61,7 @@ public partial class Profile {
   //===================================================================
 
   //-------------------------------------------------------------------
-  // イベント
+  // 編集開始・終了
   //-------------------------------------------------------------------
 
   /// イベント: 変更時
@@ -72,13 +73,6 @@ public partial class Profile {
     var handler = this.OnChanged;
     if (handler != null) handler(this, EventArgs.Empty);
   }
-
-  //-------------------------------------------------------------------
-  // カーソル
-  //-------------------------------------------------------------------
-
-  /// 現在選択中のレイアウト要素
-  public LayoutElement Current { get; set; }
 
   /// レイアウト要素編集開始
   public void Open() {
@@ -92,23 +86,7 @@ public partial class Profile {
   }
 
   //-------------------------------------------------------------------
-  // カーソル(インデックス)
-  //-------------------------------------------------------------------
-
-  /// 現在選択中のレイアウト要素のインデックスを返す
-  public int GetCurrentIndex() {
-    return this.LayoutElements.IndexOf(this.Current);
-  }
-
-  /// 指定されたインデックスのレイアウト要素を選択する
-  /// @param next 選択したいレイアウト要素のインデックス
-  public void SetCurrentByIndex(int next) {
-    /// @todo(me): 範囲チェック
-    this.Current = this.LayoutElements[next];
-  }
-
-  //-------------------------------------------------------------------
-  // レイアウト要素の追加
+  // レイアウト要素の追加・削除
   //-------------------------------------------------------------------
 
   /// レイアウト要素を追加可能か
@@ -127,10 +105,6 @@ public partial class Profile {
     this.RaiseChanged();
   }
 
-  //-------------------------------------------------------------------
-  // レイアウト要素の削除
-  //-------------------------------------------------------------------
-
   /// レイアウト要素を削除可能か
   public bool CanRemoveCurrent {
     get { return this.LayoutElements.Count > 1; }
@@ -139,14 +113,16 @@ public partial class Profile {
   /// 現在選択中のレイアウト要素を削除
   /// @post タイムスタンプ更新
   public void RemoveCurrent() {
-    var removedIndex = this.GetCurrentIndex();
-    this.LayoutElements.Remove(this.Current);
+    lock (this.CopyLock) {
+      var removedIndex = this.GetCurrentIndex();
+      this.LayoutElements.Remove(this.Current);
 
-    // Currentを新しい場所に移して終了
-    if (removedIndex < this.LayoutElements.Count) {
-      this.Current = this.LayoutElements[removedIndex];
-    } else {
-      this.Current = this.LayoutElements[removedIndex - 1];
+      // Currentを新しい場所に移して終了
+      if (removedIndex < this.LayoutElements.Count) {
+        this.Current = this.LayoutElements[removedIndex];
+      } else {
+        this.Current = this.LayoutElements[removedIndex - 1];
+      }
     }
 
     // 変更イベントの発生
@@ -160,9 +136,11 @@ public partial class Profile {
 
   /// 現在編集中のレイアウト要素を一つ前面に
   public void BringCurrentForward() {
-    var removedIndex = this.LayoutElements.IndexOf(this.Current);
-    this.LayoutElements.Remove(this.Current);
-    this.LayoutElements.Insert(removedIndex + 1, this.Current);
+    lock (this.CopyLock) {
+      var removedIndex = this.LayoutElements.IndexOf(this.Current);
+      this.LayoutElements.Remove(this.Current);
+      this.LayoutElements.Insert(removedIndex + 1, this.Current);
+    }
 
     // 変更イベントの発生
     this.UpdateTimestamp();
@@ -179,9 +157,11 @@ public partial class Profile {
 
   /// 現在編集中のレイアウト要素を一つ背面に
   public void SendCurrentBackward() {
-    var removedIndex = this.LayoutElements.IndexOf(this.Current);
-    this.LayoutElements.Remove(this.Current);
-    this.LayoutElements.Insert(removedIndex - 1, this.Current);
+    lock (this.CopyLock) {
+      var removedIndex = this.LayoutElements.IndexOf(this.Current);
+      this.LayoutElements.Remove(this.Current);
+      this.LayoutElements.Insert(removedIndex - 1, this.Current);
+    }
 
     // 変更イベントの発生
     this.UpdateTimestamp();
@@ -197,7 +177,7 @@ public partial class Profile {
   }
 
   //-------------------------------------------------------------------
-  // LayoutElementsの一括更新
+  // BackupParameters
   //-------------------------------------------------------------------
 
   /// 全てのレイアウト要素のBackupParametersを更新する
@@ -216,11 +196,6 @@ public partial class Profile {
         layoutElement.RestoreBackupParameters();
       }
     }
-  }
-  /// 全てのレイアウト要素を一気に更新する
-  public void SetLayoutElements(List<LayoutElement> layoutElements, LayoutElement current) {
-    this.LayoutElements = layoutElements;
-    this.Current = current;
   }
 
   //-------------------------------------------------------------------
@@ -256,6 +231,12 @@ public partial class Profile {
   /// タイムスタンプ
   public Int64 Timestamp { get; private set; }
 
+  /// レイアウトパラメータをまとめたリスト
+  public List<LayoutElement> LayoutElements { get; private set; }
+
+  /// 現在選択中のレイアウト要素
+  public LayoutElement Current { get; set; }
+
   /// レイアウトの種類
   public LayoutTypes LayoutType {
     get { return this.LayoutElements.Count == 1 ? LayoutTypes.NativeLayout : LayoutTypes.ComplexLayout; }
@@ -270,11 +251,35 @@ public partial class Profile {
     this.Timestamp = DateTime.Now.Ticks;
   }
 
+  /// 現在選択中のレイアウト要素のインデックスを返す
+  public int GetCurrentIndex() {
+    return this.LayoutElements.IndexOf(this.Current);
+  }
+
+  /// 指定されたインデックスのレイアウト要素を選択する
+  /// @param next 選択したいレイアウト要素のインデックス
+  public void SetCurrentByIndex(int next) {
+    /// @todo(me): 範囲チェック
+    this.Current = this.LayoutElements[next];
+  }
+
+  /// 全てのレイアウト要素を一気に更新する
+  public void SetLayoutElements(List<LayoutElement> layoutElements, LayoutElement current) {
+    this.LayoutElements = layoutElements;
+    this.Current = current;
+  }
+  /// 全てのレイアウト要素をコピーする
+  public List<LayoutElement> CopyLayoutElements() {
+    lock (this.CopyLock) {
+      return new List<LayoutElement>(this.LayoutElements);
+    }
+  }
+
   //===================================================================
   // フィールド
   //===================================================================
 
-  /// レイアウトパラメータをまとめたリスト
-  public List<LayoutElement> LayoutElements { get; private set; }
+  /// コピー・削除時に使うロック
+  private object CopyLock { get; set; }
 }
 }   // namespace SCFF.Common.Profile

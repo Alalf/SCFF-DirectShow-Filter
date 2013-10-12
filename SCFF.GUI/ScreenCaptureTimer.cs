@@ -233,11 +233,11 @@ public class ScreenCaptureTimer : IDisposable {
   //-------------------------------------------------------------------
 
   /// スクリーンキャプチャをこのマネージャに依頼
+  /// @attention UIスレッド上で実行されることを想定している
   public void UpdateRequest(Profile profile) {
     // ProfileからRequestを生成
     var profileRequests = new HashSet<ScreenCaptureRequest>();
-    var copy = profile.DopyLayoutElements();
-    foreach (var layoutElement in copy) {
+    foreach (var layoutElement in profile.LayoutElements) {
       if (!layoutElement.IsWindowValid) continue;
       profileRequests.Add(new ScreenCaptureRequest(layoutElement));
     }

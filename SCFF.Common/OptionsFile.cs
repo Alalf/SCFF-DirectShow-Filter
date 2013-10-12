@@ -50,7 +50,7 @@ public class OptionsFile : TinyKeyValueFile {
     try {
       using (var writer = new StreamWriter(path)) {
         writer.WriteLine(Constants.OptionsHeader);
-        for (int i = 0; i < 5; ++i) {
+        for (int i = 0; i < Constants.RecentProfilesLength; ++i) {
           writer.WriteLine("RecentProfile{0}={1}", i,
                            this.options.GetRecentProfile(i));
         }
@@ -116,7 +116,7 @@ public class OptionsFile : TinyKeyValueFile {
 
     // Dictionaryを調べながら値を設定する
     string prefix = "RecentProfile";
-    for (int i = 0; i < 5; ++i) {
+    for (int i = 0; i < Constants.RecentProfilesLength; ++i) {
       if (this.TryGetString(prefix + i, out stringValue)) {
         this.options.SetRecentProfile(i, stringValue);
       }

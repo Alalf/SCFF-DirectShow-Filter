@@ -261,19 +261,5 @@ public partial class Profile {
     this.LayoutElements = layoutElements;
     this.Current = current;
   }
-  /// 全てのレイアウト要素をforeachを使わずにコピーする
-  /// @warning 本来はLockを使うべきだが、ScreenCaptureTimerは正確な同期を必要としないのでこれで十分
-  public List<LayoutElement> DopyLayoutElements() {
-    var copy = new List<LayoutElement>();
-    int count = this.LayoutElements.Count;
-    try {
-      for (int i = 0; i < count; i++) {
-        copy.Add(this.LayoutElements[i]);
-      }
-    } catch {
-      // nop
-    }
-    return copy;
-  }
 }
 }   // namespace SCFF.Common.Profile

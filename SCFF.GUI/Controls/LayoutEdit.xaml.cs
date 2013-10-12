@@ -244,6 +244,7 @@ public partial class LayoutEdit
   //===================================================================
 
   /// 再描画タイマーコールバック
+  /// @attention UIスレッド上で実行されている
   /// @param sender 使用しない
   /// @param e 使用しない
   public void OnScreenCaptured(object sender, EventArgs e) {

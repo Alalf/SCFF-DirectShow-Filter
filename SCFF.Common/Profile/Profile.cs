@@ -41,7 +41,6 @@ public partial class Profile {
   
   /// コンストラクタ
   public Profile() {
-    this.CopyLock = new object();
     this.RestoreDefault();
   }
 
@@ -113,16 +112,14 @@ public partial class Profile {
   /// 現在選択中のレイアウト要素を削除
   /// @post タイムスタンプ更新
   public void RemoveCurrent() {
-    lock (this.CopyLock) {
-      var removedIndex = this.GetCurrentIndex();
-      this.LayoutElements.Remove(this.Current);
+    var removedIndex = this.GetCurrentIndex();
+    this.LayoutElements.Remove(this.Current);
 
-      // Currentを新しい場所に移して終了
-      if (removedIndex < this.LayoutElements.Count) {
-        this.Current = this.LayoutElements[removedIndex];
-      } else {
-        this.Current = this.LayoutElements[removedIndex - 1];
-      }
+    // Currentを新しい場所に移して終了
+    if (removedIndex < this.LayoutElements.Count) {
+      this.Current = this.LayoutElements[removedIndex];
+    } else {
+      this.Current = this.LayoutElements[removedIndex - 1];
     }
 
     // 変更イベントの発生
@@ -136,11 +133,9 @@ public partial class Profile {
 
   /// 現在編集中のレイアウト要素を一つ前面に
   public void BringCurrentForward() {
-    lock (this.CopyLock) {
-      var removedIndex = this.LayoutElements.IndexOf(this.Current);
-      this.LayoutElements.Remove(this.Current);
-      this.LayoutElements.Insert(removedIndex + 1, this.Current);
-    }
+    var removedIndex = this.LayoutElements.IndexOf(this.Current);
+    this.LayoutElements.Remove(this.Current);
+    this.LayoutElements.Insert(removedIndex + 1, this.Current);
 
     // 変更イベントの発生
     this.UpdateTimestamp();
@@ -157,11 +152,9 @@ public partial class Profile {
 
   /// 現在編集中のレイアウト要素を一つ背面に
   public void SendCurrentBackward() {
-    lock (this.CopyLock) {
-      var removedIndex = this.LayoutElements.IndexOf(this.Current);
-      this.LayoutElements.Remove(this.Current);
-      this.LayoutElements.Insert(removedIndex - 1, this.Current);
-    }
+    var removedIndex = this.LayoutElements.IndexOf(this.Current);
+    this.LayoutElements.Remove(this.Current);
+    this.LayoutElements.Insert(removedIndex - 1, this.Current);
 
     // 変更イベントの発生
     this.UpdateTimestamp();
@@ -268,18 +261,19 @@ public partial class Profile {
     this.LayoutElements = layoutElements;
     this.Current = current;
   }
-  /// 全てのレイアウト要素をコピーする
-  public List<LayoutElement> CopyLayoutElements() {
-    lock (this.CopyLock) {
-      return new List<LayoutElement>(this.LayoutElements);
+  /// 全てのレイアウト要素をforeachを使わずにコピーする
+  /// @warning 本来はLockを使うべきだが、ScreenCaptureTimerは正確な同期を必要としないのでこれで十分
+  public List<LayoutElement> DopyLayoutElements() {
+    var copy = new List<LayoutElement>();
+    int count = this.LayoutElements.Count;
+    try {
+      for (int i = 0; i < count; i++) {
+        copy.Add(this.LayoutElements[i]);
+      }
+    } catch {
+      // nop
     }
+    return copy;
   }
-
-  //===================================================================
-  // フィールド
-  //===================================================================
-
-  /// コピー・削除時に使うロック
-  private object CopyLock { get; set; }
 }
 }   // namespace SCFF.Common.Profile

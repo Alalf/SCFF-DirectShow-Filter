@@ -210,15 +210,6 @@ void TestDXGIDesktopDuplication() {
   /// @todo(me): CopySubresourceRegionで与えられたRECTの部分のみを転送
   // おそらくCopy前にsystem_memory_textureを黒で塗りつぶして置かなければならないはず
   device_context->CopyResource(system_memory_texture, d3d11_texture);
-  d3d11_texture->Release();
-  d3d11_texture = nullptr;
-
-  // この時点でOutput DuplicationをReleaseしてもよい
-  result = dxgi_output_duplication->ReleaseFrame();
-  if (FAILED(result)) {
-    printf("Error @ ReleaseFrame\n");
-    goto RELEASE;
-  }
 
   // 直接MapしてもいいがSurfaceを解するとプログラムが見やすくなる
   IDXGISurface *system_memory_surface = nullptr;
@@ -268,9 +259,6 @@ void TestDXGIDesktopDuplication() {
     WriteFile(bmp_file, mapped_surface.pBits, bmp_size, &written_byte, nullptr);
     CloseHandle(bmp_file);
 
-    /// @todo(me): 出力してみた結果、正常にCopyResourceできていない可能性がある
-    /// - なぜかデバッガでステップオーバー連打だとできる
-    /// - コピーする前のFrameデータがどっかに行ってる？何か問題があるかもしれない
     printf("BMP FILE SAVED\n");
   } else {
     printf("Something is wrong\n");
@@ -283,11 +271,27 @@ void TestDXGIDesktopDuplication() {
     goto RELEASE;
   }
 
+  // なぜかわからないがコピー元のテクスチャはここで開放しなければならない
+  // @todo(me): 要調査。どうも自分のCopyResourceへの理解が間違っている気がする
+  d3d11_texture->Release();
+  d3d11_texture = nullptr;
+
+  // d3d11_textureがいらなくなった段階でReleaseFrameする
+  result = dxgi_output_duplication->ReleaseFrame();
+  if (FAILED(result)) {
+    printf("Error @ ReleaseFrame\n");
+    goto RELEASE;
+  }
+
 RELEASE:
   // 開放
   if (system_memory_surface != nullptr) {
     system_memory_surface->Release();
     system_memory_surface = nullptr; 
+  }
+  if (d3d11_texture != nullptr) {
+    d3d11_texture->Release();
+    d3d11_texture = nullptr;
   }
   if (dxgi_output_duplication != nullptr) {
     dxgi_output_duplication->Release();

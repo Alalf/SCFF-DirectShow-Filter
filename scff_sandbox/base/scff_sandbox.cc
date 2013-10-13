@@ -213,6 +213,13 @@ void TestDXGIDesktopDuplication() {
   d3d11_texture->Release();
   d3d11_texture = nullptr;
 
+  // この時点でOutput DuplicationをReleaseしてもよい
+  result = dxgi_output_duplication->ReleaseFrame();
+  if (FAILED(result)) {
+    printf("Error @ ReleaseFrame\n");
+    goto RELEASE;
+  }
+
   // 直接MapしてもいいがSurfaceを解するとプログラムが見やすくなる
   IDXGISurface *system_memory_surface = nullptr;
   result = system_memory_texture->QueryInterface(__uuidof(IDXGISurface),

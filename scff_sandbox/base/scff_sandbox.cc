@@ -273,6 +273,7 @@ void TestDXGIDesktopDuplication() {
 
   // なぜかわからないがコピー元のテクスチャはここで開放しなければならない
   // @todo(me): 要調査。どうも自分のCopyResourceへの理解が間違っている気がする
+  // ここに移動しても動作しない場合がある
   d3d11_texture->Release();
   d3d11_texture = nullptr;
 

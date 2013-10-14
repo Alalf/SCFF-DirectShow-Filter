@@ -54,6 +54,33 @@ const int kFeatureLevelsCount =
     sizeof(kFeatureLevels) / sizeof(kFeatureLevels[0]);
 }
 
+void SaveBitmapFile(const byte* bitmap, const int width, const int height, LPCWSTR filename) {
+  const int bmp_size = width * height * 4;
+
+  BITMAPINFOHEADER bmp_header;
+  RtlZeroMemory(&bmp_header, sizeof(bmp_header));
+  bmp_header.biSize = sizeof(bmp_header);
+  bmp_header.biWidth = width;
+  bmp_header.biHeight = -1 * height;
+  bmp_header.biPlanes = 1;
+  bmp_header.biBitCount = 32;
+  bmp_header.biCompression = BI_RGB;
+  bmp_header.biSizeImage = bmp_size;
+
+  BITMAPFILEHEADER bmp_file_header;
+  RtlZeroMemory(&bmp_file_header, sizeof(bmp_file_header));
+  bmp_file_header.bfType = 0x4D42;
+  bmp_file_header.bfSize = sizeof(bmp_file_header) + sizeof(bmp_header) + bmp_size;
+  bmp_file_header.bfOffBits = sizeof(bmp_file_header) + sizeof(bmp_header);
+
+  auto bmp_file = CreateFile(filename, GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
+  DWORD written_byte;
+  WriteFile(bmp_file, &bmp_file_header, sizeof(bmp_file_header), &written_byte, nullptr);
+  WriteFile(bmp_file, &bmp_header, sizeof(bmp_header), &written_byte, nullptr);
+  WriteFile(bmp_file, bitmap, bmp_size, &written_byte, nullptr);
+  CloseHandle(bmp_file);
+}
+
 void TestDXGIDesktopDuplication() {
   // 使いまわし用HRESULT
   HRESULT result;
@@ -118,9 +145,19 @@ void TestDXGIDesktopDuplication() {
     goto RELEASE;
   }
 
-  // DXGI_OUTPUT_DESCの取得
+  // DXGIOutputの情報を取得
   DXGI_OUTPUT_DESC dxgi_output_descriptor;
   dxgi_output->GetDesc(&dxgi_output_descriptor);
+
+  // Descriptorの中身を表示
+  printf("=== DXGI_OUTPUT_DESC ===\n");
+  _tprintf(TEXT("Device Name: %s\n"), dxgi_output_descriptor.DeviceName);
+  if (dxgi_output_descriptor.AttachedToDesktop) printf("Attached to Desktop: true\n");
+  printf("Desktop Coordinates: (%d,%d) to (%d,%d)\n",
+      dxgi_output_descriptor.DesktopCoordinates.left,
+      dxgi_output_descriptor.DesktopCoordinates.top,
+      dxgi_output_descriptor.DesktopCoordinates.right,
+      dxgi_output_descriptor.DesktopCoordinates.bottom);
 
   // DXGIOutput1 = Desktop Duplication可能な出力先(モニタ)に変換
   IDXGIOutput1 *dxgi_output_one = nullptr;
@@ -146,25 +183,79 @@ void TestDXGIDesktopDuplication() {
     goto RELEASE;
   }
 
-  // Descriptorの中身を表示
-  printf("Device Name: %s\n", dxgi_output_descriptor.DeviceName);
-  if (dxgi_output_descriptor.AttachedToDesktop) printf("Attached to Desktop: true\n");
-  printf("Desktop Coordinates: (%d,%d) to (%d,%d)\n",
-      dxgi_output_descriptor.DesktopCoordinates.left,
-      dxgi_output_descriptor.DesktopCoordinates.top,
-      dxgi_output_descriptor.DesktopCoordinates.right,
-      dxgi_output_descriptor.DesktopCoordinates.bottom);
+  // Output Duplicationの情報を表示
+  DXGI_OUTDUPL_DESC dxgi_output_duplication_descriptor;
+  dxgi_output_duplication->GetDesc(&dxgi_output_duplication_descriptor);
+  printf("=== DXGI_OUTDUPL_DESC ===\n");
+  if (dxgi_output_duplication_descriptor.DesktopImageInSystemMemory) {
+    printf("DesktopImageInSystemMemory: true\n");
+  } 
+  printf("Size/FPS: (%d, %d) %dfps\n",
+      dxgi_output_duplication_descriptor.ModeDesc.Width,
+      dxgi_output_duplication_descriptor.ModeDesc.Height,
+      (int)(dxgi_output_duplication_descriptor.ModeDesc.RefreshRate.Numerator /
+            dxgi_output_duplication_descriptor.ModeDesc.RefreshRate.Denominator));
 
-  // 試しに何かしてみる
-  const int timeout_milliseconds = 10000;
+#ifdef MAP_DESKTOP_SURFACE
+  // MapDesktopSurfaceのテスト
+  // だめそうなのでコメントアウト
+  if (dxgi_output_duplication_descriptor.DesktopImageInSystemMemory) {
+    const int width = dxgi_output_descriptor.DesktopCoordinates.right -
+        dxgi_output_descriptor.DesktopCoordinates.left;
+    const int height = dxgi_output_descriptor.DesktopCoordinates.bottom -
+        dxgi_output_descriptor.DesktopCoordinates.top;
+    const int data_size = width * height * 4;
+    auto buffer = new BYTE[data_size];
+
+    DXGI_MAPPED_RECT desktop_surface;
+    result = dxgi_output_duplication->MapDesktopSurface(&desktop_surface);
+    if (FAILED(result)) {
+      printf("Error @ MapDesktopSurface %d\n", result);
+      goto RELEASE;
+    }
+
+    memcpy(buffer, desktop_surface.pBits, data_size);
+    
+    result = dxgi_output_duplication->UnMapDesktopSurface();
+    if (FAILED(result)) {
+      printf("Error @ UnMapDesktopSurface\n");
+      goto RELEASE;
+    }
+
+    SaveBitmapFile(buffer, width, height, TEXT("test2.bmp"));
+
+    delete [] buffer;
+  }
+#endif
+
+  // 一回だけ適当にAcquireNextFrame
   DXGI_OUTDUPL_FRAME_INFO frame_info;
   IDXGIResource *dxgi_resource = nullptr;
+  result = dxgi_output_duplication->AcquireNextFrame(0, &frame_info, &dxgi_resource);
+  if (FAILED(result)) {
+    if (result == DXGI_ERROR_ACCESS_LOST) {
+      printf("Error DXGI_ERROR_ACCESS_LOST @ First AcquireNextFrame\n");
+    } else if (result == DXGI_ERROR_WAIT_TIMEOUT) {
+      printf("Error DXGI_ERROR_WAIT_TIMEOUT @ First AcquireNextFrame\n");
+    } else {
+      printf("Error @ First AcquireNextFrame\n");
+    }
+    goto RELEASE;
+  }
+  if (dxgi_resource != nullptr) {
+    dxgi_resource->Release();
+    dxgi_resource = nullptr;
+  }
+  dxgi_output_duplication->ReleaseFrame();
+
+  // Timeout付きで取得
+  const int timeout_milliseconds = INFINITE;
   result = dxgi_output_duplication->AcquireNextFrame(timeout_milliseconds, &frame_info, &dxgi_resource);
   if (FAILED(result)) {
     if (result == DXGI_ERROR_WAIT_TIMEOUT) {
       printf("Error @ Timeout\n");
     }
-    printf("Error @ Duplicate Output\n");
+    printf("Error @ AcquireNextFrame\n");
     goto RELEASE;
   }
 
@@ -179,18 +270,23 @@ void TestDXGIDesktopDuplication() {
     goto RELEASE;
   }
 
+  // D3D11_TEXTURE2D_DESCの取得
+  D3D11_TEXTURE2D_DESC d3d11_texture_descriptor;
+  d3d11_texture->GetDesc(&d3d11_texture_descriptor);
+
+  // Descriptorの中身を表示
+  printf("=== D3D11_TEXTURE2D_DESC ===\n");
+  printf("Captured Width: %d\n", d3d11_texture_descriptor.Width);
+  printf("Captured Height: %d\n", d3d11_texture_descriptor.Height);
+
   // システムメモリ上にStaging Bufferを作成する準備
   D3D11_TEXTURE2D_DESC system_memory_texture_descriptor;
   RtlZeroMemory(&system_memory_texture_descriptor, sizeof(system_memory_texture_descriptor));
-  system_memory_texture_descriptor.Width =
-      dxgi_output_descriptor.DesktopCoordinates.right -
-      dxgi_output_descriptor.DesktopCoordinates.left;
-  system_memory_texture_descriptor.Height =
-      dxgi_output_descriptor.DesktopCoordinates.bottom -
-      dxgi_output_descriptor.DesktopCoordinates.top;
+  system_memory_texture_descriptor.Width = d3d11_texture_descriptor.Width;
+  system_memory_texture_descriptor.Height = d3d11_texture_descriptor.Height;
   system_memory_texture_descriptor.MipLevels = 1;
   system_memory_texture_descriptor.ArraySize = 1;
-  system_memory_texture_descriptor.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
+  system_memory_texture_descriptor.Format = d3d11_texture_descriptor.Format;
   system_memory_texture_descriptor.SampleDesc.Count = 1;
   system_memory_texture_descriptor.Usage = D3D11_USAGE_STAGING;
   system_memory_texture_descriptor.BindFlags = 0;
@@ -210,6 +306,17 @@ void TestDXGIDesktopDuplication() {
   /// @todo(me): CopySubresourceRegionで与えられたRECTの部分のみを転送
   // おそらくCopy前にsystem_memory_textureを黒で塗りつぶして置かなければならないはず
   device_context->CopyResource(system_memory_texture, d3d11_texture);
+  // @todo(me): 要調査。どうも自分のCopyResourceへの理解が間違っている気がする
+  // ここに移動しても動作しない場合がある
+  d3d11_texture->Release();
+  d3d11_texture = nullptr;
+
+  // d3d11_textureがいらなくなった段階でReleaseFrameする
+  result = dxgi_output_duplication->ReleaseFrame();
+  if (FAILED(result)) {
+    printf("Error @ ReleaseFrame\n");
+    goto RELEASE;
+  }
 
   // 直接MapしてもいいがSurfaceを解するとプログラムが見やすくなる
   IDXGISurface *system_memory_surface = nullptr;
@@ -233,33 +340,12 @@ void TestDXGIDesktopDuplication() {
   // あとはmemcpyすればavpicture化できる
   if (mapped_surface.pBits != nullptr) {
     // 試しにBitmap出力してみる
-    const int bmp_size = system_memory_texture_descriptor.Width
-        * system_memory_texture_descriptor.Height * 4;
+    SaveBitmapFile(mapped_surface.pBits,
+        system_memory_texture_descriptor.Width,
+        system_memory_texture_descriptor.Height,
+        TEXT("test.bmp"));
 
-    BITMAPINFOHEADER bmp_header;
-    RtlZeroMemory(&bmp_header, sizeof(bmp_header));
-    bmp_header.biSize = sizeof(bmp_header);
-    bmp_header.biWidth = system_memory_texture_descriptor.Width;
-    bmp_header.biHeight = -1 * system_memory_texture_descriptor.Height;
-    bmp_header.biPlanes = 1;
-    bmp_header.biBitCount = 32;
-    bmp_header.biCompression = BI_RGB;
-    bmp_header.biSizeImage = bmp_size;
-
-    BITMAPFILEHEADER bmp_file_header;
-    RtlZeroMemory(&bmp_file_header, sizeof(bmp_file_header));
-    bmp_file_header.bfType = 0x4D42;
-    bmp_file_header.bfSize = sizeof(bmp_file_header) + sizeof(bmp_header) + bmp_size;
-    bmp_file_header.bfOffBits = sizeof(bmp_file_header) + sizeof(bmp_header);
-
-    auto bmp_file = CreateFile(TEXT("test.bmp"), GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
-    DWORD written_byte;
-    WriteFile(bmp_file, &bmp_file_header, sizeof(bmp_file_header), &written_byte, nullptr);
-    WriteFile(bmp_file, &bmp_header, sizeof(bmp_header), &written_byte, nullptr);
-    WriteFile(bmp_file, mapped_surface.pBits, bmp_size, &written_byte, nullptr);
-    CloseHandle(bmp_file);
-
-    printf("BMP FILE SAVED\n");
+    printf("=== BMP FILE SAVED ===\n");
   } else {
     printf("Something is wrong\n");
   }
@@ -268,19 +354,6 @@ void TestDXGIDesktopDuplication() {
   result = system_memory_surface->Unmap();
   if (FAILED(result)) {
     printf("Error @ Unmap\n");
-    goto RELEASE;
-  }
-
-  // なぜかわからないがコピー元のテクスチャはここで開放しなければならない
-  // @todo(me): 要調査。どうも自分のCopyResourceへの理解が間違っている気がする
-  // ここに移動しても動作しない場合がある
-  d3d11_texture->Release();
-  d3d11_texture = nullptr;
-
-  // d3d11_textureがいらなくなった段階でReleaseFrameする
-  result = dxgi_output_duplication->ReleaseFrame();
-  if (FAILED(result)) {
-    printf("Error @ ReleaseFrame\n");
     goto RELEASE;
   }
 

@@ -28,6 +28,8 @@
 #include "scff_imaging/request.h"
 #include "scff_imaging/utilities.h"
 
+extern OSVERSIONINFO g_osInfo;
+
 namespace {
 
 /// 指定されたAVPictureImageを黒で塗りつぶす
@@ -60,6 +62,11 @@ void Clear(scff_imaging::AVPictureImage *image) {
                     0,
                     image->width(),
                     image->height());
+}
+
+/// Desktop Duplicationが利用可能な場合はtrue
+bool CanUseDesktopDuplication() {
+  return g_osInfo.dwMajorVersion >= 6 && g_osInfo.dwMinorVersion >= 2;
 }
 }   // namespace
 

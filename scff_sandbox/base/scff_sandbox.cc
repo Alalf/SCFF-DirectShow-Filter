@@ -311,7 +311,7 @@ void TestDXGIDesktopDuplication() {
     goto RELEASE;
   }
 
-  // VRAM->RAM転送
+  // StagingBufferにコピー
   /// @todo(me): CopySubresourceRegionで与えられたRECTの部分のみを転送
   // おそらくCopy前にsystem_memory_textureを黒で塗りつぶして置かなければならないはず
   // クリッピングはしてくれないのでこの前にIntersectRectするしかない

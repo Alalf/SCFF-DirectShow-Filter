@@ -279,11 +279,20 @@ void TestDXGIDesktopDuplication() {
   printf("Captured Width: %d\n", d3d11_texture_descriptor.Width);
   printf("Captured Height: %d\n", d3d11_texture_descriptor.Height);
 
+  // 試しに少し小さなテクスチャにコピーしてみる
+  D3D11_BOX source_region;
+  source_region.left = 0;
+  source_region.right = 320;
+  source_region.top = 0;
+  source_region.bottom = 240;
+  source_region.front = 0;
+  source_region.back = 1;
+
   // システムメモリ上にStaging Bufferを作成する準備
   D3D11_TEXTURE2D_DESC system_memory_texture_descriptor;
   RtlZeroMemory(&system_memory_texture_descriptor, sizeof(system_memory_texture_descriptor));
-  system_memory_texture_descriptor.Width = d3d11_texture_descriptor.Width;
-  system_memory_texture_descriptor.Height = d3d11_texture_descriptor.Height;
+  system_memory_texture_descriptor.Width = source_region.right - source_region.left;
+  system_memory_texture_descriptor.Height = source_region.bottom - source_region.top;
   system_memory_texture_descriptor.MipLevels = 1;
   system_memory_texture_descriptor.ArraySize = 1;
   system_memory_texture_descriptor.Format = d3d11_texture_descriptor.Format;
@@ -305,7 +314,12 @@ void TestDXGIDesktopDuplication() {
   // VRAM->RAM転送
   /// @todo(me): CopySubresourceRegionで与えられたRECTの部分のみを転送
   // おそらくCopy前にsystem_memory_textureを黒で塗りつぶして置かなければならないはず
-  device_context->CopyResource(system_memory_texture, d3d11_texture);
+  // クリッピングはしてくれないのでこの前にIntersectRectするしかない
+  const int destination_left = 0;
+  const int destination_top = 0;
+  device_context->CopySubresourceRegion(system_memory_texture, 0,
+      destination_left, destination_top, 0,
+      d3d11_texture, 0, &source_region);
   // @todo(me): 要調査。どうも自分のCopyResourceへの理解が間違っている気がする
   // ここに移動しても動作しない場合がある
   d3d11_texture->Release();

@@ -63,11 +63,6 @@ void Clear(scff_imaging::AVPictureImage *image) {
                     image->width(),
                     image->height());
 }
-
-/// Desktop Duplicationが利用可能な場合はtrue
-bool CanUseDesktopDuplication() {
-  return g_osInfo.dwMajorVersion >= 6 && g_osInfo.dwMinorVersion >= 2;
-}
 }   // namespace
 
 namespace scff_imaging {

@@ -1,5 +1,5 @@
 @echo off
-IF NOT DEFINED DevEnvDir CALL "%VS110COMNTOOLS%vsvars32.bat" >NUL:
+IF NOT DEFINED DevEnvDir CALL "%VS120COMNTOOLS%vsvars32.bat" >NUL:
 
 SET ROOT_DIR=%~dp0\
 SET DLL2DEF_PY=%ROOT_DIR%scripts\dllexports2def.py

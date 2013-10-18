@@ -31,7 +31,7 @@ def make_build_Win32_bat():
 
     # ビルドスクリプト生成
     build_script = '''@ECHO OFF
-CALL "%s"
+IF NOT DEFINED DevEnvDir CALL "%s" >NUL:
 msbuild /verbosity:m /t:build /p:Configuration=Debug /p:Platform=Win32 "%s"
 msbuild /verbosity:m /t:build /p:Configuration=Release /p:Platform=Win32 "%s"
 ''' % (ENV_32BIT_BAT, DSF_SLN, DSF_SLN)
@@ -50,7 +50,7 @@ def make_build_x64_bat():
 
     # ビルドスクリプト生成
     build_script = '''@ECHO OFF
-CALL "%s"
+IF NOT DEFINED DevEnvDir CALL "%s" >NUL:
 msbuild /verbosity:m /t:build /p:Configuration=Debug /p:Platform=x64 "%s"
 msbuild /verbosity:m /t:build /p:Configuration=Release /p:Platform=x64 "%s"
 ''' % (ENV_64BIT_BAT, DSF_SLN, DSF_SLN)

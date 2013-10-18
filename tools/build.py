@@ -57,8 +57,8 @@ def msbuild():
     msbuild.BUILD_32BIT_BAT = msbuild.TMP_DIR + '\\build_Win32.bat'
     msbuild.BUILD_64BIT_BAT = msbuild.TMP_DIR + '\\build_x64.bat'
 
-    msbuild.ENV_32BIT_BAT = 'D:\\Program Files\\MSVS2012\\VC\\vcvarsall.bat'
-    msbuild.ENV_64BIT_BAT = 'D:\\Program Files\\MSVS2012\\VC\\vcvarsall.bat'
+    msbuild.ENV_32BIT_BAT = '%VS120COMNTOOLS%\\vsvars32.bat'
+    msbuild.ENV_64BIT_BAT = '%VS120COMNTOOLS%\\vsvars32.bat'
     msbuild.DSF_SLN = ROOT_DIR + '\\scff.sln'
 
     msbuild.init()
@@ -91,7 +91,7 @@ def dist():
         ROOT_DIR + '\\tools\\bin\\regsvrex32.exe',
         ROOT_DIR + '\\tools\\bin\\regsvrex64.exe',
         ROOT_DIR + '\\tools\\dist\\Microsoft .NET Framework 4 Client Profile.url',
-        ROOT_DIR + '\\tools\\dist\\Visual C++ Redistributable for Visual Studio 2012 Update 3.url',
+        ROOT_DIR + '\\tools\\dist\\Visual C++ Redistributable Packages for Visual Studio 2013.url',
         ROOT_DIR + '\\tools\\dist\\install.bat',
         ROOT_DIR + '\\tools\\dist\\uninstall.bat',
         ROOT_DIR + '\\tools\\dist\\install_regsvr.bat',

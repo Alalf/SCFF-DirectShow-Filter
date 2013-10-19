@@ -22,9 +22,7 @@
 namespace SCFF.GUI {
 
 using System.Diagnostics;
-using System.IO;
 using System.IO.Pipes;
-using System.Text;
 using System.Threading;
 using System.Windows;
 using System.Windows.Interop;

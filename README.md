@@ -197,8 +197,6 @@ v0.3.0-alpha.3インストール前の注意事項
 
 - DirectShow base classes - efines class hierarchy for streams architecture.
     - Copyright (c) 1992-2001 Microsoft Corporation.  All rights reserved.
-- ISO C9x  compliant inttypes.h for Microsoft Visual Studio
-    - Copyright (c) 2006 Alexander Chemeris
 - ffmpegプロジェクト(http://ffmpeg.org)
     - 利用しているLGPLライブラリ:
         - libswscale:

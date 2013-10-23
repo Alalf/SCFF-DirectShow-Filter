@@ -233,6 +233,7 @@ public class ScreenCaptureTimer : IDisposable {
   //-------------------------------------------------------------------
 
   /// スクリーンキャプチャをこのマネージャに依頼
+  /// @param profile プロファイル
   /// @attention UIスレッド上で実行されることを想定している
   public void UpdateRequest(Profile profile) {
     // ProfileからRequestを生成

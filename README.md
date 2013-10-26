@@ -159,6 +159,9 @@ v0.3.0-alpha.3インストール前の注意事項
 - サンプル設定がtools/test_ffmpeg.batにあります。
 - "real-time buffer XXX% full! frame dropped!"が表示された場合、音ずれが発生しています。
     - "-rtbufsize=100MB"オプションを追加する、CPU優先度を上げる(start /high ffmpeg.exe)など設定を見直してみてください。
+- -iオプションの前に-rオプションを指定してFPSを指定した場合、処理落ちなどでフレームドロップしてもタイムスタンプ(pts)が補正されず音ずれが発生します。
+    - -rオプションの代わりにdshowデバイスのオプション(-f dshow -framerate)のみでFPSを指定してみてください。
+    - 例: -f dshow -video_size 640x360 -framerate 24 -pixel_format yuv420p -i video="SCFF DirectShow Filter" ...
 
 ### xSplit
 - xSplitと併用する場合、ffmpegの一部ライブラリが干渉することがあります。

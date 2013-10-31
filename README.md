@@ -157,8 +157,9 @@ v0.3.0-alpha.3インストール前の注意事項
 
 ### ffmpeg
 - サンプル設定がtools/test_ffmpeg.batにあります。
-- "real-time buffer XXX% full! frame dropped!"が表示された場合、音ずれが発生しています。
-    - "-rtbufsize=100MB"オプションを追加する、CPU優先度を上げる(start /high ffmpeg.exe)など設定を見直してみてください。
+- "real-time buffer XXX% full! frame dropped!"が表示された場合、フレームドロップが発生しています。
+    - 出力先がストリーミングサイトの場合、混み合っている時間帯に起きやすいようです。
+    - "-rtbufsize=100MB"オプションを追加すると改善される場合があります。
 - -iオプションの前に-rオプションを指定してFPSを指定した場合、処理落ちなどでフレームドロップしてもタイムスタンプ(pts)が補正されず音ずれが発生します。
     - -rオプションの代わりにdshowデバイスのオプション(-f dshow -framerate)のみでFPSを指定してみてください。
     - 例: -f dshow -video_size 640x360 -framerate 24 -pixel_format yuv420p -i video="SCFF DirectShow Filter" ...
@@ -166,10 +167,6 @@ v0.3.0-alpha.3インストール前の注意事項
 ### xSplit
 - xSplitと併用する場合、ffmpegの一部ライブラリが干渉することがあります。
     - SplitMediaLabs\XSplit\avutil-51.dllをSCFF付属のavutil-*.dllと置き換えるとよい、という報告がありました。
-
-### x264を利用したflvエンコーダ共通
-- 長時間エンコードした時に音ずれが発生する場合、音声同期オプションを試してみてください。
-    - 例 ffmpeg: "-async 100"オプションの追加で改善される場合があります。
 
 ### Windows Media Encoder(WME)
 - WMEのノンインターレース化処理の利用は非推奨です。

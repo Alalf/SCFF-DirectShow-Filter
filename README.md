@@ -190,7 +190,7 @@ v0.3.0-alpha.3インストール前の注意事項
     - 例: scff_dsf/base/constants.ccの{640, 360}を{960, 540}に変更
 - ピクセルフォーマット出力をYUV422からYUV420Pに変更するには、ツール＞オプション＞互換性のリストから以下の項目***以外***を無効化してください:
     - i420 VFE デコーダ
-    - iyuv VFWデコーダ
+    - iyuv VFW デコーダ
 
 ### WME/KTE/EE共通
 - 最新のWindows OSやExpression Encoder付属のqasf.dll(DirectShow ASF Support)の方が画質が良いそうです(thx cavelis!)

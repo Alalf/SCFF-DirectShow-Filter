@@ -89,7 +89,8 @@
                 Click="AreaSelect_Click"/>
       <Button   Grid.Column="2"
                 VerticalAlignment="Center" Height="20"
-                x:Name="DXGI" Content="DXGI?"
+                IsEnabled="False"
+                x:Name="DXGI" Content="DXGI"
                 Click="DXGI_Click"/>
       <Button   Grid.Column="3"
                 VerticalAlignment="Center" Height="20" Margin="0,0,5,0"

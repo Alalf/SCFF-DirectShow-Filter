@@ -93,7 +93,9 @@ public partial class MainWindow
     if (e.Quiet) return;
     MessageBox.Show(e.Message, "SCFF.GUI",
                     MessageBoxButton.OK,
-                    MessageBoxImage.Error);
+                    MessageBoxImage.Error,
+                    MessageBoxResult.OK,
+                    MessageBoxOptions.DefaultDesktopOnly);
   }
 
   /// @copybrief SCFF::Common::ClientApplication::OnProfileChanged

@@ -29,8 +29,9 @@
               PreviewMouseDown="DragHere_PreviewMouseDown"
               PreviewMouseUp="DragHere_PreviewMouseUp"/>
     <Button   Grid.Row="1" Grid.Column="2"
+              IsEnabled="False"
               Height="20" 
-              x:Name="DXGI" Content="DXGI?"
+              x:Name="DXGI" Content="DXGI"
               Click="DXGI_Click"/>
     <Button   Grid.Row="1" Grid.Column="3"
               Height="20" 

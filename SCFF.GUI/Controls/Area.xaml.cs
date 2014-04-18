@@ -501,19 +501,20 @@ public partial class Area : UserControl, IBindingProfile {
   public void OnCurrentLayoutElementChanged() {
     this.CanChangeProfile = false;
 
+    /// @todo(me) DXGI対応までDisabled
     switch (App.Profile.Current.WindowType) {
       case WindowTypes.Normal: {
-        this.DXGI.IsEnabled = true;
+        // this.DXGI.IsEnabled = true;
         this.Desktop.IsEnabled = true;
         break;
       }
       case WindowTypes.Desktop: {
-        this.DXGI.IsEnabled = true;
+        // this.DXGI.IsEnabled = true;
         this.Desktop.IsEnabled = false;
         break;
       }
       case WindowTypes.DXGI: {
-        this.DXGI.IsEnabled = false;
+        // this.DXGI.IsEnabled = false;
         this.Desktop.IsEnabled = true;
         break;
       }

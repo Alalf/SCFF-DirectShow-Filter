@@ -40,13 +40,13 @@ extern "C" {
  * Add all refs from a to ret and destroy a.
  */
 //---------------------------------------------------------------------
-// 2012/06/30 modified by Alalf
+// 2014/05/28 modified by Alalf
 #define MERGE_REF(ret, a, fmts, type, fail)                                \
 do {                                                                       \
     type ***tmp;                                                           \
     int i;                                                                 \
                                                                            \
-    if (!(tmp = reinterpret_cast<type***>(av_realloc(ret->refs,            \
+    if (!(tmp = static_cast<type***>(av_realloc(ret->refs,                 \
                     sizeof(*tmp) * (ret->refcount + a->refcount)))))       \
         goto fail;                                                         \
     ret->refs = tmp;                                                       \
@@ -67,16 +67,16 @@ do {                                                                       \
  * a and b.
  */
 //---------------------------------------------------------------------
-// 2012/06/30 modified by Alalf
+// 2014/05/28 modified by Alalf
 #define MERGE_FORMATS(ret, a, b, fmts_type, fmts, nb, type, fail)               \
 do {                                                                            \
     int i, j, k = 0, count = FFMIN(a->nb, b->nb);                               \
                                                                                 \
-    if (!(ret = reinterpret_cast<type*>(av_mallocz(sizeof(*ret)))))             \
+    if (!(ret = static_cast<type*>(av_mallocz(sizeof(*ret)))))                  \
         goto fail;                                                              \
                                                                                 \
     if (count) {                                                                \
-        if (!(ret->fmts = reinterpret_cast<fmts_type*>(av_malloc(sizeof(*ret->fmts) * count))))               \
+        if (!(ret->fmts = static_cast<fmts_type*>(av_malloc(sizeof(*ret->fmts) * count))))               \
             goto fail;                                                          \
         for (i = 0; i < a->nb; i++)                                             \
             for (j = 0; j < b->nb; j++)                                         \
@@ -218,9 +218,9 @@ AVFilterChannelLayouts *ff_merge_channel_layouts(AVFilterChannelLayouts *a,
 
     ret_max = a->nb_channel_layouts + b->nb_channel_layouts;
     //-----------------------------------------------------------------
-    // 2013/02/01 Modified by Alalf
-    if (!(ret = reinterpret_cast<AVFilterChannelLayouts*>(av_mallocz(sizeof(*ret)))) ||
-        !(ret->channel_layouts = reinterpret_cast<uint64_t*>(av_malloc(sizeof(*ret->channel_layouts) *
+    // 2014/05/28 Modified by Alalf
+    if (!(ret = static_cast<AVFilterChannelLayouts*>(av_mallocz(sizeof(*ret)))) ||
+        !(ret->channel_layouts = static_cast<uint64_t*>(av_malloc(sizeof(*ret->channel_layouts) *
                                            ret_max))))
         goto fail;
     //-----------------------------------------------------------------
@@ -288,13 +288,13 @@ int ff_fmt_is_in(int fmt, const int *fmts)
 }
 
 //---------------------------------------------------------------------
-// 2012/06/30 modified by Alalf
+// 2014/05/28 modified by Alalf
 #define COPY_INT_LIST(list_copy, list, type) {                          \
     int count = 0;                                                      \
     if (list)                                                           \
         for (count = 0; list[count] != -1; count++)                     \
             ;                                                           \
-    list_copy = reinterpret_cast<type*>(av_calloc(count+1, sizeof(type)));                       \
+    list_copy = static_cast<type*>(av_calloc(count+1, sizeof(type)));   \
     if (list_copy) {                                                    \
         memcpy(list_copy, list, sizeof(type) * count);                  \
         list_copy[count] = -1;                                          \
@@ -303,18 +303,18 @@ int ff_fmt_is_in(int fmt, const int *fmts)
 //---------------------------------------------------------------------
 
 //---------------------------------------------------------------------
-// 2012/06/30 modified by Alalf
+// 2014/05/28 modified by Alalf
 #define MAKE_FORMAT_LIST(type, field_type, field, count_field)                      \
     type *formats;                                                      \
     int count = 0;                                                      \
     if (fmts)                                                           \
         for (count = 0; fmts[count] != -1; count++)                     \
             ;                                                           \
-    formats = reinterpret_cast<type*>(av_mallocz(sizeof(*formats)));                             \
+    formats = static_cast<type*>(av_mallocz(sizeof(*formats)));         \
     if (!formats) return NULL;                                          \
     formats->count_field = count;                                       \
     if (count) {                                                        \
-        formats->field = reinterpret_cast<field_type*>(av_malloc(sizeof(*formats->field)*count));      \
+        formats->field = static_cast<field_type*>(av_malloc(sizeof(*formats->field)*count));      \
         if (!formats->field) {                                          \
             av_free(formats);                                           \
             return NULL;                                                \
@@ -349,15 +349,15 @@ AVFilterChannelLayouts *avfilter_make_format64_list(const int64_t *fmts)
 }
 
 //---------------------------------------------------------------------
-// 2012/06/30 modified by Alalf
+// 2014/05/28 modified by Alalf
 #define ADD_FORMAT(f_type, f, fmt, type, list, nb)          \
 do {                                                        \
     type *fmts;                                             \
                                                             \
-    if (!(*f) && !(*f = reinterpret_cast<f_type*>(av_mallocz(sizeof(**f)))))\
+    if (!(*f) && !(*f = static_cast<f_type*>(av_mallocz(sizeof(**f))))) \
         return AVERROR(ENOMEM);                             \
                                                             \
-    fmts = reinterpret_cast<type*>(av_realloc((*f)->list,   \
+    fmts = static_cast<type*>(av_realloc((*f)->list,        \
               sizeof(*(*f)->list) * ((*f)->nb + 1)));       \
     if (!fmts)                                              \
         return AVERROR(ENOMEM);                             \
@@ -439,8 +439,8 @@ AVFilterFormats *ff_planar_sample_fmts(void)
 AVFilterFormats *ff_all_samplerates(void)
 {
     //---------------------------------------------------------------------
-    // 2012/06/30 modified by Alalf
-    AVFilterFormats *ret = reinterpret_cast<AVFilterFormats*>(av_mallocz(sizeof(*ret)));
+    // 2014/05/28 modified by Alalf
+    AVFilterFormats *ret = static_cast<AVFilterFormats*>(av_mallocz(sizeof(*ret)));
     //---------------------------------------------------------------------
     return ret;
 }
@@ -448,8 +448,8 @@ AVFilterFormats *ff_all_samplerates(void)
 AVFilterChannelLayouts *ff_all_channel_layouts(void)
 {
     //---------------------------------------------------------------------
-    // 2012/06/30 modified by Alalf
-    AVFilterChannelLayouts *ret = reinterpret_cast<AVFilterChannelLayouts*>(av_mallocz(sizeof(*ret)));
+    // 2014/05/28 modified by Alalf
+    AVFilterChannelLayouts *ret = static_cast<AVFilterChannelLayouts*>(av_mallocz(sizeof(*ret)));
     //---------------------------------------------------------------------
     if (!ret)
         return NULL;
@@ -460,8 +460,8 @@ AVFilterChannelLayouts *ff_all_channel_layouts(void)
 AVFilterChannelLayouts *ff_all_channel_counts(void)
 {
     //---------------------------------------------------------------------
-    // 2013/02/01 modified by Alalf
-    AVFilterChannelLayouts *ret = reinterpret_cast<AVFilterChannelLayouts*>(av_mallocz(sizeof(*ret)));
+    // 2014/05/28 modified by Alalf
+    AVFilterChannelLayouts *ret = static_cast<AVFilterChannelLayouts*>(av_mallocz(sizeof(*ret)));
     //---------------------------------------------------------------------
     if (!ret)
         return NULL;
@@ -470,11 +470,11 @@ AVFilterChannelLayouts *ff_all_channel_counts(void)
 }
 
 //---------------------------------------------------------------------
-// 2012/06/30 modified by Alalf
+// 2014/05/28 modified by Alalf
 #define FORMATS_REF(f, ref_type, ref)                                \
 do {                                                                 \
     *ref = f;                                                        \
-    f->refs = reinterpret_cast<ref_type*>(av_realloc(f->refs, sizeof(*f->refs) * ++f->refcount));\
+    f->refs = static_cast<ref_type*>(av_realloc(f->refs, sizeof(*f->refs) * ++f->refcount));\
     f->refs[f->refcount-1] = ref;                                    \
 } while (0)
 //---------------------------------------------------------------------

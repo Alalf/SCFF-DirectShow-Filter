@@ -40,14 +40,14 @@ extern "C" {
  * Add all refs from a to ret and destroy a.
  */
 //---------------------------------------------------------------------
-// 2014/05/28 modified by Alalf
+// 2014/06/25 modified by Alalf
 #define MERGE_REF(ret, a, fmts, type, fail)                                \
 do {                                                                       \
     type ***tmp;                                                           \
     int i;                                                                 \
                                                                            \
-    if (!(tmp = static_cast<type***>(av_realloc(ret->refs,                 \
-                    sizeof(*tmp) * (ret->refcount + a->refcount)))))       \
+    if (!(tmp = static_cast<type***>(av_realloc_array(ret->refs, ret->refcount + a->refcount,   \
+                                 sizeof(*tmp)))))                          \
         goto fail;                                                         \
     ret->refs = tmp;                                                       \
                                                                            \
@@ -67,7 +67,7 @@ do {                                                                       \
  * a and b.
  */
 //---------------------------------------------------------------------
-// 2014/05/28 modified by Alalf
+// 2014/06/25 modified by Alalf
 #define MERGE_FORMATS(ret, a, b, fmts_type, fmts, nb, type, fail)               \
 do {                                                                            \
     int i, j, k = 0, count = FFMIN(a->nb, b->nb);                               \
@@ -76,7 +76,7 @@ do {                                                                            
         goto fail;                                                              \
                                                                                 \
     if (count) {                                                                \
-        if (!(ret->fmts = static_cast<fmts_type*>(av_malloc(sizeof(*ret->fmts) * count))))               \
+        if (!(ret->fmts = static_cast<fmts_type*>(av_malloc_array(count, sizeof(*ret->fmts)))))          \
             goto fail;                                                          \
         for (i = 0; i < a->nb; i++)                                             \
             for (j = 0; j < b->nb; j++)                                         \
@@ -218,10 +218,10 @@ AVFilterChannelLayouts *ff_merge_channel_layouts(AVFilterChannelLayouts *a,
 
     ret_max = a->nb_channel_layouts + b->nb_channel_layouts;
     //-----------------------------------------------------------------
-    // 2014/05/28 Modified by Alalf
+    // 2014/06/25 Modified by Alalf
     if (!(ret = static_cast<AVFilterChannelLayouts*>(av_mallocz(sizeof(*ret)))) ||
-        !(ret->channel_layouts = static_cast<uint64_t*>(av_malloc(sizeof(*ret->channel_layouts) *
-                                           ret_max))))
+        !(ret->channel_layouts = static_cast<uint64_t*>(av_malloc_array(ret_max,
+                                                 sizeof(*ret->channel_layouts)))))
         goto fail;
     //-----------------------------------------------------------------
 
@@ -303,7 +303,7 @@ int ff_fmt_is_in(int fmt, const int *fmts)
 //---------------------------------------------------------------------
 
 //---------------------------------------------------------------------
-// 2014/05/28 modified by Alalf
+// 2014/06/25 modified by Alalf
 #define MAKE_FORMAT_LIST(type, field_type, field, count_field)                      \
     type *formats;                                                      \
     int count = 0;                                                      \
@@ -314,7 +314,7 @@ int ff_fmt_is_in(int fmt, const int *fmts)
     if (!formats) return NULL;                                          \
     formats->count_field = count;                                       \
     if (count) {                                                        \
-        formats->field = static_cast<field_type*>(av_malloc(sizeof(*formats->field)*count));      \
+        formats->field = static_cast<field_type*>(av_malloc_array(count, sizeof(*formats->field)));      \
         if (!formats->field) {                                          \
             av_free(formats);                                           \
             return NULL;                                                \
@@ -349,7 +349,7 @@ AVFilterChannelLayouts *avfilter_make_format64_list(const int64_t *fmts)
 }
 
 //---------------------------------------------------------------------
-// 2014/05/28 modified by Alalf
+// 2014/06/25 modified by Alalf
 #define ADD_FORMAT(f_type, f, fmt, type, list, nb)          \
 do {                                                        \
     type *fmts;                                             \
@@ -358,7 +358,7 @@ do {                                                        \
         return AVERROR(ENOMEM);                             \
                                                             \
     fmts = static_cast<type*>(av_realloc((*f)->list,        \
-              sizeof(*(*f)->list) * ((*f)->nb + 1)));       \
+                     sizeof(*(*f)->list) * ((*f)->nb + 1)));\
     if (!fmts)                                              \
         return AVERROR(ENOMEM);                             \
                                                             \

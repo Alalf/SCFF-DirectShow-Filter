@@ -117,7 +117,7 @@ v0.3.0-alpha.3インストール前の注意事項
     - [Microsoft Ribbon for WPF.msi]
       (http://www.microsoft.com/en-us/download/details.aspx?id=11877)
 3. scff.slnソリューションを開き、全てのビルドが通ることを確認
-    - Microsoft Visual Studio Express 2013 for Windows Desktopで確認済み
+    - Visual Studio Community 2013で確認済み
     - 必要ならばいくつかのプロジェクト設定を書き換えること
 4. tools/copy_ffmpeg_dll.batを実行してbinディレクトリにffmpeg付属のdllをコピー
 5. tools/install_debug.batかtools/install_release.batを実行

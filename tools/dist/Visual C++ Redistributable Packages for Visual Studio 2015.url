@@ -2,5 +2,7 @@
 URL=http://www.microsoft.com/ja-jp/download/details.aspx?id=46881
 IDList=
 HotKey=0
+IconFile=http://www.microsoft.com/favicon.ico?v2
+IconIndex=1
 [{000214A0-0000-0000-C000-000000000046}]
 Prop3=19,2

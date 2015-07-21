@@ -91,7 +91,7 @@ def dist():
         ROOT_DIR + '\\tools\\bin\\regsvrex32.exe',
         ROOT_DIR + '\\tools\\bin\\regsvrex64.exe',
         ROOT_DIR + '\\tools\\dist\\Microsoft .NET Framework 4 Client Profile.url',
-        ROOT_DIR + '\\tools\\dist\\Visual C++ Redistributable Packages for Visual Studio 2013.url',
+        ROOT_DIR + '\\tools\\dist\\Visual C++ Redistributable Packages for Visual Studio 2015.url',
         ROOT_DIR + '\\tools\\dist\\install.bat',
         ROOT_DIR + '\\tools\\dist\\uninstall.bat',
         ROOT_DIR + '\\tools\\dist\\install_regsvr.bat',

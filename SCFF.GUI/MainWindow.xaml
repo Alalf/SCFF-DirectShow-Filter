@@ -4,7 +4,7 @@
         xmlns:shell="http://schemas.microsoft.com/winfx/2006/xaml/presentation/shell"
         xmlns:localControls="clr-namespace:SCFF.GUI.Controls"
         xmlns:local="clr-namespace:SCFF.GUI"
-        xmlns:common="clr-namespace:SCFF.Common"
+        xmlns:common="clr-namespace:SCFF.Common;assembly=SCFF.Common"
         Title="SCFF VERSION"
         SnapsToDevicePixels="True"
         Background="{DynamicResource WindowBackgroundBrush}"

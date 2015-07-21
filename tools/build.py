@@ -57,8 +57,8 @@ def msbuild():
     msbuild.BUILD_32BIT_BAT = msbuild.TMP_DIR + '\\build_Win32.bat'
     msbuild.BUILD_64BIT_BAT = msbuild.TMP_DIR + '\\build_x64.bat'
 
-    msbuild.ENV_32BIT_BAT = '%VS120COMNTOOLS%\\vsvars32.bat'
-    msbuild.ENV_64BIT_BAT = '%VS120COMNTOOLS%\\vsvars32.bat'
+    msbuild.ENV_32BIT_BAT = '%VS140COMNTOOLS%\\vsvars32.bat'
+    msbuild.ENV_64BIT_BAT = '%VS140COMNTOOLS%\\vsvars32.bat'
     msbuild.DSF_SLN = ROOT_DIR + '\\scff.sln'
 
     msbuild.init()

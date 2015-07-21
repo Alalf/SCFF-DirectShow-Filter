@@ -70,6 +70,9 @@ int ff_fill_line_with_color(uint8_t *line[4], int pixel_step[4], int w, uint8_t 
     uint8_t rgba_map[4] = {0};
     int i;
     const AVPixFmtDescriptor *pix_desc = av_pix_fmt_desc_get(pix_fmt);
+    // 2015/07/12 modified by Alalf
+    // int hsub;
+    // av_assert0(pix_desc);
     int hsub = pix_desc->log2_chroma_w;
 
     *is_packed_rgba = ff_fill_rgba_map(rgba_map, pix_fmt) >= 0;
@@ -170,7 +173,7 @@ int ff_draw_init(FFDrawContext *draw, enum AVPixelFormat format, unsigned flags)
     unsigned i, nb_planes = 0;
     int pixelstep[MAX_PLANES] = { 0 };
 
-    if (!desc->name)
+    if (!desc || !desc->name)
         return AVERROR(EINVAL);
     if (desc->flags & ~(AV_PIX_FMT_FLAG_PLANAR | AV_PIX_FMT_FLAG_RGB | AV_PIX_FMT_FLAG_PSEUDOPAL | AV_PIX_FMT_FLAG_ALPHA))
         return AVERROR(ENOSYS);

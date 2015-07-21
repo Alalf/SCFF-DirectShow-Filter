@@ -23,9 +23,7 @@
 /TestResults
 /ext/XSplit/*.dll
 /ext/XSplit/*.def
-
 /ext/XSplit/*.exp
-
 /ext/XSplit/*.lib
 /.vs
-/UpgradeLog.htm
+/*.htm

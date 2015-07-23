@@ -29,9 +29,9 @@ v0.3.0-alpha.3インストール前の注意事項
     - 共通: [Microsoft .NET Framework 4 Client Profile]
       (http://www.microsoft.com/downloads/ja-jp/details.aspx?FamilyID=e5ad0459-cbcc-4b4f-97b6-fb17111cf544)
     - 32bit/64bit OS: [Visual Studio 2015 の Visual C++ 再頒布可能パッケージ (vc_redist.x86.exe)]
-      (http://www.microsoft.com/ja-jp/download/details.aspx?id=46881)
+      (http://www.microsoft.com/ja-jp/download/details.aspx?id=48145)
     - 64bit OS: [Visual Studio 2015 の Visual C++ 再頒布可能パッケージ (vc_redist.x64.exe)]
-      (http://www.microsoft.com/ja-jp/download/details.aspx?id=46881)
+      (http://www.microsoft.com/ja-jp/download/details.aspx?id=48145)
 2. install.batを実行してください
     - ***重要！***
       インストール後にscff_dsf_Win32/x64.axを移動させた場合は再度install.batを実行してください。

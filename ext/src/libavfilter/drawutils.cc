@@ -20,10 +20,11 @@
  */
 
 //---------------------------------------------------------------------
-// 2012/12/02 modified by Alalf
+// 2016/03/14 modified by Alalf
 #include <libavfilter/drawutils.h>
 #include <string.h>
 extern "C" {
+#include <libavutil/avassert.h>
 #include <libavutil/avutil.h>
 #include <libavutil/colorspace.h>
 #include <libavutil/mem.h>
@@ -55,6 +56,10 @@ int ff_fill_rgba_map(uint8_t *rgba_map, enum AVPixelFormat pix_fmt)
     case AV_PIX_FMT_BGRA:
     case AV_PIX_FMT_BGR0:
     case AV_PIX_FMT_BGR24: rgba_map[BLUE ] = 0; rgba_map[GREEN] = 1; rgba_map[RED  ] = 2; rgba_map[ALPHA] = 3; break;
+    case AV_PIX_FMT_GBRP9:
+    case AV_PIX_FMT_GBRP10:
+    case AV_PIX_FMT_GBRP12:
+    case AV_PIX_FMT_GBRP14:
     case AV_PIX_FMT_GBRAP:
     case AV_PIX_FMT_GBRP:  rgba_map[GREEN] = 0; rgba_map[BLUE ] = 1; rgba_map[RED  ] = 2; rgba_map[ALPHA] = 3; break;
     default:                    /* unsupported */
@@ -70,12 +75,11 @@ int ff_fill_line_with_color(uint8_t *line[4], int pixel_step[4], int w, uint8_t 
     uint8_t rgba_map[4] = {0};
     int i;
     const AVPixFmtDescriptor *pix_desc = av_pix_fmt_desc_get(pix_fmt);
-    // 2015/07/12 modified by Alalf
-    // int hsub;
-    //
+    int hsub;
+    // 2016/03/15 modified by Alalf
     // av_assert0(pix_desc);
     //
-    int hsub = pix_desc->log2_chroma_w;
+    hsub = pix_desc->log2_chroma_w;
 
     *is_packed_rgba = ff_fill_rgba_map(rgba_map, pix_fmt) >= 0;
 
@@ -107,7 +111,7 @@ int ff_fill_line_with_color(uint8_t *line[4], int pixel_step[4], int w, uint8_t 
             int hsub1 = (plane == 1 || plane == 2) ? hsub : 0;
 
             pixel_step[plane] = 1;
-            line_size = FF_CEIL_RSHIFT(w, hsub1) * pixel_step[plane];
+            line_size = AV_CEIL_RSHIFT(w, hsub1) * pixel_step[plane];
             //---------------------------------------------------------
             // 2014/05/28 modified by Alalf
             line[plane] = static_cast<uint8_t*>(av_malloc(line_size));
@@ -134,8 +138,8 @@ void ff_draw_rectangle(uint8_t *dst[4], int dst_linesize[4],
     for (plane = 0; plane < 4 && dst[plane]; plane++) {
         int hsub1 = plane == 1 || plane == 2 ? hsub : 0;
         int vsub1 = plane == 1 || plane == 2 ? vsub : 0;
-        int width  = FF_CEIL_RSHIFT(w, hsub1);
-        int height = FF_CEIL_RSHIFT(h, vsub1);
+        int width  = AV_CEIL_RSHIFT(w, hsub1);
+        int height = AV_CEIL_RSHIFT(h, vsub1);
 
         p = dst[plane] + (y >> vsub1) * dst_linesize[plane];
         for (i = 0; i < height; i++) {
@@ -156,8 +160,8 @@ void ff_copy_rectangle(uint8_t *dst[4], int dst_linesize[4],
     for (plane = 0; plane < 4 && dst[plane]; plane++) {
         int hsub1 = plane == 1 || plane == 2 ? hsub : 0;
         int vsub1 = plane == 1 || plane == 2 ? vsub : 0;
-        int width  = FF_CEIL_RSHIFT(w, hsub1);
-        int height = FF_CEIL_RSHIFT(h, vsub1);
+        int width  = AV_CEIL_RSHIFT(w, hsub1);
+        int height = AV_CEIL_RSHIFT(h, vsub1);
 
         p = dst[plane] + (y >> vsub1) * dst_linesize[plane];
         for (i = 0; i < height; i++) {
@@ -262,8 +266,8 @@ void ff_copy_rectangle2(FFDrawContext *draw,
     for (plane = 0; plane < draw->nb_planes; plane++) {
         p = pointer_at(draw, src, src_linesize, plane, src_x, src_y);
         q = pointer_at(draw, dst, dst_linesize, plane, dst_x, dst_y);
-        wp = FF_CEIL_RSHIFT(w, draw->hsub[plane]) * draw->pixelstep[plane];
-        hp = FF_CEIL_RSHIFT(h, draw->vsub[plane]);
+        wp = AV_CEIL_RSHIFT(w, draw->hsub[plane]) * draw->pixelstep[plane];
+        hp = AV_CEIL_RSHIFT(h, draw->vsub[plane]);
         for (y = 0; y < hp; y++) {
             memcpy(q, p, wp);
             p += src_linesize[plane];
@@ -281,8 +285,8 @@ void ff_fill_rectangle(FFDrawContext *draw, FFDrawColor *color,
 
     for (plane = 0; plane < draw->nb_planes; plane++) {
         p0 = pointer_at(draw, dst, dst_linesize, plane, dst_x, dst_y);
-        wp = FF_CEIL_RSHIFT(w, draw->hsub[plane]);
-        hp = FF_CEIL_RSHIFT(h, draw->vsub[plane]);
+        wp = AV_CEIL_RSHIFT(w, draw->hsub[plane]);
+        hp = AV_CEIL_RSHIFT(h, draw->vsub[plane]);
         if (!hp)
             return;
         p = p0;

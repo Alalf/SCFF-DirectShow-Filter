@@ -103,16 +103,17 @@ v0.3.0-alpha.3インストール前の注意事項
 0. Pythonに詳しい方はtools/build.pyを参照してください。下記の作業の一部を自動化できます。
 1. [Zeranoe FFmpeg builds](http://ffmpeg.zeranoe.com/builds/) からSharedビルド及びDevビルドを取得する
     - [32bit Builds (Shared)]
-      (http://ffmpeg.zeranoe.com/builds/win32/shared/ffmpeg-latest-win32-shared.7z)
+      (http://ffmpeg.zeranoe.com/builds/win32/shared/ffmpeg-3.0-win32-shared.7z)
     - [32bit Builds (Dev)]
-      (http://ffmpeg.zeranoe.com/builds/win32/dev/ffmpeg-latest-win32-dev.7z)
+      (http://ffmpeg.zeranoe.com/builds/win32/dev/ffmpeg-3.0-win32-dev.7z)
     - [64bit Builds (Shared)]
-      (http://ffmpeg.zeranoe.com/builds/win64/shared/ffmpeg-latest-win64-shared.7z)
+      (http://ffmpeg.zeranoe.com/builds/win64/shared/ffmpeg-3.0-win64-shared.7z)
     - [64bit Builds (Dev)]
-      (http://ffmpeg.zeranoe.com/builds/win64/dev/ffmpeg-latest-win64-dev.7z)
+      (http://ffmpeg.zeranoe.com/builds/win64/dev/ffmpeg-3.0-win64-dev.7z)
     - ext/ffmpeg/x64に64bit版を、ext/ffmpeg/Win32に32bit版を展開する
     - SharedもDevも同じディレクトリに展開すること（数個のファイルが上書きされるが問題ない）
     - ext/ffmpeg/x64/README.txt, ext/ffmpeg/Win32/README.txtが存在するように確認すること
+    - ソースコードは [GitHub: FFmpeg / FFmpeg](https://github.com/FFmpeg/FFmpeg) からダウンロード可能
 2. Microsoft Ribbon for WPF October 2010をインストールする
     - [Microsoft Ribbon for WPF.msi]
       (http://www.microsoft.com/en-us/download/details.aspx?id=11877)

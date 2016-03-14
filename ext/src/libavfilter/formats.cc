@@ -30,8 +30,8 @@ extern "C" {
 #include <libavutil/pixdesc.h>
 #include <libavutil/parseutils.h>
 #include <libavfilter/avfilter.h>
+/* #include <libavfilter/internal.h> */
 }
-//#include <libavfilter/internal.h>
 //---------------------------------------------------------------------
 
 #define KNOWN(l) (!FF_LAYOUT2COUNT(l)) /* for readability */
@@ -591,6 +591,8 @@ void ff_formats_changeref(AVFilterFormats **oldref, AVFilterFormats **newref)
             int ret = ref_fn(fmts, &ctx->inputs[i]->out_fmts);      \
             if (ret < 0) {                                          \
                 unref_fn(&fmts);                                    \
+                av_freep(&fmts->list);                              \
+                av_freep(&fmts);                                    \
                 return ret;                                         \
             }                                                       \
             count++;                                                \
@@ -601,6 +603,8 @@ void ff_formats_changeref(AVFilterFormats **oldref, AVFilterFormats **newref)
             int ret = ref_fn(fmts, &ctx->outputs[i]->in_fmts);      \
             if (ret < 0) {                                          \
                 unref_fn(&fmts);                                    \
+                av_freep(&fmts->list);                              \
+                av_freep(&fmts);                                    \
                 return ret;                                         \
             }                                                       \
             count++;                                                \

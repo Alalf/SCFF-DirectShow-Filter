@@ -210,8 +210,6 @@ v0.3.0-alpha.3インストール前の注意事項
           a library containing functions for simplifying programming,
           including random number generators, data structures, mathematics routines,
           core multimedia utilities, and much more.
-        - libavcodec:
-          a library containing decoders and encoders for audio/video codecs.
     - 利用しているLGPLライセンスのソースコード
         - libavutil/colorspace.h
         - libavfilter/drawutils.c

@@ -28,8 +28,8 @@
 namespace scff_imaging {
 
 class Request;
-class AVPictureImage;
-class AVPictureWithFillImage;
+class AVFrameImage;
+class AVFrameBitmapImage;
 class RawBitmapImage;
 class WindowsDDBImage;
 

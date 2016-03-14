@@ -47,12 +47,6 @@
     <ClCompile Include="..\ext\src\libavfilter\drawutils.cc">
       <Filter>ext</Filter>
     </ClCompile>
-    <ClCompile Include="scff_imaging\avpicture_image.cc">
-      <Filter>scff_imaging</Filter>
-    </ClCompile>
-    <ClCompile Include="scff_imaging\avpicture_with_fill_image.cc">
-      <Filter>scff_imaging</Filter>
-    </ClCompile>
     <ClCompile Include="scff_imaging\engine.cc">
       <Filter>scff_imaging</Filter>
     </ClCompile>
@@ -94,6 +88,12 @@
     </ClCompile>
     <ClCompile Include="..\ext\src\libavfilter\formats.cc">
       <Filter>ext</Filter>
+    </ClCompile>
+    <ClCompile Include="scff_imaging\avframe_image.cc">
+      <Filter>scff_imaging</Filter>
+    </ClCompile>
+    <ClCompile Include="scff_imaging\avframe_bitmap_image.cc">
+      <Filter>scff_imaging</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -140,12 +140,6 @@
     </ClInclude>
     <ClInclude Include="..\ext\include\libavutil\colorspace.h">
       <Filter>ext</Filter>
-    </ClInclude>
-    <ClInclude Include="scff_imaging\avpicture_image.h">
-      <Filter>scff_imaging</Filter>
-    </ClInclude>
-    <ClInclude Include="scff_imaging\avpicture_with_fill_image.h">
-      <Filter>scff_imaging</Filter>
     </ClInclude>
     <ClInclude Include="scff_imaging\engine.h">
       <Filter>scff_imaging</Filter>
@@ -206,6 +200,12 @@
     </ClInclude>
     <ClInclude Include="..\ext\include\libavfilter\formats.h">
       <Filter>ext</Filter>
+    </ClInclude>
+    <ClInclude Include="scff_imaging\avframe_image.h">
+      <Filter>scff_imaging</Filter>
+    </ClInclude>
+    <ClInclude Include="scff_imaging\avframe_bitmap_image.h">
+      <Filter>scff_imaging</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

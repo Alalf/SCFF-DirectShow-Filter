@@ -15,43 +15,43 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file scff_imaging/avpicture_image.h
-/// scff_imaging::AVPictureImageの宣言
+/// @file scff_imaging/avframe_image.h
+/// scff_imaging::AVFrameImageの宣言
 
-#ifndef SCFF_DSF_SCFF_IMAGING_AVPICTURE_IMAGE_H_
-#define SCFF_DSF_SCFF_IMAGING_AVPICTURE_IMAGE_H_
+#ifndef SCFF_DSF_SCFF_IMAGING_AVFRAME_IMAGE_H_
+#define SCFF_DSF_SCFF_IMAGING_AVFRAME_IMAGE_H_
 
 #include "scff_imaging/common.h"
 #include "scff_imaging/image.h"
 
 namespace scff_imaging {
 
-/// AVPicture(ffmpeg)の実体を管理するクラス
-class AVPictureImage: public Image {
+/// AVFrame(ffmpeg)の実体を管理するクラス
+class AVFrameImage: public Image {
  public:
   /// コンストラクタ
-  AVPictureImage();
+  AVFrameImage();
   /// デストラクタ
-  ~AVPictureImage();
+  ~AVFrameImage();
 
   //-------------------------------------------------------------------
   /// @copydoc Image::IsEmpty
   bool IsEmpty() const;
-  /// AVPictureの実体を作成する
+  /// AVFrameの実体を作成する
   /// @sa Image::Create
   ErrorCodes Create(ImagePixelFormats pixel_format, int width, int height);
   //-------------------------------------------------------------------
 
-  /// Getter: AVPictureへのポインタ
-  AVPicture* avpicture() const;
+  /// Getter: AVFrameへのポインタ
+  AVFrame* avframe() const;
 
  private:
-  /// AVPictureへのポインタ
-  AVPicture *avpicture_;
+  /// AVFrameへのポインタ
+  AVFrame *avframe_;
 
   // コピー＆代入禁止
-  DISALLOW_COPY_AND_ASSIGN(AVPictureImage);
+  DISALLOW_COPY_AND_ASSIGN(AVFrameImage);
 };
 }   // namespace scff_imaging
 
-#endif  // SCFF_DSF_SCFF_IMAGING_AVPICTURE_IMAGE_H_
+#endif  // SCFF_DSF_SCFF_IMAGING_AVFRAME_IMAGE_H_

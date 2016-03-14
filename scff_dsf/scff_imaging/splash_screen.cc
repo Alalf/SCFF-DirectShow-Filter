@@ -190,7 +190,7 @@ ErrorCodes SplashScreen::Run() {
   SelectObject(resource_dc, resource_ddb_.windows_ddb());
   GetDIBits(resource_dc, resource_ddb_.windows_ddb(),
             0, resource_ddb_.height(),
-            resource_image_.raw_bitmap(),
+            resource_image_.bitmap(),
             &resource_ddb_info_,
             DIB_RGB_COLORS);
   DeleteDC(resource_dc);

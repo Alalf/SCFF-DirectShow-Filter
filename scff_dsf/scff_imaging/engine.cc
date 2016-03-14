@@ -20,8 +20,13 @@
 
 #include "scff_imaging/engine.h"
 
+extern "C" {
+#include <libavutil/frame.h>
+#include <libavutil/imgutils.h>
+}
+
 #include "scff_imaging/debug.h"
-#include "scff_imaging/avpicture_image.h"
+#include "scff_imaging/avframe_image.h"
 #include "scff_imaging/splash_screen.h"
 #include "scff_imaging/native_layout.h"
 #include "scff_imaging/complex_layout.h"
@@ -32,8 +37,8 @@ extern OSVERSIONINFO g_osInfo;
 
 namespace {
 
-/// 指定されたAVPictureImageを黒で塗りつぶす
-void Clear(scff_imaging::AVPictureImage *image) {
+/// 指定されたAVFrameImageを黒で塗りつぶす
+void Clear(scff_imaging::AVFrameImage *image) {
   if (!scff_imaging::utilities::CanUseDrawUtils(image->pixel_format())) {
     // 塗りつぶせなければなにもしない
     return;
@@ -56,8 +61,8 @@ void Clear(scff_imaging::AVPictureImage *image) {
                 rgba_padding_color);
 
   ff_fill_rectangle(&draw_context, &padding_color,
-                    image->avpicture()->data,
-                    image->avpicture()->linesize,
+                    image->avframe()->data,
+                    image->avframe()->linesize,
                     0,
                     0,
                     image->width(),
@@ -214,29 +219,26 @@ ErrorCodes Engine::CopyCurrentImage(BYTE *sample, DWORD data_size) {
   // layout_にエラーが発生していたらスプラッシュを書く
   if (GetCurrentLayoutError() != ErrorCodes::kNoError) {
     ASSERT(data_size == utilities::CalculateImageSize(splash_image_));
-    avpicture_layout(splash_image_.avpicture(),
-                     splash_image_.av_pixel_format(),
-                     splash_image_.width(),
-                     splash_image_.height(),
-                     sample, data_size);
+    av_image_copy_to_buffer(sample, data_size,
+                            splash_image_.avframe()->data, splash_image_.avframe()->linesize,
+                            splash_image_.av_pixel_format(),
+                            splash_image_.width(), splash_image_.height(), 1);
     return GetCurrentError();
   }
 
   // sampleにコピー
   if (last_update_image_ == ImageIndexes::kFront) {
     ASSERT(data_size == utilities::CalculateImageSize(front_image_));
-    avpicture_layout(front_image_.avpicture(),
-                     front_image_.av_pixel_format(),
-                     front_image_.width(),
-                     front_image_.height(),
-                     sample, data_size);
+    av_image_copy_to_buffer(sample, data_size,
+                            front_image_.avframe()->data, front_image_.avframe()->linesize,
+                            front_image_.av_pixel_format(),
+                            front_image_.width(), front_image_.height(), 1);
   } else if (last_update_image_ == ImageIndexes::kBack) {
     ASSERT(data_size == utilities::CalculateImageSize(back_image_));
-    avpicture_layout(back_image_.avpicture(),
-                     back_image_.av_pixel_format(),
-                     back_image_.width(),
-                     back_image_.height(),
-                     sample, data_size);
+    av_image_copy_to_buffer(sample, data_size,
+                            back_image_.avframe()->data, back_image_.avframe()->linesize,
+                            back_image_.av_pixel_format(),
+                            back_image_.width(), back_image_.height(), 1);
   }
 
   return GetCurrentError();

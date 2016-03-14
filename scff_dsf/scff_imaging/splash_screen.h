@@ -22,7 +22,7 @@
 #define SCFF_DSF_SCFF_IMAGING_SPLASH_SCREEN_H_
 
 #include "scff_imaging/layout.h"
-#include "scff_imaging/avpicture_with_fill_image.h"
+#include "scff_imaging/avframe_bitmap_image.h"
 #include "scff_imaging/windows_ddb_image.h"
 
 namespace scff_imaging {
@@ -59,9 +59,9 @@ class SplashScreen : public Layout {
   /// リソースのビットマップ読み込み用
   WindowsDDBImage resource_ddb_;
   /// GetDIBits用
-  AVPictureWithFillImage resource_image_;
+  AVFrameBitmapImage resource_image_;
   /// 変換後
-  AVPictureImage converted_image_;
+  AVFrameImage converted_image_;
   //-------------------------------------------------------------------
 
   /// 取り込み用BITMAPINFO

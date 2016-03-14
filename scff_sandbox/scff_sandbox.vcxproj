@@ -114,7 +114,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)ext\ffmpeg\$(PlatformName)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>delayimp.lib;d3d11.lib;dxgi.lib;avutil.lib;swscale.lib;avcodec.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>delayimp.lib;d3d11.lib;dxgi.lib;avutil.lib;swscale.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
       <DelayLoadDLLs>d3d11.dll;dxgi.dll</DelayLoadDLLs>
     </Link>
@@ -136,7 +136,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)ext\ffmpeg\$(PlatformName)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>delayimp.lib;d3d11.lib;dxgi.lib;avutil.lib;swscale.lib;avcodec.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>delayimp.lib;d3d11.lib;dxgi.lib;avutil.lib;swscale.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <DelayLoadDLLs>d3d11.dll;dxgi.dll</DelayLoadDLLs>
     </Link>
     <PostBuildEvent>
@@ -161,7 +161,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>$(SolutionDir)ext\ffmpeg\$(PlatformName)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>delayimp.lib;d3d11.lib;dxgi.lib;avutil.lib;swscale.lib;avcodec.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>delayimp.lib;d3d11.lib;dxgi.lib;avutil.lib;swscale.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
       <DelayLoadDLLs>d3d11.dll;dxgi.dll</DelayLoadDLLs>
     </Link>
@@ -187,7 +187,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>$(SolutionDir)ext\ffmpeg\$(PlatformName)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>delayimp.lib;d3d11.lib;dxgi.lib;avutil.lib;swscale.lib;avcodec.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>delayimp.lib;d3d11.lib;dxgi.lib;avutil.lib;swscale.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <DelayLoadDLLs>d3d11.dll;dxgi.dll</DelayLoadDLLs>
     </Link>
     <PostBuildEvent>

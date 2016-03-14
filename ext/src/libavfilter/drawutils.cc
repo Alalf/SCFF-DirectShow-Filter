@@ -22,6 +22,7 @@
 //---------------------------------------------------------------------
 // 2016/03/14 modified by Alalf
 #include <libavfilter/drawutils.h>
+
 #include <string.h>
 extern "C" {
 #include <libavutil/avassert.h>

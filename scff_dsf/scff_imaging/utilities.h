@@ -23,7 +23,7 @@
 
 #include <Windows.h>
 extern "C" {
-#include <libavcodec/avcodec.h>
+#include <libavutil/pixfmt.h>
 }
 
 namespace scff_imaging {
@@ -31,7 +31,7 @@ namespace scff_imaging {
 enum class ErrorCodes;
 enum class ImagePixelFormats;
 class Image;
-class AVPictureImage;
+class AVFrameImage;
 
 /// scff_imagingモジュールを使う上で便利な機能を集めた名前空間
 namespace utilities {
@@ -64,7 +64,7 @@ int CalculateDataSize(ImagePixelFormats pixel_format,
 int CalculateImageSize(const Image &image);
 
 /// AVPixelFormatを取得
-AVPixelFormat ToAVPicturePixelFormat(ImagePixelFormats pixel_format);
+AVPixelFormat ConvertToAVPixelFormat(ImagePixelFormats pixel_format);
 
 /// BITMAPINFOHEADERを取得
 void ToWindowsBitmapInfo(ImagePixelFormats pixel_format,

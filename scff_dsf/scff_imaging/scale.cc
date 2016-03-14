@@ -21,12 +21,13 @@
 #include "scff_imaging/scale.h"
 
 extern "C" {
+#include <libavutil/frame.h>
 #include <libswscale/swscale.h>
 }
 
 #include "scff_imaging/utilities.h"
-#include "scff_imaging/avpicture_image.h"
-#include "scff_imaging/avpicture_with_fill_image.h"
+#include "scff_imaging/avframe_image.h"
+#include "scff_imaging/avframe_bitmap_image.h"
 
 namespace scff_imaging {
 
@@ -35,7 +36,7 @@ namespace scff_imaging {
 //=====================================================================
 
 Scale::Scale(const SWScaleConfig &swscale_config)
-    : Processor<AVPictureWithFillImage, AVPictureImage>(),
+    : Processor<AVFrameBitmapImage, AVFrameImage>(),
       swscale_config_(swscale_config),
       filter_(nullptr),
       scaler_(nullptr) {
@@ -146,11 +147,11 @@ ErrorCodes Scale::Run() {
   // SWScaleを使って拡大・縮小を行う
   int scale_height =
       sws_scale(scaler_,
-                GetInputImage()->avpicture()->data,
-                GetInputImage()->avpicture()->linesize,
+                GetInputImage()->avframe()->data,
+                GetInputImage()->avframe()->linesize,
                 0, GetInputImage()->height(),
-                GetOutputImage()->avpicture()->data,
-                GetOutputImage()->avpicture()->linesize);
+                GetOutputImage()->avframe()->data,
+                GetOutputImage()->avframe()->linesize);
   ASSERT(scale_height == GetOutputImage()->height());
 
   // エラー発生なし

@@ -15,13 +15,14 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file scff_imaging/avpicture_image.cc
-/// scff_imaging::AVPictureImageの定義
+/// @file scff_imaging/avframe_image.cc
+/// scff_imaging::AVFrameImageの定義
 
-#include "scff_imaging/avpicture_image.h"
+#include "scff_imaging/avframe_image.h"
 
 extern "C" {
-#include <libavcodec/avcodec.h>
+#include <libavutil/frame.h>
+#include <libavutil/imgutils.h>
 }
 
 #include "scff_imaging/debug.h"
@@ -31,48 +32,54 @@ extern "C" {
 namespace scff_imaging {
 
 //=====================================================================
-// scff_imaging::AVPictureImage
+// scff_imaging::AVFrameImage
 //=====================================================================
 
-AVPictureImage::AVPictureImage()
+AVFrameImage::AVFrameImage()
     : Image(),
-      avpicture_(nullptr) {
-  /// @attention avpicture_そのものの構築はCreateで行う
+      avframe_(nullptr) {
+  /// @attention avframe_そのものの構築はCreateで行う
 }
 
-AVPictureImage::~AVPictureImage() {
+AVFrameImage::~AVFrameImage() {
   if (!IsEmpty()) {
-    avpicture_free(avpicture_);
+    if (avframe_->data) {
+      av_freep(&avframe_->data[0]);
+    }
+    av_frame_free(&avframe_);
   }
 }
 
-bool AVPictureImage::IsEmpty() const {
-  return avpicture_ == nullptr;
+bool AVFrameImage::IsEmpty() const {
+  return avframe_ == nullptr;
 }
 
-ErrorCodes AVPictureImage::Create(ImagePixelFormats pixel_format,
-                                  int width, int height) {
+ErrorCodes AVFrameImage::Create(ImagePixelFormats pixel_format,
+                                int width, int height) {
   // pixel_format, width, heightを設定する
   ErrorCodes error_create = Image::Create(pixel_format, width, height);
   if (error_create != ErrorCodes::kNoError) {
     return error_create;
   }
 
-  // 取り込み用AVPictureを作成
-  AVPicture *avpicture = new AVPicture();
-  int result_alloc =
-      avpicture_alloc(avpicture,
-                      av_pixel_format(),
-                      width, height);
-  if (result_alloc != 0) {
-    return ErrorCodes::kAVPictureImageOutOfMemoryError;
-  }
-  avpicture_ = avpicture;
+  // 取り込み用AVFrameを作成
+  AVFrame *avframe = av_frame_alloc();
+  avframe->width = width;
+  avframe->height = height;
+  avframe->format = av_pixel_format();
 
+  const int result_alloc = av_image_alloc(avframe->data,
+                                          avframe->linesize,
+                                          width, height, av_pixel_format(), 1);
+  if (result_alloc == 0) {
+    return ErrorCodes::kAVFrameImageOutOfMemoryError;
+  }
+
+  avframe_ = avframe;
   return ErrorCodes::kNoError;
 }
 
-AVPicture* AVPictureImage::avpicture() const {
-  return avpicture_;
+AVFrame* AVFrameImage::avframe() const {
+  return avframe_;
 }
 }   // namespace scff_imaging

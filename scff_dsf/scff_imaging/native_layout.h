@@ -23,7 +23,7 @@
 
 #include "scff_imaging/common.h"
 #include "scff_imaging/layout.h"
-#include "scff_imaging/avpicture_with_fill_image.h"
+#include "scff_imaging/avframe_bitmap_image.h"
 
 namespace scff_imaging {
 
@@ -60,9 +60,9 @@ class NativeLayout : public Layout {
   // Image
   //-------------------------------------------------------------------
   /// ScreenCaptureから取得した変換処理前のイメージ
-  AVPictureWithFillImage captured_image_;
+  AVFrameBitmapImage captured_image_;
   /// SWScaleで拡大縮小ピクセルフォーマット変換を行った後のイメージ
-  AVPictureImage converted_image_;
+  AVFrameImage converted_image_;
   //-------------------------------------------------------------------
 
   /// レイアウトパラメータ

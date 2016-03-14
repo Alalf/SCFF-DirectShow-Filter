@@ -22,15 +22,14 @@
 #define SCFF_DSF_SCFF_IMAGING_IMAGE_H_
 
 #include <Windows.h>
-extern "C" {
-#include <libavcodec/avcodec.h>
-}
-
 #include <cstdint>
+extern "C" {
+#include <libavutil/pixfmt.h>
+}
 
 #include "scff_imaging/common.h"
 
-struct AVPicture;
+struct AVFrame;
 
 namespace scff_imaging {
 
@@ -46,7 +45,7 @@ class Image {
 
   /// Getter: イメージのピクセルフォーマット
   ImagePixelFormats pixel_format() const;
-  /// イメージのピクセルフォーマットをAVPicture用に変換
+  /// イメージのピクセルフォーマットをAVFrame用に変換
   AVPixelFormat av_pixel_format() const;
   /// Getter: イメージの幅
   int width() const;

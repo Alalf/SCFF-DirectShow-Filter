@@ -20,15 +20,15 @@
 
 #include "scff_imaging/utilities.h"
 
-extern "C" {
-#include <libavcodec/avcodec.h>
-}
-
 #include <cmath>
+extern "C" {
+#define __STDC_CONSTANT_MACROS
+#include <libavutil/imgutils.h>
+}
 
 #include "scff_imaging/debug.h"
 #include "scff_imaging/imaging_types.h"
-#include "scff_imaging/avpicture_image.h"
+#include "scff_imaging/avframe_image.h"
 
 // DLLインスタンスハンドル(DirectShow BaseClassesで定義済み)
 extern HINSTANCE g_hInst;
@@ -91,8 +91,8 @@ bool CanUseDrawUtils(ImagePixelFormats pixel_format) {
 
 int CalculateDataSize(ImagePixelFormats pixel_format,
                       int width, int height) {
-  return avpicture_get_size(ToAVPicturePixelFormat(pixel_format),
-                            width, height);
+  return av_image_get_buffer_size(ConvertToAVPixelFormat(pixel_format),
+                                  width, height, 1);
 }
 
 int CalculateImageSize(const Image &image) {
@@ -102,7 +102,7 @@ int CalculateImageSize(const Image &image) {
 }
 
 /// @attention ピクセルフォーマットを追加するときはここを修正すること
-AVPixelFormat ToAVPicturePixelFormat(ImagePixelFormats pixel_format) {
+AVPixelFormat ConvertToAVPixelFormat(ImagePixelFormats pixel_format) {
   switch (pixel_format) {
     case ImagePixelFormats::kI420:
     case ImagePixelFormats::kIYUV:

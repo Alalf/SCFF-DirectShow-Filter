@@ -44,7 +44,7 @@ ScreenCapture::ScreenCapture(
     bool vertical_invert,
     int count,
     const LayoutParameter (&parameters)[kMaxProcessorSize])
-    : Processor<void, AVPictureWithFillImage>(count),
+    : Processor<void, AVFrameBitmapImage>(count),
       vertical_invert_(vertical_invert) {
   DbgLog((kLogMemory, kTrace,
           TEXT("ScreenCapture: NEW(%d)"),
@@ -247,7 +247,7 @@ ErrorCodes ScreenCapture::Run() {
     GetDIBits(dc_for_bitblt_[i],
               image_for_bitblt_[i].windows_ddb(),
               0, parameters_[i].clipping_height,
-              GetOutputImage(i)->raw_bitmap(),
+              GetOutputImage(i)->bitmap(),
               &(info_for_getdibits_[i]),
               DIB_RGB_COLORS);
   }

@@ -21,10 +21,8 @@
 #include <SDKDDKVer.h>
 #include <stdio.h>
 #include <tchar.h>
-
 // SWScale実験用
 extern "C" {
-#include <libavcodec/avcodec.h>
 #include <libswscale/swscale.h>
 }
 

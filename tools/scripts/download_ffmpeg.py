@@ -140,25 +140,17 @@ MKDIR "bin\\Release_x64\\"
 MKDIR "bin\\Debug_Win32\\"
 MKDIR "bin\\Release_Win32\\"
 
-COPY /Y "ext\\ffmpeg\\x64\\bin\\avcodec*.dll" "bin\\Debug_x64\\"
 COPY /Y "ext\\ffmpeg\\x64\\bin\\avutil*.dll" "bin\\Debug_x64\\"
 COPY /Y "ext\\ffmpeg\\x64\\bin\\swscale*.dll" "bin\\Debug_x64\\"
-COPY /Y "ext\\ffmpeg\\x64\\bin\\swresample*.dll" "bin\\Debug_x64\\"
 
-COPY /Y "ext\\ffmpeg\\x64\\bin\\avcodec*.dll" "bin\\Release_x64\\"
 COPY /Y "ext\\ffmpeg\\x64\\bin\\avutil*.dll" "bin\\Release_x64\\"
 COPY /Y "ext\\ffmpeg\\x64\\bin\\swscale*.dll" "bin\\Release_x64\\"
-COPY /Y "ext\\ffmpeg\\x64\\bin\\swresample*.dll" "bin\\Release_x64\\"
 
-COPY /Y "ext\\ffmpeg\\Win32\\bin\\avcodec*.dll" "bin\\Debug_Win32\\"
 COPY /Y "ext\\ffmpeg\\Win32\\bin\\avutil*.dll" "bin\\Debug_Win32\\"
 COPY /Y "ext\\ffmpeg\\Win32\\bin\\swscale*.dll" "bin\\Debug_Win32\\"
-COPY /Y "ext\\ffmpeg\\Win32\\bin\\swresample*.dll" "bin\\Debug_Win32\\"
 
-COPY /Y "ext\\ffmpeg\\Win32\\bin\\avcodec*.dll" "bin\\Release_Win32\\"
 COPY /Y "ext\\ffmpeg\\Win32\\bin\\avutil*.dll" "bin\\Release_Win32\\"
 COPY /Y "ext\\ffmpeg\\Win32\\bin\\swscale*.dll" "bin\\Release_Win32\\"
-COPY /Y "ext\\ffmpeg\\Win32\\bin\\swresample*.dll" "bin\\Release_Win32\\"
 
 POPD
 ''' % ROOT_DIR

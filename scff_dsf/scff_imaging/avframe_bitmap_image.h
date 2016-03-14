@@ -15,47 +15,47 @@
 // You should have received a copy of the GNU General Public License
 // along with SCFF DSF.  If not, see <http://www.gnu.org/licenses/>.
 
-/// @file scff_imaging/avpicture_with_fill_image.h
-/// scff_imaging::AVPictureWithFillImageの宣言
+/// @file scff_imaging/avframe_bitmap_image.h
+/// scff_imaging::AVFrameBitmapImageの宣言
 
-#ifndef SCFF_DSF_SCFF_IMAGING_AVPICTURE_WITH_FILL_IMAGE_H_
-#define SCFF_DSF_SCFF_IMAGING_AVPICTURE_WITH_FILL_IMAGE_H_
+#ifndef SCFF_DSF_SCFF_IMAGING_AVFRAME_BITMAP_IMAGE_H_
+#define SCFF_DSF_SCFF_IMAGING_AVFRAME_BITMAP_IMAGE_H_
 
 #include "scff_imaging/common.h"
 #include "scff_imaging/image.h"
 
 namespace scff_imaging {
 
-/// AVPicture(ffmpeg)の実体を管理するクラス
-class AVPictureWithFillImage: public Image {
+/// AVFrame(ffmpeg)の実体を管理するクラス
+class AVFrameBitmapImage: public Image {
  public:
   /// コンストラクタ
-  AVPictureWithFillImage();
+  AVFrameBitmapImage();
   /// デストラクタ
-  ~AVPictureWithFillImage();
+  ~AVFrameBitmapImage();
 
   //-------------------------------------------------------------------
   /// @copydoc Image::IsEmpty
   bool IsEmpty() const;
-  /// AVPictureと同時にRawBitmapの実体を作成する
+  /// AVFrameと同時にRawBitmapの実体を作成する
   /// @sa Image::Create
   ErrorCodes Create(ImagePixelFormats pixel_format, int width, int height);
   //-------------------------------------------------------------------
 
   /// Getter: 各種ビットマップ
-  uint8_t* raw_bitmap() const;
-  /// Getter: AVPictureへのポインタ
-  AVPicture* avpicture() const;
+  uint8_t* bitmap() const;
+  /// Getter: AVFrameへのポインタ
+  AVFrame* avframe() const;
 
  private:
   /// 各種ビットマップ
-  uint8_t *raw_bitmap_;
-  /// AVPictureへのポインタ
-  AVPicture *avpicture_;
+  uint8_t *bitmap_;
+  /// AVFrameへのポインタ
+  AVFrame *avframe_;
 
   // コピー＆代入禁止
-  DISALLOW_COPY_AND_ASSIGN(AVPictureWithFillImage);
+  DISALLOW_COPY_AND_ASSIGN(AVFrameBitmapImage);
 };
 }   // namespace scff_imaging
 
-#endif  // SCFF_DSF_SCFF_IMAGING_AVPICTURE_WITH_FILL_IMAGE_H_
+#endif  // SCFF_DSF_SCFF_IMAGING_AVFRAME_BITMAP_IMAGE_H_

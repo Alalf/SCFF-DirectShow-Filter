@@ -29,7 +29,7 @@ struct SwsContext;
 namespace scff_imaging {
 
 /// SWScaleを利用してイメージの拡大・縮小・ピクセルフォーマット変換を行う
-class Scale : public Processor<AVPictureWithFillImage, AVPictureImage> {
+class Scale : public Processor<AVFrameBitmapImage, AVFrameImage> {
  public:
   /// コンストラクタ
   explicit Scale(const SWScaleConfig &swscale_config);

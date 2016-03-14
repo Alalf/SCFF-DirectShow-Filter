@@ -20,10 +20,6 @@
 
 #include "scff_imaging/raw_bitmap_image.h"
 
-extern "C" {
-#include <libavcodec/avcodec.h>
-}
-
 #include "scff_imaging/debug.h"
 #include "scff_imaging/imaging_types.h"
 #include "scff_imaging/utilities.h"

@@ -20,6 +20,10 @@
 
 #include "scff_imaging/complex_layout.h"
 
+extern "C" {
+#include <libavutil/frame.h>
+}
+
 #include "scff_imaging/debug.h"
 #include "scff_imaging/utilities.h"
 #include "scff_imaging/screen_capture.h"
@@ -227,8 +231,8 @@ ErrorCodes ComplexLayout::Run() {
 
   // 背景描画
   ff_fill_rectangle(&draw_context_, &background_color_,
-                    GetOutputImage()->avpicture()->data,
-                    GetOutputImage()->avpicture()->linesize,
+                    GetOutputImage()->avframe()->data,
+                    GetOutputImage()->avframe()->linesize,
                     0, 0,
                     GetOutputImage()->width(),
                     GetOutputImage()->height());
@@ -236,10 +240,10 @@ ErrorCodes ComplexLayout::Run() {
   // 要素を順番に描画
   for (int i = 0; i < element_count_; i++) {
     ff_copy_rectangle2(&draw_context_,
-                       GetOutputImage()->avpicture()->data,
-                       GetOutputImage()->avpicture()->linesize,
-                       converted_image_[i].avpicture()->data,
-                       converted_image_[i].avpicture()->linesize,
+                       GetOutputImage()->avframe()->data,
+                       GetOutputImage()->avframe()->linesize,
+                       converted_image_[i].avframe()->data,
+                       converted_image_[i].avframe()->linesize,
                        element_x_[i], element_y_[i],
                        0, 0,
                        converted_image_[i].width(),

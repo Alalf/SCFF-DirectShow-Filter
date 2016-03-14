@@ -133,11 +133,11 @@ class Engine : public CAMThread, public Layout {
   // Image
   //-------------------------------------------------------------------
   /// フロントイメージ
-  AVPictureImage front_image_;
+  AVFrameImage front_image_;
   /// バックイメージ
-  AVPictureImage back_image_;
+  AVFrameImage back_image_;
   /// スプラッシュイメージ
-  AVPictureImage splash_image_;
+  AVFrameImage splash_image_;
   //-------------------------------------------------------------------
 
   /// フロントイメージの消去が必要

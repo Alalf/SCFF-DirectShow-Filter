@@ -25,12 +25,12 @@
 
 #include "scff_imaging/processor.h"
 #include "scff_imaging/windows_ddb_image.h"
-#include "scff_imaging/avpicture_with_fill_image.h"
+#include "scff_imaging/avframe_bitmap_image.h"
 
 namespace scff_imaging {
 
 /// スクリーンキャプチャを行うプロセッサ
-class ScreenCapture : public Processor<void, AVPictureWithFillImage> {
+class ScreenCapture : public Processor<void, AVFrameBitmapImage> {
  public:
   /// コンストラクタ
   ScreenCapture(

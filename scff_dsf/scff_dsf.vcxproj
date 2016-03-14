@@ -29,8 +29,8 @@
     <ClCompile Include="base\scff_output_pin_implement.cc" />
     <ClCompile Include="base\scff_output_pin.cc" />
     <ClCompile Include="base\scff_source.cc" />
-    <ClCompile Include="scff_imaging\avpicture_image.cc" />
-    <ClCompile Include="scff_imaging\avpicture_with_fill_image.cc" />
+    <ClCompile Include="scff_imaging\avframe_image.cc" />
+    <ClCompile Include="scff_imaging\avframe_bitmap_image.cc" />
     <ClCompile Include="scff_imaging\complex_layout.cc" />
     <ClCompile Include="scff_imaging\engine.cc" />
     <ClCompile Include="scff_imaging\image.cc" />
@@ -63,8 +63,8 @@
     <ClInclude Include="base\scff_output_pin.h" />
     <ClInclude Include="base\scff_source.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="scff_imaging\avpicture_image.h" />
-    <ClInclude Include="scff_imaging\avpicture_with_fill_image.h" />
+    <ClInclude Include="scff_imaging\avframe_image.h" />
+    <ClInclude Include="scff_imaging\avframe_bitmap_image.h" />
     <ClInclude Include="scff_imaging\common.h" />
     <ClInclude Include="scff_imaging\complex_layout.h" />
     <ClInclude Include="scff_imaging\debug.h" />
@@ -183,7 +183,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)\obj\BaseClasses\$(Configuration)_$(PlatformName)\;$(SolutionDir)ext\ffmpeg\$(PlatformName)\lib</AdditionalLibraryDirectories>
       <ModuleDefinitionFile>base\$(ProjectName)_$(PlatformName).def</ModuleDefinitionFile>
-      <AdditionalDependencies>strmbasd.lib;Msvcrtd.lib;Winmm.lib;PSAPI.lib;swscale.lib;avcodec.lib;avutil.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>strmbasd.lib;Msvcrtd.lib;Winmm.lib;PSAPI.lib;swscale.lib;avutil.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
     <PreLinkEvent />
@@ -206,7 +206,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)\obj\BaseClasses\$(Configuration)_$(PlatformName)\;$(SolutionDir)ext\ffmpeg\$(PlatformName)\lib</AdditionalLibraryDirectories>
       <ModuleDefinitionFile>base\$(ProjectName)_$(PlatformName).def</ModuleDefinitionFile>
-      <AdditionalDependencies>strmbasd.lib;Msvcrtd.lib;Winmm.lib;PSAPI.lib;swscale.lib;avcodec.lib;avutil.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>strmbasd.lib;Msvcrtd.lib;Winmm.lib;PSAPI.lib;swscale.lib;avutil.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent />
     <PreLinkEvent />
@@ -231,7 +231,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>$(SolutionDir)\obj\BaseClasses\$(Configuration)_$(PlatformName)\;$(SolutionDir)ext\ffmpeg\$(PlatformName)\lib</AdditionalLibraryDirectories>
       <ModuleDefinitionFile>base\$(ProjectName)_$(PlatformName).def</ModuleDefinitionFile>
-      <AdditionalDependencies>strmbase.lib;Msvcrt.lib;Winmm.lib;PSAPI.lib;swscale.lib;avcodec.lib;avutil.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>strmbase.lib;Msvcrt.lib;Winmm.lib;PSAPI.lib;swscale.lib;avutil.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
     <PreLinkEvent />
@@ -258,7 +258,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>$(SolutionDir)\obj\BaseClasses\$(Configuration)_$(PlatformName)\;$(SolutionDir)ext\ffmpeg\$(PlatformName)\lib</AdditionalLibraryDirectories>
       <ModuleDefinitionFile>base\$(ProjectName)_$(PlatformName).def</ModuleDefinitionFile>
-      <AdditionalDependencies>strmbase.lib;Msvcrt.lib;Winmm.lib;PSAPI.lib;swscale.lib;avcodec.lib;avutil.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>strmbase.lib;Msvcrt.lib;Winmm.lib;PSAPI.lib;swscale.lib;avutil.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreLinkEvent />
     <PreLinkEvent />

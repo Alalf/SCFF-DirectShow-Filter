@@ -21,11 +21,11 @@
 #ifndef SCFF_DSF_SCFF_IMAGING_IMAGING_TYPES_H_
 #define SCFF_DSF_SCFF_IMAGING_IMAGING_TYPES_H_
 
+#include <Windows.h>
+#include <cstdint>
 extern "C" {
 #include <libswscale/swscale.h>
 }
-#include <Windows.h>
-#include <cstdint>
 
 namespace scff_imaging {
 
@@ -53,24 +53,22 @@ enum class ErrorCodes {
   /// RawBitmapイメージのメモリ確保に失敗した
   kRawBitmapImageOutOfMemoryError = 1000,
 
-  /// AVPictureイメージのメモリ確保に失敗した
-  kAVPictureImageOutOfMemoryError = 1001,
-
-  /// AVPictureWithFillイメージのメモリ確保に失敗した
-  kAVPictureWithFillImageOutOfMemoryError = 1002,
-  /// AVPictureWithFillイメージのAVPicture作成に失敗した
-  kAVPictureWithFillImageCannotCreateAVPictureError = 1003,
-  /// AVPictureWithFillイメージのfillに失敗した
-  kAVPictureWithFillImageCannotFillError = 1004,
+  /// AVFrameイメージのメモリ確保に失敗した
+  kAVFrameImageOutOfMemoryError = 1001,
+  
+  /// AVFrameBitmapイメージのメモリ確保に失敗した
+  kAVFrameBitmapImageOutOfMemoryError = 1002,
+  /// AVFrameBitmapイメージのfillに失敗した
+  kAVFrameBitmapImageCannotFillError = 1003,
 
   /// WindowsDDBイメージ作成時のリソース画像のLoadImageに失敗した
-  kWindowsDDBImageCannotLoadResourceImageError = 1005,
+  kWindowsDDBImageCannotLoadResourceImageError = 1004,
   /// WindowsDDBイメージ作成時にWindowからDCを得ることに失敗した
-  kWindowsDDBImageCannotGetDCFromWindowError = 1006,
+  kWindowsDDBImageCannotGetDCFromWindowError = 1005,
   /// 32bit以外のWindowからWindowsDDBイメージを作成しようとした
-  kWindowsDDBImageNotRGB32WindowError = 1007,
+  kWindowsDDBImageNotRGB32WindowError = 1006,
   /// WindowsDDBイメージのメモリ確保に失敗した
-  kWindowsDDBImageOutOfMemoryError = 1008,
+  kWindowsDDBImageOutOfMemoryError = 1007,
 
   //-------------------------------------------------------------------
   // Processor

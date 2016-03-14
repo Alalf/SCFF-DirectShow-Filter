@@ -22,12 +22,12 @@
 #define SCFF_DSF_SCFF_IMAGING_LAYOUT_H_
 
 #include "scff_imaging/processor.h"
-#include "scff_imaging/avpicture_image.h"
+#include "scff_imaging/avframe_image.h"
 
 namespace scff_imaging {
 
 /// レイアウト: 入力がない特殊なプロセッサ
-typedef Processor<void, AVPictureImage> Layout;
+typedef Processor<void, AVFrameImage> Layout;
 
 }   // namespace scff_imaging
 

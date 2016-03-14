@@ -29,7 +29,7 @@
 namespace scff_imaging {
 
 /// drawutilsを利用してパディングを行う
-class Padding : public Processor<AVPictureImage, AVPictureImage> {
+class Padding : public Processor<AVFrameImage, AVFrameImage> {
  public:
   /// コンストラクタ
   Padding(int padding_left, int padding_right,

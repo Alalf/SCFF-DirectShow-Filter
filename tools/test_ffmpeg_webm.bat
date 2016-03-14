@@ -6,7 +6,7 @@ SET OUTPUT_DIR=tools\tmp
 SET OUTPUT=http://localhost:8080/publish/first?password=secret
 SET OUTPUT_FILE=%OUTPUT_DIR%\test_ffmpeg_webm.webm
 SET VIDEO=SCFF DirectShow Filter
-SET AUDIO=Mixer (Creative SB X-Fi)
+SET AUDIO=Mixer (Realtek High Definition 
 SET FFMPEG_EXE=ext\ffmpeg\x64\bin\ffmpeg.exe
 
 MKDIR "%OUTPUT_DIR%"

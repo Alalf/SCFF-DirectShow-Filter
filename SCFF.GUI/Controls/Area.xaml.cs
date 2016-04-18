@@ -295,6 +295,24 @@ public partial class Area : UserControl, IBindingProfile {
     }
   }
 
+  /// Deviceの座標(GDI32)をWPFの座標に変換
+  private Point DeviceToWPFPoint(Point devicePoint) {
+    var source = PresentationSource.FromVisual(this);
+    if (source == null || source.CompositionTarget == null) {
+      return devicePoint;
+    }
+    return source.CompositionTarget.TransformFromDevice.Transform(devicePoint);
+  }
+
+  /// WPFの座標をDeviceの座標(GDI32)に変換
+  private Point WPFToDevicePoint(Point wpfPoint) {
+    var source = PresentationSource.FromVisual(this);
+    if (source == null || source.CompositionTarget == null) {
+      return wpfPoint;
+    }
+    return source.CompositionTarget.TransformToDevice.Transform(wpfPoint);
+  }
+
   /// 現在編集中のレイアウト要素のクリッピング領域/Fitオプションを変更する
   private void CommonAreaSelect(bool changeWindowType = false,
                                 WindowTypes nextWindowType = WindowTypes.Normal) {
@@ -308,12 +326,14 @@ public partial class Area : UserControl, IBindingProfile {
     //-----------------------------------------------------------------
     var dialog = new AreaSelectWindow();
 
-    // サイズ
+    // サイズ(DPI補正)
     var screenRect = App.Profile.Current.ScreenClippingRectWithFit;
-    dialog.Left   = screenRect.X;
-    dialog.Top    = screenRect.Y;
-    dialog.Width  = screenRect.Width;
-    dialog.Height = screenRect.Height;
+    var wpfLeftTop = this.DeviceToWPFPoint(new Point(screenRect.X, screenRect.Y));
+    var wpfRightBottom = this.DeviceToWPFPoint(new Point(screenRect.Right, screenRect.Bottom));
+    dialog.Left   = wpfLeftTop.X;
+    dialog.Top    = wpfLeftTop.Y;
+    dialog.Width  = wpfRightBottom.X - wpfLeftTop.X;
+    dialog.Height = wpfRightBottom.Y - wpfLeftTop.Y;
 
     // カラーの変更
     Brush border, background;
@@ -327,9 +347,13 @@ public partial class Area : UserControl, IBindingProfile {
     var result = dialog.ShowDialog();
     if (!result.HasValue || !(bool)result) return;
 
-    // 結果をScreenRectにまとめる
+    // 結果をScreenRectにまとめる(DPI補正)
+    var deviceLeftTop = this.WPFToDevicePoint(new Point(dialog.Left, dialog.Top));
+    var deviceRightBottom = this.WPFToDevicePoint(new Point(dialog.Left + dialog.Width, dialog.Top + dialog.Height));
     var nextScreenRect = new ScreenRect(
-        (int)dialog.Left, (int)dialog.Top, (int)dialog.Width, (int)dialog.Height);
+        (int)deviceLeftTop.X, (int)deviceLeftTop.Y,
+        (int)(deviceRightBottom.X - deviceLeftTop.X),
+        (int)(deviceRightBottom.Y - deviceLeftTop.Y));
 
     // Profile更新
     App.Profile.Open();

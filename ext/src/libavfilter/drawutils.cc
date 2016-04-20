@@ -20,8 +20,8 @@
  */
 
 //---------------------------------------------------------------------
-// 2016/03/14 modified by Alalf
-#include <libavfilter/drawutils.h>
+// 2016/04/20 modified by Alalf
+#include "libavfilter/drawutils.h"
 
 #include <string.h>
 extern "C" {
@@ -31,7 +31,8 @@ extern "C" {
 #include <libavutil/mem.h>
 #include <libavutil/pixdesc.h>
 }
-#include <libavfilter/formats.h>
+
+#include "libavfilter/formats.h"
 //---------------------------------------------------------------------
 
 enum { RED = 0, GREEN, BLUE, ALPHA };

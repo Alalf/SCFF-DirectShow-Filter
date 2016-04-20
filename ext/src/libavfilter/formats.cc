@@ -20,8 +20,9 @@
  */
 
 //---------------------------------------------------------------------
-// 2012/12/02 modified by Alalf
-#include <libavfilter/formats.h>
+// 2016/04/20 modified by Alalf
+#include "libavfilter/formats.h"
+
 extern "C" {
 #include <libavutil/avassert.h>
 #include <libavutil/channel_layout.h>

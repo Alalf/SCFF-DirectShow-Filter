@@ -37,7 +37,7 @@ def download_ffmpeg():
         'https://ffmpeg.zeranoe.com/builds/win64/dev/ffmpeg-3.2-win64-dev.zip']
 
     download_ffmpeg.EXTRACT_COMMAND = BIN_DIR + '\\unzip.exe'
-    download_ffmpeg.EXTRACT_OPTIONS = '-d "%s"' % download_ffmpeg.TMP_DIR
+    download_ffmpeg.EXTRACT_OPTIONS = '-qq -d "%s"' % download_ffmpeg.TMP_DIR
 
     download_ffmpeg.init()
     download_ffmpeg.download()

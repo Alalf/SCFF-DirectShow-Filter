@@ -31,13 +31,13 @@ def download_ffmpeg():
 
     # 3.0 or latest
     download_ffmpeg.DOWNLOADS = [
-        'http://ffmpeg.zeranoe.com/builds/win32/shared/ffmpeg-3.0.1-win32-shared.7z',
-        'http://ffmpeg.zeranoe.com/builds/win32/dev/ffmpeg-3.0.1-win32-dev.7z',
-        'http://ffmpeg.zeranoe.com/builds/win64/shared/ffmpeg-3.0.1-win64-shared.7z',
-        'http://ffmpeg.zeranoe.com/builds/win64/dev/ffmpeg-3.0.1-win64-dev.7z']
+        'https://ffmpeg.zeranoe.com/builds/win32/shared/ffmpeg-3.2-win32-shared.zip',
+        'https://ffmpeg.zeranoe.com/builds/win32/dev/ffmpeg-3.2-win32-dev.zip',
+        'https://ffmpeg.zeranoe.com/builds/win64/shared/ffmpeg-3.2-win64-shared.zip',
+        'https://ffmpeg.zeranoe.com/builds/win64/dev/ffmpeg-3.2-win64-dev.zip']
 
-    download_ffmpeg.EXTRACT_COMMAND = BIN_DIR + '\\7zr.exe'
-    download_ffmpeg.EXTRACT_OPTIONS = 'x -o"%s"' % download_ffmpeg.TMP_DIR
+    download_ffmpeg.EXTRACT_COMMAND = BIN_DIR + '\\unzip.exe'
+    download_ffmpeg.EXTRACT_OPTIONS = '-d "%s"' % download_ffmpeg.TMP_DIR
 
     download_ffmpeg.init()
     download_ffmpeg.download()

@@ -30,7 +30,9 @@ def init():
 
 def download():
     from sys import stderr
-    from urllib import urlretrieve
+    #from urllib import urlretrieve
+    import webbrowser
+    from os import popen
 
     print >>stderr, 'download:'
 
@@ -39,7 +41,11 @@ def download():
         print >>stderr, '\t[download] ' + url
         filename = url.split('/')[-1]
         path = TMP_DIR + '\\' + filename
-        urlretrieve(url, path)
+        # urlretrieve(url, path)
+        webbrowser.open(url)
+
+    popen('explorer "%s"' % TMP_DIR)
+    raw_input('press return key after moving zipfiles to %s...' % TMP_DIR)
 
 #-----------------------------------------------------------------------
 

@@ -31,10 +31,10 @@ def download_ffmpeg():
 
     # 3.0 or latest
     download_ffmpeg.DOWNLOADS = [
-        'https://ffmpeg.zeranoe.com/builds/win32/shared/ffmpeg-3.2-win32-shared.zip',
-        'https://ffmpeg.zeranoe.com/builds/win32/dev/ffmpeg-3.2-win32-dev.zip',
-        'https://ffmpeg.zeranoe.com/builds/win64/shared/ffmpeg-3.2-win64-shared.zip',
-        'https://ffmpeg.zeranoe.com/builds/win64/dev/ffmpeg-3.2-win64-dev.zip']
+        'https://ffmpeg.zeranoe.com/builds/win32/shared/ffmpeg-3.2.4-win32-shared.zip',
+        'https://ffmpeg.zeranoe.com/builds/win32/dev/ffmpeg-3.2.4-win32-dev.zip',
+        'https://ffmpeg.zeranoe.com/builds/win64/shared/ffmpeg-3.2.4-win64-shared.zip',
+        'https://ffmpeg.zeranoe.com/builds/win64/dev/ffmpeg-3.2.4-win64-dev.zip']
 
     download_ffmpeg.EXTRACT_COMMAND = BIN_DIR + '\\unzip.exe'
     download_ffmpeg.EXTRACT_OPTIONS = '-qq -d "%s"' % download_ffmpeg.TMP_DIR
@@ -58,8 +58,8 @@ def msbuild():
     msbuild.BUILD_32BIT_BAT = msbuild.TMP_DIR + '\\build_Win32.bat'
     msbuild.BUILD_64BIT_BAT = msbuild.TMP_DIR + '\\build_x64.bat'
 
-    msbuild.ENV_32BIT_BAT = '%VS140COMNTOOLS%\\vsvars32.bat'
-    msbuild.ENV_64BIT_BAT = '%VS140COMNTOOLS%\\vsvars32.bat'
+    msbuild.ENV_32BIT_BAT = 'D:\\Program Files\\MSVS2017\\Common7\\Tools\\VsDevCmd.bat'
+    msbuild.ENV_64BIT_BAT = 'D:\\Program Files\\MSVS2017\\Common7\\Tools\\VsDevCmd.bat'
     msbuild.DSF_SLN = ROOT_DIR + '\\scff.sln'
 
     msbuild.init()

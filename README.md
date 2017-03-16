@@ -118,7 +118,7 @@ v0.3.0-alpha.3インストール前の注意事項
     - [Microsoft Ribbon for WPF.msi]
       (http://www.microsoft.com/en-us/download/details.aspx?id=11877)
 3. scff.slnソリューションを開き、全てのビルドが通ることを確認
-    - Visual Studio Community 2015で確認済み
+    - Visual Studio Community 2017で確認済み
     - 必要ならばいくつかのプロジェクト設定を書き換えること
 4. tools/copy_ffmpeg_dll.batを実行してbinディレクトリにffmpeg付属のdllをコピー
 5. tools/install_debug.batかtools/install_release.batを実行
@@ -230,4 +230,4 @@ v0.3.0-alpha.3インストール前の注意事項
 -----------------------------------------------------------------------
 
 - https://github.com/Alalf/SCFF-DirectShow-Filter
-- Copyright (C) 2012-2015 Alalf
+- Copyright (C) 2012-2017 Alalf

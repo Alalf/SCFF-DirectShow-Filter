@@ -127,7 +127,8 @@ public partial class LayoutEdit
         FlowDirection.LeftToRight,
         new Typeface("Segoe UI, Tahoma"),
         CaptionFontSize,
-        textBrush);
+        textBrush,
+        VisualTreeHelper.GetDpi(this).PixelsPerDip);
 
     // Clipping
     formattedText.MaxTextWidth = boundRect.Width;

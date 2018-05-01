@@ -25,7 +25,6 @@ using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
 using Microsoft.Win32;
-using Microsoft.Windows.Shell;
 using SCFF.Common;
 using SCFF.Common.GUI;
 

@@ -70,6 +70,8 @@ int ff_fill_rgba_map(uint8_t *rgba_map, enum AVPixelFormat pix_fmt)
     case AV_PIX_FMT_GBRP16LE:
     case AV_PIX_FMT_GBRP16BE:
     case AV_PIX_FMT_GBRAP:
+    case AV_PIX_FMT_GBRAP10LE:
+    case AV_PIX_FMT_GBRAP10BE:
     case AV_PIX_FMT_GBRAP12LE:
     case AV_PIX_FMT_GBRAP12BE:
     case AV_PIX_FMT_GBRAP16LE:
@@ -194,9 +196,13 @@ int ff_draw_init(FFDrawContext *draw, enum AVPixelFormat format, unsigned flags)
 
     if (!desc || !desc->name)
         return AVERROR(EINVAL);
+    //-------------------------------------------------------------
+    // 2018/05/01 modified by Alalf
+    // AV_PIX_FMT_FLAG_PSEUDOPAL is deprecated -> FF_PSEUDOPAL
     if (desc->flags & ~(AV_PIX_FMT_FLAG_PLANAR | AV_PIX_FMT_FLAG_RGB | AV_PIX_FMT_FLAG_PSEUDOPAL | AV_PIX_FMT_FLAG_ALPHA))
-        return AVERROR(ENOSYS);
-    if (format == AV_PIX_FMT_P010LE || format == AV_PIX_FMT_P010BE)
+      return AVERROR(ENOSYS);
+    //-------------------------------------------------------------
+    if (format == AV_PIX_FMT_P010LE || format == AV_PIX_FMT_P010BE || format == AV_PIX_FMT_P016LE || format == AV_PIX_FMT_P016BE)
         return AVERROR(ENOSYS);
     for (i = 0; i < desc->nb_components; i++) {
         c = &desc->comp[i];
@@ -272,14 +278,16 @@ void ff_draw_color(FFDrawContext *draw, FFDrawColor *color, const uint8_t rgba[4
         EXPAND(2);
         EXPAND(1);
         EXPAND(0);
-    } else if (draw->format == AV_PIX_FMT_GRAY8 || draw->format == AV_PIX_FMT_GRAY8A) {
+    } else if (draw->format == AV_PIX_FMT_GRAY8 || draw->format == AV_PIX_FMT_GRAY8A ||
+               draw->format == AV_PIX_FMT_GRAY16LE || draw->format == AV_PIX_FMT_YA16LE ||
+               draw->format == AV_PIX_FMT_GRAY9LE  ||
+               draw->format == AV_PIX_FMT_GRAY10LE ||
+               draw->format == AV_PIX_FMT_GRAY12LE) {
+        const AVPixFmtDescriptor *desc = draw->desc;
         color->comp[0].u8[0] = RGB_TO_Y_CCIR(rgba[0], rgba[1], rgba[2]);
+        EXPAND(0);
         color->comp[1].u8[0] = rgba[3];
-    } else if (draw->format == AV_PIX_FMT_GRAY16LE || draw->format == AV_PIX_FMT_YA16LE) {
-        color->comp[0].u8[0] = RGB_TO_Y_CCIR(rgba[0], rgba[1], rgba[2]);
-        color->comp[0].u16[0] = color->comp[0].u8[0] << 8;
-        color->comp[1].u8[0] = rgba[3];
-        color->comp[1].u16[0] = color->comp[1].u8[0] << 8;
+        EXPAND(1);
     } else {
         av_log(NULL, AV_LOG_WARNING,
                "Color conversion not implemented for %s\n", draw->desc->name);

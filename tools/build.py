@@ -31,10 +31,10 @@ def download_ffmpeg():
 
     # 3.0 or latest
     download_ffmpeg.DOWNLOADS = [
-        'https://ffmpeg.zeranoe.com/builds/win32/shared/ffmpeg-3.3.3-win32-shared.zip',
-        'https://ffmpeg.zeranoe.com/builds/win32/dev/ffmpeg-3.3.3-win32-dev.zip',
-        'https://ffmpeg.zeranoe.com/builds/win64/shared/ffmpeg-3.3.3-win64-shared.zip',
-        'https://ffmpeg.zeranoe.com/builds/win64/dev/ffmpeg-3.3.3-win64-dev.zip']
+        'https://ffmpeg.zeranoe.com/builds/win32/shared/ffmpeg-4.0-win32-shared.zip',
+        'https://ffmpeg.zeranoe.com/builds/win32/dev/ffmpeg-4.0-win32-dev.zip',
+        'https://ffmpeg.zeranoe.com/builds/win64/shared/ffmpeg-4.0-win64-shared.zip',
+        'https://ffmpeg.zeranoe.com/builds/win64/dev/ffmpeg-4.0-win64-dev.zip']
 
     download_ffmpeg.EXTRACT_COMMAND = BIN_DIR + '\\unzip.exe'
     download_ffmpeg.EXTRACT_OPTIONS = '-qq -d "%s"' % download_ffmpeg.TMP_DIR
@@ -91,7 +91,7 @@ def dist():
         ROOT_DIR + '\\bin\\Release\\SCFF.Interprocess.dll',
         ROOT_DIR + '\\tools\\bin\\regsvrex32.exe',
         ROOT_DIR + '\\tools\\bin\\regsvrex64.exe',
-        ROOT_DIR + '\\tools\\dist\\Microsoft .NET Framework 4 Client Profile.url',
+        ROOT_DIR + '\\tools\\dist\\Microsoft .NET Framework 4.7.1.url',
         ROOT_DIR + '\\tools\\dist\\Downloads - Visual Studio Official Site.url',
         ROOT_DIR + '\\tools\\dist\\install.bat',
         ROOT_DIR + '\\tools\\dist\\uninstall.bat',

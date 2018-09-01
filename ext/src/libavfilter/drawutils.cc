@@ -91,9 +91,9 @@ int ff_fill_line_with_color(uint8_t *line[4], int pixel_step[4], int w, uint8_t 
     int i;
     const AVPixFmtDescriptor *pix_desc = av_pix_fmt_desc_get(pix_fmt);
     int hsub;
-    // 2016/03/15 modified by Alalf
-    // av_assert0(pix_desc);
-    //
+
+    av_assert0(pix_desc);
+
     hsub = pix_desc->log2_chroma_w;
 
     *is_packed_rgba = ff_fill_rgba_map(rgba_map, pix_fmt) >= 0;

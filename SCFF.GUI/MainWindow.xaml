@@ -1,7 +1,6 @@
 ﻿<Window x:Class="SCFF.GUI.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:shell="http://schemas.microsoft.com/winfx/2006/xaml/presentation/shell"
         xmlns:localControls="clr-namespace:SCFF.GUI.Controls"
         xmlns:local="clr-namespace:SCFF.GUI"
         xmlns:common="clr-namespace:SCFF.Common;assembly=SCFF.Common"
@@ -19,14 +18,14 @@
         AllowDrop="True">
   <!-- CommandBindings -->
   <Window.CommandBindings>
-    <!-- shell:SystemCommands -->
-    <CommandBinding Command="{x:Static shell:SystemCommands.CloseWindowCommand}"
+    <!-- SystemCommands -->
+    <CommandBinding Command="{x:Static SystemCommands.CloseWindowCommand}"
                     Executed="OnCloseWindow"/>
-    <CommandBinding Command="{x:Static shell:SystemCommands.MaximizeWindowCommand}"
+    <CommandBinding Command="{x:Static SystemCommands.MaximizeWindowCommand}"
                     Executed="OnMaximizeWindow"/>
-    <CommandBinding Command="{x:Static shell:SystemCommands.MinimizeWindowCommand}"
+    <CommandBinding Command="{x:Static SystemCommands.MinimizeWindowCommand}"
                     Executed="OnMinimizeWindow"/>
-    <CommandBinding Command="{x:Static shell:SystemCommands.RestoreWindowCommand}"
+    <CommandBinding Command="{x:Static SystemCommands.RestoreWindowCommand}"
                     Executed="OnRestoreWindow"/>
     <!-- ApplicationCommands -->
     <CommandBinding Command="New" Executed="OnNew"/>
@@ -75,12 +74,12 @@
     <CommandBinding Command="{x:Static local:Commands.SetCompactView}"
                     Executed="OnSetCompactView"/>
   </Window.CommandBindings>
-  <shell:WindowChrome.WindowChrome>
-    <shell:WindowChrome CaptionHeight="{x:Static SystemParameters.CaptionHeight}"
-                        ResizeBorderThickness="8"
-                        GlassFrameThickness="0"
-                        CornerRadius="0"/>
-  </shell:WindowChrome.WindowChrome>
+  <WindowChrome.WindowChrome>
+    <WindowChrome CaptionHeight="{x:Static SystemParameters.CaptionHeight}"
+                  ResizeBorderThickness="8"
+                  GlassFrameThickness="0"
+                  CornerRadius="0"/>
+  </WindowChrome.WindowChrome>
   <Border BorderBrush="{DynamicResource SolidBorderBrush}" BorderThickness="1">
     <DockPanel LastChildFill="True" Margin="0,0,0,0">
       <!-- キャプションバー -->
@@ -109,22 +108,22 @@
                     Style="{StaticResource CaptionButton}"
                     VerticalAlignment="Center" Height="12" 
                     FontSize="10.5" Content="0"
-                    Command="{x:Static shell:SystemCommands.MinimizeWindowCommand}"/>
+                    Command="{x:Static SystemCommands.MinimizeWindowCommand}"/>
         <Button     Grid.Column="3"
                     Style="{StaticResource CaptionButton}"
                     VerticalAlignment="Center" Height="12" 
                     FontSize="10.5" Content="1"
-                    Command="{x:Static shell:SystemCommands.MaximizeWindowCommand}"/>
+                    Command="{x:Static SystemCommands.MaximizeWindowCommand}"/>
         <Button     Grid.Column="4"
                     Style="{StaticResource CaptionButton}"
                     VerticalAlignment="Center" Height="12" 
                     FontSize="10.5" Content="2"
-                    Command="{x:Static shell:SystemCommands.RestoreWindowCommand}"/>
+                    Command="{x:Static SystemCommands.RestoreWindowCommand}"/>
         <Button     Grid.Column="5"
                     Style="{StaticResource CaptionButton}"
                     VerticalAlignment="Center" Height="12"
                     FontSize="10.5" Content="r"
-                    Command="{x:Static shell:SystemCommands.CloseWindowCommand}"/>
+                    Command="{x:Static SystemCommands.CloseWindowCommand}"/>
       </Grid>
       <!-- メニューバー -->
       <localControls:MainMenu DockPanel.Dock="Top"

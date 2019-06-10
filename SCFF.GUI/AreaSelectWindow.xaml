@@ -1,7 +1,6 @@
 ﻿<Window x:Class="SCFF.GUI.AreaSelectWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:shell="http://schemas.microsoft.com/winfx/2006/xaml/presentation/shell"
         xmlns:local="clr-namespace:SCFF.GUI"
         AllowsTransparency="True"
         WindowStyle="None"
@@ -15,19 +14,19 @@
   <Window.CommandBindings>
     <!-- ApplicationCommands -->
     <CommandBinding Command="Save" Executed="OnSave"/>
-    <!-- shell:SystemCommands -->
-    <CommandBinding Command="{x:Static shell:SystemCommands.CloseWindowCommand}"
+    <!-- SystemCommands -->
+    <CommandBinding Command="{x:Static SystemCommands.CloseWindowCommand}"
                     Executed="OnCloseWindow"/>
   </Window.CommandBindings>
   <Window.InputBindings>
     <KeyBinding Key="Return" Command="Save"/>
   </Window.InputBindings>
-  <shell:WindowChrome.WindowChrome>
-    <shell:WindowChrome CaptionHeight="0"
+  <WindowChrome.WindowChrome>
+    <WindowChrome CaptionHeight="0"
                         ResizeBorderThickness="8"
                         GlassFrameThickness="0"
                         CornerRadius="0"/>
-  </shell:WindowChrome.WindowChrome>
+  </WindowChrome.WindowChrome>
   <Border x:Name="WindowBorder" BorderBrush="DarkOrange" BorderThickness="1">
     <Grid x:Name="WindowGrid" Background="#99FF8000">
       <Grid.RowDefinitions>
@@ -43,7 +42,7 @@
               VerticalAlignment="Center" HorizontalAlignment="Right" Height="14"
               FontSize="11" Content="r"
               IsCancel="True"
-              Command="{x:Static shell:SystemCommands.CloseWindowCommand}"/>
+              Command="{x:Static SystemCommands.CloseWindowCommand}"/>
       <Label  Grid.Row="2"
               VerticalAlignment="Center" HorizontalAlignment="Center" Height="12" 
               IsHitTestVisible="False"

@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:shell="http://schemas.microsoft.com/winfx/2006/xaml/presentation/shell"
              mc:Ignorable="d" d:DesignWidth="530" d:DesignHeight="37"
              FontSize="10">
   <Menu FontSize="10" FontFamily="Segoe UI, Tahoma"> <!-- なぜかMenuだけFont指定が必要 -->
@@ -45,7 +44,7 @@
                 Click="RecentProfile5_Click"/>
       <Separator/>
       <MenuItem Header="Exit(_X)"
-                Command="{x:Static shell:SystemCommands.CloseWindowCommand}"/>
+                Command="{x:Static SystemCommands.CloseWindowCommand}"/>
     </MenuItem>
     <MenuItem Header="Options(_O)">
       <MenuItem Header="Compact view(_C)"

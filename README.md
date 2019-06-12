@@ -26,9 +26,10 @@ v0.3.0-alpha.3インストール前の注意事項
 -----------------------------------------------------------------------
 
 1. 以下のランタイムをインストールしてください  
-    - 共通: [Microsoft .NET Framework 4.7.1]
-      (https://www.microsoft.com/ja-JP/download/details.aspx?id=56115)
-    - [Visual Studio 2017 の Microsoft Visual C++ 再頒布可能パッケージ]
+    - 共通: [Microsoft .NET Framework 4.8]
+      (https://dotnet.microsoft.com/download)
+        - .NET Framework > Run Apps > Download .NET Framework Runtime
+    - [Visual Studio 2019 の Microsoft Visual C++ 再頒布可能パッケージ]
       (https://www.visualstudio.com/ja/downloads/)
         - 32bit/64bit OS: その他のツールとフレームワーク > ...C++ 再頒布可能パッケージ > vc_redist.x86.exe
         - 64bit OS: その他のツールとフレームワーク > ...C++ 再頒布可能パッケージ > vc_redist.x64.exe

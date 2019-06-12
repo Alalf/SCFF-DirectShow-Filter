@@ -30,7 +30,7 @@ v0.3.0-alpha.3インストール前の注意事項
       (https://dotnet.microsoft.com/download)
         - .NET Framework > Run Apps > Download .NET Framework Runtime
     - [Visual Studio 2019 の Microsoft Visual C++ 再頒布可能パッケージ]
-      (https://www.visualstudio.com/ja/downloads/)
+      (https://www.visualstudio.com/downloads/)
         - 32bit/64bit OS: その他のツールとフレームワーク > ...C++ 再頒布可能パッケージ > vc_redist.x86.exe
         - 64bit OS: その他のツールとフレームワーク > ...C++ 再頒布可能パッケージ > vc_redist.x64.exe
 2. install.batを実行してください

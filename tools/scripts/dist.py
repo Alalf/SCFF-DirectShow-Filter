@@ -20,7 +20,7 @@ def init():
     from os import makedirs
     from shutil import rmtree
 
-    print >>stderr, 'init:'
+    print('init:', file=stderr)
     
     rmtree(TMP_DIR, True)
     makedirs(TMP_DIR)
@@ -33,7 +33,7 @@ def make_dist():
     from glob import glob
     from shutil import copy
 
-    print >>stderr, 'make_dist:'
+    print('make_dist:', file=stderr)
     
     makedirs(DIST_DIR)
     for path in FILES:
@@ -57,7 +57,7 @@ def make_archive():
     from datetime import datetime
     from subprocess import call
 
-    print >>stderr, 'make_archive:'
+    print('make_archive:', file=stderr)
     
     today = datetime.today()
     timestamp = today.strftime('%Y%m%d-%H%M%S')

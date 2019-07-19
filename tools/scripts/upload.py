@@ -17,7 +17,7 @@ def init():
     from os import makedirs
     from shutil import rmtree
 
-    print >>stderr, 'init:'
+    print('init:', file=stderr)
 
     rmtree(TMP_DIR, True)
     makedirs(TMP_DIR)
@@ -35,13 +35,13 @@ def upload():
     from os.path import split
     from os.path import getsize
 
-    print >>stderr, 'upload:'
+    print('upload:', file=stderr)
 
     # common
     headers = {'content-type':'application/json', 'accept':'application/json'}
 
     # get_downloads
-    print >>stderr, '\t[get_downloads]'
+    print('\t[get_downloads]', file=stderr)
     response = get(DOWNLOADS_URL, headers=headers)
     data = response.json
 
@@ -50,7 +50,7 @@ def upload():
         for archive in glob(ARCHIVES):
             filename = split(archive)[1]
             if i['name'] == filename:
-                print >>stderr, '\t[delete] %s(%s)' % (filename, i['id'])
+                print('\t[delete] %s(%s)' % (filename, i['id']), file=stderr)
                 url = DOWNLOADS_URL + '/' + str(i['id'])
                 delete(url, auth=AUTH, headers=headers)
 
@@ -61,13 +61,13 @@ def upload():
         filesize = getsize(archive)
 
         # create_downloads_resource
-        print >>stderr, '\t[create_downloads_resource] ' + filename
+        print('\t[create_downloads_resource] ' + filename, file=stderr)
         payload = {'name':filename, 'size':filesize}
         response = post(DOWNLOADS_URL, auth=AUTH, headers=headers, data=dumps(payload))
         data = response.json
 
         # upload_file_to_s3
-        print >>stderr, '\t[upload_file_to_s3] ' + filename
+        print('\t[upload_file_to_s3] ' + filename, file=stderr)
 
         params = [
             ('key', data['path']),

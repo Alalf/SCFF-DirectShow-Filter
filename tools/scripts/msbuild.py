@@ -17,7 +17,7 @@ def init():
     from os import makedirs
     from shutil import rmtree
 
-    print >>stderr, 'init:'
+    print('init:', file=stderr)
 
     rmtree(TMP_DIR, True)
     makedirs(TMP_DIR)
@@ -27,7 +27,7 @@ def init():
 def make_build_Win32_bat():
     from sys import stderr
 
-    print >>stderr, 'make_build_Win32_bat:'
+    print('make_build_Win32_bat:', file=stderr)
 
     # ビルドスクリプト生成
     build_script = '''@ECHO OFF
@@ -38,7 +38,7 @@ msbuild /verbosity:m /t:build /p:Configuration=Release /p:Platform=Win32 "%s"
 
     # ファイルに書き込み
     with open(BUILD_32BIT_BAT, 'w') as f:
-        print >>stderr, '\t[write] ' + BUILD_32BIT_BAT
+        print('\t[write] ' + BUILD_32BIT_BAT, file=stderr)
         f.write(build_script)
 
 #----------------------------------------------------------------------
@@ -46,7 +46,7 @@ msbuild /verbosity:m /t:build /p:Configuration=Release /p:Platform=Win32 "%s"
 def make_build_x64_bat():
     from sys import stderr
 
-    print >>stderr, 'make_build_x64_bat:'
+    print('make_build_x64_bat:', file=stderr)
 
     # ビルドスクリプト生成
     build_script = '''@ECHO OFF
@@ -57,51 +57,49 @@ msbuild /verbosity:m /t:build /p:Configuration=Release /p:Platform=x64 "%s"
 
     # ファイルに書き込み
     with open(BUILD_64BIT_BAT, 'w') as f:
-        print >>stderr, '\t[write] ' + BUILD_64BIT_BAT
+        print('\t[write] ' + BUILD_64BIT_BAT, file=stderr)
         f.write(build_script)
 
 #----------------------------------------------------------------------
 
 def build_Win32():
-    from sys import stderr
-    from sys import exit
+    from sys import stderr, exit
     from subprocess import call
 
-    print >>stderr, 'build_Win32:'
+    print('build_Win32:', file=stderr)
 
     # 32bit版ビルド
     try:
-        print >>stderr, '\t[build_Win32] START'
+        print('\t[build_Win32] START', file=stderr)
         retcode = call(BUILD_32BIT_BAT)
         if retcode < 0:
-            print >>stderr, '\t[build_Win32] FAILED!', -retcode
+            print('\t[build_Win32] FAILED! %d' % -retcode, file=stderr)
             exit()
         else:
-            print >>stderr, '\t[build_Win32] SUCCESS!', retcode
-    except OSError, e:
-        print >>stderr, '\t[build_Win32] Execution failed:', e
+            print('\t[build_Win32] SUCCESS! %d' % retcode, file=stderr)
+    except OSError as e:
+        print('\t[build_Win32] Execution failed: %s' % e.strerror, file=stderr)
         exit()
 
 #----------------------------------------------------------------------
 
 def build_x64():
-    from sys import stderr
-    from sys import exit
+    from sys import stderr, exit
     from subprocess import call
 
-    print >>stderr, 'build_x64:'
+    print('build_x64:', file=stderr)
 
     # 64bit版ビルド
     try:
-        print >>stderr, '\t[build_x64] START'
+        print('\t[build_x64] START', file=stderr)
         retcode = call(BUILD_64BIT_BAT)
         if retcode < 0:
-            print >>stderr, '\t[build_x64] FAILED!', -retcode
+            print('\t[build_x64] FAILED! %d' % -retcode, file=stderr)
             exit()
         else:
-            print >>stderr, '\t[build_x64] SUCCESS!', retcode
-    except OSError, e:
-        print >>stderr, '\t[build_x64] Execution failed:', e
+            print('\t[build_x64] SUCCESS! %d' % retcode, file=stderr)
+    except OSError as e:
+        print('\t[build_x64] Execution failed: %s' % e.strerror, file=stderr)
         exit()
 
 #----------------------------------------------------------------------

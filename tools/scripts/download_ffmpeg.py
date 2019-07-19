@@ -21,7 +21,7 @@ def init():
     from os import makedirs
     from shutil import rmtree
 
-    print >>stderr, 'init:'
+    print('init:', file=stderr)
 
     rmtree(TMP_DIR, True)
     makedirs(TMP_DIR)
@@ -30,22 +30,24 @@ def init():
 
 def download():
     from sys import stderr
-    #from urllib import urlretrieve
     import webbrowser
     from os import popen
 
-    print >>stderr, 'download:'
+    #popen('explorer "%s"' % TMP_DIR)
+    #input('press return key after moving zipfiles to %s...' % TMP_DIR)
+    #return
+
+    print('download:', file=stderr)
 
     # ffmpegのアーカイブをダウンロード
     for url in DOWNLOADS:
-        print >>stderr, '\t[download] ' + url
+        print('\t[download] ' + url, file=stderr)
         filename = url.split('/')[-1]
         path = TMP_DIR + '\\' + filename
-        # urlretrieve(url, path)
         webbrowser.open(url)
 
     popen('explorer "%s"' % TMP_DIR)
-    raw_input('press return key after moving zipfiles to %s...' % TMP_DIR)
+    input('press return key after moving zipfiles to %s...' % TMP_DIR)
 
 #-----------------------------------------------------------------------
 
@@ -53,13 +55,13 @@ def extract():
     from sys import stderr
     from subprocess import call
 
-    print >>stderr, 'extract:'
+    print('extract:', file=stderr)
 
     # アーカイブをすべて解凍する
     for url in DOWNLOADS:
         filename = url.split('/')[-1]
         path = TMP_DIR + '\\' + filename
-        print >>stderr, '\t[extract] ' + path
+        print('\t[extract] ' + path, file=stderr)
         command = '"%s" %s "%s"' % (EXTRACT_COMMAND, EXTRACT_OPTIONS, path)
         call(command)
 
@@ -72,7 +74,7 @@ def relocate():
     from shutil import copyfile
     from subprocess import call
 
-    print >>stderr, 'relocate:'
+    print('relocate:', file=stderr)
 
     # ファイル名を格納するディレクトリ
     ffmpeg_dirs = {}
@@ -95,18 +97,18 @@ def relocate():
     # Xcopyでファイルを上書きコピーする
     for k, v in ffmpeg_dirs.items():
         try:
-            print >>stderr, '\t[copy_%s] START' % k
+            print('\t[copy_%s] START' % k, file=stderr)
             if k.startswith('win32'):
                 retcode = call('XCOPY /Q /C /Y /R /E "%s" "%s"' % (v, FFMPEG_32BIT_DIR))
             else:
                 retcode = call('XCOPY /Q /C /Y /R /E "%s" "%s"' % (v, FFMPEG_64BIT_DIR))
             if retcode < 0:
-                print >>stderr, '\t[copy_%s] FAILED!' % k, -retcode
+                print('\t[copy_%s] FAILED! %d' % (k, -retcode), file=stderr)
                 sys.exit()
             else:
-                print >>stderr, '\t[copy_%s] SUCCESS!' % k, retcode
-        except OSError, e:
-            print >>stderr, '\t[copy_%s] Execution failed:' % k, e
+                print('\t[copy_%s] SUCCESS! %d' % (k, retcode), file=stderr)
+        except OSError as e:
+            print('\t[copy_%s] Execution failed: %s' % (k, e.strerror), file=stderr)
             sys.exit()
 
     # scffのext/ffmpeg/*ディレクトリからdummy.txtをコピーしてくる
@@ -120,7 +122,7 @@ def move_to_ext():
     from shutil import move
     from shutil import rmtree
 
-    print >>stderr, 'move_to_ext:'
+    print('move_to_ext:', file=stderr)
 
     # extの元あったディレクトリを削除する
     rmtree(EXT_FFMPEG_32BIT_DIR, True)
@@ -135,7 +137,7 @@ def copy_dll():
     from sys import stderr
     from subprocess import call
 
-    print >>stderr, 'copy_dll:'
+    print('copy_dll:', file=stderr)
 
     bat_string = '''@ECHO OFF
 SET ROOT_DIR=%s
@@ -174,7 +176,7 @@ POPD
 def make_tools_bat():
     from sys import stderr
 
-    print >>stderr, 'make_tools_bat:'
+    print('make_tools_bat:', file=stderr)
 
     src_bat = TMP_DIR + '\\copy_ffmpeg_dll.bat'
     dst_bat = ROOT_DIR + '\\tools\\copy_ffmpeg_dll.bat'

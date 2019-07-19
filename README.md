@@ -104,13 +104,13 @@ v0.3.0-alpha.3インストール前の注意事項
 0. Pythonに詳しい方はtools/build.pyを参照してください。下記の作業の一部を自動化できます。
 1. [Zeranoe FFmpeg builds](http://ffmpeg.zeranoe.com/builds/) からSharedビルド及びDevビルドを取得する
     - [32bit Builds (Shared)]
-      (https://ffmpeg.zeranoe.com/builds/win32/shared/ffmpeg-4.1.3-win32-shared.zip)
+      (https://ffmpeg.zeranoe.com/builds/win32/shared/ffmpeg-4.1.4-win32-shared.zip)
     - [32bit Builds (Dev)]
-      (https://ffmpeg.zeranoe.com/builds/win32/dev/ffmpeg-4.1.3-win32-dev.zip)
+      (https://ffmpeg.zeranoe.com/builds/win32/dev/ffmpeg-4.1.4-win32-dev.zip)
     - [64bit Builds (Shared)]
-      (https://ffmpeg.zeranoe.com/builds/win64/shared/ffmpeg-4.1.3-win64-shared.zip)
+      (https://ffmpeg.zeranoe.com/builds/win64/shared/ffmpeg-4.1.4-win64-shared.zip)
     - [64bit Builds (Dev)]
-      (https://ffmpeg.zeranoe.com/builds/win64/dev/ffmpeg-4.1.3-win64-dev.zip)
+      (https://ffmpeg.zeranoe.com/builds/win64/dev/ffmpeg-4.1.4-win64-dev.zip)
     - ext/ffmpeg/x64に64bit版を、ext/ffmpeg/Win32に32bit版を展開する
     - SharedもDevも同じディレクトリに展開すること（数個のファイルが上書きされるが問題ない）
     - ext/ffmpeg/x64/README.txt, ext/ffmpeg/Win32/README.txtが存在するように確認すること

@@ -18,7 +18,7 @@ BIN_DIR = ROOT_DIR + '\\tools\\bin'
 
 def download_ffmpeg():
     from sys import stderr
-    print >>stderr, '--- download_ffmpeg ---\n'
+    print('--- download_ffmpeg ---\n', file=stderr)
 
     from scripts import download_ffmpeg
     download_ffmpeg.TMP_DIR = TMP_DIR + '\\download_ffmpeg'
@@ -31,10 +31,10 @@ def download_ffmpeg():
 
     # stable
     download_ffmpeg.DOWNLOADS = [
-        'https://ffmpeg.zeranoe.com/builds/win32/shared/ffmpeg-4.1.3-win32-shared.zip',
-        'https://ffmpeg.zeranoe.com/builds/win32/dev/ffmpeg-4.1.3-win32-dev.zip',
-        'https://ffmpeg.zeranoe.com/builds/win64/shared/ffmpeg-4.1.3-win64-shared.zip',
-        'https://ffmpeg.zeranoe.com/builds/win64/dev/ffmpeg-4.1.3-win64-dev.zip']
+        'https://ffmpeg.zeranoe.com/builds/win32/shared/ffmpeg-4.1.4-win32-shared.zip',
+        'https://ffmpeg.zeranoe.com/builds/win32/dev/ffmpeg-4.1.4-win32-dev.zip',
+        'https://ffmpeg.zeranoe.com/builds/win64/shared/ffmpeg-4.1.4-win64-shared.zip',
+        'https://ffmpeg.zeranoe.com/builds/win64/dev/ffmpeg-4.1.4-win64-dev.zip']
 
     download_ffmpeg.EXTRACT_COMMAND = BIN_DIR + '\\unzip.exe'
     download_ffmpeg.EXTRACT_OPTIONS = '-qq -d "%s"' % download_ffmpeg.TMP_DIR
@@ -51,15 +51,15 @@ def download_ffmpeg():
 
 def msbuild():
     from sys import stderr
-    print >>stderr, '--- msbuild ---\n'
+    print('--- msbuild ---\n', file=stderr)
 
     from scripts import msbuild
     msbuild.TMP_DIR = TMP_DIR + '\\msbuild'
     msbuild.BUILD_32BIT_BAT = msbuild.TMP_DIR + '\\build_Win32.bat'
     msbuild.BUILD_64BIT_BAT = msbuild.TMP_DIR + '\\build_x64.bat'
 
-    msbuild.ENV_32BIT_BAT = 'D:\\Program Files\\MSVS2017\\Common7\\Tools\\VsDevCmd.bat'
-    msbuild.ENV_64BIT_BAT = 'D:\\Program Files\\MSVS2017\\Common7\\Tools\\VsDevCmd.bat'
+    msbuild.ENV_32BIT_BAT = 'C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\Common7\\Tools\\VsDevCmd.bat'
+    msbuild.ENV_64BIT_BAT = 'C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\Common7\\Tools\\VsDevCmd.bat'
     msbuild.DSF_SLN = ROOT_DIR + '\\scff.sln'
 
     msbuild.init()
@@ -72,7 +72,7 @@ def msbuild():
 
 def dist():
     from sys import stderr
-    print >>stderr, '--- dist ---\n'
+    print('--- dist ---\n', file=stderr)
 
     from scripts import dist
     dist.TMP_DIR = TMP_DIR + '\\dist'
@@ -117,7 +117,7 @@ def dist():
 
 def upload():
     from sys import stderr
-    print >>stderr, '--- upload ---\n'
+    print('--- upload ---\n', file=stderr)
 
     from scripts import upload
     upload.TMP_DIR = TMP_DIR + '\\upload'
@@ -125,7 +125,7 @@ def upload():
     upload.UPLOAD_COMMAND = 'C:\\Program Files (x86)\\Git\\bin\\curl.exe'
     upload.UPLOAD_OPTIONS = ''
 
-    upload.AUTH = ('Alalf', raw_input('GitHub Password: '))
+    upload.AUTH = ('Alalf', input('GitHub Password: '))
     upload.DOWNLOADS_URL = 'https://api.github.com/repos/Alalf/SCFF-DirectShow-Filter/downloads'
 
     upload.init()
@@ -137,7 +137,7 @@ def upload():
 if __name__=='__main__':
     from sys import stderr
 
-    print >>stderr, '=== SCFF-DirectShow-Filter Build Script ===\n'
+    print('=== SCFF-DirectShow-Filter Build Script ===\n', file=stderr)
 
     # download_ffmpeg.py
     if 'download_ffmpeg' in OPTIONS:

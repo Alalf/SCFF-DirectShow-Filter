@@ -31,10 +31,10 @@ def download_ffmpeg():
 
     # stable
     download_ffmpeg.DOWNLOADS = [
-        'https://ffmpeg.zeranoe.com/builds/win32/shared/ffmpeg-4.1.4-win32-shared.zip',
-        'https://ffmpeg.zeranoe.com/builds/win32/dev/ffmpeg-4.1.4-win32-dev.zip',
-        'https://ffmpeg.zeranoe.com/builds/win64/shared/ffmpeg-4.1.4-win64-shared.zip',
-        'https://ffmpeg.zeranoe.com/builds/win64/dev/ffmpeg-4.1.4-win64-dev.zip']
+        'https://ffmpeg.zeranoe.com/builds/win32/shared/ffmpeg-4.3.1-win32-shared.zip',
+        'https://ffmpeg.zeranoe.com/builds/win32/dev/ffmpeg-4.3.1-win32-dev.zip',
+        'https://ffmpeg.zeranoe.com/builds/win64/shared/ffmpeg-4.3.1-win64-shared.zip',
+        'https://ffmpeg.zeranoe.com/builds/win64/dev/ffmpeg-4.3.1-win64-dev.zip']
 
     download_ffmpeg.EXTRACT_COMMAND = BIN_DIR + '\\unzip.exe'
     download_ffmpeg.EXTRACT_OPTIONS = '-qq -d "%s"' % download_ffmpeg.TMP_DIR

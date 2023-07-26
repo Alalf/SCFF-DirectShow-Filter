@@ -30,3 +30,4 @@
 /*.opendb
 /*.db
 /tools/debug.log
+/MigrationBackup
